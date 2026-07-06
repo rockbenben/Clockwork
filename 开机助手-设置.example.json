@@ -1,0 +1,1205 @@
+﻿{
+    "launchSteps":  [
+                        {
+                            "enabled":  true,
+                            "kind":  "volume",
+                            "label":  "开机先静音（示例·仅上午 8 点前生效，晚上开机就不会突然出声）",
+                            "delayMs":  0,
+                            "target":  "",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "mute",
+                            "level":  50,
+                            "onlyBefore8":  true,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  true,
+                            "kind":  "app",
+                            "label":  "打开浏览器（示例·换成你常用的浏览器）",
+                            "delayMs":  0,
+                            "target":  "msedge.exe",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  true,
+                            "kind":  "app",
+                            "label":  "打开常用网站（示例·换成你的邮箱 / 待办 / 网页版应用）",
+                            "delayMs":  800,
+                            "target":  "https://github.com",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  true,
+                            "kind":  "app",
+                            "label":  "打开常用软件（示例·把目标换成你自己的 .exe 或快捷方式）",
+                            "delayMs":  1000,
+                            "target":  "notepad.exe",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  true,
+                            "kind":  "delay",
+                            "label":  "等待 2 秒（示例·纯延时步骤，给前面的软件留出打开时间）",
+                            "delayMs":  2000,
+                            "target":  "",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  true,
+                            "kind":  "keys",
+                            "label":  "回到桌面 Win+D（示例·发送组合键）",
+                            "delayMs":  0,
+                            "target":  "",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "Win+D",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  true,
+                            "kind":  "volume",
+                            "label":  "音量调到 30%（示例·设音量会自动取消上面的静音）",
+                            "delayMs":  500,
+                            "target":  "",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "set",
+                            "level":  30,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  true,
+                            "kind":  "window",
+                            "label":  "最小化浏览器（示例·窗口动作，按进程名操作）",
+                            "delayMs":  1000,
+                            "target":  "",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "minimize",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "msedge",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  false,
+                            "kind":  "system",
+                            "label":  "显示桌面（示例·系统命令，默认不勾选）",
+                            "delayMs":  0,
+                            "target":  "",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "showDesktop",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  false,
+                            "kind":  "app",
+                            "label":  "Windows 设置（示例·可直接打开 URI 协议，默认不勾选）",
+                            "delayMs":  0,
+                            "target":  "ms-settings:",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        },
+                        {
+                            "enabled":  false,
+                            "kind":  "app",
+                            "label":  "任务管理器（示例·默认不勾选，避免每次开机弹出）",
+                            "delayMs":  0,
+                            "target":  "taskmgr.exe",
+                            "args":  "",
+                            "workDir":  "",
+                            "elevated":  false,
+                            "combo":  "",
+                            "groupId":  "",
+                            "action":  "",
+                            "level":  50,
+                            "onlyBefore8":  false,
+                            "beforeHour":  8,
+                            "days":  [
+
+                                     ],
+                            "process":  "",
+                            "sendKey":  "{ENTER}",
+                            "waitForWindowSeconds":  0,
+                            "postWindowDelaySeconds":  0,
+                            "command":  "",
+                            "message":  "",
+                            "speak":  false,
+                            "confirm":  false,
+                            "onYes":  {
+                                          "target":  "",
+                                          "type":  "none"
+                                      }
+                        }
+                    ],
+    "reminders":  [
+                      {
+                          "id":  "feac5540-7356-4a3d-80a6-0cf34f42042b",
+                          "enabled":  true,
+                          "trigger":  "time",
+                          "time":  "10:00",
+                          "days":  [
+                                       1,
+                                       2,
+                                       3,
+                                       4,
+                                       5
+                                   ],
+                          "message":  "起来活动一下、喝口水~（示例提醒）",
+                          "speak":  false,
+                          "onYes":  {
+                                        "target":  "",
+                                        "type":  "none"
+                                    },
+                          "graceMinutes":  5,
+                          "delaySeconds":  0,
+                          "randomDelaySeconds":  0,
+                          "repeatMinutes":  0,
+                          "repeatUntil":  "",
+                          "recurType":  "daily",
+                          "intervalDays":  1,
+                          "monthlyDay":  1,
+                          "anchorDate":  "",
+                          "popupTimeoutSeconds":  0,
+                          "startupHourMode":  "any",
+                          "startupHour":  9,
+                          "startupWithinMinutes":  10,
+                          "silentGroupId":  ""
+                      },
+                      {
+                          "id":  "e9e859c7-46ef-458f-8dd8-95f628f0217c",
+                          "enabled":  true,
+                          "trigger":  "time",
+                          "time":  "12:30",
+                          "days":  [
+
+                                   ],
+                          "message":  "午休时间到（示例）",
+                          "speak":  false,
+                          "onYes":  {
+                                        "target":  "",
+                                        "type":  "none"
+                                    },
+                          "graceMinutes":  5,
+                          "delaySeconds":  0,
+                          "randomDelaySeconds":  0,
+                          "repeatMinutes":  0,
+                          "repeatUntil":  "",
+                          "recurType":  "daily",
+                          "intervalDays":  1,
+                          "monthlyDay":  1,
+                          "anchorDate":  "",
+                          "popupTimeoutSeconds":  0,
+                          "startupHourMode":  "any",
+                          "startupHour":  9,
+                          "startupWithinMinutes":  10,
+                          "silentGroupId":  ""
+                      },
+                      {
+                          "id":  "155e90a6-9d36-48d7-8e6b-00987fcd11ac",
+                          "enabled":  true,
+                          "trigger":  "time",
+                          "time":  "15:30",
+                          "days":  [
+                                       1,
+                                       2,
+                                       3,
+                                       4,
+                                       5
+                                   ],
+                          "message":  "吃口水果，补充点维生素（示例·可开语音播报）",
+                          "speak":  true,
+                          "onYes":  {
+                                        "target":  "",
+                                        "type":  "none"
+                                    },
+                          "graceMinutes":  5,
+                          "delaySeconds":  0,
+                          "randomDelaySeconds":  0,
+                          "repeatMinutes":  0,
+                          "repeatUntil":  "",
+                          "recurType":  "daily",
+                          "intervalDays":  1,
+                          "monthlyDay":  1,
+                          "anchorDate":  "",
+                          "popupTimeoutSeconds":  0,
+                          "startupHourMode":  "any",
+                          "startupHour":  9,
+                          "startupWithinMinutes":  10,
+                          "silentGroupId":  ""
+                      },
+                      {
+                          "id":  "949caeac-3ae5-4448-a5f0-8b51f613dd14",
+                          "enabled":  true,
+                          "trigger":  "time",
+                          "time":  "18:00",
+                          "days":  [
+                                       1,
+                                       2,
+                                       3,
+                                       4,
+                                       5
+                                   ],
+                          "message":  "下班啦，收拾一下桌面（示例）",
+                          "speak":  false,
+                          "onYes":  {
+                                        "target":  "",
+                                        "type":  "none"
+                                    },
+                          "graceMinutes":  5,
+                          "delaySeconds":  0,
+                          "randomDelaySeconds":  0,
+                          "repeatMinutes":  0,
+                          "repeatUntil":  "",
+                          "recurType":  "daily",
+                          "intervalDays":  1,
+                          "monthlyDay":  1,
+                          "anchorDate":  "",
+                          "popupTimeoutSeconds":  0,
+                          "startupHourMode":  "any",
+                          "startupHour":  9,
+                          "startupWithinMinutes":  10,
+                          "silentGroupId":  ""
+                      },
+                      {
+                          "id":  "dde6424b-46c3-4a08-8d78-bf76b87e72c4",
+                          "enabled":  true,
+                          "trigger":  "time",
+                          "time":  "23:00",
+                          "days":  [
+
+                                   ],
+                          "message":  "该睡觉了（示例）",
+                          "speak":  false,
+                          "onYes":  {
+                                        "target":  "",
+                                        "type":  "none"
+                                    },
+                          "graceMinutes":  5,
+                          "delaySeconds":  0,
+                          "randomDelaySeconds":  0,
+                          "repeatMinutes":  0,
+                          "repeatUntil":  "",
+                          "recurType":  "daily",
+                          "intervalDays":  1,
+                          "monthlyDay":  1,
+                          "anchorDate":  "",
+                          "popupTimeoutSeconds":  0,
+                          "startupHourMode":  "any",
+                          "startupHour":  9,
+                          "startupWithinMinutes":  10,
+                          "silentGroupId":  ""
+                      }
+                  ],
+    "settings":  {
+                     "tickSeconds":  30,
+                     "startMinimized":  false,
+                     "startupWaitForReady":  false,
+                     "startupDelaySeconds":  30
+                 },
+    "actionGroups":  [
+                         {
+                             "id":  "b39af667-4d56-476c-a932-0f34690fb2f6",
+                             "name":  "专注·开始工作",
+                             "enabled":  true,
+                             "steps":  [
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "window",
+                                               "label":  "关闭 微信",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "close",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "Weixin",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "window",
+                                               "label":  "关闭 QQ",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "close",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "QQ",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "volume",
+                                               "label":  "系统静音",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "mute",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "显示桌面",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "showDesktop",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           }
+                                       ]
+                         },
+                         {
+                             "id":  "c207080e-d4f5-4d52-bc69-d69d8f334d5b",
+                             "name":  "会议模式",
+                             "enabled":  true,
+                             "steps":  [
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "volume",
+                                               "label":  "系统静音",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "mute",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "window",
+                                               "label":  "关闭 微信",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "close",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "Weixin",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "window",
+                                               "label":  "关闭 QQ",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "close",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "QQ",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           }
+                                       ]
+                         },
+                         {
+                             "id":  "6a5e5c1f-0955-4f2c-a10f-b33332a568a2",
+                             "name":  "收工·下班",
+                             "enabled":  true,
+                             "steps":  [
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "message",
+                                               "label":  "",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "今天的任务都记录好了吗？",
+                                               "speak":  false,
+                                               "confirm":  true,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "window",
+                                               "label":  "关闭 微信",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "close",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "Weixin",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "window",
+                                               "label":  "关闭 QQ",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "close",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "QQ",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "清空回收站",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "emptyRecycleBin",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "清空剪贴板",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "clearClipboard",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "锁屏",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "lockScreen",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           }
+                                       ]
+                         },
+                         {
+                             "id":  "8706b33e-85c0-4135-bcc5-c7dd1ead29a8",
+                             "name":  "睡前",
+                             "enabled":  true,
+                             "steps":  [
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "message",
+                                               "label":  "",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "该睡觉了！",
+                                               "speak":  true,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "volume",
+                                               "label":  "系统静音",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "mute",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "window",
+                                               "label":  "关闭 微信",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "close",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "Weixin",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "关闭显示器",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "monitorOff",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           }
+                                       ]
+                         },
+                         {
+                             "id":  "955af595-5625-4891-b629-e74deb6e91cc",
+                             "name":  "离开一下",
+                             "enabled":  true,
+                             "steps":  [
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "锁屏",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "lockScreen",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "关闭显示器",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "monitorOff",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           }
+                                       ]
+                         },
+                         {
+                             "id":  "8650eedc-bf9f-4a60-8b85-b97963e007c9",
+                             "name":  "截图标注",
+                             "enabled":  true,
+                             "steps":  [
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "system",
+                                               "label":  "截图 Win+Shift+S",
+                                               "delayMs":  0,
+                                               "target":  "",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "screenshot",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           },
+                                           {
+                                               "enabled":  true,
+                                               "kind":  "app",
+                                               "label":  "打开 画图",
+                                               "delayMs":  800,
+                                               "target":  "mspaint.exe",
+                                               "args":  "",
+                                               "workDir":  "",
+                                               "elevated":  false,
+                                               "combo":  "",
+                                               "groupId":  "",
+                                               "action":  "",
+                                               "level":  50,
+                                               "onlyBefore8":  false,
+                                               "beforeHour":  8,
+                                               "days":  [
+
+                                                        ],
+                                               "process":  "",
+                                               "sendKey":  "{ENTER}",
+                                               "waitForWindowSeconds":  0,
+                                               "postWindowDelaySeconds":  0,
+                                               "command":  "",
+                                               "message":  "",
+                                               "speak":  false,
+                                               "confirm":  false,
+                                               "onYes":  {
+                                                             "target":  "",
+                                                             "type":  "none"
+                                                         }
+                                           }
+                                       ]
+                         }
+                     ]
+}

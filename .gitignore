@@ -1,0 +1,12 @@
+# 本机运行时生成的个人配置（含个人路径，不入库）。示例见 开机助手-设置.example.json
+开机助手-设置.json
+
+# 临时 / 系统 / 工具
+*.log
+Thumbs.db
+desktop.ini
+.claude/
+.vs/
+
+# SDD 工作目录（briefs / reports / review diffs / 进度账本）
+.superpowers/
