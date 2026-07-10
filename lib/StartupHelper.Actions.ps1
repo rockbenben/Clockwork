@@ -19,22 +19,42 @@ function Import-StartupItemToChecklist {
 
 function Invoke-LaunchItem {
     param($Item)
-    if ($script:LaunchSelfPaths -and (Test-IsSelfTarget $Item.target $script:LaunchSelfPaths)) {
+    # 备用路径：主路径(完整路径)不存在时，用「备用路径」里第一个存在的候选（每行一条），解决多设备路径不一致。
+    $tgt = Resolve-LaunchTarget $Item.target $Item.altTargets
+    if ($script:LaunchSelfPaths -and (Test-IsSelfTarget $tgt $script:LaunchSelfPaths)) {
         Write-Warning "跳过「$($Item.label)」：目标是开机助手自身，避免开机自启动循环"
         return
     }
+    # 已运行则激活窗口、不重复启动：进程名手填优先，否则从目标推导；有窗口就置前并跳过启动。
+    # 原生不可用（受限令牌下编译失败）时给一句清楚提示，然后照常启动（不因此中断）。
+    if ($Item.activateIfRunning) {
+        if (Confirm-Win32Available) {
+            $pn = if ($Item.activateProcess) { [string]$Item.activateProcess } else { Get-TargetProcessName $tgt }
+            $pn = $pn -replace '\.exe$', ''
+            if ($pn -and (Get-AppWindowHandles $pn).Count -gt 0) { [void](Set-ForegroundAppWindow $pn); return }
+        } else { Write-Warning $script:NativeRestrictedMsg }
+    }
     try {
-        if ([string]$Item.target -match '\.ps1$') {
+        if ([string]$tgt -match '\.ps1$') {
             # .ps1 直接用 PowerShell 跑（否则 Start-Process 走文件关联「打开」→ 进编辑器而非执行）。
             # -File 路径必须手动加引号：PS5.1 的 ArgumentList 用空格拼接且不加引号，带空格的路径会被拆散。
-            $psArgs = [System.Collections.Generic.List[string]]@('-NoProfile','-ExecutionPolicy','Bypass','-File', ('"' + [string]$Item.target + '"'))
+            $psArgs = [System.Collections.Generic.List[string]]@('-NoProfile','-ExecutionPolicy','Bypass','-File', ('"' + [string]$tgt + '"'))
             if ($Item.args) { $psArgs.Add([string]$Item.args) }
             $sp = @{ FilePath = 'powershell.exe'; ArgumentList = $psArgs.ToArray(); PassThru = $true }
         } else {
-            $sp = @{ FilePath = $Item.target; PassThru = $true }
+            $sp = @{ FilePath = $tgt; PassThru = $true }
             if ($Item.args) { $sp.ArgumentList = $Item.args }
         }
+        # 工作目录留空时，默认用「目标」所在目录（仅当目标是完整路径且该目录存在）——多数程序期望 cwd=自身目录。
+        # 目标为裸程序名(notepad.exe)/网址/文档关联时不套用，交给系统默认。
         if ($Item.workDir) { $sp.WorkingDirectory = $Item.workDir }
+        elseif ($tgt) {
+            $td = try { if ([System.IO.Path]::IsPathRooted([string]$tgt)) { Split-Path -Parent ([string]$tgt) } else { '' } } catch { '' }
+            if ($td -and (Test-Path -LiteralPath $td -PathType Container)) { $sp.WorkingDirectory = $td }
+        }
+        # 窗口风格：最小化/最大化/隐藏启动（正常/留空=不设，交给程序默认）。是否生效取决于目标程序。
+        $ws = switch ([string]$Item.windowStyle) { 'minimized' {'Minimized'} 'maximized' {'Maximized'} 'hidden' {'Hidden'} default {''} }
+        if ($ws) { $sp.WindowStyle = $ws }
         if ($Item.elevated) { $sp.Verb = 'RunAs' }
         $proc = Start-Process @sp
         # Start-Process 不抛错只代表「进程被拉起」，不代表程序真的跑起来。
@@ -123,6 +143,7 @@ function Invoke-StepAction {
             if ([int]$n -le 0 -and [string]$Step.action -ne 'close') { Write-Warning "没有找到「$($Step.process)」的窗口（进程未运行或尚未就绪？），$($Step.action) 未生效" }
         }
         'system' { Invoke-SystemCommand ([string]$Step.command) }
+        'text'   { Send-Text ([string]$Step.text) ([string]$Step.process) }
         # 纯延时步骤：本身无动作，等待由步骤末尾统一的 delayMs（Start-Sleep）完成——复用现成的分步延时机制，不另起 Sleep。
         'delay'  { }
         default  { Write-Warning "未知步骤类型：$($Step.kind)" }
@@ -190,7 +211,7 @@ function Wait-SystemReady {
 # 手动「重新运行」不传：环境本就就绪，立即跑、不等待、不延迟。
 function Invoke-LaunchSequence {
     param($Config, [string]$LogPath, [switch]$Boot)
-    Initialize-Win32Types   # 懒编译 SH.Native/SH.Audio：仅启动序列需要，打开编辑窗口时不付这笔编译开销
+    [void](Confirm-Win32Available)   # 懒编译 SH.Native/SH.Audio（受限令牌下编译失败会降级、不抛）；仅启动序列需要
     $bootNote = $null
     if ($Boot -and $Config.settings) {
         # 可选就绪门控（默认关）：等 Shell/网络就绪，就绪即走、封顶 90s 兜底。仅当 settings.startupWaitForReady=true 才启用。
@@ -450,7 +471,7 @@ function Invoke-ActionGroupAsync {
             . (Join-Path $appRoot 'lib\StartupHelper.Win32.ps1')
             . (Join-Path $appRoot 'lib\StartupHelper.Actions.ps1')
             . (Join-Path $appRoot 'lib\StartupHelper.WpfDialogs.ps1')   # 消息步骤弹窗 Show-ReminderPopup(WPF)
-            Initialize-Win32Types
+            [void](Confirm-Win32Available)
             # 自启动守卫与启动序列 runspace 一致：组内 app 步骤若指向开机助手自身则跳过，防套娃拉起第二实例
             $script:LaunchSelfPaths = @((Join-Path $appRoot 'startup-helper.ps1'), (Join-Path $appRoot '开机助手-双击运行.bat'))
             Invoke-ActionGroup ($groupJson | ConvertFrom-Json)
@@ -492,7 +513,7 @@ function Invoke-StepActionAsync {
             . (Join-Path $appRoot 'lib\StartupHelper.Core.ps1')
             . (Join-Path $appRoot 'lib\StartupHelper.Win32.ps1')
             . (Join-Path $appRoot 'lib\StartupHelper.Actions.ps1')
-            Initialize-Win32Types
+            [void](Confirm-Win32Available)
             # 与启动序列一致：app 步骤若指向开机助手自身则跳过，防套娃
             $script:LaunchSelfPaths = @((Join-Path $appRoot 'startup-helper.ps1'), (Join-Path $appRoot '开机助手-双击运行.bat'))
             $s  = $stepJson | ConvertFrom-Json

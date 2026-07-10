@@ -137,6 +137,19 @@ Invoke-ReminderAction ([pscustomobject]@{ type='sound'; target='D:\music\a.mp3' 
 Assert-Equal 1 $script:spCalls.Count 'sound 仍触发一次打开'
 Assert-True ([string]$script:spCalls[0] -match 'a\.mp3') 'sound 目标按文件关联打开'
 
+Write-Host 'AX13b 工作目录留空 -> 默认目标所在目录（完整路径）；裸程序名不设'
+$sysDir = Join-Path $env:WINDIR 'system32'
+$script:spCalls.Clear()
+Invoke-LaunchItem (New-LaunchStep 'app' @{ label='wd'; target=(Join-Path $sysDir 'notepad.exe'); workDir='' }) | Out-Null
+Assert-True ([string]$script:spCalls[0] -match 'WorkingDirectory') '留空 + 完整路径目标 -> 设了 WorkingDirectory'
+Assert-True ([string]$script:spCalls[0] -match [regex]::Escape($sysDir)) 'WorkingDirectory 取目标所在目录'
+$script:spCalls.Clear()
+Invoke-LaunchItem (New-LaunchStep 'app' @{ label='wd2'; target='notepad.exe'; workDir='' }) | Out-Null
+Assert-True (-not ([string]$script:spCalls[0] -match 'WorkingDirectory')) '裸程序名(非完整路径) -> 不设 WorkingDirectory'
+$script:spCalls.Clear()
+Invoke-LaunchItem (New-LaunchStep 'app' @{ label='wd3'; target=(Join-Path $sysDir 'notepad.exe'); workDir='C:\' }) | Out-Null
+Assert-True ([string]$script:spCalls[0] -match 'WorkingDirectory:\s*C:\\') '显式工作目录仍原样使用（不被目标目录覆盖）'
+
 Write-Host 'AX14 无动作提醒走系统日常通知（不再弹置顶自绘窗）'
 $script:toastCalls = New-Object System.Collections.ArrayList
 function Show-SystemToast { param([string]$Message,[string]$Title='') [void]$script:toastCalls.Add($Message); $true }
@@ -198,5 +211,52 @@ Invoke-StepAction (New-LaunchStep 'window' @{ process='Weixin'; action='close'; 
 Assert-Equal 'Weixin' ([string]$script:waArgs.P) '透传进程名'
 Assert-Equal 120 ([int]$script:waArgs.W) '透传 waitForWindowSeconds'
 Assert-Equal 5 ([int]$script:waArgs.D) '透传 postWindowDelaySeconds'
+
+Write-Host 'AX19 发送文本步骤 -> Send-Text 透传（文本 + 目标进程）'
+$script:sentText = $null; $script:sentProc = $null
+function Send-Text { param([string]$Text,[string]$Process='') $script:sentText = $Text; $script:sentProc = $Process; 'unverified' }
+Invoke-StepAction (New-LaunchStep 'text' @{ text='hello world' }) | Out-Null
+Assert-Equal 'hello world' ([string]$script:sentText) 'text 步骤把文本透传给 Send-Text'
+Assert-Equal '' ([string]$script:sentProc) '未填目标进程 -> Process 为空'
+Invoke-StepAction (New-LaunchStep 'text' @{ text='hi'; process='notepad' }) | Out-Null
+Assert-Equal 'notepad' ([string]$script:sentProc) '填了目标进程 -> 透传给 Send-Text 的 Process'
+
+Write-Host 'AX19b 已运行则激活：有窗口只激活不启动 / 无窗口照常启动 / 未勾选照常启动'
+$script:fgCalls = New-Object System.Collections.ArrayList
+$script:winCount = 1   # 受测切换：>0 表示有窗口
+function Get-AppWindowHandles { param([string]$Process) if ($script:winCount -gt 0) { ,@(1) } else { ,@() } }
+function Set-ForegroundAppWindow { param([string]$Process) [void]$script:fgCalls.Add($Process); $true }
+$script:spCalls.Clear()
+# 勾选 + 有窗口 -> 只激活、不 Start-Process
+$script:winCount = 1
+Invoke-LaunchItem (New-LaunchStep 'app' @{ target='C:\x\msedge.exe'; activateIfRunning=$true }) | Out-Null
+Assert-Equal 'msedge' ([string]$script:fgCalls[0]) '有窗口 -> 置前进程 msedge'
+Assert-Equal 0 $script:spCalls.Count '有窗口 -> 不启动'
+# 勾选 + 无窗口 -> 照常启动
+$script:fgCalls.Clear(); $script:spCalls.Clear(); $script:winCount = 0
+Invoke-LaunchItem (New-LaunchStep 'app' @{ target='C:\x\msedge.exe'; activateIfRunning=$true }) | Out-Null
+Assert-Equal 0 $script:fgCalls.Count '无窗口 -> 不置前'
+Assert-True ($script:spCalls.Count -ge 1) '无窗口 -> 照常启动'
+# 未勾选 -> 照常启动（不查窗口）
+$script:fgCalls.Clear(); $script:spCalls.Clear(); $script:winCount = 1
+Invoke-LaunchItem (New-LaunchStep 'app' @{ target='C:\x\msedge.exe'; activateIfRunning=$false }) | Out-Null
+Assert-Equal 0 $script:fgCalls.Count '未勾选 -> 不置前'
+Assert-True ($script:spCalls.Count -ge 1) '未勾选 -> 照常启动'
+# 手填进程名覆盖
+$script:fgCalls.Clear(); $script:spCalls.Clear(); $script:winCount = 1
+Invoke-LaunchItem (New-LaunchStep 'app' @{ target='C:\x\launcher.exe'; activateIfRunning=$true; activateProcess='RealApp' }) | Out-Null
+Assert-Equal 'RealApp' ([string]$script:fgCalls[0]) '手填进程名覆盖自动推导'
+
+Write-Host 'AX20 窗口风格 -> Start-Process -WindowStyle；备用路径 -> 主路径不存在用备用'
+$realExe = Join-Path $env:WINDIR 'notepad.exe'
+$script:spCalls.Clear()
+Invoke-LaunchItem (New-LaunchStep 'app' @{ target=$realExe; windowStyle='minimized' }) | Out-Null
+Assert-True ([string]$script:spCalls[0] -match 'WindowStyle:?\s*Minimized') '窗口风格 minimized -> -WindowStyle Minimized'
+$script:spCalls.Clear()
+Invoke-LaunchItem (New-LaunchStep 'app' @{ target=$realExe; windowStyle='' }) | Out-Null
+Assert-True (-not ([string]$script:spCalls[0] -match 'WindowStyle')) '正常/留空 -> 不设 WindowStyle'
+$script:spCalls.Clear()
+Invoke-LaunchItem (New-LaunchStep 'app' @{ target='Z:\no\such.exe'; altTargets=("Z:\nope`n" + $realExe) }) | Out-Null
+Assert-True ([string]$script:spCalls[0] -match [regex]::Escape($realExe)) '主路径不存在 -> 启动第一个存在的备用路径'
 
 Invoke-TestSummary

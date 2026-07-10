@@ -4,7 +4,7 @@ function New-LaunchStep {
     param([string]$Kind, [hashtable]$Props = @{})
     $s = [ordered]@{
         enabled=$true; kind=$Kind; label=''; delayMs=0
-        target=''; args=''; workDir=''; elevated=$false   # app
+        target=''; args=''; workDir=''; elevated=$false; activateIfRunning=$false; activateProcess=''; windowStyle=''; altTargets=''   # app（activate*=已运行则激活；windowStyle=最小化/最大化/隐藏；altTargets=备用路径每行一条）
         combo=''                                            # keys
         groupId=''                                          # group（引用动作组 id）
         action=''; level=50; onlyBefore8=$false; beforeHour=8  # volume/window 共用 action；时间条件「仅 N 点前」
@@ -13,6 +13,8 @@ function New-LaunchStep {
         waitForWindowSeconds=0; postWindowDelaySeconds=0    # window：等目标窗口出现的秒数(0=不等)、窗口出现后再等的秒数(给自动登录/主窗切换留时间)
         command=''                                          # system
         message=''; speak=$false; confirm=$false; onYes=@{ type='none'; target='' }  # message 步骤(动作组用)
+        text=''                                             # text 步骤：往焦点窗口输入的字面文本
+        note=''                                             # 所有步骤通用：用途说明（仅列表显示用）
     }
     foreach ($k in $Props.Keys) { $s[$k] = $Props[$k] }
     [pscustomobject]$s
@@ -471,6 +473,39 @@ function ConvertFrom-KeyCombo {
     [pscustomobject]@{ Modifiers = $mods; Key = $key; UseWin = ($mods -contains 'Win') }
 }
 
+# WPF 键名（[System.Windows.Input.Key].ToString()）-> 归一 token（Win 发送 & SendKeys 两路径都认的交集）。
+# 纯修饰键 / F13+ / 符号键等不支持项返回 $null（捕获时忽略、继续等下一个键）。
+function ConvertFrom-WpfKeyName {
+    param([string]$WpfKeyName)
+    $n = [string]$WpfKeyName
+    if ($n -cmatch '^[A-Z]$')       { return $n }              # 字母 A-Z（大小写敏感，排除 'System' 等）
+    if ($n -match  '^D([0-9])$')     { return $matches[1] }     # D0-D9 -> 0-9
+    if ($n -match  '^NumPad([0-9])$'){ return $matches[1] }     # 小键盘 0-9 -> 0-9
+    if ($n -match  '^F([1-9]|1[0-2])$') { return $n }           # F1-F12（F13+ 落到 map，取不到 -> null）
+    $map = @{
+        Return='Enter'; Enter='Enter'; Tab='Tab'; Escape='Esc'; Space='Space'
+        Back='Backspace'; Delete='Del'; Insert='Ins'; Home='Home'; End='End'
+        PageUp='PgUp'; Prior='PgUp'; PageDown='PgDn'; Next='PgDn'
+        Up='Up'; Down='Down'; Left='Left'; Right='Right'
+        PrintScreen='PrintScreen'; Snapshot='PrintScreen'
+    }
+    if ($map.ContainsKey($n)) { return $map[$n] }
+    $null
+}
+
+# 修饰键数组 + 主键 -> 组合键串（Ctrl+Alt+Shift+Win 固定顺序）。主键空 -> $null。
+function Format-KeyCombo {
+    param([string[]]$Modifiers, [string]$Key)
+    if ([string]::IsNullOrEmpty($Key)) { return $null }
+    $parts = @()
+    if ($Modifiers -contains 'Ctrl')  { $parts += 'Ctrl' }
+    if ($Modifiers -contains 'Alt')   { $parts += 'Alt' }
+    if ($Modifiers -contains 'Shift') { $parts += 'Shift' }
+    if ($Modifiers -contains 'Win')   { $parts += 'Win' }
+    $parts += $Key
+    $parts -join '+'
+}
+
 # 解析「稍后」时长文本 -> 分钟。纯数字=分钟；'1h20m'/'2h'/'45m' 解析时+分。
 # 非法/空/<1/超过 7 天 -> $null（调用方回退默认值）。
 function ConvertFrom-DurationText {
@@ -588,7 +623,7 @@ function Build-LaunchPlan {
 
 function Get-StepKindLabel {
     param([string]$Kind)
-    switch ($Kind) { 'app' {'启动程序'} 'keys' {'发送按键'} 'volume' {'音量'} 'window' {'窗口动作'} 'system' {'系统命令'} 'group' {'动作组'} 'message' {'消息'} 'delay' {'延时'} default {$Kind} }
+    switch ($Kind) { 'app' {'启动程序'} 'keys' {'发送按键'} 'volume' {'音量'} 'window' {'窗口动作'} 'system' {'系统命令'} 'group' {'动作组'} 'message' {'消息'} 'delay' {'延时'} 'text' {'发送文本'} default {$Kind} }
 }
 
 function Get-SystemCommandMap {
@@ -616,11 +651,75 @@ function Get-StepSummary {
         'group'  { "运行动作组：$(if ($Step.label) { [string]$Step.label } elseif ($Step.groupId) { [string]$Step.groupId } else { '(未指定)' })" }
         'delay'  { $ms=[int]$Step.delayMs; if ($ms % 1000 -eq 0) { "延时 $($ms/1000) 秒" } else { "延时 $ms 毫秒" } }
         'message' { ([string]$Step.message -replace "`r?`n",' ') }
+        'text' { $t=([string]$Step.text -replace "`r?`n",' '); if ($t.Length -gt 30) { $t=$t.Substring(0,30)+'…' }; "输入 $t" }
         default  { [string]$Step.kind }
     }
     $s = $base
     $dc = @(@($Step.days) | Where-Object { $null -ne $_ })   # 手写 json 缺 days 时 @($null) 会生成假的星期后缀
     if ($dc.Count -gt 0 -and $dc.Count -lt 7) { $s += "（$(Get-DaysLabel $dc)）" }
     if ($Step.onlyBefore8) { $s += "（仅$(Get-BeforeHour $Step)点前）" }
+    $s
+}
+
+# 目标 -> 进程名（不含扩展名），供「已运行则激活窗口」判断。网址/文档/脚本/快捷方式等（进程名与目标名不一致）返回 ''。
+function Get-TargetProcessName {
+    param([string]$Target)
+    $t = [string]$Target
+    if ([string]::IsNullOrWhiteSpace($t)) { return '' }
+    if ($t -match '^\s*[a-z][a-z0-9+.-]*://') { return '' }   # 网址
+    $leaf = try { Split-Path -Leaf $t } catch { $t }
+    $ext  = try { [System.IO.Path]::GetExtension($leaf) } catch { '' }
+    if ($ext -eq '' -or $ext -ieq '.exe') { return [System.IO.Path]::GetFileNameWithoutExtension($leaf) }
+    ''   # .ps1/.bat/.lnk/文档 等：进程名无法从目标名可靠推导，交给「手填进程名」
+}
+
+# 备用路径解析：目标是【完整路径】且不存在时，返回「备用路径」($AltTargets 每行一条)里第一个存在的候选；
+# 都不存在则返回原目标（让它照常报错）。目标非完整路径(裸程序名/网址/文档关联)时原样返回，不套用备用路径。
+# 用于多设备路径不一致：主机 A 装在 D:\，主机 B 装在 E:\，备用路径里各写一条，哪台在用哪条。
+function Resolve-LaunchTarget {
+    param([string]$Target, [string]$AltTargets)
+    $t = [string]$Target
+    $rooted = try { [System.IO.Path]::IsPathRooted($t) } catch { $false }
+    if (-not $rooted) { return $t }                       # 裸程序名/网址/文档：不动
+    if (Test-Path -LiteralPath $t) { return $t }          # 主路径存在：用它
+    foreach ($line in ([string]$AltTargets -split "`r?`n")) {
+        $c = $line.Trim()
+        if ($c -and (Test-Path -LiteralPath $c)) { return $c }   # 第一个存在的备用路径
+    }
+    $t   # 都不存在：返回原目标（照常尝试/报错）
+}
+
+# 字面文本 -> SendKeys 序列：转义 SendKeys 元字符（+ ^ % ~ ( ) [ ] { }），换行->{ENTER}，Tab->{TAB}，其余原样。
+function ConvertTo-SendKeysLiteral {
+    param([string]$Text)
+    if ([string]::IsNullOrEmpty($Text)) { return '' }
+    $sb = New-Object System.Text.StringBuilder
+    $s = ([string]$Text) -replace "`r`n", "`n"   # 先归一 CRLF->LF，避免 {ENTER}{ENTER}
+    foreach ($ch in $s.ToCharArray()) {
+        switch ($ch) {
+            "`n" { [void]$sb.Append('{ENTER}') }
+            "`t" { [void]$sb.Append('{TAB}') }
+            '+'  { [void]$sb.Append('{+}') }
+            '^'  { [void]$sb.Append('{^}') }
+            '%'  { [void]$sb.Append('{%}') }
+            '~'  { [void]$sb.Append('{~}') }
+            '('  { [void]$sb.Append('{(}') }
+            ')'  { [void]$sb.Append('{)}') }
+            '['  { [void]$sb.Append('{[}') }
+            ']'  { [void]$sb.Append('{]}') }
+            '{'  { [void]$sb.Append('{{}') }
+            '}'  { [void]$sb.Append('{}}') }
+            default { [void]$sb.Append($ch) }
+        }
+    }
+    $sb.ToString()
+}
+
+# 列表显示用摘要：图标作前缀、用途说明作后缀。Get-StepSummary 保持纯净（日志/托盘仍用它，不带图标/说明）。
+function Format-StepListSummary {
+    param($Step)
+    $s = Get-StepSummary $Step
+    $nt = [string]$Step.note
+    if ($nt) { $s = "$s（$nt）" }
     $s
 }

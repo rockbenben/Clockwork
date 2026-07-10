@@ -548,4 +548,81 @@ Assert-Equal 'arm' (Get-ReminderDecision $fixT $mon0900 $mon0900 (New-ReminderSt
 $rawT = New-Reminder @{ time='9:00'; days=@() }
 Assert-Equal 'none' (Get-ReminderDecision $rawT $mon0900 $mon0900 (New-ReminderState)).action '未归一的 9:00 确实不触发（bug 现场）'
 
+Write-Host 'ConvertFrom-WpfKeyName（WPF 键名 -> 归一 token）'
+Assert-Equal 'Enter'      (ConvertFrom-WpfKeyName 'Return')     'Return -> Enter'
+Assert-Equal '5'          (ConvertFrom-WpfKeyName 'D5')         'D5 -> 5'
+Assert-Equal '5'          (ConvertFrom-WpfKeyName 'NumPad5')    'NumPad5 -> 5'
+Assert-Equal 'F4'         (ConvertFrom-WpfKeyName 'F4')         'F4 原样'
+Assert-True  ($null -eq (ConvertFrom-WpfKeyName 'F13'))         'F13 不支持 -> null'
+Assert-Equal 'Esc'        (ConvertFrom-WpfKeyName 'Escape')     'Escape -> Esc'
+Assert-Equal 'Backspace'  (ConvertFrom-WpfKeyName 'Back')       'Back -> Backspace'
+Assert-Equal 'Del'        (ConvertFrom-WpfKeyName 'Delete')     'Delete -> Del'
+Assert-Equal 'PgUp'       (ConvertFrom-WpfKeyName 'Prior')      'Prior -> PgUp'
+Assert-Equal 'PgUp'       (ConvertFrom-WpfKeyName 'PageUp')     'PageUp -> PgUp'
+Assert-Equal 'PgDn'       (ConvertFrom-WpfKeyName 'Next')       'Next -> PgDn'
+Assert-Equal 'PrintScreen'(ConvertFrom-WpfKeyName 'Snapshot')   'Snapshot -> PrintScreen'
+Assert-Equal 'A'          (ConvertFrom-WpfKeyName 'A')          '字母 A 原样'
+Assert-Equal 'D'          (ConvertFrom-WpfKeyName 'D')          '字母 D 原样（区别于 D5 数字）'
+Assert-Equal 'Up'         (ConvertFrom-WpfKeyName 'Up')         '方向键原样'
+Assert-True  ($null -eq (ConvertFrom-WpfKeyName 'LeftCtrl'))    '纯修饰键 -> null'
+Assert-True  ($null -eq (ConvertFrom-WpfKeyName 'System'))      'System(Alt) -> null'
+Assert-True  ($null -eq (ConvertFrom-WpfKeyName 'OemComma'))    '符号键 -> null'
+
+Write-Host 'Format-KeyCombo（修饰键 + 主键 -> 组合键串）'
+Assert-Equal 'Ctrl+Shift+M' (Format-KeyCombo @('Ctrl','Shift') 'M') 'Ctrl+Shift+M'
+Assert-Equal 'F5'           (Format-KeyCombo @() 'F5')               '无修饰键 -> F5'
+Assert-Equal 'Win+D'        (Format-KeyCombo @('Win') 'D')           'Win+D'
+Assert-Equal 'Alt+F4'       (Format-KeyCombo @('Alt') 'F4')          'Alt+F4'
+Assert-Equal 'Ctrl+Shift+A' (Format-KeyCombo @('Shift','Ctrl') 'A')  '顺序归一为 Ctrl+Shift+A'
+Assert-True  ($null -eq (Format-KeyCombo @() ''))                    '空主键 -> null'
+# 回归：捕获产物喂现有引擎，效果与手输一致
+Assert-Equal '^{ENTER}' (ConvertTo-SendKeysString (ConvertFrom-KeyCombo (Format-KeyCombo @('Ctrl') 'Enter'))) 'Ctrl+Enter 产物 -> ^{ENTER}'
+Assert-Equal '%{F4}'    (ConvertTo-SendKeysString (ConvertFrom-KeyCombo (Format-KeyCombo @('Alt') 'F4')))     'Alt+F4 产物 -> %{F4}'
+
+Write-Host 'Get-TargetProcessName（目标 -> 进程名）'
+Assert-Equal 'msedge'  (Get-TargetProcessName 'msedge.exe')                 'msedge.exe -> msedge'
+Assert-Equal 'app'     (Get-TargetProcessName 'C:\Program Files\x\app.exe') '完整路径 exe -> app'
+Assert-Equal 'notepad' (Get-TargetProcessName 'notepad')                    '无扩展名视作进程名'
+Assert-True ($null -eq (Get-TargetProcessName '') -or '' -eq (Get-TargetProcessName ''))  '空 -> 空'
+Assert-Equal ''        (Get-TargetProcessName 'https://a.com')              '网址 -> 空'
+Assert-Equal ''        (Get-TargetProcessName 'D:\a\doc.txt')               '文档 -> 空'
+Assert-Equal ''        (Get-TargetProcessName 'x.ps1')                      '.ps1 -> 空（进程名与目标不一致）'
+
+Write-Host 'ConvertTo-SendKeysLiteral（字面文本 -> SendKeys 序列）'
+Assert-Equal 'hello'          (ConvertTo-SendKeysLiteral 'hello')       '普通文本原样'
+Assert-Equal 'a{+}b'          (ConvertTo-SendKeysLiteral 'a+b')         '+ 转义'
+Assert-Equal '100{%}'         (ConvertTo-SendKeysLiteral '100%')        '% 转义'
+Assert-Equal 'a{(}b{)}'       (ConvertTo-SendKeysLiteral 'a(b)')        '括号转义'
+Assert-Equal '{{}x{}}'        (ConvertTo-SendKeysLiteral '{x}')         '花括号转义'
+Assert-Equal '{^}{~}{[}{]}'   (ConvertTo-SendKeysLiteral '^~[]')        '^ ~ [ ] 转义'
+Assert-Equal 'l1{ENTER}l2'    (ConvertTo-SendKeysLiteral "l1`r`nl2")    'CRLF -> {ENTER}'
+Assert-Equal 'l1{ENTER}l2'    (ConvertTo-SendKeysLiteral "l1`nl2")      'LF -> {ENTER}'
+Assert-Equal 'a{TAB}b'        (ConvertTo-SendKeysLiteral "a`tb")        'Tab -> {TAB}'
+Assert-Equal ''               (ConvertTo-SendKeysLiteral '')            '空 -> 空'
+
+Write-Host 'Format-StepListSummary（图标前缀 + 说明后缀）'
+$fx1 = New-LaunchStep 'keys' @{ combo='Win+D' }
+Assert-Equal '发送 Win+D' (Format-StepListSummary $fx1) '无说明 = 原摘要'
+$fx3 = New-LaunchStep 'keys' @{ combo='Win+D'; note='显示桌面' }
+Assert-Equal '发送 Win+D（显示桌面）' (Format-StepListSummary $fx3) '有说明 = 后缀'
+
+Write-Host 'New-LaunchStep 新字段默认值 + text 标签/摘要'
+$ns = New-LaunchStep 'app'
+Assert-Equal $false ([bool]$ns.activateIfRunning) 'activateIfRunning 默认 false'
+Assert-Equal '' ([string]$ns.activateProcess) 'activateProcess 默认空'
+Assert-Equal '' ([string]$ns.note) 'note 默认空'
+Assert-Equal '发送文本' (Get-StepKindLabel 'text') 'text 标签'
+$ts = New-LaunchStep 'text' @{ text='hi there' }
+Assert-Equal '输入 hi there' (Get-StepSummary $ts) 'text 摘要'
+
+Write-Host 'Resolve-LaunchTarget（备用路径解析）'
+$rlExist = $env:WINDIR
+$rlNo = 'Z:\no\such\path_zzz.exe'
+Assert-Equal $rlExist        (Resolve-LaunchTarget $rlExist '')                     '主路径存在 -> 用主路径'
+Assert-Equal 'notepad.exe'   (Resolve-LaunchTarget 'notepad.exe' 'Z:\x')            '裸程序名 -> 原样(不套用备用)'
+Assert-Equal 'https://a.com' (Resolve-LaunchTarget 'https://a.com' 'Z:\x')          '网址 -> 原样'
+Assert-Equal $rlExist        (Resolve-LaunchTarget $rlNo ("Z:\nope`n" + $rlExist))  '主路径不存在 -> 用第一个存在的备用'
+Assert-Equal $rlNo           (Resolve-LaunchTarget $rlNo "Z:\nope1`nZ:\nope2")      '都不存在 -> 返回原目标'
+Assert-Equal $rlNo           (Resolve-LaunchTarget $rlNo '')                        '无备用且不存在 -> 原目标'
+
 Invoke-TestSummary

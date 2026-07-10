@@ -121,6 +121,15 @@ namespace SH {
 }
 }
 
+# 运行时编译 SH.Native/SH.Audio 是否可用。受限令牌/无效 TEMP 下（如经沙箱/受限令牌的启动器 Lucy 打开）
+# csc 编译会失败（报「客户端没有所需的特权」）。用它把「原生功能」的失败变成一句清楚的提示，而非晦涩报错。
+$script:Win32Unavailable = $false
+$script:NativeRestrictedMsg = '启动环境受限，此原生功能不可用（发送按键/窗口动作/激活/音量等需正常启动：双击 bat、托盘或计划任务，勿用沙箱/受限启动器如 Lucy）。'
+function Confirm-Win32Available {
+    if ($script:Win32Unavailable) { return $false }
+    try { Initialize-Win32Types; return $true } catch { $script:Win32Unavailable = $true; return $false }
+}
+
 $script:WM_CLOSE = 0x0010
 $script:SW_MINIMIZE = 6
 $script:SW_MAXIMIZE = 3
@@ -206,7 +215,7 @@ function Send-KeyCombo {
     }
     # 统一走 SendInput（官方推荐，取代 keybd_event / SendKeys 组合注入）：整个组合一次原子注入，
     # 不与真实击键交错；返回注入数，0 = 被系统拒绝（UIPI/安全桌面），可如实报失败而非「发射后不管」。
-    Initialize-Win32Types
+    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
     # 键名 → 虚拟键码：数字映射 D0-D9；命名键/字母走 Keys 枚举（强转+try/catch——PS5.1/.NET Framework
     # 没有 Enum.TryParse 的非泛型重载，误用会「找不到重载」且守卫被静默绕过）；单个符号字符经 VkKeyScan。
     # 多位纯数字必须先拒掉：字符串数字强转 [Keys] 按数值总能成功（'10' → VK 10），会静默注入错误按键。
@@ -252,17 +261,19 @@ function Send-KeyCombo {
 
 function Set-SystemVolume {
     param([int]$Percent)
+    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
     if ($Percent -lt 0) { $Percent = 0 }; if ($Percent -gt 100) { $Percent = 100 }
     [SH.Audio]::SetVolume([single]($Percent/100.0))
 }
 
 function Set-SystemMute {
     param([bool]$Mute)
+    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
     [SH.Audio]::SetMute($Mute)
 }
 
 function Invoke-WindowLogin {
-    param([string]$Process, [string]$SendKey = '{ENTER}', [int]$TimeoutSec = 8)
+    param([string]$Process, [string]$SendKey = '{ENTER}', [int]$TimeoutSec = 8, [switch]$Literal)
     $deadline = (Get-Date).AddSeconds($TimeoutSec)
     while ((Get-Date) -lt $deadline) {
         # 每次「置前台+复核+发键」尝试各自加进程级注入锁（~200ms/次），锁【不跨】下面的 500ms 重试等待——
@@ -273,8 +284,9 @@ function Invoke-WindowLogin {
                 Start-Sleep -Milliseconds 200
                 # 200ms 后焦点可能又被别的窗口抢走 → 再复核一次，仍在前台才发键。
                 if (Test-AppWindowForeground $Process) {
-                    # 宽容解析：'{ENTER}' 原样；'Enter'/'Ctrl+Enter' 组合写法自动转换，不必懂 SendKeys 花括号语法
-                    [System.Windows.Forms.SendKeys]::SendWait((ConvertTo-SendKeysSequence $SendKey))
+                    # $Literal=「发送文本」：逐字、转义元字符；否则宽容解析组合键写法（'{ENTER}' 原样、'Ctrl+Enter' 自动转）
+                    $seq = if ($Literal) { ConvertTo-SendKeysLiteral $SendKey } else { ConvertTo-SendKeysSequence $SendKey }
+                    [System.Windows.Forms.SendKeys]::SendWait($seq)
                     return $true
                 }
             }
@@ -282,6 +294,25 @@ function Invoke-WindowLogin {
         Start-Sleep -Milliseconds 500
     }
     $false   # 始终没能把目标窗口提到前台 → 不发任何按键，绝不误发到别处
+}
+
+# 逐字输入字面文本（「发送文本」步骤用）。$Process 留空=发给当前焦点窗口；填了则先把该进程窗口带到最前、
+# 复核在前台再输入（带不到前台就不发，绝不误发到别处，复用 Invoke-WindowLogin 的置前+复核+注入锁）。空文本直接返回。
+# 与发键一致：返回 'unverified'（已注入输入流，但目标是否接收无法证实）。
+function Send-Text {
+    param([string]$Text, [string]$Process = '')
+    if ([string]::IsNullOrEmpty($Text)) { return }
+    $seq = ConvertTo-SendKeysLiteral $Text
+    if ([string]::IsNullOrEmpty($seq)) { return }
+    Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
+    if ($Process) {
+        if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
+        if (Invoke-WindowLogin $Process $Text 8 -Literal) { return 'unverified' }
+        Write-Warning "发送文本：未能把「$Process」窗口带到最前，未发送"; return
+    }
+    $lk = Enter-InjectionLock
+    try { [System.Windows.Forms.SendKeys]::SendWait($seq) } finally { Exit-InjectionLock $lk }
+    'unverified'
 }
 
 # 轮询等待某窗口出现：$Probe 返回 $true 即出现，出现即走；最多等 $TimeoutSeconds 秒（0=只探一次，保持早退语义）。
@@ -320,6 +351,7 @@ function Wait-AppWindow {
 #   对 close/minimize/maximize/activate 生效，sendkey 走自带流程不用它。
 function Invoke-WindowAction {
     param([string]$Process, [string]$Op, [string]$SendKey = '{ENTER}', [int]$WaitForWindowSeconds = 0, [int]$PostWindowDelaySeconds = 0)
+    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return 0 }
     # sendkey 的等窗口+发键都在 Invoke-WindowLogin 内部逐次尝试各自加锁（每次 ~200ms），不在此处整体持锁——
     # 否则慢启动应用等窗口(可达 WaitForWindowSeconds、无上限)期间会长时间独占注入锁、把并发的其它注入饿到超时。
     if ($Op -eq 'sendkey') {
