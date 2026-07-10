@@ -3,6 +3,20 @@ param([switch]$Run)
 
 Set-Location -LiteralPath $PSScriptRoot
 
+# 兜底可写的 %TEMP%：某些启动器/快捷工具（如 Lucy）会用被清空/无效的环境拉起本进程，令 TEMP 指向不存在
+# 或不可写的目录。而后面多处 Add-Type 要【运行时编译 C#】（ShRow 行模型、SH.Native 发键、DPI 声明），
+# 编译需可写临时目录；TEMP 无效则编译失败、被各处 try/catch 吞掉 —— 尤其 ShRow 没定义会让主窗口
+# 构建时抛「找不到类型 [ShRow]」、整个应用起不来。故开局先把 TEMP/TMP 落到一个确实可写的目录。
+foreach ($c in @($env:TEMP, "$env:LOCALAPPDATA\Temp", "$env:USERPROFILE\AppData\Local\Temp", "$env:WINDIR\Temp", (Join-Path $PSScriptRoot '.temp'))) {
+    if (-not $c) { continue }
+    try {
+        if (-not (Test-Path -LiteralPath $c -PathType Container)) { New-Item -ItemType Directory -Path $c -Force -ErrorAction Stop | Out-Null }
+        $probe = Join-Path $c "sh_probe_$PID.tmp"
+        [System.IO.File]::WriteAllText($probe, 'x'); Remove-Item -LiteralPath $probe -Force -ErrorAction SilentlyContinue
+        $env:TEMP = $c; $env:TMP = $c; break   # 第一个可写的即用；正常情况下就是原 TEMP，不改动
+    } catch {}
+}
+
 # 高分辨率：尽早（建任何窗口前）声明「系统级 DPI 感知」，让计划任务/conhost/双击 任何启动路径
 # 都在当前缩放下清晰渲染，而不是被 Windows 位图拉伸发虚。逐显示器(PerMonitor)在 .NET Framework
 # WinForms 上不可靠（不会自动重排），故取系统级。宿主已声明时本调用是无害 no-op。
