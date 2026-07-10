@@ -52,6 +52,130 @@ function Add-DlgRow {
 }
 function New-DlgText { param([string]$Val='') $t=New-Object System.Windows.Controls.TextBox; $t.Text=[string]$Val; $t.Height=30; $t }
 
+# 文件选择：Microsoft.Win32.OpenFileDialog（WPF 原生）。DereferenceLinks=$false 保留 .lnk 本身路径（.lnk 是合法目标）。
+function Select-FilePathDialog {
+    param([string]$Current)
+    $ofd = New-Object Microsoft.Win32.OpenFileDialog
+    $ofd.Title = '选择文件'
+    $ofd.DereferenceLinks = $false
+    $ofd.Filter = '所有文件 (*.*)|*.*|程序 (*.exe)|*.exe|脚本 (*.ps1;*.bat;*.cmd)|*.ps1;*.bat;*.cmd|快捷方式 (*.lnk)|*.lnk'
+    try {
+        if ($Current) {
+            $dir = if (Test-Path $Current -PathType Container) { $Current } else { Split-Path -Parent $Current }
+            if ($dir -and (Test-Path $dir)) { $ofd.InitialDirectory = (Resolve-Path $dir).Path }
+        }
+    } catch {}
+    if ($ofd.ShowDialog()) { $ofd.FileName } else { $null }
+}
+
+# 文件夹选择：.NET Framework 下只有 WinForms FolderBrowserDialog（程序已加载 WinForms）。
+function Select-FolderPathDialog {
+    param([string]$Current)
+    Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
+    $fbd = New-Object System.Windows.Forms.FolderBrowserDialog
+    $fbd.Description = '选择工作目录'
+    try { if ($Current -and (Test-Path $Current -PathType Container)) { $fbd.SelectedPath = (Resolve-Path $Current).Path } } catch {}
+    if ($fbd.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { $fbd.SelectedPath } else { $null }
+}
+
+# 「文本框 + 右侧按钮」行：按钮调 $Picker（收当前文本、返回新值或 $null），非空回填。返回 TextBox（.Row=行 Grid）。
+function Add-DlgBrowseRow {
+    param($Body, [string]$Label, [string]$Val, [scriptblock]$Picker, [string]$BtnText='浏览…')
+    $tb = New-DlgText $Val
+    $g = New-Object System.Windows.Controls.Grid
+    $c0=New-Object System.Windows.Controls.ColumnDefinition; $c0.Width='*'
+    $c1=New-Object System.Windows.Controls.ColumnDefinition; $c1.Width='Auto'
+    $g.ColumnDefinitions.Add($c0); $g.ColumnDefinitions.Add($c1)
+    [System.Windows.Controls.Grid]::SetColumn($tb,0); [void]$g.Children.Add($tb)
+    $btn=New-Object System.Windows.Controls.Button; $btn.Content='…'; $btn.ToolTip=$BtnText; $btn.Style=$Body.FindResource('Ghost'); $btn.Height=30; $btn.MinWidth=36; $btn.Margin='8,0,0,0'   # 图标按钮（省空间，仿资源管理器/快捷方式编辑器的「…」）；文字说明进 ToolTip
+    [System.Windows.Controls.Grid]::SetColumn($btn,1); [void]$g.Children.Add($btn)
+    $btn.Add_Click({ $r = & $Picker $tb.Text; if ($r) { $tb.Text = [string]$r } }.GetNewClosure())
+    $row = Add-DlgRow $Body $Label $g
+    $tb | Add-Member -NotePropertyName Row -NotePropertyValue $row -Force
+    $tb
+}
+
+# 「文本框 + 捕获按钮」行：点捕获→按快捷键→回填 Ctrl+Enter 这类串。再点/失焦取消。纯修饰键忽略、继续等。返回 TextBox（.Row=行 Grid）。
+function Add-DlgCaptureRow {
+    param($Body, [string]$Label, [string]$Val)
+    $tb = New-DlgText $Val
+    $g = New-Object System.Windows.Controls.Grid
+    $c0=New-Object System.Windows.Controls.ColumnDefinition; $c0.Width='*'
+    $c1=New-Object System.Windows.Controls.ColumnDefinition; $c1.Width='Auto'
+    $g.ColumnDefinitions.Add($c0); $g.ColumnDefinitions.Add($c1)
+    [System.Windows.Controls.Grid]::SetColumn($tb,0); [void]$g.Children.Add($tb)
+    $btn=New-Object System.Windows.Controls.Button; $btn.Content='捕获'; $btn.Style=$Body.FindResource('Ghost'); $btn.Height=30; $btn.MinWidth=64; $btn.Margin='8,0,0,0'
+    [System.Windows.Controls.Grid]::SetColumn($btn,1); [void]$g.Children.Add($btn)
+    $state=@{ cap=$false }
+    $enter={ $state.cap=$true; $btn.Content='按下快捷键…'; [void]$btn.Focus() }.GetNewClosure()
+    $exit ={ $state.cap=$false; $btn.Content='捕获' }.GetNewClosure()
+    $btn.Add_Click({ if($state.cap){ & $exit } else { & $enter } }.GetNewClosure())
+    $btn.Add_LostKeyboardFocus({ if($state.cap){ & $exit } }.GetNewClosure())
+    $btn.Add_PreviewKeyDown({ param($s,$e)
+        if(-not $state.cap){ return }
+        $k=$e.Key; if($k -eq [System.Windows.Input.Key]::System){ $k=$e.SystemKey }
+        $name=ConvertFrom-WpfKeyName ([string]$k)
+        if(-not $name){ $e.Handled=$true; return }
+        $mods=@(); $m=[System.Windows.Input.Keyboard]::Modifiers
+        if($m -band [System.Windows.Input.ModifierKeys]::Control){ $mods+='Ctrl' }
+        if($m -band [System.Windows.Input.ModifierKeys]::Alt){ $mods+='Alt' }
+        if($m -band [System.Windows.Input.ModifierKeys]::Shift){ $mods+='Shift' }
+        if($m -band [System.Windows.Input.ModifierKeys]::Windows){ $mods+='Win' }
+        $tb.Text=(Format-KeyCombo $mods $name)
+        $e.Handled=$true; & $exit
+    }.GetNewClosure())
+    $row = Add-DlgRow $Body $Label $g
+    $tb | Add-Member -NotePropertyName Row -NotePropertyValue $row -Force
+    $tb
+}
+
+# 从当前「有主窗口」的进程里选一个，返回进程名（不含 .exe）。正对「窗口动作」按窗口操作的语义。
+# 顶部搜索框：输入进程名/窗口标题即时过滤（不区分大小写）。
+function Select-ProcessNameDialog {
+    param($Owner)
+    $dlg = New-WpfDialog '选择进程' 460 $Owner; $body=$dlg.FindName('Body')
+    $tSearch = New-DlgText ''; $tSearch.Margin='0,0,0,4'; [void]$body.Children.Add($tSearch)
+    $hs = New-Object System.Windows.Controls.TextBlock; $hs.Text='输入进程名或窗口标题过滤'; $hs.Foreground=$script:MutedBrush; $hs.FontSize=12; $hs.Margin='0,0,0,8'; [void]$body.Children.Add($hs)
+    $lb = New-Object System.Windows.Controls.ListBox
+    $lb.Height=300; $lb.Background=$dlg.FindResource('Panel'); $lb.Foreground=$script:InkBrush; $lb.BorderBrush=$dlg.FindResource('Line'); $lb.FontSize=13
+    [System.Windows.Controls.ScrollViewer]::SetHorizontalScrollBarVisibility($lb,'Disabled')   # 长标题裁到视口内、不出横向滚动条
+    [void]$body.Children.Add($lb)   # 直接进 Body（撑满宽度）
+    $procs = @(Get-Process | Where-Object { $_.MainWindowHandle -ne 0 -and $_.MainWindowTitle } | Sort-Object ProcessName -Unique | ForEach-Object { [pscustomobject]@{ Name=[string]$_.ProcessName; Title=[string]$_.MainWindowTitle } })
+    $fill = {
+        $q = $tSearch.Text.Trim()
+        $lb.Items.Clear()
+        $matched = if ($q) { @($procs | Where-Object { $_.Name.IndexOf($q,[System.StringComparison]::OrdinalIgnoreCase) -ge 0 -or $_.Title.IndexOf($q,[System.StringComparison]::OrdinalIgnoreCase) -ge 0 }) } else { $procs }
+        foreach ($p in $matched) {
+            $ttl=$p.Title; if($ttl.Length -gt 30){ $ttl=$ttl.Substring(0,30)+'…' }
+            $it=New-Object System.Windows.Controls.ListBoxItem; $it.Content="$($p.Name)  —  $ttl"; $it.Tag=$p.Name; $it.Foreground=$script:InkBrush
+            [void]$lb.Items.Add($it)
+        }
+        if ($lb.Items.Count -eq 0) { $it=New-Object System.Windows.Controls.ListBoxItem; $it.Content=$(if($q){'（无匹配）'}else{'（没有检测到带窗口的程序）'}); $it.Foreground=$script:MutedBrush; $it.IsEnabled=$false; [void]$lb.Items.Add($it) }
+    }.GetNewClosure()
+    & $fill
+    $tSearch.Add_TextChanged($fill)
+    $dlg.Add_Loaded({ [void]$tSearch.Focus() }.GetNewClosure())   # 打开即聚焦搜索框，可直接输入
+    $box=@{ R=$null }
+    $lb.Add_MouseDoubleClick({ if($lb.SelectedItem -and $lb.SelectedItem.Tag){ $box.R=[string]$lb.SelectedItem.Tag; $dlg.DialogResult=$true } }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ if($lb.SelectedItem -and $lb.SelectedItem.Tag){ $box.R=[string]$lb.SelectedItem.Tag }; $true }.GetNewClosure())
+    if ($dlg.ShowDialog()) { $box.R } else { $null }
+}
+
+# 日历选日期，返回 yyyy-MM-dd。$Current 能解析则预选，否则默认今天。自成小对话框（Calendar 用默认外观，不嵌暗色行内）。
+function Select-DateDialog {
+    param([string]$Current, $Owner)
+    $dlg = New-WpfDialog '选择日期' 300 $Owner; $body=$dlg.FindName('Body')
+    $dlg.SizeToContent = 'WidthAndHeight'   # 让窗口贴着日历自适应宽高：高分屏下日历不再被右侧裁掉、也不留大片空白
+    $cal = New-Object System.Windows.Controls.Calendar
+    $cal.HorizontalAlignment = 'Center'; $cal.Margin = '0,0,0,4'
+    $d = [datetime]::MinValue
+    if ([datetime]::TryParseExact($Current, 'yyyy-MM-dd', [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::None, [ref]$d)) { $cal.SelectedDate=$d; $cal.DisplayDate=$d }
+    [void]$body.Children.Add($cal)   # 直接进 Body 居中，不用 Add-DlgRow（那会多出一列空标签列、把日历挤偏）
+    $box=@{ R=$null }
+    Add-DlgButtons $dlg $body ({ if($cal.SelectedDate){ $box.R=([datetime]$cal.SelectedDate).ToString('yyyy-MM-dd') }; $true }.GetNewClosure())
+    if ($dlg.ShowDialog()) { $box.R } else { $null }
+}
+
 # 步骤通用「执行条件」两行（仅星期 + 仅 N 点前）——所有启动步骤对话框共用；由 Build-LaunchPlan 在开机/重跑时生效。
 # 返回 @{Checks;Before;Hour}，OnOk 里用 Get-DlgCondValues 取值。此前仅 app 对话框保留这两字段、其余步骤编辑即丢失。
 function Add-DlgCondRows {
@@ -74,6 +198,13 @@ function Get-DlgCondValues {
     $h=8;[void][int]::TryParse($C.Hour.Text,[ref]$h); if($h -lt 1 -or $h -gt 23){$h=8}
     @{ days=@($C.Checks|Where-Object{$_.IsChecked}|ForEach-Object{[int]$_.Tag}); onlyBefore8=[bool]$C.Before.IsChecked; beforeHour=$h }
 }
+# 「用途说明」行，所有步骤对话框共用。返回 @{Note=<TextBox>}，OnOk 里取 .Note.Text。
+# （图标 emoji 已按需求整体移除：界面、显示、模型字段都清掉了；函数名沿用旧名以免改 9 处调用点。）
+function Add-DlgIconNoteRows {
+    param($Body, $Step)
+    $tNote=New-DlgText ([string]$Step.note); Add-DlgRow $Body '说明' $tNote | Out-Null
+    @{ Note=$tNote }
+}
 function Add-DlgButtons {
     param($Dlg, $Body, [scriptblock]$OnOk)
     $bp=New-Object System.Windows.Controls.StackPanel; $bp.Orientation='Horizontal'; $bp.HorizontalAlignment='Right'; $bp.Margin='0,8,0,0'
@@ -89,15 +220,26 @@ function Show-LaunchItemDialogWpf {
     if ($null -eq $Step) { $Step = New-LaunchStep 'app' }
     $dlg = New-WpfDialog '编辑 · 启动程序' 580 $Owner; $body=$dlg.FindName('Body')
     $tName=New-DlgText $Step.label; Add-DlgRow $body '标签' $tName | Out-Null
-    $tTgt =New-DlgText $Step.target; Add-DlgRow $body '目标' $tTgt | Out-Null
+    $tTgt =Add-DlgBrowseRow $body '目标' $Step.target { param($cur) Select-FilePathDialog $cur }
     $hT=New-Object System.Windows.Controls.TextBlock; $hT.Text='程序 / 文档 / 快捷方式 / 网址均可；.ps1 会自动用 PowerShell 运行'; $hT.Foreground=$script:MutedBrush; $hT.FontSize=12; $hT.TextWrapping='Wrap'; Add-DlgRow $body $null $hT | Out-Null
+    $tAlt =New-Object System.Windows.Controls.TextBox; $tAlt.Text=[string]$Step.altTargets; $tAlt.AcceptsReturn=$true; $tAlt.TextWrapping='Wrap'; $tAlt.Height=52; $tAlt.VerticalScrollBarVisibility='Auto'; Add-DlgRow $body '备用路径' $tAlt | Out-Null
+    $hAlt=New-Object System.Windows.Controls.TextBlock; $hAlt.Text='可选，每行一条完整路径。「目标」是完整路径且不存在时，按顺序用第一个存在的备用路径（多设备安装路径不一致时用）。'; $hAlt.Foreground=$script:MutedBrush; $hAlt.FontSize=12; $hAlt.TextWrapping='Wrap'; Add-DlgRow $body $null $hAlt | Out-Null
     $tArg =New-DlgText $Step.args; Add-DlgRow $body '参数' $tArg | Out-Null
-    $tDir =New-DlgText $Step.workDir; Add-DlgRow $body '工作目录' $tDir | Out-Null
+    $tDir =Add-DlgBrowseRow $body '工作目录' $Step.workDir { param($cur) Select-FolderPathDialog ($(if([string]::IsNullOrWhiteSpace($cur)){ try{ Split-Path -Parent $tTgt.Text }catch{''} }else{$cur})) }
+    $hD=New-Object System.Windows.Controls.TextBlock; $hD.Text='留空 = 用「目标」所在目录'; $hD.Foreground=$script:MutedBrush; $hD.FontSize=12; $hD.TextWrapping='Wrap'; Add-DlgRow $body $null $hD | Out-Null
     $cEle =New-Object System.Windows.Controls.CheckBox; $cEle.Content='管理员权限'; $cEle.Foreground=$script:InkBrush; $cEle.IsChecked=[bool]$Step.elevated; Add-DlgRow $body $null $cEle | Out-Null
+    $cAct =New-Object System.Windows.Controls.CheckBox; $cAct.Content='已在运行则激活窗口（不重复启动）'; $cAct.Foreground=$script:InkBrush; $cAct.IsChecked=[bool]$Step.activateIfRunning; Add-DlgRow $body $null $cAct | Out-Null
+    $tAct =Add-DlgBrowseRow $body '进程名' $Step.activateProcess { param($cur) Select-ProcessNameDialog $dlg } '选择…'; $rowAct=$tAct.Row
+    $hAct=New-Object System.Windows.Controls.TextBlock; $hAct.Text='留空 = 用目标程序名自动判断；启动器会开另一个进程名时在此手填（不含 .exe）'; $hAct.Foreground=$script:MutedBrush; $hAct.FontSize=12; $hAct.TextWrapping='Wrap'; $rowActHint=Add-DlgRow $body $null $hAct
+    $togAct={ $v=if($cAct.IsChecked){'Visible'}else{'Collapsed'}; $rowAct.Visibility=$v; $rowActHint.Visibility=$v }.GetNewClosure()
+    $cAct.Add_Checked($togAct); $cAct.Add_Unchecked($togAct); & $togAct
+    $cbWs=New-DlgCombo @('正常','最小化','最大化','隐藏') @('','minimized','maximized','hidden') $Step.windowStyle 140; Add-DlgRow $body '窗口风格' $cbWs | Out-Null
+    $hWs=New-Object System.Windows.Controls.TextBlock; $hWs.Text='是否生效取决于目标程序；勾了「管理员权限」时窗口风格可能不生效（走系统提权路径）。'; $hWs.Foreground=$script:MutedBrush; $hWs.FontSize=12; $hWs.TextWrapping='Wrap'; Add-DlgRow $body $null $hWs | Out-Null
+    $inm=Add-DlgIconNoteRows $body $Step
     $tDly =New-DlgText ([string][int]$Step.delayMs); $tDly.Width=110; $tDly.HorizontalAlignment='Left'; Add-DlgRow $body '执行后延时(ms)' $tDly | Out-Null
     $cond=Add-DlgCondRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($tDly.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'app' @{ enabled=[bool]$Step.enabled; label=$tName.Text; target=$tTgt.Text; args=$tArg.Text; workDir=$tDir.Text; elevated=[bool]$cEle.IsChecked; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($tDly.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'app' @{ enabled=[bool]$Step.enabled; label=$tName.Text; target=$tTgt.Text; args=$tArg.Text; workDir=$tDir.Text; elevated=[bool]$cEle.IsChecked; activateIfRunning=[bool]$cAct.IsChecked; activateProcess=$tAct.Text; windowStyle=(Get-ComboValue $cbWs); altTargets=$tAlt.Text; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 
@@ -130,7 +272,9 @@ function Show-ReminderDialogWpf {
     $lbAn=New-Object System.Windows.Controls.TextBlock; $lbAn.Text='天；起算日'; $lbAn.Foreground=$script:InkBrush; $lbAn.VerticalAlignment='Center'; $lbAn.Margin='6,0,6,0'
     $tAnchor=New-DlgText ([string]$R.anchorDate); $tAnchor.Width=110
     $lbAn2=New-Object System.Windows.Controls.TextBlock; $lbAn2.Text='（yyyy-MM-dd；留空=保存时自动填今天）'; $lbAn2.Foreground=$script:MutedBrush; $lbAn2.VerticalAlignment='Center'; $lbAn2.FontSize=12; $lbAn2.Margin='6,0,0,0'
-    [void]$spInt.Children.Add($tInt); [void]$spInt.Children.Add($lbAn); [void]$spInt.Children.Add($tAnchor); [void]$spInt.Children.Add($lbAn2)
+    $btnDate=New-Object System.Windows.Controls.Button; $btnDate.Content='…'; $btnDate.ToolTip='选日期'; $btnDate.Style=$dlg.FindResource('Ghost'); $btnDate.Height=30; $btnDate.MinWidth=36; $btnDate.Margin='6,0,0,0'
+    $btnDate.Add_Click({ $r=Select-DateDialog $tAnchor.Text $dlg; if($r){ $tAnchor.Text=[string]$r } }.GetNewClosure())
+    [void]$spInt.Children.Add($tInt); [void]$spInt.Children.Add($lbAn); [void]$spInt.Children.Add($tAnchor); [void]$spInt.Children.Add($btnDate); [void]$spInt.Children.Add($lbAn2)
     $rowInt=Add-DlgRow $body '每几天' $spInt
     $tMon=New-DlgText ([string][int]$R.monthlyDay); $tMon.Width=60; $tMon.HorizontalAlignment='Left'; $rowMon=Add-DlgRow $body '每月几号' $tMon
     $tMsg=New-Object System.Windows.Controls.TextBox; $tMsg.Text=[string]$R.message; $tMsg.AcceptsReturn=$true; $tMsg.TextWrapping='Wrap'; $tMsg.Height=80; $tMsg.VerticalScrollBarVisibility='Auto'; Add-DlgRow $body '文本' $tMsg | Out-Null
@@ -148,10 +292,17 @@ function Show-ReminderDialogWpf {
     foreach($w in @('116','130','*')){ $cd=New-Object System.Windows.Controls.ColumnDefinition; $cd.Width=$w; $rowYG.ColumnDefinitions.Add($cd) }
     $lbY=New-Object System.Windows.Controls.TextBlock; $lbY.Text='点是后'; $lbY.Foreground=$script:InkBrush; $lbY.VerticalAlignment='Center'; $lbY.FontSize=14; [System.Windows.Controls.Grid]::SetColumn($lbY,0); [void]$rowYG.Children.Add($lbY)
     [System.Windows.Controls.Grid]::SetColumn($cbY,1); [void]$rowYG.Children.Add($cbY)
-    $tY.Margin='8,0,0,0'; [System.Windows.Controls.Grid]::SetColumn($tY,2); [void]$rowYG.Children.Add($tY)
+    $tYWrap=New-Object System.Windows.Controls.Grid; $tYWrap.Margin='8,0,0,0'
+    $wc0=New-Object System.Windows.Controls.ColumnDefinition; $wc0.Width='*'; $wc1=New-Object System.Windows.Controls.ColumnDefinition; $wc1.Width='Auto'
+    $tYWrap.ColumnDefinitions.Add($wc0); $tYWrap.ColumnDefinitions.Add($wc1)
+    [System.Windows.Controls.Grid]::SetColumn($tY,0); [void]$tYWrap.Children.Add($tY)
+    $btnYB=New-Object System.Windows.Controls.Button; $btnYB.Content='…'; $btnYB.ToolTip='浏览…'; $btnYB.Style=$dlg.FindResource('Ghost'); $btnYB.Height=30; $btnYB.MinWidth=36; $btnYB.Margin='8,0,0,0'
+    [System.Windows.Controls.Grid]::SetColumn($btnYB,1); [void]$tYWrap.Children.Add($btnYB)
+    $btnYB.Add_Click({ $r=Select-FilePathDialog $tY.Text; if($r){ $tY.Text=[string]$r } }.GetNewClosure())
+    [System.Windows.Controls.Grid]::SetColumn($tYWrap,2); [void]$rowYG.Children.Add($tYWrap)
     $cbYG.Margin='8,0,0,0'; $cbYG.HorizontalAlignment='Left'; [System.Windows.Controls.Grid]::SetColumn($cbYG,2); [void]$rowYG.Children.Add($cbYG)
     [void]$body.Children.Add($rowYG)
-    $togY={ if((Get-ComboValue $cbY) -eq 'group'){ $tY.Visibility='Collapsed'; $cbYG.Visibility='Visible' } else { $tY.Visibility='Visible'; $cbYG.Visibility='Collapsed' } }.GetNewClosure()
+    $togY={ $v=(Get-ComboValue $cbY); if($v -eq 'group'){ $tYWrap.Visibility='Collapsed'; $cbYG.Visibility='Visible' } else { $tYWrap.Visibility='Visible'; $cbYG.Visibility='Collapsed'; $btnYB.Visibility=$(if($v -eq 'run'){'Visible'}else{'Collapsed'}) } }.GetNewClosure()
     $cbY.Add_SelectionChanged($togY); & $togY
     # 无操作自动关闭：到秒数没人点就自动关（重复型提醒会按「重复每N分」继续催；普通提醒当天不再弹）
     $spAuto=New-Object System.Windows.Controls.StackPanel; $spAuto.Orientation='Horizontal'

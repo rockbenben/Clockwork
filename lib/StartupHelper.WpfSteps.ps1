@@ -15,12 +15,13 @@ function Show-KeysStepDialogWpf {
     param($Step, $Owner)
     if ($null -eq $Step) { $Step = New-LaunchStep 'keys' }
     $dlg=New-WpfDialog '编辑 · 发送按键' 560 $Owner; $body=$dlg.FindName('Body')
-    $t=New-DlgText $Step.combo; Add-DlgRow $body '组合键' $t | Out-Null
-    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='例：Win+D / Alt+K / Ctrl+Enter / F5（支持 Enter、Tab、Esc、Del、方向键等键名）'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
+    $t=Add-DlgCaptureRow $body '组合键' $Step.combo
+    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='例：Win+D / Alt+K / Ctrl+Enter / F5（支持 Enter、Tab、Esc、Del、方向键等键名）。点「捕获」按下快捷键即自动填入；Win+ 组合会被系统截走、需手输，符号键也请手输'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
+    $inm=Add-DlgIconNoteRows $body $Step
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $cond=Add-DlgCondRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'keys' @{ enabled=[bool]$Step.enabled; label=$t.Text; combo=$t.Text; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'keys' @{ enabled=[bool]$Step.enabled; label=$t.Text; combo=$t.Text; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-VolumeStepDialogWpf {
@@ -34,8 +35,9 @@ function Show-VolumeStepDialogWpf {
     # 音量行仅在「设为音量」时显示——静音/取消静音用不到，摆着只会让人困惑
     $togLv={ $rowLv.Visibility = if((Get-ComboValue $cb) -eq 'set'){'Visible'}else{'Collapsed'} }.GetNewClosure()
     $cb.Add_SelectionChanged($togLv); & $togLv
+    $inm=Add-DlgIconNoteRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $lvl=0;[void][int]::TryParse($lv.Text,[ref]$lvl); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'volume' @{ enabled=[bool]$Step.enabled; action=(Get-ComboValue $cb); level=[Math]::Max(0,[Math]::Min(100,$lvl)); delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $lvl=0;[void][int]::TryParse($lv.Text,[ref]$lvl); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'volume' @{ enabled=[bool]$Step.enabled; action=(Get-ComboValue $cb); level=[Math]::Max(0,[Math]::Min(100,$lvl)); delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-WindowStepDialogWpf {
@@ -43,20 +45,21 @@ function Show-WindowStepDialogWpf {
     if ($null -eq $Step) { $Step = New-LaunchStep 'window' @{ action='close' } }
     $dlg=New-WpfDialog '编辑 · 窗口动作' 560 $Owner; $body=$dlg.FindName('Body')
     $cb=New-DlgCombo @('关闭窗口','最小化窗口','最大化窗口','带到最前面','置前并发送按键') @('close','minimize','maximize','activate','sendkey') $Step.action 190; Add-DlgRow $body '动作' $cb | Out-Null
-    $tp=New-DlgText $Step.process; Add-DlgRow $body '进程名' $tp | Out-Null
+    $tp=Add-DlgBrowseRow $body '进程名' $Step.process { param($cur) Select-ProcessNameDialog $dlg } '选择…'
     $h=New-Object System.Windows.Controls.TextBlock; $h.Text='进程名，不含 .exe，如 Weixin / QQ / msedge（任务管理器「详细信息」列可查）'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
-    $tk=New-DlgText $Step.sendKey; $rowSend=Add-DlgRow $body '发送按键' $tk
-    $hk=New-Object System.Windows.Controls.TextBlock; $hk.Text='可写 Enter / Ctrl+Enter 这类组合，或原生 SendKeys 序列（如 {ENTER}、hello{TAB}）'; $hk.Foreground=$script:MutedBrush; $hk.FontSize=12; $hk.TextWrapping='Wrap'; $rowSendHint=Add-DlgRow $body $null $hk
+    $tk=Add-DlgCaptureRow $body '发送按键' $Step.sendKey; $rowSend=$tk.Row
+    $hk=New-Object System.Windows.Controls.TextBlock; $hk.Text='可写 Enter / Ctrl+Enter 这类组合，或原生 SendKeys 序列（如 {ENTER}、hello{TAB}）。点「捕获」可录单个组合键（Win+ 组合与连续序列请手输）'; $hk.Foreground=$script:MutedBrush; $hk.FontSize=12; $hk.TextWrapping='Wrap'; $rowSendHint=Add-DlgRow $body $null $hk
     $tw=New-DlgText ([string][int]$Step.waitForWindowSeconds); Add-DlgRow $body '等待窗口出现(秒)' $tw | Out-Null
     $hw=New-Object System.Windows.Controls.TextBlock; $hw.Text='最多等目标程序的窗口出现这么多秒，一出现就动手。填 0 = 不等（现在有窗口就动手，没有就跳过）；开机时程序起得慢就填大点（如 120），窗口一冒出来就动、不会白等满'; $hw.Foreground=$script:MutedBrush; $hw.FontSize=12; $hw.TextWrapping='Wrap'; Add-DlgRow $body $null $hw | Out-Null
-    $tpd=New-DlgText ([string][int]$Step.postWindowDelaySeconds); $rowPost=Add-DlgRow $body '窗口出现后再等(秒)' $tpd
+    $tpd=New-DlgText ([string][int]$Step.postWindowDelaySeconds); $rowPost=Add-DlgRow $body '出现后再等(秒)' $tpd
     $hpd=New-Object System.Windows.Controls.TextBlock; $hpd.Text='窗口出现后，再多等几秒才动手。像 QQ、TIM 会先弹个小窗、过一两秒才切到主界面，等一下才能操作到主界面（填 5 左右）。发送按键不用设这个'; $hpd.Foreground=$script:MutedBrush; $hpd.FontSize=12; $hpd.TextWrapping='Wrap'; $rowPostHint=Add-DlgRow $body $null $hpd
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $cond=Add-DlgCondRows $body $Step
     $toggle={ $v = if((Get-ComboValue $cb) -eq 'sendkey'){'Visible'}else{'Collapsed'}; $rowSend.Visibility=$v; $rowSendHint.Visibility=$v; $pv = if((Get-ComboValue $cb) -in 'close','minimize','maximize','activate'){'Visible'}else{'Collapsed'}; $rowPost.Visibility=$pv; $rowPostHint.Visibility=$pv }.GetNewClosure()
     $cb.Add_SelectionChanged($toggle); & $toggle
+    $inm=Add-DlgIconNoteRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $wv=0;[void][int]::TryParse($tw.Text,[ref]$wv); $pv=0;[void][int]::TryParse($tpd.Text,[ref]$pv); $act=(Get-ComboValue $cb); $actLb=[string]$cb.SelectedItem.Content; $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'window' @{ enabled=[bool]$Step.enabled; action=$act; process=$tp.Text; sendKey=$tk.Text; waitForWindowSeconds=$wv; postWindowDelaySeconds=$pv; label="$actLb $($tp.Text)"; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $wv=0;[void][int]::TryParse($tw.Text,[ref]$wv); $pv=0;[void][int]::TryParse($tpd.Text,[ref]$pv); $act=(Get-ComboValue $cb); $actLb=[string]$cb.SelectedItem.Content; $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'window' @{ enabled=[bool]$Step.enabled; action=$act; process=$tp.Text; sendKey=$tk.Text; waitForWindowSeconds=$wv; postWindowDelaySeconds=$pv; label="$actLb $($tp.Text)"; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-SystemStepDialogWpf {
@@ -67,8 +70,9 @@ function Show-SystemStepDialogWpf {
     $cb=New-DlgCombo $labels $ids $Step.command 220; Add-DlgRow $body '命令' $cb | Out-Null
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $cond=Add-DlgCondRows $body $Step
+    $inm=Add-DlgIconNoteRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cmd=(Get-ComboValue $cb); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'system' @{ enabled=[bool]$Step.enabled; command=$cmd; label=$m[$cmd]; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cmd=(Get-ComboValue $cb); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'system' @{ enabled=[bool]$Step.enabled; command=$cmd; label=$m[$cmd]; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-GroupStepDialogWpf {
@@ -80,8 +84,9 @@ function Show-GroupStepDialogWpf {
     $h=New-Object System.Windows.Controls.TextBlock; $h.Text='开机 / 重跑启动清单时运行该组全部步骤（组内消息步骤此时跳过，不弹窗打断）'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $cond=Add-DlgCondRows $body $Step
+    $inm=Add-DlgIconNoteRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $gid=(Get-ComboValue $cb); $gn=($gs|Where-Object{[string]$_.id -eq $gid}|ForEach-Object{[string]$_.name}); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'group' @{ enabled=[bool]$Step.enabled; groupId=$gid; label=[string]$gn; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $gid=(Get-ComboValue $cb); $gn=($gs|Where-Object{[string]$_.id -eq $gid}|ForEach-Object{[string]$_.name}); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'group' @{ enabled=[bool]$Step.enabled; groupId=$gid; label=[string]$gn; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-MessageStepDialogWpf {
@@ -99,11 +104,21 @@ function Show-MessageStepDialogWpf {
     $rowY.ColumnDefinitions.Add($c0);$rowY.ColumnDefinitions.Add($c1);$rowY.ColumnDefinitions.Add($c2)
     $lb=New-Object System.Windows.Controls.TextBlock;$lb.Text='点是后';$lb.Foreground=$script:InkBrush;$lb.VerticalAlignment='Center';$lb.FontSize=14;[System.Windows.Controls.Grid]::SetColumn($lb,0);[void]$rowY.Children.Add($lb)
     [System.Windows.Controls.Grid]::SetColumn($cbY,1);[void]$rowY.Children.Add($cbY)
-    $tY.Margin='8,0,0,0';[System.Windows.Controls.Grid]::SetColumn($tY,2);[void]$rowY.Children.Add($tY)
+    $tYWrap=New-Object System.Windows.Controls.Grid; $tYWrap.Margin='8,0,0,0'
+    $wc0=New-Object System.Windows.Controls.ColumnDefinition; $wc0.Width='*'; $wc1=New-Object System.Windows.Controls.ColumnDefinition; $wc1.Width='Auto'
+    $tYWrap.ColumnDefinitions.Add($wc0); $tYWrap.ColumnDefinitions.Add($wc1)
+    [System.Windows.Controls.Grid]::SetColumn($tY,0);[void]$tYWrap.Children.Add($tY)
+    $btnYB=New-Object System.Windows.Controls.Button; $btnYB.Content='…'; $btnYB.ToolTip='浏览…'; $btnYB.Style=$dlg.FindResource('Ghost'); $btnYB.Height=30; $btnYB.MinWidth=36; $btnYB.Margin='8,0,0,0'
+    [System.Windows.Controls.Grid]::SetColumn($btnYB,1);[void]$tYWrap.Children.Add($btnYB)
+    $btnYB.Add_Click({ $r=Select-FilePathDialog $tY.Text; if($r){ $tY.Text=[string]$r } }.GetNewClosure())
+    [System.Windows.Controls.Grid]::SetColumn($tYWrap,2);[void]$rowY.Children.Add($tYWrap)
+    $togYB={ $btnYB.Visibility=$(if((Get-ComboValue $cbY) -eq 'run'){'Visible'}else{'Collapsed'}) }.GetNewClosure()
+    $cbY.Add_SelectionChanged($togYB); & $togYB
     [void]$body.Children.Add($rowY)
+    $inm=Add-DlgIconNoteRows $body $Step
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $box.R=New-LaunchStep 'message' @{ enabled=[bool]$Step.enabled; message=$tm.Text; speak=[bool]$cSpk.IsChecked; confirm=[bool]$cCfm.IsChecked; onYes=@{ type=(Get-ComboValue $cbY); target=$tY.Text }; delayMs=$d }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $box.R=New-LaunchStep 'message' @{ enabled=[bool]$Step.enabled; message=$tm.Text; speak=[bool]$cSpk.IsChecked; confirm=[bool]$cCfm.IsChecked; onYes=@{ type=(Get-ComboValue $cbY); target=$tY.Text }; delayMs=$d; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 
@@ -116,10 +131,28 @@ function Show-DelayStepDialogWpf {
     $t=New-DlgText ([string]$sec); $t.Width=110; $t.HorizontalAlignment='Left'; Add-DlgRow $body '延时（秒）' $t | Out-Null
     $h=New-Object System.Windows.Controls.TextBlock; $h.Text='到这一步先等待指定秒数再继续。放在清单最前面即可整体推迟启动（如开得太早，先等 60 秒再启动后面的程序）。'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
     $cond=Add-DlgCondRows $body $Step
+    $inm=Add-DlgIconNoteRows $body $Step
     $box=@{R=$null}
     # 上限 2147483 秒：再大 $sv*1000 会溢出 Int32→被 PS 提升为 Double，之后回显(本函数 :115)/运行(Actions 里
     # Start-Sleep 的 [int]$step.delayMs)时转换抛 OverflowException——该延时步骤再也打不开、开机序列跑到它就崩。夹到 Int32 毫秒内即安全。
-    Add-DlgButtons $dlg $body ({ $sv=0;[void][int]::TryParse($t.Text,[ref]$sv); if($sv -lt 0){$sv=0}elseif($sv -gt 2147483){$sv=2147483}; $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'delay' @{ enabled=[bool]$Step.enabled; label="延时 $sv 秒"; delayMs=($sv*1000); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $sv=0;[void][int]::TryParse($t.Text,[ref]$sv); if($sv -lt 0){$sv=0}elseif($sv -gt 2147483){$sv=2147483}; $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'delay' @{ enabled=[bool]$Step.enabled; label="延时 $sv 秒"; delayMs=($sv*1000); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    if ($dlg.ShowDialog()) { $box.R } else { $null }
+}
+
+# 发送文本：往当前焦点窗口逐字输入的字面文本（多行）。执行时用 SendKeys.SendWait。
+function Show-TextStepDialogWpf {
+    param($Step, $Owner)
+    if ($null -eq $Step) { $Step = New-LaunchStep 'text' }
+    $dlg=New-WpfDialog '编辑 · 发送文本' 580 $Owner; $body=$dlg.FindName('Body')
+    $tm=New-Object System.Windows.Controls.TextBox; $tm.Text=[string]$Step.text; $tm.AcceptsReturn=$true; $tm.TextWrapping='Wrap'; $tm.Height=110; $tm.VerticalScrollBarVisibility='Auto'; Add-DlgRow $body '文本' $tm | Out-Null
+    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='逐字输入文本（换行=回车、Tab 生效）。'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
+    $tp=Add-DlgBrowseRow $body '目标进程' $Step.process { param($cur) Select-ProcessNameDialog $dlg } '选择…'
+    $hp=New-Object System.Windows.Controls.TextBlock; $hp.Text='留空 = 发给当前焦点窗口（需自行确保光标已在目标输入框，可配合前一步「延时」）；填进程名（不含 .exe）则先把它的窗口带到最前、再输入。'; $hp.Foreground=$script:MutedBrush; $hp.FontSize=12; $hp.TextWrapping='Wrap'; Add-DlgRow $body $null $hp | Out-Null
+    $dl=Add-DlgDelayRow $body $Step.delayMs
+    $cond=Add-DlgCondRows $body $Step
+    $inm=Add-DlgIconNoteRows $body $Step
+    $box=@{R=$null}
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'text' @{ enabled=[bool]$Step.enabled; text=$tm.Text; process=$tp.Text; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 
@@ -134,6 +167,7 @@ function Show-StepDialogWpf {
         'system'  { Show-SystemStepDialogWpf $Step $Owner }
         'group'   { Show-GroupStepDialogWpf $Step $Groups $Owner }
         'delay'   { Show-DelayStepDialogWpf $Step $Owner }
+        'text'    { Show-TextStepDialogWpf $Step $Owner }
         'message' { Show-MessageStepDialogWpf $Step $Owner }
         default   { Show-LaunchItemDialogWpf $Step $Owner }
     }
@@ -192,13 +226,13 @@ function Show-ActionGroupDialogWpf {
     foreach ($s in @($Group.steps)) { $steps.Add($s) }
     $refresh={
         $rows=New-Object System.Collections.ObjectModel.ObservableCollection[object]
-        foreach ($s in $steps) { $r=New-Object ShRow; $r.T1=(Get-StepKindLabel $s.kind); $r.T2=(Get-StepSummary $s); $r.T3=[string][int]$s.delayMs; $r.Ref=$s; $rows.Add($r) }
+        foreach ($s in $steps) { $r=New-Object ShRow; $r.T1=(Get-StepKindLabel $s.kind); $r.T2=(Format-StepListSummary $s); $r.T3=[string][int]$s.delayMs; $r.Ref=$s; $rows.Add($r) }
         $grid.ItemsSource=$rows
     }.GetNewClosure()
     & $refresh
     $selIdx={ if($null -eq $grid.SelectedItem){ -1 } else { $steps.IndexOf($grid.SelectedItem.Ref) } }.GetNewClosure()
     # 新增：类型菜单
-    $kinds=@(@('启动程序','app'),@('发送按键','keys'),@('音量','volume'),@('窗口动作','window'),@('系统命令','system'),@('延时','delay'),@('消息','message'))
+    $kinds=@(@('启动程序','app'),@('发送按键','keys'),@('发送文本','text'),@('音量','volume'),@('窗口动作','window'),@('系统命令','system'),@('延时','delay'),@('消息','message'))
     $menu=New-DarkContextMenu
     foreach ($k in $kinds) {
         $mi=New-Object System.Windows.Controls.MenuItem; $mi.Header=$k[0]; $mi.Tag=$k[1]
@@ -207,6 +241,8 @@ function Show-ActionGroupDialogWpf {
     }
     $dlg.FindName('SAdd').Add_Click({ $menu.PlacementTarget=$dlg.FindName('SAdd'); $menu.IsOpen=$true }.GetNewClosure())
     $dlg.FindName('SEdit').Add_Click({ $i=& $selIdx; if($i -ge 0){ $n=Show-StepDialogWpf ([string]$steps[$i].kind) $steps[$i] @() $dlg; if($n){ $steps[$i]=$n; & $refresh; $grid.SelectedIndex=$i } } }.GetNewClosure())
+    # 双击条目=编辑（与启动清单/提醒等列表一致）：转触发「编辑」按钮
+    $grid.Add_MouseDoubleClick({ if((& $selIdx) -ge 0){ $dlg.FindName('SEdit').RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Button]::ClickEvent))) } }.GetNewClosure())
     $dlg.FindName('SDel').Add_Click({ $i=& $selIdx; if($i -ge 0){ $steps.RemoveAt($i); & $refresh; if($steps.Count -gt 0){ $grid.SelectedIndex=[Math]::Min($i,$steps.Count-1) } } }.GetNewClosure())   # 删除后选中下一条
     $dlg.FindName('SUp').Add_Click({ $i=& $selIdx; if($i -gt 0){ $t=$steps[$i]; $steps[$i]=$steps[$i-1]; $steps[$i-1]=$t; & $refresh; $grid.SelectedIndex=$i-1 } }.GetNewClosure())
     $dlg.FindName('SDown').Add_Click({ $i=& $selIdx; if($i -ge 0 -and $i -lt $steps.Count-1){ $t=$steps[$i]; $steps[$i]=$steps[$i+1]; $steps[$i+1]=$t; & $refresh; $grid.SelectedIndex=$i+1 } }.GetNewClosure())

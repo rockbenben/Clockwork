@@ -3,22 +3,24 @@
 Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase
 Add-Type -AssemblyName System.Windows.Forms   # 仅用其 NotifyIcon 做托盘（WPF 无原生托盘）
 
-# 通用行模型（.NET 类，支持双向绑定 + 勾选回调）：C1=启用勾选、C2=次勾选(语音)、T1..T4=文本列、Ref=原始对象。
-try {
-    Add-Type -ReferencedAssemblies 'System.dll' -TypeDefinition @'
-using System; using System.ComponentModel;
-public class ShRow : INotifyPropertyChanged {
-    private bool _c1; public bool C1 { get{return _c1;} set{ if(_c1!=value){_c1=value; PC("C1"); if(OnC1!=null) OnC1(this);} } }
-    private bool _c2; public bool C2 { get{return _c2;} set{ if(_c2!=value){_c2=value; PC("C2"); if(OnC2!=null) OnC2(this);} } }
-    public string T1 {get;set;} public string T2 {get;set;} public string T3 {get;set;} public string T4 {get;set;}
-    private bool _canEdit = true; public bool CanEdit { get{return _canEdit;} set{ if(_canEdit!=value){_canEdit=value; PC("CanEdit");} } }
-    public object Ref {get;set;}
-    [field:NonSerialized] public Action<ShRow> OnC1; [field:NonSerialized] public Action<ShRow> OnC2;
-    public event PropertyChangedEventHandler PropertyChanged;
-    void PC(string n){ var h=PropertyChanged; if(h!=null) h(this, new PropertyChangedEventArgs(n)); }
+# 通用行模型（列表行，供 WPF 双向绑定）：C1=启用勾选、C2=次勾选(语音)、T1..T4=文本列、CanEdit=可否改、
+# Ref=原始对象、OnC1/OnC2=勾选切换后的回调（由 Add-CheckClickSelect 在勾选框 Click 时触发并回写/持久化）。
+# 用【PowerShell 类】而非 Add-Type 编译 C#：纯源码、无需 csc.exe / 临时 DLL，受限令牌（如经 Lucy 等启动器
+# 打开）下也能定义——运行时编译 C# 会报「客户端没有所需的特权」而使应用起不来。
+# 代价：PS 类不支持带副作用的 setter，也无 INotifyPropertyChanged，故「切换即回写」改由 Click 路由事件驱动，
+# 回调可能回滚 C1/C2（如系统项切换失败），由 Add-CheckClickSelect 在回调后把勾选框同步回模型值来体现。
+class ShRow {
+    [bool]   $C1
+    [bool]   $C2
+    [string] $T1
+    [string] $T2
+    [string] $T3
+    [string] $T4
+    [bool]   $CanEdit = $true
+    [object] $Ref
+    [object] $OnC1
+    [object] $OnC2
 }
-'@ -ErrorAction Stop
-} catch {}
 
 # —— 暗色调色板（与预览一致）——
 $script:W = @{
@@ -121,7 +123,7 @@ $script:MainXaml = @'
         <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="150"/></Grid.ColumnDefinitions>
           <DataGrid x:Name="GridLaunch" Grid.Column="0" Margin="0,8,0,0">
             <DataGrid.Columns>
-              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="C1" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
               <DataGridTextColumn Header="类型" Binding="{Binding T1}" Width="96" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="摘要" Binding="{Binding T2}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="延时(ms)" Binding="{Binding T3}" Width="80" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
@@ -137,11 +139,11 @@ $script:MainXaml = @'
         <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="150"/></Grid.ColumnDefinitions>
           <DataGrid x:Name="GridRemind" Grid.Column="0" Margin="0,8,0,0">
             <DataGrid.Columns>
-              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="C1" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
               <DataGridTextColumn Header="时间" Binding="{Binding T1}" Width="88" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="周期" Binding="{Binding T2}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="文本" Binding="{Binding T3}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
-              <DataGridTemplateColumn Header="语音" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+              <DataGridTemplateColumn Header="语音" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="C2" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
             </DataGrid.Columns>
           </DataGrid>
           <StackPanel Grid.Column="1" Margin="10,8,0,0">
@@ -151,28 +153,33 @@ $script:MainXaml = @'
         </Grid>
       </TabItem>
       <TabItem Header="系统启动项">
-        <Grid><Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-          <DataGrid x:Name="GridSystem" Grid.Row="0" Margin="0,8,0,0">
+        <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+          <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,8,0,0">
+            <TextBlock Text="过滤" Foreground="{StaticResource Ink}" VerticalAlignment="Center" FontSize="13" Margin="0,0,8,0"/>
+            <TextBox x:Name="SSearch" Width="320" Height="30" Background="#2E343B" Foreground="#E6E9ED" BorderBrush="#3C434B" BorderThickness="1" Padding="6,4" FontSize="13" CaretBrush="#E6E9ED"/>
+            <TextBlock Text="按名称或命令过滤" Foreground="{StaticResource Muted}" VerticalAlignment="Center" FontSize="12" Margin="10,0,0,0"/>
+          </StackPanel>
+          <DataGrid x:Name="GridSystem" Grid.Row="1" Margin="0,8,0,0">
             <DataGrid.Columns>
-              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="C1" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
               <DataGridTextColumn Header="名称" Binding="{Binding T1}" Width="200" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="命令" Binding="{Binding T2}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="来源" Binding="{Binding T3}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="范围" Binding="{Binding T4}" Width="130" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
             </DataGrid.Columns>
           </DataGrid>
-          <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
+          <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
             <Button x:Name="SRefresh" Content="刷新" Style="{StaticResource Side}" Width="100" Height="28" Margin="0,0,10,0"/>
             <Button x:Name="SImport" Content="纳入启动清单" Style="{StaticResource Side}" Width="130" Height="28" Margin="0"/>
-            <TextBlock x:Name="SHint" Text="勾选/取消即时生效（非删除，可恢复）；标「需管理员」的项需管理员身份；置灰的「只读」项为系统/策略项，无法开关。" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Margin="14,0,0,0" FontSize="12"/>
           </StackPanel>
+          <TextBlock x:Name="SHint" Grid.Row="3" Text="勾选/取消即时生效（非删除，可恢复）；标「需管理员」的项需管理员身份；置灰的「只读」项为系统/策略项，无法开关。" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,8,0,0" FontSize="12"/>
         </Grid>
       </TabItem>
       <TabItem Header="动作组">
         <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="150"/></Grid.ColumnDefinitions>
           <DataGrid x:Name="GridGroup" Grid.Column="0" Margin="0,8,0,0">
             <DataGrid.Columns>
-              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+              <DataGridTemplateColumn Header="启用" Width="54"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding C1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="C1" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
               <DataGridTextColumn Header="名称" Binding="{Binding T1}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
               <DataGridTextColumn Header="步骤" Binding="{Binding T2}" Width="80" IsReadOnly="True" ElementStyle="{StaticResource CellText}"/>
             </DataGrid.Columns>
@@ -214,10 +221,10 @@ function Get-LaunchRows {
         $r = New-Object ShRow
         $r.C1 = [bool]$st.enabled
         $r.T1 = Get-StepKindLabel $st.kind
-        $r.T2 = Get-StepSummary $st
+        $r.T2 = Format-StepListSummary $st
         $r.T3 = [string][int]$st.delayMs
         $r.Ref = $st
-        $r.OnC1 = [Action[ShRow]]{ param($row) $row.Ref.enabled = $row.C1; Save-Config }
+        $r.OnC1 = { param($row) $row.Ref.enabled = $row.C1; Save-Config }
         $rows.Add($r)
     }
     ,$rows   # 逗号防止集合被展开（单元素时 ItemsSource 会收到单个 ShRow）
@@ -237,8 +244,8 @@ function Get-ReminderRows {
         $row.T2 = switch ([string]$r.recurType) { 'everyNDays'{"每$([int]$r.intervalDays)天"} 'monthly'{"每月$([int]$r.monthlyDay)号"} default{ Get-DaysLabel $r.days } }
         $sum = ([string]$r.message -replace "`r?`n",' '); if ($sum.Length -gt 30){ $sum=$sum.Substring(0,30)+'…' }
         $row.T3 = $sum; $row.C2 = [bool]$r.speak; $row.Ref = $r
-        $row.OnC1 = [Action[ShRow]]{ param($x) $x.Ref.enabled = $x.C1; Save-Config }
-        $row.OnC2 = [Action[ShRow]]{ param($x) $x.Ref.speak  = $x.C2; Save-Config }
+        $row.OnC1 = { param($x) $x.Ref.enabled = $x.C1; Save-Config }
+        $row.OnC2 = { param($x) $x.Ref.speak  = $x.C2; Save-Config }
         $rows.Add($row)
     }
     ,$rows   # 逗号防止 PowerShell 把集合展开成元素（否则单元素时 ItemsSource 收到的是单个 ShRow 而非集合）
@@ -249,7 +256,7 @@ function Get-GroupRows {
     foreach ($g in @($Config.actionGroups)) {
         $row = New-Object ShRow
         $row.C1 = [bool]$g.enabled; $row.T1 = [string]$g.name; $row.T2 = [string]@($g.steps).Count; $row.Ref = $g
-        $row.OnC1 = [Action[ShRow]]{ param($x) $x.Ref.enabled = $x.C1; Save-Config }
+        $row.OnC1 = { param($x) $x.Ref.enabled = $x.C1; Save-Config }
         $rows.Add($row)
     }
     ,$rows   # 逗号防止 PowerShell 把集合展开成元素（否则单元素时 ItemsSource 收到的是单个 ShRow 而非集合）
@@ -272,12 +279,28 @@ function Get-SystemRows {
 # 勾选框由 DataGridCheckBoxColumn 改为模板 CheckBox 后，点勾选框不再顺带选中该行（模板 CheckBox 会
 # 吞掉 MouseDown，DataGridCell 收不到、不选行）。而「编辑/删除/上移下移/纳入」等按钮都按 SelectedItem
 # 取行——不同步就会对错行操作。补一个类处理器：点某行勾选框即把该行设为选中。四个 DataGrid 共用。
+# 同时承担【勾选切换后的持久化】：ShRow 是 PS 类、无 setter 副作用/INotifyPropertyChanged（改用 PS 类是
+# 为了免运行时编译、受限令牌下也能起），故在此 Click 事件里按勾选框 Tag(C1/C2) 调 OnC1/OnC2 回调；回调可能
+# 回滚 C1/C2（如系统项切换失败），回调后把勾选框 IsChecked 同步回模型值来反映（替代原 INPC 的 源->目标 更新）。
 function Add-CheckClickSelect {
     param($Grid)
     $Grid.AddHandler([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent,
         [System.Windows.RoutedEventHandler]{ param($s,$e)
-            $src = $e.OriginalSource
-            if ($src -is [System.Windows.FrameworkElement] -and $src.DataContext -is [ShRow]) { $s.SelectedItem = $src.DataContext }
+            # 冒泡到 DataGrid 时 $e.Source 会被重定成 DataGrid，故从 $e.OriginalSource（被点的最深视觉元素，
+            # 位于勾选框模板内部）往上找到那个勾选框本身，才能拿到它的 Tag(C1/C2) 和 DataContext(ShRow)。
+            $cb = $e.OriginalSource
+            while ($cb -and $cb -isnot [System.Windows.Controls.Primitives.ToggleButton]) {
+                $cb = if ($cb -is [System.Windows.Media.Visual] -or $cb -is [System.Windows.Media.Media3D.Visual3D]) { [System.Windows.Media.VisualTreeHelper]::GetParent($cb) } else { $null }
+            }
+            if (-not $cb) { return }   # 只有勾选框触发的 Click 才走持久化（其它 ButtonBase 不管）
+            $row = $cb.DataContext
+            if ($row -isnot [ShRow]) { return }
+            $s.SelectedItem = $row
+            if ([string]$cb.Tag -eq 'C2') {
+                if ($row.OnC2) { try { & $row.OnC2 $row } catch {} ; $cb.IsChecked = [bool]$row.C2 }
+            } else {
+                if ($row.OnC1) { try { & $row.OnC1 $row } catch {} ; $cb.IsChecked = [bool]$row.C1 }
+            }
         }, $true)
 }
 
@@ -316,9 +339,9 @@ function Show-WpfMainWindow {
     $crudL = Register-CrudGrid $win $Config 'GridLaunch' 'launchSteps' { param($c) Get-LaunchRows $c } 'LEdit' 'LDel'
     $gl = $crudL.Grid; $selIdx = $crudL.Sel; $reloadLaunch = $crudL.Reload
 
-    # 新增：类型菜单（启动清单可含 app/keys/volume/window/system/delay/group，不含 message）
+    # 新增：类型菜单（启动清单可含 app/keys/text/volume/window/system/delay/group，不含 message）
     $lAddMenu = New-DarkContextMenu
-    foreach ($k in @(@('启动程序','app'),@('发送按键','keys'),@('音量','volume'),@('窗口动作','window'),@('系统命令','system'),@('延时','delay'),@('动作组','group'))) {
+    foreach ($k in @(@('启动程序','app'),@('发送按键','keys'),@('发送文本','text'),@('音量','volume'),@('窗口动作','window'),@('系统命令','system'),@('延时','delay'),@('动作组','group'))) {
         $mi=New-Object System.Windows.Controls.MenuItem; $mi.Header=$k[0]; $mi.Tag=$k[1]
         $mi.Add_Click({ param($s,$e) $n=Show-StepDialogWpf ([string]$s.Tag) $null $Config.actionGroups $win; if($n){ $r=Add-ItemAfter $Config.launchSteps $n (& $selIdx); $Config.launchSteps=@($r.Items); Save-Config; & $reloadLaunch; $gl.SelectedIndex=$r.NewIndex; try{$gl.ScrollIntoView($gl.SelectedItem)}catch{} } }.GetNewClosure())
         [void]$lAddMenu.Items.Add($mi)
@@ -400,15 +423,28 @@ function Show-WpfMainWindow {
 
     # —— 系统启动项 Tab（首次进入懒加载，后台枚举）——
     $gs = $win.FindName('GridSystem')
+    $ss = $win.FindName('SSearch')
     Add-CheckClickSelect $gs   # 点勾选框即选中该行（「纳入启动清单」按 SelectedItem 取行，否则会对错行操作）
-    $sysState = @{ Loaded=$false; Loading=$false }
+    $sysState = @{ Loaded=$false; Loading=$false; AllRows=$null }
+    # 搜索/过滤：按名称(T1)或命令(T2)不区分大小写过滤；过滤后 ItemsSource 仍用同一批 ShRow（保住 OnC1/勾选态）。
+    # 用 IndexOf 不用通配/正则，含 [ 等字符也不炸。
+    $applySysFilter = {
+        if ($null -eq $sysState.AllRows) { return }
+        $q = $ss.Text.Trim()
+        $view = New-Object System.Collections.ObjectModel.ObservableCollection[object]
+        foreach ($r in $sysState.AllRows) {
+            if (-not $q -or ([string]$r.T1).IndexOf($q,[System.StringComparison]::OrdinalIgnoreCase) -ge 0 -or ([string]$r.T2).IndexOf($q,[System.StringComparison]::OrdinalIgnoreCase) -ge 0) { $view.Add($r) }
+        }
+        $gs.ItemsSource = $view
+    }.GetNewClosure()
+    $ss.Add_TextChanged($applySysFilter)
     # OnDone 必须是「单层」闭包（直接从本函数作用域 GetNewClosure 捕获 $gs/$sysState）。
     # 若把它嵌在 $loadSys 里再 GetNewClosure，内层闭包捕获不到外层闭包的 $gs → 回调里 $gs 非法、$gs.ItemsSource 抛「找不到属性」。
     $onSysLoaded = {
         param($items)
         $rows = Get-SystemRows $items
         foreach ($rw in $rows) {
-            $rw.OnC1 = [Action[ShRow]]{ param($x)
+            $rw.OnC1 = { param($x)
                 if ([bool]$x.C1 -eq [bool]$x.Ref.enabled) { return }
                 $canT = if ($x.Ref.PSObject.Properties['canToggle']) { [bool]$x.Ref.canToggle } else { $true }
                 if (-not $canT) { $x.C1 = [bool]$x.Ref.enabled; return }
@@ -418,7 +454,7 @@ function Show-WpfMainWindow {
                 else { $x.C1 = [bool]$x.Ref.enabled; [System.Windows.MessageBox]::Show("修改「$($x.Ref.name)」失败：`n$res",'系统启动项')|Out-Null }
             }
         }
-        $gs.ItemsSource = $rows; $sysState.Loaded=$true; $sysState.Loading=$false
+        $sysState.AllRows = $rows; & $applySysFilter; $sysState.Loaded=$true; $sysState.Loading=$false
     }.GetNewClosure()
     $loadSys = {
         if ($sysState.Loading) { return }
