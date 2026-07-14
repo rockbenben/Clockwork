@@ -1,5 +1,5 @@
 ﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-. (Join-Path $here '..\lib\StartupHelper.SystemStartup.ps1')
+. (Join-Path $here '..\lib\Clockwork.SystemStartup.ps1')
 
 Write-Host ('IsElevated = ' + (Test-IsElevated))
 
@@ -10,7 +10,7 @@ $items | Select-Object -First 8 name, type, scope, enabled | Format-Table -AutoS
 # —— 安全往返（仅动用户级、无害的临时项）——
 $startup = [Environment]::GetFolderPath('Startup')
 $probe = Join-Path $startup '__sh_probe__.txt'
-Set-Content -LiteralPath $probe -Value 'startup-helper probe' -Encoding UTF8
+Set-Content -LiteralPath $probe -Value 'clockwork probe' -Encoding UTF8
 try {
     $mine = (Get-SystemStartupItems | Where-Object { $_.type -eq 'StartupFolder' -and $_.name -eq '__sh_probe__.txt' })[0]
     Write-Host ('找到探针项，初始 enabled = ' + $mine.enabled)

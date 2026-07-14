@@ -1,4 +1,4 @@
-﻿# StartupHelper.Win32.ps1 —— Win32 P/Invoke 封装
+﻿# Clockwork.Win32.ps1 —— Win32 P/Invoke 封装
 Add-Type -AssemblyName System.Windows.Forms
 
 # 把 C# 编译（SH.Native/SH.Audio，各 spawn 一次 csc、约 200ms）推迟到真正用到时（启动序列），
@@ -124,10 +124,15 @@ namespace SH {
 # 运行时编译 SH.Native/SH.Audio 是否可用。受限令牌/无效 TEMP 下（如经沙箱/受限令牌的启动器 Lucy 打开）
 # csc 编译会失败（报「客户端没有所需的特权」）。用它把「原生功能」的失败变成一句清楚的提示，而非晦涩报错。
 $script:Win32Unavailable = $false
+$script:Win32Error = $null   # 首次编译失败的真实异常（csc 报的原话）——诊断时比笼统提示有用得多，别再丢掉
 $script:NativeRestrictedMsg = '启动环境受限，此原生功能不可用（发送按键/窗口动作/激活/音量等需正常启动：双击 bat、托盘或计划任务，勿用沙箱/受限启动器如 Lucy）。'
 function Confirm-Win32Available {
     if ($script:Win32Unavailable) { return $false }
-    try { Initialize-Win32Types; return $true } catch { $script:Win32Unavailable = $true; return $false }
+    try { Initialize-Win32Types; return $true } catch { $script:Win32Unavailable = $true; $script:Win32Error = $_.Exception.Message; return $false }
+}
+# 对用户展示的原生不可用提示：带上底层真实原因（如「客户端没有所需的特权」=受限令牌 / TEMP 不可写 / csc 缺失）。
+function Get-NativeRestrictedMsg {
+    if ($script:Win32Error) { "$script:NativeRestrictedMsg`n底层原因：$script:Win32Error" } else { $script:NativeRestrictedMsg }
 }
 
 $script:WM_CLOSE = 0x0010
@@ -135,7 +140,7 @@ $script:SW_MINIMIZE = 6
 $script:SW_MAXIMIZE = 3
 $script:SW_RESTORE = 9
 
-function Get-AppWindowHandles { param([string]$ProcessName) ,([SH.Native]::WindowsForProcess($ProcessName)) }
+function Get-AppWindowHandles { param([string]$ProcessName) ,([SH.Native]::WindowsForProcess((ConvertTo-ProcessName $ProcessName))) }
 
 function Close-AppWindow {
     param([string]$ProcessName)
@@ -194,7 +199,7 @@ function Set-ForegroundAppWindow {
 # （原来并发会互抢前台致一方 Invoke-WindowLogin 复核失败而空发）。等超时(15s)则照跑不锁，宁可能并发也不挂死。
 # 用显式 Enter/Exit（不传脚本块给辅助函数再 & 调用）：避免嵌套闭包捕获不到 $mods/$vk 等局部变量的老坑。
 function Enter-InjectionLock {
-    $m = New-Object System.Threading.Mutex($false, 'Local\rockbenben.startupHelper.inject')
+    $m = New-Object System.Threading.Mutex($false, 'Local\rockbenben.clockwork.inject')
     $got = $false
     try { $got = $m.WaitOne(15000) } catch [System.Threading.AbandonedMutexException] { $got = $true }  # 上个持有者崩溃遗弃锁 → 接管
     [pscustomobject]@{ Mutex = $m; Got = $got }
@@ -206,6 +211,27 @@ function Exit-InjectionLock {
     try { $Lock.Mutex.Dispose() } catch {}
 }
 
+# 常用键名别名 → System.Windows.Forms.Keys 枚举正名。发键(Send-KeyCombo)与急停键注册(ConvertTo-HotkeyParams)
+# 共用同一份，避免两处各存一份、加/改别名时漂移（同一拼写在发键认、注册热键不认）。
+function Get-KeyNameAliasMap {
+    @{ esc='Escape'; del='Delete'; ins='Insert'; bs='Back'; backspace='Back'
+       pgup='PageUp'; pageup='PageUp'; pgdn='PageDown'; pagedown='PageDown'; prtsc='PrintScreen'; 'return'='Enter' }
+}
+
+# 键名 → Keys 枚举虚拟键码。发键(Send-KeyCombo)与全局急停热键注册(ConvertTo-HotkeyParams)共用，避免两处各写一份、
+# 加/改别名或修 parse bug 时漂移（同一拼写「发得出、却注册不上」）。规则：多位纯数字拒绝（'10' 强转 [Keys] 会静默变
+# VK 10）→ 单数字映射 D0-D9 → 别名归一 → [Keys] 枚举强转(PS5.1 无 Enum.TryParse 非泛型重载，故 try/catch)。
+# 返回 [int] VK；0 = 枚举不认，由调用方各自兜底（发键退回 VkKeyScan 认单个符号字符；热键注册则判失败）。
+# 刻意只用 [Keys] 枚举、不碰 SH.Native/VkKeyScan：热键注册在 GUI 启动路径，不该为它触发 SH.Native 的懒编译。
+function ConvertTo-KeysVk {
+    param([string]$Key)
+    if ([string]::IsNullOrEmpty($Key) -or ($Key -match '^\d\d+$')) { return 0 }
+    $keyName = if ($Key -match '^\d$') { "D$Key" } else { $Key }
+    $alias = Get-KeyNameAliasMap
+    if ($alias.ContainsKey($keyName.ToLower())) { $keyName = $alias[$keyName.ToLower()] }
+    try { [int][System.Windows.Forms.Keys]$keyName } catch { 0 }
+}
+
 function Send-KeyCombo {
     param([string]$Combo)
     $parsed = ConvertFrom-KeyCombo $Combo   # 来自 Core
@@ -215,18 +241,13 @@ function Send-KeyCombo {
     }
     # 统一走 SendInput（官方推荐，取代 keybd_event / SendKeys 组合注入）：整个组合一次原子注入，
     # 不与真实击键交错；返回注入数，0 = 被系统拒绝（UIPI/安全桌面），可如实报失败而非「发射后不管」。
-    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
+    if (-not (Confirm-Win32Available)) { Write-Warning (Get-NativeRestrictedMsg); return }
     # 键名 → 虚拟键码：数字映射 D0-D9；命名键/字母走 Keys 枚举（强转+try/catch——PS5.1/.NET Framework
     # 没有 Enum.TryParse 的非泛型重载，误用会「找不到重载」且守卫被静默绕过）；单个符号字符经 VkKeyScan。
     # 多位纯数字必须先拒掉：字符串数字强转 [Keys] 按数值总能成功（'10' → VK 10），会静默注入错误按键。
     if ($parsed.Key -match '^\d\d+$') { Write-Warning "无法识别的按键名「$($parsed.Key)」（多位数字不是按键），热键「$Combo」未发送"; return }
-    $keyName = if ($parsed.Key -match '^\d$') { "D$($parsed.Key)" } else { $parsed.Key }
-    # 常用键名别名 → Keys 枚举正名（编辑器提示里承诺支持这些写法，枚举里只有 Escape/Delete/Back 等正名）
-    $alias = @{ esc='Escape'; del='Delete'; ins='Insert'; bs='Back'; backspace='Back'
-                pgup='PageUp'; pageup='PageUp'; pgdn='PageDown'; pagedown='PageDown'; prtsc='PrintScreen'; 'return'='Enter' }
-    if ($alias.ContainsKey($keyName.ToLower())) { $keyName = $alias[$keyName.ToLower()] }
-    $vk = 0; $needShift = $false
-    try { $vk = [uint16][int][System.Windows.Forms.Keys]$keyName } catch { $vk = 0 }
+    $needShift = $false
+    $vk = [uint16](ConvertTo-KeysVk $parsed.Key)   # 共用键名→VK；0=枚举不认，下面对单个符号字符退回 VkKeyScan
     if ($vk -eq 0) {
         if ($parsed.Key.Length -eq 1) {
             $vs = [SH.Native]::VkKeyScan([char]$parsed.Key)
@@ -261,14 +282,14 @@ function Send-KeyCombo {
 
 function Set-SystemVolume {
     param([int]$Percent)
-    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
+    if (-not (Confirm-Win32Available)) { Write-Warning (Get-NativeRestrictedMsg); return }
     if ($Percent -lt 0) { $Percent = 0 }; if ($Percent -gt 100) { $Percent = 100 }
     [SH.Audio]::SetVolume([single]($Percent/100.0))
 }
 
 function Set-SystemMute {
     param([bool]$Mute)
-    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
+    if (-not (Confirm-Win32Available)) { Write-Warning (Get-NativeRestrictedMsg); return }
     [SH.Audio]::SetMute($Mute)
 }
 
@@ -276,6 +297,7 @@ function Invoke-WindowLogin {
     param([string]$Process, [string]$SendKey = '{ENTER}', [int]$TimeoutSec = 8, [switch]$Literal)
     $deadline = (Get-Date).AddSeconds($TimeoutSec)
     while ((Get-Date) -lt $deadline) {
+        if (Test-StopRequested) { return $false }   # 急停：等窗口/重试期间收到停止即弃发（可长达 WaitForWindowSeconds）
         # 每次「置前台+复核+发键」尝试各自加进程级注入锁（~200ms/次），锁【不跨】下面的 500ms 重试等待——
         # 故即便 $TimeoutSec 很大（WaitForWindowSeconds 无上限）也不会长时间独占注入锁；复核前台仍保证并发下不误发。
         $lk = Enter-InjectionLock
@@ -306,9 +328,11 @@ function Send-Text {
     if ([string]::IsNullOrEmpty($seq)) { return }
     Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
     if ($Process) {
-        if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return }
+        if (-not (Confirm-Win32Available)) { Write-Warning (Get-NativeRestrictedMsg); return }
         if (Invoke-WindowLogin $Process $Text 8 -Literal) { return 'unverified' }
-        Write-Warning "发送文本：未能把「$Process」窗口带到最前，未发送"; return
+        # Invoke-WindowLogin 因急停返回 $false 时不误报「未能带到最前」——那是用户停的、不是没带到前台。
+        if (-not (Test-StopRequested)) { Write-Warning "发送文本：未能把「$Process」窗口带到最前，未发送" }
+        return
     }
     $lk = Enter-InjectionLock
     try { [System.Windows.Forms.SendKeys]::SendWait($seq) } finally { Exit-InjectionLock $lk }
@@ -335,10 +359,28 @@ function Wait-AppWindow {
         try { $present = [bool](& $Probe) } catch { $present = $false }
         if ($present) { break }                # 窗口出现即走
         if ($waited -ge $maxWaitMs) { break }  # 到封顶仍无窗口：放弃
+        if (Test-StopRequested) { break }      # 急停：不再干等窗口（返回 Present=false，调用方按「没等到」处理）
         & $Sleeper $PollMs
         $waited += $PollMs
     }
     [pscustomobject]@{ Present = $present; WaitedMs = $waited }
+}
+
+# 组合键串 -> RegisterHotKey 参数（fsModifiers/vk）。全局急停键注册用。
+# 只支持 Keys 枚举可解析的键名（字母/数字/F1-F12/Enter 等命名键，含 Send-KeyCombo 同款别名）；
+# 解析失败返回 $null（调用方拒注册并提示）。MOD_* 常量：Alt=1 Ctrl=2 Shift=4 Win=8。
+function ConvertTo-HotkeyParams {
+    param([string]$Combo)
+    $p = ConvertFrom-KeyCombo $Combo   # 来自 Core
+    if ([string]::IsNullOrWhiteSpace([string]$p.Key)) { return $null }
+    $vk = [uint32](ConvertTo-KeysVk $p.Key)   # 共用键名→VK（多位数字拒绝 / D0-D9 / 别名 / [Keys] 枚举）
+    if ($vk -eq 0) { return $null }
+    $mods = [uint32]0
+    if ($p.Modifiers -contains 'Alt')   { $mods = $mods -bor 0x1 }
+    if ($p.Modifiers -contains 'Ctrl')  { $mods = $mods -bor 0x2 }
+    if ($p.Modifiers -contains 'Shift') { $mods = $mods -bor 0x4 }
+    if ($p.UseWin)                      { $mods = $mods -bor 0x8 }
+    [pscustomobject]@{ Modifiers = $mods; Vk = $vk }
 }
 
 # 统一的窗口动作：一律【先激活/定位目标窗口，再执行操作】。
@@ -351,7 +393,7 @@ function Wait-AppWindow {
 #   对 close/minimize/maximize/activate 生效，sendkey 走自带流程不用它。
 function Invoke-WindowAction {
     param([string]$Process, [string]$Op, [string]$SendKey = '{ENTER}', [int]$WaitForWindowSeconds = 0, [int]$PostWindowDelaySeconds = 0)
-    if (-not (Confirm-Win32Available)) { Write-Warning $script:NativeRestrictedMsg; return 0 }
+    if (-not (Confirm-Win32Available)) { Write-Warning (Get-NativeRestrictedMsg); return 0 }
     # sendkey 的等窗口+发键都在 Invoke-WindowLogin 内部逐次尝试各自加锁（每次 ~200ms），不在此处整体持锁——
     # 否则慢启动应用等窗口(可达 WaitForWindowSeconds、无上限)期间会长时间独占注入锁、把并发的其它注入饿到超时。
     if ($Op -eq 'sendkey') {
@@ -367,8 +409,8 @@ function Invoke-WindowAction {
         # 直接 (...).Count 才是真实句柄数（0 / N），与 Set-ForegroundAppWindow 的用法一致。
         $w = Wait-AppWindow -TimeoutSeconds $WaitForWindowSeconds -Probe ({ (Get-AppWindowHandles $Process).Count -gt 0 }.GetNewClosure())
         if (-not $w.Present) { return 0 }
-        # 窗口已在 → 出现后延迟（登录/主窗切换就绪）再动手
-        if ($PostWindowDelaySeconds -gt 0) { Start-Sleep -Seconds $PostWindowDelaySeconds }
+        # 窗口已在 → 出现后延迟（登录/主窗切换就绪）再动手。急停打断延迟时不再动手（用户要停，别再关窗/发键）。
+        if ($PostWindowDelaySeconds -gt 0) { if (-not (Start-InterruptibleSleep ($PostWindowDelaySeconds * 1000))) { return 0 } }
     }
     # 「置前台+动作」加进程级注入锁（~120ms/次）：等窗口出现的长等待(上面 Wait-AppWindow)留在锁外，此处只锁
     # 真正的前台切换/关窗，避免与其它 runspace 的注入交错（A 置前台后被 B 抢走前台致发键落到 B 的窗口）。

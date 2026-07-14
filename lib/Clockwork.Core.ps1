@@ -1,4 +1,4 @@
-﻿# StartupHelper.Core.ps1 —— 纯逻辑，不引用 WinForms / Win32，可被测试 dot-source
+﻿# Clockwork.Core.ps1 —— 纯逻辑，不引用 WinForms / Win32，可被测试 dot-source
 
 function New-LaunchStep {
     param([string]$Kind, [hashtable]$Props = @{})
@@ -15,19 +15,26 @@ function New-LaunchStep {
         message=''; speak=$false; confirm=$false; onYes=@{ type='none'; target='' }  # message 步骤(动作组用)
         text=''                                             # text 步骤：往焦点窗口输入的字面文本
         note=''                                             # 所有步骤通用：用途说明（仅列表显示用）
+        repeat=1                                            # 所有步骤通用：连续执行次数（循环动作）；每次之间等 delayMs
     }
     foreach ($k in $Props.Keys) { $s[$k] = $Props[$k] }
     [pscustomobject]$s
 }
 
+# 「插到第 Index 项之后」的落点：Index<0（无选中）或越界则追加到末尾。Add-ItemAfter 与动作组步骤编辑器共用，
+# 口径一致；避开 PS 数组切片 $a[($i+1)..($n-1)] 在 i 为末项时区间反向的坑。
+function Get-InsertPosition {
+    param([int]$Index, [int]$Count)
+    if ($Index -ge 0 -and $Index -lt $Count) { $Index + 1 } else { $Count }
+}
+
 # 在 $Arr 的「第 $Index 项之后」插入 $Item；$Index<0 或越界（无选中）则追加到末尾。
-# 返回 @{ Items=新数组; NewIndex=新项落点 }——供「新增即选中并滚动到」用。用 ArrayList.Insert 而非数组切片，
-# 避开 PS 里 $a[($i+1)..($n-1)] 在 i 为末项时区间反向的坑。
+# 返回 @{ Items=新数组; NewIndex=新项落点 }——供「新增即选中并滚动到」用。用 ArrayList.Insert 而非数组切片。
 function Add-ItemAfter {
     param($Arr, $Item, [int]$Index)
     $l = New-Object System.Collections.ArrayList
     if ($null -ne $Arr) { [void]$l.AddRange([object[]]@($Arr)) }
-    $pos = if ($Index -ge 0 -and $Index -lt $l.Count) { $Index + 1 } else { $l.Count }
+    $pos = Get-InsertPosition $Index $l.Count
     [void]$l.Insert($pos, $Item)
     [pscustomobject]@{ Items = $l.ToArray(); NewIndex = $pos }
 }
@@ -203,9 +210,18 @@ function Get-DefaultReminders {
     )
 }
 
-# 通知身份（AUMID），进程声明与显示名注册、Toast 发送共用同一值。带 .v2：通知平台按 AUMID 缓存
-# 「应用归属」显示名，旧 ID 的乱码回退名已被缓存锁死，换代重建。
-function Get-AppAumid { 'rockbenben.startupHelper.v2' }
+# 归一进程标识：窗口动作/发送文本靠 GetProcessesByName 找窗口，它只认「裸进程名」。用户却常填整条 exe 全路径
+# （如 C:\Program Files\Notepad++\notepad++.exe）或带 .exe 的名——都会找不到窗口而「未能带到最前」。这里剥掉目录、
+# 再去掉结尾 .exe（只去 .exe，保留 foo.bar 这类本身带点的名字）。裸名原样返回。编辑器保存与运行时查找共用，避免不一致。
+function ConvertTo-ProcessName {
+    param([string]$Value)
+    $n = ([string]$Value).Trim() -replace '.*[\\/]', ''   # 去目录：贪婪匹配到最后一个 / 或 \ 全部删掉，留 basename
+    $n -replace '(?i)\.exe$', ''                            # 仅去结尾 .exe（不区分大小写）
+}
+
+# 通知身份（AUMID），进程声明与显示名注册、Toast 发送共用同一值。通知平台按此值缓存「应用归属」显示名，
+# 故它须稳定唯一；一旦改动，Windows 通知中心里的归属名会以新 ID 重建。
+function Get-AppAumid { 'rockbenben.clockwork' }
 
 function Get-DefaultConfig {
     [pscustomobject]@{
@@ -217,7 +233,11 @@ function Get-DefaultConfig {
         # startupWaitForReady：可选的就绪门控（等桌面/网络就绪，就绪即走）。默认关——它测的是「壳/网存不存在」，
         #   冷启动一两秒就过、并不反映机器是否闲下来，形同安慰剂；确有「必须等网络起来再跑」的需求才在配置里开。
         # 二者仅作用于开机自启路径（-Boot）；手动「重新运行」环境本就就绪，不等待、不延迟。
-        settings     = [pscustomobject]@{ tickSeconds = 30; startMinimized = $false; startupWaitForReady = $false; startupDelaySeconds = 30 }
+        # stopHotkey：全局急停快捷键（随时停止正在运行的启动清单/动作组/单步运行；循环动作跑飞时的刹车）。空=禁用。
+        #   这是【全新配置】的默认（无配置文件/配置损坏时经此生成，或随附示例配置显式带上）——全新用户开箱即用。
+        #   升级不静默抢占的处理【不在这里】：Read-Config 回填旧配置缺失的 stopHotkey 时，特判回填【空】而非此默认
+        #   （见 Read-Config）——否则每个既有安装升级都会静默 RegisterHotKey 抢占系统级组合键、夺走别处的同键绑定。
+        settings     = [pscustomobject]@{ tickSeconds = 30; startMinimized = $false; startupWaitForReady = $false; startupDelaySeconds = 30; stopHotkey = 'Ctrl+Alt+F12' }
         actionGroups = @()
     }
 }
@@ -244,7 +264,32 @@ function ConvertTo-LaunchSteps {
 
 function Write-Config {
     param($Config, [string]$Path)
-    ($Config | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $Path -Encoding UTF8
+    # 原子写：先写同目录临时文件、再原子替换。直接 Set-Content 到目标是非原子的——写到一半崩溃/断电会把配置【截断】，
+    # 下次 Read-Config 解析失败落回默认、用户全部启动步骤/提醒/动作组静默丢失。每次开关/编辑都 Save-Config，这个损坏窗口一直在。
+    # 临时文件用 [System.IO.File]::WriteAllText 而非 Set-Content：后者按【PS provider 的 $PWD】解析路径，而下面 Replace/Move
+    #   按【.NET 的 Environment.CurrentDirectory】解析，二者对相对路径分叉（Set-Location 不改 .NET CWD）→ 找不到临时文件。统一走 .NET。
+    # File.Replace 比原地 Set-Content 更受瞬时占用影响（OneDrive 同步 / 搜索索引 / 杀软持句柄，配置常在 Documents 下）→ 重试几次让其过峰。
+    # 注：File.Replace 第三参(备份路径)传 $null 会被 PS 编成 ""→抛「路径格式不合法」，必须用 [NullString]::Value。
+    # 始终失败(持久占用/不支持的卷)才抛：目标文件保持原样、绝不损坏，仅本次改动未落盘，由调用方/全局处理器提示。
+    # 整个「写临时 + 替换」都放进重试循环（不只替换那步）：临时文件与目标都可能被瞬时占用 → 写临时那步也要能重试；
+    # 且 File.Replace 若在替换后期出错(如替换完再重设 ACL 失败)已【消耗掉】$tmp，只有每次重试都重写临时文件，下次才有源可用、
+    # 不会退化成 FileNotFound 误报「保存失败」（实则已写入）。分支判定用 .NET File.Exists（非 Test-Path）与下面 Replace/Move
+    # 同按 .NET CurrentDirectory 解析，避免相对路径时与 PS provider $PWD 分叉选错分支。
+    $json = $Config | ConvertTo-Json -Depth 8
+    $tmp = "$Path.tmp"
+    $enc = New-Object System.Text.UTF8Encoding($false)
+    for ($i = 0; ; $i++) {
+        try {
+            [System.IO.File]::WriteAllText($tmp, $json, $enc)
+            if ([System.IO.File]::Exists($Path)) { [System.IO.File]::Replace($tmp, $Path, [NullString]::Value) }
+            else { [System.IO.File]::Move($tmp, $Path) }
+            return
+        } catch {
+            # 重试 5 次(约 0.5s)仍失败(持久占用) → 清掉本轮刚写的临时文件(尽力，别在配置旁留下残 .tmp)再如实抛；目标文件保持原样、绝不损坏。
+            if ($i -ge 4) { try { [System.IO.File]::Delete($tmp) } catch {}; throw }
+            Start-Sleep -Milliseconds 100
+        }
+    }
 }
 
 function Read-Config {
@@ -257,6 +302,11 @@ function Read-Config {
         $j.PSObject.Properties.Remove('specialSteps')
     }
     $def = Get-DefaultConfig
+    # stopHotkey 升级判定必须在补默认【之前】取：既有配置是否【显式】带过此键。没带过=老用户从未设过全局急停键，
+    # 稍后强制回填空（禁用）、不静默抢占系统级组合键。判定要覆盖两种缺失——整个 settings 对象缺失（最老的
+    # launchItems/specialSteps 格式），或 settings 在、仅缺此键。全新/损坏配置走 Get-DefaultConfig 兜底、根本不进本段，
+    # 故仍拿默认键(Ctrl+Alt+F12) 开箱即用。（评审：仅在子键循环里特判会被「整个 settings 缺失时 wholesale 补默认」绕过。）
+    $hadStopHotkey = [bool]($j.settings -and $j.settings.PSObject.Properties['stopHotkey'])
     foreach ($k in 'launchSteps','reminders','settings','actionGroups') {
         if ($null -eq $j.$k) { $j | Add-Member -NotePropertyName $k -NotePropertyValue $def.$k -Force }
     }
@@ -264,6 +314,8 @@ function Read-Config {
     foreach ($sp in $def.settings.PSObject.Properties) {
         if (-not $j.settings.PSObject.Properties[$sp.Name]) { $j.settings | Add-Member -NotePropertyName $sp.Name -NotePropertyValue $sp.Value -Force }
     }
+    # 权威单点：既有配置没显式设过 stopHotkey → 一律回填空。放在补默认之后，覆盖「整个 settings 缺失被 wholesale 带入默认键」。
+    if (-not $hadStopHotkey) { $j.settings.stopHotkey = '' }
     # days 特性之前写出的步骤/提醒没有 days 字段；缺失即「每天」。不补则 @($null).Count=1 会被
     # Build-LaunchPlan / Get-ReminderDecision 误判为「有星期限制且今天不匹配」→ 步骤全被跳过（启动清单
     # 什么都不启动）、提醒永不触发。在此统一补成空数组（=每天），与新建项一致。
@@ -360,9 +412,15 @@ function Test-StartupHourOk {
     return ($loginHour -ge $h)
 }
 
-# 系统开机至今的分钟数。Stopwatch 的 QPC 计数从开机起算，纯 .NET、不经 WMI/P-Invoke。
+# 系统开机至今的分钟数（毫秒·从开机起算），纯 .NET、不经 WMI。用 [Environment]::TickCount（32 位，.NET Framework/PS5.1 就有）。
+# 【两个坑都踩过，勿再改回】：
+#   ① TickCount64 是 .NET Core+ 才有——PS5.1 访问它静默返回 $null（不抛异常），$null/60000=0 → uptime 恒 0、「登录时」门控永不生效。
+#   ② PowerShell 的 [uint32] 转换是【检查型】，对负值（开机超 24.9 天 TickCount 回绕成负）会抛 RuntimeException（不同于 C# 的 unchecked 位重解释）。
+# 故：用位与 -band 0xFFFFFFFFL 取低 32 位还原无符号毫秒（到 ~49.7 天前都准），此法绝不抛。再包一层 try/catch 兜底：本函数在
+# 提醒计时器初始化(Start-WpfReminderTimer)时调用，一旦抛出会令整个提醒计时器起不来、所有提醒静默失效；异常时返 0（顶多「登录时」偶尔多弹一次，不致全线失效）。
+# 不用 Stopwatch 的 QPC——它的计数起点【不保证】是开机时刻，某些硬件/VM 上会远大于真实开机时长。
 function Get-SystemUptimeMinutes {
-    [int]([double][System.Diagnostics.Stopwatch]::GetTimestamp() / [System.Diagnostics.Stopwatch]::Frequency / 60)
+    try { [int](([long][Environment]::TickCount -band 0xFFFFFFFFL) / 60000) } catch { 0 }
 }
 
 # 触发判定纯函数。返回 @{ action='none'|'arm'|'fire'; base=<datetime|$null>; state }。
@@ -531,7 +589,7 @@ function ConvertFrom-DurationText {
     [int]$mins
 }
 
-# 目标路径是否就是开机助手自身（防开机自启动循环）。规范化后大小写不敏感比较。
+# 目标路径是否就是Clockwork自身（防开机自启动循环）。规范化后大小写不敏感比较。
 function Test-IsSelfTarget {
     param([string]$Target, [string[]]$SelfPaths)
     if ([string]::IsNullOrWhiteSpace($Target)) { return $false }
@@ -583,11 +641,63 @@ function ConvertTo-SendKeysSequence {
     if ($s) { $s } else { $Raw }
 }
 
+# —— 全局「停止所有动作」信号（急停）——
+# 命名手动复位事件：启动序列/动作组/单步运行各自跑在不同 runspace，$script 变量跨不了上下文，
+# 与动作组命名互斥锁同一思路用内核对象通信。Set=请求停止；每次开始新一轮执行前由 Async 入口 Reset。
+# 句柄按 runspace 缓存、不 Dispose：命名内核对象在最后一个句柄关闭时销毁——若每次开完即关，
+# Set 完一放手信号就没了，别的 runspace 根本看不到。主进程常驻句柄保证对象活到进程退出。
+function Get-StopEventName { 'Local\rockbenben.clockwork.stopAll' }
+function Get-StopEvent {
+    if (-not $script:StopEvt) {
+        $created = $false
+        $script:StopEvt = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, (Get-StopEventName), [ref]$created)
+    }
+    $script:StopEvt
+}
+function Request-StopAll   { [void](Get-StopEvent).Set() }
+function Clear-StopAll     { [void](Get-StopEvent).Reset() }
+function Test-StopRequested { (Get-StopEvent).WaitOne(0) }
+# 可中断延时：等待 $Ms 毫秒；期间停止信号一响立即返回 $false（=被停止），平安睡满返回 $true。
+# 用事件自身的 WaitOne(timeout) 实现，无需切片轮询——信号响起毫秒级醒来。
+function Start-InterruptibleSleep {
+    # 收 [long] 而非 [int]：走「<秒> * 1000」的调用方（如窗口步骤 postWindowDelaySeconds——它未像延时步骤那样夹上限），
+    # 秒数大到乘积溢出 Int32 时会被 PS 提升为 long/double，若参数声明 [int] 会在【绑定时】抛「值对 Int32 太大」，令该步/整个动作组中途崩。
+    # 注：直接传 [int]$Step.delayMs 的调用方【不】经这里兜——它们在调用点已 [int] 强转；但 delayMs 经 GUI 恒 ≤ Int32.Max
+    # （延时步骤夹 2147483 秒、ms 框是 [int] 解析），只有手改 json 填超 Int32 才会在那个强转处抛（越界属手编坏数据，不在此兜）。
+    param([long]$Ms)
+    if ($Ms -le 0) { return (-not (Test-StopRequested)) }
+    if ($Ms -gt [int]::MaxValue) { $Ms = [int]::MaxValue }   # WaitOne 上限 ~24.8 天；再大也只能等这么久
+    -not (Get-StopEvent).WaitOne([int]$Ms)
+}
+
+# 重复次数夹取：<1→1，>999→999（防手写 json/输入框填出跑不完的序列）。步骤读取、编辑框保存、
+# 动作组循环三处共用这一处口径，避免「1..999」魔数散落多份各自漂移。
+function Get-ClampedRepeat {
+    param([int]$N)
+    if ($N -lt 1) { 1 } elseif ($N -gt 999) { 999 } else { $N }
+}
+
+# 步骤重复次数：缺失/非法/<1 一律回退 1（旧配置无 repeat 字段），上限 999。
+# 所有读取点一律经此取值（与 Get-BeforeHour 同模式），Read-Config 无需回填。
+function Get-StepRepeat {
+    param($Step)
+    $r = 1
+    if ($Step.PSObject.Properties['repeat']) { try { $r = [int]$Step.repeat } catch { $r = 1 } }
+    Get-ClampedRepeat $r
+}
+
 # 时间条件的小时阈值：缺失/越界一律回退 8（兼容旧配置里只有 onlyBefore8、没有 beforeHour 的步骤）。
 function Get-BeforeHour {
     param($Step)
     $h = [int]$Step.beforeHour
     if ($h -lt 1 -or $h -gt 23) { 8 } else { $h }
+}
+
+# 文本超长截断加省略号（列表/标签显示用），默认 30 字。多处（步骤摘要 / 提醒摘要 / 进程标题）共用。
+function Format-Ellipsis {
+    param([string]$Text, [int]$Max = 30)
+    $t = [string]$Text
+    if ($t.Length -gt $Max) { $t.Substring(0, $Max) + '…' } else { $t }
 }
 
 # 星期集合 → 文案：空或全 7 天=「每天」，否则列出（一二三四五六日）。提醒与启动步骤共用。
@@ -651,10 +761,12 @@ function Get-StepSummary {
         'group'  { "运行动作组：$(if ($Step.label) { [string]$Step.label } elseif ($Step.groupId) { [string]$Step.groupId } else { '(未指定)' })" }
         'delay'  { $ms=[int]$Step.delayMs; if ($ms % 1000 -eq 0) { "延时 $($ms/1000) 秒" } else { "延时 $ms 毫秒" } }
         'message' { ([string]$Step.message -replace "`r?`n",' ') }
-        'text' { $t=([string]$Step.text -replace "`r?`n",' '); if ($t.Length -gt 30) { $t=$t.Substring(0,30)+'…' }; "输入 $t" }
+        'text' { "输入 $(Format-Ellipsis ([string]$Step.text -replace "`r?`n",' '))" }
         default  { [string]$Step.kind }
     }
     $s = $base
+    $rep = Get-StepRepeat $Step
+    if ($rep -gt 1) { $s += " ×$rep" }   # 循环动作：重复次数直接可见（列表/日志/托盘共用）
     $dc = @(@($Step.days) | Where-Object { $null -ne $_ })   # 手写 json 缺 days 时 @($null) 会生成假的星期后缀
     if ($dc.Count -gt 0 -and $dc.Count -lt 7) { $s += "（$(Get-DaysLabel $dc)）" }
     if ($Step.onlyBefore8) { $s += "（仅$(Get-BeforeHour $Step)点前）" }

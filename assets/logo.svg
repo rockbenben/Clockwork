@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22262C"/><stop offset="1" stop-color="#191C20"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.46" r="0.5"><stop offset="0" stop-color="#F0651A" stop-opacity="0.30"/><stop offset="1" stop-color="#F0651A" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#tile)" stroke="#2E343B" stroke-width="1.5"/>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#glow)"/>
+  <!-- gear ring -->
+  <path d="M99.68,59.63L107.68,40.32L148.32,40.32L156.32,59.63L156.32,59.63L175.63,51.63L204.37,80.37L196.37,99.68L196.37,99.68L215.68,107.68L215.68,148.32L196.37,156.32L196.37,156.32L204.37,175.63L175.63,204.37L156.32,196.37L156.32,196.37L148.32,215.68L107.68,215.68L99.68,196.37L99.68,196.37L80.37,204.37L51.63,175.63L59.63,156.32L59.63,156.32L40.32,148.32L40.32,107.68L59.63,99.68L59.63,99.68L51.63,80.37L80.37,51.63L99.68,59.63Z" fill="#F0651A"/>
+  <circle cx="128" cy="128" r="50" fill="url(#tile)"/>
+  <!-- clock hands + pivot -->
+  <line x1="128" y1="128" x2="164.4" y2="107.0" stroke="#F0651A" stroke-width="12" stroke-linecap="round"/>
+  <line x1="128" y1="128" x2="103.8" y2="114.0" stroke="#F0651A" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="128" cy="128" r="9" fill="#FF7A2A"/>
+</svg>

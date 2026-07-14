@@ -1,8 +1,8 @@
 ﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $here '_assert.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Core.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Win32.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Actions.ps1')
+. (Join-Path $here '..\lib\Clockwork.Core.ps1')
+. (Join-Path $here '..\lib\Clockwork.Win32.ps1')
+. (Join-Path $here '..\lib\Clockwork.Actions.ps1')
 $script:AppRoot = $null   # 强制 Invoke-ActionGroupAsync 走同步兜底，避免测试起后台 runspace
 Initialize-Win32Types
 
@@ -168,12 +168,28 @@ $pN = Invoke-Reminder $rN @()
 Assert-Equal 0 $script:toastCalls2.Count '重复型未发 Toast'
 Assert-Equal 'ok' ([string]$pN.Action) '走了可交互弹窗（确定可停催）'
 
+Write-Host 'AX15b 静默动作组提醒返回 Action=空（配了重复催促才能续期，#4）'
+$rS = New-Reminder @{ time='09:00'; silentGroupId='no-such'; repeatMinutes=30 }   # 组找不到即返回，不执行任何动作，仍验证返回值
+$pS = Invoke-Reminder $rS @() 3>$null
+Assert-Equal '' ([string]$pS.Action) "静默组返回 Action='' 而非 'ok'（否则 Update-ReminderAfterFire 会清掉重复计划、只跑一次）"
+
+Write-Host 'AX15c ConvertTo-KeysVk 键名→VK（发键与热键注册共用，#10）'
+Assert-Equal 13  (ConvertTo-KeysVk 'Enter') 'Enter -> 13'
+Assert-Equal 27  (ConvertTo-KeysVk 'esc')   '别名 esc -> Escape 27'
+Assert-Equal 53  (ConvertTo-KeysVk '5')     '单数字 5 -> D5 53'
+Assert-Equal 65  (ConvertTo-KeysVk 'A')     '字母 A -> 65'
+Assert-Equal 116 (ConvertTo-KeysVk 'F5')    'F5 -> 116'
+Assert-Equal 0   (ConvertTo-KeysVk '10')    '多位数字拒绝 -> 0'
+Assert-Equal 0   (ConvertTo-KeysVk 'Bogus') '无法识别 -> 0'
+Assert-Equal 0   (ConvertTo-KeysVk '')      '空 -> 0'
+Assert-Equal ([int](ConvertTo-KeysVk '5')) ([int](ConvertTo-HotkeyParams 'Ctrl+5').Vk) '共用后：热键注册与发键解析对同一键名一致（不再漂移）'
+
 Write-Host 'AX16 动作组命名互斥锁：同组已在运行则跳过（跨 runspace 也有效）'
 # 注意：Mutex 对同一线程可重入，必须在【另一个线程】持锁才能模拟「别处正在跑该组」
 $grpM = New-ActionGroup @{ name='GM'; steps=@( (New-LaunchStep 'system' @{ command='showDesktop' }) ) }
 $rsM = [runspacefactory]::CreateRunspace(); $rsM.Open()
 $psM = [powershell]::Create(); $psM.Runspace = $rsM
-[void]$psM.AddScript('param($n) $m = New-Object System.Threading.Mutex($true, $n); Start-Sleep -Seconds 2; $m.ReleaseMutex(); $m.Dispose()').AddArgument('Local\rockbenben.startupHelper.group.' + [string]$grpM.id)
+[void]$psM.AddScript('param($n) $m = New-Object System.Threading.Mutex($true, $n); Start-Sleep -Seconds 2; $m.ReleaseMutex(); $m.Dispose()').AddArgument('Local\rockbenben.clockwork.group.' + [string]$grpM.id)
 $hM = $psM.BeginInvoke()
 Start-Sleep -Milliseconds 400   # 等对方线程真正拿到锁
 $wM = @(Invoke-ActionGroup $grpM 3>&1)
@@ -258,5 +274,184 @@ Assert-True (-not ([string]$script:spCalls[0] -match 'WindowStyle')) '正常/留
 $script:spCalls.Clear()
 Invoke-LaunchItem (New-LaunchStep 'app' @{ target='Z:\no\such.exe'; altTargets=("Z:\nope`n" + $realExe) }) | Out-Null
 Assert-True ([string]$script:spCalls[0] -match [regex]::Escape($realExe)) '主路径不存在 -> 启动第一个存在的备用路径'
+
+Write-Host 'AX21 循环动作：顶层步骤 repeat=3 -> 执行 3 次、日志标注第 i/3 次'
+$logR = Join-Path ([System.IO.Path]::GetTempPath()) ("ax21_{0}.log" -f [guid]::NewGuid().ToString('N'))
+$cfgRep = [pscustomobject]@{ actionGroups=@(); launchSteps=@( (New-LaunchStep 'system' @{ command='__nope__'; label='X'; repeat=3 }) ) }
+$rRep = Invoke-LaunchSequence $cfgRep $logR
+$cRep = Get-Content -LiteralPath $logR -Raw -Encoding UTF8; Remove-Item -LiteralPath $logR -Force
+Assert-Equal 3 ([int]$rRep.Total) 'repeat=3 计 3 次执行'
+Assert-Equal 3 ([int]$rRep.Fail)  '每次都如实计 Fail'
+Assert-True ($cRep -match '第 1/3 次') '日志标注第 1/3 次'
+Assert-True ($cRep -match '第 3/3 次') '日志标注第 3/3 次'
+
+Write-Host 'AX22 循环动作：group 步骤 repeat=2 -> 整组展开两遍；组内步骤 repeat 亦生效'
+$grpRep = New-ActionGroup @{ name='GR'; steps=@( (New-LaunchStep 'system' @{ command='__nope__'; repeat=2 }) ) }
+$logG2 = Join-Path ([System.IO.Path]::GetTempPath()) ("ax22_{0}.log" -f [guid]::NewGuid().ToString('N'))
+$cfgG2 = [pscustomobject]@{ actionGroups=@($grpRep); launchSteps=@( (New-LaunchStep 'group' @{ groupId=$grpRep.id; label='GR'; repeat=2 }) ) }
+$rG2 = Invoke-LaunchSequence $cfgG2 $logG2
+$cG2 = Get-Content -LiteralPath $logG2 -Raw -Encoding UTF8; Remove-Item -LiteralPath $logG2 -Force
+Assert-Equal 4 ([int]$rG2.Total) '组×2 × 组内步骤×2 = 4 次执行'
+Assert-Equal 4 ([int]$rG2.Fail)  '4 次都计 Fail'
+Assert-True ($cG2 -match '运行动作组：GR（第 1/2 次）') '组头标注第 1/2 次'
+Assert-True ($cG2 -match '运行动作组：GR（第 2/2 次）') '组头标注第 2/2 次'
+
+Write-Host 'AX23 Get-StepRunMarkRepeat：Fail 累计、Mark 取第一个非 ✓（单步「运行」归纳）'
+$rrRep = Get-StepRunMarkRepeat (New-LaunchStep 'system' @{ command='__nope2__'; repeat=2 })
+Assert-Equal 2 ([int]$rrRep.Fail) 'repeat=2 两次都计 Fail'
+Assert-True ([string]$rrRep.Mark -match '未知系统命令') 'Mark 保留告警文本'
+$rrOld = Get-StepRunMarkRepeat ([pscustomobject]@{ enabled=$true; kind='system'; command='__nope3__' })   # 旧配置无 repeat
+Assert-Equal 1 ([int]$rrOld.Fail) '缺 repeat 字段 -> 跑一次'
+
+Write-Host 'AX24 循环动作：Invoke-ActionGroup 内步骤 repeat 生效；旧步骤(无 repeat)跑一次'
+$script:axCount = 0
+function Invoke-SystemCommand { param([string]$Command) if ($Command -eq '__count__') { $script:axCount++ } }   # 计数桩（本测试起遮蔽真函数）
+$grpCnt = New-ActionGroup @{ name='GC2'; steps=@( (New-LaunchStep 'system' @{ command='__count__'; repeat=3 }) ) }
+Invoke-ActionGroup $grpCnt
+Assert-Equal 3 $script:axCount '组内 repeat=3 执行 3 次'
+$script:axCount = 0
+$grpCnt2 = New-ActionGroup @{ name='GC3'; steps=@( ([pscustomobject]@{ enabled=$true; kind='system'; command='__count__'; delayMs=0 }) ) }
+Invoke-ActionGroup $grpCnt2
+Assert-Equal 1 $script:axCount '缺 repeat 字段 -> 跑一次'
+
+Write-Host 'AX25 急停：步骤循环中置停止信号 -> 弃跑剩余次数与后续步骤'
+Clear-StopAll
+function Invoke-SystemCommand { param([string]$Command) switch ($Command) { '__count__' { $script:axCount++ } '__stop__' { $script:axCount++; Request-StopAll } } }   # 计数桩 + 急停桩
+$script:axCount = 0
+$logS = Join-Path ([System.IO.Path]::GetTempPath()) ("ax25_{0}.log" -f [guid]::NewGuid().ToString('N'))
+$cfgS = [pscustomobject]@{ actionGroups=@(); launchSteps=@(
+    (New-LaunchStep 'system' @{ command='__stop__'; label='S'; repeat=3 }),
+    (New-LaunchStep 'system' @{ command='__count__'; label='C' }) ) }
+$rS = Invoke-LaunchSequence $cfgS $logS
+$cS = Get-Content -LiteralPath $logS -Raw -Encoding UTF8; Remove-Item -LiteralPath $logS -Force
+Assert-Equal 1 $script:axCount '第 1 次执行后即停：不跑第 2/3 次、不跑下一步'
+Assert-Equal 1 ([int]$rS.Total) 'Total 只计已执行的 1 次'
+Assert-True ([bool]$rS.Stopped) '返回 Stopped=true'
+Assert-True ($cS -match '已手动停止') '日志记「已手动停止」'
+Clear-StopAll
+
+Write-Host 'AX26 急停：动作组内置停止信号 -> 中止整组剩余步骤'
+$script:axCount = 0
+$grpS = New-ActionGroup @{ name='GS'; steps=@(
+    (New-LaunchStep 'system' @{ command='__stop__' }),
+    (New-LaunchStep 'system' @{ command='__count__' }) ) }
+Invoke-ActionGroup $grpS
+Assert-Equal 1 $script:axCount '组内第 1 步置停止后第 2 步不再执行'
+Clear-StopAll
+
+Write-Host 'AX27 急停：Get-StepRunMarkRepeat 循环间响应'
+$script:axCount = 0
+$rrS = Get-StepRunMarkRepeat (New-LaunchStep 'system' @{ command='__stop__'; repeat=5 })
+Assert-Equal 1 $script:axCount 'repeat=5 只跑 1 次即停'
+Clear-StopAll
+
+Write-Host 'AX27b 评审4-#1: Invoke-InRunspaceAsync 建立阶段抛错 -> 仍以 $null 调 OnDone（不泄漏在跑标志、不卡死急停清理）'
+# 注入让「计时器创建」同步抛错，模拟建 runspace/BeginInvoke 阶段失败：此时 OnDone 本不会被计时器调度，
+# 若不兜底，调用方的 Running/ReminderFiring 标志永远清不掉 → Test-AnyRunActive 恒真 → 急停信号永久卡死。
+$axDone = @{ count=0; out='sentinel' }
+$script:MakeAsyncTimer = { throw '注入：建立失败' }
+Invoke-InRunspaceAsync -Script { 1 } -OnDone { param($o) $axDone.count++; $axDone.out=$o } 3>$null
+$script:MakeAsyncTimer = $null
+Assert-Equal 1 ([int]$axDone.count) '建立失败 -> OnDone 仍被调用一次（兜底清标志）'
+Assert-True ($null -eq $axDone.out) 'OnDone 收到 $null（各 OnDone 都先清标志再用输出、容忍 $null）'
+
+Write-Host 'AX28 ConvertTo-HotkeyParams（急停键解析）'
+$hp1 = ConvertTo-HotkeyParams 'Ctrl+Alt+F12'
+Assert-True ($null -ne $hp1) 'Ctrl+Alt+F12 可解析'
+Assert-Equal 3 ([int]$hp1.Modifiers) 'Ctrl(2)+Alt(1)=3'
+Assert-Equal 123 ([int]$hp1.Vk) 'F12 -> VK 123'
+$hp2 = ConvertTo-HotkeyParams 'Win+Shift+Q'
+Assert-Equal 12 ([int]$hp2.Modifiers) 'Win(8)+Shift(4)=12'
+Assert-Equal ([int][System.Windows.Forms.Keys]::Q) ([int]$hp2.Vk) 'Q 的 VK'
+$hp3 = ConvertTo-HotkeyParams 'Ctrl+5'
+Assert-Equal ([int][System.Windows.Forms.Keys]::D5) ([int]$hp3.Vk) '数字 5 -> D5'
+Assert-True ($null -eq (ConvertTo-HotkeyParams 'Ctrl+')) '缺主键 -> null'
+Assert-True ($null -eq (ConvertTo-HotkeyParams 'Ctrl+10')) '多位数字 -> null'
+Assert-True ($null -eq (ConvertTo-HotkeyParams '')) '空 -> null'
+
+Write-Host 'AX29 fix#1: Reset-StopIfIdle 仅在全空闲时复位急停信号（有运行在跑则保留，不吞并发急停）'
+Clear-StopAll
+$script:LaunchState = @{ Running = $true }; $script:StepActionState = @{ Running = $false }; $script:ActionGroupRunning = @{}
+Request-StopAll
+Reset-StopIfIdle
+Assert-True (Test-StopRequested) '有启动序列在跑 -> 保留急停信号（不被并发操作擦掉）'
+$script:LaunchState = @{ Running = $false }; $script:ActionGroupRunning = @{ 'g1' = $true }
+Reset-StopIfIdle
+Assert-True (Test-StopRequested) '有动作组在跑 -> 保留急停信号'
+$script:ActionGroupRunning = @{ 'g1' = $false }
+Assert-True (-not (Test-AnyRunActive)) '全 false -> 无运行在跑'
+Reset-StopIfIdle
+Assert-True (-not (Test-StopRequested)) '全空闲 -> 复位急停信号'
+
+Write-Host 'AX30 fix#4: 单步运行 group 步骤按其 repeat 跑整组 N 遍（Invoke-ActionGroupAsync -Repeat）'
+Clear-StopAll
+$script:axCount = 0
+function Invoke-SystemCommand { param([string]$Command) if ($Command -eq '__gr__') { $script:axCount++ } }   # 计数桩
+$grpR = New-ActionGroup @{ name='GRR'; steps=@( (New-LaunchStep 'system' @{ command='__gr__' }) ) }
+Invoke-ActionGroupAsync $grpR 3 0
+Assert-Equal 3 $script:axCount 'group 步骤 repeat=3 -> 整组跑 3 遍'
+$script:axCount = 0
+Invoke-ActionGroupAsync $grpR
+Assert-Equal 1 $script:axCount '默认 repeat=1 -> 一遍（托盘/提醒触发不变）'
+Clear-StopAll
+
+Write-Host 'AX30b fix#1(评审回归): 背景/同步路径（AppRoot 未设=提醒 runspace）绝不复位急停信号'
+# $script:AppRoot 在测试里为 $null（顶部设定），Invoke-ActionGroupAsync 走同步兜底=模拟提醒背景 runspace。
+# 修复前：入口无条件 Reset-StopIfIdle -> 在此擦掉别处按下的急停（评审确认的 bug）。修复后：同步路径不复位。
+Clear-StopAll
+$script:axCount = 0
+function Invoke-SystemCommand { param([string]$Command) if ($Command -eq '__gr2__') { $script:axCount++ } }
+$grpBg = New-ActionGroup @{ name='GBG'; steps=@( (New-LaunchStep 'system' @{ command='__gr2__' }) ) }
+Request-StopAll   # 模拟：主线程正为在跑的启动序列按下了急停
+Invoke-ActionGroupAsync $grpBg   # 提醒背景路径触发同一组
+Assert-True (Test-StopRequested) '背景/同步路径未擦掉急停信号（急停得以保留）'
+Assert-Equal 0 $script:axCount '急停在效 -> 该组本身也不执行（fail-safe）'
+Clear-StopAll
+
+Write-Host 'AX30c 评审3-#2: Test-AnyRunActive 也识别提醒在跑（$script:ReminderFiring），Reset-StopIfIdle 不误清其急停'
+$script:LaunchState=@{Running=$false}; $script:StepActionState=@{Running=$false}; $script:ActionGroupRunning=@{}; $script:ReminderFiring=@{}
+Assert-True (-not (Test-AnyRunActive)) '全空 -> 无运行在跑'
+$script:ReminderFiring=@{ 'r1'=$true }
+Assert-True (Test-AnyRunActive) '有提醒在弹/在跑 -> 视为有运行（背景 runspace 不设主线程守卫，靠此表识别）'
+Clear-StopAll; Request-StopAll
+Reset-StopIfIdle
+Assert-True (Test-StopRequested) '提醒在跑时 Reset-StopIfIdle 保留急停信号（不擦掉为提醒组按下的急停）'
+$script:ReminderFiring=@{}
+Reset-StopIfIdle
+Assert-True (-not (Test-StopRequested)) '提醒结束、全空闲 -> 复位'
+Clear-StopAll
+
+Write-Host 'AX31 fix#4b: Invoke-ActionGroupRepeat 急停在遍间中止'
+Clear-StopAll
+$script:axCount = 0
+function Invoke-SystemCommand { param([string]$Command) if ($Command -eq '__grs__') { $script:axCount++; Request-StopAll } }   # 跑一遍即置停
+$grpRS = New-ActionGroup @{ name='GRS'; steps=@( (New-LaunchStep 'system' @{ command='__grs__' }) ) }
+Invoke-ActionGroupRepeat $grpRS 5 0
+Assert-Equal 1 $script:axCount 'repeat=5 但第 1 遍置停 -> 只跑 1 遍'
+Clear-StopAll
+
+Write-Host 'AX32 fix#5: 急停在效时窗口步骤返回 0 不误报「找不到窗口」'
+function Invoke-WindowAction { param([string]$Process,[string]$Op,[string]$SendKey='{ENTER}',[int]$WaitForWindowSeconds=0,[int]$PostWindowDelaySeconds=0) 0 }   # 桩：恒返回 0（模拟急停打断/无窗口）
+$stW = New-LaunchStep 'window' @{ process='whatever'; action='minimize' }
+Request-StopAll
+$rrW = Get-StepRunMark $stW
+Assert-Equal '✓' ([string]$rrW.Mark) '急停在效 -> 静默不告警（记 ✓）'
+Assert-Equal 0 ([int]$rrW.Fail) '急停在效 -> 不计 Fail'
+Clear-StopAll
+$rrW2 = Get-StepRunMark $stW
+Assert-Equal 1 ([int]$rrW2.Fail) '无急停 -> 返回 0 仍如实告警（原行为不变）'
+
+Write-Host 'AX18 窗口 sendkey 成功记「~ 已发送（未校验）」而非 ✓（#2）'
+function Invoke-WindowAction { param($Process,$Op,$SendKey,$Wait,$Post) $true }   # 模拟置前+发送成功（放最后，不影响上面的真实窗口测试）
+$mkSK = Get-StepRunMark ([pscustomobject]@{ kind='window'; action='sendkey'; process='x'; sendKey='{ENTER}'; waitForWindowSeconds=0; postWindowDelaySeconds=0 })
+Assert-Equal 1 ([int]$mkSK.Unver) 'sendkey 成功计入「已发送未校验」'
+Assert-Equal 0 ([int]$mkSK.Fail)  'sendkey 成功不算失败'
+Assert-True ($mkSK.Mark -match '未校验') 'Mark 标为 ~ 已发送（未校验）'
+
+Write-Host 'AX19 Invoke-ActionGroup 不把步骤成功流漏进返回值（#2）'
+function Invoke-StepAction { param($Step) 'unverified' }   # mock：模拟步骤的 'unverified' 成功流输出（放最后，不影响上面真实测试）
+$grpLeak = New-ActionGroup @{ name='leak'; enabled=$true; steps=@((New-LaunchStep 'keys' @{ combo='Enter' })) }
+$leakOut = @(Invoke-ActionGroup $grpLeak)
+Assert-Equal 0 $leakOut.Count "动作组执行不漏出步骤的 'unverified' 等成功流对象"
 
 Invoke-TestSummary

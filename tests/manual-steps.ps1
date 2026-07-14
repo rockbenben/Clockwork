@@ -1,7 +1,7 @@
 ﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-. (Join-Path $here '..\lib\StartupHelper.Core.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Win32.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Actions.ps1')
+. (Join-Path $here '..\lib\Clockwork.Core.ps1')
+. (Join-Path $here '..\lib\Clockwork.Win32.ps1')
+. (Join-Path $here '..\lib\Clockwork.Actions.ps1')
 
 # 安全序列：开记事本 → 设音量40 → 发 Win+D 两次 → 系统命令 显示桌面
 $cfg = [pscustomobject]@{ launchSteps = @(

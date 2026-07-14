@@ -1,6 +1,6 @@
 ﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $here '_assert.ps1')
-. (Join-Path $here '..\lib\StartupHelper.SystemStartup.ps1')
+. (Join-Path $here '..\lib\Clockwork.SystemStartup.ps1')
 
 Write-Host 'Test-StartupApprovedEnabled'
 Assert-True  (Test-StartupApprovedEnabled $null)                                      'null = enabled'

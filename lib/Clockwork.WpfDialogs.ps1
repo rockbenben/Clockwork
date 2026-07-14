@@ -1,36 +1,58 @@
-﻿# StartupHelper.WpfDialogs.ps1 —— WPF 对话框 + 提醒弹窗（配合 WpfGui.ps1）
+﻿# Clockwork.WpfDialogs.ps1 —— WPF 对话框 + 提醒弹窗（配合 WpfGui.ps1）
 $script:DlgRes = @'
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <SolidColorBrush x:Key="Ink" Color="#E6E9ED"/><SolidColorBrush x:Key="Muted" Color="#8B95A1"/><SolidColorBrush x:Key="Signal" Color="#F0651A"/>
-  <SolidColorBrush x:Key="Panel" Color="#2E343B"/><SolidColorBrush x:Key="Line" Color="#3C434B"/>
-  <Style TargetType="TextBox"><Setter Property="Background" Value="#2E343B"/><Setter Property="Foreground" Value="#E6E9ED"/><Setter Property="BorderBrush" Value="#3C434B"/><Setter Property="BorderThickness" Value="1"/><Setter Property="Padding" Value="6,4"/><Setter Property="FontSize" Value="14"/><Setter Property="CaretBrush" Value="#E6E9ED"/></Style>
-  <Style TargetType="CheckBox"><Setter Property="Foreground" Value="#E6E9ED"/><Setter Property="FontSize" Value="14"/><Setter Property="VerticalAlignment" Value="Center"/></Style>
-  <Style x:Key="Primary" TargetType="Button"><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="Bold"/><Setter Property="FontSize" Value="14"/><Setter Property="Height" Value="34"/><Setter Property="MinWidth" Value="88"/><Setter Property="Cursor" Value="Hand"/>
-    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#F0651A" CornerRadius="3" Padding="14,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#FF7A2A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
-  <Style x:Key="Ghost" TargetType="Button"><Setter Property="Foreground" Value="#E6E9ED"/><Setter Property="FontSize" Value="14"/><Setter Property="Height" Value="34"/><Setter Property="MinWidth" Value="80"/><Setter Property="Cursor" Value="Hand"/>
-    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3" Padding="14,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
-  <Style TargetType="ComboBoxItem"><Setter Property="Foreground" Value="#E6E9ED"/>
-    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBoxItem"><Border x:Name="b" Background="Transparent" Padding="8,5"><ContentPresenter/></Border>
-      <ControlTemplate.Triggers><Trigger Property="IsHighlighted" Value="True"><Setter TargetName="b" Property="Background" Value="#3A4149"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
-  <Style TargetType="ComboBox"><Setter Property="Foreground" Value="#E6E9ED"/><Setter Property="Background" Value="#2E343B"/><Setter Property="BorderBrush" Value="#3C434B"/>
+  <SolidColorBrush x:Key="Ink" Color="#EAEDF1"/><SolidColorBrush x:Key="Muted" Color="#98A2AE"/><SolidColorBrush x:Key="Faint" Color="#6B7480"/><SolidColorBrush x:Key="Signal" Color="#F0651A"/><SolidColorBrush x:Key="SignalHi" Color="#FF7C34"/>
+  <SolidColorBrush x:Key="Panel" Color="#2A2F37"/><SolidColorBrush x:Key="Raised" Color="#2A2F37"/><SolidColorBrush x:Key="Line" Color="#353C45"/>
+  <Style TargetType="TextBox"><Setter Property="Background" Value="#2A2F37"/><Setter Property="Foreground" Value="#EAEDF1"/><Setter Property="BorderBrush" Value="#353C45"/><Setter Property="BorderThickness" Value="1"/><Setter Property="Padding" Value="7,4"/><Setter Property="FontSize" Value="14"/><Setter Property="CaretBrush" Value="#EAEDF1"/></Style>
+  <Style TargetType="CheckBox"><Setter Property="Cursor" Value="Hand"/><Setter Property="Foreground" Value="#EAEDF1"/><Setter Property="FontSize" Value="14"/><Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="CheckBox"><StackPanel Orientation="Horizontal" Background="Transparent">
+      <Border x:Name="box" Width="18" Height="18" CornerRadius="5" Background="Transparent" BorderBrush="#6B7480" BorderThickness="1.6" VerticalAlignment="Center"><Path x:Name="chk" Data="M4,9 L7.5,12.5 L14,5" Stroke="#1A1D22" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/></Border>
+      <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/></StackPanel>
+      <ControlTemplate.Triggers>
+        <Trigger Property="IsChecked" Value="True"><Setter TargetName="box" Property="Background" Value="#F0651A"/><Setter TargetName="box" Property="BorderBrush" Value="#F0651A"/><Setter TargetName="chk" Property="Visibility" Value="Visible"/></Trigger>
+        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="box" Property="BorderBrush" Value="#F0651A"/></Trigger>
+        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.4"/></Trigger>
+      </ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+  <Style x:Key="Primary" TargetType="Button"><Setter Property="Foreground" Value="#1A1D22"/><Setter Property="FontWeight" Value="Bold"/><Setter Property="FontSize" Value="14"/><Setter Property="Height" Value="36"/><Setter Property="MinWidth" Value="92"/><Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#F0651A" CornerRadius="8" Padding="16,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#FF7C34"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+  <Style x:Key="Ghost" TargetType="Button"><Setter Property="Foreground" Value="#EAEDF1"/><Setter Property="FontSize" Value="14"/><Setter Property="Height" Value="36"/><Setter Property="MinWidth" Value="84"/><Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8" Padding="16,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/><Setter TargetName="b" Property="Background" Value="#31373F"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+  <Style TargetType="ComboBoxItem"><Setter Property="Foreground" Value="#EAEDF1"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBoxItem"><Border x:Name="b" Background="Transparent" Padding="9,6"><ContentPresenter/></Border>
+      <ControlTemplate.Triggers><Trigger Property="IsHighlighted" Value="True"><Setter TargetName="b" Property="Background" Value="#31373F"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+  <Style TargetType="ComboBox"><Setter Property="Foreground" Value="#EAEDF1"/><Setter Property="Background" Value="#2A2F37"/><Setter Property="BorderBrush" Value="#353C45"/>
     <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBox">
       <Grid>
         <ToggleButton Focusable="False" ClickMode="Press" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
-          <ToggleButton.Template><ControlTemplate TargetType="ToggleButton"><Border Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3">
-            <Path Data="M0,0 L4,4 L8,0 Z" Fill="#8B95A1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,0"/></Border></ControlTemplate></ToggleButton.Template>
+          <ToggleButton.Template><ControlTemplate TargetType="ToggleButton"><Border Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8">
+            <Path Data="M0,0 L4,4 L8,0 Z" Fill="#98A2AE" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/></Border></ControlTemplate></ToggleButton.Template>
         </ToggleButton>
-        <ContentPresenter Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Margin="9,0,26,0" VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+        <ContentPresenter Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Margin="10,0,26,0" VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="False"/>
         <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
-          <Border Background="#2A3038" BorderBrush="#3C434B" BorderThickness="1" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+          <Border Background="#262B31" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
             <ScrollViewer MaxHeight="260"><StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/></ScrollViewer></Border>
         </Popup>
       </Grid></ControlTemplate></Setter.Value></Setter></Style>
+  <Style x:Key="ScrollThumb" TargetType="Thumb"><Setter Property="OverridesDefaultStyle" Value="True"/><Setter Property="IsTabStop" Value="False"/><Setter Property="MinHeight" Value="28"/><Setter Property="MinWidth" Value="28"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Thumb"><Border x:Name="t" CornerRadius="3" Background="#464E58" Margin="2"/>
+      <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="#5C6672"/></Trigger><Trigger Property="IsDragging" Value="True"><Setter TargetName="t" Property="Background" Value="#6E7885"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+  <Style x:Key="ScrollPage" TargetType="RepeatButton"><Setter Property="OverridesDefaultStyle" Value="True"/><Setter Property="IsTabStop" Value="False"/><Setter Property="Focusable" Value="False"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent"/></ControlTemplate></Setter.Value></Setter></Style>
+  <Style TargetType="ScrollBar"><Setter Property="OverridesDefaultStyle" Value="True"/><Setter Property="Background" Value="Transparent"/><Setter Property="Width" Value="10"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar"><Grid Background="Transparent"><Track x:Name="PART_Track" IsDirectionReversed="True">
+      <Track.DecreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageUpCommand"/></Track.DecreaseRepeatButton>
+      <Track.Thumb><Thumb Style="{StaticResource ScrollThumb}"/></Track.Thumb>
+      <Track.IncreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageDownCommand"/></Track.IncreaseRepeatButton></Track></Grid></ControlTemplate></Setter.Value></Setter>
+    <Style.Triggers><Trigger Property="Orientation" Value="Horizontal"><Setter Property="Width" Value="Auto"/><Setter Property="Height" Value="10"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar"><Grid Background="Transparent"><Track x:Name="PART_Track" Orientation="Horizontal">
+        <Track.DecreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageLeftCommand"/></Track.DecreaseRepeatButton>
+        <Track.Thumb><Thumb Style="{StaticResource ScrollThumb}"/></Track.Thumb>
+        <Track.IncreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageRightCommand"/></Track.IncreaseRepeatButton></Track></Grid></ControlTemplate></Setter.Value></Setter></Trigger></Style.Triggers></Style>
 </ResourceDictionary>
 '@
 
 function New-WpfDialog {
     param([string]$Title, [double]$Width=560, $Owner)
-    $x = "<Window xmlns=`"http://schemas.microsoft.com/winfx/2006/xaml/presentation`" xmlns:x=`"http://schemas.microsoft.com/winfx/2006/xaml`" Title=`"$Title`" SizeToContent=`"Height`" Width=`"$Width`" WindowStartupLocation=`"CenterOwner`" Background=`"#262B31`" WindowStyle=`"ToolWindow`" ResizeMode=`"NoResize`" FontFamily=`"Microsoft YaHei UI`" TextOptions.TextFormattingMode=`"Display`"><StackPanel x:Name=`"Body`" Margin=`"20`"/></Window>"
+    $x = "<Window xmlns=`"http://schemas.microsoft.com/winfx/2006/xaml/presentation`" xmlns:x=`"http://schemas.microsoft.com/winfx/2006/xaml`" Title=`"$Title`" SizeToContent=`"Height`" Width=`"$Width`" WindowStartupLocation=`"CenterOwner`" Background=`"#22262D`" WindowStyle=`"ToolWindow`" ResizeMode=`"NoResize`" FontFamily=`"Microsoft YaHei UI`" TextOptions.TextFormattingMode=`"Display`"><StackPanel x:Name=`"Body`" Margin=`"22`"/></Window>"
     $dlg = [Windows.Markup.XamlReader]::Parse($x)
     $dlg.Resources.MergedDictionaries.Add([Windows.Markup.XamlReader]::Parse($script:DlgRes))
     # Owner=「从未显示过的窗口」会抛 InvalidOperationException（主窗最小化启动时就是这种状态）——
@@ -38,8 +60,8 @@ function New-WpfDialog {
     try { if ($Owner) { $dlg.Owner = $Owner } elseif ($script:MainWin) { $dlg.Owner = $script:MainWin } } catch {}
     $dlg
 }
-$script:InkBrush = [System.Windows.Media.BrushConverter]::new().ConvertFrom('#E6E9ED')
-$script:MutedBrush = [System.Windows.Media.BrushConverter]::new().ConvertFrom('#8B95A1')
+$script:InkBrush = [System.Windows.Media.BrushConverter]::new().ConvertFrom('#EAEDF1')
+$script:MutedBrush = [System.Windows.Media.BrushConverter]::new().ConvertFrom('#98A2AE')
 function Add-DlgRow {
     param($Body, [string]$Label, $Control)
     $g = New-Object System.Windows.Controls.Grid; $g.Margin = '0,0,0,12'
@@ -146,7 +168,7 @@ function Select-ProcessNameDialog {
         $lb.Items.Clear()
         $matched = if ($q) { @($procs | Where-Object { $_.Name.IndexOf($q,[System.StringComparison]::OrdinalIgnoreCase) -ge 0 -or $_.Title.IndexOf($q,[System.StringComparison]::OrdinalIgnoreCase) -ge 0 }) } else { $procs }
         foreach ($p in $matched) {
-            $ttl=$p.Title; if($ttl.Length -gt 30){ $ttl=$ttl.Substring(0,30)+'…' }
+            $ttl=Format-Ellipsis $p.Title
             $it=New-Object System.Windows.Controls.ListBoxItem; $it.Content="$($p.Name)  —  $ttl"; $it.Tag=$p.Name; $it.Foreground=$script:InkBrush
             [void]$lb.Items.Add($it)
         }
@@ -176,13 +198,21 @@ function Select-DateDialog {
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 
+# 一二三四五六日 7 个星期勾选框：填进 $Panel、返回勾选框 ArrayList（Tag=ISO 1..7，据 $Days 预勾）。
+# 步骤「仅星期」条件行(Add-DlgCondRows)与提醒周期编辑共用；读回用 $checks|?{IsChecked}|%{[int]$_.Tag}。
+function Add-WeekdayChecks {
+    param($Panel, $Days, [string]$Margin='0,0,10,0')
+    $checks=New-Object System.Collections.ArrayList; $dn=@('一','二','三','四','五','六','日'); $cur=@(@($Days)|ForEach-Object{[int]$_})
+    for($i=1;$i -le 7;$i++){ $c=New-Object System.Windows.Controls.CheckBox; $c.Content=$dn[$i-1]; $c.Foreground=$script:InkBrush; $c.Margin=$Margin; $c.IsChecked=($cur -contains $i); $c.Tag=$i; [void]$checks.Add($c); [void]$Panel.Children.Add($c) }
+    ,$checks
+}
+
 # 步骤通用「执行条件」两行（仅星期 + 仅 N 点前）——所有启动步骤对话框共用；由 Build-LaunchPlan 在开机/重跑时生效。
 # 返回 @{Checks;Before;Hour}，OnOk 里用 Get-DlgCondValues 取值。此前仅 app 对话框保留这两字段、其余步骤编辑即丢失。
 function Add-DlgCondRows {
     param($Body, $Step)
     $daysPanel=New-Object System.Windows.Controls.StackPanel; $daysPanel.Orientation='Horizontal'
-    $checks=New-Object System.Collections.ArrayList; $dn=@('一','二','三','四','五','六','日'); $cur=@(@($Step.days)|ForEach-Object{[int]$_})
-    for($i=1;$i -le 7;$i++){ $c=New-Object System.Windows.Controls.CheckBox; $c.Content=$dn[$i-1]; $c.Foreground=$script:InkBrush; $c.Margin='0,0,10,0'; $c.IsChecked=($cur -contains $i); $c.Tag=$i; [void]$checks.Add($c); [void]$daysPanel.Children.Add($c) }
+    $checks=Add-WeekdayChecks $daysPanel $Step.days '0,0,10,0'
     $hd=New-Object System.Windows.Controls.TextBlock; $hd.Text='（都不选=每天）'; $hd.Foreground=$script:MutedBrush; $hd.VerticalAlignment='Center'; $hd.FontSize=12; [void]$daysPanel.Children.Add($hd)
     Add-DlgRow $Body '仅星期' $daysPanel | Out-Null
     $sp=New-Object System.Windows.Controls.StackPanel; $sp.Orientation='Horizontal'
@@ -205,6 +235,18 @@ function Add-DlgIconNoteRows {
     $tNote=New-DlgText ([string]$Step.note); Add-DlgRow $Body '说明' $tNote | Out-Null
     @{ Note=$tNote }
 }
+# 「重复次数」行（循环动作），启动程序/按键/文本/音量/窗口/系统/动作组对话框共用；延时（重复=把秒数改大）
+# 与消息（确认框弹 N 次）无意义、不加。返回 TextBox，保存时用 Get-DlgRepeatValue 取值（夹 1..999）。
+function Add-DlgRepeatRow {
+    param($Body, $Step)
+    $sp=New-Object System.Windows.Controls.StackPanel; $sp.Orientation='Horizontal'
+    $t=New-DlgText ([string](Get-StepRepeat $Step)); $t.Width=110
+    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='连续执行 N 次（循环动作），每次之间等「执行后延时」；1 = 不重复'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.VerticalAlignment='Center'; $h.Margin='8,0,0,0'; $h.TextWrapping='Wrap'; $h.MaxWidth=330
+    [void]$sp.Children.Add($t); [void]$sp.Children.Add($h)
+    Add-DlgRow $Body '重复次数' $sp | Out-Null
+    $t
+}
+function Get-DlgRepeatValue { param($T) $r=1; [void][int]::TryParse($T.Text,[ref]$r); Get-ClampedRepeat $r }   # 夹取口径与 Get-StepRepeat 共用（Core）
 function Add-DlgButtons {
     param($Dlg, $Body, [scriptblock]$OnOk)
     $bp=New-Object System.Windows.Controls.StackPanel; $bp.Orientation='Horizontal'; $bp.HorizontalAlignment='Right'; $bp.Margin='0,8,0,0'
@@ -237,9 +279,10 @@ function Show-LaunchItemDialogWpf {
     $hWs=New-Object System.Windows.Controls.TextBlock; $hWs.Text='是否生效取决于目标程序；勾了「管理员权限」时窗口风格可能不生效（走系统提权路径）。'; $hWs.Foreground=$script:MutedBrush; $hWs.FontSize=12; $hWs.TextWrapping='Wrap'; Add-DlgRow $body $null $hWs | Out-Null
     $inm=Add-DlgIconNoteRows $body $Step
     $tDly =New-DlgText ([string][int]$Step.delayMs); $tDly.Width=110; $tDly.HorizontalAlignment='Left'; Add-DlgRow $body '执行后延时(ms)' $tDly | Out-Null
+    $rp=Add-DlgRepeatRow $body $Step
     $cond=Add-DlgCondRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($tDly.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'app' @{ enabled=[bool]$Step.enabled; label=$tName.Text; target=$tTgt.Text; args=$tArg.Text; workDir=$tDir.Text; elevated=[bool]$cEle.IsChecked; activateIfRunning=[bool]$cAct.IsChecked; activateProcess=$tAct.Text; windowStyle=(Get-ComboValue $cbWs); altTargets=$tAlt.Text; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($tDly.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'app' @{ enabled=[bool]$Step.enabled; label=$tName.Text; target=$tTgt.Text; args=$tArg.Text; workDir=$tDir.Text; elevated=[bool]$cEle.IsChecked; activateIfRunning=[bool]$cAct.IsChecked; activateProcess=$tAct.Text; windowStyle=(Get-ComboValue $cbWs); altTargets=$tAlt.Text; delayMs=$d; repeat=(Get-DlgRepeatValue $rp); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 
@@ -263,8 +306,7 @@ function Show-ReminderDialogWpf {
     $cbSMode.Add_SelectionChanged($togSH); & $togSH
     $cbRec=New-DlgCombo @('按星期','每 N 天','每月某号') @('daily','everyNDays','monthly') $R.recurType 160; Add-DlgRow $body '周期' $cbRec | Out-Null
     $daysPanel=New-Object System.Windows.Controls.StackPanel; $daysPanel.Orientation='Horizontal'
-    $dayChecks=New-Object System.Collections.ArrayList; $dn=@('一','二','三','四','五','六','日'); $cur=@(@($R.days)|ForEach-Object{[int]$_})
-    for($i=1;$i -le 7;$i++){ $c=New-Object System.Windows.Controls.CheckBox; $c.Content=$dn[$i-1]; $c.Foreground=$script:InkBrush; $c.Margin='0,0,12,0'; $c.IsChecked=($cur -contains $i); $c.Tag=$i; [void]$dayChecks.Add($c); [void]$daysPanel.Children.Add($c) }
+    $dayChecks=Add-WeekdayChecks $daysPanel $R.days '0,0,12,0'
     $hd=New-Object System.Windows.Controls.TextBlock; $hd.Text='（都不选=每天）'; $hd.Foreground=$script:MutedBrush; $hd.VerticalAlignment='Center'; $hd.FontSize=12; [void]$daysPanel.Children.Add($hd)
     $rowDays=Add-DlgRow $body '星期' $daysPanel
     $spInt=New-Object System.Windows.Controls.StackPanel; $spInt.Orientation='Horizontal'
@@ -339,9 +381,9 @@ function Show-ReminderDialogWpf {
     $box=@{R=$null}
     Add-DlgButtons $dlg $body ({
         $trig=(Get-ComboValue $cbTrig)
-        if ($trig -eq 'time' -and $tTime.Text -notmatch '^([01]\d|2[0-3]):[0-5]\d$') { [System.Windows.MessageBox]::Show('时间格式应为 HH:mm','开机助手')|Out-Null; return $false }
-        if ($tRepU.Text.Trim() -ne '' -and $tRepU.Text.Trim() -notmatch '^([01]\d|2[0-3]):[0-5]\d$') { [System.Windows.MessageBox]::Show('「重复直到」格式应为 HH:mm（或留空）','开机助手')|Out-Null; return $false }
-        if ($tAnchor.Text.Trim() -ne '' -and $tAnchor.Text.Trim() -notmatch '^\d{4}-\d{2}-\d{2}$') { [System.Windows.MessageBox]::Show('起算日格式应为 yyyy-MM-dd（或留空）','开机助手')|Out-Null; return $false }
+        if ($trig -eq 'time' -and $tTime.Text -notmatch '^([01]\d|2[0-3]):[0-5]\d$') { [System.Windows.MessageBox]::Show('时间格式应为 HH:mm','Clockwork')|Out-Null; return $false }
+        if ($tRepU.Text.Trim() -ne '' -and $tRepU.Text.Trim() -notmatch '^([01]\d|2[0-3]):[0-5]\d$') { [System.Windows.MessageBox]::Show('「重复直到」格式应为 HH:mm（或留空）','Clockwork')|Out-Null; return $false }
+        if ($tAnchor.Text.Trim() -ne '' -and $tAnchor.Text.Trim() -notmatch '^\d{4}-\d{2}-\d{2}$') { [System.Windows.MessageBox]::Show('起算日格式应为 yyyy-MM-dd（或留空）','Clockwork')|Out-Null; return $false }
         $days=@($dayChecks | Where-Object { $_.IsChecked } | ForEach-Object { [int]$_.Tag })
         # TryParse 失败会把 [ref] 写成 0（而非保留预置值）——清空/误填的框必须显式回退默认，否则
         # startupHour=0 让「仅 N 点前」永假、graceMinutes=0 丢补弹等，全是静默失效。
@@ -367,10 +409,10 @@ function Show-ReminderDialogWpf {
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 
-function Show-ActionGroupDialogWpf { param($G,$Owner) [System.Windows.MessageBox]::Show('动作组编辑对话框正在迁移到 WPF（下一步）。','开机助手')|Out-Null; $null }
-
-# 原生系统通知（Win10/11 Toast，即「日常通知」样式）：归属名来自我们注册的 AUMID DisplayName，
-# 不会出现 NotifyIcon 气泡那种乱码回退名；不置顶抢视线，错过自动进通知中心。失败返回 $false（调用方退回气泡/弹窗）。
+# 原生系统通知（Win10/11 Toast，即「日常通知」样式）。仍在用：普通提醒（Invoke-Reminder 里无动作、非重复那条）
+# 经它弹「日常通知」——不置顶抢视线、错过自动进通知中心。Setting≠Enabled（通知未启用/受限启动器）时返回 $false，
+# 由调用方退回自绘弹窗 Show-ReminderPopup（故受限环境下提醒仍可见、不乱码）。
+# 注意：托盘状态提示（Show-TrayNotify）已改走自绘 Show-AppToast，不再经过这里——别据本函数名误以为通知全线自绘。
 function Show-SystemToast {
     # $Long：横幅时长 短(默认,~5-7s)/长(~25s)。Windows 只有这两档，无法任意秒数（见 Test-ReminderToastLong）。
     param([string]$Message, [string]$Title = '', [bool]$Long = $false)
@@ -393,11 +435,63 @@ function Show-SystemToast {
     } catch { $false }
 }
 
-# 托盘类通知统一先走系统 Toast（归属名/样式正确）；Toast 不可用（老系统/策略禁用）才退回 NotifyIcon 气泡。
+# —— 自绘角落通知（与提醒弹窗 Show-ReminderPopup 同一视觉家族：深色 + 强调色左条 + 等宽小标签）——
+# 为什么不用系统 Toast / NotifyIcon 气泡：系统 Toast 在「通知未启用 / 受限启动器」下 Setting≠Enabled、静默失败；
+# 退回的 NotifyIcon 气泡其 OS 归属名会乱码。自绘则完全可控、到处一致、不受启动器限制。轻量变体：无按钮、
+# 不抢焦点(ShowActivated=False)、右下角、几秒自动消失、可点掉；多条自动向上堆叠。$Kind 决定强调色（多种样式）。
+$script:ActiveToasts = $null
+function Show-AppToast {
+    param([string]$Message, [string]$Kicker = '通知', [string]$Kind = 'info', [int]$Seconds = 5)
+    # 必须在主 UI 线程建窗/Show()：非模态 Show 依赖那条常驻消息泵，背景 runspace 里 Show 完即随 runspace 消散。
+    # 取主窗 Dispatcher，取不到再退回 Application.Current.Dispatcher；两者都无（如无 AppRoot 的同步兜底路径、
+    # 无消息泵）则静默放弃、绝不抛错拖垮调用方（提醒 tick / OnDone）——通知是 best-effort，宁可不显示也不崩。
+    $disp = $null
+    try { if ($script:MainWin) { $disp = $script:MainWin.Dispatcher } } catch {}
+    if (-not $disp) { try { $disp = [System.Windows.Application]::Current.Dispatcher } catch {} }
+    if (-not $disp) { return }
+    if (-not $disp.CheckAccess()) { [void]$disp.BeginInvoke([action]({ Show-AppToast -Message $Message -Kicker $Kicker -Kind $Kind -Seconds $Seconds }.GetNewClosure())); return }
+    $accent = if ($Kind -eq 'stop') { '#E0623E' } else { '#F0651A' }
+    $x = @'
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  SizeToContent="Height" Width="360" WindowStartupLocation="Manual" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+  ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" ShowActivated="False" FontFamily="Microsoft YaHei UI" TextOptions.TextFormattingMode="Display">
+  <Border Background="#23272E" CornerRadius="10" BorderBrush="#353C45" BorderThickness="1" Margin="12">
+    <Border.Effect><DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="3" Opacity="0.5"/></Border.Effect>
+    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="4"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+      <Rectangle x:Name="Stripe" Grid.Column="0" Fill="#F0651A" RadiusX="2" RadiusY="2" Margin="0,2"/>
+      <StackPanel Grid.Column="1" Margin="16,12,16,13">
+        <TextBlock x:Name="Kick" Foreground="#F0651A" FontFamily="Consolas" FontWeight="Bold" FontSize="12"/>
+        <TextBlock x:Name="Msg" Foreground="#EAEDF1" FontSize="14" TextWrapping="Wrap" Margin="0,5,0,0"/>
+      </StackPanel>
+    </Grid>
+  </Border>
+</Window>
+'@
+    $dlg = [Windows.Markup.XamlReader]::Parse($x)
+    $br = New-Object Windows.Media.SolidColorBrush ([Windows.Media.ColorConverter]::ConvertFromString($accent))
+    $dlg.FindName('Kick').Text = $Kicker; $dlg.FindName('Kick').Foreground = $br; $dlg.FindName('Stripe').Fill = $br
+    $dlg.FindName('Msg').Text = $Message
+    if (-not $script:ActiveToasts) { $script:ActiveToasts = New-Object System.Collections.ArrayList }
+    [void]$script:ActiveToasts.Add($dlg)
+    # 定位放到内容渲染后（此时 ActualWidth/Height 才有效）：贴右下角，已有 toast 则依次向上堆叠。
+    $dlg.Add_ContentRendered({
+        $wa = [System.Windows.SystemParameters]::WorkArea; $off = 0.0
+        foreach ($w in @($script:ActiveToasts)) { if ($w -ne $dlg -and $w.IsVisible) { $off += $w.ActualHeight + 6 } }
+        $dlg.Left = $wa.Right - $dlg.ActualWidth - 8; $dlg.Top = $wa.Bottom - $dlg.ActualHeight - 8 - $off
+    }.GetNewClosure())
+    $dlg.Add_Closed({ try { [void]$script:ActiveToasts.Remove($dlg) } catch {} }.GetNewClosure())
+    $dlg.Add_MouseLeftButtonUp({ try { $dlg.Close() } catch {} }.GetNewClosure())   # 点一下即刻消掉
+    $t = New-Object System.Windows.Threading.DispatcherTimer; $t.Interval = [TimeSpan]::FromSeconds([Math]::Max(2, $Seconds))
+    $t.Add_Tick({ $t.Stop(); try { $dlg.Close() } catch {} }.GetNewClosure()); $t.Start()
+    [void]$dlg.Show()
+}
+
+# 托盘类通知：统一走自绘 Show-AppToast（见上）。$Title 形如「Clockwork · 运行」→ 取「·」后作小标签；
+# 仅「Clockwork」→ 归为「通知」。$Kind='stop' 给急停等用红橙强调色。
 function Show-TrayNotify {
-    param($Tray, [string]$Title, [string]$Message)
-    if (Show-SystemToast $Message $Title) { return }
-    try { $Tray.ShowBalloonTip(3000, $Title, $Message, [System.Windows.Forms.ToolTipIcon]::Info) } catch {}
+    param($Tray, [string]$Title, [string]$Message, [string]$Kind = 'info')
+    $kick = if ($Title -match '·\s*(.+)$') { $Matches[1].Trim() } elseif ($Title -and $Title -ne 'Clockwork') { $Title } else { '通知' }
+    Show-AppToast -Message $Message -Kicker $kick -Kind $Kind
 }
 
 # —— 提醒弹窗（WPF，替代 WinForms 版；Actions.ps1 的 Invoke-Reminder 调用它）——
@@ -406,13 +500,13 @@ function Show-ReminderPopup {
     $box = @{ result = $(if ($Confirm) { 'no' } else { 'ok' }); snoozeMinutes = $null }
     $x = @'
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  Title="开机助手 · 提醒" SizeToContent="Height" Width="460" WindowStartupLocation="Manual" Background="#2E343B"
+  Title="Clockwork · 提醒" SizeToContent="Height" Width="460" WindowStartupLocation="Manual" Background="#23272E"
   WindowStyle="ToolWindow" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" FontFamily="Microsoft YaHei UI" TextOptions.TextFormattingMode="Display">
   <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="5"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
     <Rectangle Grid.Column="0" Fill="#F0651A"/>
-    <StackPanel Grid.Column="1" Margin="20,16,20,16">
+    <StackPanel Grid.Column="1" Margin="22,18,22,18">
       <TextBlock Text="提醒" Foreground="#F0651A" FontFamily="Consolas" FontWeight="Bold" FontSize="13"/>
-      <TextBlock x:Name="Msg" Foreground="#E6E9ED" FontSize="15" TextWrapping="Wrap" Margin="0,10,0,18"/>
+      <TextBlock x:Name="Msg" Foreground="#EAEDF1" FontSize="15" TextWrapping="Wrap" Margin="0,10,0,18"/>
       <StackPanel x:Name="Btns" Orientation="Horizontal" HorizontalAlignment="Right"/>
     </StackPanel>
   </Grid>
@@ -421,8 +515,8 @@ function Show-ReminderPopup {
     $dlg = [Windows.Markup.XamlReader]::Parse($x)
     $dlg.FindName('Msg').Text = $Message
     $btns = $dlg.FindName('Btns')
-    $prim = [Windows.Markup.XamlReader]::Parse('<Style xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Setter Property="Foreground" Value="White"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border Background="#F0651A" CornerRadius="3" Padding="14,7"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border></ControlTemplate></Setter.Value></Setter></Style>')
-    $ghost= [Windows.Markup.XamlReader]::Parse('<Style xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Setter Property="Foreground" Value="#E6E9ED"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border Background="#262B31" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3" Padding="14,7"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border></ControlTemplate></Setter.Value></Setter></Style>')
+    $prim = [Windows.Markup.XamlReader]::Parse('<Style xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Setter Property="Foreground" Value="#1A1D22"/><Setter Property="FontWeight" Value="Bold"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border Background="#F0651A" CornerRadius="8" Padding="16,7"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border></ControlTemplate></Setter.Value></Setter></Style>')
+    $ghost= [Windows.Markup.XamlReader]::Parse('<Style xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Setter Property="Foreground" Value="#EAEDF1"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8" Padding="16,7"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border></ControlTemplate></Setter.Value></Setter></Style>')
     # 按钮工厂只负责外观；Add_Click 闭包必须在【函数直层】创建——嵌套在工厂脚本块里 .GetNewClosure()
     # 捕获不到外层的 $box/$dlg（嵌套闭包坑），点击时抛「找不到属性 result」。
     $mk = { param($txt,$st) $b=New-Object System.Windows.Controls.Button; $b.Content=$txt; $b.MinWidth=76; $b.Margin='10,0,0,0'; $b.Cursor='Hand'; $b.Style=$st; $b }

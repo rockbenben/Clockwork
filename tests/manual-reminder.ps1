@@ -1,7 +1,7 @@
 ﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-. (Join-Path $here '..\lib\StartupHelper.Core.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Win32.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Actions.ps1')
+. (Join-Path $here '..\lib\Clockwork.Core.ps1')
+. (Join-Path $here '..\lib\Clockwork.Win32.ps1')
+. (Join-Path $here '..\lib\Clockwork.Actions.ps1')
 
 Write-Host '1) 纯通知提醒（无动作 → 系统通知）：'
 Invoke-Reminder ([pscustomobject]@{ message='这是一条普通提醒'; speak=$false; onYes=@{type='none';target=''} })

@@ -505,7 +505,8 @@
                      "tickSeconds":  30,
                      "startMinimized":  false,
                      "startupWaitForReady":  false,
-                     "startupDelaySeconds":  30
+                     "startupDelaySeconds":  30,
+                     "stopHotkey":  "Ctrl+Alt+F12"
                  },
     "actionGroups":  [
                          {

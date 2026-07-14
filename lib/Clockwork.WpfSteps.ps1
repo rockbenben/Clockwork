@@ -1,4 +1,4 @@
-﻿# StartupHelper.WpfSteps.ps1 —— 各类步骤对话框（WPF）+ 步骤派发 + 动作组编辑器。配合 WpfGui/WpfDialogs。
+﻿# Clockwork.WpfSteps.ps1 —— 各类步骤对话框（WPF）+ 步骤派发 + 动作组编辑器。配合 WpfGui/WpfDialogs。
 
 function New-DlgCombo {
     param([string[]]$Labels, [string[]]$Values, [string]$Selected, [double]$Width=200)
@@ -16,12 +16,13 @@ function Show-KeysStepDialogWpf {
     if ($null -eq $Step) { $Step = New-LaunchStep 'keys' }
     $dlg=New-WpfDialog '编辑 · 发送按键' 560 $Owner; $body=$dlg.FindName('Body')
     $t=Add-DlgCaptureRow $body '组合键' $Step.combo
-    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='例：Win+D / Alt+K / Ctrl+Enter / F5（支持 Enter、Tab、Esc、Del、方向键等键名）。点「捕获」按下快捷键即自动填入；Win+ 组合会被系统截走、需手输，符号键也请手输'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
+    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='例：Win+D / Alt+K / Ctrl+Enter / F5（支持 Enter、Tab、Esc、Del、方向键等键名）。点「捕获」按下快捷键即自动填入；Win+ 组合会被系统截走、需手输，符号键也请手输。按键发给【当前焦点窗口】——请自己先确保目标窗口在最前、光标就位（可配前一步「延时」或「窗口动作 · 带到最前面」）。'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
     $inm=Add-DlgIconNoteRows $body $Step
     $dl=Add-DlgDelayRow $body $Step.delayMs
+    $rp=Add-DlgRepeatRow $body $Step
     $cond=Add-DlgCondRows $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'keys' @{ enabled=[bool]$Step.enabled; label=$t.Text; combo=$t.Text; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'keys' @{ enabled=[bool]$Step.enabled; label=$t.Text; combo=$t.Text; delayMs=$d; repeat=(Get-DlgRepeatValue $rp); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-VolumeStepDialogWpf {
@@ -36,8 +37,9 @@ function Show-VolumeStepDialogWpf {
     $togLv={ $rowLv.Visibility = if((Get-ComboValue $cb) -eq 'set'){'Visible'}else{'Collapsed'} }.GetNewClosure()
     $cb.Add_SelectionChanged($togLv); & $togLv
     $inm=Add-DlgIconNoteRows $body $Step
+    $rp=Add-DlgRepeatRow $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $lvl=0;[void][int]::TryParse($lv.Text,[ref]$lvl); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'volume' @{ enabled=[bool]$Step.enabled; action=(Get-ComboValue $cb); level=[Math]::Max(0,[Math]::Min(100,$lvl)); delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $lvl=0;[void][int]::TryParse($lv.Text,[ref]$lvl); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'volume' @{ enabled=[bool]$Step.enabled; action=(Get-ComboValue $cb); level=[Math]::Max(0,[Math]::Min(100,$lvl)); delayMs=$d; repeat=(Get-DlgRepeatValue $rp); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-WindowStepDialogWpf {
@@ -46,9 +48,9 @@ function Show-WindowStepDialogWpf {
     $dlg=New-WpfDialog '编辑 · 窗口动作' 560 $Owner; $body=$dlg.FindName('Body')
     $cb=New-DlgCombo @('关闭窗口','最小化窗口','最大化窗口','带到最前面','置前并发送按键') @('close','minimize','maximize','activate','sendkey') $Step.action 190; Add-DlgRow $body '动作' $cb | Out-Null
     $tp=Add-DlgBrowseRow $body '进程名' $Step.process { param($cur) Select-ProcessNameDialog $dlg } '选择…'
-    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='进程名，不含 .exe，如 Weixin / QQ / msedge（任务管理器「详细信息」列可查）'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
+    $h=New-Object System.Windows.Controls.TextBlock; $h.Text='进程名，不含 .exe，如 Weixin / QQ / msedge（任务管理器「详细信息」列可查）。注：「带到最前面 / 置前并发送按键」需抢占前台，开机自启或后台触发时系统可能不允许（只闪任务栏、不动作）——目标程序已在前台时最稳。'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
     $tk=Add-DlgCaptureRow $body '发送按键' $Step.sendKey; $rowSend=$tk.Row
-    $hk=New-Object System.Windows.Controls.TextBlock; $hk.Text='可写 Enter / Ctrl+Enter 这类组合，或原生 SendKeys 序列（如 {ENTER}、hello{TAB}）。点「捕获」可录单个组合键（Win+ 组合与连续序列请手输）'; $hk.Foreground=$script:MutedBrush; $hk.FontSize=12; $hk.TextWrapping='Wrap'; $rowSendHint=Add-DlgRow $body $null $hk
+    $hk=New-Object System.Windows.Controls.TextBlock; $hk.Text='可写 Enter / Ctrl+Enter 这类组合，或原生 SendKeys 序列（如 {ENTER}、hello{TAB}）。点「捕获」可录单个组合键（Win+ 组合与连续序列请手输）。会先把该程序窗口带到最前再发；带不到最前（开机自启/后台触发常见）则不发，请在程序已在前台时用。'; $hk.Foreground=$script:MutedBrush; $hk.FontSize=12; $hk.TextWrapping='Wrap'; $rowSendHint=Add-DlgRow $body $null $hk
     $tw=New-DlgText ([string][int]$Step.waitForWindowSeconds); Add-DlgRow $body '等待窗口出现(秒)' $tw | Out-Null
     $hw=New-Object System.Windows.Controls.TextBlock; $hw.Text='最多等目标程序的窗口出现这么多秒，一出现就动手。填 0 = 不等（现在有窗口就动手，没有就跳过）；开机时程序起得慢就填大点（如 120），窗口一冒出来就动、不会白等满'; $hw.Foreground=$script:MutedBrush; $hw.FontSize=12; $hw.TextWrapping='Wrap'; Add-DlgRow $body $null $hw | Out-Null
     $tpd=New-DlgText ([string][int]$Step.postWindowDelaySeconds); $rowPost=Add-DlgRow $body '出现后再等(秒)' $tpd
@@ -58,8 +60,9 @@ function Show-WindowStepDialogWpf {
     $toggle={ $v = if((Get-ComboValue $cb) -eq 'sendkey'){'Visible'}else{'Collapsed'}; $rowSend.Visibility=$v; $rowSendHint.Visibility=$v; $pv = if((Get-ComboValue $cb) -in 'close','minimize','maximize','activate'){'Visible'}else{'Collapsed'}; $rowPost.Visibility=$pv; $rowPostHint.Visibility=$pv }.GetNewClosure()
     $cb.Add_SelectionChanged($toggle); & $toggle
     $inm=Add-DlgIconNoteRows $body $Step
+    $rp=Add-DlgRepeatRow $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $wv=0;[void][int]::TryParse($tw.Text,[ref]$wv); $pv=0;[void][int]::TryParse($tpd.Text,[ref]$pv); $act=(Get-ComboValue $cb); $actLb=[string]$cb.SelectedItem.Content; $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'window' @{ enabled=[bool]$Step.enabled; action=$act; process=$tp.Text; sendKey=$tk.Text; waitForWindowSeconds=$wv; postWindowDelaySeconds=$pv; label="$actLb $($tp.Text)"; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $wv=0;[void][int]::TryParse($tw.Text,[ref]$wv); $pv=0;[void][int]::TryParse($tpd.Text,[ref]$pv); $act=(Get-ComboValue $cb); $actLb=[string]$cb.SelectedItem.Content; $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'window' @{ enabled=[bool]$Step.enabled; action=$act; process=(ConvertTo-ProcessName $tp.Text); sendKey=$tk.Text; waitForWindowSeconds=$wv; postWindowDelaySeconds=$pv; label="$actLb $(ConvertTo-ProcessName $tp.Text)"; delayMs=$d; repeat=(Get-DlgRepeatValue $rp); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-SystemStepDialogWpf {
@@ -71,8 +74,9 @@ function Show-SystemStepDialogWpf {
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $cond=Add-DlgCondRows $body $Step
     $inm=Add-DlgIconNoteRows $body $Step
+    $rp=Add-DlgRepeatRow $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cmd=(Get-ComboValue $cb); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'system' @{ enabled=[bool]$Step.enabled; command=$cmd; label=$m[$cmd]; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cmd=(Get-ComboValue $cb); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'system' @{ enabled=[bool]$Step.enabled; command=$cmd; label=$m[$cmd]; delayMs=$d; repeat=(Get-DlgRepeatValue $rp); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-GroupStepDialogWpf {
@@ -85,8 +89,9 @@ function Show-GroupStepDialogWpf {
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $cond=Add-DlgCondRows $body $Step
     $inm=Add-DlgIconNoteRows $body $Step
+    $rp=Add-DlgRepeatRow $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $gid=(Get-ComboValue $cb); $gn=($gs|Where-Object{[string]$_.id -eq $gid}|ForEach-Object{[string]$_.name}); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'group' @{ enabled=[bool]$Step.enabled; groupId=$gid; label=[string]$gn; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $gid=(Get-ComboValue $cb); $gn=($gs|Where-Object{[string]$_.id -eq $gid}|ForEach-Object{[string]$_.name}); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'group' @{ enabled=[bool]$Step.enabled; groupId=$gid; label=[string]$gn; delayMs=$d; repeat=(Get-DlgRepeatValue $rp); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 function Show-MessageStepDialogWpf {
@@ -147,12 +152,13 @@ function Show-TextStepDialogWpf {
     $tm=New-Object System.Windows.Controls.TextBox; $tm.Text=[string]$Step.text; $tm.AcceptsReturn=$true; $tm.TextWrapping='Wrap'; $tm.Height=110; $tm.VerticalScrollBarVisibility='Auto'; Add-DlgRow $body '文本' $tm | Out-Null
     $h=New-Object System.Windows.Controls.TextBlock; $h.Text='逐字输入文本（换行=回车、Tab 生效）。'; $h.Foreground=$script:MutedBrush; $h.FontSize=12; $h.TextWrapping='Wrap'; Add-DlgRow $body $null $h | Out-Null
     $tp=Add-DlgBrowseRow $body '目标进程' $Step.process { param($cur) Select-ProcessNameDialog $dlg } '选择…'
-    $hp=New-Object System.Windows.Controls.TextBlock; $hp.Text='留空 = 发给当前焦点窗口（需自行确保光标已在目标输入框，可配合前一步「延时」）；填进程名（不含 .exe）则先把它的窗口带到最前、再输入。'; $hp.Foreground=$script:MutedBrush; $hp.FontSize=12; $hp.TextWrapping='Wrap'; Add-DlgRow $body $null $hp | Out-Null
+    $hp=New-Object System.Windows.Controls.TextBlock; $hp.Text='留空 =【推荐·最稳】直接发给当前焦点窗口（自己先把光标点进目标输入框，可配前一步「延时」）。填进程名（不含 .exe）会先尝试把它带到最前再输入——但开机自启/后台触发时系统常不让抢前台（只闪任务栏、不输入），这类场景请改为留空、自行聚焦。'; $hp.Foreground=$script:MutedBrush; $hp.FontSize=12; $hp.TextWrapping='Wrap'; Add-DlgRow $body $null $hp | Out-Null
     $dl=Add-DlgDelayRow $body $Step.delayMs
     $cond=Add-DlgCondRows $body $Step
     $inm=Add-DlgIconNoteRows $body $Step
+    $rp=Add-DlgRepeatRow $body $Step
     $box=@{R=$null}
-    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'text' @{ enabled=[bool]$Step.enabled; text=$tm.Text; process=$tp.Text; delayMs=$d; days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
+    Add-DlgButtons $dlg $body ({ $d=0;[void][int]::TryParse($dl.Text,[ref]$d); $cv=Get-DlgCondValues $cond; $box.R=New-LaunchStep 'text' @{ enabled=[bool]$Step.enabled; text=$tm.Text; process=(ConvertTo-ProcessName $tp.Text); delayMs=$d; repeat=(Get-DlgRepeatValue $rp); days=$cv.days; onlyBefore8=$cv.onlyBefore8; beforeHour=$cv.beforeHour; note=$inm.Note.Text }; $true }.GetNewClosure())
     if ($dlg.ShowDialog()) { $box.R } else { $null }
 }
 
@@ -179,45 +185,46 @@ function Show-ActionGroupDialogWpf {
     if ($null -eq $Group) { $Group = New-ActionGroup }
     $x = @'
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  Title="编辑动作组" Width="720" Height="560" WindowStartupLocation="CenterOwner" Background="#262B31"
+  Title="编辑动作组" Width="720" Height="560" WindowStartupLocation="CenterOwner" Background="#22262D"
   WindowStyle="ToolWindow" ResizeMode="CanResize" MinWidth="560" MinHeight="420" FontFamily="Microsoft YaHei UI" TextOptions.TextFormattingMode="Display">
   <Grid Margin="18">
     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
-      <TextBlock Text="名称" Foreground="#E6E9ED" VerticalAlignment="Center" FontSize="14" Width="52"/>
-      <TextBox x:Name="Name" Width="420" Height="30" Background="#2E343B" Foreground="#E6E9ED" BorderBrush="#3C434B" BorderThickness="1" Padding="6,4" FontSize="14" CaretBrush="#E6E9ED"/>
+      <TextBlock Text="名称" Foreground="#EAEDF1" VerticalAlignment="Center" FontSize="14" Width="52"/>
+      <TextBox x:Name="Name" Width="420" Height="30" Background="#2A2F37" Foreground="#EAEDF1" BorderBrush="#353C45" BorderThickness="1" Padding="6,4" FontSize="14" CaretBrush="#EAEDF1"/>
     </StackPanel>
-    <TextBlock Grid.Row="1" Text="动作组只定义动作；触发请在「启动清单」或「提醒」里引用本组。" Foreground="#8B95A1" FontSize="12" Margin="52,0,0,10"/>
+    <TextBlock Grid.Row="1" Text="动作组只定义动作；触发请在「启动清单」或「提醒」里引用本组。" Foreground="#98A2AE" FontSize="12" Margin="52,0,0,10"/>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="110"/></Grid.ColumnDefinitions>
-      <DataGrid x:Name="Steps" Grid.Column="0" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="None"
-                Background="#262B31" Foreground="#E6E9ED" BorderThickness="1" BorderBrush="#3C434B" RowBackground="#262B31" AlternatingRowBackground="#2B3138" RowHeight="28" FontSize="13" SelectionMode="Single">
+      <DataGrid x:Name="Steps" Grid.Column="0" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#2A3038" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                Background="#22262D" Foreground="#EAEDF1" BorderThickness="1" BorderBrush="#353C45" RowBackground="#22262D" RowHeight="36" FontSize="13" SelectionMode="Single">
         <DataGrid.Columns>
-          <DataGridTextColumn Header="类型" Binding="{Binding T1}" Width="110" IsReadOnly="True"/>
-          <DataGridTextColumn Header="摘要" Binding="{Binding T2}" Width="*" IsReadOnly="True"/>
-          <DataGridTextColumn Header="延时(ms)" Binding="{Binding T3}" Width="80" IsReadOnly="True"/>
+          <DataGridTemplateColumn Header="类型" Width="112"><DataGridTemplateColumn.CellTemplate><DataTemplate><Border Background="#2E343C" BorderBrush="#353C45" BorderThickness="1" CornerRadius="7" Padding="9,2" HorizontalAlignment="Left" VerticalAlignment="Center"><TextBlock Text="{Binding T1}" Foreground="#C7CDD5" FontSize="12.5"/></Border></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+          <DataGridTextColumn Header="摘要" Binding="{Binding T2}" Width="*" IsReadOnly="True"><DataGridTextColumn.ElementStyle><Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="TextTrimming" Value="CharacterEllipsis"/><Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/></Style></DataGridTextColumn.ElementStyle></DataGridTextColumn>
+          <DataGridTextColumn Header="延时" Binding="{Binding T3}" Width="86" IsReadOnly="True"><DataGridTextColumn.ElementStyle><Style TargetType="TextBlock"><Setter Property="VerticalAlignment" Value="Center"/><Setter Property="FontFamily" Value="Consolas"/><Setter Property="FontSize" Value="12.5"/><Setter Property="Foreground" Value="#98A2AE"/><Setter Property="TextAlignment" Value="Right"/><Setter Property="Margin" Value="0,0,6,0"/></Style></DataGridTextColumn.ElementStyle></DataGridTextColumn>
         </DataGrid.Columns>
         <DataGrid.Resources>
-          <Style TargetType="DataGridColumnHeader"><Setter Property="Background" Value="#262B31"/><Setter Property="Foreground" Value="#8B95A1"/><Setter Property="FontWeight" Value="Bold"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Padding" Value="8,6"/><Setter Property="Height" Value="28"/></Style>
-          <Style TargetType="DataGridCell"><Setter Property="BorderThickness" Value="0"/><Setter Property="Foreground" Value="#E6E9ED"/><Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#40301E"/></Trigger></Style.Triggers></Style>
+          <Style TargetType="DataGridColumnHeader"><Setter Property="Background" Value="#22262D"/><Setter Property="Foreground" Value="#6B7480"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="FontSize" Value="12"/><Setter Property="BorderThickness" Value="0,0,0,1"/><Setter Property="BorderBrush" Value="#353C45"/><Setter Property="Padding" Value="10,7"/><Setter Property="Height" Value="32"/></Style>
+          <Style TargetType="DataGridCell"><Setter Property="BorderThickness" Value="0"/><Setter Property="Foreground" Value="#EAEDF1"/><Setter Property="VerticalContentAlignment" Value="Center"/><Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#382718"/></Trigger></Style.Triggers></Style>
         </DataGrid.Resources>
       </DataGrid>
       <StackPanel Grid.Column="1" Margin="10,0,0,0">
-        <Button x:Name="SAdd" Content="新增 ▾" Height="32" Margin="0,0,0,8" Foreground="#E6E9ED" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
-        <Button x:Name="SEdit" Content="编辑" Height="32" Margin="0,0,0,8" Foreground="#E6E9ED" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
-        <Button x:Name="SDel" Content="删除" Height="32" Margin="0,0,0,8" Foreground="#E6E9ED" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
-        <Button x:Name="SUp" Content="上移" Height="32" Margin="0,14,0,8" Foreground="#E6E9ED" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
-        <Button x:Name="SDown" Content="下移" Height="32" Foreground="#E6E9ED" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
+        <Button x:Name="SAdd" Content="新增 ▾" Height="32" Margin="0,0,0,8" Foreground="#EAEDF1" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
+        <Button x:Name="SEdit" Content="编辑" Height="32" Margin="0,0,0,8" Foreground="#EAEDF1" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
+        <Button x:Name="SDel" Content="删除" Height="32" Margin="0,0,0,8" Foreground="#EAEDF1" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
+        <Button x:Name="SUp" Content="上移" Height="32" Margin="0,14,0,8" Foreground="#EAEDF1" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
+        <Button x:Name="SDown" Content="下移" Height="32" Foreground="#EAEDF1" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
       </StackPanel>
     </Grid>
     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
-      <Button x:Name="Ok" Content="确定" MinWidth="88" Height="34" Margin="0,0,10,0" Foreground="White" FontWeight="Bold" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#F0651A" CornerRadius="3" Padding="14,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#FF7A2A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
-      <Button x:Name="Cancel" Content="取消" MinWidth="80" Height="34" Foreground="#E6E9ED" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2E343B" BorderBrush="#3C434B" BorderThickness="1" CornerRadius="3" Padding="14,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
+      <Button x:Name="Ok" Content="确定" MinWidth="92" Height="36" Margin="0,0,10,0" Foreground="#1A1D22" FontWeight="Bold" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#F0651A" CornerRadius="8" Padding="14,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="Background" Value="#FF7C34"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
+      <Button x:Name="Cancel" Content="取消" MinWidth="80" Height="34" Foreground="#EAEDF1" Cursor="Hand"><Button.Template><ControlTemplate TargetType="Button"><Border x:Name="b" Background="#2A2F37" BorderBrush="#353C45" BorderThickness="1" CornerRadius="8" Padding="14,0"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="b" Property="BorderBrush" Value="#F0651A"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Button.Template></Button>
     </StackPanel>
   </Grid>
 </Window>
 '@
     $dlg=[Windows.Markup.XamlReader]::Parse($x)
+    $dlg.Resources.MergedDictionaries.Add([Windows.Markup.XamlReader]::Parse($script:DlgRes))   # 复用对话框资源：主要为纤细滚动条（编辑器的内联控件多已自带样式，隐式样式仅补齐滚动条等）
     try { if ($Owner) { $dlg.Owner=$Owner } elseif ($script:MainWin) { $dlg.Owner=$script:MainWin } } catch {}   # 未显示过的窗口设 Owner 会抛，设不上就居中屏幕
     $dlg.FindName('Name').Text=[string]$Group.name
     $grid=$dlg.FindName('Steps')
@@ -226,7 +233,7 @@ function Show-ActionGroupDialogWpf {
     foreach ($s in @($Group.steps)) { $steps.Add($s) }
     $refresh={
         $rows=New-Object System.Collections.ObjectModel.ObservableCollection[object]
-        foreach ($s in $steps) { $r=New-Object ShRow; $r.T1=(Get-StepKindLabel $s.kind); $r.T2=(Format-StepListSummary $s); $r.T3=[string][int]$s.delayMs; $r.Ref=$s; $rows.Add($r) }
+        foreach ($s in $steps) { $r=New-Object ShRow; $r.T1=(Get-StepKindLabel $s.kind); $r.T2=(Format-StepListSummary $s); $r.T3=(Format-DelayShort ([int]$s.delayMs)); $r.Ref=$s; $rows.Add($r) }
         $grid.ItemsSource=$rows
     }.GetNewClosure()
     & $refresh
@@ -236,7 +243,7 @@ function Show-ActionGroupDialogWpf {
     $menu=New-DarkContextMenu
     foreach ($k in $kinds) {
         $mi=New-Object System.Windows.Controls.MenuItem; $mi.Header=$k[0]; $mi.Tag=$k[1]
-        $mi.Add_Click({ param($s,$e) $n=Show-StepDialogWpf ([string]$s.Tag) $null @() $dlg; if($n){ $i=& $selIdx; $pos=if($i -ge 0 -and $i -lt $steps.Count){$i+1}else{$steps.Count}; $steps.Insert($pos,$n); & $refresh; $grid.SelectedIndex=$pos } }.GetNewClosure())
+        $mi.Add_Click({ param($s,$e) $n=Show-StepDialogWpf ([string]$s.Tag) $null @() $dlg; if($n){ $i=& $selIdx; $pos=Get-InsertPosition $i $steps.Count; $steps.Insert($pos,$n); & $refresh; $grid.SelectedIndex=$pos } }.GetNewClosure())
         [void]$menu.Items.Add($mi)
     }
     $dlg.FindName('SAdd').Add_Click({ $menu.PlacementTarget=$dlg.FindName('SAdd'); $menu.IsOpen=$true }.GetNewClosure())
@@ -248,7 +255,7 @@ function Show-ActionGroupDialogWpf {
     $dlg.FindName('SDown').Add_Click({ $i=& $selIdx; if($i -ge 0 -and $i -lt $steps.Count-1){ $t=$steps[$i]; $steps[$i]=$steps[$i+1]; $steps[$i+1]=$t; & $refresh; $grid.SelectedIndex=$i+1 } }.GetNewClosure())
     $box=@{R=$null}
     $dlg.FindName('Ok').Add_Click({
-        if ([string]::IsNullOrWhiteSpace($dlg.FindName('Name').Text)) { [System.Windows.MessageBox]::Show('请填写动作组名称。','开机助手')|Out-Null; return }
+        if ([string]::IsNullOrWhiteSpace($dlg.FindName('Name').Text)) { [System.Windows.MessageBox]::Show('请填写动作组名称。','Clockwork')|Out-Null; return }
         $ret=New-ActionGroup @{ name=$dlg.FindName('Name').Text; enabled=[bool]$Group.enabled; steps=$steps.ToArray() }; $ret.id=$Group.id   # .ToArray()：@($List[object]) 在 PS5.1 会抛 ArgumentException
         $box.R=$ret; $dlg.DialogResult=$true
     }.GetNewClosure())

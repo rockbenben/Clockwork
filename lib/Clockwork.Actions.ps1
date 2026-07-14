@@ -1,4 +1,4 @@
-﻿# StartupHelper.Actions.ps1 —— 编排：依赖 Core + Win32
+﻿# Clockwork.Actions.ps1 —— 编排：依赖 Core + Win32
 
 # 接管：先停用原项(可逆 StartupApproved)，成功才把它作为 app 步骤加入清单。返回 'Ok'/'NeedsAdmin'/'Error:...'。
 function Import-StartupItemToChecklist {
@@ -12,8 +12,9 @@ function Import-StartupItemToChecklist {
     if ($res -ne 'Ok') { return $res }
     $step = New-ImportedLaunchStep $Item
     # 去重：清单里已有相同 target 的步骤就不再追加，避免重复纳入导致双重启动。
-    $dup = @($Config.launchSteps) | Where-Object { [string]$step.target -ne '' -and [string]$_.target -eq [string]$step.target }
+    $dup = @($Config.launchSteps) | Where-Object { [string]$step.target -ne '' -and [string]$_.target -eq [string]$step.target } | Select-Object -First 1
     if (-not $dup) { $Config.launchSteps = @($Config.launchSteps) + $step }
+    elseif (-not $dup.enabled) { $dup.enabled = $true }   # 已有同目标步骤但被禁用：启用它——否则刚关掉系统自启、清单那条又没启用，该程序两边都不启动（界面却报成功）
     'Ok'
 }
 
@@ -22,7 +23,7 @@ function Invoke-LaunchItem {
     # 备用路径：主路径(完整路径)不存在时，用「备用路径」里第一个存在的候选（每行一条），解决多设备路径不一致。
     $tgt = Resolve-LaunchTarget $Item.target $Item.altTargets
     if ($script:LaunchSelfPaths -and (Test-IsSelfTarget $tgt $script:LaunchSelfPaths)) {
-        Write-Warning "跳过「$($Item.label)」：目标是开机助手自身，避免开机自启动循环"
+        Write-Warning "跳过「$($Item.label)」：目标是Clockwork自身，避免开机自启动循环"
         return
     }
     # 已运行则激活窗口、不重复启动：进程名手填优先，否则从目标推导；有窗口就置前并跳过启动。
@@ -32,7 +33,7 @@ function Invoke-LaunchItem {
             $pn = if ($Item.activateProcess) { [string]$Item.activateProcess } else { Get-TargetProcessName $tgt }
             $pn = $pn -replace '\.exe$', ''
             if ($pn -and (Get-AppWindowHandles $pn).Count -gt 0) { [void](Set-ForegroundAppWindow $pn); return }
-        } else { Write-Warning $script:NativeRestrictedMsg }
+        } else { Write-Warning (Get-NativeRestrictedMsg) }
     }
     try {
         if ([string]$tgt -match '\.ps1$') {
@@ -80,7 +81,7 @@ function Confirm-Destructive {
         # 那两处只 Add-Type System.Windows.Forms、没有 PresentationFramework —— 原来的 [System.Windows.MessageBox]
         # (WPF) 在那里类型解析失败 → 抛异常 → 走 catch 返回 $false → 关机/重启/注销步骤被【静默跳过】。
         # 三个 runspace（含动作组）与主进程都载入了 WinForms，故改用它，各路径统一可弹确认。
-        $r = [System.Windows.Forms.MessageBox]::Show("确定要执行「$Action」吗？", '开机助手 · 确认',
+        $r = [System.Windows.Forms.MessageBox]::Show("确定要执行「$Action」吗？", 'Clockwork · 确认',
             [System.Windows.Forms.MessageBoxButtons]::YesNo, [System.Windows.Forms.MessageBoxIcon]::Warning)
         return ($r -eq [System.Windows.Forms.DialogResult]::Yes)
     } catch { Write-Warning "无法弹出确认框，已跳过「$Action」"; return $false }
@@ -102,9 +103,13 @@ function Invoke-SystemCommand {
         'restart'         { if (Confirm-Destructive '重启') { Start-Process shutdown.exe '/r /t 0' } }
         'shutdown'        { if (Confirm-Destructive '关机') { Start-Process shutdown.exe '/s /t 0' } }
         'emptyRecycleBin' {
-            # 原本 catch{} 吞掉一切→永远假成功。改为如实报错；「回收站已空」不算失败。
-            try { Clear-RecycleBin -Force -ErrorAction Stop }
-            catch { if ($_.Exception.Message -notmatch '空|empty') { Write-Warning "清空回收站失败：$($_.Exception.Message)" } }
+            # 「回收站已空」不算失败、也不该每次跑都误告警（原来靠报错文字含「空/empty」判断，依赖系统语言，德语等误报）。
+            # 定案（勿再改回「先清、出错再数」）：先数条目——空就静默跳过（本就无事可做），非空才清、清失败才如实告警。
+            #   · 不依赖语言；· 已知非空才清，真失败必告警、不会被吞；· Shell 回收站枚举是标准可靠 API，「数了非空却清不动」才告警合理。
+            try {
+                $bin = (New-Object -ComObject Shell.Application).NameSpace(0xA)
+                if (@($bin.Items()).Count -gt 0) { Clear-RecycleBin -Force -ErrorAction Stop }
+            } catch { Write-Warning "清空回收站失败：$($_.Exception.Message)" }
         }
         'openSettings'    { Start-Process 'ms-settings:' }
         'screenshot'      {
@@ -140,7 +145,18 @@ function Invoke-StepAction {
             # close 例外：目标态就是「不在运行」，本就没开 = 目标已达成，按幂等语义记 ✓ 不告警
             # （动作组常批量关一串常驻应用，逐个 ⚠ 会把「有警告」淹没成噪音）。其余动作 0 仍如实告警。
             $n = Invoke-WindowAction $Step.process ([string]$Step.action) $Step.sendKey ([int]$Step.waitForWindowSeconds) ([int]$Step.postWindowDelaySeconds)
-            if ([int]$n -le 0 -and [string]$Step.action -ne 'close') { Write-Warning "没有找到「$($Step.process)」的窗口（进程未运行或尚未就绪？），$($Step.action) 未生效" }
+            # 急停打断等窗口/出现后延迟时 Invoke-WindowAction 也返回 0——那是「用户停了」不是「没找到窗口」，
+            # 不能误报 ⚠（否则用户停后读日志会去排查一个不存在的窗口检测问题）。停止在效则静默，由序列/组的停止分支收尾。
+            # sendkey：键注入前台窗口后无法证实对方是否接收（同 发送按键/文本）→ 成功输出 'unverified' 标「~ 已发送（未校验）」，
+            # 不能记 ✓（否则用户以为自动登录成功了）。$n=$false（窗口没出现 或 抢不到前台）才告警；急停打断也返 false，Test-StopRequested 时静默。
+            if ([string]$Step.action -eq 'sendkey') {
+                if ($n) { 'unverified' }
+                elseif (-not (Test-StopRequested)) { Write-Warning "未能向「$($Step.process)」发送按键：窗口没出现，或找到了却无法把它带到最前（后台/开机自启触发时常见）" }
+            }
+            # 其余动作（close/minimize/maximize/activate）：$n 是操作的窗口数，0=没找到窗口。close 幂等不告警；急停返回 0 也静默。
+            elseif ([int]$n -le 0 -and [string]$Step.action -ne 'close' -and -not (Test-StopRequested)) {
+                Write-Warning "没有找到「$($Step.process)」的窗口（进程未运行或尚未就绪？），$($Step.action) 未生效"
+            }
         }
         'system' { Invoke-SystemCommand ([string]$Step.command) }
         'text'   { Send-Text ([string]$Step.text) ([string]$Step.process) }
@@ -163,6 +179,24 @@ function Get-StepRunMark {
     } catch { $note = "异常：$($_.Exception.Message)"; $f = 1 }
     $mark = if ($note) { "⚠ $note" } elseif ($unverified) { '~ 已发送（未校验）' } else { '✓' }
     @{ Mark = $mark; Fail = $f; Unver = $u }
+}
+
+# 跑单个步骤 repeat 次并归纳标记（单步「运行」用；循环动作的测试路径）：每次之间等 delayMs（末次不等——
+# 手动运行后面没有下一步）；Mark 取第一个非 ✓ 的标记（如实暴露失败），Fail/Unver 累计。
+function Get-StepRunMarkRepeat {
+    param($Step)
+    $rep = Get-StepRepeat $Step
+    $mark = '✓'; $fail = 0; $unver = 0
+    for ($i = 1; $i -le $rep; $i++) {
+        $rr = Get-StepRunMark $Step
+        $fail += $rr.Fail; $unver += $rr.Unver
+        if ($mark -eq '✓' -and [string]$rr.Mark -ne '✓') { $mark = [string]$rr.Mark }
+        if ($i -lt $rep) {   # 急停：循环之间响应（可中断延时/信号检查），收到即弃跑剩余次数
+            if (Test-StopRequested) { break }
+            if ([int]$Step.delayMs -gt 0 -and -not (Start-InterruptibleSleep ([int]$Step.delayMs))) { break }
+        }
+    }
+    @{ Mark = $mark; Fail = $fail; Unver = $unver }
 }
 
 # 就绪探针：Shell（资源管理器有主窗口=桌面/任务栏起来了，keys/window/置前台才有意义）与网络（网卡可用）。
@@ -201,6 +235,7 @@ function Wait-SystemReady {
         if (-not $netOk)   { try { $netOk   = [bool](& $NetProbe) }   catch { $netOk = $true } }
         if ($shellOk -and $netOk) { break }   # 就绪即走
         if ($waited -ge $maxWaitMs) { break } # 到封顶：放行（宁可早跑也不挂死）
+        if (Test-StopRequested) { break }     # 急停：不再干等就绪，放行后由启动序列的停止检查中止
         & $Sleeper $PollMs
         $waited += $PollMs
     }
@@ -213,6 +248,7 @@ function Invoke-LaunchSequence {
     param($Config, [string]$LogPath, [switch]$Boot)
     [void](Confirm-Win32Available)   # 懒编译 SH.Native/SH.Audio（受限令牌下编译失败会降级、不抛）；仅启动序列需要
     $bootNote = $null
+    $stopped = $false   # 急停标志：Test-StopRequested/可中断延时一旦响应即置位，跳过所有剩余步骤、如实进日志
     if ($Boot -and $Config.settings) {
         # 可选就绪门控（默认关）：等 Shell/网络就绪，就绪即走、封顶 90s 兜底。仅当 settings.startupWaitForReady=true 才启用。
         # 默认不开——它测「壳/网存不存在」，冷启动一两秒就过，不反映机器是否闲下来；主延时交给下面的固定缓冲。
@@ -223,11 +259,11 @@ function Invoke-LaunchSequence {
             $bootNote = "就绪门控：等待 {0:N1}s（Shell={1} 网络={2}）{3}" -f ($r.WaitedMs / 1000), $r.Shell, $r.Net, $(if (-not $r.Ready) { '，超时仍未就绪，照常放行' } else { '' })
         }
         # 诚实固定延时（主杠杆）：从被唤醒起真实等待 N 秒再跑清单。原「计划任务 15s 触发延迟 + 就绪门控」都并入这一个可调数字，
-        # 慢机器/登录风暴重就把它调大（GUI 0–600）。这是唯一稳定生效、可预测的延时。
+        # 慢机器/登录风暴重就把它调大（GUI 0–600）。这是唯一稳定生效、可预测的延时。可被急停打断（开机不想跑清单时按急停键即弃跑）。
         $preDelay = [int]$Config.settings.startupDelaySeconds
         if ($preDelay -gt 0) {
             $bootNote = (($bootNote, ("开机延迟：{0}s" -f $preDelay)) | Where-Object { $_ }) -join '；'
-            Start-Sleep -Seconds $preDelay
+            if (-not (Start-InterruptibleSleep ($preDelay * 1000))) { $stopped = $true }
         }
     }
     # 小时/星期取一次、全程共用：带延时的长序列跨点时，顶层与组内子步骤的「仅N点前/仅星期」判定基准一致
@@ -237,7 +273,11 @@ function Invoke-LaunchSequence {
     $lines = New-Object System.Collections.ArrayList
     $fail = 0; $unver = 0; $total = 0
     foreach ($step in $plan) {
+        if (-not $stopped -and (Test-StopRequested)) { $stopped = $true }
+        if ($stopped) { break }
         $ts = (Get-Date).ToString('HH:mm:ss')
+        # 循环动作：整个步骤（含 group 展开）重复 repeat 次；每次之间等 delayMs（末次由步尾统一延时负责）。
+        $rep = Get-StepRepeat $step
         if ([string]$step.kind -eq 'group') {
             # group 步骤：解析引用的动作组，展开其非 message 步骤逐条进日志（诚实三态）。
             # message 步骤在启动展开时跳过（启动静默，不宜中途弹确认框）。
@@ -248,32 +288,50 @@ function Invoke-LaunchSequence {
                 # 组被禁用：引用时如实跳过（区别于「找不到」），不计成败、不计入步数。
                 [void]$lines.Add(("[{0}] {1}  · 动作组「{2}」已禁用，跳过" -f $ts, (Get-StepSummary $step), [string]$g.name))
             } else {
-                [void]$lines.Add(("[{0}] 运行动作组：{1}" -f $ts, [string]$g.name))
-                foreach ($sub in @($g.steps)) {
-                    if (-not $sub.enabled) { continue }
-                    if (-not (Test-StepCondition $sub $nowHour $nowIso)) { continue }   # 组内步骤同样遵守时间条件（与顶层同基准）
-                    if ([string]$sub.kind -eq 'message') { continue }
-                    $rr = Get-StepRunMark $sub
-                    [void]$lines.Add(("[{0}]     {1}  {2}" -f (Get-Date).ToString('HH:mm:ss'), (Get-StepSummary $sub), $rr.Mark))
-                    $fail += $rr.Fail; $unver += $rr.Unver; $total++
-                    if ([int]$sub.delayMs -gt 0) { Start-Sleep -Milliseconds ([int]$sub.delayMs) }
+                for ($gi = 1; $gi -le $rep -and -not $stopped; $gi++) {
+                    $gHdr = if ($rep -gt 1) { "运行动作组：{0}（第 {1}/{2} 次）" -f [string]$g.name, $gi, $rep } else { "运行动作组：{0}" -f [string]$g.name }
+                    [void]$lines.Add(("[{0}] {1}" -f (Get-Date).ToString('HH:mm:ss'), $gHdr))
+                    foreach ($sub in @($g.steps)) {
+                        if (-not $stopped -and (Test-StopRequested)) { $stopped = $true }
+                        if ($stopped) { break }
+                        if (-not $sub.enabled) { continue }
+                        if (-not (Test-StepCondition $sub $nowHour $nowIso)) { continue }   # 组内步骤同样遵守时间条件（与顶层同基准）
+                        if ([string]$sub.kind -eq 'message') { continue }
+                        $subRep = Get-StepRepeat $sub
+                        for ($si = 1; $si -le $subRep -and -not $stopped; $si++) {
+                            $rr = Get-StepRunMark $sub
+                            $subSfx = if ($subRep -gt 1) { "（第 $si/$subRep 次）" } else { '' }
+                            [void]$lines.Add(("[{0}]     {1}{2}  {3}" -f (Get-Date).ToString('HH:mm:ss'), (Get-StepSummary $sub), $subSfx, $rr.Mark))
+                            $fail += $rr.Fail; $unver += $rr.Unver; $total++
+                            if (Test-StopRequested) { $stopped = $true }
+                            elseif ([int]$sub.delayMs -gt 0) { if (-not (Start-InterruptibleSleep ([int]$sub.delayMs))) { $stopped = $true } }
+                        }
+                    }
+                    if (-not $stopped -and $gi -lt $rep -and [int]$step.delayMs -gt 0) { if (-not (Start-InterruptibleSleep ([int]$step.delayMs))) { $stopped = $true } }
                 }
             }
         } else {
-            $rr = Get-StepRunMark $step
-            [void]$lines.Add(("[{0}] {1}  {2}" -f $ts, (Get-StepSummary $step), $rr.Mark))
-            $fail += $rr.Fail; $unver += $rr.Unver; $total++
+            for ($i = 1; $i -le $rep -and -not $stopped; $i++) {
+                $rr = Get-StepRunMark $step
+                $sfx = if ($rep -gt 1) { "（第 $i/$rep 次）" } else { '' }
+                [void]$lines.Add(("[{0}] {1}{2}  {3}" -f (Get-Date).ToString('HH:mm:ss'), (Get-StepSummary $step), $sfx, $rr.Mark))
+                $fail += $rr.Fail; $unver += $rr.Unver; $total++
+                if (Test-StopRequested) { $stopped = $true }
+                elseif ($i -lt $rep -and [int]$step.delayMs -gt 0) { if (-not (Start-InterruptibleSleep ([int]$step.delayMs))) { $stopped = $true } }
+            }
         }
-        if ([int]$step.delayMs -gt 0) { Start-Sleep -Milliseconds ([int]$step.delayMs) }
+        if (-not $stopped -and [int]$step.delayMs -gt 0) { if (-not (Start-InterruptibleSleep ([int]$step.delayMs))) { $stopped = $true } }
     }
+    if ($stopped) { [void]$lines.Add(("[{0}] ⏹ 已手动停止，后续步骤未执行" -f (Get-Date).ToString('HH:mm:ss'))) }
     if ($LogPath) {
         try {
             $bootHdr = if ($bootNote) { "$bootNote`r`n" } else { '' }
-            $hdr = "开机助手 · 上次启动清单运行日志`r`n时间：{0}`r`n{1}共 {2} 步：{3} 步失败/警告、{4} 步已发送但无法校验、其余成功`r`n（~ 表示按键/热键类动作已注入，但目标是否响应无法确认）`r`n{5}" -f (Get-Date).ToString('yyyy-MM-dd HH:mm:ss'), $bootHdr, $total, $fail, $unver, ('=' * 40)
+            $stopHdr = if ($stopped) { "⏹ 本次运行被手动停止（急停键 / 托盘「停止」）`r`n" } else { '' }
+            $hdr = "Clockwork · 上次启动清单运行日志`r`n时间：{0}`r`n{1}{2}共 {3} 步：{4} 步失败/警告、{5} 步已发送但无法校验、其余成功`r`n（~ 表示按键/热键类动作已注入，但目标是否响应无法确认）`r`n{6}" -f (Get-Date).ToString('yyyy-MM-dd HH:mm:ss'), $bootHdr, $stopHdr, $total, $fail, $unver, ('=' * 40)
             Set-Content -LiteralPath $LogPath -Value (@($hdr) + $lines) -Encoding UTF8
         } catch {}
     }
-    [pscustomobject]@{ Total = $total; Fail = $fail; Unverified = $unver }
+    [pscustomobject]@{ Total = $total; Fail = $fail; Unverified = $unver; Stopped = $stopped }
 }
 
 # 在后台 runspace 跑 $Script，完成后由 UI 线程计时器调用 $OnDone（参数=脚本输出）。
@@ -284,36 +342,66 @@ function Invoke-InRunspaceAsync {
     param([scriptblock]$Script, [hashtable]$Vars, [scriptblock]$OnDone, [switch]$STA)
     if (-not $script:BgTimers) { $script:BgTimers = New-Object System.Collections.ArrayList }
     $bag = $script:BgTimers
-    $rs = [runspacefactory]::CreateRunspace()
-    if ($STA) { $rs.ApartmentState = [System.Threading.ApartmentState]::STA }
-    $rs.Open()
-    if ($Vars) { foreach ($k in $Vars.Keys) { $rs.SessionStateProxy.SetVariable($k, $Vars[$k]) } }
-    $ps = [powershell]::Create(); $ps.Runspace = $rs
-    [void]$ps.AddScript($Script)
-    $async = $ps.BeginInvoke()
-    # 轮询定时器可插拔：WPF 版注入 $script:MakeAsyncTimer 返回 DispatcherTimer（WinForms.Timer 在 WPF 消息循环下不可靠）；
-    # 未注入时退回 WinForms.Timer（WinForms 版原样）。二者都有 Add_Tick/Start/Stop，Interval 由工厂各自设好。
-    $t = if ($script:MakeAsyncTimer) { & $script:MakeAsyncTimer } else { $wt = New-Object System.Windows.Forms.Timer; $wt.Interval = 400; $wt }
-    [void]$bag.Add($t)
-    $t.Add_Tick({
-        if ($async.IsCompleted) {
-            $t.Stop()
-            $out = $null
-            try { $out = $ps.EndInvoke($async) } catch {}
-            try { $rs.Dispose() } catch {}
-            $ps.Dispose(); try { $t.Dispose() } catch {}; [void]$bag.Remove($t)
-            if ($OnDone) { & $OnDone $out }
-        }
-    }.GetNewClosure())
-    $t.Start()
+    $rs = $null; $ps = $null
+    try {
+        $rs = [runspacefactory]::CreateRunspace()
+        if ($STA) { $rs.ApartmentState = [System.Threading.ApartmentState]::STA }
+        $rs.Open()
+        if ($Vars) { foreach ($k in $Vars.Keys) { $rs.SessionStateProxy.SetVariable($k, $Vars[$k]) } }
+        $ps = [powershell]::Create(); $ps.Runspace = $rs
+        [void]$ps.AddScript($Script)
+        $async = $ps.BeginInvoke()
+        # 轮询定时器可插拔：WPF 版注入 $script:MakeAsyncTimer 返回 DispatcherTimer（WinForms.Timer 在 WPF 消息循环下不可靠）；
+        # 未注入时退回 WinForms.Timer（WinForms 版原样）。二者都有 Add_Tick/Start/Stop，Interval 由工厂各自设好。
+        $t = if ($script:MakeAsyncTimer) { & $script:MakeAsyncTimer } else { $wt = New-Object System.Windows.Forms.Timer; $wt.Interval = 400; $wt }
+        [void]$bag.Add($t)
+        $t.Add_Tick({
+            if ($async.IsCompleted) {
+                $t.Stop()
+                $out = $null
+                try { $out = $ps.EndInvoke($async) } catch {}
+                try { $rs.Dispose() } catch {}
+                $ps.Dispose(); try { $t.Dispose() } catch {}; [void]$bag.Remove($t)
+                if ($OnDone) { & $OnDone $out }
+            }
+        }.GetNewClosure())
+        $t.Start()
+    } catch {
+        # 建 runspace / Open / BeginInvoke 阶段抛错（资源紧张等）：计时器没起来 → OnDone 永不会被调度 →
+        # 调用方的「运行中」标志(LaunchState/ActionGroupRunning/StepActionState/ReminderFiring)永远清不掉，
+        # 而 Test-AnyRunActive 读这些标志门控急停信号的清理 —— 一处泄漏就把急停永久卡死（此后每次运行都秒停，只能重启）。
+        # 兜底：清理已建对象，并以 $null 调一次 OnDone，让调用方走它的收尾（各 OnDone 都先清标志再用输出、容忍 $null）。
+        try { if ($ps) { $ps.Dispose() } } catch {}
+        try { if ($rs) { $rs.Dispose() } } catch {}
+        Write-Warning "后台任务启动失败：$($_.Exception.Message)"
+        if ($OnDone) { try { & $OnDone $null } catch {} }
+    }
 }
+
+# 是否有【任何】执行在跑（启动序列/动作组/单步/提醒）。急停信号是全局粘滞的，新一轮开跑前须复位——但【只在
+# 完全空闲时】复位：否则一个并发启动的操作会把刚为另一在跑操作按下的急停擦掉，急停被静默吞掉。
+# 前三个守卫标志由主 runspace 的 Async 入口维护、彼此可见。提醒在【背景 runspace】里跑、不设这些标志，故【必须】
+# 额外看 $script:ReminderFiring（提醒计时器在主 runspace 维护：派发时置、OnDone 移除）——否则「提醒组正在被急停、
+# 用户又从 UI 起个动作」会经 Reset-StopIfIdle 擦掉那次急停（评审确认：不能只给心跳加 $firing 感知而漏了本函数）。
+# 注：Reset-StopIfIdle 只从主 runspace 调用（见三个 Async 入口，均在 AppRoot 判断之后），故此处 $script 均权威可读。
+function Test-AnyRunActive {
+    if ($script:LaunchState -and $script:LaunchState.Running) { return $true }
+    if ($script:StepActionState -and $script:StepActionState.Running) { return $true }
+    if ($script:ActionGroupRunning) { foreach ($v in $script:ActionGroupRunning.Values) { if ($v) { return $true } } }
+    if ($script:ReminderFiring -and $script:ReminderFiring.Count -gt 0) { return $true }
+    $false
+}
+# 仅在无任何运行在跑时才复位急停信号（见 Test-AnyRunActive）。有运行在跑时保留信号，避免并发操作吞掉急停。
+function Reset-StopIfIdle { if (-not (Test-AnyRunActive)) { Clear-StopAll } }
 
 # 手动「重新运行」/开机自启序列：后台跑，避免 Sleep/微信前台等待冻结 UI。并发守卫防连点交错。
 function Invoke-LaunchSequenceAsync {
     param($Config, $Tray, [switch]$Boot)   # $Tray 给了就在完成时弹托盘气泡（手动重跑用；开机自启不传=静默）。$Boot：开机自启路径才做就绪门控/延迟。
     if (-not $script:LaunchState) { $script:LaunchState = @{ Running = $false } }
     if ($script:LaunchState.Running) { return }   # 已有一次在跑，忽略重复触发（避免交错按键/重复启动）
-    if (-not $script:AppRoot) { Invoke-LaunchSequence $Config -Boot:$Boot; return }   # 兜底：无根路径则同步
+    if (-not $script:AppRoot) { Invoke-LaunchSequence $Config -Boot:$Boot; return }   # 兜底：无根路径则同步（测试）
+    Reset-StopIfIdle   # 仅主 runspace（AppRoot 已设=UI 线程）路径复位：此处三个 Running 守卫可见、能判是否全空闲。
+                       # 背景 runspace（AppRoot 未设，见下方 Async 里）看不到这些守卫，故绝不在那里复位，否则会擦掉别处的急停。
     $script:LaunchState.Running = $true
     $state = $script:LaunchState; $tray2 = $Tray   # 本地引用供 OnDone 闭包捕获
     Invoke-InRunspaceAsync -STA `
@@ -323,23 +411,28 @@ function Invoke-LaunchSequenceAsync {
             if ($tray2) {
                 $sum = $out | Select-Object -Last 1
                 if (-not $sum -or $null -eq $sum.Total) {   # 后台 runspace 异常/无输出：如实提示而非显示成「：步」
-                    Show-TrayNotify $tray2 '开机助手' '启动清单执行异常结束（详见启动日志）'
+                    Show-TrayNotify $tray2 'Clockwork' '启动清单执行异常结束（详见启动日志）'
+                    return
+                }
+                # 被急停：如实告知停在哪（比「有警告」优先——停止是用户主动行为，必须给回执）。
+                if ($sum.PSObject.Properties['Stopped'] -and [bool]$sum.Stopped) {
+                    Show-TrayNotify $tray2 'Clockwork' "启动清单已手动停止：已执行 $($sum.Total) 步，其余未执行"
                     return
                 }
                 # 只在真失败/警告时弹：手动重跑时人就在跟前，程序逐个打开即是成功确认，「全部正常」纯噪音。
                 # 完整三态(✓/⚠/~)仍写入启动日志，静默不丢信息（~ 已发送未校验不算失败，一并静默）。
                 if ([int]$sum.Fail -gt 0) {
-                    Show-TrayNotify $tray2 '开机助手' "启动清单执行完成：$($sum.Total) 步，$($sum.Fail) 步有警告（右键托盘→查看上次启动日志）"
+                    Show-TrayNotify $tray2 'Clockwork' "启动清单执行完成：$($sum.Total) 步，$($sum.Fail) 步有警告（右键托盘→查看上次启动日志）"
                 }
             }
         }.GetNewClosure()) `
         -Script {
             Add-Type -AssemblyName System.Windows.Forms
-            . (Join-Path $appRoot 'lib\StartupHelper.Core.ps1')
-            . (Join-Path $appRoot 'lib\StartupHelper.Win32.ps1')
-            . (Join-Path $appRoot 'lib\StartupHelper.Actions.ps1')
-            $script:LaunchSelfPaths = @((Join-Path $appRoot 'startup-helper.ps1'), (Join-Path $appRoot '开机助手-双击运行.bat'))
-            Invoke-LaunchSequence -Config ($cfgJson | ConvertFrom-Json) -LogPath (Join-Path $appRoot '开机助手-启动日志.log') -Boot:([bool]$boot)
+            . (Join-Path $appRoot 'lib\Clockwork.Core.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.Win32.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.Actions.ps1')
+            $script:LaunchSelfPaths = @((Join-Path $appRoot 'clockwork.ps1'), (Join-Path $appRoot 'Clockwork.bat'))
+            Invoke-LaunchSequence -Config ($cfgJson | ConvertFrom-Json) -LogPath (Join-Path $appRoot 'clockwork.run.log') -Boot:([bool]$boot)
         }
 }
 
@@ -396,7 +489,9 @@ function Invoke-Reminder {
         if (-not $g)             { Write-Warning "提醒的静默动作组不存在（id=$($Reminder.silentGroupId)）" }
         elseif (-not $g.enabled) { Write-Warning "动作组「$($g.name)」已禁用，跳过" }
         else                     { Invoke-ActionGroupAsync $g }
-        return [pscustomobject]@{ Action = 'ok'; SnoozeMinutes = $null }
+        # 返回 ''（未确认）而非 'ok'：静默组若同时配了「重复催促」(repeatMinutes>0)，Update-ReminderAfterFire 才会按 repeatMinutes 排下次；
+        # 原来的 'ok' 被当成「已确认」直接清掉重复计划，静默组只跑一次就再不重复。非重复情形返回 '' 同样正常收尾。
+        return [pscustomobject]@{ Action = ''; SnoozeMinutes = $null }
     }
     if ($Reminder.speak) { Start-SpeakAsync ([string]$Reminder.message) }
     # 是/否只跟「点是后」走：配了动作 → 弹「是/否」问你（否则动作永远无法触发——旧逻辑还要求勾 confirm，
@@ -423,7 +518,7 @@ function Invoke-Reminder {
 # 上下文——两个静默提醒同 tick 触发同一组会双开每个程序、按键交错。互斥锁进程级全局，谁先到谁跑、后到者跳过。
 function Invoke-ActionGroup {
     param($Group)
-    $mtx = New-Object System.Threading.Mutex($false, ('Local\rockbenben.startupHelper.group.' + [string]$Group.id))
+    $mtx = New-Object System.Threading.Mutex($false, ('Local\rockbenben.clockwork.group.' + [string]$Group.id))
     $got = $false
     try { $got = $mtx.WaitOne(0) } catch [System.Threading.AbandonedMutexException] { $got = $true }
     if (-not $got) { Write-Warning "动作组「$($Group.name)」已在运行，忽略本次触发"; $mtx.Dispose(); return }
@@ -431,7 +526,9 @@ function Invoke-ActionGroup {
         # 小时/星期在组开跑时取一次：跨点的长组内各步骤用同一判定基准（与顶层清单一致）
         $hour = [int](Get-Date).Hour
         $iso  = [int](Get-Date).DayOfWeek; if ($iso -eq 0) { $iso = 7 }
+        $stopped = $false   # 急停：每步/每次循环/每段延时之间响应，收到即中止整组剩余部分
         foreach ($step in @($Group.steps)) {
+            if ($stopped -or (Test-StopRequested)) { break }
             if (-not $step.enabled) { continue }
             if (-not (Test-StepCondition $step $hour $iso)) { continue }
             if ([string]$step.kind -eq 'message') {
@@ -442,39 +539,63 @@ function Invoke-ActionGroup {
                 $p = Show-ReminderPopup ([string]$step.message) $confirm 0 -NoSnooze
                 if     ($p.Action -eq 'yes') { Invoke-ReminderAction $step.onYes }
                 elseif ($p.Action -eq 'no')  { break }   # 否/关闭 -> 中止整组剩余步骤
+                if ([int]$step.delayMs -gt 0) { if (-not (Start-InterruptibleSleep ([int]$step.delayMs))) { $stopped = $true } }
             } else {
-                Invoke-StepAction $step
+                # 循环动作：重复 repeat 次，每次执行后等 delayMs（message 不循环——确认闸门弹 N 次无意义）。
+                $rep = Get-StepRepeat $step
+                for ($i = 1; $i -le $rep -and -not $stopped; $i++) {
+                    [void](Invoke-StepAction $step)   # 丢弃成功流输出（keys/text/window-sendkey 的 'unverified'、app 的返回值等）——动作组只执行、不按步标记(那是启动路径 Get-StepRunMark 的事)，不丢会漏进本函数返回值
+                    if (Test-StopRequested) { $stopped = $true }
+                    elseif ([int]$step.delayMs -gt 0) { if (-not (Start-InterruptibleSleep ([int]$step.delayMs))) { $stopped = $true } }
+                }
             }
-            if ([int]$step.delayMs -gt 0) { Start-Sleep -Milliseconds ([int]$step.delayMs) }
         }
     } finally { try { $mtx.ReleaseMutex() } catch {}; $mtx.Dispose() }
 }
 
+# 顺序把动作组跑 $Repeat 遍，每遍之间等 $RepeatDelayMs（可被急停打断）。$Repeat 来自「动作组」步骤的 repeat，
+# 单遍语义不变（默认 1）。整组循环放在这里而非组内：与启动序列 group 步骤的展开口径一致（组×N，非把每个子步骤各×N）。
+function Invoke-ActionGroupRepeat {
+    param($Group, [int]$Repeat = 1, [int]$RepeatDelayMs = 0)
+    $rep = Get-ClampedRepeat $Repeat
+    for ($i = 1; $i -le $rep; $i++) {
+        if (Test-StopRequested) { break }
+        Invoke-ActionGroup $Group
+        if ($i -lt $rep -and [int]$RepeatDelayMs -gt 0) { if (-not (Start-InterruptibleSleep ([int]$RepeatDelayMs))) { break } }
+    }
+}
+
 # 后台 STA runspace 跑动作组：window 动作的等窗口/发键、步骤 Sleep 都不冻 UI；message 弹窗在该 STA 线程 ShowDialog。
 # 并发守卫按组 id：同组在跑则忽略重复触发。
+# $Repeat/$RepeatDelayMs：整组循环次数与遍间延时——启动清单里「动作组」步骤设了 repeat 时，单步「运行」
+# 预览要跑同样遍数才与开机行为一致（否则预览恒跑一遍，循环组步骤的测试按钮失真）。托盘/提醒触发默认 1，不变。
 function Invoke-ActionGroupAsync {
-    param($Group)
+    param($Group, [int]$Repeat = 1, [int]$RepeatDelayMs = 0)
     if (-not $script:ActionGroupRunning) { $script:ActionGroupRunning = @{} }
     $gid = [string]$Group.id
     if ($script:ActionGroupRunning[$gid]) { return }
-    if (-not $script:AppRoot) { Invoke-ActionGroup $Group; return }   # 兜底：无根路径则同步
+    # 关键：AppRoot 未设=在【提醒的背景 runspace】里被调用（静默组/点是组走此路径）——此上下文里三个 $script
+    # 守卫恒空、Test-AnyRunActive 恒 false，若在此复位急停信号会擦掉主线程正在跑的启动序列的急停（评审确认的 bug）。
+    # 故背景/同步路径【绝不】复位；仅下面的主 runspace 路径复位。滞留的空闲急停由提醒计时器心跳在 UI 线程安全清理。
+    if (-not $script:AppRoot) { Invoke-ActionGroupRepeat $Group $Repeat $RepeatDelayMs; return }
+    Reset-StopIfIdle   # 仅主 runspace（UI 线程）路径：三个 Running 守卫可见、能判是否全空闲
     $script:ActionGroupRunning[$gid] = $true
     $running = $script:ActionGroupRunning
     Invoke-InRunspaceAsync -STA `
-        -Vars @{ appRoot = $script:AppRoot; groupJson = ($Group | ConvertTo-Json -Depth 8) } `
+        -Vars @{ appRoot = $script:AppRoot; groupJson = ($Group | ConvertTo-Json -Depth 8); repeat = ([int]$Repeat); repeatDelayMs = ([int]$RepeatDelayMs) } `
         -OnDone ({ param($out) $running[$gid] = $false }.GetNewClosure()) `
         -Script {
             Add-Type -AssemblyName System.Windows.Forms
             Add-Type -AssemblyName System.Drawing
             Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase
-            . (Join-Path $appRoot 'lib\StartupHelper.Core.ps1')
-            . (Join-Path $appRoot 'lib\StartupHelper.Win32.ps1')
-            . (Join-Path $appRoot 'lib\StartupHelper.Actions.ps1')
-            . (Join-Path $appRoot 'lib\StartupHelper.WpfDialogs.ps1')   # 消息步骤弹窗 Show-ReminderPopup(WPF)
+            . (Join-Path $appRoot 'lib\Clockwork.Core.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.Win32.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.Actions.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.WpfDialogs.ps1')   # 消息步骤弹窗 Show-ReminderPopup(WPF)
             [void](Confirm-Win32Available)
-            # 自启动守卫与启动序列 runspace 一致：组内 app 步骤若指向开机助手自身则跳过，防套娃拉起第二实例
-            $script:LaunchSelfPaths = @((Join-Path $appRoot 'startup-helper.ps1'), (Join-Path $appRoot '开机助手-双击运行.bat'))
-            Invoke-ActionGroup ($groupJson | ConvertFrom-Json)
+            # 自启动守卫与启动序列 runspace 一致：组内 app 步骤若指向Clockwork自身则跳过，防套娃拉起第二实例
+            $script:LaunchSelfPaths = @((Join-Path $appRoot 'clockwork.ps1'), (Join-Path $appRoot 'Clockwork.bat'))
+            Invoke-ActionGroupRepeat ($groupJson | ConvertFrom-Json) $repeat $repeatDelayMs
             Wait-SpeakDone   # 朗读未完前别让 runspace 释放（COM 随之释放会掐断语音）
         }
 }
@@ -490,11 +611,12 @@ function Invoke-StepActionAsync {
     # 或把 app 步骤启动两次。已有一步在跑则忽略重复触发。
     if (-not $script:StepActionState) { $script:StepActionState = @{ Running = $false } }
     if ($script:StepActionState.Running) { return }
-    if (-not $script:AppRoot) {   # 兜底：无根路径则同步跑（阻塞 UI，天然不会重入），仍尽量给反馈
-        $rr = Get-StepRunMark $Step
-        if ($Tray) { Show-TrayNotify $Tray '开机助手 · 运行' ((Get-StepSummary $Step) + '  ' + $rr.Mark) }
+    if (-not $script:AppRoot) {   # 兜底：无根路径则同步跑（阻塞 UI，天然不会重入），仍尽量给反馈。不复位急停（同 Async 里的说明）
+        $rr = Get-StepRunMarkRepeat $Step
+        if ($Tray) { Show-TrayNotify $Tray 'Clockwork · 运行' ((Get-StepSummary $Step) + '  ' + $rr.Mark) }
         return
     }
+    Reset-StopIfIdle   # 仅主 runspace（UI 线程，此函数只从 LTest 调）路径复位：三个 Running 守卫可见、能判是否全空闲
     $script:StepActionState.Running = $true
     $state = $script:StepActionState   # 本地引用供 OnDone 闭包捕获
     $tray2 = $Tray
@@ -504,25 +626,25 @@ function Invoke-StepActionAsync {
             $state.Running = $false
             if ($tray2) {
                 $r = $out | Select-Object -Last 1
-                if ($r -and $r.Mark) { Show-TrayNotify $tray2 '开机助手 · 运行' ([string]$r.Summary + '  ' + [string]$r.Mark) }
-                else { Show-TrayNotify $tray2 '开机助手 · 运行' '运行异常结束（无输出）' }
+                if ($r -and $r.Mark) { Show-TrayNotify $tray2 'Clockwork · 运行' ([string]$r.Summary + '  ' + [string]$r.Mark) }
+                else { Show-TrayNotify $tray2 'Clockwork · 运行' '运行异常结束（无输出）' }
             }
         }.GetNewClosure()) `
         -Script {
             Add-Type -AssemblyName System.Windows.Forms
-            . (Join-Path $appRoot 'lib\StartupHelper.Core.ps1')
-            . (Join-Path $appRoot 'lib\StartupHelper.Win32.ps1')
-            . (Join-Path $appRoot 'lib\StartupHelper.Actions.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.Core.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.Win32.ps1')
+            . (Join-Path $appRoot 'lib\Clockwork.Actions.ps1')
             [void](Confirm-Win32Available)
-            # 与启动序列一致：app 步骤若指向开机助手自身则跳过，防套娃
-            $script:LaunchSelfPaths = @((Join-Path $appRoot 'startup-helper.ps1'), (Join-Path $appRoot '开机助手-双击运行.bat'))
+            # 与启动序列一致：app 步骤若指向Clockwork自身则跳过，防套娃
+            $script:LaunchSelfPaths = @((Join-Path $appRoot 'clockwork.ps1'), (Join-Path $appRoot 'Clockwork.bat'))
             $s  = $stepJson | ConvertFrom-Json
-            $rr = Get-StepRunMark $s
+            $rr = Get-StepRunMarkRepeat $s   # 循环动作：手动运行也按 repeat 跑（测的就是循环本身），Mark 归纳
             [pscustomobject]@{ Summary = (Get-StepSummary $s); Mark = $rr.Mark }
         }
 }
 
-function Get-AutostartTaskName { 'StartupHelper' }
+function Get-AutostartTaskName { 'Clockwork' }
 
 function Test-AutostartRegistered {
     # 用 schtasks.exe 查询：比 Get-ScheduledTask 的 CIM 快很多，且在 Task Scheduler/CIM 卡顿的机器上不会挂起
@@ -548,7 +670,7 @@ function Register-Autostart {
     $xml = @"
 <?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
-  <RegistrationInfo><Description>开机助手 登录自启</Description></RegistrationInfo>
+  <RegistrationInfo><Description>Clockwork 登录自启</Description></RegistrationInfo>
   <Triggers><LogonTrigger><Enabled>true</Enabled><UserId>$userXml</UserId></LogonTrigger></Triggers>
   <Principals><Principal id="Author"><UserId>$userXml</UserId><LogonType>InteractiveToken</LogonType><RunLevel>HighestAvailable</RunLevel></Principal></Principals>
   <Settings>

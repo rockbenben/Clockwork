@@ -1,6 +1,6 @@
 ﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-. (Join-Path $here '..\lib\StartupHelper.Core.ps1')
-. (Join-Path $here '..\lib\StartupHelper.Win32.ps1')
+. (Join-Path $here '..\lib\Clockwork.Core.ps1')
+. (Join-Path $here '..\lib\Clockwork.Win32.ps1')
 
 Write-Host '打开记事本，3 秒后最小化它...'
 Start-Process notepad.exe; Start-Sleep 3

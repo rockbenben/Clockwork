@@ -1,5 +1,5 @@
-# 本机运行时生成的个人配置（含个人路径，不入库）。示例见 开机助手-设置.example.json
-开机助手-设置.json
+# 本机运行时生成的个人配置（含个人路径，不入库）。示例见 clockwork.settings.example.json
+clockwork.settings.json
 
 # 临时 / 系统 / 工具
 *.log

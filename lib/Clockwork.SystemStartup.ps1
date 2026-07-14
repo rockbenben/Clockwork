@@ -1,4 +1,4 @@
-﻿# StartupHelper.SystemStartup.ps1 —— 系统启动项枚举/开关
+﻿# Clockwork.SystemStartup.ps1 —— 系统启动项枚举/开关
 # 本段为纯逻辑（可单测）；副作用部分在 Task 2 追加。
 
 function Test-StartupApprovedEnabled {
