@@ -11,3 +11,13 @@ desktop.ini
 
 # SDD 工作目录（briefs / reports / review diffs / 进度账本）
 docs/
+
+# C#/.NET 工程（主分支 main）的构建产物 —— 同一工作区切分支时会残留在这里。
+# 本 PowerShell 归档分支一并忽略，免得误提交，也不依赖机器全局 gitignore；这些目录 main 也忽略，故不与主分支冲突。
+bin/
+obj/
+publish/
+app/bin/
+app/obj/
+app.Tests/bin/
+app.Tests/obj/
