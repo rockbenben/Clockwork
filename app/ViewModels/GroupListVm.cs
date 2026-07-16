@@ -1,0 +1,44 @@
+using System.Collections.ObjectModel;
+using Clockwork.Core;
+
+namespace Clockwork.ViewModels;
+
+// 动作组页一行（启用/名称/步骤数）。
+public sealed class GroupRowVm : ObservableObject, IRowVm
+{
+    private readonly Action _onChanged;
+
+    public GroupRowVm(ActionGroup group, Action onChanged)
+    {
+        Group = group;
+        _onChanged = onChanged;
+    }
+
+    public ActionGroup Group { get; }
+
+    public bool Enabled
+    {
+        get => Group.Enabled;
+        set { if (Group.Enabled != value) { Group.Enabled = value; OnPropertyChanged(); _onChanged(); } }
+    }
+
+    public string Name => Group.Name;
+    public string StepCount => Group.Steps.Count.ToString();
+
+    public void Refresh()
+    {
+        OnPropertyChanged(nameof(Enabled));
+        OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(StepCount));
+    }
+}
+
+// 动作组页 ViewModel（增删改即存盘；无排序）。公共增删改在 ListVm。
+// 组 id 保留不换：SilentGroupId / OnYes 按组 id 引用，编辑换 id 会让引用失效（故不重写 OnReplacing）。
+public sealed class GroupListVm : ListVm<ActionGroup, GroupRowVm>
+{
+    public GroupListVm(RootConfig config, Action save)
+        : base(config, config.ActionGroups, g => new GroupRowVm(g, save), save) { }
+
+    public ActionGroup? SelectedGroup => Selected;
+}

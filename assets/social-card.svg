@@ -1,36 +1,53 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-<defs>
- <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A3037"/><stop offset="0.55" stop-color="#262B31"/><stop offset="1" stop-color="#20242A"/></linearGradient>
- <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#F0651A" stop-opacity="0.34"/><stop offset="0.6" stop-color="#F0651A" stop-opacity="0.10"/><stop offset="1" stop-color="#F0651A" stop-opacity="0"/></radialGradient>
- <radialGradient id="innerglow" cx="0.5" cy="0.42" r="0.6"><stop offset="0" stop-color="#FF7A2A" stop-opacity="0.16"/><stop offset="1" stop-color="#FF7A2A" stop-opacity="0"/></radialGradient>
-</defs>
-<rect width="1200" height="630" fill="url(#bg)"/>
-<!-- faint grid -->
-<line x1="0" y1="70" x2="1200" y2="70" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="134" x2="1200" y2="134" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="198" x2="1200" y2="198" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="262" x2="1200" y2="262" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="326" x2="1200" y2="326" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="390" x2="1200" y2="390" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="454" x2="1200" y2="454" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="518" x2="1200" y2="518" stroke="#ffffff" stroke-opacity="0.018"/><line x1="0" y1="582" x2="1200" y2="582" stroke="#ffffff" stroke-opacity="0.018"/>
-<circle cx="958" cy="292" r="205" fill="url(#glow)"/><line x1="1150.0" y1="292.0" x2="1134.0" y2="292.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="1148.4" y1="317.1" x2="1140.4" y2="316.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1143.5" y1="341.7" x2="1135.7" y2="339.6" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1135.4" y1="365.5" x2="1128.0" y2="362.4" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1124.3" y1="388.0" x2="1110.4" y2="380.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="1110.3" y1="408.9" x2="1104.0" y2="404.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1093.8" y1="427.8" x2="1088.1" y2="422.1" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1074.9" y1="444.3" x2="1070.0" y2="438.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1054.0" y1="458.3" x2="1046.0" y2="444.4" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="1031.5" y1="469.4" x2="1028.4" y2="462.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1007.7" y1="477.5" x2="1005.6" y2="469.7" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="983.1" y1="482.4" x2="982.0" y2="474.4" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="958.0" y1="484.0" x2="958.0" y2="468.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="932.9" y1="482.4" x2="934.0" y2="474.4" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="908.3" y1="477.5" x2="910.4" y2="469.7" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="884.5" y1="469.4" x2="887.6" y2="462.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="862.0" y1="458.3" x2="870.0" y2="444.4" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="841.1" y1="444.3" x2="846.0" y2="438.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="822.2" y1="427.8" x2="827.9" y2="422.1" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="805.7" y1="408.9" x2="812.0" y2="404.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="791.7" y1="388.0" x2="805.6" y2="380.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="780.6" y1="365.5" x2="788.0" y2="362.4" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="772.5" y1="341.7" x2="780.3" y2="339.6" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="767.6" y1="317.1" x2="775.6" y2="316.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="766.0" y1="292.0" x2="782.0" y2="292.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="767.6" y1="266.9" x2="775.6" y2="268.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="772.5" y1="242.3" x2="780.3" y2="244.4" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="780.6" y1="218.5" x2="788.0" y2="221.6" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="791.7" y1="196.0" x2="805.6" y2="204.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="805.7" y1="175.1" x2="812.0" y2="180.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="822.2" y1="156.2" x2="827.9" y2="161.9" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="841.1" y1="139.7" x2="846.0" y2="146.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="862.0" y1="125.7" x2="870.0" y2="139.6" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="884.5" y1="114.6" x2="887.6" y2="122.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="908.3" y1="106.5" x2="910.4" y2="114.3" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="932.9" y1="101.6" x2="934.0" y2="109.6" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="958.0" y1="100.0" x2="958.0" y2="116.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="983.1" y1="101.6" x2="982.0" y2="109.6" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1007.7" y1="106.5" x2="1005.6" y2="114.3" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1031.5" y1="114.6" x2="1028.4" y2="122.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1054.0" y1="125.7" x2="1046.0" y2="139.6" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="1074.9" y1="139.7" x2="1070.0" y2="146.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1093.8" y1="156.2" x2="1088.1" y2="161.9" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1110.3" y1="175.1" x2="1104.0" y2="180.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1124.3" y1="196.0" x2="1110.4" y2="204.0" stroke="#F0651A" stroke-opacity="0.5" stroke-width="2.4"/><line x1="1135.4" y1="218.5" x2="1128.0" y2="221.6" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1143.5" y1="242.3" x2="1135.7" y2="244.4" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><line x1="1148.4" y1="266.9" x2="1140.4" y2="268.0" stroke="#F0651A" stroke-opacity="0.22" stroke-width="1.6"/><path d="M1067.96,146.78L1075.14,134.01L1097.82,138.61L1099.46,153.16L1099.46,153.16L1113.57,149.21L1126.36,168.50L1117.22,179.96L1117.22,179.96L1129.99,187.14L1125.39,209.82L1110.84,211.46L1110.84,211.46L1114.79,225.57L1095.50,238.36L1084.04,229.22L1084.04,229.22L1076.86,241.99L1054.18,237.39L1052.54,222.84L1052.54,222.84L1038.43,226.79L1025.64,207.50L1034.78,196.04L1034.78,196.04L1022.01,188.86L1026.61,166.18L1041.16,164.54L1041.16,164.54L1037.21,150.43L1056.50,137.64L1067.96,146.78Z" fill="#F0651A" fill-opacity="0.9"/><circle cx="1076" cy="188" r="26" fill="#262B31"/><circle cx="1076" cy="188" r="7" fill="#FF7A2A"/><path d="M924.63,189.29L934.90,162.04L981.10,162.04L991.37,189.29L991.37,189.29L1015.70,173.28L1053.08,200.44L1045.37,228.52L1045.37,228.52L1074.46,229.87L1088.74,273.81L1066.00,292.00L1066.00,292.00L1088.74,310.19L1074.46,354.13L1045.37,355.48L1045.37,355.48L1053.08,383.56L1015.70,410.72L991.37,394.71L991.37,394.71L981.10,421.96L934.90,421.96L924.63,394.71L924.63,394.71L900.30,410.72L862.92,383.56L870.63,355.48L870.63,355.48L841.54,354.13L827.26,310.19L850.00,292.00L850.00,292.00L827.26,273.81L841.54,229.87L870.63,228.52L870.63,228.52L862.92,200.44L900.30,173.28L924.63,189.29Z" fill="#F0651A"/><circle cx="958" cy="292" r="76" fill="#262B31"/><circle cx="958" cy="292" r="76" fill="url(#innerglow)"/><line x1="958" y1="292" x2="1008.2" y2="263.0" stroke="#FF7A2A" stroke-width="9" stroke-linecap="round"/><line x1="958" y1="292" x2="923.4" y2="272.0" stroke="#F0651A" stroke-width="9" stroke-linecap="round"/><circle cx="958" cy="292" r="11" fill="#FF7A2A"/>
-<!-- brand lockup -->
-<g transform="translate(70,60)">
- <path d="M13.88,5.22L15.48,0.52L24.52,0.52L26.12,5.22L26.12,5.22L30.58,3.03L36.97,9.42L34.78,13.88L34.78,13.88L39.48,15.48L39.48,24.52L34.78,26.12L34.78,26.12L36.97,30.58L30.58,36.97L26.12,34.78L26.12,34.78L24.52,39.48L15.48,39.48L13.88,34.78L13.88,34.78L9.42,36.97L3.03,30.58L5.22,26.12L5.22,26.12L0.52,24.52L0.52,15.48L5.22,13.88L5.22,13.88L3.03,9.42L9.42,3.03L13.88,5.22Z" fill="#F0651A"/><circle cx="20" cy="20" r="11" fill="#262B31"/><line x1="20" y1="20" x2="27.8" y2="15.5" stroke="#FF7A2A" stroke-width="3.2" stroke-linecap="round"/><line x1="20" y1="20" x2="14.8" y2="17.0" stroke="#F0651A" stroke-width="3.2" stroke-linecap="round"/><circle cx="20" cy="20" r="2.6" fill="#FF7A2A"/>
- <text x="52" y="30" font-family="Segoe UI" font-weight="600" font-size="34" fill="#E9ECEF" letter-spacing="0.5">Clockwork</text>
- <text x="248" y="29" font-family="Consolas" font-size="15" fill="#8A94A0" letter-spacing="2">WINDOWS 托盘自动化</text>
-</g>
-<!-- hero benefit -->
-<text x="70" y="192" font-family="Microsoft YaHei" font-weight="700" font-size="60" fill="#E9ECEF" letter-spacing="1">电脑上重复的事，</text>
-<text x="70" y="262" font-family="Microsoft YaHei" font-weight="700" font-size="60" fill="#E9ECEF" letter-spacing="1">自动<tspan fill="#FF7A2A">帮你做</tspan></text>
-<!-- sub -->
-<text x="70" y="316" font-family="Microsoft YaHei" font-size="24" fill="#8A94A0">开机自动开好软件 · 按时提醒 · 一键完成一串操作</text>
-<line x1="104" y1="358" x2="104" y2="522" stroke="#3A424B" stroke-width="2"/><circle cx="104" cy="372" r="6" fill="#F0651A"/>
- <rect x="134" y="350" width="78" height="44" rx="10" fill="#3A2416" stroke="#F0651A" stroke-opacity="0.55"/>
- <text x="173" y="380" font-family="Microsoft YaHei" font-weight="700" font-size="23" fill="#FF7A2A" text-anchor="middle">开机</text>
- <text x="234" y="380" font-family="Microsoft YaHei" font-size="25" fill="#C6CCD3">自动打开常用软件、整理好桌面</text><circle cx="104" cy="440" r="6" fill="#F0651A"/>
- <rect x="134" y="418" width="78" height="44" rx="10" fill="#3A2416" stroke="#F0651A" stroke-opacity="0.55"/>
- <text x="173" y="448" font-family="Microsoft YaHei" font-weight="700" font-size="23" fill="#FF7A2A" text-anchor="middle">到点</text>
- <text x="234" y="448" font-family="Microsoft YaHei" font-size="25" fill="#C6CCD3">按时提醒你，或静默跑一串动作</text><circle cx="104" cy="508" r="6" fill="#F0651A"/>
- <rect x="134" y="486" width="78" height="44" rx="10" fill="#3A2416" stroke="#F0651A" stroke-opacity="0.55"/>
- <text x="173" y="516" font-family="Microsoft YaHei" font-weight="700" font-size="23" fill="#FF7A2A" text-anchor="middle">一键</text>
- <text x="234" y="516" font-family="Microsoft YaHei" font-size="25" fill="#C6CCD3">专注 / 会议 / 收工，一步到位</text>
-<!-- footer -->
-<line x1="70" y1="566" x2="1140" y2="566" stroke="#3A424B" stroke-opacity="0.6" stroke-width="1"/>
-<text x="70" y="598" font-family="Consolas" font-size="17" fill="#8A94A0" letter-spacing="1">365 开源计划 · #020</text>
-<text x="1140" y="598" font-family="Microsoft YaHei" font-size="19" fill="#C6CCD3" text-anchor="end">启动清单 · 定时提醒 · 系统启动项 · 动作组</text>
+  <defs>
+    <linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#161C26"/><stop offset="0.6" stop-color="#12161D"/><stop offset="1" stop-color="#0E1219"/></linearGradient>
+    <radialGradient id="cglow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#E0A23C" stop-opacity="0.16"/><stop offset="1" stop-color="#E0A23C" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#cbg)"/>
+  <circle cx="980" cy="300" r="250" fill="url(#cglow)"/>
+  <!-- ambient meshing escape wheels -->
+  <g>
+    <path d="M980.00,166.00 L980.00,132.00 L1031.28,176.20 L1044.29,144.79 L1074.75,205.25 L1098.79,181.21 L1103.80,248.72 L1135.21,235.71 L1114.00,300.00 L1148.00,300.00 L1103.80,351.28 L1135.21,364.29 L1074.75,394.75 L1098.79,418.79 L1031.28,423.80 L1044.29,455.21 L980.00,434.00 L980.00,468.00 L928.72,423.80 L915.71,455.21 L885.25,394.75 L861.21,418.79 L856.20,351.28 L824.79,364.29 L846.00,300.00 L812.00,300.00 L856.20,248.72 L824.79,235.71 L885.25,205.25 L861.21,181.21 L928.72,176.20 L915.71,144.79 Z" fill="#E0A23C" fill-opacity="0.20"/>
+    <circle cx="980" cy="300" r="96" fill="#12161D"/>
+    <circle cx="980" cy="300" r="96" fill="none" stroke="#B87A2A" stroke-opacity="0.5" stroke-width="2"/>
+    <line x1="980" y1="300" x2="980" y2="224" stroke="#B87A2A" stroke-opacity="0.7" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="980" cy="300" r="14" fill="#F5A65A"/>
+    <path d="M1112.00,104.00 L1112.00,90.00 L1133.38,109.27 L1139.88,96.87 L1149.86,123.87 L1161.38,115.92 L1157.66,144.46 L1171.56,142.77 L1155.01,166.31 L1168.10,171.28 L1142.50,184.43 L1151.79,194.91 L1123.01,194.66 L1126.36,208.26 L1100.99,194.66 L1097.64,208.26 L1081.50,184.43 L1072.21,194.91 L1068.99,166.31 L1055.90,171.28 L1066.34,144.46 L1052.44,142.77 L1074.14,123.87 L1062.62,115.92 L1090.62,109.27 L1084.12,96.87 Z" fill="#E0A23C" fill-opacity="0.14"/>
+    <circle cx="1112" cy="150" r="34" fill="#12161D"/><circle cx="1112" cy="150" r="6" fill="#B87A2A"/>
+  </g>
+  <!-- brand lockup: escape-wheel glyph + wordmark -->
+  <g transform="translate(70,64)">
+    <g transform="translate(0,-4) scale(0.18)">
+      <path fill-rule="evenodd" d="M128.00,44.00 L128.00,24.00 L162.17,51.26 L170.30,32.99 L190.42,71.79 L205.29,58.41 L207.89,102.04 L226.91,95.86 L211.54,136.78 L231.43,138.87 L200.75,170.00 L218.07,180.00 L177.37,195.96 L189.13,212.14 L145.46,210.16 L149.62,229.73 L110.54,210.16 L106.38,229.73 L78.63,195.96 L66.87,212.14 L55.25,170.00 L37.93,180.00 L44.46,136.78 L24.57,138.87 L48.11,102.04 L29.09,95.86 L65.58,71.79 L50.71,58.41 L93.83,51.26 L85.70,32.99 Z M186,128 a58,58 0 1,0 -116,0 a58,58 0 1,0 116,0 Z" fill="#E0A23C"/>
+      <path d="M109.20,11.51 L146.80,11.51 L142.98,35.20 L113.02,35.20 Z" fill="#B87A2A"/>
+      <circle cx="128" cy="128" r="9" fill="#F5A65A"/>
+    </g>
+    <text x="60" y="30" font-family="Bahnschrift, DIN, sans-serif" font-weight="600" font-size="38" fill="#ECE6D8" letter-spacing="0.5">Clockwork</text>
+    <text x="272" y="29" font-family="Consolas, monospace" font-size="14" fill="#8B95A3" letter-spacing="3">WINDOWS 托盘自动化</text>
+  </g>
+  <!-- hero -->
+  <text x="70" y="210" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="62" fill="#ECE6D8" letter-spacing="1">电脑上重复的事，</text>
+  <text x="70" y="284" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="62" fill="#ECE6D8" letter-spacing="1">自动<tspan fill="#E0A23C">帮你做</tspan></text>
+  <text x="70" y="336" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#8B95A3">开机自动开好软件 · 按时提醒 · 一键完成一串操作</text>
+  <!-- escapement rail with 3 rows -->
+  <g>
+    <line x1="96" y1="384" x2="96" y2="556" stroke="#2E3947" stroke-width="2"/>
+    <line x1="96" y1="384" x2="96" y2="470" stroke="#E0A23C" stroke-width="2"/>
+    <path d="M88,398 L100,404 L88,410 Z" fill="#E0A23C"/><circle cx="96" cy="404" r="7" fill="#12161D" stroke="#E0A23C" stroke-width="2"/>
+    <rect x="126" y="382" width="72" height="44" rx="9" fill="#251d10" stroke="#B87A2A" stroke-opacity="0.5"/>
+    <text x="162" y="410" font-family="Bahnschrift, sans-serif" font-weight="700" font-size="21" fill="#E0A23C" text-anchor="middle">开机</text>
+    <text x="222" y="411" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#C9CFD7">自动打开常用软件、整理好桌面</text>
+    <path d="M88,464 L100,470 L88,476 Z" fill="#E0A23C"/><circle cx="96" cy="470" r="7" fill="#12161D" stroke="#E0A23C" stroke-width="2"/>
+    <rect x="126" y="448" width="72" height="44" rx="9" fill="#251d10" stroke="#B87A2A" stroke-opacity="0.5"/>
+    <text x="162" y="476" font-family="Bahnschrift, sans-serif" font-weight="700" font-size="21" fill="#E0A23C" text-anchor="middle">到点</text>
+    <text x="222" y="477" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#C9CFD7">按时提醒你，或静默跑一串动作</text>
+    <path d="M88,530 L100,536 L88,542 Z" fill="#5B6472"/><circle cx="96" cy="536" r="7" fill="#12161D" stroke="#5B6472" stroke-width="2"/>
+    <rect x="126" y="514" width="72" height="44" rx="9" fill="none" stroke="#2E3947"/>
+    <text x="162" y="542" font-family="Bahnschrift, sans-serif" font-weight="700" font-size="21" fill="#8B95A3" text-anchor="middle">一键</text>
+    <text x="222" y="543" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#C9CFD7">专注 / 会议 / 收工，一步到位</text>
+  </g>
+  <!-- footer -->
+  <line x1="70" y1="582" x2="1130" y2="582" stroke="#2E3947" stroke-opacity="0.7"/>
+  <text x="70" y="612" font-family="Consolas, monospace" font-size="16" fill="#8B95A3" letter-spacing="1">365 开源计划 · #020</text>
+  <text x="1130" y="612" font-family="Microsoft YaHei, sans-serif" font-size="18" fill="#C9CFD7" text-anchor="end">启动清单 · 定时提醒 · 系统启动项 · 动作组</text>
 </svg>

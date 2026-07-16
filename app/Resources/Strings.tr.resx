@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="App_Subtitle" xml:space="preserve"><value>Başlangıç · Hatırlatma · Tek dokunuş eylemler</value></data>
+  <data name="Tab_Launch" xml:space="preserve"><value>Başlangıç listesi</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Hatırlatmalar</value></data>
+  <data name="Tab_Group" xml:space="preserve"><value>Eylem grupları</value></data>
+  <data name="Tab_System" xml:space="preserve"><value>Sistem başlangıcı</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Başlangıçta yukarıdan aşağıya çalışır · her adım sonraki gecikme, tekrar sayısı ve koşulları destekler (hafta günü / N saatten önce)</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Zamana dayalı hatırlatma · sesli okuma · «Evet» olduğunda program çalıştır / dosya / URL / grup aç</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Bir dizi eylemi grupta topla ve tepsiden / başlangıç listesinden / hatırlatmadan tek dokunuşla tetikle</value></data>
+  <data name="System_Hint" xml:space="preserve"><value>Bilgisayarınızın tüm otomatik başlangıç öğeleri — gereksizleri tek dokunuşla kapatın. Yalnızca devre dışı bırakır, silmez; istediğiniz zaman geri alın.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>İşaretleme/kaldırma anında geçerlidir (devre dışı bırakır, silmez; geri alınabilir). «Yönetici gerekir» öğeleri yönetici hakkı ister. Sistem / ilke / tek seferlik salt okunur öğeler varsayılan olarak gizlidir.</value></data>
+  <data name="System_Filter" xml:space="preserve"><value>Filtre</value></data>
+  <data name="System_ShowReadOnly" xml:space="preserve"><value>Sistem / salt okunur öğeleri göster</value></data>
+  <data name="System_Scanning" xml:space="preserve"><value>Başlangıç öğeleri taranıyor…</value></data>
+  <data name="System_Refresh" xml:space="preserve"><value>Yenile</value></data>
+
+  <data name="Col_Enabled" xml:space="preserve"><value>Açık</value></data>
+  <data name="Col_Kind" xml:space="preserve"><value>Tür</value></data>
+  <data name="Col_Summary" xml:space="preserve"><value>Özet</value></data>
+  <data name="Col_Delay" xml:space="preserve"><value>Gecikme</value></data>
+  <data name="Col_Time" xml:space="preserve"><value>Saat</value></data>
+  <data name="Col_Period" xml:space="preserve"><value>Dönem</value></data>
+  <data name="Col_Text" xml:space="preserve"><value>Metin</value></data>
+  <data name="Col_Speak" xml:space="preserve"><value>Ses</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="Col_Steps" xml:space="preserve"><value>Adımlar</value></data>
+  <data name="Col_Command" xml:space="preserve"><value>Komut</value></data>
+  <data name="Col_Source" xml:space="preserve"><value>Kaynak</value></data>
+  <data name="Col_Scope" xml:space="preserve"><value>Kapsam</value></data>
+
+  <data name="Btn_Add" xml:space="preserve"><value>Ekle</value></data>
+  <data name="Btn_AddMenu" xml:space="preserve"><value>Ekle ▾</value></data>
+  <data name="Btn_Edit" xml:space="preserve"><value>Düzenle</value></data>
+  <data name="Btn_Delete" xml:space="preserve"><value>Sil</value></data>
+  <data name="Btn_Up" xml:space="preserve"><value>↑ Yukarı</value></data>
+  <data name="Btn_Down" xml:space="preserve"><value>↓ Aşağı</value></data>
+  <data name="Btn_RunStep" xml:space="preserve"><value>▶ Bu adımı çalıştır</value></data>
+  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Grubu çalıştır</value></data>
+  <data name="Btn_Preview" xml:space="preserve"><value>▶ Önizle</value></data>
+
+  <data name="Settings_StartupDelay" xml:space="preserve"><value>Başlangıç gecikmesi (sn)</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>Tepsiye küçültülmüş başlat</value></data>
+  <data name="Settings_StopHotkey" xml:space="preserve"><value>Durdurma tuşu</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Dil</value></data>
+  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Sonraki başlangıçta geçerli olur; boş = kapalı. Tepsi menüsündeki «Durdur» her zaman kullanılabilir.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Dil, Clockwork'ün sonraki başlangıcında geçerli olur.</value></data>
+
+  <data name="Autostart_Checking" xml:space="preserve"><value>Otomatik başlat: denetleniyor…</value></data>
+  <data name="Autostart_On" xml:space="preserve"><value>Otomatik başlat: AÇIK (kapatmak için tıklayın)</value></data>
+  <data name="Autostart_Off" xml:space="preserve"><value>Otomatik başlat: KAPALI (açmak için tıklayın)</value></data>
+
+  <data name="Tray_Show" xml:space="preserve"><value>Pencereyi göster</value></data>
+  <data name="Tray_Rerun" xml:space="preserve"><value>Başlangıç listesini yeniden çalıştır</value></data>
+  <data name="Tray_Stop" xml:space="preserve"><value>Çalışan eylemleri durdur</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>Çıkış</value></data>
+
+  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>Evet</value></data>
+  <data name="Reminder_Popup_No" xml:space="preserve"><value>Hayır</value></data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>10 dk ertele</value></data>
+
+  <data name="Kind_app" xml:space="preserve"><value>Uygulama aç</value></data>
+  <data name="Kind_keys" xml:space="preserve"><value>Tuş gönder</value></data>
+  <data name="Kind_volume" xml:space="preserve"><value>Ses düzeyi</value></data>
+  <data name="Kind_window" xml:space="preserve"><value>Pencere eylemi</value></data>
+  <data name="Kind_system" xml:space="preserve"><value>Sistem komutu</value></data>
+  <data name="Kind_group" xml:space="preserve"><value>Eylem grubu</value></data>
+  <data name="Kind_message" xml:space="preserve"><value>Bildirim</value></data>
+  <data name="Kind_delay" xml:space="preserve"><value>Gecikme</value></data>
+  <data name="Kind_text" xml:space="preserve"><value>Metin gönder</value></data>
+
+  <data name="Sys_showDesktop" xml:space="preserve"><value>Masaüstünü göster</value></data>
+  <data name="Sys_lockScreen" xml:space="preserve"><value>Ekranı kilitle (dönüşte parola gerekir)</value></data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>Geri dönüşüm kutusunu boşalt</value></data>
+  <data name="Sys_openSettings" xml:space="preserve"><value>Windows Ayarları'nı aç</value></data>
+  <data name="Sys_screenshot" xml:space="preserve"><value>Ekran görüntüsü (alan seç)</value></data>
+  <data name="Sys_clearClipboard" xml:space="preserve"><value>Panoyu temizle</value></data>
+  <data name="Sys_taskManager" xml:space="preserve"><value>Görev Yöneticisi'ni aç</value></data>
+  <data name="Sys_monitorOff" xml:space="preserve"><value>Ekranı kapat (uyandırmak için fareyi oynat)</value></data>
+  <data name="Sys_sleep" xml:space="preserve"><value>Uyku (düşük güç, hızlı uyanma)</value></data>
+  <data name="Sys_hibernate" xml:space="preserve"><value>Hazırda beklet (kaydet ve kapat)</value></data>
+  <data name="Sys_signOut" xml:space="preserve"><value>Oturumu kapat (onay)</value></data>
+  <data name="Sys_restart" xml:space="preserve"><value>Yeniden başlat (onay)</value></data>
+  <data name="Sys_shutdown" xml:space="preserve"><value>Kapat (onay)</value></data>
+
+  <data name="Vol_mute" xml:space="preserve"><value>Sesi kapat</value></data>
+  <data name="Vol_unmute" xml:space="preserve"><value>Sesi aç</value></data>
+  <data name="Vol_set" xml:space="preserve"><value>Ses düzeyi %{0}</value></data>
+  <data name="Win_close" xml:space="preserve"><value>Pencereyi kapat</value></data>
+  <data name="Win_minimize" xml:space="preserve"><value>Küçült</value></data>
+  <data name="Win_maximize" xml:space="preserve"><value>Büyüt</value></data>
+  <data name="Win_activate" xml:space="preserve"><value>Öne getir</value></data>
+  <data name="Win_sendkey" xml:space="preserve"><value>Öne getir ve tuş gönder</value></data>
+
+  <data name="Sum_SendKeys" xml:space="preserve"><value>{0} gönder</value></data>
+  <data name="Sum_Delay_Sec" xml:space="preserve"><value>{0}sn gecikme</value></data>
+  <data name="Sum_Delay_Ms" xml:space="preserve"><value>{0}ms gecikme</value></data>
+  <data name="Sum_RunGroup" xml:space="preserve"><value>Grubu çalıştır: {0}</value></data>
+  <data name="Sum_Group_None" xml:space="preserve"><value>(belirtilmedi)</value></data>
+  <data name="Sum_Text" xml:space="preserve"><value>{0} yaz</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (yalnızca {0}:00'dan önce)</value></data>
+  <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
+
+  <data name="Days_EveryDay" xml:space="preserve"><value>Her gün</value></data>
+  <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Day_1" xml:space="preserve"><value>Pzt</value></data>
+  <data name="Day_2" xml:space="preserve"><value>Sal</value></data>
+  <data name="Day_3" xml:space="preserve"><value>Çar</value></data>
+  <data name="Day_4" xml:space="preserve"><value>Per</value></data>
+  <data name="Day_5" xml:space="preserve"><value>Cum</value></data>
+  <data name="Day_6" xml:space="preserve"><value>Cmt</value></data>
+  <data name="Day_7" xml:space="preserve"><value>Paz</value></data>
+
+  <data name="Period_EveryNDays" xml:space="preserve"><value>Her {0} günde</value></data>
+  <data name="Period_Monthly" xml:space="preserve"><value>Her ayın {0}. günü</value></data>
+  <data name="Time_Startup" xml:space="preserve"><value>Oturum açıldığında</value></data>
+  <data name="Time_Startup_Before" xml:space="preserve"><value>Oturum açıldığında · {0}:00'dan önce</value></data>
+  <data name="Time_Startup_After" xml:space="preserve"><value>Oturum açıldığında · {0}:00'dan sonra</value></data>
+
+  <data name="Type_Registry" xml:space="preserve"><value>Kayıt Defteri</value></data>
+  <data name="Type_StartupFolder" xml:space="preserve"><value>Başlangıç klasörü</value></data>
+  <data name="Type_ScheduledTask" xml:space="preserve"><value>Zamanlanmış görev</value></data>
+  <data name="Scope_Machine" xml:space="preserve"><value>Tüm kullanıcılar</value></data>
+  <data name="Scope_User" xml:space="preserve"><value>Geçerli kullanıcı</value></data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0} (yönetici gerekir)</value></data>
+
+  <data name="Ed_Ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="Ed_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Ed_Title_Step" xml:space="preserve"><value>Adımı düzenle</value></data>
+  <data name="Ed_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Ed_Label" xml:space="preserve"><value>Etiket</value></data>
+  <data name="Ed_Target" xml:space="preserve"><value>Hedef</value></data>
+  <data name="Ed_Args" xml:space="preserve"><value>Bağımsız değişkenler</value></data>
+  <data name="Ed_WorkDir" xml:space="preserve"><value>Çalışma klasörü</value></data>
+  <data name="Ed_Elevated" xml:space="preserve"><value>Yönetici olarak çalıştır</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>Hedef tam exe yolu, ad, URL, ms-settings: gibi bir protokol veya belge olabilir.</value></data>
+  <data name="Ed_Combo" xml:space="preserve"><value>Kısayol</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin.</value></data>
+  <data name="Ed_Action" xml:space="preserve"><value>Eylem</value></data>
+  <data name="Ed_Level" xml:space="preserve"><value>Ses düzeyi (0-100)</value></data>
+  <data name="Ed_Process" xml:space="preserve"><value>İşlem</value></data>
+  <data name="Ed_SendKey" xml:space="preserve"><value>Tuş gönder</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>Pencereyi bekle (sn)</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>Göründükten sonra (sn)</value></data>
+  <data name="Ed_WindowHint" xml:space="preserve"><value>İşlem adı .exe olmadan (örn. Weixin / msedge). Öne getir / tuş gönder odak gerektirir ve başlangıçta çalışmayabilir.</value></data>
+  <data name="Ed_Command" xml:space="preserve"><value>Komut</value></data>
+  <data name="Ed_Text" xml:space="preserve"><value>Metin</value></data>
+  <data name="Ed_TextProcess" xml:space="preserve"><value>Hedef işlem</value></data>
+  <data name="Ed_TextHint" xml:space="preserve"><value>Karakter karakter yazar (yeni satır = Enter). Odaktaki pencereye göndermek için işlemi boş bırakın (en güvenilir).</value></data>
+  <data name="Ed_Message" xml:space="preserve"><value>Mesaj</value></data>
+  <data name="Ed_Speak" xml:space="preserve"><value>Sesli oku</value></data>
+  <data name="Ed_Confirm" xml:space="preserve"><value>Evet/Hayır onayla (Evet = devam, Hayır = grubu iptal)</value></data>
+  <data name="Ed_OnYes" xml:space="preserve"><value>«Evet»ten sonra</value></data>
+  <data name="Ed_Group" xml:space="preserve"><value>Eylem grubu</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>Sonraki gecikme (ms)</value></data>
+  <data name="Ed_Repeat" xml:space="preserve"><value>Tekrar sayısı</value></data>
+  <data name="Ed_Note" xml:space="preserve"><value>Not</value></data>
+  <data name="Ed_DaysHeader" xml:space="preserve"><value>Yalnızca bu günlerde çalıştır (seçili değil = her gün)</value></data>
+  <data name="Ed_OnlyBefore" xml:space="preserve"><value>Yalnızca şundan önce</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_Vol_Set" xml:space="preserve"><value>Ses düzeyini ayarla</value></data>
+  <data name="Ed_OnYes_None" xml:space="preserve"><value>Yok</value></data>
+  <data name="Ed_OnYes_Run" xml:space="preserve"><value>Çalıştır / dosya aç</value></data>
+  <data name="Ed_OnYes_Url" xml:space="preserve"><value>URL aç</value></data>
+  <data name="Ed_Group_None" xml:space="preserve"><value>(yok)</value></data>
+
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>«{0}» hedefine tuş gönderilemedi: pencere görünmedi veya öne getirilemedi (başlangıçta/arka planda sık görülür)</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>«{0}» penceresi bulunamadı (işlem çalışmıyor veya hazır değil?); {1} etkisiz</value></data>
+  <data name="Warn_UnknownVolume" xml:space="preserve"><value>Bilinmeyen ses eylemi: {0}</value></data>
+  <data name="Warn_UnknownKind" xml:space="preserve"><value>Bilinmeyen adım türü: {0}</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» atlandı: hedef Clockwork'ün kendisi (otomatik başlatma döngüsünden kaçınılıyor)</value></data>
+  <data name="Warn_LaunchFail" xml:space="preserve"><value>Başlatma başarısız: {0} — {1}</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» 0,5 sn içinde kapandı (kod {1}); başlatma başarısız olabilir</value></data>
+  <data name="Mark_Unverified" xml:space="preserve"><value>~ Gönderildi (doğrulanmadı)</value></data>
+  <data name="Mark_Exception" xml:space="preserve"><value>Hata: {0}</value></data>
+
+  <data name="Note_Policy" xml:space="preserve"><value>İlke</value></data>
+  <data name="Note_OneTime" xml:space="preserve"><value>Tek seferlik</value></data>
+  <data name="Note_System" xml:space="preserve"><value>Sistem için kritik</value></data>
+  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
+
+  <data name="Ed_Title_Group" xml:space="preserve"><value>Eylem grubunu düzenle</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Grup yalnızca eylemleri tanımlar; Başlangıç listesinden veya Hatırlatmalardan tetiklenir.</value></data>
+  <data name="Val_GroupName" xml:space="preserve"><value>Lütfen bir grup adı girin.</value></data>
+
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Hatırlatmayı düzenle</value></data>
+  <data name="Ed_Trigger" xml:space="preserve"><value>Tetikleyici</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>Zamana dayalı (bir saatte)</value></data>
+  <data name="Ed_Trig_Startup" xml:space="preserve"><value>Oturum açıldığında</value></data>
+  <data name="Ed_Time" xml:space="preserve"><value>Saat (HH:mm)</value></data>
+  <data name="Ed_LoginTiming" xml:space="preserve"><value>Oturum açma koşulu</value></data>
+  <data name="Ed_SMode_Any" xml:space="preserve"><value>Her zaman</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>Yalnızca N:00'dan önce</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>Yalnızca N:00'dan sonra</value></data>
+  <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_OnlyBoot" xml:space="preserve"><value>Yalnızca şu süre içinde</value></data>
+  <data name="Ed_WithinHint" xml:space="preserve"><value>önyüklemeden sonraki dakika oturum açma sayılır (0 = her açılış)</value></data>
+  <data name="Ed_Period" xml:space="preserve"><value>Dönem</value></data>
+  <data name="Ed_Rec_Daily" xml:space="preserve"><value>Hafta gününe göre</value></data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Her N günde</value></data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Aylık</value></data>
+  <data name="Ed_EveryNDays" xml:space="preserve"><value>Her</value></data>
+  <data name="Ed_AnchorDays" xml:space="preserve"><value>günde; şu tarihten sayılır</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; boş = bugün)</value></data>
+  <data name="Ed_MonthlyDay" xml:space="preserve"><value>Ayın günü</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Sessiz grup</value></data>
+  <data name="Ed_SilentHint" xml:space="preserve"><value>Ayarlanırsa, grubu zamanında sessizce çalıştırır (metin / ses / «Evet»ten sonra atlanır)</value></data>
+  <data name="Ed_OnYes_Group" xml:space="preserve"><value>Eylem grubunu çalıştır</value></data>
+  <data name="Ed_AutoDismiss" xml:space="preserve"><value>Otomatik kapat (sn)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>tıklanmazsa kendi kapanır (0 = asla; yinelenen hatırlatma: varsayılan 60)</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Yinele</value></data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>dakikada bir (0 = yineleme yok), şuna kadar</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, boş = sınırsız)</value></data>
+  <data name="Ed_TrigDelay" xml:space="preserve"><value>Tetikten sonra gecikme</value></data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>sn, artı rastgele 0~</value></data>
+  <data name="Ed_Sec" xml:space="preserve"><value>sn</value></data>
+  <data name="Ed_Grace" xml:space="preserve"><value>Ek süre (dk)</value></data>
+  <data name="Ed_GraceHint" xml:space="preserve"><value>saati bu süre içinde kaçırırsa yine de tetiklenir</value></data>
+  <data name="Val_TimeFormat" xml:space="preserve"><value>Saat HH:mm biçiminde olmalı</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>«Şuna kadar yinele» HH:mm olmalı (veya boş)</value></data>
+  <data name="Val_Anchor" xml:space="preserve"><value>Başlangıç tarihi yyyy-MM-dd olmalı (veya boş)</value></data>
+
+  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Onay</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>«{0}» çalıştırmak istediğinizden emin misiniz?</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Hata</value></data>
+  <data name="Crash_Body" xml:space="preserve"><value>Clockwork bir hatayla karşılaştı (günlüğe kaydedildi; genellikle kullanmaya devam edebilirsiniz):
+
+{0}
+
+Günlük: {1}</value></data>
+  <data name="Run_Title" xml:space="preserve"><value>Clockwork · Çalıştır</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork Hatırlatması</value></data>
+  <data name="Tray_LaunchStopped" xml:space="preserve"><value>Başlangıç listesi durduruldu: {0} adım tamamlandı, kalanı atlandı</value></data>
+  <data name="Tray_LaunchWarn" xml:space="preserve"><value>Başlangıç listesi tamamlandı: {0} adım, {1} uyarılı (tepsi → son günlüğe bak)</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Durdurma tuşu «{0}» tanınmadı; ana pencereden değiştirin. Tepsideki «Durdur» hâlâ çalışır.</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Durdurma tuşu «{0}» kaydedilemedi (kullanımda olabilir); tepsideki «Durdur» hâlâ çalışır.</value></data>
+  <data name="Hotkey_Stopped" xml:space="preserve"><value>Çalışan eylemlerin durdurulması istendi.</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» değiştirmek için yönetici hakkı gerekir; Clockwork'ü yönetici olarak yeniden açın.</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>«{0}» değiştirilemedi: {1}</value></data>
+  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Otomatik başlatmayı kaydetmek/kaldırmak için yönetici hakkı gerekir; Clockwork'ü yönetici olarak yeniden açın.</value></data>
+  <data name="Autostart_Fail" xml:space="preserve"><value>İşlem başarısız: {0}</value></data>
+  <data name="Tab_Settings" xml:space="preserve"><value>Ayarlar</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>Genel</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>Hakkında</value></data>
+  <data name="About_CheckUpdate" xml:space="preserve"><value>Güncellemeleri denetle</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>Denetleniyor…</value></data>
+  <data name="Update_Latest" xml:space="preserve"><value>En son sürümü kullanıyorsunuz ({0})</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>Yeni sürüm {0} mevcut. İndirmeye gidilsin mi?</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Güncelleme denetimi başarısız: {0}</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Tıklayın, sonra kısayola basın. Esc iptal eder, Del temizler. Tepsideki «Durdur» her zaman çalışır.</value></data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Bir kısayola basın…</value></data>
+  <data name="Sys_Takeover" xml:space="preserve"><value>Başlangıç listesine al</value></data>
+  <data name="Ed_CatchUp" xml:space="preserve"><value>Kaçarsa telafi et (uyku/kapanma sonrası)</value></data>
+  <data name="Unit_Minutes" xml:space="preserve"><value>{0} dk</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>"{0}" kısayolunun ana tuşu yok; gönderilmedi</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Tanınmayan tuş adı "{0}" (çok basamaklı sayılar tuş değildir); "{1}" kısayolu gönderilmedi</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Tanınmayan tuş "{0}"; "{1}" kısayolu gönderilmedi</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>"{0}" kısayolu sistem tarafından reddedildi (önde yükseltilmiş pencere/güvenli masaüstü varken olur); etkisiz</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>"{0}" kısayolu yalnızca kısmen enjekte edildi ({1}/{2}); tuş bırakmaları yeniden gönderildi, etkisiz</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>Metin gönder: "{0}" penceresi öne getirilemedi; gönderilmedi</value></data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Yapılandırma kaydedilemedi: {0} (değişiklikler yalnızca bellekte ve yeniden başlatınca kaybolur)</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>"{0}" hatırlatıcısının başvurduğu eylem grubu artık yok; bu sefer hiçbir şey çalıştırılmadı</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>"{0}" hatırlatıcısının başvurduğu eylem grubu devre dışı; bu sefer hiçbir şey çalıştırılmadı</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu artık yok; atlandı</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu devre dışı; atlandı</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Zamanlanmış görevler henüz devralınamıyor; yalnızca kayıt defteri Run anahtarları ve Başlangıç klasörü öğeleri desteklenir</value></data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Başlangıç listesi çalıştırması kesildi: {0}</value></data>
+  <data name="Tray_ViewLog" xml:space="preserve"><value>Son başlangıç günlüğünü görüntüle</value></data>
+  <data name="Tray_NoLog" xml:space="preserve"><value>Henüz başlangıç günlüğü yok (önce başlangıç listesini bir kez çalıştırın)</value></data>
+  <data name="Err_ClearClipboard" xml:space="preserve"><value>Pano temizlenemedi: {0}</value></data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Geri dönüşüm kutusu boşaltılamadı: {0}</value></data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Bilinmeyen sistem komutu: {0}</value></data>
+  <data name="Tray_RunGroup" xml:space="preserve"><value>Çalıştır: {0}</value></data>
+  <data name="Tray_DndHours" xml:space="preserve"><value>Hatırlatıcıları {0} sa duraklat</value></data>
+  <data name="Tray_DndResume" xml:space="preserve"><value>Hatırlatıcıları sürdür ({0} dk kaldı)</value></data>
+  <data name="Toast_DndOn" xml:space="preserve"><value>Hatırlatıcılar {0} saat duraklatıldı</value></data>
+  <data name="Toast_DndOff" xml:space="preserve"><value>Hatırlatıcılar sürdürüldü</value></data>
+  <data name="Menu_BlankGroup" xml:space="preserve"><value>Boş grup</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>Odak · Çalışmaya başla</value></data>
+  <data name="Tpl_Meeting" xml:space="preserve"><value>Toplantı modu</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Paydos · Gün sonu</value></data>
+  <data name="Tpl_Bedtime" xml:space="preserve"><value>Yatma vakti</value></data>
+  <data name="Tpl_Away" xml:space="preserve"><value>Kısa mola</value></data>
+  <data name="Tpl_Screenshot" xml:space="preserve"><value>Ekran görüntüsü ve işaretleme</value></data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Bugünün görevlerinin hepsini kaydettin mi?</value></data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Yatma vakti!</value></data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Bu işlem yönetici izni gerektirir. Clockwork yönetici olarak yeniden açılsın mı?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>"{0}" eylem grubuna {1} hatırlatıcı ve {2} adım başvuruyor. Silinirse bu başvurular da temizlenir (hatırlatıcılar yalnızca açılır pencere olur; başvuran adımlar kaldırılır). Yine de silinsin mi?</value></data>
+  <data name="Btn_Browse" xml:space="preserve"><value>Gözat…</value></data>
+  <data name="Btn_Pick" xml:space="preserve"><value>Seç…</value></data>
+  <data name="Btn_Capture" xml:space="preserve"><value>Yakala</value></data>
+  <data name="Btn_PickDate" xml:space="preserve"><value>Tarih seç</value></data>
+  <data name="Filter_Browse" xml:space="preserve"><value>Programlar / betikler / kısayollar|*.exe;*.bat;*.cmd;*.ps1;*.lnk|Tüm dosyalar|*.*</value></data>
+  <data name="Ed_WindowStyle" xml:space="preserve"><value>Pencere stili</value></data>
+  <data name="WinStyle_Default" xml:space="preserve"><value>Varsayılan (normal pencere)</value></data>
+  <data name="WinStyle_Minimized" xml:space="preserve"><value>Simge durumunda başlat</value></data>
+  <data name="WinStyle_Maximized" xml:space="preserve"><value>Ekranı kaplayarak başlat</value></data>
+  <data name="WinStyle_Hidden" xml:space="preserve"><value>Gizli başlat</value></data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>Zaten çalışıyorsa pencereyi etkinleştir (yeniden başlatma)</value></data>
+  <data name="Ed_ActivateProcess" xml:space="preserve"><value>Etkinleştirilecek işlem</value></data>
+  <data name="Ed_AltTargets" xml:space="preserve"><value>Yedek yollar</value></data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>Her satıra bir tam yol; hedef yoksa var olan ilki kullanılır (farklı kurulum yolları olan makineler için)</value></data>
+  <data name="Picker_Process" xml:space="preserve"><value>İşlem seç</value></data>
+  <data name="Picker_Search" xml:space="preserve"><value>İşlem adı / pencere başlığı ara</value></data>
+  <data name="Date_Pick" xml:space="preserve"><value>Tarih seç</value></data>
+  <data name="Capture_Key" xml:space="preserve"><value>Tuş yakala</value></data>
+</root>

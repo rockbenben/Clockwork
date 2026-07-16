@@ -1,0 +1,30 @@
+name: CI
+
+# 每次 push 到 main 或提 PR：在 Windows runner 上构建 + 跑测试。
+# WPF/WinForms 只能在 Windows 上构建，故固定用 windows-latest。
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # 测试工程 ProjectReference 主程序，还原/构建它即连带把 app 一起编出来。
+      - name: Restore
+        run: dotnet restore app.Tests/Clockwork.Tests.csproj
+
+      - name: Build
+        run: dotnet build app.Tests/Clockwork.Tests.csproj --no-restore -c Release
+
+      - name: Test
+        run: dotnet test app.Tests/Clockwork.Tests.csproj --no-build -c Release --verbosity normal

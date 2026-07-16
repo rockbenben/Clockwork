@@ -506,7 +506,7 @@
                      "startMinimized":  false,
                      "startupWaitForReady":  false,
                      "startupDelaySeconds":  30,
-                     "stopHotkey":  "Ctrl+Alt+F12"
+                     "stopHotkey": "Ctrl+Alt+Q"
                  },
     "actionGroups":  [
                          {

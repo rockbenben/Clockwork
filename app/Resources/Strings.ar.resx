@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="App_Subtitle" xml:space="preserve"><value>بدء التشغيل · التذكيرات · إجراءات بلمسة واحدة</value></data>
+  <data name="Tab_Launch" xml:space="preserve"><value>قائمة البدء</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>التذكيرات</value></data>
+  <data name="Tab_Group" xml:space="preserve"><value>مجموعات الإجراءات</value></data>
+  <data name="Tab_System" xml:space="preserve"><value>بدء تشغيل النظام</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>تُنفَّذ من الأعلى للأسفل عند البدء · كل خطوة تدعم تأخيرًا بعدها وعدد تكرارات وشروط (يوم الأسبوع / قبل الساعة N)</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>تذكيرات مجدولة · نطق اختياري · عند «نعم» تشغيل برنامج / فتح ملف / رابط / مجموعة</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>اجمع سلسلة من الإجراءات في مجموعة وشغّلها بلمسة من علبة النظام / قائمة البدء / التذكيرات</value></data>
+  <data name="System_Hint" xml:space="preserve"><value>كل عناصر البدء التلقائي في هذا الجهاز — أوقف ما لا تحتاجه بلمسة. تعطيل فقط دون حذف؛ قابل للتراجع في أي وقت.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>التحديد/إلغاؤه يسري فورًا (تعطيل لا حذف؛ قابل للتراجع). العناصر «تتطلب مسؤولًا» تحتاج صلاحيات المسؤول. عناصر النظام / السياسة / المرة الواحدة للقراءة فقط مخفية افتراضيًا.</value></data>
+  <data name="System_Filter" xml:space="preserve"><value>تصفية</value></data>
+  <data name="System_ShowReadOnly" xml:space="preserve"><value>إظهار عناصر النظام / للقراءة فقط</value></data>
+  <data name="System_Scanning" xml:space="preserve"><value>جارٍ فحص عناصر البدء التلقائي…</value></data>
+  <data name="System_Refresh" xml:space="preserve"><value>تحديث</value></data>
+
+  <data name="Col_Enabled" xml:space="preserve"><value>تفعيل</value></data>
+  <data name="Col_Kind" xml:space="preserve"><value>النوع</value></data>
+  <data name="Col_Summary" xml:space="preserve"><value>الملخص</value></data>
+  <data name="Col_Delay" xml:space="preserve"><value>تأخير</value></data>
+  <data name="Col_Time" xml:space="preserve"><value>الوقت</value></data>
+  <data name="Col_Period" xml:space="preserve"><value>الدورة</value></data>
+  <data name="Col_Text" xml:space="preserve"><value>نص</value></data>
+  <data name="Col_Speak" xml:space="preserve"><value>صوت</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>الاسم</value></data>
+  <data name="Col_Steps" xml:space="preserve"><value>خطوات</value></data>
+  <data name="Col_Command" xml:space="preserve"><value>أمر</value></data>
+  <data name="Col_Source" xml:space="preserve"><value>المصدر</value></data>
+  <data name="Col_Scope" xml:space="preserve"><value>النطاق</value></data>
+
+  <data name="Btn_Add" xml:space="preserve"><value>إضافة</value></data>
+  <data name="Btn_AddMenu" xml:space="preserve"><value>إضافة ▾</value></data>
+  <data name="Btn_Edit" xml:space="preserve"><value>تعديل</value></data>
+  <data name="Btn_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="Btn_Up" xml:space="preserve"><value>↑ أعلى</value></data>
+  <data name="Btn_Down" xml:space="preserve"><value>↓ أسفل</value></data>
+  <data name="Btn_RunStep" xml:space="preserve"><value>▶ تشغيل هذه الخطوة</value></data>
+  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ تشغيل المجموعة</value></data>
+  <data name="Btn_Preview" xml:space="preserve"><value>▶ معاينة</value></data>
+
+  <data name="Settings_StartupDelay" xml:space="preserve"><value>تأخير البدء (ث)</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>البدء مصغّرًا في علبة النظام</value></data>
+  <data name="Settings_StopHotkey" xml:space="preserve"><value>مفتاح الإيقاف</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>اللغة</value></data>
+  <data name="Settings_HotkeyTip" xml:space="preserve"><value>يسري عند التشغيل التالي؛ فارغ = معطّل. «إيقاف» من قائمة العلبة يعمل دائمًا.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>ستُطبَّق اللغة عند تشغيل Clockwork في المرة القادمة.</value></data>
+
+  <data name="Autostart_Checking" xml:space="preserve"><value>البدء التلقائي: جارٍ التحقق…</value></data>
+  <data name="Autostart_On" xml:space="preserve"><value>البدء التلقائي: مفعّل (انقر للتعطيل)</value></data>
+  <data name="Autostart_Off" xml:space="preserve"><value>البدء التلقائي: معطّل (انقر للتفعيل)</value></data>
+
+  <data name="Tray_Show" xml:space="preserve"><value>إظهار النافذة</value></data>
+  <data name="Tray_Rerun" xml:space="preserve"><value>إعادة تشغيل قائمة البدء</value></data>
+  <data name="Tray_Stop" xml:space="preserve"><value>إيقاف الإجراءات الجارية</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>خروج</value></data>
+
+  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>نعم</value></data>
+  <data name="Reminder_Popup_No" xml:space="preserve"><value>لا</value></data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>موافق</value></data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>تأجيل 10 دقائق</value></data>
+
+  <data name="Kind_app" xml:space="preserve"><value>تشغيل تطبيق</value></data>
+  <data name="Kind_keys" xml:space="preserve"><value>إرسال مفاتيح</value></data>
+  <data name="Kind_volume" xml:space="preserve"><value>مستوى الصوت</value></data>
+  <data name="Kind_window" xml:space="preserve"><value>إجراء نافذة</value></data>
+  <data name="Kind_system" xml:space="preserve"><value>أمر نظام</value></data>
+  <data name="Kind_group" xml:space="preserve"><value>مجموعة إجراءات</value></data>
+  <data name="Kind_message" xml:space="preserve"><value>رسالة</value></data>
+  <data name="Kind_delay" xml:space="preserve"><value>تأخير</value></data>
+  <data name="Kind_text" xml:space="preserve"><value>إرسال نص</value></data>
+
+  <data name="Sys_showDesktop" xml:space="preserve"><value>إظهار سطح المكتب</value></data>
+  <data name="Sys_lockScreen" xml:space="preserve"><value>قفل الشاشة (كلمة مرور عند العودة)</value></data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>إفراغ سلة المحذوفات</value></data>
+  <data name="Sys_openSettings" xml:space="preserve"><value>فتح إعدادات Windows</value></data>
+  <data name="Sys_screenshot" xml:space="preserve"><value>لقطة شاشة (تحديد منطقة)</value></data>
+  <data name="Sys_clearClipboard" xml:space="preserve"><value>مسح الحافظة</value></data>
+  <data name="Sys_taskManager" xml:space="preserve"><value>فتح مدير المهام</value></data>
+  <data name="Sys_monitorOff" xml:space="preserve"><value>إطفاء الشاشة (حرّك الفأرة للإيقاظ)</value></data>
+  <data name="Sys_sleep" xml:space="preserve"><value>سكون (استهلاك منخفض، استيقاظ سريع)</value></data>
+  <data name="Sys_hibernate" xml:space="preserve"><value>إسبات (حفظ وإيقاف)</value></data>
+  <data name="Sys_signOut" xml:space="preserve"><value>تسجيل الخروج (تأكيد)</value></data>
+  <data name="Sys_restart" xml:space="preserve"><value>إعادة التشغيل (تأكيد)</value></data>
+  <data name="Sys_shutdown" xml:space="preserve"><value>إيقاف التشغيل (تأكيد)</value></data>
+
+  <data name="Vol_mute" xml:space="preserve"><value>كتم</value></data>
+  <data name="Vol_unmute" xml:space="preserve"><value>إلغاء الكتم</value></data>
+  <data name="Vol_set" xml:space="preserve"><value>مستوى الصوت {0}%</value></data>
+  <data name="Win_close" xml:space="preserve"><value>إغلاق النافذة</value></data>
+  <data name="Win_minimize" xml:space="preserve"><value>تصغير</value></data>
+  <data name="Win_maximize" xml:space="preserve"><value>تكبير</value></data>
+  <data name="Win_activate" xml:space="preserve"><value>إحضار للأمام</value></data>
+  <data name="Win_sendkey" xml:space="preserve"><value>للأمام وإرسال مفاتيح</value></data>
+
+  <data name="Sum_SendKeys" xml:space="preserve"><value>إرسال {0}</value></data>
+  <data name="Sum_Delay_Sec" xml:space="preserve"><value>تأخير {0}ث</value></data>
+  <data name="Sum_Delay_Ms" xml:space="preserve"><value>تأخير {0}مث</value></data>
+  <data name="Sum_RunGroup" xml:space="preserve"><value>تشغيل المجموعة: {0}</value></data>
+  <data name="Sum_Group_None" xml:space="preserve"><value>(غير محدد)</value></data>
+  <data name="Sum_Text" xml:space="preserve"><value>إدخال {0}</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (فقط قبل {0}:00)</value></data>
+  <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
+
+  <data name="Days_EveryDay" xml:space="preserve"><value>يوميًا</value></data>
+  <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Day_1" xml:space="preserve"><value>إثنين</value></data>
+  <data name="Day_2" xml:space="preserve"><value>ثلاثاء</value></data>
+  <data name="Day_3" xml:space="preserve"><value>أربعاء</value></data>
+  <data name="Day_4" xml:space="preserve"><value>خميس</value></data>
+  <data name="Day_5" xml:space="preserve"><value>جمعة</value></data>
+  <data name="Day_6" xml:space="preserve"><value>سبت</value></data>
+  <data name="Day_7" xml:space="preserve"><value>أحد</value></data>
+
+  <data name="Period_EveryNDays" xml:space="preserve"><value>كل {0} أيام</value></data>
+  <data name="Period_Monthly" xml:space="preserve"><value>يوم {0} من كل شهر</value></data>
+  <data name="Time_Startup" xml:space="preserve"><value>عند تسجيل الدخول</value></data>
+  <data name="Time_Startup_Before" xml:space="preserve"><value>عند الدخول · قبل {0}:00</value></data>
+  <data name="Time_Startup_After" xml:space="preserve"><value>عند الدخول · بعد {0}:00</value></data>
+
+  <data name="Type_Registry" xml:space="preserve"><value>السجل</value></data>
+  <data name="Type_StartupFolder" xml:space="preserve"><value>مجلد بدء التشغيل</value></data>
+  <data name="Type_ScheduledTask" xml:space="preserve"><value>مهمة مجدولة</value></data>
+  <data name="Scope_Machine" xml:space="preserve"><value>كل المستخدمين</value></data>
+  <data name="Scope_User" xml:space="preserve"><value>المستخدم الحالي</value></data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0} (يتطلب مسؤولًا)</value></data>
+
+  <data name="Ed_Ok" xml:space="preserve"><value>موافق</value></data>
+  <data name="Ed_Cancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="Ed_Title_Step" xml:space="preserve"><value>تعديل الخطوة</value></data>
+  <data name="Ed_Type" xml:space="preserve"><value>النوع</value></data>
+  <data name="Ed_Label" xml:space="preserve"><value>التسمية</value></data>
+  <data name="Ed_Target" xml:space="preserve"><value>الهدف</value></data>
+  <data name="Ed_Args" xml:space="preserve"><value>الوسائط</value></data>
+  <data name="Ed_WorkDir" xml:space="preserve"><value>مجلد العمل</value></data>
+  <data name="Ed_Elevated" xml:space="preserve"><value>التشغيل كمسؤول</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>يمكن أن يكون الهدف مسار exe كامل أو اسمًا أو رابطًا أو بروتوكولًا مثل ms-settings: أو مستندًا.</value></data>
+  <data name="Ed_Combo" xml:space="preserve"><value>اختصار</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>مثال: Win+D / Alt+K / Ctrl+Enter / F5. يُرسَل إلى النافذة النشطة؛ أحضر الهدف للأمام أولًا.</value></data>
+  <data name="Ed_Action" xml:space="preserve"><value>الإجراء</value></data>
+  <data name="Ed_Level" xml:space="preserve"><value>مستوى الصوت (0-100)</value></data>
+  <data name="Ed_Process" xml:space="preserve"><value>العملية</value></data>
+  <data name="Ed_SendKey" xml:space="preserve"><value>إرسال مفاتيح</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>انتظار النافذة (ث)</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>بعد الظهور (ث)</value></data>
+  <data name="Ed_WindowHint" xml:space="preserve"><value>اسم العملية دون .exe (مثل Weixin / msedge). الإحضار للأمام / إرسال المفاتيح يتطلب التركيز وقد لا يعمل عند البدء.</value></data>
+  <data name="Ed_Command" xml:space="preserve"><value>أمر</value></data>
+  <data name="Ed_Text" xml:space="preserve"><value>نص</value></data>
+  <data name="Ed_TextProcess" xml:space="preserve"><value>العملية الهدف</value></data>
+  <data name="Ed_TextHint" xml:space="preserve"><value>يكتب حرفًا حرفًا (سطر جديد = Enter). اترك العملية فارغة للإرسال إلى النافذة النشطة (الأكثر موثوقية).</value></data>
+  <data name="Ed_Message" xml:space="preserve"><value>رسالة</value></data>
+  <data name="Ed_Speak" xml:space="preserve"><value>قراءة صوتية</value></data>
+  <data name="Ed_Confirm" xml:space="preserve"><value>تأكيد نعم/لا (نعم = متابعة، لا = إلغاء المجموعة)</value></data>
+  <data name="Ed_OnYes" xml:space="preserve"><value>بعد «نعم»</value></data>
+  <data name="Ed_Group" xml:space="preserve"><value>مجموعة إجراءات</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>تأخير بعده (مث)</value></data>
+  <data name="Ed_Repeat" xml:space="preserve"><value>عدد التكرارات</value></data>
+  <data name="Ed_Note" xml:space="preserve"><value>ملاحظة</value></data>
+  <data name="Ed_DaysHeader" xml:space="preserve"><value>التشغيل في هذه الأيام فقط (لا شيء = يوميًا)</value></data>
+  <data name="Ed_OnlyBefore" xml:space="preserve"><value>فقط قبل</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_Vol_Set" xml:space="preserve"><value>تعيين الصوت</value></data>
+  <data name="Ed_OnYes_None" xml:space="preserve"><value>لا شيء</value></data>
+  <data name="Ed_OnYes_Run" xml:space="preserve"><value>تشغيل / فتح ملف</value></data>
+  <data name="Ed_OnYes_Url" xml:space="preserve"><value>فتح رابط</value></data>
+  <data name="Ed_Group_None" xml:space="preserve"><value>(لا شيء)</value></data>
+
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>فشل إرسال المفاتيح إلى «{0}»: لم تظهر النافذة أو تعذّر إحضارها للأمام (شائع عند البدء/في الخلفية)</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>لم يُعثر على نافذة لـ «{0}» (العملية غير مشغّلة أو غير جاهزة؟)؛ {1} بلا أثر</value></data>
+  <data name="Warn_UnknownVolume" xml:space="preserve"><value>إجراء صوت غير معروف: {0}</value></data>
+  <data name="Warn_UnknownKind" xml:space="preserve"><value>نوع خطوة غير معروف: {0}</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>تم تخطي «{0}»: الهدف هو Clockwork نفسه (لتجنّب حلقة بدء تلقائي)</value></data>
+  <data name="Warn_LaunchFail" xml:space="preserve"><value>فشل التشغيل: {0} — {1}</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>انتهى «{0}» خلال 0.5 ث (الرمز {1})؛ فشل تشغيل محتمل</value></data>
+  <data name="Mark_Unverified" xml:space="preserve"><value>~ أُرسل (غير مؤكد)</value></data>
+  <data name="Mark_Exception" xml:space="preserve"><value>خطأ: {0}</value></data>
+
+  <data name="Note_Policy" xml:space="preserve"><value>سياسة</value></data>
+  <data name="Note_OneTime" xml:space="preserve"><value>مرة واحدة</value></data>
+  <data name="Note_System" xml:space="preserve"><value>حرج للنظام</value></data>
+  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
+
+  <data name="Ed_Title_Group" xml:space="preserve"><value>تعديل مجموعة الإجراءات</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>المجموعة تُعرّف الإجراءات فقط؛ شغّلها من قائمة البدء أو التذكيرات.</value></data>
+  <data name="Val_GroupName" xml:space="preserve"><value>يرجى إدخال اسم المجموعة.</value></data>
+
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>تعديل التذكير</value></data>
+  <data name="Ed_Trigger" xml:space="preserve"><value>المشغّل</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>مجدول (في وقت محدد)</value></data>
+  <data name="Ed_Trig_Startup" xml:space="preserve"><value>عند تسجيل الدخول</value></data>
+  <data name="Ed_Time" xml:space="preserve"><value>الوقت (HH:mm)</value></data>
+  <data name="Ed_LoginTiming" xml:space="preserve"><value>شرط تسجيل الدخول</value></data>
+  <data name="Ed_SMode_Any" xml:space="preserve"><value>دائمًا</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>فقط قبل N:00</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>فقط بعد N:00</value></data>
+  <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_OnlyBoot" xml:space="preserve"><value>فقط خلال</value></data>
+  <data name="Ed_WithinHint" xml:space="preserve"><value>دقيقة بعد الإقلاع يُعدّ تسجيل دخول (0 = عند كل فتح)</value></data>
+  <data name="Ed_Period" xml:space="preserve"><value>الدورة</value></data>
+  <data name="Ed_Rec_Daily" xml:space="preserve"><value>حسب يوم الأسبوع</value></data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>كل N أيام</value></data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>شهريًا</value></data>
+  <data name="Ed_EveryNDays" xml:space="preserve"><value>كل</value></data>
+  <data name="Ed_AnchorDays" xml:space="preserve"><value>أيام؛ ابتداءً من</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd؛ فارغ = اليوم)</value></data>
+  <data name="Ed_MonthlyDay" xml:space="preserve"><value>يوم الشهر</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>مجموعة صامتة</value></data>
+  <data name="Ed_SilentHint" xml:space="preserve"><value>إذا حُدِّدت، تُشغَّل المجموعة بصمت في الوقت (تجاهل النص / الصوت / بعد «نعم»)</value></data>
+  <data name="Ed_OnYes_Group" xml:space="preserve"><value>تشغيل مجموعة إجراءات</value></data>
+  <data name="Ed_AutoDismiss" xml:space="preserve"><value>إغلاق تلقائي (ث)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>يُغلق تلقائيًا دون نقر (0 = أبدًا؛ التذكير المتكرر: 60 افتراضيًا)</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>تذكير متكرر</value></data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>دقيقة (0 = بلا تكرار)، حتى</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = بلا حد)</value></data>
+  <data name="Ed_TrigDelay" xml:space="preserve"><value>تأخير بعد التشغيل</value></data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>ث، بالإضافة إلى عشوائي 0~</value></data>
+  <data name="Ed_Sec" xml:space="preserve"><value>ث</value></data>
+  <data name="Ed_Grace" xml:space="preserve"><value>سماح (دقيقة)</value></data>
+  <data name="Ed_GraceHint" xml:space="preserve"><value>يظل يُشغَّل إذا فات الوقت خلال</value></data>
+  <data name="Val_TimeFormat" xml:space="preserve"><value>يجب أن يكون الوقت بصيغة HH:mm</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>«التكرار حتى» يجب أن يكون HH:mm (أو فارغًا)</value></data>
+  <data name="Val_Anchor" xml:space="preserve"><value>يجب أن يكون تاريخ البدء yyyy-MM-dd (أو فارغًا)</value></data>
+
+  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · تأكيد</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>هل أنت متأكد من تنفيذ «{0}»؟</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · خطأ</value></data>
+  <data name="Crash_Body" xml:space="preserve"><value>واجه Clockwork خطأً (مُسجَّل؛ عادةً يمكن المتابعة):
+
+{0}
+
+السجل: {1}</value></data>
+  <data name="Run_Title" xml:space="preserve"><value>Clockwork · تشغيل</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>تذكير Clockwork</value></data>
+  <data name="Tray_LaunchStopped" xml:space="preserve"><value>أُوقفت قائمة البدء: نُفّذت {0} خطوة، وتُخطّي الباقي</value></data>
+  <data name="Tray_LaunchWarn" xml:space="preserve"><value>اكتملت قائمة البدء: {0} خطوة، {1} بها تحذيرات (العلبة → آخر سجل)</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>مفتاح الإيقاف «{0}» غير معروف؛ غيّره في النافذة الرئيسية. «إيقاف» من العلبة لا يزال متاحًا.</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>تعذّر تسجيل مفتاح الإيقاف «{0}» (قد يكون مستخدمًا)؛ «إيقاف» من العلبة لا يزال متاحًا.</value></data>
+  <data name="Hotkey_Stopped" xml:space="preserve"><value>تم طلب إيقاف الإجراءات الجارية.</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>يتطلب تبديل «{0}» صلاحيات المسؤول؛ أعد فتح Clockwork كمسؤول.</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>فشل تبديل «{0}»: {1}</value></data>
+  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>يتطلب تسجيل/إزالة البدء التلقائي صلاحيات المسؤول؛ أعد فتح Clockwork كمسؤول.</value></data>
+  <data name="Autostart_Fail" xml:space="preserve"><value>فشلت العملية: {0}</value></data>
+  <data name="Tab_Settings" xml:space="preserve"><value>الإعدادات</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>عام</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>حول</value></data>
+  <data name="About_CheckUpdate" xml:space="preserve"><value>التحقق من التحديثات</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>جارٍ التحقق…</value></data>
+  <data name="Update_Latest" xml:space="preserve"><value>أنت على أحدث إصدار ({0})</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>يتوفر إصدار جديد {0}. الانتقال إلى التنزيل؟</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>فشل التحقق من التحديثات: {0}</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>انقر ثم اضغط الاختصار. Esc للإلغاء، Del للمسح. «إيقاف» في علبة النظام يعمل دائمًا.</value></data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>اضغط اختصارًا…</value></data>
+  <data name="Sys_Takeover" xml:space="preserve"><value>نقل إلى قائمة البدء</value></data>
+  <data name="Ed_CatchUp" xml:space="preserve"><value>التعويض إذا فات (بعد السكون/الإيقاف)</value></data>
+  <data name="Unit_Minutes" xml:space="preserve"><value>{0} دقيقة</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>الاختصار "{0}" لا يحتوي على مفتاح رئيسي؛ لم يُرسَل</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>اسم مفتاح غير معروف "{0}" (الأرقام متعددة الخانات ليست مفاتيح)؛ الاختصار "{1}" لم يُرسَل</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>مفتاح غير معروف "{0}"؛ الاختصار "{1}" لم يُرسَل</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>رُفض الاختصار "{0}" من قبل النظام (يحدث عند وجود نافذة مرتفعة الصلاحيات/سطح مكتب آمن في المقدمة)؛ بلا تأثير</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>تم حقن الاختصار "{0}" جزئيًا فقط ({1}/{2})؛ أُعيد إرسال تحرير المفاتيح، بلا تأثير</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>إرسال نص: تعذّر إحضار نافذة "{0}" إلى المقدمة؛ لم يُرسَل</value></data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>فشل حفظ الإعدادات: {0} (التغييرات في الذاكرة فقط وستُفقد عند إعادة التشغيل)</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>مجموعة الإجراءات التي يشير إليها التذكير "{0}" لم تعد موجودة؛ لم يُنفَّذ شيء هذه المرة</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات التي يشير إليها التذكير "{0}" معطّلة؛ لم يُنفَّذ شيء هذه المرة</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" لم تعد موجودة؛ تم التخطي</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" معطّلة؛ تم التخطي</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>المهام المجدولة لا تدعم الاستيلاء بعد؛ يُدعم فقط مفاتيح Run في السجل وعناصر مجلد بدء التشغيل</value></data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>توقف تشغيل قائمة البدء: {0}</value></data>
+  <data name="Tray_ViewLog" xml:space="preserve"><value>عرض سجل بدء التشغيل الأخير</value></data>
+  <data name="Tray_NoLog" xml:space="preserve"><value>لا يوجد سجل بدء تشغيل بعد (شغّل قائمة البدء مرة أولاً)</value></data>
+  <data name="Err_ClearClipboard" xml:space="preserve"><value>فشل مسح الحافظة: {0}</value></data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>فشل إفراغ سلة المحذوفات: {0}</value></data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>أمر نظام غير معروف: {0}</value></data>
+  <data name="Tray_RunGroup" xml:space="preserve"><value>تشغيل: {0}</value></data>
+  <data name="Tray_DndHours" xml:space="preserve"><value>إيقاف التذكيرات مؤقتًا {0} ساعة</value></data>
+  <data name="Tray_DndResume" xml:space="preserve"><value>استئناف التذكيرات (متبقٍ {0} دقيقة)</value></data>
+  <data name="Toast_DndOn" xml:space="preserve"><value>أُوقفت التذكيرات مؤقتًا {0} ساعة</value></data>
+  <data name="Toast_DndOff" xml:space="preserve"><value>استُؤنفت التذكيرات</value></data>
+  <data name="Menu_BlankGroup" xml:space="preserve"><value>مجموعة فارغة</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>تركيز · بدء العمل</value></data>
+  <data name="Tpl_Meeting" xml:space="preserve"><value>وضع الاجتماع</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>إنهاء اليوم</value></data>
+  <data name="Tpl_Bedtime" xml:space="preserve"><value>قبل النوم</value></data>
+  <data name="Tpl_Away" xml:space="preserve"><value>مغادرة قصيرة</value></data>
+  <data name="Tpl_Screenshot" xml:space="preserve"><value>لقطة شاشة وتعليق</value></data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>هل سجّلت كل مهام اليوم؟</value></data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>حان وقت النوم!</value></data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>يتطلب هذا الإجراء صلاحيات المسؤول. هل تريد إعادة فتح Clockwork كمسؤول؟</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>مجموعة الإجراءات "{0}" مُشار إليها من {1} تذكير و{2} خطوة. حذفها سيمسح هذه الإشارات أيضًا (تصبح التذكيرات نوافذ منبثقة فقط؛ وتُزال الخطوات المشيرة إليها). أتريد الحذف رغم ذلك؟</value></data>
+  <data name="Btn_Browse" xml:space="preserve"><value>استعراض…</value></data>
+  <data name="Btn_Pick" xml:space="preserve"><value>اختيار…</value></data>
+  <data name="Btn_Capture" xml:space="preserve"><value>التقاط</value></data>
+  <data name="Btn_PickDate" xml:space="preserve"><value>اختيار التاريخ</value></data>
+  <data name="Filter_Browse" xml:space="preserve"><value>برامج / نصوص برمجية / اختصارات|*.exe;*.bat;*.cmd;*.ps1;*.lnk|كل الملفات|*.*</value></data>
+  <data name="Ed_WindowStyle" xml:space="preserve"><value>نمط النافذة</value></data>
+  <data name="WinStyle_Default" xml:space="preserve"><value>افتراضي (نافذة عادية)</value></data>
+  <data name="WinStyle_Minimized" xml:space="preserve"><value>بدء مصغّرًا</value></data>
+  <data name="WinStyle_Maximized" xml:space="preserve"><value>بدء مكبّرًا</value></data>
+  <data name="WinStyle_Hidden" xml:space="preserve"><value>بدء مخفيًا</value></data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>تنشيط النافذة إذا كانت قيد التشغيل (بدون إعادة تشغيل)</value></data>
+  <data name="Ed_ActivateProcess" xml:space="preserve"><value>العملية المراد تنشيطها</value></data>
+  <data name="Ed_AltTargets" xml:space="preserve"><value>مسارات بديلة</value></data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>مسار كامل واحد في كل سطر؛ إذا لم يوجد الهدف يُستخدم أول مسار موجود (للأجهزة ذات مسارات مختلفة)</value></data>
+  <data name="Picker_Process" xml:space="preserve"><value>اختيار عملية</value></data>
+  <data name="Picker_Search" xml:space="preserve"><value>بحث باسم العملية / عنوان النافذة</value></data>
+  <data name="Date_Pick" xml:space="preserve"><value>اختيار تاريخ</value></data>
+  <data name="Capture_Key" xml:space="preserve"><value>التقاط مفتاح</value></data>
+</root>

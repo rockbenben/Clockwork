@@ -1,0 +1,46 @@
+<Window x:Class="Clockwork.Views.GroupEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:Clockwork.I18n"
+        Title="{loc:Loc Ed_Title_Group}" Width="700" Height="560" WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BrushInk}"
+        ShowInTaskbar="False" MinWidth="560" MinHeight="420">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
+            <TextBlock Text="{loc:Loc Col_Name}" VerticalAlignment="Center" Width="52"/>
+            <TextBox x:Name="NameBox" Width="420" Height="28"/>
+        </StackPanel>
+        <TextBlock Grid.Row="1" Text="{loc:Loc Ed_GroupHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" Margin="52,0,0,10"/>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="110"/></Grid.ColumnDefinitions>
+            <DataGrid x:Name="Steps" Grid.Column="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                      HeadersVisibility="Column" SelectionMode="Single" GridLinesVisibility="Horizontal" MouseDoubleClick="SEdit_Click">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{loc:Loc Col_Kind}" Binding="{Binding KindLabel}" Width="90" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="{loc:Loc Col_Delay}" Binding="{Binding DelayText}" Width="70" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <Button x:Name="SAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}" Margin="0,0,0,8" Click="SAdd_Click"/>
+                <Button Content="{loc:Loc Btn_Edit}" Margin="0,0,0,8" Click="SEdit_Click"/>
+                <Button Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,0,0,8" Click="SDel_Click"/>
+                <Button Content="{loc:Loc Btn_Up}" Margin="0,14,0,8" Padding="8,5" Click="SUp_Click"/>
+                <Button Content="{loc:Loc Btn_Down}" Padding="8,5" Click="SDown_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource PrimaryButton}" MinWidth="80" Height="32" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
+            <Button Content="{loc:Loc Ed_Cancel}" MinWidth="70" Height="32" Click="Cancel_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

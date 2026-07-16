@@ -1,0 +1,32 @@
+<Window x:Class="Clockwork.Views.NotificationToast"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="Manual" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ShowInTaskbar="False" ShowActivated="False" Topmost="True" ResizeMode="NoResize"
+        SizeToContent="Height" Width="356" Cursor="Hand">
+    <!-- 品牌化非模态通知卡片：擒纵蓝钢面板 + 左侧强调轨(黄铜=信息 / clay=警示) + 品牌标记 + 眉标 + 正文。
+         屏幕右下角堆叠、自动消失、不抢焦点，替代原来的系统托盘气泡，与提醒弹窗视觉一致。 -->
+    <Border Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}" BorderThickness="1"
+            CornerRadius="10" Margin="12" ClipToBounds="True">
+        <Border.Effect>
+            <DropShadowEffect Color="#0A0D12" BlurRadius="20" ShadowDepth="4" Direction="270" Opacity="0.55"/>
+        </Border.Effect>
+        <Grid>
+            <Border x:Name="Rail" Width="3" Background="{StaticResource BrushBrass}" HorizontalAlignment="Left"/>
+            <Grid Margin="21,14,16,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="/logo-256.png" Width="26" Height="26" VerticalAlignment="Top"
+                       RenderOptions.BitmapScalingMode="HighQuality" Margin="0,1,13,0"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock x:Name="TitleText" FontFamily="{StaticResource FontMono}" FontSize="11.5"
+                               Foreground="{StaticResource BrushBrass}"/>
+                    <TextBlock x:Name="MsgText" FontSize="14" Foreground="{StaticResource BrushPaper}"
+                               TextWrapping="Wrap" LineHeight="20" LineStackingStrategy="BlockLineHeight" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

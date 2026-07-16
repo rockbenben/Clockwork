@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="App_Subtitle" xml:space="preserve"><value>เริ่มต้นระบบ · การเตือน · การทำงานแบบแตะเดียว</value></data>
+  <data name="Tab_Launch" xml:space="preserve"><value>รายการเริ่มต้น</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>การเตือน</value></data>
+  <data name="Tab_Group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
+  <data name="Tab_System" xml:space="preserve"><value>การเริ่มต้นของระบบ</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>ทำงานจากบนลงล่างเมื่อเริ่มต้น · แต่ละขั้นรองรับการหน่วงหลังจากนั้น จำนวนรอบ และเงื่อนไข (วันในสัปดาห์ / ก่อน N นาฬิกา)</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>การเตือนตามเวลา · อ่านออกเสียงได้ · เมื่อ «ใช่» เรียกโปรแกรม / เปิดไฟล์ / URL / กลุ่ม</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่มแล้วสั่งด้วยแตะเดียวจากถาด / รายการเริ่มต้น / การเตือน</value></data>
+  <data name="System_Hint" xml:space="preserve"><value>รายการเริ่มต้นอัตโนมัติทั้งหมดของเครื่อง — ปิดสิ่งที่ไม่ต้องการด้วยแตะเดียว ปิดใช้งานเท่านั้น ไม่ลบ ย้อนกลับได้ทุกเมื่อ</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>ติ๊ก/เอาออกมีผลทันที (ปิดใช้งาน ไม่ใช่ลบ ย้อนกลับได้) รายการ «ต้องใช้แอดมิน» ต้องการสิทธิ์ผู้ดูแล รายการระบบ / นโยบาย / ครั้งเดียวแบบอ่านอย่างเดียวถูกซ่อนโดยค่าเริ่มต้น</value></data>
+  <data name="System_Filter" xml:space="preserve"><value>ตัวกรอง</value></data>
+  <data name="System_ShowReadOnly" xml:space="preserve"><value>แสดงรายการระบบ / อ่านอย่างเดียว</value></data>
+  <data name="System_Scanning" xml:space="preserve"><value>กำลังสแกนรายการเริ่มต้น…</value></data>
+  <data name="System_Refresh" xml:space="preserve"><value>รีเฟรช</value></data>
+
+  <data name="Col_Enabled" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Col_Kind" xml:space="preserve"><value>ชนิด</value></data>
+  <data name="Col_Summary" xml:space="preserve"><value>สรุป</value></data>
+  <data name="Col_Delay" xml:space="preserve"><value>หน่วง</value></data>
+  <data name="Col_Time" xml:space="preserve"><value>เวลา</value></data>
+  <data name="Col_Period" xml:space="preserve"><value>รอบ</value></data>
+  <data name="Col_Text" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="Col_Speak" xml:space="preserve"><value>เสียง</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Col_Steps" xml:space="preserve"><value>ขั้น</value></data>
+  <data name="Col_Command" xml:space="preserve"><value>คำสั่ง</value></data>
+  <data name="Col_Source" xml:space="preserve"><value>แหล่ง</value></data>
+  <data name="Col_Scope" xml:space="preserve"><value>ขอบเขต</value></data>
+
+  <data name="Btn_Add" xml:space="preserve"><value>เพิ่ม</value></data>
+  <data name="Btn_AddMenu" xml:space="preserve"><value>เพิ่ม ▾</value></data>
+  <data name="Btn_Edit" xml:space="preserve"><value>แก้ไข</value></data>
+  <data name="Btn_Delete" xml:space="preserve"><value>ลบ</value></data>
+  <data name="Btn_Up" xml:space="preserve"><value>↑ ขึ้น</value></data>
+  <data name="Btn_Down" xml:space="preserve"><value>↓ ลง</value></data>
+  <data name="Btn_RunStep" xml:space="preserve"><value>▶ รันขั้นนี้</value></data>
+  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ รันทั้งกลุ่ม</value></data>
+  <data name="Btn_Preview" xml:space="preserve"><value>▶ ตัวอย่าง</value></data>
+
+  <data name="Settings_StartupDelay" xml:space="preserve"><value>หน่วงเริ่มต้น (วิ)</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>เริ่มแบบย่อลงถาด</value></data>
+  <data name="Settings_StopHotkey" xml:space="preserve"><value>ปุ่มหยุด</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>ภาษา</value></data>
+  <data name="Settings_HotkeyTip" xml:space="preserve"><value>มีผลเมื่อเริ่มครั้งถัดไป; ว่าง = ปิด «หยุด» จากเมนูถาดใช้ได้เสมอ</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>ภาษาจะมีผลเมื่อเริ่ม Clockwork ครั้งถัดไป</value></data>
+
+  <data name="Autostart_Checking" xml:space="preserve"><value>เริ่มอัตโนมัติ: กำลังตรวจสอบ…</value></data>
+  <data name="Autostart_On" xml:space="preserve"><value>เริ่มอัตโนมัติ: เปิด (คลิกเพื่อปิด)</value></data>
+  <data name="Autostart_Off" xml:space="preserve"><value>เริ่มอัตโนมัติ: ปิด (คลิกเพื่อเปิด)</value></data>
+
+  <data name="Tray_Show" xml:space="preserve"><value>แสดงหน้าต่าง</value></data>
+  <data name="Tray_Rerun" xml:space="preserve"><value>รันรายการเริ่มต้นอีกครั้ง</value></data>
+  <data name="Tray_Stop" xml:space="preserve"><value>หยุดการทำงานที่กำลังรัน</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>ออก</value></data>
+
+  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>ใช่</value></data>
+  <data name="Reminder_Popup_No" xml:space="preserve"><value>ไม่</value></data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>ตกลง</value></data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>เลื่อน 10 นาที</value></data>
+
+  <data name="Kind_app" xml:space="preserve"><value>เปิดแอป</value></data>
+  <data name="Kind_keys" xml:space="preserve"><value>ส่งปุ่ม</value></data>
+  <data name="Kind_volume" xml:space="preserve"><value>ระดับเสียง</value></data>
+  <data name="Kind_window" xml:space="preserve"><value>การกระทำหน้าต่าง</value></data>
+  <data name="Kind_system" xml:space="preserve"><value>คำสั่งระบบ</value></data>
+  <data name="Kind_group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
+  <data name="Kind_message" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="Kind_delay" xml:space="preserve"><value>หน่วงเวลา</value></data>
+  <data name="Kind_text" xml:space="preserve"><value>ส่งข้อความ</value></data>
+
+  <data name="Sys_showDesktop" xml:space="preserve"><value>แสดงเดสก์ท็อป</value></data>
+  <data name="Sys_lockScreen" xml:space="preserve"><value>ล็อกหน้าจอ (ใส่รหัสเมื่อกลับมา)</value></data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>ล้างถังรีไซเคิล</value></data>
+  <data name="Sys_openSettings" xml:space="preserve"><value>เปิดการตั้งค่า Windows</value></data>
+  <data name="Sys_screenshot" xml:space="preserve"><value>ภาพหน้าจอ (เลือกพื้นที่)</value></data>
+  <data name="Sys_clearClipboard" xml:space="preserve"><value>ล้างคลิปบอร์ด</value></data>
+  <data name="Sys_taskManager" xml:space="preserve"><value>เปิดตัวจัดการงาน</value></data>
+  <data name="Sys_monitorOff" xml:space="preserve"><value>ปิดหน้าจอ (ขยับเมาส์เพื่อปลุก)</value></data>
+  <data name="Sys_sleep" xml:space="preserve"><value>สลีป (ประหยัดพลังงาน ตื่นเร็ว)</value></data>
+  <data name="Sys_hibernate" xml:space="preserve"><value>ไฮเบอร์เนต (บันทึกแล้วปิด)</value></data>
+  <data name="Sys_signOut" xml:space="preserve"><value>ออกจากระบบ (ยืนยัน)</value></data>
+  <data name="Sys_restart" xml:space="preserve"><value>รีสตาร์ต (ยืนยัน)</value></data>
+  <data name="Sys_shutdown" xml:space="preserve"><value>ปิดเครื่อง (ยืนยัน)</value></data>
+
+  <data name="Vol_mute" xml:space="preserve"><value>ปิดเสียง</value></data>
+  <data name="Vol_unmute" xml:space="preserve"><value>เปิดเสียง</value></data>
+  <data name="Vol_set" xml:space="preserve"><value>ระดับเสียง {0}%</value></data>
+  <data name="Win_close" xml:space="preserve"><value>ปิดหน้าต่าง</value></data>
+  <data name="Win_minimize" xml:space="preserve"><value>ย่อ</value></data>
+  <data name="Win_maximize" xml:space="preserve"><value>ขยาย</value></data>
+  <data name="Win_activate" xml:space="preserve"><value>นำไปด้านหน้า</value></data>
+  <data name="Win_sendkey" xml:space="preserve"><value>นำไปด้านหน้าแล้วส่งปุ่ม</value></data>
+
+  <data name="Sum_SendKeys" xml:space="preserve"><value>ส่ง {0}</value></data>
+  <data name="Sum_Delay_Sec" xml:space="preserve"><value>หน่วง {0}วิ</value></data>
+  <data name="Sum_Delay_Ms" xml:space="preserve"><value>หน่วง {0}มิลลิวิ</value></data>
+  <data name="Sum_RunGroup" xml:space="preserve"><value>รันกลุ่ม: {0}</value></data>
+  <data name="Sum_Group_None" xml:space="preserve"><value>(ไม่ได้ระบุ)</value></data>
+  <data name="Sum_Text" xml:space="preserve"><value>พิมพ์ {0}</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (เฉพาะก่อน {0}:00)</value></data>
+  <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
+
+  <data name="Days_EveryDay" xml:space="preserve"><value>ทุกวัน</value></data>
+  <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Day_1" xml:space="preserve"><value>จ</value></data>
+  <data name="Day_2" xml:space="preserve"><value>อ</value></data>
+  <data name="Day_3" xml:space="preserve"><value>พ</value></data>
+  <data name="Day_4" xml:space="preserve"><value>พฤ</value></data>
+  <data name="Day_5" xml:space="preserve"><value>ศ</value></data>
+  <data name="Day_6" xml:space="preserve"><value>ส</value></data>
+  <data name="Day_7" xml:space="preserve"><value>อา</value></data>
+
+  <data name="Period_EveryNDays" xml:space="preserve"><value>ทุก {0} วัน</value></data>
+  <data name="Period_Monthly" xml:space="preserve"><value>วันที่ {0} ของทุกเดือน</value></data>
+  <data name="Time_Startup" xml:space="preserve"><value>เมื่อเข้าสู่ระบบ</value></data>
+  <data name="Time_Startup_Before" xml:space="preserve"><value>เมื่อเข้าสู่ระบบ · ก่อน {0}:00</value></data>
+  <data name="Time_Startup_After" xml:space="preserve"><value>เมื่อเข้าสู่ระบบ · หลัง {0}:00</value></data>
+
+  <data name="Type_Registry" xml:space="preserve"><value>รีจิสทรี</value></data>
+  <data name="Type_StartupFolder" xml:space="preserve"><value>โฟลเดอร์เริ่มต้น</value></data>
+  <data name="Type_ScheduledTask" xml:space="preserve"><value>งานที่ตั้งเวลา</value></data>
+  <data name="Scope_Machine" xml:space="preserve"><value>ผู้ใช้ทั้งหมด</value></data>
+  <data name="Scope_User" xml:space="preserve"><value>ผู้ใช้ปัจจุบัน</value></data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0} (ต้องใช้แอดมิน)</value></data>
+
+  <data name="Ed_Ok" xml:space="preserve"><value>ตกลง</value></data>
+  <data name="Ed_Cancel" xml:space="preserve"><value>ยกเลิก</value></data>
+  <data name="Ed_Title_Step" xml:space="preserve"><value>แก้ไขขั้น</value></data>
+  <data name="Ed_Type" xml:space="preserve"><value>ชนิด</value></data>
+  <data name="Ed_Label" xml:space="preserve"><value>ป้ายกำกับ</value></data>
+  <data name="Ed_Target" xml:space="preserve"><value>เป้าหมาย</value></data>
+  <data name="Ed_Args" xml:space="preserve"><value>อาร์กิวเมนต์</value></data>
+  <data name="Ed_WorkDir" xml:space="preserve"><value>โฟลเดอร์ทำงาน</value></data>
+  <data name="Ed_Elevated" xml:space="preserve"><value>เรียกใช้ในฐานะผู้ดูแล</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>เป้าหมายเป็นพาธ exe เต็ม ชื่อ URL โปรโตคอลอย่าง ms-settings: หรือเอกสารก็ได้</value></data>
+  <data name="Ed_Combo" xml:space="preserve"><value>ทางลัด</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน</value></data>
+  <data name="Ed_Action" xml:space="preserve"><value>การกระทำ</value></data>
+  <data name="Ed_Level" xml:space="preserve"><value>ระดับเสียง (0-100)</value></data>
+  <data name="Ed_Process" xml:space="preserve"><value>โปรเซส</value></data>
+  <data name="Ed_SendKey" xml:space="preserve"><value>ส่งปุ่ม</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>รอหน้าต่าง (วิ)</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>หลังปรากฏ (วิ)</value></data>
+  <data name="Ed_WindowHint" xml:space="preserve"><value>ชื่อโปรเซสไม่มี .exe (เช่น Weixin / msedge) นำมาด้านหน้า / ส่งปุ่มต้องมีโฟกัส และอาจไม่ทำงานตอนเริ่มต้น</value></data>
+  <data name="Ed_Command" xml:space="preserve"><value>คำสั่ง</value></data>
+  <data name="Ed_Text" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="Ed_TextProcess" xml:space="preserve"><value>โปรเซสเป้าหมาย</value></data>
+  <data name="Ed_TextHint" xml:space="preserve"><value>พิมพ์ทีละอักขระ (ขึ้นบรรทัด = Enter) เว้นโปรเซสว่างเพื่อส่งไปยังหน้าต่างที่โฟกัส (เชื่อถือได้สุด)</value></data>
+  <data name="Ed_Message" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="Ed_Speak" xml:space="preserve"><value>อ่านออกเสียง</value></data>
+  <data name="Ed_Confirm" xml:space="preserve"><value>ยืนยัน ใช่/ไม่ (ใช่ = ทำต่อ, ไม่ = ยกเลิกกลุ่ม)</value></data>
+  <data name="Ed_OnYes" xml:space="preserve"><value>หลัง «ใช่»</value></data>
+  <data name="Ed_Group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>หน่วงหลังจากนั้น (ms)</value></data>
+  <data name="Ed_Repeat" xml:space="preserve"><value>จำนวนรอบ</value></data>
+  <data name="Ed_Note" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Ed_DaysHeader" xml:space="preserve"><value>รันเฉพาะวันเหล่านี้ (ไม่เลือก = ทุกวัน)</value></data>
+  <data name="Ed_OnlyBefore" xml:space="preserve"><value>เฉพาะก่อน</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_Vol_Set" xml:space="preserve"><value>ตั้งระดับเสียง</value></data>
+  <data name="Ed_OnYes_None" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="Ed_OnYes_Run" xml:space="preserve"><value>เรียกใช้ / เปิดไฟล์</value></data>
+  <data name="Ed_OnYes_Url" xml:space="preserve"><value>เปิด URL</value></data>
+  <data name="Ed_Group_None" xml:space="preserve"><value>(ไม่มี)</value></data>
+
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>ส่งปุ่มไปยัง «{0}» ไม่สำเร็จ: หน้าต่างไม่ปรากฏ หรือไม่สามารถนำมาด้านหน้าได้ (พบบ่อยตอนเริ่มต้น/เบื้องหลัง)</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>ไม่พบหน้าต่างของ «{0}» (โปรเซสไม่ทำงานหรือยังไม่พร้อม?); {1} ไม่มีผล</value></data>
+  <data name="Warn_UnknownVolume" xml:space="preserve"><value>การกระทำระดับเสียงไม่รู้จัก: {0}</value></data>
+  <data name="Warn_UnknownKind" xml:space="preserve"><value>ชนิดขั้นไม่รู้จัก: {0}</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>ข้าม «{0}»: เป้าหมายคือ Clockwork เอง (เลี่ยงลูปเริ่มต้นอัตโนมัติ)</value></data>
+  <data name="Warn_LaunchFail" xml:space="preserve"><value>เริ่มไม่สำเร็จ: {0} — {1}</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» ปิดภายใน 0.5 วิ (รหัส {1}); น่าจะเริ่มไม่สำเร็จ</value></data>
+  <data name="Mark_Unverified" xml:space="preserve"><value>~ ส่งแล้ว (ไม่ได้ยืนยัน)</value></data>
+  <data name="Mark_Exception" xml:space="preserve"><value>ข้อผิดพลาด: {0}</value></data>
+
+  <data name="Note_Policy" xml:space="preserve"><value>นโยบาย</value></data>
+  <data name="Note_OneTime" xml:space="preserve"><value>ครั้งเดียว</value></data>
+  <data name="Note_System" xml:space="preserve"><value>สำคัญต่อระบบ</value></data>
+  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
+
+  <data name="Ed_Title_Group" xml:space="preserve"><value>แก้ไขกลุ่มการทำงาน</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>กลุ่มกำหนดเฉพาะการทำงาน; สั่งได้จากรายการเริ่มต้นหรือการเตือน</value></data>
+  <data name="Val_GroupName" xml:space="preserve"><value>โปรดกรอกชื่อกลุ่ม</value></data>
+
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>แก้ไขการเตือน</value></data>
+  <data name="Ed_Trigger" xml:space="preserve"><value>ทริกเกอร์</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>ตามเวลา (ที่ชั่วโมงหนึ่ง)</value></data>
+  <data name="Ed_Trig_Startup" xml:space="preserve"><value>เมื่อเข้าสู่ระบบ</value></data>
+  <data name="Ed_Time" xml:space="preserve"><value>เวลา (HH:mm)</value></data>
+  <data name="Ed_LoginTiming" xml:space="preserve"><value>เงื่อนไขเข้าสู่ระบบ</value></data>
+  <data name="Ed_SMode_Any" xml:space="preserve"><value>เสมอ</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>เฉพาะก่อน N:00</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>เฉพาะหลัง N:00</value></data>
+  <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_OnlyBoot" xml:space="preserve"><value>เฉพาะภายใน</value></data>
+  <data name="Ed_WithinHint" xml:space="preserve"><value>นาทีหลังบูตจึงนับเป็นการเข้าสู่ระบบ (0 = ทุกครั้งที่เปิด)</value></data>
+  <data name="Ed_Period" xml:space="preserve"><value>รอบ</value></data>
+  <data name="Ed_Rec_Daily" xml:space="preserve"><value>ตามวันในสัปดาห์</value></data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>ทุก N วัน</value></data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>รายเดือน</value></data>
+  <data name="Ed_EveryNDays" xml:space="preserve"><value>ทุก</value></data>
+  <data name="Ed_AnchorDays" xml:space="preserve"><value>วัน; เริ่มนับจาก</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; ว่าง = วันนี้)</value></data>
+  <data name="Ed_MonthlyDay" xml:space="preserve"><value>วันที่ของเดือน</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>กลุ่มเงียบ</value></data>
+  <data name="Ed_SilentHint" xml:space="preserve"><value>ถ้าตั้ง จะรันกลุ่มแบบเงียบเมื่อถึงเวลา (ละเว้นข้อความ / เสียง / หลัง «ใช่»)</value></data>
+  <data name="Ed_OnYes_Group" xml:space="preserve"><value>รันกลุ่มการทำงาน</value></data>
+  <data name="Ed_AutoDismiss" xml:space="preserve"><value>ปิดอัตโนมัติ (วิ)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>ปิดเองถ้าไม่กด (0 = ไม่ปิด; การเตือนซ้ำ: ค่าเริ่มต้น 60)</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>เตือนซ้ำ</value></data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>นาทีต่อครั้ง (0 = ไม่ซ้ำ), จนถึง</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, ว่าง = ไม่จำกัด)</value></data>
+  <data name="Ed_TrigDelay" xml:space="preserve"><value>หน่วงหลังทริกเกอร์</value></data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>วิ, บวกสุ่ม 0~</value></data>
+  <data name="Ed_Sec" xml:space="preserve"><value>วิ</value></data>
+  <data name="Ed_Grace" xml:space="preserve"><value>ผ่อนผัน (นาที)</value></data>
+  <data name="Ed_GraceHint" xml:space="preserve"><value>ยังเตือนถ้าพลาดเวลาภายใน</value></data>
+  <data name="Val_TimeFormat" xml:space="preserve"><value>เวลาต้องอยู่ในรูปแบบ HH:mm</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>«ทำซ้ำจนถึง» ต้องเป็น HH:mm (หรือว่าง)</value></data>
+  <data name="Val_Anchor" xml:space="preserve"><value>วันเริ่มต้องเป็น yyyy-MM-dd (หรือว่าง)</value></data>
+
+  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · ยืนยัน</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>แน่ใจหรือไม่ว่าจะเรียกใช้ «{0}»?</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · ข้อผิดพลาด</value></data>
+  <data name="Crash_Body" xml:space="preserve"><value>Clockwork พบข้อผิดพลาด (บันทึกแล้ว; มักใช้งานต่อได้):
+
+{0}
+
+บันทึก: {1}</value></data>
+  <data name="Run_Title" xml:space="preserve"><value>Clockwork · เรียกใช้</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>การเตือน Clockwork</value></data>
+  <data name="Tray_LaunchStopped" xml:space="preserve"><value>หยุดรายการเริ่มต้นแล้ว: ทำ {0} ขั้น ที่เหลือข้าม</value></data>
+  <data name="Tray_LaunchWarn" xml:space="preserve"><value>รายการเริ่มต้นเสร็จ: {0} ขั้น, {1} มีคำเตือน (ถาด → ดูบันทึกล่าสุด)</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>ปุ่มหยุด «{0}» ไม่รู้จัก; เปลี่ยนในหน้าต่างหลัก «หยุด» ที่ถาดยังใช้ได้</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>ลงทะเบียนปุ่มหยุด «{0}» ไม่สำเร็จ (อาจถูกใช้อยู่); «หยุด» ที่ถาดยังใช้ได้</value></data>
+  <data name="Hotkey_Stopped" xml:space="preserve"><value>ขอให้หยุดการทำงานที่กำลังรันแล้ว</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» ต้องใช้สิทธิ์ผู้ดูแลเพื่อสลับ; เปิด Clockwork ในฐานะผู้ดูแลอีกครั้ง</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>สลับ «{0}» ไม่สำเร็จ: {1}</value></data>
+  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>การลงทะเบียน/ลบเริ่มอัตโนมัติต้องใช้สิทธิ์ผู้ดูแล; เปิด Clockwork ในฐานะผู้ดูแลอีกครั้ง</value></data>
+  <data name="Autostart_Fail" xml:space="preserve"><value>การดำเนินการล้มเหลว: {0}</value></data>
+  <data name="Tab_Settings" xml:space="preserve"><value>การตั้งค่า</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>ทั่วไป</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>เกี่ยวกับ</value></data>
+  <data name="About_CheckUpdate" xml:space="preserve"><value>ตรวจหาการอัปเดต</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>กำลังตรวจสอบ…</value></data>
+  <data name="Update_Latest" xml:space="preserve"><value>คุณใช้เวอร์ชันล่าสุดแล้ว ({0})</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>มีเวอร์ชันใหม่ {0} ไปที่หน้าดาวน์โหลดไหม?</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>ตรวจหาการอัปเดตล้มเหลว: {0}</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัด Esc เพื่อยกเลิก Del เพื่อล้าง เมนู «หยุด» ในถาดใช้ได้เสมอ</value></data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>กดปุ่มลัด…</value></data>
+  <data name="Sys_Takeover" xml:space="preserve"><value>นำเข้าสู่รายการเริ่มต้น</value></data>
+  <data name="Ed_CatchUp" xml:space="preserve"><value>แจ้งย้อนหลังถ้าพลาด (หลังสลีป/ปิดเครื่อง)</value></data>
+  <data name="Unit_Minutes" xml:space="preserve"><value>{0} นาที</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>คีย์ลัด "{0}" ไม่มีปุ่มหลัก จึงไม่ได้ส่ง</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>ชื่อปุ่มที่ไม่รู้จัก "{0}" (ตัวเลขหลายหลักไม่ใช่ปุ่ม) คีย์ลัด "{1}" ไม่ได้ส่ง</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>ปุ่มที่ไม่รู้จัก "{0}" คีย์ลัด "{1}" ไม่ได้ส่ง</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>คีย์ลัด "{0}" ถูกระบบปฏิเสธ (เกิดขึ้นเมื่อมีหน้าต่างสิทธิ์สูง/เดสก์ท็อปนิรภัยอยู่ด้านหน้า) ไม่มีผล</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>คีย์ลัด "{0}" ถูกส่งเพียงบางส่วน ({1}/{2}) ส่งการปล่อยปุ่มซ้ำแล้ว ไม่มีผล</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>ส่งข้อความ: ไม่สามารถนำหน้าต่าง "{0}" มาไว้ด้านหน้าได้ จึงไม่ได้ส่ง</value></data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>บันทึกการตั้งค่าไม่สำเร็จ: {0} (การเปลี่ยนแปลงอยู่ในหน่วยความจำเท่านั้นและจะหายไปเมื่อรีสตาร์ท)</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน "{0}" อ้างอิงไม่มีอยู่แล้ว ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน "{0}" อ้างอิงถูกปิดใช้งาน ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ไม่มีอยู่แล้ว ข้ามไป</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ถูกปิดใช้งาน ข้ามไป</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>ยังไม่รองรับการรับช่วงงานตามกำหนดเวลา รองรับเฉพาะคีย์ Run ในรีจิสทรีและรายการในโฟลเดอร์เริ่มต้นเท่านั้น</value></data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>การรันรายการเริ่มต้นถูกขัดจังหวะ: {0}</value></data>
+  <data name="Tray_ViewLog" xml:space="preserve"><value>ดูบันทึกการเริ่มต้นครั้งล่าสุด</value></data>
+  <data name="Tray_NoLog" xml:space="preserve"><value>ยังไม่มีบันทึกการเริ่มต้น (รันรายการเริ่มต้นหนึ่งครั้งก่อน)</value></data>
+  <data name="Err_ClearClipboard" xml:space="preserve"><value>ล้างคลิปบอร์ดไม่สำเร็จ: {0}</value></data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>ล้างถังรีไซเคิลไม่สำเร็จ: {0}</value></data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>คำสั่งระบบที่ไม่รู้จัก: {0}</value></data>
+  <data name="Tray_RunGroup" xml:space="preserve"><value>รัน: {0}</value></data>
+  <data name="Tray_DndHours" xml:space="preserve"><value>หยุดการแจ้งเตือน {0} ชม.</value></data>
+  <data name="Tray_DndResume" xml:space="preserve"><value>กลับมาแจ้งเตือน (เหลือ {0} นาที)</value></data>
+  <data name="Toast_DndOn" xml:space="preserve"><value>หยุดการแจ้งเตือนแล้ว {0} ชม.</value></data>
+  <data name="Toast_DndOff" xml:space="preserve"><value>กลับมาแจ้งเตือนแล้ว</value></data>
+  <data name="Menu_BlankGroup" xml:space="preserve"><value>กลุ่มว่าง</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>โฟกัส · เริ่มทำงาน</value></data>
+  <data name="Tpl_Meeting" xml:space="preserve"><value>โหมดประชุม</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>เลิกงาน</value></data>
+  <data name="Tpl_Bedtime" xml:space="preserve"><value>ก่อนนอน</value></data>
+  <data name="Tpl_Away" xml:space="preserve"><value>ออกไปสักครู่</value></data>
+  <data name="Tpl_Screenshot" xml:space="preserve"><value>จับภาพหน้าจอและใส่คำอธิบาย</value></data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>บันทึกงานของวันนี้ครบหรือยัง?</value></data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>ได้เวลานอนแล้ว!</value></data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>การทำงานนี้ต้องใช้สิทธิ์ผู้ดูแลระบบ เปิด Clockwork ใหม่ในฐานะผู้ดูแลระบบหรือไม่?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>กลุ่มการทำงาน "{0}" ถูกอ้างอิงโดยการแจ้งเตือน {1} รายการและขั้นตอน {2} รายการ การลบจะล้างการอ้างอิงเหล่านี้ด้วย (การแจ้งเตือนจะเหลือแค่ป๊อปอัป ขั้นตอนที่อ้างอิงจะถูกลบ) ยังต้องการลบหรือไม่?</value></data>
+  <data name="Btn_Browse" xml:space="preserve"><value>เรียกดู…</value></data>
+  <data name="Btn_Pick" xml:space="preserve"><value>เลือก…</value></data>
+  <data name="Btn_Capture" xml:space="preserve"><value>จับปุ่ม</value></data>
+  <data name="Btn_PickDate" xml:space="preserve"><value>เลือกวันที่</value></data>
+  <data name="Filter_Browse" xml:space="preserve"><value>โปรแกรม / สคริปต์ / ทางลัด|*.exe;*.bat;*.cmd;*.ps1;*.lnk|ไฟล์ทั้งหมด|*.*</value></data>
+  <data name="Ed_WindowStyle" xml:space="preserve"><value>รูปแบบหน้าต่าง</value></data>
+  <data name="WinStyle_Default" xml:space="preserve"><value>ค่าเริ่มต้น (หน้าต่างปกติ)</value></data>
+  <data name="WinStyle_Minimized" xml:space="preserve"><value>เริ่มแบบย่อ</value></data>
+  <data name="WinStyle_Maximized" xml:space="preserve"><value>เริ่มแบบขยาย</value></data>
+  <data name="WinStyle_Hidden" xml:space="preserve"><value>เริ่มแบบซ่อน</value></data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>เปิดใช้งานหน้าต่างหากกำลังทำงานอยู่ (ไม่เปิดซ้ำ)</value></data>
+  <data name="Ed_ActivateProcess" xml:space="preserve"><value>โปรเซสที่จะเปิดใช้งาน</value></data>
+  <data name="Ed_AltTargets" xml:space="preserve"><value>เส้นทางสำรอง</value></data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>หนึ่งเส้นทางเต็มต่อบรรทัด หากเป้าหมายไม่มีอยู่จะใช้อันแรกที่มี (สำหรับเครื่องที่ติดตั้งต่างเส้นทาง)</value></data>
+  <data name="Picker_Process" xml:space="preserve"><value>เลือกโปรเซส</value></data>
+  <data name="Picker_Search" xml:space="preserve"><value>ค้นหาชื่อโปรเซส / ชื่อหน้าต่าง</value></data>
+  <data name="Date_Pick" xml:space="preserve"><value>เลือกวันที่</value></data>
+  <data name="Capture_Key" xml:space="preserve"><value>จับปุ่มกด</value></data>
+</root>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="App_Subtitle" xml:space="preserve"><value>Автозапуск · Напоминания · Действия в один клик</value></data>
+  <data name="Tab_Launch" xml:space="preserve"><value>Список запуска</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Напоминания</value></data>
+  <data name="Tab_Group" xml:space="preserve"><value>Группы действий</value></data>
+  <data name="Tab_System" xml:space="preserve"><value>Автозагрузка системы</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Выполняется сверху вниз при запуске · каждый шаг поддерживает задержку после, повторы и условия (день недели / до N часов)</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Напоминания по времени · озвучивание опционально · при «Да» запуск программы / открытие файла / URL / группы</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Объедините ряд действий в группу и запускайте одним кликом из трея / списка запуска / напоминаний</value></data>
+  <data name="System_Hint" xml:space="preserve"><value>Все элементы автозагрузки ПК — отключите ненужное одним кликом. Только отключение, без удаления; обратимо в любой момент.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>Установка/снятие флажка действует сразу (отключение, не удаление; обратимо). Элементы «нужен админ» требуют прав администратора. Системные / политики / однократные элементы только для чтения по умолчанию скрыты.</value></data>
+  <data name="System_Filter" xml:space="preserve"><value>Фильтр</value></data>
+  <data name="System_ShowReadOnly" xml:space="preserve"><value>Показать системные / только для чтения</value></data>
+  <data name="System_Scanning" xml:space="preserve"><value>Сканирование элементов автозагрузки…</value></data>
+  <data name="System_Refresh" xml:space="preserve"><value>Обновить</value></data>
+
+  <data name="Col_Enabled" xml:space="preserve"><value>Вкл.</value></data>
+  <data name="Col_Kind" xml:space="preserve"><value>Тип</value></data>
+  <data name="Col_Summary" xml:space="preserve"><value>Сводка</value></data>
+  <data name="Col_Delay" xml:space="preserve"><value>Задержка</value></data>
+  <data name="Col_Time" xml:space="preserve"><value>Время</value></data>
+  <data name="Col_Period" xml:space="preserve"><value>Период</value></data>
+  <data name="Col_Text" xml:space="preserve"><value>Текст</value></data>
+  <data name="Col_Speak" xml:space="preserve"><value>Голос</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>Имя</value></data>
+  <data name="Col_Steps" xml:space="preserve"><value>Шаги</value></data>
+  <data name="Col_Command" xml:space="preserve"><value>Команда</value></data>
+  <data name="Col_Source" xml:space="preserve"><value>Источник</value></data>
+  <data name="Col_Scope" xml:space="preserve"><value>Область</value></data>
+
+  <data name="Btn_Add" xml:space="preserve"><value>Добавить</value></data>
+  <data name="Btn_AddMenu" xml:space="preserve"><value>Добавить ▾</value></data>
+  <data name="Btn_Edit" xml:space="preserve"><value>Изменить</value></data>
+  <data name="Btn_Delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Btn_Up" xml:space="preserve"><value>↑ Вверх</value></data>
+  <data name="Btn_Down" xml:space="preserve"><value>↓ Вниз</value></data>
+  <data name="Btn_RunStep" xml:space="preserve"><value>▶ Выполнить этот шаг</value></data>
+  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Выполнить группу</value></data>
+  <data name="Btn_Preview" xml:space="preserve"><value>▶ Предпросмотр</value></data>
+
+  <data name="Settings_StartupDelay" xml:space="preserve"><value>Задержка запуска (с)</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>Запускать свёрнутым в трей</value></data>
+  <data name="Settings_StopHotkey" xml:space="preserve"><value>Клавиша остановки</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Язык</value></data>
+  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Действует при следующем запуске; пусто = отключено. «Остановить» в меню трея работает всегда.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Язык вступит в силу при следующем запуске Clockwork.</value></data>
+
+  <data name="Autostart_Checking" xml:space="preserve"><value>Автозапуск: проверка…</value></data>
+  <data name="Autostart_On" xml:space="preserve"><value>Автозапуск: ВКЛ (нажмите, чтобы выключить)</value></data>
+  <data name="Autostart_Off" xml:space="preserve"><value>Автозапуск: ВЫКЛ (нажмите, чтобы включить)</value></data>
+
+  <data name="Tray_Show" xml:space="preserve"><value>Показать окно</value></data>
+  <data name="Tray_Rerun" xml:space="preserve"><value>Повторить список запуска</value></data>
+  <data name="Tray_Stop" xml:space="preserve"><value>Остановить текущие действия</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>Выход</value></data>
+
+  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>Да</value></data>
+  <data name="Reminder_Popup_No" xml:space="preserve"><value>Нет</value></data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>ОК</value></data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>Отложить на 10 мин</value></data>
+
+  <data name="Kind_app" xml:space="preserve"><value>Запуск приложения</value></data>
+  <data name="Kind_keys" xml:space="preserve"><value>Отправка клавиш</value></data>
+  <data name="Kind_volume" xml:space="preserve"><value>Громкость</value></data>
+  <data name="Kind_window" xml:space="preserve"><value>Действие с окном</value></data>
+  <data name="Kind_system" xml:space="preserve"><value>Системная команда</value></data>
+  <data name="Kind_group" xml:space="preserve"><value>Группа действий</value></data>
+  <data name="Kind_message" xml:space="preserve"><value>Сообщение</value></data>
+  <data name="Kind_delay" xml:space="preserve"><value>Задержка</value></data>
+  <data name="Kind_text" xml:space="preserve"><value>Отправка текста</value></data>
+
+  <data name="Sys_showDesktop" xml:space="preserve"><value>Показать рабочий стол</value></data>
+  <data name="Sys_lockScreen" xml:space="preserve"><value>Заблокировать экран (пароль при возврате)</value></data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>Очистить корзину</value></data>
+  <data name="Sys_openSettings" xml:space="preserve"><value>Открыть параметры Windows</value></data>
+  <data name="Sys_screenshot" xml:space="preserve"><value>Снимок экрана (выбор области)</value></data>
+  <data name="Sys_clearClipboard" xml:space="preserve"><value>Очистить буфер обмена</value></data>
+  <data name="Sys_taskManager" xml:space="preserve"><value>Открыть диспетчер задач</value></data>
+  <data name="Sys_monitorOff" xml:space="preserve"><value>Выключить экран (движение мыши включит)</value></data>
+  <data name="Sys_sleep" xml:space="preserve"><value>Сон (низкое энергопотребление, быстрое пробуждение)</value></data>
+  <data name="Sys_hibernate" xml:space="preserve"><value>Гибернация (сохранить и выключить)</value></data>
+  <data name="Sys_signOut" xml:space="preserve"><value>Выйти из системы (подтверждение)</value></data>
+  <data name="Sys_restart" xml:space="preserve"><value>Перезагрузка (подтверждение)</value></data>
+  <data name="Sys_shutdown" xml:space="preserve"><value>Завершение работы (подтверждение)</value></data>
+
+  <data name="Vol_mute" xml:space="preserve"><value>Без звука</value></data>
+  <data name="Vol_unmute" xml:space="preserve"><value>Включить звук</value></data>
+  <data name="Vol_set" xml:space="preserve"><value>Громкость {0}%</value></data>
+  <data name="Win_close" xml:space="preserve"><value>Закрыть окно</value></data>
+  <data name="Win_minimize" xml:space="preserve"><value>Свернуть</value></data>
+  <data name="Win_maximize" xml:space="preserve"><value>Развернуть</value></data>
+  <data name="Win_activate" xml:space="preserve"><value>На передний план</value></data>
+  <data name="Win_sendkey" xml:space="preserve"><value>На передний план и отправить клавиши</value></data>
+
+  <data name="Sum_SendKeys" xml:space="preserve"><value>Отправить {0}</value></data>
+  <data name="Sum_Delay_Sec" xml:space="preserve"><value>Задержка {0}с</value></data>
+  <data name="Sum_Delay_Ms" xml:space="preserve"><value>Задержка {0}мс</value></data>
+  <data name="Sum_RunGroup" xml:space="preserve"><value>Выполнить группу: {0}</value></data>
+  <data name="Sum_Group_None" xml:space="preserve"><value>(не указано)</value></data>
+  <data name="Sum_Text" xml:space="preserve"><value>Ввод {0}</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (только до {0}:00)</value></data>
+  <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
+
+  <data name="Days_EveryDay" xml:space="preserve"><value>Ежедневно</value></data>
+  <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Day_1" xml:space="preserve"><value>Пн</value></data>
+  <data name="Day_2" xml:space="preserve"><value>Вт</value></data>
+  <data name="Day_3" xml:space="preserve"><value>Ср</value></data>
+  <data name="Day_4" xml:space="preserve"><value>Чт</value></data>
+  <data name="Day_5" xml:space="preserve"><value>Пт</value></data>
+  <data name="Day_6" xml:space="preserve"><value>Сб</value></data>
+  <data name="Day_7" xml:space="preserve"><value>Вс</value></data>
+
+  <data name="Period_EveryNDays" xml:space="preserve"><value>Каждые {0} дн.</value></data>
+  <data name="Period_Monthly" xml:space="preserve"><value>{0}-го числа каждого месяца</value></data>
+  <data name="Time_Startup" xml:space="preserve"><value>При входе</value></data>
+  <data name="Time_Startup_Before" xml:space="preserve"><value>При входе · до {0}:00</value></data>
+  <data name="Time_Startup_After" xml:space="preserve"><value>При входе · после {0}:00</value></data>
+
+  <data name="Type_Registry" xml:space="preserve"><value>Реестр</value></data>
+  <data name="Type_StartupFolder" xml:space="preserve"><value>Папка автозагрузки</value></data>
+  <data name="Type_ScheduledTask" xml:space="preserve"><value>Планировщик заданий</value></data>
+  <data name="Scope_Machine" xml:space="preserve"><value>Все пользователи</value></data>
+  <data name="Scope_User" xml:space="preserve"><value>Текущий пользователь</value></data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0} (нужен админ)</value></data>
+
+  <data name="Ed_Ok" xml:space="preserve"><value>ОК</value></data>
+  <data name="Ed_Cancel" xml:space="preserve"><value>Отмена</value></data>
+  <data name="Ed_Title_Step" xml:space="preserve"><value>Изменить шаг</value></data>
+  <data name="Ed_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Ed_Label" xml:space="preserve"><value>Метка</value></data>
+  <data name="Ed_Target" xml:space="preserve"><value>Цель</value></data>
+  <data name="Ed_Args" xml:space="preserve"><value>Аргументы</value></data>
+  <data name="Ed_WorkDir" xml:space="preserve"><value>Рабочая папка</value></data>
+  <data name="Ed_Elevated" xml:space="preserve"><value>Запуск от имени администратора</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>Целью может быть полный путь к exe, имя, URL, протокол вроде ms-settings: или документ.</value></data>
+  <data name="Ed_Combo" xml:space="preserve"><value>Сочетание клавиш</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план.</value></data>
+  <data name="Ed_Action" xml:space="preserve"><value>Действие</value></data>
+  <data name="Ed_Level" xml:space="preserve"><value>Громкость (0-100)</value></data>
+  <data name="Ed_Process" xml:space="preserve"><value>Процесс</value></data>
+  <data name="Ed_SendKey" xml:space="preserve"><value>Отправить клавиши</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>Ждать окно (с)</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>После появления (с)</value></data>
+  <data name="Ed_WindowHint" xml:space="preserve"><value>Имя процесса без .exe (напр. Weixin / msedge). Вывод на передний план / отправка клавиш требует фокуса и может не работать при запуске.</value></data>
+  <data name="Ed_Command" xml:space="preserve"><value>Команда</value></data>
+  <data name="Ed_Text" xml:space="preserve"><value>Текст</value></data>
+  <data name="Ed_TextProcess" xml:space="preserve"><value>Целевой процесс</value></data>
+  <data name="Ed_TextHint" xml:space="preserve"><value>Ввод посимвольно (перенос = Enter). Оставьте процесс пустым, чтобы отправить в активное окно (надёжнее всего).</value></data>
+  <data name="Ed_Message" xml:space="preserve"><value>Сообщение</value></data>
+  <data name="Ed_Speak" xml:space="preserve"><value>Озвучивание</value></data>
+  <data name="Ed_Confirm" xml:space="preserve"><value>Подтверждение Да/Нет (Да = продолжить, Нет = прервать группу)</value></data>
+  <data name="Ed_OnYes" xml:space="preserve"><value>После «Да»</value></data>
+  <data name="Ed_Group" xml:space="preserve"><value>Группа действий</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>Задержка после (мс)</value></data>
+  <data name="Ed_Repeat" xml:space="preserve"><value>Повторы</value></data>
+  <data name="Ed_Note" xml:space="preserve"><value>Заметка</value></data>
+  <data name="Ed_DaysHeader" xml:space="preserve"><value>Выполнять только в эти дни (ничего = ежедневно)</value></data>
+  <data name="Ed_OnlyBefore" xml:space="preserve"><value>Только до</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_Vol_Set" xml:space="preserve"><value>Задать громкость</value></data>
+  <data name="Ed_OnYes_None" xml:space="preserve"><value>Нет</value></data>
+  <data name="Ed_OnYes_Run" xml:space="preserve"><value>Запустить / открыть файл</value></data>
+  <data name="Ed_OnYes_Url" xml:space="preserve"><value>Открыть URL</value></data>
+  <data name="Ed_Group_None" xml:space="preserve"><value>(нет)</value></data>
+
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>Не удалось отправить клавиши в «{0}»: окно не появилось или не удалось вывести на передний план (часто при запуске/в фоне)</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>Окно для «{0}» не найдено (процесс не запущен или не готов?); {1} без эффекта</value></data>
+  <data name="Warn_UnknownVolume" xml:space="preserve"><value>Неизвестное действие громкости: {0}</value></data>
+  <data name="Warn_UnknownKind" xml:space="preserve"><value>Неизвестный тип шага: {0}</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» пропущено: цель — сам Clockwork (во избежание цикла автозапуска)</value></data>
+  <data name="Warn_LaunchFail" xml:space="preserve"><value>Ошибка запуска: {0} — {1}</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» завершился за 0,5 с (код {1}); вероятно, не запустился</value></data>
+  <data name="Mark_Unverified" xml:space="preserve"><value>~ Отправлено (не подтверждено)</value></data>
+  <data name="Mark_Exception" xml:space="preserve"><value>Ошибка: {0}</value></data>
+
+  <data name="Note_Policy" xml:space="preserve"><value>Политика</value></data>
+  <data name="Note_OneTime" xml:space="preserve"><value>Однократно</value></data>
+  <data name="Note_System" xml:space="preserve"><value>Системно важное</value></data>
+  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
+
+  <data name="Ed_Title_Group" xml:space="preserve"><value>Изменить группу действий</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Группа только определяет действия; запускайте её из Списка запуска или Напоминаний.</value></data>
+  <data name="Val_GroupName" xml:space="preserve"><value>Введите имя группы.</value></data>
+
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Изменить напоминание</value></data>
+  <data name="Ed_Trigger" xml:space="preserve"><value>Триггер</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>По времени (в определённый час)</value></data>
+  <data name="Ed_Trig_Startup" xml:space="preserve"><value>При входе</value></data>
+  <data name="Ed_Time" xml:space="preserve"><value>Время (HH:mm)</value></data>
+  <data name="Ed_LoginTiming" xml:space="preserve"><value>Условие входа</value></data>
+  <data name="Ed_SMode_Any" xml:space="preserve"><value>Всегда</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>Только до N:00</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>Только после N:00</value></data>
+  <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_OnlyBoot" xml:space="preserve"><value>Только в течение</value></data>
+  <data name="Ed_WithinHint" xml:space="preserve"><value>мин после загрузки считается входом (0 = при каждом открытии)</value></data>
+  <data name="Ed_Period" xml:space="preserve"><value>Период</value></data>
+  <data name="Ed_Rec_Daily" xml:space="preserve"><value>По дням недели</value></data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Каждые N дней</value></data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Ежемесячно</value></data>
+  <data name="Ed_EveryNDays" xml:space="preserve"><value>Каждые</value></data>
+  <data name="Ed_AnchorDays" xml:space="preserve"><value>дн.; отсчёт с</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; пусто = сегодня)</value></data>
+  <data name="Ed_MonthlyDay" xml:space="preserve"><value>День месяца</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Тихая группа</value></data>
+  <data name="Ed_SilentHint" xml:space="preserve"><value>Если задано, группа выполняется без окна в назначенное время (текст / голос / после «Да» игнорируются)</value></data>
+  <data name="Ed_OnYes_Group" xml:space="preserve"><value>Выполнить группу действий</value></data>
+  <data name="Ed_AutoDismiss" xml:space="preserve"><value>Автозакрытие (с)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>закрывается само без нажатия (0 = никогда; повторное напоминание: по умолчанию 60)</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Повторное напоминание</value></data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>мин (0 = без повтора), до</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, пусто = без ограничения)</value></data>
+  <data name="Ed_TrigDelay" xml:space="preserve"><value>Задержка после срабатывания</value></data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>с, плюс случайно 0~</value></data>
+  <data name="Ed_Sec" xml:space="preserve"><value>с</value></data>
+  <data name="Ed_Grace" xml:space="preserve"><value>Допуск (мин)</value></data>
+  <data name="Ed_GraceHint" xml:space="preserve"><value>всё ещё сработает, если время было пропущено в течение</value></data>
+  <data name="Val_TimeFormat" xml:space="preserve"><value>Время должно быть в формате HH:mm</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>«Повторять до» должно быть HH:mm (или пусто)</value></data>
+  <data name="Val_Anchor" xml:space="preserve"><value>Дата начала должна быть yyyy-MM-dd (или пусто)</value></data>
+
+  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Подтверждение</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>Вы уверены, что хотите выполнить «{0}»?</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Ошибка</value></data>
+  <data name="Crash_Body" xml:space="preserve"><value>В Clockwork произошла ошибка (записана в журнал; обычно можно продолжить):
+
+{0}
+
+Журнал: {1}</value></data>
+  <data name="Run_Title" xml:space="preserve"><value>Clockwork · Выполнение</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Напоминание Clockwork</value></data>
+  <data name="Tray_LaunchStopped" xml:space="preserve"><value>Список запуска остановлен: выполнено шагов — {0}, остальные пропущены</value></data>
+  <data name="Tray_LaunchWarn" xml:space="preserve"><value>Список запуска завершён: {0} шагов, {1} с предупреждениями (трей → последний журнал)</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Клавиша остановки «{0}» не распознана; измените её в главном окне. «Остановить» в трее по-прежнему доступно.</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Не удалось зарегистрировать клавишу остановки «{0}» (возможно, уже занята); «Остановить» в трее по-прежнему доступно.</value></data>
+  <data name="Hotkey_Stopped" xml:space="preserve"><value>Запрошена остановка текущих действий.</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>Для переключения «{0}» нужны права администратора; откройте Clockwork от имени администратора.</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>Не удалось переключить «{0}»: {1}</value></data>
+  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Для добавления/удаления автозапуска нужны права администратора; откройте Clockwork от имени администратора.</value></data>
+  <data name="Autostart_Fail" xml:space="preserve"><value>Ошибка операции: {0}</value></data>
+  <data name="Tab_Settings" xml:space="preserve"><value>Настройки</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>Общие</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>О программе</value></data>
+  <data name="About_CheckUpdate" xml:space="preserve"><value>Проверить обновления</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>Проверка…</value></data>
+  <data name="Update_Latest" xml:space="preserve"><value>Установлена последняя версия ({0})</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>Доступна новая версия {0}. Перейти к загрузке?</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Не удалось проверить обновления: {0}</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Нажмите, затем нажмите сочетание клавиш. Esc — отмена, Del — очистить. «Стоп» в трее работает всегда.</value></data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Нажмите сочетание…</value></data>
+  <data name="Sys_Takeover" xml:space="preserve"><value>Перенести в список запуска</value></data>
+  <data name="Ed_CatchUp" xml:space="preserve"><value>Наверстать пропущенное (после сна/выключения)</value></data>
+  <data name="Unit_Minutes" xml:space="preserve"><value>{0} мин</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>У сочетания «{0}» нет основной клавиши; не отправлено</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Нераспознанное имя клавиши «{0}» (многозначные числа не являются клавишами); сочетание «{1}» не отправлено</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Нераспознанная клавиша «{0}»; сочетание «{1}» не отправлено</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>Сочетание «{0}» отклонено системой (бывает, когда впереди окно с повышенными правами/защищённый рабочий стол); без эффекта</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>Сочетание «{0}» внедрено лишь частично ({1}/{2}); отпускания клавиш отправлены повторно, без эффекта</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>Отправка текста: не удалось вывести окно «{0}» на передний план; не отправлено</value></data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Не удалось сохранить настройки: {0} (изменения только в памяти и будут потеряны при перезапуске)</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Группа действий, на которую ссылается напоминание «{0}», больше не существует; на этот раз ничего не выполнено</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Группа действий, на которую ссылается напоминание «{0}», отключена; на этот раз ничего не выполнено</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Группа действий для запуска по «Да» больше не существует; пропущено</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Группа действий для запуска по «Да» отключена; пропущено</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Задачи планировщика пока нельзя перехватить; поддерживаются только ключи Run реестра и элементы папки автозагрузки</value></data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Выполнение списка запуска прервано: {0}</value></data>
+  <data name="Tray_ViewLog" xml:space="preserve"><value>Показать последний журнал запуска</value></data>
+  <data name="Tray_NoLog" xml:space="preserve"><value>Журнала запуска ещё нет (сначала запустите список запуска)</value></data>
+  <data name="Err_ClearClipboard" xml:space="preserve"><value>Не удалось очистить буфер обмена: {0}</value></data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Не удалось очистить корзину: {0}</value></data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Неизвестная системная команда: {0}</value></data>
+  <data name="Tray_RunGroup" xml:space="preserve"><value>Запустить: {0}</value></data>
+  <data name="Tray_DndHours" xml:space="preserve"><value>Приостановить напоминания на {0} ч</value></data>
+  <data name="Tray_DndResume" xml:space="preserve"><value>Возобновить напоминания (осталось {0} мин)</value></data>
+  <data name="Toast_DndOn" xml:space="preserve"><value>Напоминания приостановлены на {0} ч</value></data>
+  <data name="Toast_DndOff" xml:space="preserve"><value>Напоминания возобновлены</value></data>
+  <data name="Menu_BlankGroup" xml:space="preserve"><value>Пустая группа</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>Фокус · Начать работу</value></data>
+  <data name="Tpl_Meeting" xml:space="preserve"><value>Режим совещания</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Завершение дня</value></data>
+  <data name="Tpl_Bedtime" xml:space="preserve"><value>Перед сном</value></data>
+  <data name="Tpl_Away" xml:space="preserve"><value>Отойти ненадолго</value></data>
+  <data name="Tpl_Screenshot" xml:space="preserve"><value>Скриншот и аннотация</value></data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Все сегодняшние задачи записаны?</value></data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Пора спать!</value></data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Для этого действия нужны права администратора. Перезапустить Clockwork от имени администратора?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Группа действий «{0}» используется в {1} напоминании(ях) и {2} шаге(ах). При удалении эти ссылки будут очищены (напоминания станут только всплывающими; ссылающиеся шаги удалены). Всё равно удалить?</value></data>
+  <data name="Btn_Browse" xml:space="preserve"><value>Обзор…</value></data>
+  <data name="Btn_Pick" xml:space="preserve"><value>Выбрать…</value></data>
+  <data name="Btn_Capture" xml:space="preserve"><value>Захват</value></data>
+  <data name="Btn_PickDate" xml:space="preserve"><value>Выбрать дату</value></data>
+  <data name="Filter_Browse" xml:space="preserve"><value>Программы / скрипты / ярлыки|*.exe;*.bat;*.cmd;*.ps1;*.lnk|Все файлы|*.*</value></data>
+  <data name="Ed_WindowStyle" xml:space="preserve"><value>Стиль окна</value></data>
+  <data name="WinStyle_Default" xml:space="preserve"><value>По умолчанию (обычное окно)</value></data>
+  <data name="WinStyle_Minimized" xml:space="preserve"><value>Запуск свёрнутым</value></data>
+  <data name="WinStyle_Maximized" xml:space="preserve"><value>Запуск развёрнутым</value></data>
+  <data name="WinStyle_Hidden" xml:space="preserve"><value>Запуск скрытым</value></data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>Активировать окно, если уже запущено (не перезапускать)</value></data>
+  <data name="Ed_ActivateProcess" xml:space="preserve"><value>Активируемый процесс</value></data>
+  <data name="Ed_AltTargets" xml:space="preserve"><value>Резервные пути</value></data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>Один полный путь на строку; если цель не существует, используется первый существующий (для машин с разными путями)</value></data>
+  <data name="Picker_Process" xml:space="preserve"><value>Выбор процесса</value></data>
+  <data name="Picker_Search" xml:space="preserve"><value>Поиск по имени процесса / заголовку окна</value></data>
+  <data name="Date_Pick" xml:space="preserve"><value>Выбор даты</value></data>
+  <data name="Capture_Key" xml:space="preserve"><value>Захват клавиши</value></data>
+</root>

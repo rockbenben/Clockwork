@@ -1,0 +1,41 @@
+name: Release
+
+# push 一个 v* 标签（如 v1.2.0）即触发：跑测试 → 发布自包含单文件 exe →
+# 用标签号覆盖版本 → 创建 GitHub Release 并附上 Clockwork.exe。
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write   # 创建 Release 需要写权限
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # 标签 v1.2.0 → 版本 1.2.0（去掉前缀 v），注入 exe 让文件版本与标签一致。
+      - name: Derive version from tag
+        id: ver
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      # 发布前先跑测试，不让红的构建出 Release。
+      - name: Test
+        run: dotnet test app.Tests/Clockwork.Tests.csproj -c Release --verbosity normal
+
+      - name: Publish single-file exe
+        run: dotnet publish app/Clockwork.csproj -c Release -r win-x64 -p:Version=${{ steps.ver.outputs.version }} -o publish
+
+      # 用 runner 自带的 gh CLI + 内置 GITHUB_TOKEN，不引第三方 action。
+      - name: Create GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" publish/Clockwork.exe --title "$GITHUB_REF_NAME" --generate-notes

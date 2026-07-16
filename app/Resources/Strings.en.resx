@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="App_Subtitle" xml:space="preserve"><value>Startup · Reminders · One-tap Actions</value></data>
+
+  <data name="Tab_Launch" xml:space="preserve"><value>Startup List</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Reminders</value></data>
+  <data name="Tab_Group" xml:space="preserve"><value>Action Groups</value></data>
+  <data name="Tab_System" xml:space="preserve"><value>System Startup</value></data>
+
+  <data name="Launch_Hint" xml:space="preserve"><value>Runs top-to-bottom at startup · each step supports post-delay, repeat count, and weekday / before-N-hour conditions</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Timed reminders · optional speech · on "Yes" run a program / open a file / a URL / an action group</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Bundle a series of actions into a group, triggered from the tray / startup list / reminders</value></data>
+  <data name="System_Hint" xml:space="preserve"><value>Every autostart entry on this PC — turn off what you don't need. Disable only, never delete; reversible anytime.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>Checking / unchecking takes effect immediately (disable, not delete; reversible). Items marked "needs admin" require administrator rights. System / policy / one-time read-only items are hidden by default.</value></data>
+  <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="System_ShowReadOnly" xml:space="preserve"><value>Show system / read-only items</value></data>
+  <data name="System_Scanning" xml:space="preserve"><value>Scanning autostart entries…</value></data>
+  <data name="System_Refresh" xml:space="preserve"><value>Refresh</value></data>
+
+  <data name="Col_Enabled" xml:space="preserve"><value>On</value></data>
+  <data name="Col_Kind" xml:space="preserve"><value>Type</value></data>
+  <data name="Col_Summary" xml:space="preserve"><value>Summary</value></data>
+  <data name="Col_Delay" xml:space="preserve"><value>Delay</value></data>
+  <data name="Col_Time" xml:space="preserve"><value>Time</value></data>
+  <data name="Col_Period" xml:space="preserve"><value>Period</value></data>
+  <data name="Col_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="Col_Speak" xml:space="preserve"><value>Speak</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Col_Steps" xml:space="preserve"><value>Steps</value></data>
+  <data name="Col_Command" xml:space="preserve"><value>Command</value></data>
+  <data name="Col_Source" xml:space="preserve"><value>Source</value></data>
+  <data name="Col_Scope" xml:space="preserve"><value>Scope</value></data>
+
+  <data name="Btn_Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Btn_AddMenu" xml:space="preserve"><value>Add ▾</value></data>
+  <data name="Btn_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Btn_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Btn_Up" xml:space="preserve"><value>↑ Up</value></data>
+  <data name="Btn_Down" xml:space="preserve"><value>↓ Down</value></data>
+  <data name="Btn_RunStep" xml:space="preserve"><value>▶ Run This Step</value></data>
+  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Run Group</value></data>
+  <data name="Btn_Preview" xml:space="preserve"><value>▶ Preview</value></data>
+
+  <data name="Settings_StartupDelay" xml:space="preserve"><value>Startup delay (s)</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>Start minimized to tray</value></data>
+  <data name="Settings_StopHotkey" xml:space="preserve"><value>Stop hotkey</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
+  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Takes effect on next launch; empty = disabled. Tray right-click "Stop" always works.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Language will take effect the next time Clockwork starts.</value></data>
+
+  <data name="Autostart_Checking" xml:space="preserve"><value>Autostart: checking…</value></data>
+  <data name="Autostart_On" xml:space="preserve"><value>Autostart: ON (click to disable)</value></data>
+  <data name="Autostart_Off" xml:space="preserve"><value>Autostart: OFF (click to enable)</value></data>
+
+  <data name="Tray_Show" xml:space="preserve"><value>Show Window</value></data>
+  <data name="Tray_Rerun" xml:space="preserve"><value>Rerun Startup List</value></data>
+  <data name="Tray_Stop" xml:space="preserve"><value>Stop Running Actions</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>Exit</value></data>
+
+  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>Yes</value></data>
+  <data name="Reminder_Popup_No" xml:space="preserve"><value>No</value></data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>Snooze 10 min</value></data>
+
+  <data name="Kind_app" xml:space="preserve"><value>Launch App</value></data>
+  <data name="Kind_keys" xml:space="preserve"><value>Send Keys</value></data>
+  <data name="Kind_volume" xml:space="preserve"><value>Volume</value></data>
+  <data name="Kind_window" xml:space="preserve"><value>Window Action</value></data>
+  <data name="Kind_system" xml:space="preserve"><value>System Command</value></data>
+  <data name="Kind_group" xml:space="preserve"><value>Action Group</value></data>
+  <data name="Kind_message" xml:space="preserve"><value>Message</value></data>
+  <data name="Kind_delay" xml:space="preserve"><value>Delay</value></data>
+  <data name="Kind_text" xml:space="preserve"><value>Send Text</value></data>
+
+  <data name="Sys_showDesktop" xml:space="preserve"><value>Show Desktop</value></data>
+  <data name="Sys_lockScreen" xml:space="preserve"><value>Lock Screen (password on return)</value></data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>Empty Recycle Bin</value></data>
+  <data name="Sys_openSettings" xml:space="preserve"><value>Open Windows Settings</value></data>
+  <data name="Sys_screenshot" xml:space="preserve"><value>Screenshot (region select)</value></data>
+  <data name="Sys_clearClipboard" xml:space="preserve"><value>Clear Clipboard</value></data>
+  <data name="Sys_taskManager" xml:space="preserve"><value>Open Task Manager</value></data>
+  <data name="Sys_monitorOff" xml:space="preserve"><value>Turn Off Monitor (move mouse to wake)</value></data>
+  <data name="Sys_sleep" xml:space="preserve"><value>Sleep (low-power standby)</value></data>
+  <data name="Sys_hibernate" xml:space="preserve"><value>Hibernate (save &amp; power off)</value></data>
+  <data name="Sys_signOut" xml:space="preserve"><value>Sign Out (confirm)</value></data>
+  <data name="Sys_restart" xml:space="preserve"><value>Restart (confirm)</value></data>
+  <data name="Sys_shutdown" xml:space="preserve"><value>Shut Down (confirm)</value></data>
+
+  <data name="Vol_mute" xml:space="preserve"><value>Mute</value></data>
+  <data name="Vol_unmute" xml:space="preserve"><value>Unmute</value></data>
+  <data name="Vol_set" xml:space="preserve"><value>Volume {0}%</value></data>
+  <data name="Win_close" xml:space="preserve"><value>Close Window</value></data>
+  <data name="Win_minimize" xml:space="preserve"><value>Minimize Window</value></data>
+  <data name="Win_maximize" xml:space="preserve"><value>Maximize Window</value></data>
+  <data name="Win_activate" xml:space="preserve"><value>Bring to Front</value></data>
+  <data name="Win_sendkey" xml:space="preserve"><value>Focus &amp; Send Keys</value></data>
+
+  <data name="Sum_SendKeys" xml:space="preserve"><value>Send {0}</value></data>
+  <data name="Sum_Delay_Sec" xml:space="preserve"><value>Delay {0}s</value></data>
+  <data name="Sum_Delay_Ms" xml:space="preserve"><value>Delay {0}ms</value></data>
+  <data name="Sum_RunGroup" xml:space="preserve"><value>Run group: {0}</value></data>
+  <data name="Sum_Group_None" xml:space="preserve"><value>(none)</value></data>
+  <data name="Sum_Text" xml:space="preserve"><value>Type {0}</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (before {0}:00)</value></data>
+  <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
+
+  <data name="Days_EveryDay" xml:space="preserve"><value>Every day</value></data>
+  <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Day_1" xml:space="preserve"><value>Mon</value></data>
+  <data name="Day_2" xml:space="preserve"><value>Tue</value></data>
+  <data name="Day_3" xml:space="preserve"><value>Wed</value></data>
+  <data name="Day_4" xml:space="preserve"><value>Thu</value></data>
+  <data name="Day_5" xml:space="preserve"><value>Fri</value></data>
+  <data name="Day_6" xml:space="preserve"><value>Sat</value></data>
+  <data name="Day_7" xml:space="preserve"><value>Sun</value></data>
+
+  <data name="Period_EveryNDays" xml:space="preserve"><value>Every {0} days</value></data>
+  <data name="Period_Monthly" xml:space="preserve"><value>Day {0} monthly</value></data>
+  <data name="Time_Startup" xml:space="preserve"><value>At logon</value></data>
+  <data name="Time_Startup_Before" xml:space="preserve"><value>At logon · before {0}:00</value></data>
+  <data name="Time_Startup_After" xml:space="preserve"><value>At logon · after {0}:00</value></data>
+
+  <data name="Type_Registry" xml:space="preserve"><value>Registry</value></data>
+  <data name="Type_StartupFolder" xml:space="preserve"><value>Startup Folder</value></data>
+  <data name="Type_ScheduledTask" xml:space="preserve"><value>Scheduled Task</value></data>
+  <data name="Scope_Machine" xml:space="preserve"><value>All users</value></data>
+  <data name="Scope_User" xml:space="preserve"><value>Current user</value></data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0} (needs admin)</value></data>
+
+  <data name="Ed_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Ed_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Ed_Title_Step" xml:space="preserve"><value>Edit Step</value></data>
+  <data name="Ed_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Ed_Label" xml:space="preserve"><value>Label</value></data>
+  <data name="Ed_Target" xml:space="preserve"><value>Target</value></data>
+  <data name="Ed_Args" xml:space="preserve"><value>Arguments</value></data>
+  <data name="Ed_WorkDir" xml:space="preserve"><value>Working dir</value></data>
+  <data name="Ed_Elevated" xml:space="preserve"><value>Run as administrator</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>Target can be a full exe path, bare name, URL, ms-settings: protocol, or a document.</value></data>
+  <data name="Ed_Combo" xml:space="preserve"><value>Hotkey</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first.</value></data>
+  <data name="Ed_Action" xml:space="preserve"><value>Action</value></data>
+  <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
+  <data name="Ed_Process" xml:space="preserve"><value>Process</value></data>
+  <data name="Ed_SendKey" xml:space="preserve"><value>Send keys</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>Wait window (s)</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>After appear (s)</value></data>
+  <data name="Ed_WindowHint" xml:space="preserve"><value>Process name without .exe (e.g. Weixin / msedge). Bring-to-front / send-keys need foreground focus and may not work at startup.</value></data>
+  <data name="Ed_Command" xml:space="preserve"><value>Command</value></data>
+  <data name="Ed_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="Ed_TextProcess" xml:space="preserve"><value>Target process</value></data>
+  <data name="Ed_TextHint" xml:space="preserve"><value>Types text literally (newline = Enter). Leave target process blank to send to the focused window (most reliable).</value></data>
+  <data name="Ed_Message" xml:space="preserve"><value>Message</value></data>
+  <data name="Ed_Speak" xml:space="preserve"><value>Speak</value></data>
+  <data name="Ed_Confirm" xml:space="preserve"><value>Yes/No confirm (Yes = continue, No = abort group)</value></data>
+  <data name="Ed_OnYes" xml:space="preserve"><value>On Yes</value></data>
+  <data name="Ed_Group" xml:space="preserve"><value>Action group</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>Post-delay (ms)</value></data>
+  <data name="Ed_Repeat" xml:space="preserve"><value>Repeat</value></data>
+  <data name="Ed_Note" xml:space="preserve"><value>Note</value></data>
+  <data name="Ed_DaysHeader" xml:space="preserve"><value>Run only on these weekdays (none = every day)</value></data>
+  <data name="Ed_OnlyBefore" xml:space="preserve"><value>Only before</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_Vol_Set" xml:space="preserve"><value>Set volume</value></data>
+  <data name="Ed_OnYes_None" xml:space="preserve"><value>None</value></data>
+  <data name="Ed_OnYes_Run" xml:space="preserve"><value>Run / open file</value></data>
+  <data name="Ed_OnYes_Url" xml:space="preserve"><value>Open URL</value></data>
+  <data name="Ed_Group_None" xml:space="preserve"><value>(none)</value></data>
+
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>Failed to send keys to "{0}": window didn't appear, or couldn't bring it to front (common at startup/background triggers)</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>No window found for "{0}" (process not running or not ready?); {1} had no effect</value></data>
+  <data name="Warn_UnknownVolume" xml:space="preserve"><value>Unknown volume action: {0}</value></data>
+  <data name="Warn_UnknownKind" xml:space="preserve"><value>Unknown step type: {0}</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>Skipped "{0}": target is Clockwork itself (avoids an autostart loop)</value></data>
+  <data name="Warn_LaunchFail" xml:space="preserve"><value>Launch failed: {0} — {1}</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>"{0}" exited within 0.5s (exit code {1}); likely failed to start</value></data>
+  <data name="Mark_Unverified" xml:space="preserve"><value>~ Sent (unverified)</value></data>
+  <data name="Mark_Exception" xml:space="preserve"><value>Error: {0}</value></data>
+
+  <data name="Note_Policy" xml:space="preserve"><value>Policy</value></data>
+  <data name="Note_OneTime" xml:space="preserve"><value>One-time</value></data>
+  <data name="Note_System" xml:space="preserve"><value>System critical</value></data>
+  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
+
+  <data name="Ed_Title_Group" xml:space="preserve"><value>Edit Action Group</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>A group only defines actions; trigger it from the Startup List or Reminders.</value></data>
+  <data name="Val_GroupName" xml:space="preserve"><value>Please enter a group name.</value></data>
+
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Edit Reminder</value></data>
+  <data name="Ed_Trigger" xml:space="preserve"><value>Trigger</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>Timed</value></data>
+  <data name="Ed_Trig_Startup" xml:space="preserve"><value>At logon</value></data>
+  <data name="Ed_Time" xml:space="preserve"><value>Time (HH:mm)</value></data>
+  <data name="Ed_LoginTiming" xml:space="preserve"><value>Logon timing</value></data>
+  <data name="Ed_SMode_Any" xml:space="preserve"><value>Always</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>Before N:00</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>After N:00</value></data>
+  <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_OnlyBoot" xml:space="preserve"><value>Only within</value></data>
+  <data name="Ed_WithinHint" xml:space="preserve"><value>min of logon counts as a logon (0 = every launch)</value></data>
+  <data name="Ed_Period" xml:space="preserve"><value>Period</value></data>
+  <data name="Ed_Rec_Daily" xml:space="preserve"><value>By weekday</value></data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Every N days</value></data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Monthly</value></data>
+  <data name="Ed_EveryNDays" xml:space="preserve"><value>Every</value></data>
+  <data name="Ed_AnchorDays" xml:space="preserve"><value>days; from</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; blank = today)</value></data>
+  <data name="Ed_MonthlyDay" xml:space="preserve"><value>Day of month</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Silent group</value></data>
+  <data name="Ed_SilentHint" xml:space="preserve"><value>If set, runs the group silently at trigger (ignoring text / speech / on-Yes)</value></data>
+  <data name="Ed_OnYes_Group" xml:space="preserve"><value>Run action group</value></data>
+  <data name="Ed_AutoDismiss" xml:space="preserve"><value>Auto-close (s)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>auto-close if no click (0 = never; repeat default 60)</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Repeat nag</value></data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = off), until</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, blank = no limit)</value></data>
+  <data name="Ed_TrigDelay" xml:space="preserve"><value>Delay after trigger</value></data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>s, plus random 0~</value></data>
+  <data name="Ed_Sec" xml:space="preserve"><value>s</value></data>
+  <data name="Ed_Grace" xml:space="preserve"><value>Grace (min)</value></data>
+  <data name="Ed_GraceHint" xml:space="preserve"><value>still fires if the time was missed within</value></data>
+  <data name="Val_TimeFormat" xml:space="preserve"><value>Time must be in HH:mm format</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>"Repeat until" must be HH:mm (or blank)</value></data>
+  <data name="Val_Anchor" xml:space="preserve"><value>Start date must be yyyy-MM-dd (or blank)</value></data>
+
+  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Confirm</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>Are you sure you want to "{0}"?</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Error</value></data>
+  <data name="Crash_Body" xml:space="preserve"><value>Clockwork hit an error (logged; usually safe to continue):
+
+{0}
+
+Log: {1}</value></data>
+  <data name="Run_Title" xml:space="preserve"><value>Clockwork · Run</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork Reminder</value></data>
+  <data name="Tray_LaunchStopped" xml:space="preserve"><value>Startup list stopped: {0} steps done, the rest skipped</value></data>
+  <data name="Tray_LaunchWarn" xml:space="preserve"><value>Startup list done: {0} steps, {1} with warnings (tray → view last startup log)</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Stop hotkey "{0}" not recognized; change it in the main window. Tray "Stop" still works.</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Failed to register stop hotkey "{0}" (may be in use by another app); tray "Stop" still works.</value></data>
+  <data name="Hotkey_Stopped" xml:space="preserve"><value>Requested stop of running actions.</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>"{0}" needs administrator rights to toggle; reopen Clockwork as administrator.</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>"{0}" toggle failed: {1}</value></data>
+  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Registering / removing autostart needs administrator rights; reopen Clockwork as administrator.</value></data>
+  <data name="Autostart_Fail" xml:space="preserve"><value>Operation failed: {0}</value></data>
+  <data name="Tab_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>General</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>About</value></data>
+  <data name="About_CheckUpdate" xml:space="preserve"><value>Check for updates</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>Checking…</value></data>
+  <data name="Update_Latest" xml:space="preserve"><value>You're on the latest version ({0})</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>New version {0} available. Go to download?</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Update check failed: {0}</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Click, then press the shortcut. Esc cancels, Del clears it. "Stop" in the tray menu always works.</value></data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Press a shortcut…</value></data>
+  <data name="Sys_Takeover" xml:space="preserve"><value>Take over into launch list</value></data>
+  <data name="Ed_CatchUp" xml:space="preserve"><value>Catch up if missed (after sleep/off)</value></data>
+  <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>Hotkey "{0}" has no main key; not sent</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Unrecognized key name "{0}" (multi-digit numbers aren't keys); hotkey "{1}" not sent</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Unrecognized key "{0}"; hotkey "{1}" not sent</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>Hotkey "{0}" was rejected by the system (happens when an elevated window or the secure desktop is in front); no effect</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>Hotkey "{0}" only partially injected ({1}/{2}); key-ups resent, no effect</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>Send text: couldn't bring the "{0}" window to the front; not sent</value></data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Failed to save config: {0} (changes are only in memory and will be lost on restart)</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>The action group referenced by reminder "{0}" no longer exists; nothing was run this time</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>The action group referenced by reminder "{0}" is disabled; nothing was run this time</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>The action group to run on "Yes" no longer exists; skipped</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>The action group to run on "Yes" is disabled; skipped</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Scheduled tasks can't be taken over yet; only registry Run keys and Startup-folder items are supported</value></data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Launch-list run aborted: {0}</value></data>
+  <data name="Tray_ViewLog" xml:space="preserve"><value>View last startup log</value></data>
+  <data name="Tray_NoLog" xml:space="preserve"><value>No startup log yet (run the launch list once first)</value></data>
+  <data name="Err_ClearClipboard" xml:space="preserve"><value>Failed to clear clipboard: {0}</value></data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Failed to empty recycle bin: {0}</value></data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Unknown system command: {0}</value></data>
+  <data name="Tray_RunGroup" xml:space="preserve"><value>Run: {0}</value></data>
+  <data name="Tray_DndHours" xml:space="preserve"><value>Pause reminders for {0} h</value></data>
+  <data name="Tray_DndResume" xml:space="preserve"><value>Resume reminders ({0} min left)</value></data>
+  <data name="Toast_DndOn" xml:space="preserve"><value>Reminders paused for {0} h</value></data>
+  <data name="Toast_DndOff" xml:space="preserve"><value>Reminders resumed</value></data>
+  <data name="Menu_BlankGroup" xml:space="preserve"><value>Blank group</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>Focus · Start working</value></data>
+  <data name="Tpl_Meeting" xml:space="preserve"><value>Meeting mode</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Wrap up · End of day</value></data>
+  <data name="Tpl_Bedtime" xml:space="preserve"><value>Bedtime</value></data>
+  <data name="Tpl_Away" xml:space="preserve"><value>Stepping away</value></data>
+  <data name="Tpl_Screenshot" xml:space="preserve"><value>Screenshot &amp; annotate</value></data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Did you log all of today's tasks?</value></data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Time for bed!</value></data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>This action needs administrator rights. Reopen Clockwork as administrator?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Action group "{0}" is referenced by {1} reminder(s) and {2} step(s). Deleting it will also clear those references (reminders become popup-only; steps referencing it are removed). Delete anyway?</value></data>
+  <data name="Btn_Browse" xml:space="preserve"><value>Browse…</value></data>
+  <data name="Btn_Pick" xml:space="preserve"><value>Pick…</value></data>
+  <data name="Btn_Capture" xml:space="preserve"><value>Capture</value></data>
+  <data name="Btn_PickDate" xml:space="preserve"><value>Pick date</value></data>
+  <data name="Filter_Browse" xml:space="preserve"><value>Programs / scripts / shortcuts|*.exe;*.bat;*.cmd;*.ps1;*.lnk|All files|*.*</value></data>
+  <data name="Ed_WindowStyle" xml:space="preserve"><value>Window style</value></data>
+  <data name="WinStyle_Default" xml:space="preserve"><value>Default (normal window)</value></data>
+  <data name="WinStyle_Minimized" xml:space="preserve"><value>Start minimized</value></data>
+  <data name="WinStyle_Maximized" xml:space="preserve"><value>Start maximized</value></data>
+  <data name="WinStyle_Hidden" xml:space="preserve"><value>Start hidden</value></data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>Activate window if already running (don't relaunch)</value></data>
+  <data name="Ed_ActivateProcess" xml:space="preserve"><value>Process to activate</value></data>
+  <data name="Ed_AltTargets" xml:space="preserve"><value>Fallback paths</value></data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>One full path per line; when Target doesn't exist, the first existing one is used (for machines with different install paths)</value></data>
+  <data name="Picker_Process" xml:space="preserve"><value>Pick a process</value></data>
+  <data name="Picker_Search" xml:space="preserve"><value>Search process name / window title</value></data>
+  <data name="Date_Pick" xml:space="preserve"><value>Pick a date</value></data>
+  <data name="Capture_Key" xml:space="preserve"><value>Capture key</value></data>
+</root>

@@ -1,15 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22262C"/><stop offset="1" stop-color="#191C20"/></linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.46" r="0.5"><stop offset="0" stop-color="#F0651A" stop-opacity="0.30"/><stop offset="1" stop-color="#F0651A" stop-opacity="0"/></radialGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1C2430"/><stop offset="1" stop-color="#10141B"/>
+    </linearGradient>
   </defs>
-  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#tile)" stroke="#2E343B" stroke-width="1.5"/>
-  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#glow)"/>
-  <!-- gear ring -->
-  <path d="M99.68,59.63L107.68,40.32L148.32,40.32L156.32,59.63L156.32,59.63L175.63,51.63L204.37,80.37L196.37,99.68L196.37,99.68L215.68,107.68L215.68,148.32L196.37,156.32L196.37,156.32L204.37,175.63L175.63,204.37L156.32,196.37L156.32,196.37L148.32,215.68L107.68,215.68L99.68,196.37L99.68,196.37L80.37,204.37L51.63,175.63L59.63,156.32L59.63,156.32L40.32,148.32L40.32,107.68L59.63,99.68L59.63,99.68L51.63,80.37L80.37,51.63L99.68,59.63Z" fill="#F0651A"/>
-  <circle cx="128" cy="128" r="50" fill="url(#tile)"/>
-  <!-- clock hands + pivot -->
-  <line x1="128" y1="128" x2="164.4" y2="107.0" stroke="#F0651A" stroke-width="12" stroke-linecap="round"/>
-  <line x1="128" y1="128" x2="103.8" y2="114.0" stroke="#F0651A" stroke-width="12" stroke-linecap="round"/>
-  <circle cx="128" cy="128" r="9" fill="#FF7A2A"/>
+  <!-- blued-steel tile -->
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#tile)" stroke="#2E3947" stroke-width="1.5"/>
+  <!-- escape wheel: fine asymmetric ratchet teeth as a ring (brass) -->
+  <path fill-rule="evenodd" fill="#E0A23C" d="M128.00,36.00 L128.00,24.00 L156.43,40.50 L160.14,29.09 L182.08,53.57 L189.13,43.86 L202.43,73.92 L212.14,66.87 L215.50,99.57 L226.91,95.86 L220.00,128.00 L232.00,128.00 L215.50,156.43 L226.91,160.14 L202.43,182.08 L212.14,189.13 L182.08,202.43 L189.13,212.14 L156.43,215.50 L160.14,226.91 L128.00,220.00 L128.00,232.00 L99.57,215.50 L95.86,226.91 L73.92,202.43 L66.87,212.14 L53.57,182.08 L43.86,189.13 L40.50,156.43 L29.09,160.14 L36.00,128.00 L24.00,128.00 L40.50,99.57 L29.09,95.86 L53.57,73.92 L43.86,66.87 L73.92,53.57 L66.87,43.86 L99.57,40.50 L95.86,29.09 Z M192,128 a64,64 0 1,0 -128,0 a64,64 0 1,0 128,0 Z"/>
+  <!-- blued hub + brass rim + filament arbor -->
+  <circle cx="128" cy="128" r="64" fill="#141A22"/>
+  <circle cx="128" cy="128" r="63" fill="none" stroke="#B87A2A" stroke-width="2" stroke-opacity="0.7"/>
+  <circle cx="128" cy="128" r="10" fill="#F5A65A"/>
+  <!-- pallet lever engaging the top tooth (the escapement catch — sets it apart from a plain gear) -->
+  <path d="M120,14 L136,14 Q140,14 140,18 L138,40 Q138,44 134,44 L122,44 Q118,44 118,40 L116,18 Q116,14 120,14 Z" fill="#B87A2A"/>
 </svg>

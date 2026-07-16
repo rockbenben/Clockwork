@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="App_Subtitle" xml:space="preserve"><value>開機助手 · 定時提醒 · 一鍵動作</value></data>
+  <data name="Tab_Launch" xml:space="preserve"><value>我的開機清單</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>定時提醒</value></data>
+  <data name="Tab_Group" xml:space="preserve"><value>動作組</value></data>
+  <data name="Tab_System" xml:space="preserve"><value>系統開機項目</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>開機時由上到下依序執行 · 每步可設「執行後延遲」「重複次數」與「僅某些星期 / 僅 N 點前」</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>到點提醒 · 可朗讀 · 按「是」後執行程式 / 開啟檔案 / 開網頁 / 跑動作組</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>把一串動作打包成組，可在系統匣 / 開機清單 / 提醒裡一鍵觸發</value></data>
+  <data name="System_Hint" xml:space="preserve"><value>電腦裡所有開機自動啟動，一鍵關掉不需要的 — 只停用、不刪除，隨時還原</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>勾選 / 取消即時生效（非刪除，可還原）；標「需管理員」的項目需管理員身分。系統 / 原則 / 一次性等唯讀項目預設隱藏。</value></data>
+  <data name="System_Filter" xml:space="preserve"><value>篩選</value></data>
+  <data name="System_ShowReadOnly" xml:space="preserve"><value>顯示系統 / 唯讀項目</value></data>
+  <data name="System_Scanning" xml:space="preserve"><value>正在掃描開機自動啟動項目…</value></data>
+  <data name="System_Refresh" xml:space="preserve"><value>重新整理</value></data>
+
+  <data name="Col_Enabled" xml:space="preserve"><value>啟用</value></data>
+  <data name="Col_Kind" xml:space="preserve"><value>類型</value></data>
+  <data name="Col_Summary" xml:space="preserve"><value>摘要</value></data>
+  <data name="Col_Delay" xml:space="preserve"><value>延遲</value></data>
+  <data name="Col_Time" xml:space="preserve"><value>時間</value></data>
+  <data name="Col_Period" xml:space="preserve"><value>週期</value></data>
+  <data name="Col_Text" xml:space="preserve"><value>文字</value></data>
+  <data name="Col_Speak" xml:space="preserve"><value>語音</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>名稱</value></data>
+  <data name="Col_Steps" xml:space="preserve"><value>步驟</value></data>
+  <data name="Col_Command" xml:space="preserve"><value>命令</value></data>
+  <data name="Col_Source" xml:space="preserve"><value>來源</value></data>
+  <data name="Col_Scope" xml:space="preserve"><value>範圍</value></data>
+
+  <data name="Btn_Add" xml:space="preserve"><value>新增</value></data>
+  <data name="Btn_AddMenu" xml:space="preserve"><value>新增 ▾</value></data>
+  <data name="Btn_Edit" xml:space="preserve"><value>編輯</value></data>
+  <data name="Btn_Delete" xml:space="preserve"><value>刪除</value></data>
+  <data name="Btn_Up" xml:space="preserve"><value>↑ 上移</value></data>
+  <data name="Btn_Down" xml:space="preserve"><value>↓ 下移</value></data>
+  <data name="Btn_RunStep" xml:space="preserve"><value>▶ 執行這一步</value></data>
+  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ 執行整組</value></data>
+  <data name="Btn_Preview" xml:space="preserve"><value>▶ 預覽這條</value></data>
+
+  <data name="Settings_StartupDelay" xml:space="preserve"><value>開機延遲(秒)</value></data>
+  <data name="Settings_StartMinimized" xml:space="preserve"><value>啟動時最小化到系統匣</value></data>
+  <data name="Settings_StopHotkey" xml:space="preserve"><value>緊急停止鍵</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>語言</value></data>
+  <data name="Settings_HotkeyTip" xml:space="preserve"><value>變更後下次啟動生效；空白=停用。系統匣右鍵「停止」隨時可用。</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>語言將於下次啟動 Clockwork 時生效。</value></data>
+
+  <data name="Autostart_Checking" xml:space="preserve"><value>開機自動啟動：檢查中…</value></data>
+  <data name="Autostart_On" xml:space="preserve"><value>開機自動啟動：已開（點擊關閉）</value></data>
+  <data name="Autostart_Off" xml:space="preserve"><value>開機自動啟動：已關（點擊開啟）</value></data>
+
+  <data name="Tray_Show" xml:space="preserve"><value>顯示主視窗</value></data>
+  <data name="Tray_Rerun" xml:space="preserve"><value>重新執行開機清單</value></data>
+  <data name="Tray_Stop" xml:space="preserve"><value>停止執行中的動作</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>結束</value></data>
+
+  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>是</value></data>
+  <data name="Reminder_Popup_No" xml:space="preserve"><value>否</value></data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>確定</value></data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>稍後 10 分鐘</value></data>
+
+  <data name="Kind_app" xml:space="preserve"><value>啟動程式</value></data>
+  <data name="Kind_keys" xml:space="preserve"><value>傳送按鍵</value></data>
+  <data name="Kind_volume" xml:space="preserve"><value>音量</value></data>
+  <data name="Kind_window" xml:space="preserve"><value>視窗動作</value></data>
+  <data name="Kind_system" xml:space="preserve"><value>系統命令</value></data>
+  <data name="Kind_group" xml:space="preserve"><value>動作組</value></data>
+  <data name="Kind_message" xml:space="preserve"><value>訊息</value></data>
+  <data name="Kind_delay" xml:space="preserve"><value>延遲</value></data>
+  <data name="Kind_text" xml:space="preserve"><value>傳送文字</value></data>
+
+  <data name="Sys_showDesktop" xml:space="preserve"><value>顯示桌面</value></data>
+  <data name="Sys_lockScreen" xml:space="preserve"><value>鎖定螢幕（回來需輸入密碼）</value></data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>清空資源回收筒</value></data>
+  <data name="Sys_openSettings" xml:space="preserve"><value>開啟 Windows 設定</value></data>
+  <data name="Sys_screenshot" xml:space="preserve"><value>螢幕擷取（框選區域）</value></data>
+  <data name="Sys_clearClipboard" xml:space="preserve"><value>清空剪貼簿</value></data>
+  <data name="Sys_taskManager" xml:space="preserve"><value>開啟工作管理員</value></data>
+  <data name="Sys_monitorOff" xml:space="preserve"><value>關閉螢幕（動滑鼠即亮）</value></data>
+  <data name="Sys_sleep" xml:space="preserve"><value>睡眠（低耗電待命，秒醒）</value></data>
+  <data name="Sys_hibernate" xml:space="preserve"><value>休眠（存檔斷電，開機還原）</value></data>
+  <data name="Sys_signOut" xml:space="preserve"><value>登出（需確認）</value></data>
+  <data name="Sys_restart" xml:space="preserve"><value>重新啟動（需確認）</value></data>
+  <data name="Sys_shutdown" xml:space="preserve"><value>關機（需確認）</value></data>
+
+  <data name="Vol_mute" xml:space="preserve"><value>靜音</value></data>
+  <data name="Vol_unmute" xml:space="preserve"><value>取消靜音</value></data>
+  <data name="Vol_set" xml:space="preserve"><value>設定音量 {0}%</value></data>
+  <data name="Win_close" xml:space="preserve"><value>關閉視窗</value></data>
+  <data name="Win_minimize" xml:space="preserve"><value>最小化視窗</value></data>
+  <data name="Win_maximize" xml:space="preserve"><value>最大化視窗</value></data>
+  <data name="Win_activate" xml:space="preserve"><value>帶到最前面</value></data>
+  <data name="Win_sendkey" xml:space="preserve"><value>置前並傳送按鍵</value></data>
+
+  <data name="Sum_SendKeys" xml:space="preserve"><value>傳送 {0}</value></data>
+  <data name="Sum_Delay_Sec" xml:space="preserve"><value>延遲 {0} 秒</value></data>
+  <data name="Sum_Delay_Ms" xml:space="preserve"><value>延遲 {0} 毫秒</value></data>
+  <data name="Sum_RunGroup" xml:space="preserve"><value>執行動作組：{0}</value></data>
+  <data name="Sum_Group_None" xml:space="preserve"><value>(未指定)</value></data>
+  <data name="Sum_Text" xml:space="preserve"><value>輸入 {0}</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value>（僅{0}點前）</value></data>
+  <data name="Sum_DaysSuffix" xml:space="preserve"><value>（{0}）</value></data>
+
+  <data name="Days_EveryDay" xml:space="preserve"><value>每天</value></data>
+  <data name="Days_Sep" xml:space="preserve"><value></value></data>
+  <data name="Day_1" xml:space="preserve"><value>一</value></data>
+  <data name="Day_2" xml:space="preserve"><value>二</value></data>
+  <data name="Day_3" xml:space="preserve"><value>三</value></data>
+  <data name="Day_4" xml:space="preserve"><value>四</value></data>
+  <data name="Day_5" xml:space="preserve"><value>五</value></data>
+  <data name="Day_6" xml:space="preserve"><value>六</value></data>
+  <data name="Day_7" xml:space="preserve"><value>日</value></data>
+
+  <data name="Period_EveryNDays" xml:space="preserve"><value>每{0}天</value></data>
+  <data name="Period_Monthly" xml:space="preserve"><value>每月{0}號</value></data>
+  <data name="Time_Startup" xml:space="preserve"><value>登入時</value></data>
+  <data name="Time_Startup_Before" xml:space="preserve"><value>登入時·{0}點前</value></data>
+  <data name="Time_Startup_After" xml:space="preserve"><value>登入時·{0}點後</value></data>
+
+  <data name="Type_Registry" xml:space="preserve"><value>登錄檔</value></data>
+  <data name="Type_StartupFolder" xml:space="preserve"><value>啟動資料夾</value></data>
+  <data name="Type_ScheduledTask" xml:space="preserve"><value>排程工作</value></data>
+  <data name="Scope_Machine" xml:space="preserve"><value>所有使用者</value></data>
+  <data name="Scope_User" xml:space="preserve"><value>目前使用者</value></data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0}（需管理員）</value></data>
+
+  <data name="Ed_Ok" xml:space="preserve"><value>確定</value></data>
+  <data name="Ed_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Ed_Title_Step" xml:space="preserve"><value>編輯步驟</value></data>
+  <data name="Ed_Type" xml:space="preserve"><value>類型</value></data>
+  <data name="Ed_Label" xml:space="preserve"><value>標籤</value></data>
+  <data name="Ed_Target" xml:space="preserve"><value>目標</value></data>
+  <data name="Ed_Args" xml:space="preserve"><value>參數</value></data>
+  <data name="Ed_WorkDir" xml:space="preserve"><value>工作目錄</value></data>
+  <data name="Ed_Elevated" xml:space="preserve"><value>以系統管理員身分執行</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>目標可填 exe 完整路徑 / 裸程式名 / 網址 / ms-settings: 等通訊協定 / 文件。</value></data>
+  <data name="Ed_Combo" xml:space="preserve"><value>組合鍵</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。傳送給目前焦點視窗，請先確保目標在最前。</value></data>
+  <data name="Ed_Action" xml:space="preserve"><value>動作</value></data>
+  <data name="Ed_Level" xml:space="preserve"><value>音量(0-100)</value></data>
+  <data name="Ed_Process" xml:space="preserve"><value>處理程序名稱</value></data>
+  <data name="Ed_SendKey" xml:space="preserve"><value>傳送按鍵</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>等視窗(秒)</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>出現後等(秒)</value></data>
+  <data name="Ed_WindowHint" xml:space="preserve"><value>處理程序名稱不含 .exe（如 Weixin / msedge）。帶到最前 / 傳送按鍵需搶占前景，開機自動啟動時可能無效。</value></data>
+  <data name="Ed_Command" xml:space="preserve"><value>命令</value></data>
+  <data name="Ed_Text" xml:space="preserve"><value>文字</value></data>
+  <data name="Ed_TextProcess" xml:space="preserve"><value>目標處理程序</value></data>
+  <data name="Ed_TextHint" xml:space="preserve"><value>逐字輸入（換行=Enter）。目標處理程序留空=傳送給目前焦點視窗（最穩）。</value></data>
+  <data name="Ed_Message" xml:space="preserve"><value>訊息</value></data>
+  <data name="Ed_Speak" xml:space="preserve"><value>語音朗讀</value></data>
+  <data name="Ed_Confirm" xml:space="preserve"><value>是/否確認（是=繼續，否=中止本組）</value></data>
+  <data name="Ed_OnYes" xml:space="preserve"><value>按是後</value></data>
+  <data name="Ed_Group" xml:space="preserve"><value>動作組</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>執行後延遲(ms)</value></data>
+  <data name="Ed_Repeat" xml:space="preserve"><value>重複次數</value></data>
+  <data name="Ed_Note" xml:space="preserve"><value>用途說明</value></data>
+  <data name="Ed_DaysHeader" xml:space="preserve"><value>僅這些星期執行（都不勾=每天）</value></data>
+  <data name="Ed_OnlyBefore" xml:space="preserve"><value>僅</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>點前執行</value></data>
+  <data name="Ed_Vol_Set" xml:space="preserve"><value>設定音量</value></data>
+  <data name="Ed_OnYes_None" xml:space="preserve"><value>無</value></data>
+  <data name="Ed_OnYes_Run" xml:space="preserve"><value>執行 / 開啟檔案</value></data>
+  <data name="Ed_OnYes_Url" xml:space="preserve"><value>開網頁</value></data>
+  <data name="Ed_Group_None" xml:space="preserve"><value>（無）</value></data>
+
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>無法向「{0}」傳送按鍵：視窗沒出現，或找到了卻無法帶到最前（背景/開機自動啟動觸發時常見）</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>找不到「{0}」的視窗（處理程序未執行或尚未就緒？），{1} 未生效</value></data>
+  <data name="Warn_UnknownVolume" xml:space="preserve"><value>未知音量動作：{0}</value></data>
+  <data name="Warn_UnknownKind" xml:space="preserve"><value>未知步驟類型：{0}</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>略過「{0}」：目標是 Clockwork 本身，避免開機自動啟動迴圈</value></data>
+  <data name="Warn_LaunchFail" xml:space="preserve"><value>啟動失敗：{0} —— {1}</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>「{0}」啟動後 0.5 秒內結束（結束代碼 {1}），疑似啟動失敗</value></data>
+  <data name="Mark_Unverified" xml:space="preserve"><value>~ 已傳送（未驗證）</value></data>
+  <data name="Mark_Exception" xml:space="preserve"><value>例外：{0}</value></data>
+
+  <data name="Note_Policy" xml:space="preserve"><value>原則</value></data>
+  <data name="Note_OneTime" xml:space="preserve"><value>一次性</value></data>
+  <data name="Note_System" xml:space="preserve"><value>系統關鍵</value></data>
+  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
+
+  <data name="Ed_Title_Group" xml:space="preserve"><value>編輯動作組</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>動作組只定義動作；觸發請在「開機清單」或「提醒」裡引用本組。</value></data>
+  <data name="Val_GroupName" xml:space="preserve"><value>請填寫動作組名稱。</value></data>
+
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>編輯提醒</value></data>
+  <data name="Ed_Trigger" xml:space="preserve"><value>觸發</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>定時（到點提醒）</value></data>
+  <data name="Ed_Trig_Startup" xml:space="preserve"><value>登入時</value></data>
+  <data name="Ed_Time" xml:space="preserve"><value>時間(HH:mm)</value></data>
+  <data name="Ed_LoginTiming" xml:space="preserve"><value>登入時機</value></data>
+  <data name="Ed_SMode_Any" xml:space="preserve"><value>總是</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>僅 N 點前</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>僅 N 點後</value></data>
+  <data name="Ed_Hour" xml:space="preserve"><value>點</value></data>
+  <data name="Ed_OnlyBoot" xml:space="preserve"><value>僅開機</value></data>
+  <data name="Ed_WithinHint" xml:space="preserve"><value>分鐘內開啟才算登入（0=每次開啟都提醒）</value></data>
+  <data name="Ed_Period" xml:space="preserve"><value>週期</value></data>
+  <data name="Ed_Rec_Daily" xml:space="preserve"><value>按星期</value></data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>每 N 天</value></data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>每月某號</value></data>
+  <data name="Ed_EveryNDays" xml:space="preserve"><value>每幾天</value></data>
+  <data name="Ed_AnchorDays" xml:space="preserve"><value>天；起算日</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd；留空=今天)</value></data>
+  <data name="Ed_MonthlyDay" xml:space="preserve"><value>每月幾號</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>靜默動作組</value></data>
+  <data name="Ed_SilentHint" xml:space="preserve"><value>選了則到點不彈窗，直接靜默執行該動作組（忽略文字/語音/按是後）</value></data>
+  <data name="Ed_OnYes_Group" xml:space="preserve"><value>執行動作組</value></data>
+  <data name="Ed_AutoDismiss" xml:space="preserve"><value>自動關閉(秒)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>沒人按就自動關（0=不關；重複提醒預設60）</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>重複催促</value></data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分鐘一次(0=不重複)，直到</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm，留空=不限)</value></data>
+  <data name="Ed_TrigDelay" xml:space="preserve"><value>觸發後延遲</value></data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>秒，再隨機加 0~</value></data>
+  <data name="Ed_Sec" xml:space="preserve"><value>秒</value></data>
+  <data name="Ed_Grace" xml:space="preserve"><value>寬限(分鐘)</value></data>
+  <data name="Ed_GraceHint" xml:space="preserve"><value>內錯過時點仍補彈</value></data>
+  <data name="Val_TimeFormat" xml:space="preserve"><value>時間格式應為 HH:mm</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>「重複直到」格式應為 HH:mm（或留空）</value></data>
+  <data name="Val_Anchor" xml:space="preserve"><value>起算日格式應為 yyyy-MM-dd（或留空）</value></data>
+
+  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · 確認</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>確定要執行「{0}」嗎？</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · 發生錯誤</value></data>
+  <data name="Crash_Body" xml:space="preserve"><value>Clockwork 遇到一個錯誤（已記錄到日誌，通常可繼續使用）：
+
+{0}
+
+日誌：{1}</value></data>
+  <data name="Run_Title" xml:space="preserve"><value>Clockwork · 執行</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork 提醒</value></data>
+  <data name="Tray_LaunchStopped" xml:space="preserve"><value>開機清單已手動停止：已執行 {0} 步，其餘未執行</value></data>
+  <data name="Tray_LaunchWarn" xml:space="preserve"><value>開機清單執行完成：{0} 步，{1} 步有警告（右鍵系統匣→檢視上次開機日誌）</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>緊急停止快捷鍵「{0}」無法辨識，請在主視窗改一個；系統匣右鍵「停止」仍可用。</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>緊急停止快捷鍵「{0}」註冊失敗（可能被其他程式佔用）；系統匣右鍵「停止」仍可用。</value></data>
+  <data name="Hotkey_Stopped" xml:space="preserve"><value>已要求停止執行中的動作。</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>「{0}」需要管理員權限才能開關，請以管理員身分重新開啟 Clockwork。</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>「{0}」開關失敗：{1}</value></data>
+  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>註冊/取消開機自動啟動需要管理員權限，請以管理員身分重新開啟 Clockwork。</value></data>
+  <data name="Autostart_Fail" xml:space="preserve"><value>操作失敗：{0}</value></data>
+  <data name="Tab_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>一般</value></data>
+  <data name="Settings_About" xml:space="preserve"><value>關於</value></data>
+  <data name="About_CheckUpdate" xml:space="preserve"><value>檢查更新</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>檢查中…</value></data>
+  <data name="Update_Latest" xml:space="preserve"><value>已是最新版（{0}）</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>發現新版 {0}，前往下載？</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>檢查更新失敗：{0}</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>點擊後按下快捷鍵；Esc 取消、Del 清空停用。工作列右鍵「停止」始終可用。</value></data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>按下快捷鍵…</value></data>
+  <data name="Sys_Takeover" xml:space="preserve"><value>接管到啟動清單</value></data>
+  <data name="Ed_CatchUp" xml:space="preserve"><value>錯過必補（休眠/關機也補彈）</value></data>
+  <data name="Unit_Minutes" xml:space="preserve"><value>{0} 分鐘</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>熱鍵「{0}」缺少主鍵，未發送</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>無法辨識的按鍵名「{0}」（多位數字不是按鍵），熱鍵「{1}」未發送</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>無法辨識的按鍵「{0}」，熱鍵「{1}」未發送</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>熱鍵「{0}」被系統拒絕注入（前景為提權視窗/安全桌面時會這樣），未生效</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>熱鍵「{0}」僅部分注入（{1}/{2}），已補發按鍵放開，未生效</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>傳送文字：未能把「{0}」視窗帶到最前，未傳送</value></data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>設定儲存失敗：{0}（變更僅暫存記憶體，重啟後會遺失）</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>提醒「{0}」引用的動作組不存在，本次未執行任何動作</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>提醒「{0}」引用的動作組已停用，本次未執行任何動作</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「點是後」要執行的動作組不存在，已略過</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「點是後」要執行的動作組已停用，已略過</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>排程工作項暫不支援接管；僅支援登錄 Run 鍵與啟動資料夾項</value></data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>啟動清單執行中斷：{0}</value></data>
+  <data name="Tray_ViewLog" xml:space="preserve"><value>檢視上次啟動日誌</value></data>
+  <data name="Tray_NoLog" xml:space="preserve"><value>還沒有啟動日誌（先跑一次啟動清單）</value></data>
+  <data name="Err_ClearClipboard" xml:space="preserve"><value>清空剪貼簿失敗：{0}</value></data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>清空資源回收筒失敗：{0}</value></data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>未知系統命令：{0}</value></data>
+  <data name="Tray_RunGroup" xml:space="preserve"><value>執行：{0}</value></data>
+  <data name="Tray_DndHours" xml:space="preserve"><value>暫停提醒 {0} 小時</value></data>
+  <data name="Tray_DndResume" xml:space="preserve"><value>恢復提醒（剩 {0} 分鐘）</value></data>
+  <data name="Toast_DndOn" xml:space="preserve"><value>已暫停提醒 {0} 小時</value></data>
+  <data name="Toast_DndOff" xml:space="preserve"><value>已恢復提醒</value></data>
+  <data name="Menu_BlankGroup" xml:space="preserve"><value>空白組</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>專注·開始工作</value></data>
+  <data name="Tpl_Meeting" xml:space="preserve"><value>會議模式</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>收工·下班</value></data>
+  <data name="Tpl_Bedtime" xml:space="preserve"><value>睡前</value></data>
+  <data name="Tpl_Away" xml:space="preserve"><value>離開一下</value></data>
+  <data name="Tpl_Screenshot" xml:space="preserve"><value>截圖標註</value></data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今天的任務都記錄好了嗎？</value></data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>該睡覺了！</value></data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>此操作需要管理員權限。是否以系統管理員身分重新開啟 Clockwork？</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>動作組「{0}」正被 {1} 條提醒、{2} 個步驟引用。刪除後這些引用將一併清除（提醒改為僅彈窗、引用它的步驟移除）。仍要刪除嗎？</value></data>
+  <data name="Btn_Browse" xml:space="preserve"><value>瀏覽…</value></data>
+  <data name="Btn_Pick" xml:space="preserve"><value>選擇…</value></data>
+  <data name="Btn_Capture" xml:space="preserve"><value>擷取</value></data>
+  <data name="Btn_PickDate" xml:space="preserve"><value>選日期</value></data>
+  <data name="Filter_Browse" xml:space="preserve"><value>程式 / 指令碼 / 捷徑|*.exe;*.bat;*.cmd;*.ps1;*.lnk|所有檔案|*.*</value></data>
+  <data name="Ed_WindowStyle" xml:space="preserve"><value>視窗樣式</value></data>
+  <data name="WinStyle_Default" xml:space="preserve"><value>預設（正常視窗）</value></data>
+  <data name="WinStyle_Minimized" xml:space="preserve"><value>最小化啟動</value></data>
+  <data name="WinStyle_Maximized" xml:space="preserve"><value>最大化啟動</value></data>
+  <data name="WinStyle_Hidden" xml:space="preserve"><value>隱藏啟動</value></data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>已在執行則啟用視窗（不重複啟動）</value></data>
+  <data name="Ed_ActivateProcess" xml:space="preserve"><value>啟用程序</value></data>
+  <data name="Ed_AltTargets" xml:space="preserve"><value>備用路徑</value></data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>每行一條完整路徑；「目標」不存在時依序用第一個存在的（多裝置路徑不一致時用）</value></data>
+  <data name="Picker_Process" xml:space="preserve"><value>選擇程序</value></data>
+  <data name="Picker_Search" xml:space="preserve"><value>搜尋程序名 / 視窗標題</value></data>
+  <data name="Date_Pick" xml:space="preserve"><value>選擇日期</value></data>
+  <data name="Capture_Key" xml:space="preserve"><value>擷取按鍵</value></data>
+</root>
