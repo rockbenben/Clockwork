@@ -1,7 +1,7 @@
 name: Release
 
 # push 一个 v* 标签（如 v1.2.0）即触发：跑测试 → 发布自包含单文件 exe →
-# 用标签号覆盖版本 → 创建 GitHub Release 并附上 Clockwork.exe。
+# 用标签号覆盖版本 → 打包成带版本号的 zip（Clockwork-<tag>.zip）→ 创建 GitHub Release 并附上该 zip。
 on:
   push:
     tags: ['v*']
@@ -34,9 +34,14 @@ jobs:
       - name: Publish single-file exe
         run: dotnet publish app/Clockwork.csproj -c Release -r win-x64 -p:Version=${{ steps.ver.outputs.version }} -o publish
 
+      # 打包成带版本号的 zip：包名 Clockwork-<tag>.zip（如 Clockwork-v2.2.0.zip），内含 Clockwork.exe。
+      - name: Package zip
+        shell: pwsh
+        run: Compress-Archive -Path publish/Clockwork.exe -DestinationPath "Clockwork-$env:GITHUB_REF_NAME.zip"
+
       # 用 runner 自带的 gh CLI + 内置 GITHUB_TOKEN，不引第三方 action。
       - name: Create GitHub Release
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" publish/Clockwork.exe --title "$GITHUB_REF_NAME" --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" "Clockwork-${GITHUB_REF_NAME}.zip" --title "$GITHUB_REF_NAME" --generate-notes
