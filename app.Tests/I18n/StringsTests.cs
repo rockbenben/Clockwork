@@ -38,6 +38,48 @@ public class StringsTests
     [Fact] public void Unknown_key_returns_key() => Assert.Equal("__nope__", Strings.Get("__nope__"));
 
     [Theory]
+    [InlineData("zh-CN", "zh-CN")]      // 精确
+    [InlineData("zh-Hans-CN", "zh-CN")] // 简体
+    [InlineData("zh-TW", "zh-TW")]      // 精确繁体
+    [InlineData("zh-Hant-TW", "zh-TW")] // 繁体标记
+    [InlineData("zh-HK", "zh-TW")]      // 港（无脚本标记）→ 繁体
+    [InlineData("zh-MO", "zh-TW")]      // 澳（无脚本标记）→ 繁体
+    [InlineData("zh-SG", "zh-CN")]      // 新加坡 → 简体
+    [InlineData("zh-Hans-HK", "zh-CN")] // 简体脚本优先，即便地区是港 → 简体（不能只看地区）
+    [InlineData("zh-Hant-HK", "zh-TW")] // 繁体脚本 → 繁体
+    [InlineData("zh-CHT", "zh-TW")]     // 旧版繁体中性 → 繁体
+    [InlineData("zh-CHS", "zh-CN")]     // 旧版简体中性 → 简体
+    [InlineData("en-US", "en")]         // 两字母
+    [InlineData("en-GB", "en")]
+    [InlineData("ja-JP", "ja")]
+    [InlineData("de-DE", "de")]
+    [InlineData("pt-BR", "pt")]         // 巴西葡语 → pt
+    [InlineData("id-ID", "id")]
+    [InlineData("ar-SA", "ar")]
+    [InlineData("pl-PL", "en")]         // 不支持 → 英文
+    [InlineData("sw-KE", "en")]         // 不支持 → 英文
+    public void ResolveFor_maps_system_culture_to_supported(string culture, string expected)
+        => Assert.Equal(expected, Languages.ResolveFor(CultureInfo.GetCultureInfo(culture)));
+
+    [Theory]
+    [InlineData("en", "en")]            // 已支持 → 原样
+    [InlineData("EN", "en")]            // 大小写规范化
+    [InlineData("zh-cn", "zh-CN")]      // 规范大小写
+    [InlineData("pt-BR", "pt")]         // 有效但不在列表 → 映射最接近
+    [InlineData("zh-Hant", "zh-TW")]    // 有效但不在列表 → 繁体
+    [InlineData("en-US", "en")]
+    public void Normalize_deterministic_cases(string input, string expected)
+        => Assert.Equal(expected, Languages.Normalize(input));
+
+    [Theory]
+    [InlineData("")]                    // 空 → 跟随系统
+    [InlineData("   ")]                 // 空白
+    [InlineData(null)]                  // null
+    [InlineData("not-a-real-culture")]  // 无效文化
+    public void Normalize_falls_back_to_a_supported_language(string? input)
+        => Assert.True(Languages.IsSupported(Languages.Normalize(input)));   // 结果必是受支持的一门
+
+    [Theory]
     [InlineData("zh-CN")]
     [InlineData("en")]
     [InlineData("ja")]

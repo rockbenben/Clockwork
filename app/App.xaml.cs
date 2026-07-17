@@ -85,7 +85,13 @@ public partial class App : System.Windows.Application
         _cfgPath = ConfigPath.Resolve(_exeDir);
         EnsureConfigFile();
         _config = ConfigStore.Read(_cfgPath, out var normalized);
-        // 读入时若发生了重启后有影响的规范化（剔 null / 补生或重发 id），立即写回——
+        // 规范化界面语言到「必是受支持的一门」：空→跟随系统；不在 18 项列表里的有效文化→映射最接近（pt-BR→pt）；
+        // 无效→跟随系统。既尊重示例配置指定的语言，又保证送进 MainWindow 下拉的语言必能匹配——
+        // 否则「非空但不在列表」会被下拉初始化当不匹配、强存 zh-CN 并重启，弄丢用户/系统语言。变了就落盘。
+        var normLang = Languages.Normalize(_config.Settings.Language);
+        if (!string.Equals(normLang, _config.Settings.Language, StringComparison.Ordinal))
+        { _config.Settings.Language = normLang; normalized = true; }
+        // 读入时若发生了重启后有影响的规范化（剔 null / 补生或重发 id / 补语言），立即写回——
         // 尤其去重重发的提醒 id：不落盘则每次启动都换新 id，运行态接不上、被去重那条每次重启都重弹。
         if (normalized) { try { ConfigStore.Write(_config, _cfgPath); } catch { } }
         // 提醒运行态落盘路径 + 载入上次的耐久态（上次触发日期/稍后到点）。重启后不再重复弹当天已弹过的。

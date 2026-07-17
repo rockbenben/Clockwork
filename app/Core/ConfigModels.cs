@@ -104,7 +104,7 @@ public sealed class AppSettings
     public bool StartupWaitForReady { get; set; }
     public int StartupDelaySeconds { get; set; } = 30;
     public string StopHotkey { get; set; } = "Ctrl+Alt+Q";
-    public string Language { get; set; } = "zh-CN";
+    public string Language { get; set; } = "";   // 空=跟随系统显示语言（App 启动时解析成具体 code 并落盘）
 }
 
 public sealed class RootConfig

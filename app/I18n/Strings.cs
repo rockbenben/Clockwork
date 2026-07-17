@@ -23,7 +23,7 @@ public static class Strings
     // 按 settings.language 设置进程 UI 文化。须在建任何窗口前调用（XAML 的 Loc 在加载时取当前文化）。
     public static void ApplyCulture(string? lang)
     {
-        if (string.IsNullOrWhiteSpace(lang)) lang = "zh-CN";
+        lang = Languages.Normalize(lang);   // 空/不支持/无效 → 规范到受支持 code（单一出处，与 App 落盘同口径）
         try
         {
             var ci = CultureInfo.GetCultureInfo(lang);
