@@ -97,10 +97,12 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
         e.Graphics.DrawRectangle(pen, r);
     }
 
+    // 关键：项级渲染（分隔线/背景/文字）的 Graphics 已平移到「该项原点」，一律用项内坐标 Point.Empty+Size——
+    // 用 e.Item.Bounds（父坐标）会把第 1 项起画到各自裁剪区之外、整片看不见（只第 0 项因 Y≈0 侥幸可见）。
     protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
     {
-        var b = e.Item.Bounds;
-        int y = b.Top + b.Height / 2;
+        var b = new Rectangle(Point.Empty, e.Item.Size);
+        int y = b.Height / 2;
         using var pen = new Pen(TrayPalette.Line);
         e.Graphics.DrawLine(pen, b.Left + 12, y, b.Right - 12, y);
     }
@@ -109,7 +111,7 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
     {
         if (e.Item.Tag is TrayMeta { Header: true }) return;
         if (!e.Item.Selected || !e.Item.Enabled) return;
-        var b = e.Item.Bounds;
+        var b = new Rectangle(Point.Empty, e.Item.Size);
         using (var br = new SolidBrush(TrayPalette.Steel))
             e.Graphics.FillRectangle(br, new Rectangle(b.Left + 3, b.Top + 1, b.Width - 6, b.Height - 2));
         using var bar = new SolidBrush(TrayPalette.Brass);   // signature：左侧黄铜刻度条
@@ -120,7 +122,7 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
     {
         var g = e.Graphics;
         g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-        var b = e.Item.Bounds;
+        var b = new Rectangle(Point.Empty, e.Item.Size);
         // 标签/小标题都用 e.TextFont——即 ToolStrip 自动测宽所用的那支字体，绘制=测量，绝不因字体不一致被省略号截断。
         var font = e.TextFont;
 
