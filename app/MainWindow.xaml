@@ -254,8 +254,7 @@
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StopHotkey}" Style="{StaticResource FieldLabel}"/>
                                     <StackPanel Grid.Column="1">
-                                        <TextBox x:Name="HotkeyBox" Width="190" Height="32" HorizontalAlignment="Left" Style="{StaticResource HotkeyCapture}"
-                                                 GotKeyboardFocus="Hotkey_GotFocus" LostKeyboardFocus="Hotkey_LostFocus" PreviewKeyDown="Hotkey_PreviewKeyDown"/>
+                                        <TextBox x:Name="HotkeyBox" Width="190" Height="32" HorizontalAlignment="Left" Style="{StaticResource HotkeyCapture}"/>
                                         <TextBlock Text="{loc:Loc Settings_HotkeyCaptureTip}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap" MaxWidth="380"/>
                                     </StackPanel>
                                 </Grid>

@@ -38,7 +38,7 @@
                 </StackPanel>
 
                 <StackPanel x:Name="PanKeys">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Combo}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ComboBox2" Width="300" Height="28"/><Button Content="{loc:Loc Btn_Capture}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="CaptureCombo_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Combo}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ComboBox2" Width="300" Height="28" Style="{StaticResource HotkeyCapture}"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_KeysHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
@@ -50,7 +50,7 @@
                 <StackPanel x:Name="PanWindow">
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Action}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="WinActionCombo" Width="190" Height="28" SelectionChanged="WinAction_Changed"/></StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Process}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ProcessBox" Width="240" Height="28"/><Button Content="{loc:Loc Btn_Pick}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="PickProcess_Click"/></StackPanel>
-                    <StackPanel x:Name="WinSendRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SendKey}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="SendKeyBox" Width="240" Height="28"/><Button Content="{loc:Loc Btn_Capture}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="CaptureSendKey_Click"/></StackPanel>
+                    <StackPanel x:Name="WinSendRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SendKey}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="SendKeyBox" Width="240" Height="28" Style="{StaticResource HotkeyCapture}"/></StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WaitWin}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WaitWinBox" Width="90" Height="28"/></StackPanel>
                     <StackPanel x:Name="WinPostRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_PostDelay}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="PostDelayBox" Width="90" Height="28"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_WindowHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>

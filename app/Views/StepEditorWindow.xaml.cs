@@ -37,6 +37,13 @@ public partial class StepEditorWindow : Window
         ShowPanelForKind(step.Kind);
         UpdateVolRow();
         UpdateWinRows();
+
+        // 组合键/发送键改「点击即录键」，与急停键/组热键统一走 KeyCaptureBox——去掉多余的「捕捉」按钮。
+        // 发送键模式：允许裸键（F5/{ENTER} 等），各按自身发送路径校验；值就在文本框里、确定时读取，故 set 空。
+        KeyCaptureBox.Attach(ComboBox2, Native.HotkeyCapture.KeyCaptureMode.SendKeys,
+            c => Native.KeyInput.ToHotkeyParams(c) != null, () => ComboBox2.Text, _ => { });
+        KeyCaptureBox.Attach(SendKeyBox, Native.HotkeyCapture.KeyCaptureMode.SendKeys,
+            KeyCombo.CanEncodeForSendKeys, () => SendKeyBox.Text, _ => { });
     }
 
     private void LoadStep(LaunchStep s)
@@ -133,17 +140,6 @@ public partial class StepEditorWindow : Window
     private void PickProcess_Click(object sender, RoutedEventArgs e) { if (Pickers.PickProcess(this) is string p) ProcessBox.Text = p; }
     private void PickTextProcess_Click(object sender, RoutedEventArgs e) { if (Pickers.PickProcess(this) is string p) TextProcessBox.Text = p; }
     private void PickActivateProc_Click(object sender, RoutedEventArgs e) { if (Pickers.PickProcess(this) is string p) ActivateProcBox.Text = p; }
-    // 两个捕获目的地走不同发送路径，键集不同：组合键 = SendInput（能解析出 VK 即可，Win 组合支持）；
-    // 置前发送键 = SendKeys（Win 不支持、键名须能编码，否则运行时被当字面文本打进目标窗口）。
-    private void CaptureCombo_Click(object sender, RoutedEventArgs e)
-    {
-        if (Pickers.CaptureKey(this, c => Native.KeyInput.ToHotkeyParams(c) != null) is string s) ComboBox2.Text = s;
-    }
-    private void CaptureSendKey_Click(object sender, RoutedEventArgs e)
-    {
-        if (Pickers.CaptureKey(this, KeyCombo.CanEncodeForSendKeys) is string s) SendKeyBox.Text = s;
-    }
-
     // 打开编辑器，返回编辑后的新步骤（取消→null）。step 为 null=新建指定 kind。
     public static LaunchStep? Edit(Window owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups)
     {

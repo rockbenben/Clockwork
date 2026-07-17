@@ -71,28 +71,56 @@ public static class HotkeyCapture
         return KeyInput.ToHotkeyParams(combo) == null ? null : combo;   // 不可注册就作废
     }
 
-    // 捕捉框按键的统一决策（设置页急停键 / 组编辑器全局热键共用，两处不再各抄一份状态机）。
+    // 「发送键」用的组合：允许裸键（发送按键不要求修饰键，如 F5 / Enter / {ENTER}），
+    // 不排除系统保留组合（只是发给目标窗口、不做全局注册），最终由 accept 校验目的地能否编码。
+    public static string? BuildSendCombo(ModifierKeys mods, Key key, Func<string, bool>? accept)
+    {
+        if (IsModifierKey(key)) return null;
+        var tok = KeyToken(key);
+        if (tok == null) return null;
+        var parts = new List<string>();
+        if (mods.HasFlag(ModifierKeys.Control)) parts.Add("Ctrl");
+        if (mods.HasFlag(ModifierKeys.Alt)) parts.Add("Alt");
+        if (mods.HasFlag(ModifierKeys.Shift)) parts.Add("Shift");
+        if (mods.HasFlag(ModifierKeys.Windows)) parts.Add("Win");
+        parts.Add(tok);
+        var combo = string.Join("+", parts);
+        return accept == null || accept(combo) ? combo : null;
+    }
+
+    // 捕捉框有两种模式：Hotkey=全局热键（急停键/组热键，要修饰键、拒保留组合）；
+    // SendKeys=发送键（步骤里「发送按键」/「置前发送键」，允许裸键、按 accept 校验）。
+    public enum KeyCaptureMode { Hotkey, SendKeys }
+
+    // 捕捉框按键的统一决策：四个键框（急停键/组热键/组合键/发送键）共用同一状态机，不再各抄一份、也不再要「捕捉」按钮。
     public enum CaptureAction
     {
-        Ignore,       // 吞掉本次按键，继续等（只按修饰键 / 组不出可注册组合）
-        PassThrough,  // 不拦截（e.Handled=false）：裸 Tab/Enter 留给焦点导航与默认按钮——否则键盘用户被困在框里
+        Ignore,       // 吞掉本次按键，继续等（只按修饰键 / 组不出有效组合）
+        PassThrough,  // 不拦截（e.Handled=false）：裸 Tab 留给焦点导航（Hotkey 模式下裸 Enter 也放行给默认按钮）
         Cancel,       // Esc：恢复原值、退出捕捉
-        Clear,        // Delete/Backspace：清空热键
+        Clear,        // 裸 Delete/Backspace 清空（仅 Hotkey 模式——发送键里 Delete/Enter 是可录的键）
         Captured,     // 捕捉成功，combo 即结果
     }
 
-    // 调用方先把 Key.System 解包成 SystemKey 再传入。
-    public static CaptureAction ProcessCaptureKey(Key key, ModifierKeys mods, out string? combo)
+    // 调用方先把 Key.System 解包成 SystemKey 再传入。accept 仅 SendKeys 模式用（目的地可编码校验）。
+    public static CaptureAction ProcessCaptureKey(Key key, ModifierKeys mods, KeyCaptureMode mode, Func<string, bool>? accept, out string? combo)
     {
         combo = null;
         bool bare = (mods & ~ModifierKeys.Shift) == ModifierKeys.None;   // 无修饰（Shift 单独不算）
-        if (key == Key.Tab && bare) return CaptureAction.PassThrough;    // Tab/Shift+Tab：移动焦点
-        if (key == Key.Enter && mods == ModifierKeys.None) return CaptureAction.PassThrough;  // 裸 Enter：默认按钮
+        if (key == Key.Tab && bare) return CaptureAction.PassThrough;    // Tab/Shift+Tab：移动焦点（两模式都放行——裸 Tab 罕见作发送键）
         if (IsModifierKey(key)) return CaptureAction.Ignore;
         if (key == Key.Escape) return CaptureAction.Cancel;
-        // 只有「裸」Delete/Backspace 才是清空；带修饰键的（如 Ctrl+Delete）是用户想录的组合，交给 BuildCombo。
-        if (key is Key.Delete or Key.Back && mods == ModifierKeys.None) return CaptureAction.Clear;
-        combo = BuildCombo(mods, key);
+        if (mode == KeyCaptureMode.Hotkey)
+        {
+            if (key == Key.Enter && mods == ModifierKeys.None) return CaptureAction.PassThrough;  // 热键：裸 Enter 给默认按钮
+            // 只有「裸」Delete/Backspace 才是清空；带修饰键的（如 Ctrl+Delete）是用户想录的组合，交给 BuildCombo。
+            if (key is Key.Delete or Key.Back && mods == ModifierKeys.None) return CaptureAction.Clear;
+            combo = BuildCombo(mods, key);
+        }
+        else   // SendKeys：裸键可录（含 Enter/Delete），accept 校验；无清空/默认按钮分支。
+        {
+            combo = BuildSendCombo(mods, key, accept);
+        }
         return combo == null ? CaptureAction.Ignore : CaptureAction.Captured;
     }
 }

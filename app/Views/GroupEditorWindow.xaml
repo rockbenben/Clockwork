@@ -20,8 +20,7 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
             <TextBlock Text="{loc:Loc Ed_GroupHotkey}" VerticalAlignment="Center" MinWidth="52" TextWrapping="Wrap" Margin="0,0,10,0"/>
-            <TextBox x:Name="HotkeyBox" Width="170" Height="28" Style="{StaticResource HotkeyCapture}"
-                     GotKeyboardFocus="Hotkey_GotFocus" LostKeyboardFocus="Hotkey_LostFocus" PreviewKeyDown="Hotkey_PreviewKeyDown"/>
+            <TextBox x:Name="HotkeyBox" Width="170" Height="28" Style="{StaticResource HotkeyCapture}"/>
             <TextBlock Text="{loc:Loc Ed_GroupHotkeyHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap" MaxWidth="380"/>
         </StackPanel>
         <TextBlock Grid.Row="2" Text="{loc:Loc Ed_GroupHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" Margin="52,0,0,10"/>

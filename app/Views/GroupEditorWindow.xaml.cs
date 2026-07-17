@@ -34,26 +34,15 @@ public partial class GroupEditorWindow : Window
         _stopHotkey = stopHotkey;
         NameBox.Text = group.Name;
         _hotkey = group.Hotkey ?? "";
-        HotkeyBox.Text = _hotkey;
+        // 全局热键「点击即录键」，与急停键/发送键统一走 KeyCaptureBox。只改工作副本 _hotkey，
+        // 点「确定」才随 Result 落库——取消编辑不影响已有热键。
+        KeyCaptureBox.Attach(HotkeyBox, HotkeyCapture.KeyCaptureMode.Hotkey, null,
+            () => _hotkey, combo => _hotkey = combo);
         foreach (var s in group.Steps) _rows.Add(new StepRowVm(Clone(s), () => { }));
         Steps.ItemsSource = _rows;
     }
 
-    // —— 全局热键：按键捕捉 ——（与设置页急停键同一交互：点击后按下组合即录入，Esc 取消、Delete 清除）
-    // 只改工作副本 _hotkey，点「确定」才随 Result 落库——取消编辑不影响已有热键。
     private string _hotkey = "";
-
-    private void Hotkey_GotFocus(object sender, KeyboardFocusChangedEventArgs e)
-    {
-        HotkeyBox.Text = Strings.Get("Hotkey_PressPrompt");
-        App.Instance?.SuspendHotkeys();   // 捕捉期间注销全部全局热键，避免按到已注册组合触发急停/跑组
-    }
-
-    private void Hotkey_LostFocus(object sender, KeyboardFocusChangedEventArgs e)
-    {
-        if (HotkeyBox.Text == Strings.Get("Hotkey_PressPrompt")) HotkeyBox.Text = _hotkey;
-        App.Instance?.ResumeHotkeys();    // 恢复按当前配置注册（编辑未保存，故仍是旧键）
-    }
 
     // 兜底：捕捉框仍持焦点时窗口被关（如裸 Enter 直接触发默认「确定」）不保证会走 LostFocus——
     // 关窗必恢复，否则急停/组热键保持挂起、保命键静默失效。ResumeHotkeys 幂等，双触发无害。
@@ -61,24 +50,6 @@ public partial class GroupEditorWindow : Window
     {
         App.Instance?.ResumeHotkeys();
         base.OnClosed(e);
-    }
-
-    private void Hotkey_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-    {
-        e.Handled = true;   // PassThrough 分支除外——决策统一在 HotkeyCapture.ProcessCaptureKey（与设置页急停键同一状态机）
-        var key = e.Key == Key.System ? e.SystemKey : e.Key;
-        switch (HotkeyCapture.ProcessCaptureKey(key, Keyboard.Modifiers, out var combo))
-        {
-            case HotkeyCapture.CaptureAction.PassThrough:            // 裸 Tab/Enter：放行，键盘用户不被困在框里
-                e.Handled = false; return;
-            case HotkeyCapture.CaptureAction.Cancel:
-                HotkeyBox.Text = _hotkey; Keyboard.ClearFocus(); return;
-            case HotkeyCapture.CaptureAction.Clear:
-                _hotkey = ""; HotkeyBox.Text = ""; Keyboard.ClearFocus(); return;
-            case HotkeyCapture.CaptureAction.Captured:
-                _hotkey = combo!; HotkeyBox.Text = combo; Keyboard.ClearFocus(); return;
-            default: return;                                         // Ignore
-        }
     }
 
     private int Sel => Steps.SelectedIndex;

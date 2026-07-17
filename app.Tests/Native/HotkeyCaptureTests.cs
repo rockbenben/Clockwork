@@ -59,36 +59,41 @@ public class HotkeyCaptureTests
     public void BuildCombo_still_accepts_reserved_main_key_with_more_modifiers()
         => Assert.Equal("Ctrl+Alt+F4", HotkeyCapture.BuildCombo(ModifierKeys.Control | ModifierKeys.Alt, Key.F4));
 
-    // —— 捕捉状态机（设置页急停键与组编辑器共用） ——
+    // —— 捕捉状态机：Hotkey 模式（急停键 / 组热键） ——
+    static HotkeyCapture.CaptureAction Hk(Key k, ModifierKeys m, out string? c)
+        => HotkeyCapture.ProcessCaptureKey(k, m, HotkeyCapture.KeyCaptureMode.Hotkey, null, out c);
+    static HotkeyCapture.CaptureAction Sk(Key k, ModifierKeys m, out string? c)
+        => HotkeyCapture.ProcessCaptureKey(k, m, HotkeyCapture.KeyCaptureMode.SendKeys, null, out c);
+
     [Theory]
     [InlineData(Key.Tab, ModifierKeys.None)]                  // 裸 Tab：焦点导航
     [InlineData(Key.Tab, ModifierKeys.Shift)]                 // Shift+Tab：反向导航
     [InlineData(Key.Enter, ModifierKeys.None)]                // 裸 Enter：默认按钮
-    public void Capture_passes_through_navigation_keys(Key key, ModifierKeys mods)
-        => Assert.Equal(HotkeyCapture.CaptureAction.PassThrough, HotkeyCapture.ProcessCaptureKey(key, mods, out _));
+    public void Capture_hotkey_passes_through_navigation_keys(Key key, ModifierKeys mods)
+        => Assert.Equal(HotkeyCapture.CaptureAction.PassThrough, Hk(key, mods, out _));
 
     [Fact]
-    public void Capture_esc_cancels()
-        => Assert.Equal(HotkeyCapture.CaptureAction.Cancel, HotkeyCapture.ProcessCaptureKey(Key.Escape, ModifierKeys.None, out _));
+    public void Capture_hotkey_esc_cancels()
+        => Assert.Equal(HotkeyCapture.CaptureAction.Cancel, Hk(Key.Escape, ModifierKeys.None, out _));
 
     [Theory]
     [InlineData(Key.Delete)]
     [InlineData(Key.Back)]
-    public void Capture_bare_delete_clears(Key key)
-        => Assert.Equal(HotkeyCapture.CaptureAction.Clear, HotkeyCapture.ProcessCaptureKey(key, ModifierKeys.None, out _));
+    public void Capture_hotkey_bare_delete_clears(Key key)
+        => Assert.Equal(HotkeyCapture.CaptureAction.Clear, Hk(key, ModifierKeys.None, out _));
 
     [Fact]
-    public void Capture_modified_delete_is_a_combo_not_clear()   // Ctrl+Delete 是用户想录的组合，不能当清空吞掉
+    public void Capture_hotkey_modified_delete_is_a_combo_not_clear()   // Ctrl+Delete 是用户想录的组合，不能当清空吞掉
     {
-        var act = HotkeyCapture.ProcessCaptureKey(Key.Delete, ModifierKeys.Control, out var combo);
+        var act = Hk(Key.Delete, ModifierKeys.Control, out var combo);
         Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
         Assert.Equal("Ctrl+Delete", combo);
     }
 
     [Fact]
-    public void Capture_valid_combo_is_captured()
+    public void Capture_hotkey_valid_combo_is_captured()
     {
-        var act = HotkeyCapture.ProcessCaptureKey(Key.F, ModifierKeys.Control | ModifierKeys.Alt, out var combo);
+        var act = Hk(Key.F, ModifierKeys.Control | ModifierKeys.Alt, out var combo);
         Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
         Assert.Equal("Ctrl+Alt+F", combo);
     }
@@ -97,6 +102,37 @@ public class HotkeyCaptureTests
     [InlineData(Key.LeftCtrl, ModifierKeys.Control)]   // 只按修饰键：继续等
     [InlineData(Key.Q, ModifierKeys.None)]             // 裸键组不出可注册组合：忽略
     [InlineData(Key.F4, ModifierKeys.Alt)]             // Alt+F4 保留组合：忽略而非捕获
-    public void Capture_ignores_incomplete_or_reserved(Key key, ModifierKeys mods)
-        => Assert.Equal(HotkeyCapture.CaptureAction.Ignore, HotkeyCapture.ProcessCaptureKey(key, mods, out _));
+    public void Capture_hotkey_ignores_incomplete_or_reserved(Key key, ModifierKeys mods)
+        => Assert.Equal(HotkeyCapture.CaptureAction.Ignore, Hk(key, mods, out _));
+
+    // —— 捕捉状态机：SendKeys 模式（步骤里的组合键 / 发送键） ——
+    [Theory]
+    [InlineData(Key.F5, ModifierKeys.None, "F5")]                       // 裸 F5：发送键允许，热键模式则拒
+    [InlineData(Key.Enter, ModifierKeys.None, "Enter")]                 // 裸 Enter：可录（发送 Enter 是常见需求）
+    [InlineData(Key.Delete, ModifierKeys.None, "Delete")]              // 裸 Delete：可录，不当清空
+    [InlineData(Key.D, ModifierKeys.Windows, "Win+D")]                 // Win+D
+    [InlineData(Key.F4, ModifierKeys.Alt, "Alt+F4")]                   // 发送键不拦系统保留组合（只发给目标窗口）
+    public void Capture_sendkeys_allows_bare_and_reserved(Key key, ModifierKeys mods, string expected)
+    {
+        var act = Sk(key, mods, out var combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
+        Assert.Equal(expected, combo);
+    }
+
+    [Fact]
+    public void Capture_sendkeys_tab_still_navigates()   // 裸 Tab 仍放行，键盘用户不被困
+        => Assert.Equal(HotkeyCapture.CaptureAction.PassThrough, Sk(Key.Tab, ModifierKeys.None, out _));
+
+    [Fact]
+    public void Capture_sendkeys_esc_cancels()
+        => Assert.Equal(HotkeyCapture.CaptureAction.Cancel, Sk(Key.Escape, ModifierKeys.None, out _));
+
+    [Fact]
+    public void Capture_sendkeys_respects_accept_filter()   // 目的地编码不了的键：忽略、继续等
+    {
+        var act = HotkeyCapture.ProcessCaptureKey(Key.F5, ModifierKeys.None,
+            HotkeyCapture.KeyCaptureMode.SendKeys, _ => false, out var combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Ignore, act);
+        Assert.Null(combo);
+    }
 }
