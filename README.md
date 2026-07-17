@@ -4,130 +4,112 @@
 
 # Clockwork
 
-**电脑上重复的事，自动帮你做**
+**Put the repetitive parts of your PC on autopilot**
 
-开机自动开好软件 · 按时提醒 · 一键完成一串操作
+Auto-launch your apps at login · timed reminders · one tap to run a whole routine
 
 </div>
 
-> 365 开源计划 #020 · Windows 托盘小工具：开机启动 / 定时提醒 / 系统启动项 / 动作组
+<div align="center">
+
+**English** · [简体中文](docs/README.zh-CN.md) · [繁體中文](docs/README.zh-TW.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [Deutsch](docs/README.de.md) · [Español](docs/README.es.md) · [Français](docs/README.fr.md) · [Italiano](docs/README.it.md) · [Nederlands](docs/README.nl.md) · [Português](docs/README.pt.md) · [Русский](docs/README.ru.md) · [Türkçe](docs/README.tr.md) · [Tiếng Việt](docs/README.vi.md) · [ไทย](docs/README.th.md) · [Bahasa Indonesia](docs/README.id.md) · [हिन्दी](docs/README.hi.md) · [العربية](docs/README.ar.md)
+
+</div>
+
+> 365 Open-Source Plan #020 · A Windows tray tool: startup launcher · reminders · system startup items · action groups
 
 ![Clockwork](assets/social-card.png)
 
-一个给 Windows 用的托盘小工具，帮你**管好开机与日常这几件事**：
+A small Windows tray tool that takes care of the routine parts of starting your day at the computer:
 
-- 🚀 **我的启动清单**：开机后自动、按顺序打开常用软件（可设管理员权限、先后延时、仅某些星期 / 仅 N 点前，还能选窗口风格 / 已开则激活 / 备用路径），还能顺手做几件杂事（关掉或激活某些窗口、发送按键 / 发送文本、调音量等）。
-- ⏰ **定时提醒**：到点弹提醒，可朗读、按「星期 / 每 N 天 / 每月」周期、也能「登录时」触发；点「是」还能运行程序 / 打开文件（如音乐）/ 开网页 / 跑一个动作组。
-- 🧹 **系统启动项**：把电脑里**所有开机自启的软件**列出来，一键关掉不需要的（只禁用、不删除，随时恢复），还能一键「纳入」到自己的启动清单来接管。
-- 🎛️ **动作组**：把一串动作打包成可复用的「组」（如 专注 / 会议 / 收工 / 睡前），在托盘、启动清单或提醒里一键触发；内置常用模板。
+- 🚀 **Startup list** — automatically open your everyday apps at login, in order (per-step admin rights, delays, only-on-certain-weekdays / only-before-N-o'clock, window style, activate-if-running, fallback paths), and do a few chores along the way (close or focus windows, send keystrokes / text, set volume…).
+- ⏰ **Reminders** — pop a reminder on time; speak it aloud; repeat by weekday / every-N-days / monthly; or trigger "at login". Clicking **Yes** can run a program, open a file (e.g. music) or a URL, or run an action group.
+- 🧹 **System startup items** — list **everything on your PC that auto-starts** and switch off what you don't need (disabled, not deleted — flip it back anytime). One click "takes over" an item into your own startup list.
+- 🎛️ **Action groups** — bundle a series of actions into a reusable group (Focus / Meeting / Wrap-up / Bedtime…) and trigger it with one click from the tray, the startup list, or a reminder. Built-in templates included.
 
-免安装、绿色单文件夹、所有设置点点鼠标就能改；暗色界面、高分屏自适应。
+No install, fully portable single folder, everything configurable by mouse; dark UI, high-DPI aware. The UI ships in **18 languages** and follows your Windows display language on first run.
 
-## 运行要求
+> 📖 **Full guide:** [English](docs/USAGE.md) · [中文](docs/USAGE.zh-CN.md)
 
-- Windows 10 / 11（x64）
-- 无需额外安装：自包含单文件 `Clockwork.exe`，内置 .NET 运行时，开箱即用
+## Requirements
 
-## 怎么开始用
+- Windows 10 / 11 (x64)
+- Nothing to install: a self-contained single-file `Clockwork.exe` with the .NET runtime bundled in.
 
-1. 到 [Releases](../../releases) 下载最新的 `Clockwork.exe`，放进任意文件夹（放哪都行，绿色免安装）；想自己构建见下方「给开发者」。
-2. 双击 **`Clockwork.exe`**，打开设置窗口。
-   - **首次打开**会自动载入一份**示例配置**（演示各种玩法的启动 / 提醒 / 动作组），照下一节手把手改成你自己的即可。你的设置存在同文件夹的 `clockwork.settings.json`，只在本机、不入库。
-3. 想每次开机自动运行：到**「设置」页**点「开机自启」按钮开启（用管理员权限注册计划任务，避免开机时弹一堆授权框）。
+## Getting started
 
-> 平时它安静待在右下角托盘里。改设置时双击托盘图标打开窗口；点窗口的关闭按钮只是收起到托盘，不会退出。彻底退出用托盘右键「退出」。
+1. Download the latest `Clockwork.exe` from [Releases](https://github.com/rockbenben/Clockwork/releases) and drop it into any folder (portable — put it wherever). To build it yourself, see **For developers** below.
+2. Double-click **`Clockwork.exe`** to open the settings window.
+   - On **first run** it loads a **sample config** (demonstrating startup / reminders / action groups) so you can adapt it to your own. Your settings live in `clockwork.settings.json` next to the exe — local only, never committed.
+3. To run it every boot: on the **Settings** tab, click **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
 
-## 第一次用：把示例换成你自己的
+> It sits quietly in the tray. Double-click the tray icon to open the window; the window's close button only hides it to the tray. Quit for real via the tray's right-click **Exit**.
 
-第一次打开，清单 / 提醒 / 动作组里已经放了一批**示例**（都带「示例」字样），只是演示各种玩法、给你照葫芦画瓢用的——**放心大胆改或删**。启动清单里，前面几条默认勾选、开机会真的执行；末尾的「Windows 设置 / 任务管理器」等**默认没勾选**，只当样例摆着，勾上才会执行。
+## Screenshot
 
-最常见的需求「开机自动打开我常用的几个软件」，这样弄：
+![Screenshot](assets/screenshot.png)
 
-1. 切到 **我的启动清单** 标签页。
-2. 把示例里用不上的整条**删掉**（选中 → 删除；删完自动选中下一条，连着删很顺手）。
-3. 点 **「新增 ▾」→ 启动程序**，「目标」填你要开的软件：
-   - 系统能直接找到的，填程序名就行：`msedge.exe`（Edge）、`notepad.exe`（记事本）；
-   - 找不到的填**完整路径**：在开始菜单 / 桌面右键该程序 →「打开文件所在位置」，再右键图标「属性」，把里面的「目标」路径复制粘进来；
-   - 网址（`https://…`）、文档、`.ps1` 脚本、快捷方式（`.lnk`）也都能填。
-4. 想让某个软件晚点再开（比如等前一个起来、等网络就绪），把它的**「执行后延时」**调大几秒，或用上下移调整顺序。
-5. 全部弄好，托盘图标**右键 →「重新运行启动清单」**先试跑一遍，确认都对。
-6. 满意了，到**「设置」页**开启「开机自启」，以后开机自动照做。
+## The five tabs
 
-> 只想用「定时提醒」或「动作组」？去对应标签页照同样思路改示例就行，启动清单可以全删空；三块功能各自独立，用哪块开哪块。
+### Startup list
+An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pick a type; add/remove/reorder freely; each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times), and conditions (**only on certain weekdays / only before N o'clock**). Step types:
 
-## 长这样
+- **Launch program** — target (**Browse…** to pick a file) / arguments / working dir (leave blank = target's folder) / admin. Target can be an `.exe`, document, shortcut or URL; a `.ps1` runs via PowerShell. Advanced: **window style** (minimized / maximized / hidden), **activate if already running** (bring it to front instead of relaunching; process name via **Pick…**), **fallback paths** (one full path per line; the first existing one is used — handy when install paths differ across machines).
+- **Send keys** — e.g. Win+D, Alt+K, Ctrl+Enter, F5 (**Capture** to record a shortcut by pressing it).
+- **Send text** — type a string into the focused window (or a chosen **target process** via **Pick…**).
+- **Volume** — mute / unmute / set level.
+- **Window action** — by process name (**Pick…**, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys; slow apps can **wait up to N seconds for the window to appear**.
+- **System command** — show desktop / lock / turn off monitor / empty recycle bin / clear clipboard / open Settings / Task Manager / screenshot / sleep / hibernate / sign out / restart / shut down (the last three confirm first).
+- **Delay** — just wait N seconds before the next step.
+- **Action group** — run a defined action group; set a repeat count to loop the whole group.
 
-![界面截图](assets/screenshot.png)
+> **Startup delay** (Settings tab, boot only): wait a fixed number of seconds after login so the "login storm" (disk/CPU contention from every autostart) passes before the list runs; a manual re-run is not affected. Raise it (0–600 s) if things start too early.
 
-## 五个标签页怎么用
+> **Stop anytime** — tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately.
 
-### 我的启动清单
-一条**有序步骤列表**，开机时从上到下依次执行。点「新增 ▾」选类型，可在任意位置增删、上下移；每步可单独启用 / 禁用、设「执行后延时」、设「**重复次数**」（循环动作：连续执行 N 次，每次之间等「执行后延时」；给「动作组」步骤设重复即可整组循环），设条件「仅某些星期 / 仅 N 点前」。步骤类型：
+### Reminders
+Set a **time** (or switch to **at login**), a **recurrence** (weekdays / every-N-days / monthly), and the **text**; optionally speak it aloud. Reminders with an **On-Yes** action (run program / open file / URL / run action group) pop a **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5–60 min); the rest slide in as a **reminder card** in the corner (auto-close after the configured seconds, **0 = stays until you dismiss it**). You can also set a **silent action group** — run a group on time with no popup.
 
-- **启动程序**：目标（可点「浏览…」选文件）/ 参数 / 工作目录（可选文件夹，**留空 = 用目标所在目录**）/ 管理员。目标填 `.exe`、文档、快捷方式、网址都行；填 `.ps1` 会自动用 PowerShell 运行。进阶选项：**窗口风格**（最小化 / 最大化 / 隐藏 启动）、**已在运行则激活窗口**（程序已开就把它带到最前、不重复启动；进程名可「选择…」）、**备用路径**（每行一条完整路径，「目标」不存在时按顺序用第一个存在的——多设备安装路径不一致时很方便）。
-- **发送按键**：如 Win+D、Alt+K、Ctrl+Enter、F5（支持 Enter / Tab / Esc / Del / 方向键等键名；可点「**捕获**」直接按下快捷键自动填入；SendInput 原子注入，失败会如实记入日志）
-- **发送文本**：往**当前焦点窗口**逐字输入一段文本（换行=回车、Tab 生效；适合自动填账号、模板文字等）。可选「**目标进程**」（可「选择…」）——填了就先把它的窗口带到最前、再输入；留空则发给当前焦点窗口（需自行确保光标已在目标输入框，可配合前一步「延时」）。
-- **音量**：静音 / 取消静音 / 设为音量（设音量会先自动取消静音）
-- **窗口动作**：按进程名（可「选择…」，带搜索）关闭 / 最小化 / 最大化 / 带到最前面 / 置前并发送按键（适配微信、QQ 等常驻软件）；慢启动的应用还可设「等窗口出现最多 N 秒」「窗口出现后再等 N 秒」自适应等待，不必盲等固定延时
-- **系统命令**：显示桌面 / 锁屏（回来需输密码）/ 息屏（只关屏幕）/ 清空回收站 / 清空剪贴板 / 打开设置 / 任务管理器 / 截图 / 睡眠（秒醒）/ 休眠（断电保存）/ 注销 / 重启 / 关机（后三项执行前会弹确认框）
-- **延时**：单纯等待 N 秒再继续下一步；放在清单最前面可整体推迟启动（开机太早时先缓一缓）
-- **动作组**：引用一个已定义好的动作组；设「重复次数」即可把整组动作循环 N 遍
+Advanced: **auto-close**, **repeat nagging** (re-pop every N minutes until a deadline), **post-trigger delay + random jitter**, **grace** (catch a fire missed by a brief shutdown/sleep), **catch up if missed** (re-fire once after hibernation/shutdown skipped it), and an **anchor date** for every-N-days (**Pick date**). "Fired today" and "snoozed until" survive restarts (`clockwork.state.json`), so a snooze carries across a restart and nothing double-fires.
 
-> **开机延迟**：**设置页**有个「开机延迟 N 秒」——**仅开机自启时生效**。登录后先固定等这么多秒，让「登录风暴」（开机时磁盘 / CPU 被一堆自启程序抢占）过峰，再跑清单；手动「重新运行」不受影响。开机太早、有软件没起来，就把它调大（0–600 秒）。这是整体延时的**唯一旋钮**；若只想让某一步慢一点，用那一步的「执行后延时」。
+Need to focus or take a meeting? The tray offers **Pause reminders for 1 / 2 / 4 hours** (Do-Not-Disturb): everything (including silent groups) is suppressed and auto-resumes when the time is up.
 
-> **随时叫停**：托盘右键 →「**停止正在运行的动作**」，或按全局**急停键**（在**设置页**设置：点击输入框后直接按下想要的快捷键即录入，Esc 取消、Delete 清空停用；默认 `Ctrl+Alt+Q`）。正在运行的启动清单 / 动作组 / 单步运行会在当前动作做完后立刻停下（循环设多了 / 延时设长了不用干等）；开机延迟、等窗口出现等长等待也会被立即打断。启动日志会如实记录「已手动停止」和停在哪一步。若设的热键被别的程序占用而注册失败，会弹托盘气泡提醒（此时用托盘菜单的「停止」兜底）。
+### System startup items
+Lists **everything that auto-starts** (registry Run keys, Startup folders, scheduled tasks). Uncheck **Enable** to switch an item off — **disabled, not deleted; re-check to restore** (takes effect immediately). Items marked **needs admin** prompt to relaunch elevated. System / policy / one-time items (Group-Policy Run, RunOnce, Winlogon, Active Setup) can't be toggled normally and are **hidden by default** — tick **Show system / read-only items** to view them (greyed out). **Take over into startup list** hands an item to Clockwork (registry Run keys and Startup-folder items only). A top **filter** searches by name / command; hover a truncated command to read it in full.
 
-### 定时提醒
-设**时间**（或改为「登录时」触发；可设「仅开机 N 分钟内」才算登录——新建默认 10 分钟，白天重开程序不会再弹）、**周期**（按星期 / 每 N 天 / 每月某号）、**提醒文字**；可选「朗读出来」。配了「**点是后**」动作（运行程序 / 打开文件 / 开网页 / 跑动作组）的提醒会弹「是 / 否」问你，还能点「**稍后**」打个盹（默认 10 分钟，旁边 ▾ 可选 5–60 分钟）；其余没配动作的提醒走右下角**提醒卡片**（不置顶抢视线），显示多久由「自动关闭」秒数决定，**0 = 不自动关**、常驻到你点掉为止——离屏一会儿也不会错过（重复催促型仍用弹窗，好一键停催）。也可设「**静默动作组**」——到点不弹窗、直接跑指定动作组。选中提醒点「运行」马上试跑一次（注意：静默提醒的「运行」会**真的执行**那个动作组）。
+### Action groups
+Bundle actions into a reusable group. **Add ▾** starts one from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save. A group **only defines actions**; trigger it three ways: from the tray (**Run: <group>**), as an **action-group step** in the startup list (at boot), or from a reminder (**On-Yes / silent group**). A group runs only one copy at a time; a **message** step can act as a confirmation gate (answering **No** aborts the rest).
 
-进阶选项：**自动关闭**（N 秒没点击就自己关，适合"看到就行"的提醒）、**重复催促**（没确认就每 N 分钟再弹、直到某时刻，适合催睡觉这类）、**到点后延迟 + 随机延迟**、**宽限**（到点时恰好关机 / 睡眠，N 分钟内补弹）、**错过必补**（休眠 / 关机把提醒整段错过时，下次程序在跑就补弹一次）、「每 N 天」的**起算日**（可点「选日期」）。「当天已提醒过」「稍后到几点」这些状态会落盘（`clockwork.state.json`），重启程序也不丢：打的盹跨过重启仍会响，同一条提醒一天也不会重复弹。
+### Settings
+**Startup delay** (0–600 s, boot only), **start minimized to tray**, **panic hotkey** (click the box and press your shortcut; Esc cancels, Delete clears; default `Ctrl+Alt+Q`), and **UI language** (Simplified Chinese, English, 日本語 and 15 more — 18 total; switching restarts the app to apply).
 
-要专注或开会时，托盘右键可「**暂停提醒** 1 / 2 / 4 小时」（勿扰）：期间所有提醒（含静默动作组）都不触发，到时自动恢复，也可随时点「恢复提醒」；错过的提醒按宽限 / 错过必补的正常规则处理。
+## Tips
 
-### 系统启动项
-列出电脑里**所有开机自启**的项目（来自注册表 Run 键、启动文件夹、计划任务）。取消某项的「启用」勾选即禁用——**只是禁用、不会删除，随时再勾上就恢复**（勾选**即时生效**）。带「需管理员」的项要管理员权限：勾选时会提示以管理员身份重开再操作。**系统 / 策略 / 一次性项**（组策略 Run、RunOnce、Winlogon、Active Setup）无法用常规开关关闭，**默认不显示**——勾右上角「显示系统 / 只读项」才列出（置灰、仅供查看）。「刷新」重新扫描；「纳入启动清单」把某项交给本工具接管（自动停用原项 + 加进你的清单；仅支持注册表 Run 键与启动文件夹项，计划任务暂不支持、会给出提示）。项目多时，顶部**过滤框**可按名称 / 命令快速筛；命令行太长被截断时，**鼠标悬停可看全文**。
+- **Double-click a row to edit** it. When filling paths / processes / shortcuts / dates you don't have to type by hand: **Browse…**, **Pick…** (searchable process picker), **Capture**, and **Pick date**.
+- Double-clicking `Clockwork.exe` only opens settings — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.
+- **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers block low-level calls, so send-keys / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).
+- Your config is `clockwork.settings.json` (local only). Delete it to reset to the sample. Reminder state is `clockwork.state.json` (also local; safe to delete).
+- Adding an `.ahk` step needs AutoHotkey installed. Global hotkeys / text expansion are out of scope — that's AutoHotkey's strength.
 
-### 动作组
-把一串动作打包成可复用的「组」。点「新增 ▾」可从**内置模板**（专注 / 会议 / 收工 / 睡前 / 离开一下 / 截图标注）快速创建，打开后按需改进程名 / 应用再保存。动作组本身**只定义动作**，触发方式有三种：托盘「运行：某组」手动跑、启动清单里加一个「动作组」步骤（开机跑）、或在提醒里挂「点是后 / 静默动作组」（定时跑）。同一动作组同时只会跑一份（重复触发自动跳过）；组内步骤的「仅某些星期 / 仅 N 点前」条件同样生效；「消息」步骤可当**确认闸门**（答「否」中止整组）。
+## For developers
 
-### 设置
-**开机延迟**（0–600 秒，仅开机自启时生效）、**启动时最小化到托盘**（手动打开也直接进托盘、不弹主窗口）、**急停键**（点击输入框后按下想要的快捷键即录入，Esc 取消、Delete 清空停用；默认 `Ctrl+Alt+Q`）、**界面语言**（简体中文、English、日本語 等 18 种，切换后自动重启生效）。
+C#/.NET WPF; source in `app/` (needs the .NET 10 SDK). Layers: `Core/` pure logic · `Native/` Win32 interop · `Engine/` execution · `ViewModels/` + `Views/` UI · `I18n/` + `Resources/` localization (neutral = Chinese source, one `Strings.<code>.resx` satellite per language).
 
-## 小提示
-
-- 列表里**双击条目即编辑**（动作组编辑器里也一样）；删除后自动选中下一条，连续整理很顺手。
-- 填路径 / 进程 / 组合键 / 日期时不用硬记：**目标 / 工作目录可「浏览…」选，进程可「选择…」（带搜索），组合键可「捕获」，起算日可「选日期」**。
-- **进程选择框**和**系统启动项**列表都带**搜索/过滤**框，条目多时按名称或标题快速找。
-- 双击 `Clockwork.exe` 只打开设置窗口，**不会**立刻跑启动清单；想立刻跑一遍，用托盘右键的「重新运行启动清单」。
-- **请用正常方式启动本程序**（双击 `Clockwork.exe`、托盘、或计划任务）。若用某些**沙箱 / 受限权限的启动器**（如 Lucy）打开，Windows 会限制部分底层调用，**发送按键 / 窗口动作 / 已运行则激活 / 发送文本到指定进程 / 音量** 等原生功能可能不可用（会给出清楚提示、并不影响单纯「启动程序」）。
-- 你的个人设置保存在 `clockwork.settings.json`（仅本机、不入库）。想恢复到示例，删掉它重开即可（会重新从 `.example.json` 生成）。
-- 提醒的「当天已弹 / 稍后到几点」状态记在旁边的 `clockwork.state.json`（同样只在本机）；删掉它无妨，最多当天的提醒再弹一次。
-- 内置模板里的进程名用的是常见默认（如 Weixin / QQ），跟你实际应用不同就在编辑器里改。
-- 启动清单里若加 `.ahk` 脚本，需电脑已装 AutoHotkey。
-- 全局热键 / 文本展开这类功能不在本工具范围（那是 AutoHotkey 的强项）。
-- 进阶：默认用固定「开机延迟」等待即可。若你的第一步开机就要用网络（挂网络盘、开离线打不开的内网页），可在 `clockwork.settings.json` 把 `startupWaitForReady` 设为 `true`——开机自启时先等桌面 / 网络就绪再跑清单（就绪即走、封顶 90 秒），默认 `false`。
-
-## 给开发者
-
-C#/.NET WPF，源码在 `app/`（需 .NET 10 SDK）。分层：`Core/` 纯逻辑、`Native/` Win32 互操作、`Engine/` 执行、`ViewModels/` + `Views/` 界面、`I18n/` + `Resources/` 多语言（中性 = 中文源，`Strings.<code>.resx` 每语言一份卫星程序集）。
-
-- 跑测试（xUnit）：
+- Run tests (xUnit):
   ```powershell
   dotnet test app.Tests/Clockwork.Tests.csproj
   ```
-- 打包自包含单文件 exe（单文件 / 自包含 / 压缩等属性已写在 csproj 里）：
+- Build the self-contained single-file exe (single-file / self-contained / compression are set in the csproj):
   ```powershell
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
-  产物在 `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`。
-- **CI / 发版**（GitHub Actions）：push / PR 自动在 Windows runner 上构建并跑全部测试；推送 `v*` 标签（如 `v1.1.0`）会自动构建、以标签号作文件版本、创建 GitHub Release 并附上 `Clockwork.exe`。
+  Output: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
+- **CI / releases** (GitHub Actions): push / PR builds and runs all tests on a Windows runner; pushing a `v*` tag (e.g. `v2.0.0`) builds, stamps the file version from the tag, creates a GitHub Release and attaches `Clockwork.exe`.
 
-## 关于 365 开源计划
+## About the 365 Open-Source Plan
 
-本项目是 [365 开源计划](https://github.com/rockbenben/365opensource) 的第 20 个项目。
+This is project #20 of the [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — one person + AI, 300+ open-source projects in a year. [Submit a request →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
 
-一个人 + AI，一年 300+ 个开源项目。[提交你的需求 →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
-
-## 许可
+## License
 
 [MIT](LICENSE) © rockbenben

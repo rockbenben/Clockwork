@@ -9,5 +9,5 @@ desktop.ini
 .vs/
 .temp/   # 兜底 TEMP：仅当系统 %TEMP% 全部不可写时，才在应用目录下创建（极少见）
 
-# SDD 工作目录（briefs / reports / review diffs / 进度账本）
-docs/
+# SDD 内部工作目录（planning/specs，本地生成、不入库）；docs/ 其余用于真实文档
+docs/superpowers/
