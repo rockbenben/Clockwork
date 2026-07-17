@@ -112,15 +112,23 @@
         <Setter Property="FontFamily" Value="{StaticResource FontDisplay}"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Padding" Value="10,7"/>
+        <Setter Property="Padding" Value="7,7"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <!-- 按钮文字可换行：长译文(如德语「Diesen Schritt ausführen」)在窄侧栏按钮里换行而非被截断 -->
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap" TextAlignment="Center"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="1" CornerRadius="8" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -146,7 +154,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushFilament}"/></Trigger>

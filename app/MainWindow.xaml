@@ -54,7 +54,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="{loc:Loc Col_Kind}" Width="104">
+                                <DataGridTemplateColumn Header="{loc:Loc Col_Kind}" Width="Auto" MinWidth="104">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border Style="{StaticResource KindChipCell}">
@@ -104,8 +104,8 @@
                                         <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate></DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="{loc:Loc Col_Time}" Binding="{Binding TimeLabel}" Width="140" IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
-                                <DataGridTextColumn Header="{loc:Loc Col_Period}" Binding="{Binding PeriodLabel}" Width="120" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Time}" Binding="{Binding TimeLabel}" Width="Auto" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Period}" Binding="{Binding PeriodLabel}" Width="Auto" MinWidth="120" IsReadOnly="True"/>
                                 <DataGridTextColumn Header="{loc:Loc Col_Text}" Binding="{Binding Text}" Width="*" IsReadOnly="True"/>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Speak}" Width="56">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>
@@ -196,8 +196,8 @@
                             <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="170" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
                             <DataGridTextColumn Header="{loc:Loc Col_Command}" Binding="{Binding Command}" Width="*" IsReadOnly="True"
                                                 ElementStyle="{StaticResource SysCmdCell}"/>
-                            <DataGridTextColumn Header="{loc:Loc Col_Source}" Binding="{Binding SourceLabel}" Width="140" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
-                            <DataGridTextColumn Header="{loc:Loc Col_Scope}" Binding="{Binding ScopeLabel}" Width="172" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
+                            <DataGridTextColumn Header="{loc:Loc Col_Source}" Binding="{Binding SourceLabel}" Width="Auto" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
+                            <DataGridTextColumn Header="{loc:Loc Col_Scope}" Binding="{Binding ScopeLabel}" Width="Auto" MinWidth="172" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     </Border>

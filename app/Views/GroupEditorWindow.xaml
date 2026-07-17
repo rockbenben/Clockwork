@@ -24,7 +24,7 @@
             <DataGrid x:Name="Steps" Grid.Column="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       HeadersVisibility="Column" SelectionMode="Single" GridLinesVisibility="Horizontal" MouseDoubleClick="SEdit_Click">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="{loc:Loc Col_Kind}" Binding="{Binding KindLabel}" Width="90" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="{loc:Loc Col_Kind}" Binding="{Binding KindLabel}" Width="Auto" MinWidth="90" IsReadOnly="True"/>
                     <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"/>
                     <DataGridTextColumn Header="{loc:Loc Col_Delay}" Binding="{Binding DelayText}" Width="70" IsReadOnly="True"/>
                 </DataGrid.Columns>
