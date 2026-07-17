@@ -582,5 +582,19 @@
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
     </Style>
+    <!-- 类型徽标底 + 延时等宽读数：启动清单与动作组步骤列表共用（从 MainWindow 移来，两处一致口径）。 -->
+    <Style x:Key="KindChipCell" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BrushSteel}"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="9,3"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="DelayCol" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource FontMono}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
 
 </ResourceDictionary>

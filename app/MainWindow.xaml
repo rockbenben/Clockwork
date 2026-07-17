@@ -10,12 +10,6 @@
         Background="{StaticResource BrushInk}"
         Icon="/logo.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style x:Key="DelayCol" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="{StaticResource FontMono}"/>
-            <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
         <!-- 系统启动项单元格：列宽有限、内容常被截断（长路径 / 范围「所有用户（需管理员）」等）。
              省略号收尾 + 始终挂 tooltip=本单元格全文，hover 即可看全，不丢信息。 -->
         <Style x:Key="SysCell" TargetType="TextBlock">
@@ -26,13 +20,6 @@
         <Style x:Key="SysCmdCell" TargetType="TextBlock" BasedOn="{StaticResource DelayCol}">
             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
             <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-        </Style>
-        <Style x:Key="KindChipCell" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource BrushSteel}"/>
-            <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="Padding" Value="9,3"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
     <Grid>
