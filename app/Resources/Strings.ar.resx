@@ -104,7 +104,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>تشغيل المجموعة: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(غير محدد)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>إدخال {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (فقط قبل {0}:00)</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (فقط قبل {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>يوميًا</value></data>
@@ -163,7 +163,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>ملاحظة</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>التشغيل في هذه الأيام فقط (لا شيء = يوميًا)</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>فقط قبل</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>الصيغة H:mm، مثال 08:30؛ يمكن إدخال الساعة فقط (مثل 8)؛ الافتراضي 08:00.</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>تعيين الصوت</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>لا شيء</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>تشغيل / فتح ملف</value></data>

@@ -104,7 +104,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Esegui gruppo: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(non specificato)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Digita {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (solo prima delle {0}:00)</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (solo prima delle {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Ogni giorno</value></data>
@@ -163,7 +163,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>Nota</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>Esegui solo in questi giorni (nessuno = ogni giorno)</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>Solo prima delle</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>Formato H:mm, es. 08:30; va bene anche solo l'ora (es. 8); predefinito 08:00.</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>Imposta volume</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>Nessuno</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Esegui / apri file</value></data>

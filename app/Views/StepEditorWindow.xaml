@@ -89,7 +89,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,3">
                     <CheckBox x:Name="OnlyBeforeChk" Content="{loc:Loc Ed_OnlyBefore}" VerticalAlignment="Center"/>
-                    <TextBox x:Name="BeforeHourBox" Width="44" Height="26" Margin="6,0"/>
+                    <TextBox x:Name="BeforeTimeBox" Width="60" Height="26" Margin="6,0" ToolTip="{loc:Loc Ed_BeforeTimeHint}"/>
                     <TextBlock Text="{loc:Loc Ed_HourBefore}" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>

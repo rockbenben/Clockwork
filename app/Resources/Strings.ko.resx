@@ -104,7 +104,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>그룹 실행: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(미지정)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>입력 {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> ({0}시 이전만)</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> ({0} 이전만)</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>매일</value></data>
@@ -163,7 +163,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>메모</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>이 요일에만 실행(모두 해제=매일)</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>단</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>시 이전 실행</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>형식 H:mm, 예: 08:30. 시만 입력(예: 8)해도 됩니다. 기본값 08:00.</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>이전 실행</value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>볼륨 설정</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>없음</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>실행 / 파일 열기</value></data>

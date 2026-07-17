@@ -106,7 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Run group: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(none)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Type {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (before {0}:00)</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (before {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Every day</value></data>
@@ -165,7 +165,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>Note</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>Run only on these weekdays (none = every day)</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>Only before</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>Format H:mm, e.g. 08:30; entering just the hour (e.g. 8) also works; default 08:00.</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>Set volume</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>None</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Run / open file</value></data>

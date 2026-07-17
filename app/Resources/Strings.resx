@@ -106,7 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>运行动作组：{0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(未指定)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>输入 {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value>（仅{0}点前）</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value>（仅{0}前）</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value>（{0}）</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>每天</value></data>
@@ -165,7 +165,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>用途说明</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>仅这些星期执行（都不勾=每天）</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>仅</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>点前执行</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>前执行</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>格式 时:分，如 08:30；只填小时(如 8)也可，默认 08:00</value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>设为音量</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>无</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>运行 / 打开文件</value></data>

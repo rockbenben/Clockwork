@@ -73,7 +73,7 @@ public static class StepDisplay
         if (rep > 1) result += $" ×{rep}";
         var dc = (s.Days ?? new()).Where(x => x >= 1 && x <= 7).ToList();
         if (dc.Count > 0 && dc.Count < 7) result += Strings.Lf("Sum_DaysSuffix", DaysLabel(dc));
-        if (s.OnlyBefore8) result += Strings.Lf("Sum_Before", StepHelpers.BeforeHour(s));
+        if (s.OnlyBefore8) result += Strings.Lf("Sum_Before", StepHelpers.BeforeTimeLabel(s));
         return result;
     }
 

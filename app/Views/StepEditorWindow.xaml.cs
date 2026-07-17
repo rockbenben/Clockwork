@@ -54,7 +54,7 @@ public partial class StepEditorWindow : Window
         NoteBox.Text = s.Note;
         LoadDays(s.Days, Day1, Day2, Day3, Day4, Day5, Day6, Day7);
         OnlyBeforeChk.IsChecked = s.OnlyBefore8;
-        BeforeHourBox.Text = StepHelpers.BeforeHour(s).ToString();
+        BeforeTimeBox.Text = StepHelpers.BeforeTimeLabel(s);   // HH:mm，支持任意时刻
     }
 
     private void ShowPanelForKind(string kind)
@@ -82,7 +82,7 @@ public partial class StepEditorWindow : Window
         var kind = ComboVal(KindCombo);
         int delay = ParseOr(DelayBox.Text, 0);
         var days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7);
-        int beforeHour = ParseOr(BeforeHourBox.Text, 8, 1, 23);
+        ParseBeforeTime(BeforeTimeBox.Text, out int beforeHour, out int beforeMinute);
 
         var r = new LaunchStep
         {
@@ -94,6 +94,7 @@ public partial class StepEditorWindow : Window
             Days = days,
             OnlyBefore8 = OnlyBeforeChk.IsChecked == true,
             BeforeHour = beforeHour,
+            BeforeMinute = beforeMinute,
             Enabled = _original.Enabled,   // 保留启用/禁用态：编辑步骤不应把用户关掉的步骤又打开
         };
 

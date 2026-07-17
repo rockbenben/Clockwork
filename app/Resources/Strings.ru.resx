@@ -104,7 +104,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Выполнить группу: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(не указано)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Ввод {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (только до {0}:00)</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (только до {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Ежедневно</value></data>
@@ -163,7 +163,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>Заметка</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>Выполнять только в эти дни (ничего = ежедневно)</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>Только до</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>Формат H:mm, напр. 08:30; можно указать только час (напр. 8); по умолчанию 08:00.</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>Задать громкость</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>Нет</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Запустить / открыть файл</value></data>

@@ -104,7 +104,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>グループ実行：{0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(未指定)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>入力 {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value>（{0}時前のみ）</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value>（{0}前のみ）</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value>（{0}）</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>毎日</value></data>
@@ -163,7 +163,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>メモ</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>これらの曜日のみ実行（未選択=毎日）</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>のみ</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>時前に実行</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>形式は H:mm、例: 08:30。時のみ（例: 8）の入力も可。既定は 08:00。</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>前に実行</value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>音量設定</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>なし</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>実行 / ファイルを開く</value></data>

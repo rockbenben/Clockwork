@@ -104,7 +104,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Chạy nhóm: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(chưa chỉ định)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Nhập {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (chỉ trước {0}:00)</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (chỉ trước {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Hằng ngày</value></data>
@@ -163,7 +163,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>Ghi chú</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>Chỉ chạy vào các thứ này (không chọn = hằng ngày)</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>Chỉ trước</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>Định dạng H:mm, ví dụ 08:30; chỉ nhập giờ (ví dụ 8) cũng được; mặc định 08:00.</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>Đặt âm lượng</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>Không</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Chạy / mở tệp</value></data>

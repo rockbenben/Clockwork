@@ -30,13 +30,14 @@ public static class ActionGroupRunner
         if (!_running.TryAdd(gid, 0)) return;   // 已在跑：忽略本次触发（避免双开/按键交错）
         try
         {
-            var (hour, iso) = StepCondition.ResolveSentinels(deps.Hour, deps.IsoDay, DateTime.Now);
+            var now = DateTime.Now;   // 取一次，小时/分钟同源，避免跨分钟边界不一致
+            var (hour, iso) = StepCondition.ResolveSentinels(deps.Hour, deps.IsoDay, now);
             bool stopped = false;
             foreach (var step in group.Steps)
             {
                 if (stopped || StopSignal.IsRequested) break;
                 if (!step.Enabled) continue;
-                if (!StepCondition.IsSatisfied(step, hour, iso)) continue;   // 组内步骤同样遵守时间条件
+                if (!StepCondition.IsSatisfied(step, hour, iso, now.Minute)) continue;   // 组内步骤同样遵守时间条件（分钟级）
 
                 if (step.Kind == "message")
                 {

@@ -36,7 +36,7 @@ public static class LaunchSequence
 
         var nowDt = now();
         (hour, isoDay) = StepCondition.ResolveSentinels(hour, isoDay, nowDt);
-        var plan = LaunchPlan.Build(config, hour, isoDay);
+        var plan = LaunchPlan.Build(config, hour, isoDay, nowDt.Minute);
         var lines = new List<string>();
         int fail = 0, unver = 0, total = 0;
 
@@ -62,7 +62,7 @@ public static class LaunchSequence
                             if (!stopped && StopSignal.IsRequested) stopped = true;
                             if (stopped) break;
                             if (!sub.Enabled) continue;
-                            if (!StepCondition.IsSatisfied(sub, hour, isoDay)) continue;   // 组内步骤同样遵守时间条件
+                            if (!StepCondition.IsSatisfied(sub, hour, isoDay, nowDt.Minute)) continue;   // 组内步骤同样遵守时间条件
                             if (sub.Kind == "message") continue;                            // 启动展开跳过 message（启动静默，不弹确认）
                             if (sub.Kind == "group") { lines.Add($"[{Ts(now)}]     {StepDisplay.StepSummary(sub)}  · 开机时不展开嵌套动作组，已跳过"); continue; }
                             int subRep = StepHelpers.StepRepeat(sub);

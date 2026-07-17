@@ -11,8 +11,12 @@ public static class StepHelpers
     // 步骤重复次数：夹到 1..999（C# 强类型，缺失即默认 1）。
     public static int StepRepeat(LaunchStep s) => ClampRepeat(s.Repeat);
 
-    // 时间条件的小时阈值：缺失/越界一律回退 8（兼容旧配置只有 onlyBefore8 没有 beforeHour）。
-    public static int BeforeHour(LaunchStep s) => (s.BeforeHour < 1 || s.BeforeHour > 23) ? 8 : s.BeforeHour;
+    // 「仅 N 前」阈值的时/分（各自夹取）与「当天分钟数」。支持任意时刻（不再只整点）：时 0..23、分 0..59，
+    // 越界回退 8:00（兼容旧配置只有 onlyBefore8 没有 beforeHour/beforeMinute——缺失即模型默认 8:00）。
+    public static int BeforeHour(LaunchStep s) => (s.BeforeHour < 0 || s.BeforeHour > 23) ? 8 : s.BeforeHour;
+    public static int BeforeMinute(LaunchStep s) => (s.BeforeMinute < 0 || s.BeforeMinute > 59) ? 0 : s.BeforeMinute;
+    public static int BeforeMinutesOfDay(LaunchStep s) => BeforeHour(s) * 60 + BeforeMinute(s);
+    public static string BeforeTimeLabel(LaunchStep s) => $"{BeforeHour(s):D2}:{BeforeMinute(s):D2}";
 
     // 开机延迟秒数夹取：0..600（10 分钟）。设置页与开机消费侧共用同一口径，避免魔数分家、UI 收了值而开机静默只等一半。
     public static int ClampStartupDelay(int seconds) => Math.Clamp(seconds, 0, 600);

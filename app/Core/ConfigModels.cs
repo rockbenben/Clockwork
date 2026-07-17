@@ -33,6 +33,7 @@ public sealed class LaunchStep
     public int Level { get; set; } = 50;
     public bool OnlyBefore8 { get; set; }
     public int BeforeHour { get; set; } = 8;
+    public int BeforeMinute { get; set; }   // 「仅 N 前」的分钟位：阈值=BeforeHour:BeforeMinute，支持任意时刻（不再只整点）
     // 仅在这些星期(ISO 1..7)开机启动；空=每天
     public List<int> Days { get; set; } = new();
     // window

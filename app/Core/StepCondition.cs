@@ -16,10 +16,12 @@ public static class StepCondition
     public static (int hour, int isoDay) ResolveSentinels(int hour, int isoDay, DateTime now)
         => (hour < 0 ? now.Hour : hour, isoDay <= 0 ? IsoDayOfWeek(now) : isoDay);
 
-    public static bool IsSatisfied(LaunchStep s, int currentHour, int currentIsoDay)
+    // currentMinute 默认 0 → 只给小时的老调用（及测试）等价于「N:00 前」，行为不变；
+    // 生产调用点传入当前分钟，实现分钟级精度：当天分钟数 ≥ 阈值分钟数(HH:mm) 即不满足。
+    public static bool IsSatisfied(LaunchStep s, int currentHour, int currentIsoDay, int currentMinute = 0)
     {
         if (currentIsoDay <= 0) currentIsoDay = IsoDayOfWeek(DateTime.Now);
-        if (s.OnlyBefore8 && currentHour >= StepHelpers.BeforeHour(s)) return false;
+        if (s.OnlyBefore8 && currentHour * 60 + currentMinute >= StepHelpers.BeforeMinutesOfDay(s)) return false;
         var days = s.Days ?? new();
         if (days.Count > 0 && !days.Contains(currentIsoDay)) return false;
         return true;

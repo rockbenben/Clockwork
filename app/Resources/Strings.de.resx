@@ -104,7 +104,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Gruppe ausführen: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(nicht angegeben)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Eingeben {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (nur vor {0}:00)</value></data>
+  <data name="Sum_Before" xml:space="preserve"><value> (nur vor {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Täglich</value></data>
@@ -163,7 +163,8 @@
   <data name="Ed_Note" xml:space="preserve"><value>Notiz</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>Nur an diesen Wochentagen ausführen (keine = täglich)</value></data>
   <data name="Ed_OnlyBefore" xml:space="preserve"><value>Nur vor</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>:00</value></data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>Format H:mm, z. B. 08:30; nur die Stunde (z. B. 8) geht auch; Standard 08:00.</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>Lautstärke setzen</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>Keine</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Ausführen / Datei öffnen</value></data>

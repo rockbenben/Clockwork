@@ -14,14 +14,37 @@ public class StepHelpersTests
         => Assert.Equal(expected, StepHelpers.ClampRepeat(input));
 
     [Theory]
-    [InlineData(0, 8)]
+    [InlineData(0, 0)]    // 0 时（午夜）现为合法：支持「仅 00:MM 前」
     [InlineData(24, 8)]
     [InlineData(-1, 8)]
     [InlineData(8, 8)]
     [InlineData(23, 23)]
     [InlineData(1, 1)]
-    public void BeforeHour_defaults_to_8_when_out_of_range(int raw, int expected)
+    public void BeforeHour_clamps_to_0_23_else_8(int raw, int expected)
         => Assert.Equal(expected, StepHelpers.BeforeHour(new LaunchStep { BeforeHour = raw }));
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(30, 30)]
+    [InlineData(59, 59)]
+    [InlineData(60, 0)]    // 越界回退 0
+    [InlineData(-1, 0)]
+    public void BeforeMinute_clamps_to_0_59_else_0(int raw, int expected)
+        => Assert.Equal(expected, StepHelpers.BeforeMinute(new LaunchStep { BeforeMinute = raw }));
+
+    [Theory]
+    [InlineData(8, 30, 510)]    // 08:30 = 8*60+30
+    [InlineData(0, 0, 0)]
+    [InlineData(23, 59, 1439)]
+    public void BeforeMinutesOfDay_is_hours_times_60_plus_minutes(int h, int m, int expected)
+        => Assert.Equal(expected, StepHelpers.BeforeMinutesOfDay(new LaunchStep { BeforeHour = h, BeforeMinute = m }));
+
+    [Theory]
+    [InlineData(8, 30, "08:30")]
+    [InlineData(9, 0, "09:00")]
+    [InlineData(0, 5, "00:05")]
+    public void BeforeTimeLabel_is_zero_padded_hhmm(int h, int m, string expected)
+        => Assert.Equal(expected, StepHelpers.BeforeTimeLabel(new LaunchStep { BeforeHour = h, BeforeMinute = m }));
 
     [Theory]
     [InlineData(-1, 3, 3)]

@@ -25,6 +25,25 @@ public class StepConditionTests
     }
 
     [Fact]
+    public void OnlyBefore8_minute_precision()   // 阈值 08:30，按分钟比较（不再只整点）
+    {
+        var s = new LaunchStep { OnlyBefore8 = true, BeforeHour = 8, BeforeMinute = 30 };
+        Assert.True(StepCondition.IsSatisfied(s, 8, 3, 15));    // 08:15 < 08:30 → 满足
+        Assert.True(StepCondition.IsSatisfied(s, 8, 3, 29));    // 08:29 < 08:30 → 满足
+        Assert.False(StepCondition.IsSatisfied(s, 8, 3, 30));   // 08:30 = 阈值 → 不满足
+        Assert.False(StepCondition.IsSatisfied(s, 8, 3, 45));   // 08:45 > 08:30 → 不满足
+        Assert.True(StepCondition.IsSatisfied(s, 7, 3, 59));    // 07:59 < 08:30 → 满足
+    }
+
+    [Fact]
+    public void OnlyBefore8_minute_defaults_to_zero()   // 只给小时的老调用 = 「N:00 前」，行为不变
+    {
+        var s = new LaunchStep { OnlyBefore8 = true, BeforeHour = 8 };  // 08:00
+        Assert.True(StepCondition.IsSatisfied(s, 7, 3));    // currentMinute 默认 0 → 07:00 < 08:00
+        Assert.False(StepCondition.IsSatisfied(s, 8, 3));   // 08:00 = 阈值
+    }
+
+    [Fact]
     public void Days_filter_matches_iso_day()
     {
         var s = new LaunchStep { Days = new() { 1, 2, 3, 4, 5 } };
