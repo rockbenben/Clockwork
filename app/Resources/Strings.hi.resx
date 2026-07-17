@@ -311,4 +311,9 @@
   <data name="Picker_Search" xml:space="preserve"><value>प्रक्रिया नाम / विंडो शीर्षक खोजें</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>तारीख़ चुनें</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>कुंजी कैप्चर करें</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>वैश्विक हॉटकी</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>क्लिक करें और कुंजी संयोजन दबाएँ, यह समूह कभी भी चलेगा; Esc रद्द, Delete साफ़</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>क्रिया समूह “{0}” की हॉटकी {1} पंजीकृत नहीं हो सकी: संभवतः पहले से उपयोग में है</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>हॉटकी {0} पहले से “{1}” द्वारा उपयोग में है; कोई और संयोजन चुनें</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} सिस्टम-आरक्षित संयोजन है (पंजीकरण से सिस्टम कुंजी छिन जाएगी), इसे हॉटकी नहीं बनाया जा सकता</value></data>
 </root>

@@ -25,7 +25,7 @@ Một công cụ nhỏ nằm ở khay hệ thống Windows, lo giúp bạn nhữ
 - 🚀 **Danh sách khởi động** — tự động mở các ứng dụng thường dùng khi đăng nhập, theo thứ tự (quyền admin theo từng bước, độ trễ, chỉ vào một số ngày trong tuần / chỉ trước N giờ, kiểu cửa sổ, kích hoạt nếu đang chạy, đường dẫn dự phòng), và làm vài việc lặt vặt trên đường (đóng hoặc đưa cửa sổ ra trước, gửi phím / văn bản, chỉnh âm lượng…).
 - ⏰ **Nhắc nhở** — bật lời nhắc đúng giờ; đọc to; lặp theo ngày trong tuần / mỗi N ngày / hằng tháng; hoặc kích hoạt "khi đăng nhập". Nhấn **Có** có thể chạy một chương trình, mở một tệp (ví dụ nhạc) hay URL, hoặc chạy một nhóm thao tác.
 - 🧹 **Mục khởi động hệ thống** — liệt kê **mọi thứ tự khởi động trên máy** và tắt những gì bạn không cần (bị vô hiệu hóa, không bị xóa — bật lại bất cứ lúc nào). Một cú nhấp "tiếp quản" một mục vào danh sách khởi động của riêng bạn.
-- 🎛️ **Nhóm thao tác** — gói một chuỗi thao tác thành nhóm tái sử dụng (Tập trung / Họp / Kết thúc / Trước khi ngủ…) và kích hoạt bằng một cú nhấp từ khay, danh sách khởi động, hoặc một lời nhắc. Có sẵn các mẫu dựng sẵn.
+- 🎛️ **Nhóm thao tác** — gói một chuỗi thao tác thành nhóm tái sử dụng (Tập trung / Họp / Kết thúc / Trước khi ngủ…) và kích hoạt bằng một cú nhấp từ khay, một **phím tắt toàn cục**, danh sách khởi động, hoặc một lời nhắc. Có sẵn các mẫu dựng sẵn.
 
 Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ cấu hình bằng chuột; giao diện tối, tương thích DPI cao.
 
@@ -50,6 +50,7 @@ Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ c
 ## Năm tab
 
 ### Danh sách khởi động
+
 Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi đăng nhập. Nhấp **Thêm ▾** để chọn loại; thêm/xóa/sắp xếp tự do; mỗi bước có thể bật/tắt, đặt **độ trễ sau bước**, một **số lần lặp** (lặp N lần), và điều kiện (**chỉ vào một số ngày trong tuần / chỉ trước N giờ**). Các loại bước:
 
 - **Khởi chạy chương trình** — đích (**Duyệt…** để chọn tệp) / tham số / thư mục làm việc (để trống = thư mục chứa đích) / admin. Đích có thể là `.exe`, tài liệu, lối tắt hoặc URL; `.ps1` chạy qua PowerShell. Nâng cao: **kiểu cửa sổ** (thu nhỏ / phóng to / ẩn), **kích hoạt nếu đang chạy** (đưa ra trước thay vì mở lại; tên tiến trình qua **Chọn…**), **đường dẫn dự phòng** (mỗi dòng một đường dẫn đầy đủ; dùng đường dẫn đầu tiên tồn tại — tiện khi đường dẫn cài đặt khác nhau giữa các máy).
@@ -66,6 +67,7 @@ Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi 
 > **Dừng bất cứ lúc nào** — khay → **Dừng các thao tác đang chạy**, hoặc **phím tắt khẩn** toàn cục (đặt ở tab Cài đặt; mặc định `Ctrl+Alt+Q`). Bất cứ thứ gì đang chạy sẽ dừng sau thao tác hiện tại; các khoảng chờ dài (độ trễ khởi động, chờ cửa sổ) bị ngắt ngay lập tức.
 
 ### Nhắc nhở
+
 Đặt một **thời điểm** (hoặc chuyển sang **khi đăng nhập**), một **chu kỳ** (ngày trong tuần / mỗi N ngày / hằng tháng), và **nội dung**; tùy chọn đọc to. Lời nhắc có thao tác **Khi-Có** (chạy chương trình / mở tệp / URL / chạy nhóm thao tác) sẽ bật hộp thoại **Có / Không** kèm nút **Hoãn** (mặc định 10 phút, menu ▾ 5–60 phút); những lời nhắc còn lại trượt vào góc dưới dạng **thẻ nhắc** (tự đóng sau số giây đã đặt, **0 = ở lại đến khi bạn bỏ qua**). Bạn cũng có thể đặt một **nhóm thao tác im lặng** — chạy một nhóm đúng giờ mà không bật cửa sổ.
 
 Nâng cao: **tự đóng**, **nhắc lặp lại** (bật lại mỗi N phút cho đến một hạn), **độ trễ sau kích hoạt + dao động ngẫu nhiên**, **thời gian ân hạn** (bắt lại một lần bị lỡ do tắt máy/ngủ ngắn), **bù nếu bị lỡ** (bật lại một lần sau khi ngủ đông/tắt máy làm lỡ), và một **ngày mốc** cho chu kỳ mỗi N ngày (**Chọn ngày**). Trạng thái "đã bật hôm nay" và "hoãn đến" tồn tại qua các lần khởi động lại (`clockwork.state.json`), nên một lần hoãn vẫn giữ qua lần khởi động lại và không có gì bật hai lần.
@@ -73,12 +75,17 @@ Nâng cao: **tự đóng**, **nhắc lặp lại** (bật lại mỗi N phút ch
 Cần tập trung hay họp? Khay cung cấp **Tạm dừng nhắc nhở 1 / 2 / 4 giờ** (Không làm phiền): mọi thứ (kể cả nhóm im lặng) bị chặn và tự nối lại khi hết giờ.
 
 ### Mục khởi động hệ thống
+
 Liệt kê **mọi thứ tự khởi động** (khóa Run trong registry, thư mục Startup, tác vụ theo lịch). Bỏ chọn **Bật** để tắt một mục — **bị vô hiệu hóa, không bị xóa; chọn lại để khôi phục** (có hiệu lực ngay). Mục được đánh dấu **cần admin** sẽ hỏi khởi động lại với quyền nâng cao. Các mục hệ thống / chính sách / một lần (Group-Policy Run, RunOnce, Winlogon, Active Setup) không thể bật tắt theo cách thông thường và **bị ẩn theo mặc định** — tích **Hiện mục hệ thống / chỉ đọc** để xem (mờ đi). **Tiếp quản vào danh sách khởi động** giao một mục cho Clockwork (chỉ khóa Run trong registry và mục thư mục Startup). Ô **lọc** ở trên tìm theo tên / lệnh; di chuột lên một lệnh bị cắt để đọc đầy đủ.
 
 ### Nhóm thao tác
-Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo ba cách: từ khay (**Chạy: <nhóm>**), như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một lời nhắc (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm; một bước **thông báo** có thể làm cổng xác nhận (trả lời **Không** sẽ hủy phần còn lại).
+
+Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một lời nhắc (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm; một bước **thông báo** có thể làm cổng xác nhận (trả lời **Không** sẽ hủy phần còn lại).
+
+> **Phím tắt toàn cục** — trong trình chỉnh sửa nhóm, nhấp vào ô phím tắt rồi nhấn một tổ hợp (ví dụ `Ctrl+Alt+F`) để chạy nhóm đó từ bất cứ đâu, không cần menu. Esc hủy, Delete xóa. Các nhóm bị tắt sẽ nhả tổ hợp của chúng; các tổ hợp dành riêng cho hệ thống (Alt+F4, Ctrl+Shift+Esc…) và các tổ hợp đã bị một nhóm khác hoặc phím tắt khẩn chiếm dụng sẽ bị từ chối kèm thông báo.
 
 ### Cài đặt
+
 **Độ trễ khởi động** (0–600 giây, chỉ khi khởi động máy), **thu nhỏ vào khay khi khởi động**, **phím tắt khẩn** (nhấp vào ô rồi nhấn tổ hợp của bạn; Esc hủy, Delete xóa; mặc định `Ctrl+Alt+Q`), và **ngôn ngữ giao diện** (Tiếng Trung giản thể, English, 日本語 và 15 ngôn ngữ nữa — tổng 18; đổi ngôn ngữ sẽ khởi động lại ứng dụng để áp dụng).
 
 ## Mẹo
@@ -106,7 +113,7 @@ C#/.NET WPF; mã nguồn ở `app/` (cần .NET 10 SDK). Các lớp: `Core/` log
 
 ## Về 365 Open-Source Plan
 
-Đây là dự án #20 của [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — một người + AI, 300+ dự án mã nguồn mở trong một năm. [Gửi yêu cầu →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+Đây là dự án #20 của [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — một người + AI, 300+ dự án mã nguồn mở trong một năm. [Gửi yêu cầu →](https://365.aishort.top/)
 
 ## Giấy phép
 

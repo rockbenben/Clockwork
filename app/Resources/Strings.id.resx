@@ -311,4 +311,9 @@ Log: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Cari nama proses / judul jendela</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Pilih tanggal</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Tangkap tombol</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Tombol pintas global</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klik lalu tekan kombinasi tombol untuk menjalankan grup ini kapan saja; Esc membatalkan, Delete menghapus</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Gagal mendaftarkan tombol pintas {1} untuk grup aksi “{0}”: mungkin sudah dipakai</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>Tombol pintas {0} sudah dipakai oleh “{1}”; pilih kombinasi lain</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} adalah kombinasi yang dicadangkan sistem (mendaftarkannya akan membajak tombol sistem) dan tidak bisa dipakai sebagai tombol pintas</value></data>
 </root>

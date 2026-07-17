@@ -311,4 +311,9 @@ Registro: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Cerca nome processo / titolo finestra</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Scegli data</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Cattura tasto</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Scorciatoia globale</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Fai clic e premi una combinazione di tasti per eseguire questo gruppo in qualsiasi momento; Esc annulla, Canc cancella</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossibile registrare la scorciatoia {1} del gruppo di azioni “{0}”: potrebbe essere già in uso</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>La scorciatoia {0} è già usata da “{1}”; scegline un'altra</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} è una combinazione riservata al sistema (registrarla dirotterebbe un tasto di sistema) e non può essere usata come scorciatoia</value></data>
 </root>

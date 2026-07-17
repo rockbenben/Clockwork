@@ -25,7 +25,7 @@ Un piccolo strumento da area di notifica per Windows che si occupa delle parti d
 - 🚀 **Elenco di avvio** — apre automaticamente le tue app di tutti i giorni all'accesso, in ordine (diritti di amministratore per singolo passaggio, ritardi, solo-in-certi-giorni-della-settimana / solo-prima-delle-N, stile della finestra, attiva-se-in-esecuzione, percorsi di ripiego) e sbriga qualche faccenda lungo il percorso (chiudere o mettere in primo piano finestre, inviare combinazioni di tasti / testo, impostare il volume…).
 - ⏰ **Promemoria** — mostra un promemoria all'ora giusta; lo legge ad alta voce; lo ripete per giorno della settimana / ogni-N-giorni / mensilmente; oppure lo attiva «all'accesso». Cliccando **Sì** puoi avviare un programma, aprire un file (ad es. musica) o un URL, oppure eseguire un gruppo di azioni.
 - 🧹 **Elementi di avvio del sistema** — elenca **tutto ciò che si avvia automaticamente sul tuo PC** e disattiva ciò che non ti serve (disattivato, non eliminato — riattivalo quando vuoi). Con un clic «prendi in carico» un elemento nel tuo elenco di avvio.
-- 🎛️ **Gruppi di azioni** — raggruppa una serie di azioni in un gruppo riutilizzabile (Concentrazione / Riunione / Chiusura / Prima di dormire…) e attivalo con un clic dall'area di notifica, dall'elenco di avvio o da un promemoria. Modelli integrati inclusi.
+- 🎛️ **Gruppi di azioni** — raggruppa una serie di azioni in un gruppo riutilizzabile (Concentrazione / Riunione / Chiusura / Prima di dormire…) e attivalo con un clic dall'area di notifica, da una **scorciatoia globale**, dall'elenco di avvio o da un promemoria. Modelli integrati inclusi.
 
 Nessuna installazione, completamente portatile in un'unica cartella, tutto configurabile con il mouse; interfaccia scura, compatibile con l'alta risoluzione (high-DPI).
 
@@ -50,6 +50,7 @@ Nessuna installazione, completamente portatile in un'unica cartella, tutto confi
 ## Le cinque schede
 
 ### Elenco di avvio
+
 Un **elenco ordinato di passaggi** eseguiti dall'alto verso il basso all'accesso. Clicca su **Aggiungi ▾** per scegliere un tipo; aggiungi, rimuovi e riordina liberamente; ogni passaggio può essere abilitato/disabilitato, dotato di un **ritardo dopo il passaggio**, di un **numero di ripetizioni** (ripeterlo N volte) e di condizioni (**solo in certi giorni della settimana / solo prima delle N**). Tipi di passaggio:
 
 - **Avvia programma** — destinazione (**Sfoglia…** per scegliere un file) / argomenti / cartella di lavoro (lascia vuoto = cartella della destinazione) / amministratore. La destinazione può essere un `.exe`, un documento, un collegamento o un URL; un `.ps1` viene eseguito tramite PowerShell. Avanzate: **stile della finestra** (ridotta a icona / ingrandita / nascosta), **attiva se già in esecuzione** (portala in primo piano invece di riavviarla; nome del processo tramite **Scegli…**), **percorsi di ripiego** (un percorso completo per riga; viene usato il primo esistente — comodo quando i percorsi di installazione variano da una macchina all'altra).
@@ -66,6 +67,7 @@ Un **elenco ordinato di passaggi** eseguiti dall'alto verso il basso all'accesso
 > **Ferma quando vuoi** — area di notifica → **Ferma le azioni in esecuzione**, oppure la **scorciatoia di emergenza** globale (impostata nella scheda Impostazioni; predefinita `Ctrl+Alt+Q`). Ciò che è in esecuzione si ferma dopo l'azione corrente; le lunghe attese (ritardo di avvio, attesa di una finestra) vengono interrotte immediatamente.
 
 ### Promemoria
+
 Imposta un'**ora** (o passa a **all'accesso**), una **ricorrenza** (giorni della settimana / ogni-N-giorni / mensile) e il **testo**; facoltativamente leggilo ad alta voce. I promemoria con un'azione **Al-Sì** (avvia programma / apri file / URL / esegui gruppo di azioni) mostrano una finestra di dialogo **Sì / No** con un pulsante **Posticipa** (predefinito 10 min, menu ▾ da 5–60 min); gli altri scivolano dentro come una **scheda promemoria** nell'angolo (si chiude da sola dopo i secondi configurati, **0 = resta finché non la chiudi**). Puoi anche impostare un **gruppo di azioni silenzioso** — esegue un gruppo all'ora stabilita senza alcun popup.
 
 Avanzate: **chiusura automatica**, **insistenza ripetuta** (ricompare ogni N minuti fino a una scadenza), **ritardo dopo l'attivazione + variazione casuale**, **tolleranza** (recupera un'attivazione persa a causa di un breve spegnimento/sospensione), **recupera se mancato** (si riattiva una volta se l'ibernazione/lo spegnimento l'ha saltato) e una **data di riferimento** per ogni-N-giorni (**Scegli data**). «Attivato oggi» e «posticipato fino a» sopravvivono ai riavvii (`clockwork.state.json`), così un rinvio si mantiene dopo un riavvio e niente si attiva due volte.
@@ -73,12 +75,17 @@ Avanzate: **chiusura automatica**, **insistenza ripetuta** (ricompare ogni N min
 Hai bisogno di concentrarti o di partecipare a una riunione? L'area di notifica offre **Sospendi i promemoria per 1 / 2 / 4 ore** (Non disturbare): tutto (compresi i gruppi silenziosi) viene soppresso e riprende automaticamente allo scadere del tempo.
 
 ### Elementi di avvio del sistema
+
 Elenca **tutto ciò che si avvia automaticamente** (chiavi Run del registro, cartelle Esecuzione automatica, operazioni pianificate). Deseleziona **Abilita** per disattivare un elemento — **disattivato, non eliminato; riseleziona per ripristinare** (ha effetto immediato). Gli elementi contrassegnati come **richiede l'amministratore** chiedono di riavviare con privilegi elevati. Gli elementi di sistema / criterio / una tantum (Run di Criteri di gruppo, RunOnce, Winlogon, Active Setup) non possono essere commutati normalmente e sono **nascosti per impostazione predefinita** — spunta **Mostra elementi di sistema / di sola lettura** per vederli (in grigio). **Prendi in carico nell'elenco di avvio** affida un elemento a Clockwork (solo chiavi Run del registro ed elementi della cartella Esecuzione automatica). Un **filtro** in alto cerca per nome / comando; passa il mouse su un comando troncato per leggerlo per intero.
 
 ### Gruppi di azioni
-Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da un **modello integrato** (Concentrazione / Riunione / Chiusura / Prima di dormire / Allontanarsi / Schermata) — modifica i nomi dei processi e salva. Un gruppo **definisce solo azioni**; attivalo in tre modi: dall'area di notifica (**Esegui: <gruppo>**), come un **passaggio di gruppo di azioni** nell'elenco di avvio (all'accensione) o da un promemoria (**Al-Sì / gruppo silenzioso**). Un gruppo esegue una sola copia alla volta; un passaggio **messaggio** può fungere da barriera di conferma (rispondere **No** interrompe il resto).
+
+Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da un **modello integrato** (Concentrazione / Riunione / Chiusura / Prima di dormire / Allontanarsi / Schermata) — modifica i nomi dei processi e salva. Un gruppo **definisce solo azioni**; attivalo in quattro modi: dall'area di notifica (**Esegui: <gruppo>**), una **scorciatoia globale**, come un **passaggio di gruppo di azioni** nell'elenco di avvio (all'accensione) o da un promemoria (**Al-Sì / gruppo silenzioso**). Un gruppo esegue una sola copia alla volta; un passaggio **messaggio** può fungere da barriera di conferma (rispondere **No** interrompe il resto).
+
+> **Scorciatoia globale** — nell'editor del gruppo, clicca sulla casella della scorciatoia e premi una combinazione (es. `Ctrl+Alt+F`) per eseguire quel gruppo da qualsiasi punto, senza menu. Esc annulla, Canc cancella. I gruppi disabilitati rilasciano la loro combinazione; le combinazioni riservate dal sistema (Alt+F4, Ctrl+Shift+Esc…) e le combinazioni già occupate da un altro gruppo o dalla scorciatoia di emergenza vengono rifiutate con un avviso.
 
 ### Impostazioni
+
 **Ritardo di avvio** (0–600 s, solo all'accensione), **avvia ridotto a icona nell'area di notifica**, **scorciatoia di emergenza** (clicca sulla casella e premi la tua scorciatoia; Esc annulla, Canc cancella; predefinita `Ctrl+Alt+Q`) e **lingua dell'interfaccia** (cinese semplificato, inglese, 日本語 e altre 15 — 18 in totale; cambiarla riavvia l'applicazione per applicarla).
 
 ## Suggerimenti
@@ -106,7 +113,7 @@ C#/.NET WPF; sorgente in `app/` (richiede l'SDK .NET 10). Livelli: `Core/` logic
 
 ## Informazioni sul Piano Open Source 365
 
-Questo è il progetto #20 del [Piano Open Source 365](https://github.com/rockbenben/365opensource) — una persona + IA, oltre 300 progetti open source in un anno. [Invia una richiesta →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+Questo è il progetto #20 del [Piano Open Source 365](https://github.com/rockbenben/365opensource) — una persona + IA, oltre 300 progetti open source in un anno. [Invia una richiesta →](https://365.aishort.top/)
 
 ## Licenza
 

@@ -25,7 +25,7 @@ Een kleine Windows-systeemvaktool die de routineklusjes afhandelt waarmee je je 
 - 🚀 **Opstartlijst** — opent automatisch je dagelijkse apps bij het aanmelden, op volgorde (beheerdersrechten per stap, vertragingen, alleen-op-bepaalde-weekdagen / alleen-vóór-N-uur, vensterstijl, activeren-indien-actief, terugvalpaden) en doet onderweg wat klusjes (vensters sluiten of naar de voorgrond halen, toetsaanslagen / tekst versturen, volume instellen…).
 - ⏰ **Herinneringen** — laat een herinnering op tijd verschijnen; leest hem hardop voor; herhaalt per weekdag / om-de-N-dagen / maandelijks; of triggert «bij het aanmelden». Op **Ja** klikken kan een programma starten, een bestand (bijv. muziek) of een URL openen, of een actiegroep uitvoeren.
 - 🧹 **Opstartitems van het systeem** — toont **alles op je pc dat automatisch opstart** en schakelt uit wat je niet nodig hebt (uitgeschakeld, niet verwijderd — zet het wanneer je wilt weer aan). Met één klik «neem je een item over» in je eigen opstartlijst.
-- 🎛️ **Actiegroepen** — bundel een reeks acties in een herbruikbare groep (Focus / Vergadering / Afronden / Bedtijd…) en trigger die met één klik vanuit het systeemvak, de opstartlijst of een herinnering. Ingebouwde sjablonen inbegrepen.
+- 🎛️ **Actiegroepen** — bundel een reeks acties in een herbruikbare groep (Focus / Vergadering / Afronden / Bedtijd…) en trigger die met één klik vanuit het systeemvak, een **globale sneltoets**, de opstartlijst of een herinnering. Ingebouwde sjablonen inbegrepen.
 
 Geen installatie, volledig draagbaar in één map, alles met de muis in te stellen; donkere interface, geschikt voor hoge resolutie (high-DPI).
 
@@ -50,6 +50,7 @@ Geen installatie, volledig draagbaar in één map, alles met de muis in te stell
 ## De vijf tabbladen
 
 ### Opstartlijst
+
 Een **geordende lijst met stappen** die bij het aanmelden van boven naar beneden worden uitgevoerd. Klik op **Toevoegen ▾** om een type te kiezen; vrij toevoegen, verwijderen en herordenen; elke stap kan worden in-/uitgeschakeld, een **vertraging na de stap**, een **aantal herhalingen** (N keer herhalen) en voorwaarden (**alleen op bepaalde weekdagen / alleen vóór N uur**) krijgen. Staptypen:
 
 - **Programma starten** — doel (**Bladeren…** om een bestand te kiezen) / argumenten / werkmap (leeg laten = map van het doel) / beheerder. Het doel kan een `.exe`, document, snelkoppeling of URL zijn; een `.ps1` draait via PowerShell. Geavanceerd: **vensterstijl** (geminimaliseerd / gemaximaliseerd / verborgen), **activeren indien al actief** (haal het naar de voorgrond in plaats van het opnieuw te starten; procesnaam via **Kiezen…**), **terugvalpaden** (één volledig pad per regel; het eerste bestaande wordt gebruikt — handig wanneer installatiepaden per machine verschillen).
@@ -66,6 +67,7 @@ Een **geordende lijst met stappen** die bij het aanmelden van boven naar beneden
 > **Stop op elk moment** — systeemvak → **Actieve acties stoppen**, of de globale **paniek-sneltoets** (ingesteld op het tabblad Instellingen; standaard `Ctrl+Alt+Q`). Wat er draait stopt na de huidige actie; lange wachttijden (opstartvertraging, wachten op een venster) worden onmiddellijk onderbroken.
 
 ### Herinneringen
+
 Stel een **tijd** in (of schakel over naar **bij het aanmelden**), een **herhaling** (weekdagen / om-de-N-dagen / maandelijks) en de **tekst**; lees hem eventueel hardop voor. Herinneringen met een **Bij-Ja**-actie (programma starten / bestand openen / URL / actiegroep uitvoeren) tonen een **Ja / Nee**-dialoogvenster met een knop **Uitstellen** (standaard 10 min, ▾-menu 5–60 min); de rest schuift als een **herinneringskaart** in de hoek naar binnen (sluit vanzelf na het ingestelde aantal seconden, **0 = blijft staan tot je hem sluit**). Je kunt ook een **stille actiegroep** instellen — voert een groep op tijd uit zonder enige pop-up.
 
 Geavanceerd: **automatisch sluiten**, **herhaald aandringen** (verschijnt om de N minuten opnieuw tot een deadline), **vertraging na trigger + willekeurige spreiding**, **respijt** (haalt een trigger in die door een korte afsluiting/slaapstand is gemist), **inhalen indien gemist** (vuurt eenmaal opnieuw als sluimerstand/afsluiting hem heeft overgeslagen) en een **ankerdatum** voor om-de-N-dagen (**Datum kiezen**). «Vandaag gevuurd» en «uitgesteld tot» overleven herstarts (`clockwork.state.json`), zodat een uitstel een herstart overbrugt en niets dubbel vuurt.
@@ -73,12 +75,17 @@ Geavanceerd: **automatisch sluiten**, **herhaald aandringen** (verschijnt om de 
 Moet je je concentreren of een vergadering bijwonen? Het systeemvak biedt **Herinneringen pauzeren gedurende 1 / 2 / 4 uur** (Niet storen): alles (inclusief stille groepen) wordt onderdrukt en hervat automatisch wanneer de tijd om is.
 
 ### Opstartitems van het systeem
+
 Toont **alles dat automatisch opstart** (Run-sleutels in het register, Opstartmappen, geplande taken). Vink **Inschakelen** uit om een item uit te schakelen — **uitgeschakeld, niet verwijderd; opnieuw aanvinken om te herstellen** (heeft direct effect). Items die als **vereist beheerder** zijn gemarkeerd, vragen om verhoogd opnieuw te starten. Systeem- / beleids- / eenmalige items (Groepsbeleid-Run, RunOnce, Winlogon, Active Setup) kunnen niet normaal worden omgeschakeld en zijn **standaard verborgen** — vink **Systeem- / alleen-lezen-items weergeven** aan om ze te bekijken (grijs weergegeven). **Overnemen in opstartlijst** draagt een item over aan Clockwork (alleen Run-sleutels in het register en items in de Opstartmap). Een **filter** bovenaan zoekt op naam / opdracht; beweeg de muis over een afgekapte opdracht om hem volledig te lezen.
 
 ### Actiegroepen
-Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis van een **ingebouwd sjabloon** (Focus / Vergadering / Afronden / Bedtijd / Even weg / Schermafbeelding) — pas de procesnamen aan en sla op. Een groep **definieert alleen acties**; trigger hem op drie manieren: vanuit het systeemvak (**Uitvoeren: <groep>**), als een **actiegroep-stap** in de opstartlijst (bij het opstarten) of vanuit een herinnering (**Bij-Ja / stille groep**). Een groep draait telkens maar één kopie tegelijk; een **bericht**-stap kan als bevestigingspoort dienen (met **Nee** antwoorden breekt de rest af).
+
+Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis van een **ingebouwd sjabloon** (Focus / Vergadering / Afronden / Bedtijd / Even weg / Schermafbeelding) — pas de procesnamen aan en sla op. Een groep **definieert alleen acties**; trigger hem op vier manieren: vanuit het systeemvak (**Uitvoeren: <groep>**), een **globale sneltoets**, als een **actiegroep-stap** in de opstartlijst (bij het opstarten) of vanuit een herinnering (**Bij-Ja / stille groep**). Een groep draait telkens maar één kopie tegelijk; een **bericht**-stap kan als bevestigingspoort dienen (met **Nee** antwoorden breekt de rest af).
+
+> **Globale sneltoets** — klik in de groepseditor op het sneltoetsvak en druk op een sneltoets (bijv. `Ctrl+Alt+F`) om die groep overal vandaan uit te voeren, zonder menu. Esc annuleert, Delete wist. Uitgeschakelde groepen geven hun combinatie vrij; systeemgereserveerde combinaties (Alt+F4, Ctrl+Shift+Esc…) en combinaties die al door een andere groep of de paniek-sneltoets in gebruik zijn, worden met een melding geweigerd.
 
 ### Instellingen
+
 **Opstartvertraging** (0–600 s, alleen bij opstarten), **geminimaliseerd naar het systeemvak starten**, **paniek-sneltoets** (klik op het vak en druk je sneltoets in; Esc annuleert, Delete wist; standaard `Ctrl+Alt+Q`) en **UI-taal** (Vereenvoudigd Chinees, Engels, 日本語 en 15 meer — 18 in totaal; wisselen herstart de app om het toe te passen).
 
 ## Tips
@@ -106,7 +113,7 @@ C#/.NET WPF; broncode in `app/` (vereist de .NET 10-SDK). Lagen: `Core/` pure lo
 
 ## Over het 365 Open-Source Plan
 
-Dit is project #20 van het [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — één persoon + AI, 300+ opensourceprojecten in een jaar. [Een verzoek indienen →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+Dit is project #20 van het [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — één persoon + AI, 300+ opensourceprojecten in een jaar. [Een verzoek indienen →](https://365.aishort.top/)
 
 ## Licentie
 

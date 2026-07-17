@@ -129,6 +129,24 @@ public class ConfigStoreTests : IDisposable
     }
 
     [Fact]
+    public void Group_hotkey_roundtrips_and_defaults_blank()
+    {
+        // 全局热键字段：写读往返保留；旧配置（无该键）读入默认空=不绑定；运行快照带上（热键触发跑的是快照）。
+        var path = Path.Combine(_dir, "ghk.json");
+        var cfg = RootConfig.Default();
+        cfg.ActionGroups.Add(new ActionGroup { Name = "专注", Hotkey = "Ctrl+Alt+F" });
+        ConfigStore.Write(cfg, path);
+        var back = ConfigStore.Read(path);
+        Assert.Equal("Ctrl+Alt+F", back.ActionGroups[0].Hotkey);
+
+        var legacy = Path.Combine(_dir, "ghk_legacy.json");
+        File.WriteAllText(legacy, "{\"actionGroups\":[{\"name\":\"旧组\"}]}");
+        Assert.Equal("", ConfigStore.Read(legacy).ActionGroups[0].Hotkey);
+
+        Assert.Equal("Ctrl+Alt+F", cfg.ActionGroups[0].SnapshotForRun().Hotkey);
+    }
+
+    [Fact]
     public void Read_null_array_elements_are_dropped_not_crashed()
     {
         // 手改配置在数组里留下 null 元素：反序列化成功但后续按元素解引用会 NRE，

@@ -311,4 +311,9 @@ Nhật ký: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Tìm tên tiến trình / tiêu đề cửa sổ</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Chọn ngày</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Bắt phím</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Phím tắt toàn cục</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Nhấp rồi nhấn tổ hợp phím để chạy nhóm này bất cứ lúc nào; Esc hủy, Delete xóa</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Không thể đăng ký phím tắt {1} cho nhóm hành động “{0}”: có thể đã bị chiếm dụng</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value></data>
 </root>

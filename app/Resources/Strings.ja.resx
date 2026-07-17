@@ -311,4 +311,9 @@
   <data name="Picker_Search" xml:space="preserve"><value>プロセス名 / ウィンドウタイトルを検索</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>日付を選択</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>キーをキャプチャ</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>グローバルホットキー</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>クリックしてキーの組み合わせを押すと、いつでもこのグループを実行できます。Esc でキャンセル、Delete でクリア</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>アクショングループ「{0}」のホットキー {1} を登録できませんでした：既に使用されている可能性があります</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>ホットキー {0} は「{1}」で既に使用されています。別の組み合わせを選んでください</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} はシステム予約の組み合わせです（登録するとシステムキーを奪ってしまうため）ホットキーには使えません</value></data>
 </root>

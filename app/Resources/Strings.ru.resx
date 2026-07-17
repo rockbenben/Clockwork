@@ -311,4 +311,9 @@
   <data name="Picker_Search" xml:space="preserve"><value>Поиск по имени процесса / заголовку окна</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Выбор даты</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Захват клавиши</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Глобальная горячая клавиша</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Нажмите на поле, затем сочетание клавиш — группа запустится в любой момент; Esc — отмена, Delete — очистить</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Не удалось зарегистрировать горячую клавишу {1} для группы действий «{0}»: возможно, она уже занята</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>Сочетание {0} уже используется «{1}»; выберите другое</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} — зарезервированное системой сочетание (его регистрация перехватила бы системную клавишу), его нельзя использовать как горячую клавишу</value></data>
 </root>

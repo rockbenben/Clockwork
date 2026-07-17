@@ -311,4 +311,9 @@ Journal : {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Rechercher nom de processus / titre de fenêtre</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Choisir une date</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Capturer une touche</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Raccourci global</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Cliquez puis appuyez sur une combinaison de touches pour exécuter ce groupe à tout moment ; Échap annule, Suppr efface</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossible d'enregistrer le raccourci {1} du groupe d'actions « {0} » : il est peut-être déjà utilisé</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par « {1} » ; choisissez une autre combinaison</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} est une combinaison réservée au système (l'enregistrer détournerait une touche système) et ne peut pas servir de raccourci</value></data>
 </root>

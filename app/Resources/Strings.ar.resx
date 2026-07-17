@@ -311,4 +311,9 @@
   <data name="Picker_Search" xml:space="preserve"><value>بحث باسم العملية / عنوان النافذة</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>اختيار تاريخ</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>التقاط مفتاح</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>اختصار عام</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>انقر ثم اضغط مجموعة مفاتيح لتشغيل هذه المجموعة في أي وقت؛ Esc للإلغاء وDelete للمسح</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>تعذّر تسجيل الاختصار {1} لمجموعة الإجراءات «{0}»: قد يكون مستخدمًا بالفعل</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>الاختصار {0} مستخدم بالفعل بواسطة «{1}»؛ اختر تركيبة أخرى</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} تركيبة محجوزة للنظام (تسجيلها سيخطف مفتاح نظام) ولا يمكن استخدامها كاختصار</value></data>
 </root>

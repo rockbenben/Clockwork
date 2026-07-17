@@ -118,7 +118,12 @@ public static class Pickers
             combo = candidate;
             dlg.DialogResult = true;
         };
-        return dlg.ShowDialog() == true ? combo : null;
+        // 录键期间挂起全部全局热键（急停 + 组）：e.Handled 拦不住 OS 级 WM_HOTKEY，
+        // 不挂起的话，按到某组已绑的组合会当场把整组跑起来。
+        var app = App.Instance;
+        app?.SuspendHotkeys();
+        try { return dlg.ShowDialog() == true ? combo : null; }
+        finally { app?.ResumeHotkeys(); }
     }
 
     private static Window NewDialog(Window owner, string title, double w, double h)

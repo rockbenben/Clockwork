@@ -25,7 +25,7 @@ Alat tray Windows kecil yang mengurus bagian-bagian rutin saat memulai hari Anda
 - 🚀 **Daftar startup** — otomatis membuka aplikasi sehari-hari Anda saat login, secara berurutan (hak admin per-langkah, penundaan, hanya-pada-hari-tertentu / hanya-sebelum-pukul-N, gaya jendela, aktifkan-jika-sedang-berjalan, jalur cadangan), dan mengerjakan beberapa tugas kecil di sepanjang jalan (menutup atau memfokuskan jendela, mengirim penekanan tombol / teks, mengatur volume…).
 - ⏰ **Pengingat** — memunculkan pengingat tepat waktu; membacakannya dengan lantang; mengulang menurut hari dalam seminggu / setiap-N-hari / bulanan; atau memicu "saat login". Mengklik **Ya** dapat menjalankan program, membuka berkas (mis. musik) atau sebuah URL, atau menjalankan grup aksi.
 - 🧹 **Item startup sistem** — mendaftar **semua yang berjalan otomatis di PC Anda** dan mematikan yang tidak Anda perlukan (dinonaktifkan, bukan dihapus — kembalikan kapan saja). Satu klik "mengambil alih" sebuah item ke daftar startup Anda sendiri.
-- 🎛️ **Grup aksi** — menggabungkan serangkaian aksi menjadi satu grup yang dapat digunakan ulang (Fokus / Rapat / Beres-beres / Menjelang tidur…) dan memicunya dengan satu klik dari tray, daftar startup, atau sebuah pengingat. Templat bawaan disertakan.
+- 🎛️ **Grup aksi** — menggabungkan serangkaian aksi menjadi satu grup yang dapat digunakan ulang (Fokus / Rapat / Beres-beres / Menjelang tidur…) dan memicunya dengan satu klik dari tray, sebuah **tombol pintas global**, daftar startup, atau sebuah pengingat. Templat bawaan disertakan.
 
 Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigurasi dengan mouse; antarmuka gelap, sadar high-DPI.
 
@@ -50,6 +50,7 @@ Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigu
 ## Lima tab
 
 ### Daftar startup
+
 Sebuah **daftar langkah yang berurutan** dijalankan dari atas ke bawah saat login. Klik **Tambah ▾** untuk memilih jenis; tambah/hapus/urutkan ulang dengan bebas; setiap langkah dapat diaktifkan/dinonaktifkan, diberi **penundaan pasca-langkah**, **jumlah pengulangan** (mengulanginya N kali), dan kondisi (**hanya pada hari tertentu / hanya sebelum pukul N**). Jenis langkah:
 
 - **Luncurkan program** — target (**Telusuri…** untuk memilih berkas) / argumen / direktori kerja (kosongkan = folder target) / admin. Target dapat berupa `.exe`, dokumen, pintasan, atau URL; sebuah `.ps1` berjalan melalui PowerShell. Lanjutan: **gaya jendela** (diminimalkan / dimaksimalkan / disembunyikan), **aktifkan jika sudah berjalan** (bawa ke depan alih-alih meluncurkan ulang; nama proses melalui **Pilih…**), **jalur cadangan** (satu jalur lengkap per baris; yang pertama ada yang digunakan — praktis ketika jalur instalasi berbeda antar mesin).
@@ -66,6 +67,7 @@ Sebuah **daftar langkah yang berurutan** dijalankan dari atas ke bawah saat logi
 > **Hentikan kapan saja** — tray → **Hentikan aksi yang berjalan**, atau **tombol pintas panik** global (diatur pada tab Pengaturan; bawaan `Ctrl+Alt+Q`). Apa pun yang sedang berjalan berhenti setelah aksi saat ini; penungguan yang lama (penundaan startup, menunggu jendela) diinterupsi seketika.
 
 ### Pengingat
+
 Atur sebuah **waktu** (atau beralih ke **saat login**), sebuah **pengulangan** (hari dalam seminggu / setiap-N-hari / bulanan), dan **teks**-nya; opsional bacakan dengan lantang. Pengingat dengan aksi **Saat-Ya** (jalankan program / buka berkas / URL / jalankan grup aksi) memunculkan dialog **Ya / Tidak** dengan tombol **Tunda** (bawaan 10 mnt, menu ▾ 5–60 mnt); selebihnya meluncur masuk sebagai **kartu pengingat** di sudut (menutup otomatis setelah detik yang dikonfigurasi, **0 = tetap ada hingga Anda menutupnya**). Anda juga dapat mengatur **grup aksi senyap** — menjalankan grup tepat waktu tanpa popup.
 
 Lanjutan: **penutupan otomatis**, **rengekan berulang** (memunculkan kembali setiap N menit hingga tenggat), **penundaan pasca-pemicu + jitter acak**, **tenggang** (menangkap pemicu yang terlewat karena mati/tidur singkat), **kejar jika terlewat** (memunculkan sekali lagi setelah hibernasi/mati melewatkannya), dan sebuah **tanggal jangkar** untuk setiap-N-hari (**Pilih tanggal**). "Terpicu hari ini" dan "ditunda hingga" bertahan melalui mulai ulang (`clockwork.state.json`), sehingga sebuah penundaan terbawa melintasi mulai ulang dan tidak ada yang terpicu ganda.
@@ -73,12 +75,17 @@ Lanjutan: **penutupan otomatis**, **rengekan berulang** (memunculkan kembali set
 Perlu fokus atau ikut rapat? Tray menawarkan **Jeda pengingat selama 1 / 2 / 4 jam** (Jangan Ganggu): semuanya (termasuk grup senyap) ditekan dan otomatis dilanjutkan saat waktunya habis.
 
 ### Item startup sistem
+
 Mendaftar **semua yang berjalan otomatis** (kunci Run registri, folder Startup, tugas terjadwal). Hapus centang **Aktifkan** untuk mematikan sebuah item — **dinonaktifkan, bukan dihapus; centang kembali untuk memulihkan** (berlaku seketika). Item yang ditandai **butuh admin** meminta untuk diluncurkan ulang dengan hak lebih tinggi. Item sistem / kebijakan / sekali-pakai (Group-Policy Run, RunOnce, Winlogon, Active Setup) tidak dapat dialihkan secara normal dan **disembunyikan secara bawaan** — centang **Tampilkan item sistem / hanya-baca** untuk melihatnya (berwarna abu-abu). **Ambil alih ke daftar startup** menyerahkan sebuah item ke Clockwork (hanya kunci Run registri dan item folder Startup). Sebuah **filter** di atas mencari menurut nama / perintah; arahkan kursor ke perintah yang terpotong untuk membacanya secara penuh.
 
 ### Grup aksi
-Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah ▾** memulai satu dari **templat bawaan** (Fokus / Rapat / Beres-beres / Menjelang tidur / Meninggalkan meja / Tangkapan layar) — sesuaikan nama proses lalu simpan. Sebuah grup **hanya mendefinisikan aksi**; picu dengan tiga cara: dari tray (**Jalankan: <grup>**), sebagai **langkah grup-aksi** dalam daftar startup (saat boot), atau dari sebuah pengingat (**Saat-Ya / grup senyap**). Sebuah grup hanya menjalankan satu salinan pada satu waktu; sebuah langkah **pesan** dapat bertindak sebagai gerbang konfirmasi (menjawab **Tidak** membatalkan sisanya).
+
+Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah ▾** memulai satu dari **templat bawaan** (Fokus / Rapat / Beres-beres / Menjelang tidur / Meninggalkan meja / Tangkapan layar) — sesuaikan nama proses lalu simpan. Sebuah grup **hanya mendefinisikan aksi**; picu dengan empat cara: dari tray (**Jalankan: <grup>**), sebuah **tombol pintas global**, sebagai **langkah grup-aksi** dalam daftar startup (saat boot), atau dari sebuah pengingat (**Saat-Ya / grup senyap**). Sebuah grup hanya menjalankan satu salinan pada satu waktu; sebuah langkah **pesan** dapat bertindak sebagai gerbang konfirmasi (menjawab **Tidak** membatalkan sisanya).
+
+> **Tombol pintas global** — di editor grup, klik kotak tombol pintas dan tekan sebuah pintasan (mis. `Ctrl+Alt+F`) untuk menjalankan grup itu dari mana saja, tanpa perlu menu. Esc membatalkan, Delete mengosongkan. Grup yang dinonaktifkan melepaskan kombinasinya; kombinasi yang dicadangkan sistem (Alt+F4, Ctrl+Shift+Esc…) dan kombinasi yang sudah dipakai oleh grup lain atau tombol pintas panik ditolak dengan sebuah pemberitahuan.
 
 ### Pengaturan
+
 **Penundaan startup** (0–600 dtk, hanya saat boot), **mulai terminimalkan ke tray**, **tombol pintas panik** (klik kotaknya dan tekan pintasan Anda; Esc membatalkan, Delete mengosongkan; bawaan `Ctrl+Alt+Q`), dan **bahasa antarmuka** (Tionghoa Sederhana, Inggris, 日本語 dan 15 lagi — total 18; beralih akan memulai ulang aplikasi untuk menerapkannya).
 
 ## Tips
@@ -106,7 +113,7 @@ C#/.NET WPF; sumber di `app/` (membutuhkan .NET 10 SDK). Lapisan: `Core/` logika
 
 ## Tentang 365 Open-Source Plan
 
-Ini adalah proyek #20 dari [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — satu orang + AI, 300+ proyek open-source dalam setahun. [Kirim permintaan →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+Ini adalah proyek #20 dari [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — satu orang + AI, 300+ proyek open-source dalam setahun. [Kirim permintaan →](https://365.aishort.top/)
 
 ## Lisensi
 

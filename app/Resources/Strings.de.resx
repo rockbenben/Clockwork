@@ -311,4 +311,9 @@ Protokoll: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Prozessname / Fenstertitel suchen</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Datum auswählen</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Taste erfassen</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Globale Tastenkombination</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klicken und Tastenkombination drücken, um diese Gruppe jederzeit auszuführen; Esc bricht ab, Entf löscht</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Tastenkombination {1} für Aktionsgruppe „{0}“ konnte nicht registriert werden: möglicherweise bereits belegt</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>Tastenkombination {0} wird bereits von „{1}“ verwendet; bitte eine andere wählen</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} ist eine systemreservierte Kombination (ihre Registrierung würde eine Systemtaste kapern) und kann nicht als Tastenkombination verwendet werden</value></data>
 </root>

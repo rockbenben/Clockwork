@@ -9,7 +9,7 @@ A small Windows tray tool that manages four everyday things (plus a Settings tab
 1. **Startup list** — open your everyday apps in order at login, and do a few chores along the way.
 2. **Reminders** — on-time reminders / read aloud / repeat-nagging / do something when you click **Yes**.
 3. **System startup items** — view and manage everything on your PC that auto-starts; switch off what you don't need.
-4. **Action groups** — bundle a series of actions into a group (Focus / Wrap-up / Bedtime…) and trigger it with one tap.
+4. **Action groups** — bundle a series of actions into a group (Focus / Wrap-up / Bedtime…) and trigger it with one tap or a **global hotkey**.
 
 ---
 
@@ -92,7 +92,8 @@ Tray → **Stop running actions**, or the global **panic hotkey** (set on the Se
 
 - **Add ▾** starts a group from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save.
 - A group runs **only one copy at a time** (repeat triggers are skipped).
-- Trigger it three ways: tray **Run: <group>** · an **action-group step** in the startup list (at boot) · a reminder's **On-Yes / silent group**.
+- Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a reminder's **On-Yes / silent group**.
+- **Global hotkey:** in the group editor, click the hotkey box and press a combo (e.g. `Ctrl+Alt+F`) to run the group from any app — no menu needed. Esc cancels, Delete clears. Changes apply live (no restart). A **disabled** group releases its combo so another group can use it. Refused with a notice: **system-reserved** combos (Alt+F4, Alt+Tab, Ctrl+Shift+Esc…), a combo already bound to **another enabled group** or the **panic hotkey**, or one **already taken by another app** (use a different combo).
 - A **message** step can act as a confirmation gate — answering **No** aborts the rest of the group (e.g. "Did you log today's tasks?" before wrap-up).
 
 ## Settings
@@ -108,4 +109,4 @@ Tray → **Stop running actions**, or the global **panic hotkey** (set on the Se
 - Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Reminder state is `clockwork.state.json` (also local; safe to delete — at most a reminder fires once more today).
 - When filling paths / processes / shortcuts / dates you don't have to type by hand: **Browse…**, **Pick…** (searchable process picker), **Capture**, and **Pick date**. The process picker and the system-startup list both have a search/filter box.
 - **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers (e.g. Lucy) block low-level calls, so send-keys / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).
-- An `.ahk` step needs AutoHotkey installed. Global hotkeys / text expansion are out of scope — that's AutoHotkey's strength.
+- Global hotkeys can **run action groups** (set per group, above). Arbitrary key remapping / text expansion is still out of scope — that's AutoHotkey's strength (an `.ahk` step needs AutoHotkey installed).

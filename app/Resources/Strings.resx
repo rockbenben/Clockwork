@@ -313,4 +313,9 @@
   <data name="Picker_Search" xml:space="preserve"><value>搜索进程名 / 窗口标题</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>选择日期</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>捕获按键</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>全局热键</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>点击后按下组合键，随时一键运行本组；Esc 取消，Delete 清除</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>动作组「{0}」的热键 {1} 注册失败：可能已被其他程序或热键占用</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>热键 {0} 已被「{1}」使用，请换一个组合</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系统保留组合（注册会劫走系统按键），不能用作热键</value></data>
 </root>

@@ -311,4 +311,9 @@ Registro: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Pesquisar nome do processo / título da janela</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Escolher data</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Capturar tecla</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Atalho global</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Clique e pressione uma combinação de teclas para executar este grupo a qualquer momento; Esc cancela, Delete limpa</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Não foi possível registrar o atalho {1} do grupo de ações “{0}”: pode já estar em uso</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>O atalho {0} já é usado por “{1}”; escolha outra combinação</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} é uma combinação reservada do sistema (registrá-la sequestraria uma tecla do sistema) e não pode ser usada como atalho</value></data>
 </root>

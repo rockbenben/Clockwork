@@ -311,4 +311,9 @@
   <data name="Picker_Search" xml:space="preserve"><value>搜尋程序名 / 視窗標題</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>選擇日期</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>擷取按鍵</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>全域快速鍵</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>點擊後按下組合鍵，隨時一鍵執行本組；Esc 取消，Delete 清除</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>動作組「{0}」的快速鍵 {1} 註冊失敗：可能已被其他程式或快速鍵佔用</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>快速鍵 {0} 已被「{1}」使用，請換一個組合</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系統保留組合（註冊會劫走系統按鍵），不能用作快速鍵</value></data>
 </root>

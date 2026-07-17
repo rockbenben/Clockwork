@@ -311,4 +311,9 @@ Günlük: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>İşlem adı / pencere başlığı ara</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Tarih seç</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Tuş yakala</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Genel kısayol tuşu</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Tıklayıp bir tuş kombinasyonuna basın; bu grubu istediğiniz an çalıştırır. Esc iptal eder, Delete temizler</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>“{0}” eylem grubunun {1} kısayolu kaydedilemedi: başka bir yerde kullanılıyor olabilir</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>{0} kısayolu zaten “{1}” tarafından kullanılıyor; başka bir kombinasyon seçin</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} sistem için ayrılmış bir kombinasyondur (kaydedilmesi bir sistem tuşunu ele geçirir) ve kısayol olarak kullanılamaz</value></data>
 </root>

@@ -311,4 +311,9 @@
   <data name="Picker_Search" xml:space="preserve"><value>ค้นหาชื่อโปรเซส / ชื่อหน้าต่าง</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>เลือกวันที่</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>จับปุ่มกด</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>ปุ่มลัดส่วนกลาง</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัดเพื่อเรียกใช้กลุ่มนี้ได้ทุกเมื่อ; Esc ยกเลิก, Delete ล้าง</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>ลงทะเบียนปุ่มลัด {1} ของกลุ่มการทำงาน “{0}” ไม่สำเร็จ: อาจถูกใช้งานอยู่แล้ว</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย “{1}” แล้ว โปรดเลือกชุดอื่น</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} เป็นชุดปุ่มที่ระบบสงวนไว้ (การลงทะเบียนจะยึดปุ่มระบบ) ใช้เป็นปุ่มลัดไม่ได้</value></data>
 </root>

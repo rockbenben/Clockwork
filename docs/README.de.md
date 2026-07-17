@@ -25,7 +25,7 @@ Ein kleines Windows-Tray-Tool, das sich um die Routineteile deines Tagesstarts a
 - 🚀 **Startliste** — öffnet beim Anmelden deine alltäglichen Apps automatisch und der Reihe nach (pro Schritt Administratorrechte, Verzögerungen, nur an bestimmten Wochentagen / nur vor einer bestimmten Uhrzeit, Fensterstil, Aktivieren-falls-läuft, Ausweichpfade) und erledigt unterwegs ein paar Kleinigkeiten (Fenster schließen oder fokussieren, Tasteneingaben / Text senden, Lautstärke einstellen …).
 - ⏰ **Erinnerungen** — blenden pünktlich eine Erinnerung ein; sprechen sie vor; wiederholen nach Wochentag / alle N Tage / monatlich; oder werden „beim Anmelden“ ausgelöst. Ein Klick auf **Ja** kann ein Programm ausführen, eine Datei (z. B. Musik) oder eine URL öffnen oder eine Aktionsgruppe ausführen.
 - 🧹 **System-Autostart-Einträge** — listet **alles auf deinem PC auf, das automatisch startet**, und schaltet ab, was du nicht brauchst (deaktiviert, nicht gelöscht — jederzeit zurückschaltbar). Ein Klick „übernimmt“ einen Eintrag in deine eigene Startliste.
-- 🎛️ **Aktionsgruppen** — bündeln eine Reihe von Aktionen zu einer wiederverwendbaren Gruppe (Fokus / Meeting / Feierabend / Schlafenszeit …) und lösen sie mit einem Klick aus dem Tray, der Startliste oder einer Erinnerung aus. Integrierte Vorlagen inklusive.
+- 🎛️ **Aktionsgruppen** — bündeln eine Reihe von Aktionen zu einer wiederverwendbaren Gruppe (Fokus / Meeting / Feierabend / Schlafenszeit …) und lösen sie mit einem Klick aus dem Tray, einem **globalen Hotkey**, der Startliste oder einer Erinnerung aus. Integrierte Vorlagen inklusive.
 
 Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Maus konfigurierbar; dunkle Oberfläche, High-DPI-tauglich.
 
@@ -50,6 +50,7 @@ Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Ma
 ## Die fünf Tabs
 
 ### Startliste
+
 Eine **geordnete Liste von Schritten**, die beim Anmelden von oben nach unten ausgeführt wird. Klicke auf **Hinzufügen ▾**, um einen Typ zu wählen; frei hinzufügen / entfernen / umsortieren; jeder Schritt lässt sich aktivieren/deaktivieren, mit einer **Verzögerung nach dem Schritt**, einer **Wiederholungszahl** (N-mal wiederholen) und Bedingungen (**nur an bestimmten Wochentagen / nur vor einer bestimmten Uhrzeit**) versehen. Schritttypen:
 
 - **Programm starten** — Ziel (**Durchsuchen…**, um eine Datei zu wählen) / Argumente / Arbeitsverzeichnis (leer lassen = Ordner des Ziels) / Administrator. Das Ziel kann eine `.exe`, ein Dokument, eine Verknüpfung oder eine URL sein; eine `.ps1` läuft über PowerShell. Erweitert: **Fensterstil** (minimiert / maximiert / ausgeblendet), **aktivieren, falls bereits läuft** (nach vorn holen statt neu zu starten; Prozessname über **Auswählen…**), **Ausweichpfade** (ein vollständiger Pfad pro Zeile; der erste vorhandene wird verwendet — praktisch, wenn sich Installationspfade zwischen Rechnern unterscheiden).
@@ -66,6 +67,7 @@ Eine **geordnete Liste von Schritten**, die beim Anmelden von oben nach unten au
 > **Jederzeit stoppen** — Tray → **Laufende Aktionen stoppen**, oder das globale **Notfall-Hotkey** (auf dem Tab „Einstellungen“ festgelegt; Standard `Ctrl+Alt+Q`). Was gerade läuft, stoppt nach der aktuellen Aktion; lange Wartezeiten (Startverzögerung, Warten auf ein Fenster) werden sofort unterbrochen.
 
 ### Erinnerungen
+
 Lege eine **Zeit** fest (oder wechsle zu **beim Anmelden**), eine **Wiederholung** (Wochentage / alle N Tage / monatlich) und den **Text**; optional laut vorlesen. Erinnerungen mit einer **Bei-Ja-Aktion** (Programm ausführen / Datei öffnen / URL / Aktionsgruppe ausführen) blenden ein **Ja / Nein**-Dialogfeld mit einer **Schlummern**-Schaltfläche ein (Standard 10 Min., ▾-Menü 5–60 Min.); die übrigen gleiten als **Erinnerungskarte** in die Ecke (schließt nach den konfigurierten Sekunden automatisch, **0 = bleibt, bis du sie schließt**). Du kannst auch eine **stille Aktionsgruppe** einstellen — eine Gruppe pünktlich ohne Popup ausführen.
 
 Erweitert: **automatisch schließen**, **wiederholtes Nörgeln** (alle N Minuten bis zu einem Stichtag erneut einblenden), **Verzögerung nach Auslösung + zufälliger Jitter**, **Kulanz** (eine durch kurzes Herunterfahren/Ruhezustand verpasste Auslösung nachholen), **nachholen, wenn verpasst** (einmal erneut auslösen, nachdem Ruhezustand/Herunterfahren es übersprungen hat) und ein **Ankerdatum** für alle N Tage (**Datum auswählen**). „Heute ausgelöst“ und „geschlummert bis“ überleben Neustarts (`clockwork.state.json`), sodass ein Schlummern über einen Neustart hinweg erhalten bleibt und nichts doppelt auslöst.
@@ -73,12 +75,17 @@ Erweitert: **automatisch schließen**, **wiederholtes Nörgeln** (alle N Minuten
 Musst du dich konzentrieren oder in ein Meeting? Der Tray bietet **Erinnerungen für 1 / 2 / 4 Stunden pausieren** (Nicht stören): alles (auch stille Gruppen) wird unterdrückt und nach Ablauf der Zeit automatisch fortgesetzt.
 
 ### System-Autostart-Einträge
+
 Listet **alles auf, das automatisch startet** (Registry-Run-Schlüssel, Autostart-Ordner, geplante Aufgaben). Entferne das Häkchen bei **Aktiviert**, um einen Eintrag abzuschalten — **deaktiviert, nicht gelöscht; erneut anhaken zum Wiederherstellen** (wirkt sofort). Als **benötigt Administrator** markierte Einträge fordern zum erhöhten Neustart auf. System- / Richtlinien- / einmalige Einträge (Gruppenrichtlinien-Run, RunOnce, Winlogon, Active Setup) lassen sich nicht auf normale Weise umschalten und sind **standardmäßig ausgeblendet** — setze ein Häkchen bei **System- / schreibgeschützte Einträge anzeigen**, um sie zu sehen (ausgegraut). **In Startliste übernehmen** übergibt einen Eintrag an Clockwork (nur Registry-Run-Schlüssel und Autostart-Ordner-Einträge). Ein **Filter** oben durchsucht nach Name / Befehl; fahre über einen abgeschnittenen Befehl, um ihn vollständig zu lesen.
 
 ### Aktionsgruppen
-Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt eine aus einer **integrierten Vorlage** (Fokus / Meeting / Feierabend / Schlafenszeit / Kurz weg / Screenshot) — passe die Prozessnamen an und speichere. Eine Gruppe **definiert nur Aktionen**; löse sie auf drei Wegen aus: aus dem Tray (**Ausführen: <Gruppe>**), als **Aktionsgruppen-Schritt** in der Startliste (beim Start) oder aus einer Erinnerung (**Bei-Ja / stille Gruppe**). Eine Gruppe läuft immer nur in einer Kopie zugleich; ein **Nachrichten**-Schritt kann als Bestätigungssperre dienen (die Antwort **Nein** bricht den Rest ab).
+
+Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt eine aus einer **integrierten Vorlage** (Fokus / Meeting / Feierabend / Schlafenszeit / Kurz weg / Screenshot) — passe die Prozessnamen an und speichere. Eine Gruppe **definiert nur Aktionen**; löse sie auf vier Wegen aus: aus dem Tray (**Ausführen: <Gruppe>**), einem **globalen Hotkey**, als **Aktionsgruppen-Schritt** in der Startliste (beim Start) oder aus einer Erinnerung (**Bei-Ja / stille Gruppe**). Eine Gruppe läuft immer nur in einer Kopie zugleich; ein **Nachrichten**-Schritt kann als Bestätigungssperre dienen (die Antwort **Nein** bricht den Rest ab).
+
+> **Globales Hotkey** — klicke im Gruppeneditor in das Hotkey-Feld und drücke ein Kürzel (z. B. `Ctrl+Alt+F`), um diese Gruppe von überall auszuführen, ganz ohne Menü. Esc bricht ab, Entf löscht. Deaktivierte Gruppen geben ihre Kombination frei; systemreservierte Kombinationen (Alt+F4, Ctrl+Shift+Esc…) und Kombinationen, die bereits von einer anderen Gruppe oder dem Notfall-Hotkey belegt sind, werden mit einem Hinweis abgelehnt.
 
 ### Einstellungen
+
 **Startverzögerung** (0–600 s, nur beim Start), **minimiert in den Tray starten**, **Notfall-Hotkey** (klicke in das Feld und drücke dein Kürzel; Esc bricht ab, Entf löscht; Standard `Ctrl+Alt+Q`) und **UI-Sprache** (vereinfachtes Chinesisch, English, 日本語 und 15 weitere — 18 insgesamt; ein Wechsel startet die App zur Übernahme neu).
 
 ## Tipps
@@ -106,7 +113,7 @@ C#/.NET WPF; Quelltext in `app/` (benötigt das .NET-10-SDK). Schichten: `Core/`
 
 ## Über den 365-Open-Source-Plan
 
-Dies ist Projekt Nr. 20 des [365-Open-Source-Plans](https://github.com/rockbenben/365opensource) — eine Person + KI, 300+ Open-Source-Projekte in einem Jahr. [Einen Wunsch einreichen →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+Dies ist Projekt Nr. 20 des [365-Open-Source-Plans](https://github.com/rockbenben/365opensource) — eine Person + KI, 300+ Open-Source-Projekte in einem Jahr. [Einen Wunsch einreichen →](https://365.aishort.top/)
 
 ## Lizenz
 

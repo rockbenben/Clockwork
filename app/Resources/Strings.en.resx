@@ -313,4 +313,9 @@ Log: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Search process name / window title</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Pick a date</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Capture key</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Global hotkey</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Click, then press a key combo to run this group anytime; Esc cancels, Delete clears</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Failed to register hotkey {1} for action group “{0}”: it may already be in use</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>
 </root>

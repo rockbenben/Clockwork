@@ -311,4 +311,9 @@ Log: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Zoek procesnaam / venstertitel</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Datum kiezen</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Toets vastleggen</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Globale sneltoets</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klik en druk op een toetsencombinatie om deze groep altijd uit te voeren; Esc annuleert, Delete wist</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Sneltoets {1} voor actiegroep “{0}” kon niet worden geregistreerd: mogelijk al in gebruik</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>Sneltoets {0} is al in gebruik door “{1}”; kies een andere combinatie</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is een door het systeem gereserveerde combinatie (registreren zou een systeemtoets kapen) en kan niet als sneltoets worden gebruikt</value></data>
 </root>

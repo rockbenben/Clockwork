@@ -9,6 +9,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -17,9 +18,15 @@
             <TextBlock Text="{loc:Loc Col_Name}" VerticalAlignment="Center" MinWidth="52" TextWrapping="Wrap" Margin="0,0,10,0"/>
             <TextBox x:Name="NameBox" Width="420" Height="28"/>
         </StackPanel>
-        <TextBlock Grid.Row="1" Text="{loc:Loc Ed_GroupHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" Margin="52,0,0,10"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+            <TextBlock Text="{loc:Loc Ed_GroupHotkey}" VerticalAlignment="Center" MinWidth="52" TextWrapping="Wrap" Margin="0,0,10,0"/>
+            <TextBox x:Name="HotkeyBox" Width="170" Height="28" Style="{StaticResource HotkeyCapture}"
+                     GotKeyboardFocus="Hotkey_GotFocus" LostKeyboardFocus="Hotkey_LostFocus" PreviewKeyDown="Hotkey_PreviewKeyDown"/>
+            <TextBlock Text="{loc:Loc Ed_GroupHotkeyHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap" MaxWidth="380"/>
+        </StackPanel>
+        <TextBlock Grid.Row="2" Text="{loc:Loc Ed_GroupHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" Margin="52,0,0,10"/>
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="110"/></Grid.ColumnDefinitions>
             <DataGrid x:Name="Steps" Grid.Column="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
                       HeadersVisibility="Column" SelectionMode="Single" GridLinesVisibility="Horizontal" MouseDoubleClick="SEdit_Click">
@@ -38,7 +45,7 @@
             </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
             <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource PrimaryButton}" MinWidth="80" Height="32" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
             <Button Content="{loc:Loc Ed_Cancel}" MinWidth="70" Height="32" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>

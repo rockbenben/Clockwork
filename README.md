@@ -25,7 +25,7 @@ A small Windows tray tool that takes care of the routine parts of starting your 
 - 🚀 **Startup list** — automatically open your everyday apps at login, in order (per-step admin rights, delays, only-on-certain-weekdays / only-before-N-o'clock, window style, activate-if-running, fallback paths), and do a few chores along the way (close or focus windows, send keystrokes / text, set volume…).
 - ⏰ **Reminders** — pop a reminder on time; speak it aloud; repeat by weekday / every-N-days / monthly; or trigger "at login". Clicking **Yes** can run a program, open a file (e.g. music) or a URL, or run an action group.
 - 🧹 **System startup items** — list **everything on your PC that auto-starts** and switch off what you don't need (disabled, not deleted — flip it back anytime). One click "takes over" an item into your own startup list.
-- 🎛️ **Action groups** — bundle a series of actions into a reusable group (Focus / Meeting / Wrap-up / Bedtime…) and trigger it with one click from the tray, the startup list, or a reminder. Built-in templates included.
+- 🎛️ **Action groups** — bundle a series of actions into a reusable group (Focus / Meeting / Wrap-up / Bedtime…) and trigger it with one click from the tray, a **global hotkey**, the startup list, or a reminder. Built-in templates included.
 
 No install, fully portable single folder, everything configurable by mouse; dark UI, high-DPI aware. The UI ships in **18 languages** and follows your Windows display language on first run.
 
@@ -52,6 +52,7 @@ No install, fully portable single folder, everything configurable by mouse; dark
 ## The five tabs
 
 ### Startup list
+
 An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pick a type; add/remove/reorder freely; each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times), and conditions (**only on certain weekdays / only before N o'clock**). Step types:
 
 - **Launch program** — target (**Browse…** to pick a file) / arguments / working dir (leave blank = target's folder) / admin. Target can be an `.exe`, document, shortcut or URL; a `.ps1` runs via PowerShell. Advanced: **window style** (minimized / maximized / hidden), **activate if already running** (bring it to front instead of relaunching; process name via **Pick…**), **fallback paths** (one full path per line; the first existing one is used — handy when install paths differ across machines).
@@ -68,6 +69,7 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 > **Stop anytime** — tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately.
 
 ### Reminders
+
 Set a **time** (or switch to **at login**), a **recurrence** (weekdays / every-N-days / monthly), and the **text**; optionally speak it aloud. Reminders with an **On-Yes** action (run program / open file / URL / run action group) pop a **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5–60 min); the rest slide in as a **reminder card** in the corner (auto-close after the configured seconds, **0 = stays until you dismiss it**). You can also set a **silent action group** — run a group on time with no popup.
 
 Advanced: **auto-close**, **repeat nagging** (re-pop every N minutes until a deadline), **post-trigger delay + random jitter**, **grace** (catch a fire missed by a brief shutdown/sleep), **catch up if missed** (re-fire once after hibernation/shutdown skipped it), and an **anchor date** for every-N-days (**Pick date**). "Fired today" and "snoozed until" survive restarts (`clockwork.state.json`), so a snooze carries across a restart and nothing double-fires.
@@ -75,12 +77,17 @@ Advanced: **auto-close**, **repeat nagging** (re-pop every N minutes until a dea
 Need to focus or take a meeting? The tray offers **Pause reminders for 1 / 2 / 4 hours** (Do-Not-Disturb): everything (including silent groups) is suppressed and auto-resumes when the time is up.
 
 ### System startup items
+
 Lists **everything that auto-starts** (registry Run keys, Startup folders, scheduled tasks). Uncheck **Enable** to switch an item off — **disabled, not deleted; re-check to restore** (takes effect immediately). Items marked **needs admin** prompt to relaunch elevated. System / policy / one-time items (Group-Policy Run, RunOnce, Winlogon, Active Setup) can't be toggled normally and are **hidden by default** — tick **Show system / read-only items** to view them (greyed out). **Take over into startup list** hands an item to Clockwork (registry Run keys and Startup-folder items only). A top **filter** searches by name / command; hover a truncated command to read it in full.
 
 ### Action groups
-Bundle actions into a reusable group. **Add ▾** starts one from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save. A group **only defines actions**; trigger it three ways: from the tray (**Run: <group>**), as an **action-group step** in the startup list (at boot), or from a reminder (**On-Yes / silent group**). A group runs only one copy at a time; a **message** step can act as a confirmation gate (answering **No** aborts the rest).
+
+Bundle actions into a reusable group. **Add ▾** starts one from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save. A group **only defines actions**; trigger it four ways: from the tray (**Run: <group>**), a **global hotkey**, an **action-group step** in the startup list (at boot), or a reminder (**On-Yes / silent group**). A group runs only one copy at a time; a **message** step can act as a confirmation gate (answering **No** aborts the rest).
+
+> **Global hotkey** — in the group editor, click the hotkey box and press a shortcut (e.g. `Ctrl+Alt+F`) to run that group from anywhere, no menu needed. Esc cancels, Delete clears. Disabled groups release their combo; system-reserved combos (Alt+F4, Ctrl+Shift+Esc…) and combos already taken by another group or the panic hotkey are refused with a notice.
 
 ### Settings
+
 **Startup delay** (0–600 s, boot only), **start minimized to tray**, **panic hotkey** (click the box and press your shortcut; Esc cancels, Delete clears; default `Ctrl+Alt+Q`), and **UI language** (Simplified Chinese, English, 日本語 and 15 more — 18 total; switching restarts the app to apply).
 
 ## Tips
@@ -108,7 +115,7 @@ C#/.NET WPF; source in `app/` (needs the .NET 10 SDK). Layers: `Core/` pure logi
 
 ## About the 365 Open-Source Plan
 
-This is project #20 of the [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — one person + AI, 300+ open-source projects in a year. [Submit a request →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+This is project #20 of the [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — one person + AI, 300+ open-source projects in a year. [Submit a request →](https://365.aishort.top/)
 
 ## License
 

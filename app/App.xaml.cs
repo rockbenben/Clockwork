@@ -206,9 +206,20 @@ public partial class App : System.Windows.Application
         });
     }
 
-    // —— 全局急停热键 ——
-    private const int HotkeyId = 0xB001;
-    private nint _hotkeyHwnd;   // 主窗口句柄，注册/注销急停热键共用
+    // —— 全局热键（急停 + 动作组） ——
+    private const int HotkeyId = 0xB001;          // 急停
+    private const int GroupHotkeyBase = 0xB100;   // 动作组热键 id 区间起点
+    private const int GroupSlotMax = 0xBFF0;      // RegisterHotKey 应用侧 id 上限 0xBFFF，留余量
+    private nint _hotkeyHwnd;                     // 主窗口句柄，注册/注销共用
+    private bool _hotkeysSuspended;               // 捕捉期间为真：SaveConfig 不得重建热键（否则组会抢走正被改绑的急停组合）
+    private readonly Dictionary<int, string> _groupHotkeyIds = new();   // 当前已注册的 id → 组 Id（WM_HOTKEY 查表）
+    private readonly Dictionary<string, int> _groupIdSlots = new();     // 组 Id → 固定 id 槽位：重建不换号，队列里滞留的旧 WM_HOTKEY 不会错派到别的组
+    private int _nextGroupSlot = GroupHotkeyBase;
+    private HashSet<string> _hotkeyFails = new();                       // 上一轮注册失败的「组Id|键」：同一失败只 toast 一次，不随每次保存刷屏
+    private string? _stopHotkeyFail;                                    // 急停键上次失败的组合：同一失败只 toast 一次（每次捕捉进出都会重注册）
+
+    // 供 Views 层取 App 实例（挂起/恢复热键等），唯一出处——别再各处手写 Application.Current as App。
+    public static App? Instance => System.Windows.Application.Current as App;
 
     private void RegisterStopHotkey()
     {
@@ -218,39 +229,129 @@ public partial class App : System.Windows.Application
             HwndSource.FromHwnd(_hotkeyHwnd)?.AddHook(HotkeyHook);          // 钩子只挂一次
         }
         catch { return; }
+        ResumeHotkeys();
+    }
+
+    // 按当前配置重注册全部热键（急停 + 各组）。捕捉结束/配置变更后调用，无需重启。
+    // 急停先注册——组热键与急停撞车时输的是组（注册失败并 toast 点名），急停永远保命优先。
+    public void ResumeHotkeys()
+    {
+        _hotkeysSuspended = false;
         RebindStopHotkey(_config.Settings.StopHotkey);
+        RebindGroupHotkeys();
     }
 
-    // 把全局急停热键即时改绑到 combo：先注销旧的、再注册新的（空/无效=停用）。设置页捕捉到新键后调用，无需重启。
-    // 只管 OS 注册；配置由 SaveHotkey 负责写，各调用方传入的都是当前配置值。
-    public void RebindStopHotkey(string? combo)
+    // 捕捉期间暂时注销全部热键：避免录键时按到已注册组合触发急停/跑组（e.Handled 拦不住 OS 级 WM_HOTKEY）。
+    // 置起挂起标志：挂起期间任何 SaveConfig 都不得重建组热键——否则捕捉中途保存（改急停键正是此路径）
+    // 会让某个组抢注用户刚指给急停的组合，恢复时急停注册失败、保命键从此哑掉。
+    public void SuspendHotkeys()
+    {
+        _hotkeysSuspended = true;
+        if (_hotkeyHwnd == 0) return;
+        try { HotKey.UnregisterHotKey(_hotkeyHwnd, HotkeyId); } catch { }
+        UnregisterGroupHotkeys();
+    }
+
+    // 急停键：先注销旧的、再注册新的（空/无效=停用）。失败/无效 toast 按组合去重——
+    // 每次进出捕捉框都会重注册，被占用时不该每次都弹同一条（组热键同款策略）。
+    private void RebindStopHotkey(string? combo)
     {
         if (_hotkeyHwnd == 0) return;
         try { HotKey.UnregisterHotKey(_hotkeyHwnd, HotkeyId); } catch { }
-        if (string.IsNullOrWhiteSpace(combo)) return;   // 空=禁用
+        if (string.IsNullOrWhiteSpace(combo)) { _stopHotkeyFail = null; return; }   // 空=禁用
         var p = KeyInput.ToHotkeyParams(combo);
-        if (p == null) { ShowToast("Clockwork", Lf("Hotkey_Unrecognized", combo), Views.ToastLevel.Warn); return; }
-        try
+        // 保留组合也在此拦：配置可手改/可带旧版遗留，只挡捕捉 UI 挡不住 JSON 里写进来的 Alt+F4。
+        // 文案分开：解析不了 → 无法识别；解析得了但系统保留 → 明说保留，别让用户以为拼写错了反复试。
+        if (p == null || HotkeyCapture.IsReserved(combo))
         {
-            if (!HotKey.RegisterHotKey(_hotkeyHwnd, HotkeyId, p.Modifiers, p.Vk))
-                ShowToast("Clockwork", Lf("Hotkey_RegisterFail", combo), Views.ToastLevel.Warn);
+            var msgKey = p == null ? "Hotkey_Unrecognized" : "Hotkey_Reserved";
+            if (_stopHotkeyFail != combo) ShowToast("Clockwork", Lf(msgKey, combo), Views.ToastLevel.Warn);
+            _stopHotkeyFail = combo;
+            return;
         }
-        catch { }
+        bool ok = false;
+        try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, HotkeyId, p.Modifiers, p.Vk); } catch { }
+        if (!ok)
+        {
+            if (_stopHotkeyFail != combo) ShowToast("Clockwork", Lf("Hotkey_RegisterFail", combo), Views.ToastLevel.Warn);
+            _stopHotkeyFail = combo;
+            return;
+        }
+        _stopHotkeyFail = null;
     }
 
-    // 捕捉期间暂时注销急停热键：避免录键时按到当前组合触发急停（e.Handled 拦不住 OS 级 WM_HOTKEY）。
-    public void SuspendStopHotkey()
+    // 动作组热键：全量重建（先注销全部旧注册，再按当前配置注册启用组的非空热键）。
+    // 注册失败（被其它程序占用 / 与急停或其它组重复）toast 点名组与键——但同一失败只报一次，
+    // 不随之后每次无关的保存反复刷屏；失败消除（改键/解除占用）后再失败会重新提示。
+    private void RebindGroupHotkeys()
     {
         if (_hotkeyHwnd == 0) return;
-        try { HotKey.UnregisterHotKey(_hotkeyHwnd, HotkeyId); } catch { }
+        UnregisterGroupHotkeys();
+        // 清掉已删除组的槽位映射：字典有界（≤当前组数），回绕后它们的号可安全复用。
+        var liveIds = new HashSet<string>(_config.ActionGroups.Select(x => x.Id));
+        foreach (var dead in _groupIdSlots.Keys.Where(k => !liveIds.Contains(k)).ToList())
+            _groupIdSlots.Remove(dead);
+        var fails = new HashSet<string>();
+        foreach (var g in _config.ActionGroups)
+        {
+            if (!g.Enabled || string.IsNullOrWhiteSpace(g.Hotkey)) continue;   // 禁用组不占键，把组合让给别人
+            // 每组用固定 id 槽位（按组 Id 分配、正常不复用）：重建后 id 不换号，
+            // 消息队列里滞留的旧 WM_HOTKEY 要么派给同一组、要么查表落空被忽略，绝不错派到别的组。
+            // 槽位逼近 RegisterHotKey 的 id 上限（同进程建删数千个组）才回绕复用已删组让出的号；
+            // 回绕时逐号跳过仍在映射中的槽位——绝不与现存组（含本轮已注册的）撞号。
+            if (!_groupIdSlots.TryGetValue(g.Id, out int slot))
+            {
+                var inUse = new HashSet<int>(_groupIdSlots.Values);
+                int probes = 0;
+                do
+                {
+                    if (_nextGroupSlot >= GroupSlotMax) _nextGroupSlot = GroupHotkeyBase;
+                    slot = _nextGroupSlot++;
+                } while (inUse.Contains(slot) && ++probes < GroupSlotMax - GroupHotkeyBase);
+                _groupIdSlots[g.Id] = slot;
+            }
+            var p = KeyInput.ToHotkeyParams(g.Hotkey);
+            bool reserved = HotkeyCapture.IsReserved(g.Hotkey);   // 手改配置写进来的 Alt+F4 等：拒注册并明说保留
+            bool ok = false;
+            if (p != null && !reserved)
+            {
+                try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, slot, p.Modifiers, p.Vk); } catch { }
+            }
+            if (!ok)
+            {
+                var key = g.Id + "|" + g.Hotkey;
+                fails.Add(key);
+                if (!_hotkeyFails.Contains(key))
+                    WarnToast(reserved ? Lf("Hotkey_Reserved", g.Hotkey) : Lf("Hotkey_GroupRegisterFail", g.Name, g.Hotkey));
+                continue;
+            }
+            _groupHotkeyIds[slot] = g.Id;
+        }
+        _hotkeyFails = fails;
+    }
+
+    private void UnregisterGroupHotkeys()
+    {
+        foreach (var id in _groupHotkeyIds.Keys)
+            try { HotKey.UnregisterHotKey(_hotkeyHwnd, id); } catch { }
+        _groupHotkeyIds.Clear();
     }
 
     private IntPtr HotkeyHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
-        if (msg == HotKey.WM_HOTKEY && wParam.ToInt32() == HotkeyId)
+        if (msg != HotKey.WM_HOTKEY) return IntPtr.Zero;
+        int id = wParam.ToInt32();
+        if (id == HotkeyId)
         {
             StopSignal.Request();
             ShowToast("Clockwork", Strings.Get("Hotkey_Stopped"), Views.ToastLevel.Warn);
+            handled = true;
+        }
+        else if (_groupHotkeyIds.TryGetValue(id, out var gid))
+        {
+            // 按组 Id 现查（注册后组可能已被编辑），禁用兜底跳过——正常情况下禁用组根本不会注册。
+            var g = _config.ActionGroups.FirstOrDefault(x => x.Id == gid);
+            if (g is { Enabled: true }) RunGroupAsync(g);
             handled = true;
         }
         return IntPtr.Zero;
@@ -516,6 +617,10 @@ public partial class App : System.Windows.Application
     {
         try { ConfigStore.Write(_config, _cfgPath); }
         catch (Exception ex) { ShowToast("Clockwork", Lf("Warn_SaveConfigFail", ex.Message), Views.ToastLevel.Warn); }
+        // 组增删改/启停/改键都走此保存——热键跟着当前配置即时重建。
+        // 捕捉挂起期间跳过（改急停键的保存正发生在挂起中）：此刻重建会让组抢注急停的新组合；
+        // 捕捉一定以 ResumeHotkeys 收尾，那里会按「急停先、组后」的次序统一重建。
+        if (!_hotkeysSuspended) RebindGroupHotkeys();
     }
 
     // 编辑提醒会换新 id（借此重置「今天已弹」态），但正在进行的「稍后」不该丢：把 SnoozeUntil 迁到新 id。

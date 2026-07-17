@@ -25,7 +25,7 @@ Una pequeña herramienta de bandeja para Windows que se encarga de las partes ru
 - 🚀 **Lista de inicio** — abre automáticamente tus aplicaciones de cada día al iniciar sesión, en orden (permisos de administrador por paso, retardos, solo-en-ciertos-días-de-la-semana / solo-antes-de-las-N-en-punto, estilo de ventana, activar-si-ya-se-está-ejecutando, rutas de reserva), y realiza algunas tareas por el camino (cerrar o enfocar ventanas, enviar pulsaciones de teclas / texto, ajustar el volumen…).
 - ⏰ **Recordatorios** — muestra un recordatorio a su hora; léelo en voz alta; repítelo por día de la semana / cada-N-días / mensualmente; o actívalo «al iniciar sesión». Al pulsar **Sí** se puede ejecutar un programa, abrir un archivo (p. ej. música) o una URL, o ejecutar un grupo de acciones.
 - 🧹 **Elementos de inicio del sistema** — lista **todo lo que se inicia automáticamente en tu PC** y desactiva lo que no necesites (desactivado, no eliminado — vuelve a activarlo cuando quieras). Con un clic «asumes el control» de un elemento y lo pasas a tu propia lista de inicio.
-- 🎛️ **Grupos de acciones** — agrupa una serie de acciones en un grupo reutilizable (Concentración / Reunión / Cierre / Antes de dormir…) y actívalo con un clic desde la bandeja, la lista de inicio o un recordatorio. Incluye plantillas integradas.
+- 🎛️ **Grupos de acciones** — agrupa una serie de acciones en un grupo reutilizable (Concentración / Reunión / Cierre / Antes de dormir…) y actívalo con un clic desde la bandeja, un **atajo global**, la lista de inicio o un recordatorio. Incluye plantillas integradas.
 
 Sin instalación, totalmente portátil en una sola carpeta, todo configurable con el ratón; interfaz oscura, compatible con alta resolución (high-DPI).
 
@@ -50,6 +50,7 @@ Sin instalación, totalmente portátil en una sola carpeta, todo configurable co
 ## Las cinco pestañas
 
 ### Lista de inicio
+
 Una **lista ordenada de pasos** que se ejecutan de arriba abajo al iniciar sesión. Haz clic en **Añadir ▾** para elegir un tipo; añade, quita y reordena libremente; cada paso se puede habilitar/deshabilitar, asignarle un **retardo posterior al paso**, un **número de repeticiones** (repetirlo N veces) y condiciones (**solo en ciertos días de la semana / solo antes de las N en punto**). Tipos de paso:
 
 - **Ejecutar programa** — destino (**Examinar…** para elegir un archivo) / argumentos / directorio de trabajo (déjalo en blanco = carpeta del destino) / administrador. El destino puede ser un `.exe`, un documento, un acceso directo o una URL; un `.ps1` se ejecuta mediante PowerShell. Avanzado: **estilo de ventana** (minimizada / maximizada / oculta), **activar si ya se está ejecutando** (traerla al frente en vez de relanzarla; nombre del proceso mediante **Elegir…**), **rutas de reserva** (una ruta completa por línea; se usa la primera que exista — útil cuando las rutas de instalación difieren entre equipos).
@@ -66,6 +67,7 @@ Una **lista ordenada de pasos** que se ejecutan de arriba abajo al iniciar sesi�
 > **Detén cuando quieras** — bandeja → **Detener acciones en ejecución**, o el **atajo de pánico** global (se configura en la pestaña Ajustes; por defecto `Ctrl+Alt+Q`). Lo que se esté ejecutando se detiene tras la acción actual; las esperas largas (retardo de inicio, esperar a una ventana) se interrumpen de inmediato.
 
 ### Recordatorios
+
 Fija una **hora** (o cambia a **al iniciar sesión**), una **periodicidad** (días de la semana / cada-N-días / mensual) y el **texto**; opcionalmente léelo en voz alta. Los recordatorios con una acción **Al-pulsar-Sí** (ejecutar programa / abrir archivo / URL / ejecutar grupo de acciones) muestran un diálogo **Sí / No** con un botón **Posponer** (por defecto 10 min, menú ▾ de 5–60 min); el resto se deslizan como una **tarjeta de recordatorio** en la esquina (se cierra sola tras los segundos configurados, **0 = permanece hasta que la descartes**). También puedes fijar un **grupo de acciones silencioso** — ejecuta un grupo a su hora sin ninguna ventana emergente.
 
 Avanzado: **cierre automático**, **insistencia repetida** (vuelve a saltar cada N minutos hasta un plazo límite), **retardo posterior al disparo + variación aleatoria**, **margen de gracia** (recupera un disparo perdido por un breve apagado/suspensión), **recuperar si se perdió** (vuelve a dispararse una vez si la hibernación/apagado lo saltó) y una **fecha de anclaje** para cada-N-días (**Elegir fecha**). «Disparado hoy» y «pospuesto hasta» sobreviven a los reinicios (`clockwork.state.json`), así que una posposición se conserva tras un reinicio y nada se dispara dos veces.
@@ -73,12 +75,17 @@ Avanzado: **cierre automático**, **insistencia repetida** (vuelve a saltar cada
 ¿Necesitas concentrarte o atender una reunión? La bandeja ofrece **Pausar recordatorios durante 1 / 2 / 4 horas** (No molestar): todo (incluidos los grupos silenciosos) se suprime y se reanuda automáticamente cuando se acaba el tiempo.
 
 ### Elementos de inicio del sistema
+
 Lista **todo lo que se inicia automáticamente** (claves Run del registro, carpetas de Inicio, tareas programadas). Desmarca **Habilitar** para desactivar un elemento — **desactivado, no eliminado; vuelve a marcarlo para restaurarlo** (surte efecto de inmediato). Los elementos marcados como **requiere administrador** piden relanzar con permisos elevados. Los elementos de sistema / directiva / de una sola vez (Run de directiva de grupo, RunOnce, Winlogon, Active Setup) no se pueden alternar de forma normal y están **ocultos por defecto** — marca **Mostrar elementos de sistema / de solo lectura** para verlos (atenuados). **Asumir el control en la lista de inicio** entrega un elemento a Clockwork (solo claves Run del registro y elementos de la carpeta de Inicio). Un **filtro** en la parte superior busca por nombre / comando; pasa el cursor sobre un comando truncado para leerlo completo.
 
 ### Grupos de acciones
-Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de una **plantilla integrada** (Concentración / Reunión / Cierre / Antes de dormir / Ausentarse / Captura de pantalla) — ajusta los nombres de los procesos y guarda. Un grupo **solo define acciones**; actívalo de tres maneras: desde la bandeja (**Ejecutar: <grupo>**), como un **paso de grupo de acciones** en la lista de inicio (en el arranque) o desde un recordatorio (**Al-pulsar-Sí / grupo silencioso**). Un grupo ejecuta solo una copia a la vez; un paso de **mensaje** puede actuar como una puerta de confirmación (responder **No** aborta el resto).
+
+Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de una **plantilla integrada** (Concentración / Reunión / Cierre / Antes de dormir / Ausentarse / Captura de pantalla) — ajusta los nombres de los procesos y guarda. Un grupo **solo define acciones**; actívalo de cuatro maneras: desde la bandeja (**Ejecutar: <grupo>**), un **atajo global**, como un **paso de grupo de acciones** en la lista de inicio (en el arranque) o desde un recordatorio (**Al-pulsar-Sí / grupo silencioso**). Un grupo ejecuta solo una copia a la vez; un paso de **mensaje** puede actuar como una puerta de confirmación (responder **No** aborta el resto).
+
+> **Atajo global** — en el editor de grupos, haz clic en el cuadro del atajo y pulsa un atajo (p. ej. `Ctrl+Alt+F`) para ejecutar ese grupo desde cualquier parte, sin necesidad de menús. Esc cancela, Supr lo borra. Los grupos deshabilitados liberan su combinación; las combinaciones reservadas por el sistema (Alt+F4, Ctrl+Shift+Esc…) y las combinaciones ya ocupadas por otro grupo o por el atajo de pánico se rechazan con un aviso.
 
 ### Ajustes
+
 **Retardo de inicio** (0–600 s, solo en el arranque), **iniciar minimizado en la bandeja**, **atajo de pánico** (haz clic en el cuadro y pulsa tu atajo; Esc cancela, Supr lo borra; por defecto `Ctrl+Alt+Q`) e **idioma de la interfaz** (chino simplificado, inglés, 日本語 y 15 más — 18 en total; cambiarlo reinicia la aplicación para aplicarlo).
 
 ## Consejos
@@ -106,7 +113,7 @@ C#/.NET WPF; código fuente en `app/` (necesita el SDK de .NET 10). Capas: `Core
 
 ## Acerca del Plan de Código Abierto 365
 
-Este es el proyecto #20 del [Plan de Código Abierto 365](https://github.com/rockbenben/365opensource) — una persona + IA, más de 300 proyectos de código abierto en un año. [Envía una solicitud →](https://my.feishu.cn/share/base/form/shrcnI6y7rrmlSjbzkYXh6sjmzb)
+Este es el proyecto #20 del [Plan de Código Abierto 365](https://github.com/rockbenben/365opensource) — una persona + IA, más de 300 proyectos de código abierto en un año. [Envía una solicitud →](https://365.aishort.top/)
 
 ## Licencia
 

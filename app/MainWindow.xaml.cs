@@ -103,39 +103,32 @@ public partial class MainWindow : Window
     {
         _hotkeyBefore = _config?.Settings.StopHotkey ?? "";
         HotkeyBox.Text = Strings.Get("Hotkey_PressPrompt");   // 进入捕捉态：提示「按下快捷键…」
-        AppInstance?.SuspendStopHotkey();                     // 捕捉期间注销全局热键，避免按到当前组合触发急停
+        AppInstance?.SuspendHotkeys();                        // 捕捉期间注销全部全局热键，避免按到已注册组合触发急停/跑组
     }
 
     private void Hotkey_LostFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
-        // 未捕捉就离开：恢复显示。无论如何都按当前配置重新注册全局热键（改键即时生效、取消则复原）。
+        // 未捕捉就离开：恢复显示。无论如何都按当前配置重新注册全部全局热键（改键即时生效、取消则复原）。
         if (HotkeyBox.Text == Strings.Get("Hotkey_PressPrompt")) HotkeyBox.Text = _hotkeyBefore;
-        AppInstance?.RebindStopHotkey(_config?.Settings.StopHotkey);
+        AppInstance?.ResumeHotkeys();
     }
 
     private void Hotkey_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
-        e.Handled = true;   // 捕捉一切按键，不让文本框/焦点处理
+        e.Handled = true;   // 捕捉一切按键，不让文本框/焦点处理（PassThrough 分支除外）
         var key = e.Key == Key.System ? e.SystemKey : e.Key;
-        if (HotkeyCapture.IsModifierKey(key)) return;               // 只按了修饰键，等主键
-        if (key == Key.Escape)                                       // Esc = 取消：恢复原值、不改配置（LostFocus 会复原注册）
+        switch (HotkeyCapture.ProcessCaptureKey(key, Keyboard.Modifiers, out var combo))
         {
-            HotkeyBox.Text = _hotkeyBefore;
-            Keyboard.ClearFocus();
-            return;
+            case HotkeyCapture.CaptureAction.PassThrough:            // 裸 Tab/Enter：放行给焦点导航/默认按钮，键盘用户不被困在框里
+                e.Handled = false; return;
+            case HotkeyCapture.CaptureAction.Cancel:                 // Esc = 取消：恢复原值、不改配置（LostFocus 会复原注册）
+                HotkeyBox.Text = _hotkeyBefore; Keyboard.ClearFocus(); return;
+            case HotkeyCapture.CaptureAction.Clear:                  // Delete/Backspace = 清空停用急停键
+                SaveHotkey(""); HotkeyBox.Text = ""; Keyboard.ClearFocus(); return;
+            case HotkeyCapture.CaptureAction.Captured:
+                SaveHotkey(combo!); HotkeyBox.Text = combo; Keyboard.ClearFocus(); return;   // → LostFocus 按新配置重注册
+            default: return;                                         // Ignore：只按修饰键/组不出可注册组合，继续等
         }
-        if (key is Key.Delete or Key.Back)                           // Delete/Backspace = 清空停用急停键
-        {
-            SaveHotkey("");
-            HotkeyBox.Text = "";
-            Keyboard.ClearFocus();
-            return;
-        }
-        var combo = HotkeyCapture.BuildCombo(Keyboard.Modifiers, key);
-        if (combo == null) return;                                   // 无修饰键 / 不可注册的键：忽略
-        SaveHotkey(combo);
-        HotkeyBox.Text = combo;
-        Keyboard.ClearFocus();                                      // → LostFocus 按新配置重注册（改键即时生效）
     }
 
     private void SaveHotkey(string combo)
@@ -297,7 +290,7 @@ public partial class MainWindow : Window
     private void LUp_Click(object sender, RoutedEventArgs e) { _launch?.MoveUp(); SyncSelection(); }
     private void LDown_Click(object sender, RoutedEventArgs e) { _launch?.MoveDown(); SyncSelection(); }
 
-    private App? AppInstance => System.Windows.Application.Current as App;
+    private static App? AppInstance => App.Instance;   // 转发到唯一出处（App.Instance），本类内仍用短名
 
     private void LRun_Click(object sender, RoutedEventArgs e)
     {
@@ -362,14 +355,14 @@ public partial class MainWindow : Window
 
     private void AddGroupFrom(ActionGroup template)
     {
-        var g = Views.GroupEditorWindow.Edit(this, template, Groups);
+        var g = Views.GroupEditorWindow.Edit(this, template, Groups, _config?.Settings.StopHotkey ?? "");
         if (g != null) { _groups?.Add(g); SyncSel(GridGroup, _groups); }
     }
     private void GEdit_Click(object sender, RoutedEventArgs e)
     {
         var sel = _groups?.SelectedGroup;
         if (sel == null) return;
-        var edited = Views.GroupEditorWindow.Edit(this, sel, Groups);
+        var edited = Views.GroupEditorWindow.Edit(this, sel, Groups, _config?.Settings.StopHotkey ?? "");
         if (edited != null) { _groups?.ReplaceSelected(edited); SyncSel(GridGroup, _groups); }
     }
     private void GridGroup_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => GEdit_Click(sender, e);
