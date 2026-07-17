@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
-            <TextBlock Text="{loc:Loc Col_Name}" VerticalAlignment="Center" Width="52"/>
+            <TextBlock Text="{loc:Loc Col_Name}" VerticalAlignment="Center" MinWidth="52" TextWrapping="Wrap" Margin="0,0,10,0"/>
             <TextBox x:Name="NameBox" Width="420" Height="28"/>
         </StackPanel>
         <TextBlock Grid.Row="1" Text="{loc:Loc Ed_GroupHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" Margin="52,0,0,10"/>

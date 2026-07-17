@@ -367,13 +367,16 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontFamily" Value="{StaticResource FontMono}"/>
         <Setter Property="FontSize" Value="11.5"/>
-        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="Padding" Value="8,8"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridColumnHeader">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1" Padding="{TemplateBinding Padding}">
-                        <ContentPresenter VerticalAlignment="Center"/>
+                        <!-- 用可换行的 TextBlock 取代 ContentPresenter：长译文(如德/俄的列名)在窄列里换行而非被截断 -->
+                        <TextBlock Text="{TemplateBinding Content}" TextWrapping="Wrap"
+                                   Foreground="{TemplateBinding Foreground}" FontFamily="{TemplateBinding FontFamily}"
+                                   FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
