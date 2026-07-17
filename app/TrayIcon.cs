@@ -1,5 +1,4 @@
 using System.Drawing;
-using System.IO;
 using Clockwork.Core;
 using Clockwork.I18n;
 using WinForms = System.Windows.Forms;
@@ -7,16 +6,10 @@ using WinForms = System.Windows.Forms;
 namespace Clockwork;
 
 // 托盘图标与右键菜单。WPF 无原生托盘，用 WinForms NotifyIcon。
-// 菜单在每次打开前重建（旧版同款）：动作组增删/勿扰剩余时间/恢复项的出现与消失都即时反映。
+// 菜单每次打开前重建：动作组增删 / 勿扰剩余时间 / 恢复项的出现与消失即时反映。
+// 外观（暗色仪表盘：字形列 + 悬停黄铜刻度 + 区段小标题）见 TrayMenuRenderer。
 public sealed class TrayIcon : IDisposable
 {
-    // 主题色（对齐 Theme.xaml）：暗底 slate、暖白 paper、悬停 steel、分隔/边框 line、禁用 faint。
-    private static readonly Color Slate = ColorTranslator.FromHtml("#1A212B");
-    private static readonly Color Steel = ColorTranslator.FromHtml("#232C38");
-    private static readonly Color Line  = ColorTranslator.FromHtml("#2E3947");
-    private static readonly Color Paper = ColorTranslator.FromHtml("#ECE6D8");
-    private static readonly Color Faint = ColorTranslator.FromHtml("#5B6472");
-
     private readonly WinForms.NotifyIcon _icon;
 
     public TrayIcon(App app)
@@ -33,11 +26,12 @@ public sealed class TrayIcon : IDisposable
 
         var menu = new WinForms.ContextMenuStrip
         {
-            // 暗色：WinForms 默认是浅色系统主题，与应用暗色主题不符。用自定义配色表/渲染器对齐（见文件末尾）。
-            Renderer = new DarkMenuRenderer(),
-            BackColor = Slate,
-            ForeColor = Paper,
-            ShowImageMargin = false,   // 无图标项，去掉左侧留白让菜单更紧凑
+            Renderer = new TrayMenuRenderer(),
+            BackColor = TrayPalette.Ink,
+            // 显式设菜单字体：项自动测宽与渲染器绘制都用它（e.TextFont），两侧一致，标签不会被省略号截断。
+            Font = new System.Drawing.Font("Segoe UI", 9.75f),
+            ShowImageMargin = false,
+            ShowCheckMargin = false,
         };
         menu.Opening += (s, e) => Rebuild(menu, app);
         Rebuild(menu, app);   // 初始也建一份：空菜单在部分系统上首次右键不弹
@@ -48,72 +42,49 @@ public sealed class TrayIcon : IDisposable
     private static void Rebuild(WinForms.ContextMenuStrip menu, App app)
     {
         menu.Items.Clear();
-        menu.Items.Add(Strings.Get("Tray_Show"), null, (s, e) => app.ShowMain());
-        menu.Items.Add(Strings.Get("Tray_Rerun"), null, (s, e) => app.RunLaunchAsync(false));
-        menu.Items.Add(Strings.Get("Tray_Stop"), null, (s, e) => StopSignal.Request());
-        // Tray_LaunchWarn 的气泡文案让用户「右键托盘→查看上次启动日志」——菜单里必须真有这一项。
-        menu.Items.Add(Strings.Get("Tray_ViewLog"), null, (s, e) => app.OpenRunLog());
+        menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Show"), TrayGlyph.Window, (s, e) => app.ShowMain()));
 
-        // 「运行：某组」——动作组的托盘触发入口（禁用的组置灰可见，与旧版一致）。
+        // 启动清单区（小标题复用「我的启动清单」标签页名，已多语言）
+        menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Launch")));
+        menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Rerun"), TrayGlyph.Rerun, (s, e) => app.RunLaunchAsync(false)));
+        menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Stop"), TrayGlyph.Stop, (s, e) => StopSignal.Request()));
+        // Tray_LaunchWarn 的气泡文案让用户「右键托盘→查看上次启动日志」——菜单里必须真有这一项。
+        menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_ViewLog"), TrayGlyph.Log, (s, e) => app.OpenRunLog()));
+
+        // 动作组区——托盘触发入口（禁用的组置灰可见）。有组才加小标题。
         var groups = app.Groups;
         if (groups.Count > 0)
         {
-            menu.Items.Add(new WinForms.ToolStripSeparator());
+            menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Group")));
             foreach (var g in groups)
             {
                 var gg = g;
-                var mi = new WinForms.ToolStripMenuItem(Strings.Lf("Tray_RunGroup", g.Name)) { Enabled = g.Enabled };
-                mi.Click += (s, e) => app.RunGroupAsync(gg);
-                menu.Items.Add(mi);
+                menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_RunGroup", g.Name), TrayGlyph.Run,
+                    (s, e) => app.RunGroupAsync(gg), enabled: g.Enabled));
             }
         }
 
-        // 勿扰：暂停提醒 1/2/4 小时；生效期间追加「恢复提醒（剩 N 分钟）」。
-        menu.Items.Add(new WinForms.ToolStripSeparator());
+        // 提醒区——勿扰：暂停 1/2/4 小时；生效期间追加「恢复提醒（剩 N 分钟）」。
+        menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Reminder")));
         foreach (int h in new[] { 1, 2, 4 })
         {
             int hh = h;
-            menu.Items.Add(Strings.Lf("Tray_DndHours", hh), null, (s, e) => app.PauseReminders(hh));
+            menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_DndHours", hh), TrayGlyph.Dnd, (s, e) => app.PauseReminders(hh)));
         }
         if (app.DndRemaining is TimeSpan left)
-            menu.Items.Add(Strings.Lf("Tray_DndResume", (int)Math.Ceiling(left.TotalMinutes)), null, (s, e) => app.ResumeReminders());
+            menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_DndResume", (int)Math.Ceiling(left.TotalMinutes)), TrayGlyph.Run,
+                (s, e) => app.ResumeReminders()));
 
         menu.Items.Add(new WinForms.ToolStripSeparator());
-        menu.Items.Add(Strings.Get("Tray_Exit"), null, (s, e) => app.ExitApp());
+        menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Exit"), TrayGlyph.Exit, (s, e) => app.ExitApp()));
     }
 
     public void Dispose()
     {
+        // 只释放托盘图标。菜单/渲染器/字体是随进程存活的单例，故意不在此 Dispose——
+        // 「退出」是从菜单项自身的 Click 里调 app.ExitApp()→本方法，此时该 ContextMenuStrip 仍在
+        // 调用栈上派发点击；同步 Dispose 它会在点击返回后触发 ObjectDisposedException。GDI 句柄由进程结束回收。
         _icon.Visible = false;
         _icon.Dispose();
-    }
-
-    // 暗色配色表：菜单底、悬停高亮、分隔线、边框全部对齐应用主题。
-    private sealed class DarkColorTable : WinForms.ProfessionalColorTable
-    {
-        public override Color ToolStripDropDownBackground => Slate;
-        public override Color ImageMarginGradientBegin => Slate;
-        public override Color ImageMarginGradientMiddle => Slate;
-        public override Color ImageMarginGradientEnd => Slate;
-        public override Color MenuItemSelected => Steel;
-        public override Color MenuItemSelectedGradientBegin => Steel;
-        public override Color MenuItemSelectedGradientEnd => Steel;
-        public override Color MenuItemBorder => Steel;
-        public override Color MenuBorder => Line;
-        public override Color SeparatorDark => Line;
-        public override Color SeparatorLight => Line;
-        public override Color MenuItemPressedGradientBegin => Steel;
-        public override Color MenuItemPressedGradientEnd => Steel;
-    }
-
-    // 暗色渲染器：套用配色表 + 文字用暖白(禁用项用 faint)，去掉圆角描边。
-    private sealed class DarkMenuRenderer : WinForms.ToolStripProfessionalRenderer
-    {
-        public DarkMenuRenderer() : base(new DarkColorTable()) { RoundedEdges = false; }
-        protected override void OnRenderItemText(WinForms.ToolStripItemTextRenderEventArgs e)
-        {
-            e.TextColor = e.Item.Enabled ? Paper : Faint;
-            base.OnRenderItemText(e);
-        }
     }
 }
