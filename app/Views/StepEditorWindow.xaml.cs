@@ -38,12 +38,25 @@ public partial class StepEditorWindow : Window
         UpdateVolRow();
         UpdateWinRows();
 
-        // 组合键/发送键改「点击即录键」，与急停键/组热键统一走 KeyCaptureBox——去掉多余的「捕捉」按钮。
-        // 发送键模式：允许裸键（F5/{ENTER} 等），各按自身发送路径校验；值就在文本框里、确定时读取，故 set 空。
+        // 「组合键」是单个组合（keys 步骤经 SendKeyCombo 单发），与热键同性质，改「点击即录键」——去掉多余的捕捉按钮。
+        // 值就在框里、确定时读取，故 set 空。（「发送键」是 SendKeys 序列，可含 {TAB}{ENTER}/字面文本，必须能打字，
+        // 保留普通文本框 + 捕捉按钮，不套 KeyCaptureBox。）
         KeyCaptureBox.Attach(ComboBox2, Native.HotkeyCapture.KeyCaptureMode.SendKeys,
             c => Native.KeyInput.ToHotkeyParams(c) != null, () => ComboBox2.Text, _ => { });
-        KeyCaptureBox.Attach(SendKeyBox, Native.HotkeyCapture.KeyCaptureMode.SendKeys,
-            KeyCombo.CanEncodeForSendKeys, () => SendKeyBox.Text, _ => { });
+    }
+
+    // 兜底：捕捉框（组合键）仍持焦点时窗口被关不保证走 LostFocus——关窗必恢复全局热键，
+    // 否则急停/组热键保持挂起、保命键静默失效。ResumeHotkeys 幂等（与组编辑器同款）。
+    protected override void OnClosed(EventArgs e)
+    {
+        App.Instance?.ResumeHotkeys();
+        base.OnClosed(e);
+    }
+
+    // 「发送键」的捕捉便利：SendKeys 序列须能打字，故仍用弹窗按需录一个键（校验目的地可编码），不改成只读捕捉框。
+    private void CaptureSendKey_Click(object sender, RoutedEventArgs e)
+    {
+        if (Pickers.CaptureKey(this, KeyCombo.CanEncodeForSendKeys) is string s) SendKeyBox.Text = s;
     }
 
     private void LoadStep(LaunchStep s)
