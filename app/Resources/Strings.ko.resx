@@ -316,4 +316,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>동작 그룹 “{0}”의 단축키 {1} 등록 실패: 이미 사용 중일 수 있습니다</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>단축키 {0}은(는) 이미 “{1}”에서 사용 중입니다. 다른 조합을 선택하세요</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0}은(는) 시스템 예약 조합입니다(등록하면 시스템 키를 가로챔). 단축키로 사용할 수 없습니다</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>전송 키 형식 오류: 중괄호가 짝이 맞지 않습니다(예: “{ENTER”는 닫는 괄호 누락)</value></data>
 </root>

@@ -316,4 +316,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>アクショングループ「{0}」のホットキー {1} を登録できませんでした：既に使用されている可能性があります</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ホットキー {0} は「{1}」で既に使用されています。別の組み合わせを選んでください</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} はシステム予約の組み合わせです（登録するとシステムキーを奪ってしまうため）ホットキーには使えません</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>送信キーの形式が不正です：波かっこが対になっていません（例:「{ENTER」は閉じかっこがありません）</value></data>
 </root>

@@ -316,4 +316,5 @@ Registro: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Não foi possível registrar o atalho {1} do grupo de ações “{0}”: pode já estar em uso</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>O atalho {0} já é usado por “{1}”; escolha outra combinação</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} é uma combinação reservada do sistema (registrá-la sequestraria uma tecla do sistema) e não pode ser usada como atalho</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Tecla de envio inválida: chaves não emparelhadas (ex.: falta a chave de fechamento em “{ENTER”)</value></data>
 </root>

@@ -316,4 +316,5 @@ Nhật ký: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Không thể đăng ký phím tắt {1} cho nhóm hành động “{0}”: có thể đã bị chiếm dụng</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Phím gửi không hợp lệ: dấu ngoặc nhọn không cân (ví dụ “{ENTER” thiếu ngoặc đóng)</value></data>
 </root>

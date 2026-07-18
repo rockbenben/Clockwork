@@ -45,13 +45,7 @@ public partial class StepEditorWindow : Window
             c => Native.KeyInput.ToHotkeyParams(c) != null, () => ComboBox2.Text, _ => { });
     }
 
-    // 兜底：捕捉框（组合键）仍持焦点时窗口被关不保证走 LostFocus——关窗必恢复全局热键，
-    // 否则急停/组热键保持挂起、保命键静默失效。ResumeHotkeys 幂等（与组编辑器同款）。
-    protected override void OnClosed(EventArgs e)
-    {
-        App.Instance?.ResumeHotkeys();
-        base.OnClosed(e);
-    }
+    // （关窗恢复全局热键的兜底由 KeyCaptureBox 统一负责——挂宿主窗口 Closed，此处不再各写一份。）
 
     // 「发送键」的捕捉便利：SendKeys 序列须能打字，故仍用弹窗按需录一个键（校验目的地可编码），不改成只读捕捉框。
     private void CaptureSendKey_Click(object sender, RoutedEventArgs e)
@@ -103,6 +97,12 @@ public partial class StepEditorWindow : Window
         int delay = ParseOr(DelayBox.Text, 0);
         var days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7);
         ParseBeforeTime(BeforeTimeBox.Text, out int beforeHour, out int beforeMinute);
+
+        // 发送键可自由打字，仅挡「花括号不成对」这一运行时必抛的明显笔误（合法序列/字面/组合都放行）。
+        if (kind == "window" && ComboVal(WinActionCombo) == "sendkey" && !KeyCombo.BracesBalanced(SendKeyBox.Text))
+        {
+            BrandDialog.Warn(this, "Clockwork", Strings.Get("Val_SendKey")); return;
+        }
 
         var r = new LaunchStep
         {

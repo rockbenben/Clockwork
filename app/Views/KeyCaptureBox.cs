@@ -31,6 +31,21 @@ internal static class KeyCaptureBox
             if (box.Text == prompt) box.Text = committed;   // 未捕捉就离开：复原显示
             App.Instance?.ResumeHotkeys();
         };
+        // 关窗兜底：捕捉框仍持焦点时窗口被关（如裸 Enter 触发默认按钮）不保证走 LostFocus——
+        // 由共享设施挂宿主窗口 Closed→恢复，宿主不必各写一份 OnClosed，将来新宿主也不会漏。ResumeHotkeys 幂等。
+        // 构造时通常已能取到宿主窗口；取不到（少见）则等 Loaded 再挂一次，绝不让关窗恢复漏掉——否则急停键会静默失效。
+        if (System.Windows.Window.GetWindow(box) is { } host)
+            host.Closed += (_, _) => App.Instance?.ResumeHotkeys();
+        else
+        {
+            System.Windows.RoutedEventHandler? onLoaded = null;
+            onLoaded = (_, _) =>
+            {
+                box.Loaded -= onLoaded;   // 只挂一次
+                if (System.Windows.Window.GetWindow(box) is { } w) w.Closed += (_, _) => App.Instance?.ResumeHotkeys();
+            };
+            box.Loaded += onLoaded;
+        }
         box.PreviewKeyDown += (_, e) =>
         {
             e.Handled = true;   // 捕捉一切按键（PassThrough 分支除外）

@@ -316,4 +316,5 @@ Log: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Sneltoets {1} voor actiegroep “{0}” kon niet worden geregistreerd: mogelijk al in gebruik</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Sneltoets {0} is al in gebruik door “{1}”; kies een andere combinatie</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is een door het systeem gereserveerde combinatie (registreren zou een systeemtoets kapen) en kan niet als sneltoets worden gebruikt</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Ongeldige verzendtoets: niet-gebalanceerde accolades (bijv. “{ENTER” mist de sluitaccolade)</value></data>
 </root>

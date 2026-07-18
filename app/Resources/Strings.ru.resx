@@ -316,4 +316,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Не удалось зарегистрировать горячую клавишу {1} для группы действий «{0}»: возможно, она уже занята</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Сочетание {0} уже используется «{1}»; выберите другое</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} — зарезервированное системой сочетание (его регистрация перехватила бы системную клавишу), его нельзя использовать как горячую клавишу</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Неверная клавиша отправки: непарные фигурные скобки (например, в «{ENTER» нет закрывающей)</value></data>
 </root>

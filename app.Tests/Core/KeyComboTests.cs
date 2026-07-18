@@ -74,4 +74,15 @@ public class KeyComboTests
     [Fact]
     public void SendKeysLiteral_braces_escaped()
         => Assert.Equal("{{}{}}", KeyCombo.ToSendKeysLiteral("{}"));
+
+    [Theory]
+    [InlineData("", true)]
+    [InlineData("{ENTER}", true)]
+    [InlineData("{TAB}{ENTER}", true)]      // 合法序列：成对
+    [InlineData("abc", true)]               // 无花括号：视为平衡
+    [InlineData("{ENTE", false)]            // 缺右括号：运行时必抛
+    [InlineData("ENTER}", false)]           // 多右括号
+    [InlineData("{a}}", false)]
+    public void BracesBalanced_only_flags_unbalanced(string s, bool expected)
+        => Assert.Equal(expected, KeyCombo.BracesBalanced(s));
 }

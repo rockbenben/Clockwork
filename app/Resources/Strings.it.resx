@@ -316,4 +316,5 @@ Registro: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossibile registrare la scorciatoia {1} del gruppo di azioni “{0}”: potrebbe essere già in uso</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>La scorciatoia {0} è già usata da “{1}”; scegline un'altra</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} è una combinazione riservata al sistema (registrarla dirotterebbe un tasto di sistema) e non può essere usata come scorciatoia</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Tasto da inviare non valido: parentesi graffe non bilanciate (es. a “{ENTER” manca la graffa di chiusura)</value></data>
 </root>

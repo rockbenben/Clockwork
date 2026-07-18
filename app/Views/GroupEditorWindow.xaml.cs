@@ -43,14 +43,7 @@ public partial class GroupEditorWindow : Window
     }
 
     private string _hotkey = "";
-
-    // 兜底：捕捉框仍持焦点时窗口被关（如裸 Enter 直接触发默认「确定」）不保证会走 LostFocus——
-    // 关窗必恢复，否则急停/组热键保持挂起、保命键静默失效。ResumeHotkeys 幂等，双触发无害。
-    protected override void OnClosed(EventArgs e)
-    {
-        App.Instance?.ResumeHotkeys();
-        base.OnClosed(e);
-    }
+    // 关窗恢复全局热键的兜底已由 KeyCaptureBox 统一负责（挂宿主窗口 Closed），此处不再各写一份。
 
     private int Sel => Steps.SelectedIndex;
 

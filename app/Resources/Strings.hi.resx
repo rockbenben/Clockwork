@@ -316,4 +316,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>क्रिया समूह “{0}” की हॉटकी {1} पंजीकृत नहीं हो सकी: संभवतः पहले से उपयोग में है</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>हॉटकी {0} पहले से “{1}” द्वारा उपयोग में है; कोई और संयोजन चुनें</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} सिस्टम-आरक्षित संयोजन है (पंजीकरण से सिस्टम कुंजी छिन जाएगी), इसे हॉटकी नहीं बनाया जा सकता</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>अमान्य सेंड-की: कर्ली ब्रैकेट असंतुलित (जैसे “{ENTER” में समापन ब्रैकेट नहीं)</value></data>
 </root>

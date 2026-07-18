@@ -316,4 +316,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>تعذّر تسجيل الاختصار {1} لمجموعة الإجراءات «{0}»: قد يكون مستخدمًا بالفعل</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>الاختصار {0} مستخدم بالفعل بواسطة «{1}»؛ اختر تركيبة أخرى</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} تركيبة محجوزة للنظام (تسجيلها سيخطف مفتاح نظام) ولا يمكن استخدامها كاختصار</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>مفتاح الإرسال غير صالح: أقواس معقوفة غير متوازنة (مثل «{ENTER» ينقصه قوس الإغلاق)</value></data>
 </root>

@@ -316,4 +316,5 @@ Günlük: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>“{0}” eylem grubunun {1} kısayolu kaydedilemedi: başka bir yerde kullanılıyor olabilir</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>{0} kısayolu zaten “{1}” tarafından kullanılıyor; başka bir kombinasyon seçin</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} sistem için ayrılmış bir kombinasyondur (kaydedilmesi bir sistem tuşunu ele geçirir) ve kısayol olarak kullanılamaz</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Geçersiz gönderme tuşu: süslü parantezler eşleşmiyor (ör. “{ENTER” kapanış parantezi eksik)</value></data>
 </root>

@@ -316,4 +316,5 @@ Journal : {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossible d'enregistrer le raccourci {1} du groupe d'actions « {0} » : il est peut-être déjà utilisé</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par « {1} » ; choisissez une autre combinaison</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} est une combinaison réservée au système (l'enregistrer détournerait une touche système) et ne peut pas servir de raccourci</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Touche à envoyer non valide : accolades non appariées (p. ex. « {ENTER » sans accolade fermante)</value></data>
 </root>

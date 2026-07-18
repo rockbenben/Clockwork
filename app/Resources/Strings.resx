@@ -318,4 +318,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>动作组「{0}」的热键 {1} 注册失败：可能已被其他程序或热键占用</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>热键 {0} 已被「{1}」使用，请换一个组合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系统保留组合（注册会劫走系统按键），不能用作热键</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>发送键格式有误：花括号不成对（如「{ENTER」缺右括号）</value></data>
 </root>

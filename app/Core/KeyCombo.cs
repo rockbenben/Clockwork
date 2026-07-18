@@ -67,6 +67,20 @@ public static class KeyCombo
         return !p.UseWin && !string.IsNullOrEmpty(p.Key) && ToSendKeysString(p) != null;
     }
 
+    // 发送键串的花括号是否成对。发送键框可自由打字（支持 {TAB}{ENTER}/字面文本），无法做完整的 SendKeys 语法校验；
+    // 但「花括号不成对」（如 "{ENTE"）在运行时 SendWait 必抛——存盘前挡下这一明显笔误，合法序列必然平衡、不误伤。
+    public static bool BracesBalanced(string? s)
+    {
+        if (string.IsNullOrEmpty(s)) return true;
+        int depth = 0;
+        foreach (var ch in s)
+        {
+            if (ch == '{') depth++;
+            else if (ch == '}' && --depth < 0) return false;
+        }
+        return depth == 0;
+    }
+
     // 窗口步骤「发送按键」内容的宽容解析：带花括号/非组合形态原样；组合写法自动转 SendKeys；转不出退回原样。
     public static string ToSendKeysSequence(string raw)
     {

@@ -316,4 +316,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>ลงทะเบียนปุ่มลัด {1} ของกลุ่มการทำงาน “{0}” ไม่สำเร็จ: อาจถูกใช้งานอยู่แล้ว</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย “{1}” แล้ว โปรดเลือกชุดอื่น</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} เป็นชุดปุ่มที่ระบบสงวนไว้ (การลงทะเบียนจะยึดปุ่มระบบ) ใช้เป็นปุ่มลัดไม่ได้</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>รูปแบบปุ่มส่งไม่ถูกต้อง: วงเล็บปีกกาไม่ครบคู่ (เช่น “{ENTER” ขาดวงเล็บปิด)</value></data>
 </root>

@@ -316,4 +316,5 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>動作組「{0}」的快速鍵 {1} 註冊失敗：可能已被其他程式或快速鍵佔用</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>快速鍵 {0} 已被「{1}」使用，請換一個組合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系統保留組合（註冊會劫走系統按鍵），不能用作快速鍵</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>傳送鍵格式有誤：大括號不成對（如「{ENTER」缺右括號）</value></data>
 </root>

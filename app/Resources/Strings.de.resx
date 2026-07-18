@@ -316,4 +316,5 @@ Protokoll: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Tastenkombination {1} für Aktionsgruppe „{0}“ konnte nicht registriert werden: möglicherweise bereits belegt</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tastenkombination {0} wird bereits von „{1}“ verwendet; bitte eine andere wählen</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} ist eine systemreservierte Kombination (ihre Registrierung würde eine Systemtaste kapern) und kann nicht als Tastenkombination verwendet werden</value></data>
+  <data name="Val_SendKey" xml:space="preserve"><value>Ungültige Sendetaste: unpaarige geschweifte Klammern (z. B. fehlt bei „{ENTER“ die schließende Klammer)</value></data>
 </root>
