@@ -40,7 +40,7 @@ Geen installatie, volledig draagbaar in één map, alles met de muis in te stell
 
 1. Download de nieuwste `Clockwork-<versie>.zip` van [Releases](https://github.com/rockbenben/Clockwork/releases) en pak hem uit — daarin zit één `Clockwork.exe`; zet hem in een willekeurige map (draagbaar — zet hem waar je wilt). Om hem zelf te bouwen, zie **Voor ontwikkelaars** hieronder.
 2. Dubbelklik op **`Clockwork.exe`** om het instellingenvenster te openen.
-   - Bij de **eerste keer starten** laadt hij een **voorbeeldconfiguratie** (die opstart / herinneringen / actiegroepen demonstreert) zodat je die naar je eigen situatie kunt aanpassen. Je instellingen staan in `clockwork.settings.json` naast de exe — alleen lokaal, nooit vastgelegd in de repository.
+   - Bij de **eerste keer starten** laadt hij een paar **voorbeelden** in de opstartlijst en de herinneringen, zodat je die naar je eigen situatie kunt aanpassen — ze staan allemaal uit, dus er draait niets tot je ze zelf aanvinkt. Je instellingen staan in `clockwork.settings.json` naast de exe — alleen lokaal, nooit vastgelegd in de repository.
 3. Om hem bij elke keer opstarten uit te voeren: klik op het tabblad **Instellingen** op **Starten bij aanmelden** (registreert een geplande taak met beheerdersrechten, dus geen stortvloed aan UAC-meldingen bij het opstarten).
 
 > Hij zit rustig in het systeemvak. Dubbelklik op het systeemvakpictogram om het venster te openen; de sluitknop van het venster verbergt het alleen in het systeemvak. Echt afsluiten doe je via **Afsluiten** in het rechtsklikmenu van het systeemvak.

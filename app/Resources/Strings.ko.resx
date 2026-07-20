@@ -298,6 +298,14 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>스크린샷 주석</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>오늘 할 일을 모두 기록했나요?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>잘 시간입니다!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>시작 시 음소거 (예시 · 오전 8시 이전에만)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>앱 열기 (예시 · 사용하는 .exe로 변경)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>웹사이트 열기 (예시 · 메일이나 할 일 URL로 변경)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D로 바탕 화면 보기 (예시 · 키 조합 전송)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>창 최소화 (예시 · 프로세스 이름으로 지정)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>일어나서 물 한 잔 마시기 (예시)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>과일 좀 먹기 (예시 · 음성 안내 켤 수 있음)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>잘 시간이에요 (예시)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>이 작업에는 관리자 권한이 필요합니다. Clockwork를 관리자 권한으로 다시 열까요?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>동작 그룹 "{0}"은(는) 알림 {1}개와 단계 {2}개에서 참조 중입니다. 삭제하면 해당 참조도 함께 정리됩니다(알림은 팝업만, 참조 단계는 제거). 그래도 삭제할까요?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>찾아보기…</value></data>

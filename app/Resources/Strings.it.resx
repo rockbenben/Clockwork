@@ -298,6 +298,14 @@ Registro: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Screenshot e annotazione</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Hai registrato tutte le attività di oggi?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>È ora di dormire!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Disattiva l'audio all'avvio (esempio · solo prima delle 8)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Apri un'applicazione (esempio · indica il tuo .exe)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Apri un sito web (esempio · usa l'URL della posta o delle attività)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Mostra il desktop con Win+D (esempio · invia una combinazione di tasti)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Riduci a icona una finestra (esempio · per nome del processo)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Alzati e bevi un po' d'acqua (esempio)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Mangia un po' di frutta (esempio · la voce si può attivare)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>È ora di dormire (esempio)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Questa azione richiede privilegi di amministratore. Riaprire Clockwork come amministratore?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Il gruppo di azioni "{0}" è referenziato da {1} promemoria e {2} passaggi. Eliminandolo verranno rimossi anche questi riferimenti (i promemoria diventano solo popup; i passaggi che lo referenziano vengono rimossi). Eliminare comunque?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Sfoglia…</value></data>

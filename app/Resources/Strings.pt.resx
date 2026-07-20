@@ -298,6 +298,14 @@ Registro: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Captura e anotação</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Registrou todas as tarefas de hoje?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Hora de dormir!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Silenciar ao iniciar (exemplo · apenas antes das 8h)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Abrir um aplicativo (exemplo · aponte para o seu .exe)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Abrir um site (exemplo · use a URL do seu e-mail ou tarefas)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Mostrar a área de trabalho com Win+D (exemplo · enviar combinação de teclas)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Minimizar uma janela (exemplo · pelo nome do processo)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Levante-se e beba um pouco de água (exemplo)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Coma uma fruta (exemplo · a voz pode ser ativada)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Hora de dormir (exemplo)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Esta ação requer privilégios de administrador. Reabrir o Clockwork como administrador?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>O grupo de ações "{0}" é referenciado por {1} lembrete(s) e {2} etapa(s). Excluí-lo também limpará essas referências (lembretes viram apenas pop-up; etapas que o referenciam são removidas). Excluir mesmo assim?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Procurar…</value></data>

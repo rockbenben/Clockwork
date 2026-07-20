@@ -40,7 +40,7 @@ Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Ma
 
 1. Lade die neueste `Clockwork-<Version>.zip` aus den [Releases](https://github.com/rockbenben/Clockwork/releases) herunter und entpacke sie — darin steckt eine einzelne `Clockwork.exe`; lege sie in einen beliebigen Ordner (portabel — leg sie ab, wo du willst). Zum Selbstbauen siehe **Für Entwickler** weiter unten.
 2. Doppelklicke **`Clockwork.exe`**, um das Einstellungsfenster zu öffnen.
-   - Beim **ersten Start** wird eine **Beispielkonfiguration** geladen (die Autostart / Erinnerungen / Aktionsgruppen demonstriert), damit du sie an deine Bedürfnisse anpassen kannst. Deine Einstellungen liegen in `clockwork.settings.json` neben der exe — nur lokal, wird nie eingecheckt.
+   - Beim **ersten Start** werden ein paar **Beispiele** in der Startliste und den Erinnerungen geladen, die du an deine Bedürfnisse anpassen kannst — alle sind zunächst nicht angehakt, es läuft also nichts, bis du es selbst aktivierst. Deine Einstellungen liegen in `clockwork.settings.json` neben der exe — nur lokal, wird nie eingecheckt.
 3. Um es bei jedem Start auszuführen: klicke auf dem Tab **Einstellungen** auf **Beim Anmelden starten** (registriert eine geplante Aufgabe mit Administratorrechten, sodass beim Start keine Flut von UAC-Abfragen erscheint).
 
 > Es sitzt still im Tray. Doppelklicke das Tray-Symbol, um das Fenster zu öffnen; die Schließen-Schaltfläche des Fensters blendet es nur in den Tray aus. Wirklich beenden über den Rechtsklick im Tray → **Beenden**.

@@ -301,6 +301,14 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>截图标注</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今天的任务都记录好了吗？</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>该睡觉了！</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>开机先静音（示例·仅上午 8 点前生效）</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>打开常用软件（示例·换成你自己的 .exe）</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>打开常用网站（示例·换成你的邮箱 / 待办）</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>回到桌面 Win+D（示例·发送组合键）</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>最小化窗口（示例·按进程名操作）</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>起来活动一下、喝口水~（示例）</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>吃口水果，补充点维生素（示例·可开语音播报）</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>该睡觉了（示例）</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>此操作需要管理员权限。是否以管理员身份重新打开 Clockwork？</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>动作组「{0}」正被 {1} 条提醒、{2} 个步骤引用。删除后这些引用将一并清除（提醒改为仅弹窗、引用它的步骤移除）。仍要删除吗？</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>浏览…</value></data>

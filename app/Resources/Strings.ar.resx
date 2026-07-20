@@ -298,6 +298,14 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>لقطة شاشة وتعليق</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>هل سجّلت كل مهام اليوم؟</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>حان وقت النوم!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>كتم الصوت عند بدء التشغيل (مثال · قبل الثامنة صباحًا فقط)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>فتح تطبيق (مثال · ضع ملف .exe الخاص بك)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>فتح موقع ويب (مثال · استخدم رابط بريدك أو مهامك)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>إظهار سطح المكتب بـ Win+D (مثال · إرسال اختصار لوحة المفاتيح)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>تصغير نافذة (مثال · حسب اسم العملية)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>قم وتحرك قليلاً واشرب بعض الماء (مثال)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>تناول بعض الفاكهة (مثال · يمكن تفعيل النطق)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>حان وقت النوم (مثال)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>يتطلب هذا الإجراء صلاحيات المسؤول. هل تريد إعادة فتح Clockwork كمسؤول؟</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>مجموعة الإجراءات "{0}" مُشار إليها من {1} تذكير و{2} خطوة. حذفها سيمسح هذه الإشارات أيضًا (تصبح التذكيرات نوافذ منبثقة فقط؛ وتُزال الخطوات المشيرة إليها). أتريد الحذف رغم ذلك؟</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>استعراض…</value></data>

@@ -23,7 +23,7 @@ It sits quietly in the tray. The window's close button only hides it to the tray
 
 ## First run: replace the samples with your own
 
-On first run the startup list / reminders / action groups already contain **samples** (each marked as such) — they just demonstrate what's possible, so edit or delete them freely. In the startup list the first few are checked (they run at boot); trailing ones like "Windows Settings / Task Manager" are unchecked (samples only — they run only if you tick them).
+On first run the startup list and the reminders each contain a handful of **samples** (marked as such), picked to show the most representative moves — conditional execution, launching an app, opening a URL, sending a key combo, acting on a window. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Action groups tab starts empty — use the ready-made templates under **Add ▾**.
 
 The most common need, "open my everyday apps at login":
 

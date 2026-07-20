@@ -298,6 +298,14 @@ Protokoll: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Screenshot &amp; Anmerkung</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Alle heutigen Aufgaben notiert?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Zeit fürs Bett!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Beim Start stummschalten (Beispiel · nur vor 8 Uhr)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Programm öffnen (Beispiel · trage deine eigene .exe ein)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Website öffnen (Beispiel · nimm deine Mail- oder To-do-URL)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Desktop anzeigen mit Win+D (Beispiel · Tastenkombination senden)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Fenster minimieren (Beispiel · über den Prozessnamen)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Kurz aufstehen und Wasser trinken (Beispiel)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Iss etwas Obst (Beispiel · Sprachausgabe aktivierbar)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Zeit zum Schlafen (Beispiel)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Diese Aktion erfordert Administratorrechte. Clockwork als Administrator neu öffnen?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Die Aktionsgruppe "{0}" wird von {1} Erinnerung(en) und {2} Schritt(en) referenziert. Beim Löschen werden diese Verweise mit entfernt (Erinnerungen nur noch Popup; referenzierende Schritte entfernt). Trotzdem löschen?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Durchsuchen…</value></data>

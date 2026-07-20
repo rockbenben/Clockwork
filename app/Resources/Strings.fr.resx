@@ -298,6 +298,14 @@ Journal : {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Capture et annotation</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Toutes les tâches du jour sont-elles notées ?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>C'est l'heure de dormir !</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Couper le son au démarrage (exemple · seulement avant 8 h)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Ouvrir une application (exemple · indiquez votre propre .exe)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Ouvrir un site web (exemple · l'URL de votre messagerie ou de vos tâches)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Afficher le bureau avec Win+D (exemple · envoyer une combinaison de touches)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Réduire une fenêtre (exemple · par nom de processus)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Levez-vous et buvez un peu d'eau (exemple)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Mangez un fruit (exemple · la synthèse vocale est activable)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Il est l'heure de dormir (exemple)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Cette action nécessite des droits d'administrateur. Rouvrir Clockwork en tant qu'administrateur ?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Le groupe d'actions « {0} » est référencé par {1} rappel(s) et {2} étape(s). Sa suppression effacera aussi ces références (rappels en simple fenêtre ; étapes le référençant supprimées). Supprimer quand même ?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Parcourir…</value></data>

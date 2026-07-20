@@ -298,6 +298,14 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Скриншот и аннотация</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Все сегодняшние задачи записаны?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Пора спать!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Отключить звук при запуске (пример · только до 8 утра)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Открыть программу (пример · укажите свой .exe)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Открыть сайт (пример · укажите адрес почты или задач)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Показать рабочий стол через Win+D (пример · отправка сочетания клавиш)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Свернуть окно (пример · по имени процесса)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Встаньте и выпейте воды (пример)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Съешьте фруктов (пример · можно включить озвучивание)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Пора спать (пример)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Для этого действия нужны права администратора. Перезапустить Clockwork от имени администратора?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Группа действий «{0}» используется в {1} напоминании(ях) и {2} шаге(ах). При удалении эти ссылки будут очищены (напоминания станут только всплывающими; ссылающиеся шаги удалены). Всё равно удалить?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Обзор…</value></data>

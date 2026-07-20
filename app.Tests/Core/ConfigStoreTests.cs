@@ -12,7 +12,7 @@ public class ConfigStoreTests : IDisposable
     public void Read_missing_file_returns_default()
     {
         var c = ConfigStore.Read(Path.Combine(_dir, "nope.json"));
-        Assert.Equal(11, c.LaunchSteps.Count);
+        Assert.Equal(RootConfig.Default().LaunchSteps.Count, c.LaunchSteps.Count);
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class ConfigStoreTests : IDisposable
     {
         var path = Path.Combine(_dir, "bad.json");
         File.WriteAllText(path, "{ this is not json");
-        Assert.Equal(11, ConfigStore.Read(path).LaunchSteps.Count);
+        Assert.Equal(RootConfig.Default().LaunchSteps.Count, ConfigStore.Read(path).LaunchSteps.Count);
     }
 
     [Fact]

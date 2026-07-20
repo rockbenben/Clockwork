@@ -298,6 +298,14 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>स्क्रीनशॉट और एनोटेशन</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>क्या आज के सभी कार्य दर्ज कर लिए?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>सोने का समय!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>शुरू होते ही म्यूट करें (उदाहरण · केवल सुबह 8 बजे से पहले)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>कोई ऐप खोलें (उदाहरण · अपनी .exe फ़ाइल चुनें)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>कोई वेबसाइट खोलें (उदाहरण · अपने मेल या टू-डू का URL डालें)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D से डेस्कटॉप दिखाएँ (उदाहरण · कुंजी संयोजन भेजें)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>विंडो छोटी करें (उदाहरण · प्रोसेस नाम से)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>उठकर थोड़ा पानी पिएँ (उदाहरण)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>कुछ फल खाएँ (उदाहरण · आवाज़ चालू की जा सकती है)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>सोने का समय हो गया (उदाहरण)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>इस कार्रवाई के लिए व्यवस्थापक अधिकार चाहिए। Clockwork को व्यवस्थापक के रूप में फिर से खोलें?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>एक्शन समूह "{0}" को {1} रिमाइंडर और {2} चरण संदर्भित कर रहे हैं। हटाने पर ये संदर्भ भी साफ़ हो जाएँगे (रिमाइंडर केवल पॉपअप रहेंगे; संदर्भित चरण हटा दिए जाएँगे)। फिर भी हटाएँ?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>ब्राउज़ करें…</value></data>

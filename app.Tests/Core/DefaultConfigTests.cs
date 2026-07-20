@@ -7,11 +7,31 @@ public class DefaultConfigTests
     public void Default_has_expected_collections()
     {
         var c = RootConfig.Default();
-        Assert.Equal(11, c.LaunchSteps.Count);          // Get-DefaultLaunchSteps 共 11 条
-        Assert.Equal(5, c.Reminders.Count);             // Get-DefaultReminders 共 5 条
+        Assert.Equal(5, c.LaunchSteps.Count);           // 精简后的代表性样例：5 条
+        Assert.Equal(3, c.Reminders.Count);             // 精简后的代表性样例：3 条
         Assert.Empty(c.ActionGroups);
         Assert.Equal(30, c.Settings.TickSeconds);
         Assert.Equal("Ctrl+Alt+Q", c.Settings.StopHotkey);
+    }
+
+    // 样例是照着改的模板，不该在用户还没看过一眼时就替他动电脑：首启必须什么都不执行。
+    [Fact]
+    public void Default_samples_are_all_disabled()
+    {
+        var c = RootConfig.Default();
+        Assert.All(c.LaunchSteps, s => Assert.False(s.Enabled));
+        Assert.All(c.Reminders, r => Assert.False(r.Enabled));
+    }
+
+    // 样例文案必须走 resx：直接返回键名说明键漏加了，非中文用户会在界面上看到 Smp_* 原始键名。
+    [Fact]
+    public void Default_samples_are_localized()
+    {
+        var c = RootConfig.Default();
+        Assert.All(c.LaunchSteps, s => Assert.DoesNotContain("Smp_", s.Label, StringComparison.Ordinal));
+        Assert.All(c.Reminders, r => Assert.DoesNotContain("Smp_", r.Message, StringComparison.Ordinal));
+        Assert.All(c.LaunchSteps, s => Assert.False(string.IsNullOrWhiteSpace(s.Label)));
+        Assert.All(c.Reminders, r => Assert.False(string.IsNullOrWhiteSpace(r.Message)));
     }
 
     [Fact]

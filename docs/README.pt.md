@@ -40,7 +40,7 @@ Sem instalação, totalmente portátil em uma única pasta, tudo configurável c
 
 1. Baixe o `Clockwork-<versão>.zip` mais recente em [Releases](https://github.com/rockbenben/Clockwork/releases) e descompacte-o — dentro há um único `Clockwork.exe`; coloque-o em qualquer pasta (portátil — ponha onde quiser). Para compilá-lo você mesmo, veja **Para desenvolvedores** abaixo.
 2. Dê um duplo clique em **`Clockwork.exe`** para abrir a janela de configurações.
-   - No **primeiro uso** ele carrega uma **configuração de exemplo** (demonstrando inicialização / lembretes / grupos de ações) para você adaptar à sua realidade. Suas configurações ficam em `clockwork.settings.json` ao lado do exe — só locais, nunca versionadas.
+   - No **primeiro uso** ele carrega alguns **exemplos** na lista de inicialização e nos lembretes para você adaptar à sua realidade — todos vêm desmarcados, então nada é executado até você marcar. Suas configurações ficam em `clockwork.settings.json` ao lado do exe — só locais, nunca versionadas.
 3. Para executá-lo a cada inicialização: na aba **Configurações**, clique em **Iniciar ao entrar** (registra uma tarefa agendada com direitos de administrador, evitando uma enxurrada de avisos do UAC na inicialização).
 
 > Ele fica quietinho na bandeja. Dê um duplo clique no ícone da bandeja para abrir a janela; o botão de fechar da janela apenas a oculta na bandeja. Para sair de verdade, use **Sair** no menu de contexto da bandeja.

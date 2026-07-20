@@ -298,6 +298,14 @@ Log: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Schermafbeelding &amp; annotatie</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Alle taken van vandaag genoteerd?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Tijd om te slapen!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Dempen bij opstarten (voorbeeld · alleen vóór 8 uur)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Een app openen (voorbeeld · wijs je eigen .exe aan)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Een website openen (voorbeeld · gebruik je mail- of takenlijst-URL)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Bureaublad tonen met Win+D (voorbeeld · toetsencombinatie sturen)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Een venster minimaliseren (voorbeeld · op procesnaam)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Sta even op en drink wat water (voorbeeld)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Eet wat fruit (voorbeeld · spraak kan aan)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Tijd om te gaan slapen (voorbeeld)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Deze actie vereist beheerdersrechten. Clockwork opnieuw openen als beheerder?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Actiegroep "{0}" wordt gebruikt door {1} herinnering(en) en {2} stap(pen). Bij verwijderen worden die verwijzingen ook gewist (herinneringen worden alleen-popup; verwijzende stappen verwijderd). Toch verwijderen?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Bladeren…</value></data>

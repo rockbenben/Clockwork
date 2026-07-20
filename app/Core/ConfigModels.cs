@@ -1,3 +1,5 @@
+using Clockwork.I18n;
+
 namespace Clockwork.Core;
 
 // 纯数据模型：LaunchStep / Reminder / ActionGroup / 默认配置。
@@ -134,29 +136,23 @@ public sealed class RootConfig
         ActionGroups = ActionGroups.Select(g => g.SnapshotForRun()).ToList(),
     };
 
-    // 首次使用的示例清单：前 8 条默认勾选，后 3 条默认不勾选。
+    // 首次使用的示例清单：只保留最有代表性的几种玩法（条件执行 / 开程序 / 开网址 / 组合键 / 窗口动作），
+    // 且全部默认不勾选——样例是照着改的模板，不该在用户还没看过一眼时就替他动电脑。
+    // 文案经 resx 本地化，与 ActionGroupTemplates 同口径（否则非中文用户首次打开只看得到中文样例）。
     public static List<LaunchStep> DefaultLaunchSteps() => new()
     {
-        new LaunchStep { Kind = "volume", Label = "开机先静音（示例·仅上午 8 点前生效，晚上开机就不会突然出声）", Action = "mute", OnlyBefore8 = true },
-        new LaunchStep { Kind = "app", Label = "打开浏览器（示例·换成你常用的浏览器）", Target = "msedge.exe" },
-        new LaunchStep { Kind = "app", Label = "打开常用网站（示例·换成你的邮箱 / 待办 / 网页版应用）", Target = "https://github.com", DelayMs = 800 },
-        new LaunchStep { Kind = "app", Label = "打开常用软件（示例·把目标换成你自己的 .exe 或快捷方式）", Target = "notepad.exe", DelayMs = 1000 },
-        new LaunchStep { Kind = "delay", Label = "等待 2 秒（示例·纯延时步骤，给前面的软件留出打开时间）", DelayMs = 2000 },
-        new LaunchStep { Kind = "keys", Label = "回到桌面 Win+D（示例·发送组合键）", Combo = "Win+D" },
-        new LaunchStep { Kind = "volume", Label = "音量调到 30%（示例·设音量会自动取消上面的静音）", Action = "set", Level = 30, DelayMs = 500 },
-        new LaunchStep { Kind = "window", Label = "最小化浏览器（示例·窗口动作，按进程名操作）", Action = "minimize", Process = "msedge", DelayMs = 1000 },
-        new LaunchStep { Kind = "system", Label = "显示桌面（示例·系统命令，默认不勾选）", Command = "showDesktop", Enabled = false },
-        new LaunchStep { Kind = "app", Label = "Windows 设置（示例·可直接打开 URI 协议，默认不勾选）", Target = "ms-settings:", Enabled = false },
-        new LaunchStep { Kind = "app", Label = "任务管理器（示例·默认不勾选，避免每次开机弹出）", Target = "taskmgr.exe", Enabled = false },
+        new LaunchStep { Kind = "volume", Label = Strings.Get("Smp_MuteEarly"), Action = "mute", OnlyBefore8 = true, Enabled = false },
+        new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenApp"), Target = "msedge.exe", Enabled = false },
+        new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenSite"), Target = "https://github.com", DelayMs = 800, Enabled = false },
+        new LaunchStep { Kind = "keys", Label = Strings.Get("Smp_ShowDesktop"), Combo = "Win+D", Enabled = false },
+        new LaunchStep { Kind = "window", Label = Strings.Get("Smp_Minimize"), Action = "minimize", Process = "msedge", DelayMs = 1000, Enabled = false },
     };
 
-    // 通用示例提醒。
+    // 通用示例提醒：工作日重复 / 语音播报 / 每天各留一条，同样默认不启用。
     public static List<Reminder> DefaultReminders() => new()
     {
-        new Reminder { Time = "10:00", Days = new() { 1, 2, 3, 4, 5 }, Message = "起来活动一下、喝口水~（示例提醒）" },
-        new Reminder { Time = "12:30", Message = "午休时间到（示例）" },
-        new Reminder { Time = "15:30", Days = new() { 1, 2, 3, 4, 5 }, Message = "吃口水果，补充点维生素（示例·可开语音播报）", Speak = true },
-        new Reminder { Time = "18:00", Days = new() { 1, 2, 3, 4, 5 }, Message = "下班啦，收拾一下桌面（示例）" },
-        new Reminder { Time = "23:00", Message = "该睡觉了（示例）" },
+        new Reminder { Time = "10:00", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemWater"), Enabled = false },
+        new Reminder { Time = "15:30", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemFruit"), Speak = true, Enabled = false },
+        new Reminder { Time = "23:00", Message = Strings.Get("Smp_RemSleep"), Enabled = false },
     };
 }

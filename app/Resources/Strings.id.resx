@@ -298,6 +298,14 @@ Log: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Tangkapan layar &amp; anotasi</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Sudah mencatat semua tugas hari ini?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Waktunya tidur!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Bisukan saat mulai (contoh · hanya sebelum pukul 8 pagi)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Buka aplikasi (contoh · arahkan ke berkas .exe milikmu)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Buka situs web (contoh · pakai URL email atau daftar tugasmu)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Tampilkan desktop dengan Win+D (contoh · kirim kombinasi tombol)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Minimalkan jendela (contoh · berdasarkan nama proses)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Bangun sebentar dan minum air (contoh)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Makan buah sedikit (contoh · suara bisa diaktifkan)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Waktunya tidur (contoh)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Tindakan ini memerlukan hak administrator. Buka ulang Clockwork sebagai administrator?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Grup aksi "{0}" direferensikan oleh {1} pengingat dan {2} langkah. Menghapusnya juga akan membersihkan referensi tersebut (pengingat menjadi hanya popup; langkah yang mereferensikannya dihapus). Tetap hapus?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Telusuri…</value></data>

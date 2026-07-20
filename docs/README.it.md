@@ -40,7 +40,7 @@ Nessuna installazione, completamente portatile in un'unica cartella, tutto confi
 
 1. Scarica l'ultimo `Clockwork-<versione>.zip` dalle [Releases](https://github.com/rockbenben/Clockwork/releases) e decomprimilo — all'interno c'è un unico `Clockwork.exe`; mettilo in una cartella qualsiasi (portatile — mettilo dove vuoi). Per compilarlo tu stesso, vedi **Per gli sviluppatori** più sotto.
 2. Fai doppio clic su **`Clockwork.exe`** per aprire la finestra delle impostazioni.
-   - Al **primo avvio** carica una **configurazione di esempio** (che mostra avvio / promemoria / gruppi di azioni) così puoi adattarla alla tua. Le tue impostazioni risiedono in `clockwork.settings.json` accanto all'exe — solo in locale, mai inviato al repository.
+   - Al **primo avvio** carica qualche **esempio** nell'elenco di avvio e nei promemoria, così puoi adattarli ai tuoi — sono tutti deselezionati all'inizio, quindi non viene eseguito nulla finché non li spunti. Le tue impostazioni risiedono in `clockwork.settings.json` accanto all'exe — solo in locale, mai inviato al repository.
 3. Per eseguirlo a ogni accensione: nella scheda **Impostazioni**, clicca su **Avvia all'accesso** (registra un'operazione pianificata con diritti di amministratore, così niente valanga di richieste UAC all'avvio).
 
 > Se ne sta tranquillo nell'area di notifica. Fai doppio clic sull'icona nell'area di notifica per aprire la finestra; il pulsante di chiusura della finestra la nasconde solo nell'area di notifica. Per uscire davvero, usa **Esci** dal clic destro sull'area di notifica.

@@ -298,6 +298,14 @@ Nhật ký: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Chụp màn hình &amp; chú thích</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Đã ghi lại hết công việc hôm nay chưa?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Đến giờ đi ngủ!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Tắt tiếng khi khởi động (ví dụ · chỉ trước 8 giờ sáng)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Mở một ứng dụng (ví dụ · trỏ tới tệp .exe của bạn)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Mở một trang web (ví dụ · dùng URL email hoặc việc cần làm của bạn)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Hiện màn hình nền bằng Win+D (ví dụ · gửi tổ hợp phím)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Thu nhỏ một cửa sổ (ví dụ · theo tên tiến trình)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Đứng dậy và uống chút nước (ví dụ)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Ăn chút trái cây (ví dụ · có thể bật đọc thành tiếng)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Đã đến giờ đi ngủ (ví dụ)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Thao tác này cần quyền quản trị. Mở lại Clockwork với quyền quản trị?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Nhóm hành động "{0}" đang được {1} lời nhắc và {2} bước tham chiếu. Xóa nó cũng sẽ dọn các tham chiếu này (lời nhắc chỉ còn cửa sổ bật lên; các bước tham chiếu bị gỡ). Vẫn xóa chứ?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Duyệt…</value></data>

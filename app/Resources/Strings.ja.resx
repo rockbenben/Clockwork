@@ -299,6 +299,14 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>スクリーンショット注釈</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今日のタスクは全部記録しましたか？</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>寝る時間です！</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>起動時にミュート（サンプル・午前 8 時前のみ）</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>アプリを開く（サンプル・自分の .exe に変更）</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Web サイトを開く（サンプル・メールや ToDo の URL に変更）</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D でデスクトップ表示（サンプル・キー操作を送信）</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>ウィンドウを最小化（サンプル・プロセス名で指定）</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>少し立って水を飲みましょう（サンプル）</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>果物を食べましょう（サンプル・読み上げも設定可）</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>そろそろ寝る時間です（サンプル）</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>この操作には管理者権限が必要です。Clockwork を管理者として再起動しますか？</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>アクショングループ「{0}」は {1} 件のリマインダーと {2} 件のステップから参照されています。削除するとこれらの参照も消去されます（リマインダーはポップアップのみに、参照するステップは削除）。削除しますか？</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>参照…</value></data>

@@ -40,7 +40,7 @@ Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigu
 
 1. Unduh `Clockwork-<versi>.zip` terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases) lalu ekstrak — di dalamnya ada satu `Clockwork.exe`; letakkan di folder mana pun (portabel — taruh di mana saja). Untuk membangunnya sendiri, lihat **Untuk pengembang** di bawah.
 2. Klik dua kali **`Clockwork.exe`** untuk membuka jendela pengaturan.
-   - Pada **jalankan pertama** ia memuat **konfigurasi contoh** (mendemonstrasikan startup / pengingat / grup aksi) sehingga Anda dapat menyesuaikannya dengan milik Anda sendiri. Pengaturan Anda tersimpan di `clockwork.settings.json` di samping exe — hanya lokal, tidak pernah di-commit.
+   - Pada **jalankan pertama** ia memuat beberapa **contoh** di daftar startup dan pengingat agar Anda dapat menyesuaikannya dengan milik Anda sendiri — semuanya tidak dicentang di awal, jadi tidak ada yang berjalan sampai Anda mencentangnya. Pengaturan Anda tersimpan di `clockwork.settings.json` di samping exe — hanya lokal, tidak pernah di-commit.
 3. Agar berjalan setiap boot: pada tab **Pengaturan**, klik **Mulai saat login** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
 
 > Ia bertengger diam di tray. Klik dua kali ikon tray untuk membuka jendela; tombol tutup jendela hanya menyembunyikannya ke tray. Untuk benar-benar keluar, klik kanan tray lalu pilih **Keluar**.

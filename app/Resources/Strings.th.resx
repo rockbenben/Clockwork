@@ -298,6 +298,14 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>จับภาพหน้าจอและใส่คำอธิบาย</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>บันทึกงานของวันนี้ครบหรือยัง?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>ได้เวลานอนแล้ว!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>ปิดเสียงตอนเปิดเครื่อง (ตัวอย่าง · เฉพาะก่อน 8 โมงเช้า)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>เปิดแอป (ตัวอย่าง · เปลี่ยนเป็นไฟล์ .exe ของคุณ)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>เปิดเว็บไซต์ (ตัวอย่าง · ใช้ URL อีเมลหรือรายการงานของคุณ)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>แสดงเดสก์ท็อปด้วย Win+D (ตัวอย่าง · ส่งปุ่มลัด)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>ย่อหน้าต่าง (ตัวอย่าง · ระบุด้วยชื่อโปรเซส)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>ลุกขึ้นขยับตัวและดื่มน้ำ (ตัวอย่าง)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>กินผลไม้สักหน่อย (ตัวอย่าง · เปิดเสียงพูดได้)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>ได้เวลานอนแล้ว (ตัวอย่าง)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>การทำงานนี้ต้องใช้สิทธิ์ผู้ดูแลระบบ เปิด Clockwork ใหม่ในฐานะผู้ดูแลระบบหรือไม่?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>กลุ่มการทำงาน "{0}" ถูกอ้างอิงโดยการแจ้งเตือน {1} รายการและขั้นตอน {2} รายการ การลบจะล้างการอ้างอิงเหล่านี้ด้วย (การแจ้งเตือนจะเหลือแค่ป๊อปอัป ขั้นตอนที่อ้างอิงจะถูกลบ) ยังต้องการลบหรือไม่?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>เรียกดู…</value></data>

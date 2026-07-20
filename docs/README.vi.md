@@ -40,7 +40,7 @@ Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ c
 
 1. Tải `Clockwork-<phiên bản>.zip` mới nhất từ [Releases](https://github.com/rockbenben/Clockwork/releases) rồi giải nén — bên trong là một tệp `Clockwork.exe` duy nhất; đặt nó vào thư mục bất kỳ (di động — để đâu cũng được). Muốn tự dựng, xem **Dành cho nhà phát triển** bên dưới.
 2. Nhấp đúp **`Clockwork.exe`** để mở cửa sổ cài đặt.
-   - Ở **lần chạy đầu tiên**, chương trình nạp một **cấu hình mẫu** (minh họa khởi động / nhắc nhở / nhóm thao tác) để bạn chỉnh thành của mình. Cài đặt của bạn nằm ở `clockwork.settings.json` cạnh tệp exe — chỉ trên máy, không đưa lên kho.
+   - Ở **lần chạy đầu tiên**, chương trình nạp vài **mẫu** trong danh sách khởi động và nhắc nhở để bạn chỉnh thành của mình — tất cả đều chưa được tick, nên không có gì chạy cho tới khi bạn tự tick. Cài đặt của bạn nằm ở `clockwork.settings.json` cạnh tệp exe — chỉ trên máy, không đưa lên kho.
 3. Để chạy mỗi lần khởi động máy: ở tab **Cài đặt**, nhấp **Khởi động cùng đăng nhập** (đăng ký một tác vụ theo lịch với quyền admin, để không phải chịu một loạt hộp thoại UAC khi khởi động).
 
 > Nó nằm im trong khay hệ thống. Nhấp đúp biểu tượng khay để mở cửa sổ; nút đóng của cửa sổ chỉ thu vào khay. Muốn thoát hẳn, nhấp chuột phải vào khay và chọn **Thoát**.

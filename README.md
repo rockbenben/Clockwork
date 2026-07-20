@@ -40,7 +40,7 @@ No install, fully portable single folder, everything configurable by mouse; dark
 
 1. Download the latest `Clockwork-<version>.zip` from [Releases](https://github.com/rockbenben/Clockwork/releases) and unzip it — inside is a single `Clockwork.exe`; drop it into any folder (portable — put it wherever). To build it yourself, see **For developers** below.
 2. Double-click **`Clockwork.exe`** to open the settings window.
-   - On **first run** it loads a **sample config** (demonstrating startup / reminders / action groups) so you can adapt it to your own. Your settings live in `clockwork.settings.json` next to the exe — local only, never committed.
+   - On **first run** it loads a few **samples** in the startup list and the reminders so you can adapt them to your own — all of them start unticked, so nothing runs until you tick it. Your settings live in `clockwork.settings.json` next to the exe — local only, never committed.
 3. To run it every boot: on the **Settings** tab, click **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
 
 > It sits quietly in the tray. Double-click the tray icon to open the window; the window's close button only hides it to the tray. Quit for real via the tray's right-click **Exit**.

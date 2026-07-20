@@ -301,6 +301,14 @@ Log: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Screenshot &amp; annotate</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Did you log all of today's tasks?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Time for bed!</value></data>
+  <data name="Smp_MuteEarly" xml:space="preserve"><value>Mute at startup (sample · only before 8 AM)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Open an app (sample · point it at your own .exe)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Open a website (sample · use your mail or to-do URL)</value></data>
+  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Show desktop with Win+D (sample · send a key combo)</value></data>
+  <data name="Smp_Minimize" xml:space="preserve"><value>Minimize a window (sample · matched by process name)</value></data>
+  <data name="Smp_RemWater" xml:space="preserve"><value>Stand up and drink some water (sample)</value></data>
+  <data name="Smp_RemFruit" xml:space="preserve"><value>Have some fruit (sample · speech can be turned on)</value></data>
+  <data name="Smp_RemSleep" xml:space="preserve"><value>Time for bed (sample)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>This action needs administrator rights. Reopen Clockwork as administrator?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Action group "{0}" is referenced by {1} reminder(s) and {2} step(s). Deleting it will also clear those references (reminders become popup-only; steps referencing it are removed). Delete anyway?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Browse…</value></data>
