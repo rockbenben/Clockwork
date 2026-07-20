@@ -84,12 +84,10 @@ public class StringsTests
     [InlineData("en")]
     [InlineData("ja")]
     [InlineData("ar")]
+    // 「键在各语言是否齐全」已由 StringsCoverageTests 自动枚举中性 resx 全量校验，
+    // 不再在此维护人工键名清单（清单只能覆盖有人记得加的键）。此处只验 Lf 的占位符带入行为。
     public void KeyInput_warning_keys_resolve_and_format(string culture) => WithCulture(culture, () =>
     {
-        // 键存在于所有卫星（非空、不等于键名回退），且占位符正确带入。
-        foreach (var key in new[] { "Warn_KeyNoMain", "Warn_KeyMultiDigit", "Warn_KeyUnknown", "Warn_KeyRejected", "Warn_KeyPartial", "Warn_TextSendFail",
-                                    "Tray_ViewLog", "Tray_NoLog", "Err_ClearClipboard", "Err_EmptyRecycleBin", "Err_UnknownSysCmd" })
-            Assert.NotEqual(key, Strings.Get(key));
         Assert.Contains("Ctrl+X", Strings.Lf("Warn_KeyNoMain", "Ctrl+X"));
         var partial = Strings.Lf("Warn_KeyPartial", "Win+D", 2, 4);
         Assert.Contains("Win+D", partial);
