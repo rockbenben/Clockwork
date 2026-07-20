@@ -31,17 +31,20 @@ public sealed class SystemStartupItem
 // 计划任务用 COM Schedule.Service（含隐藏任务）；开关用 schtasks.exe（避开 CIM 卡顿）。全为真机交互、无单测（仅冒烟）。
 public static class SystemStartupReader
 {
+    // hive 名→根键、StartupApproved 子键路径：各写一处。枚举/开关/删除共用，改动不必多处同步。
+    private static RegistryKey HiveKey(string hive) => hive == "HKLM" ? Registry.LocalMachine : Registry.CurrentUser;
+    private static string ApprovedPath(string subKey) => $@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\{subKey}";
+
     private static RegistryKey? OpenKey(string hive, string subPath)
     {
-        var b = hive == "HKLM" ? Registry.LocalMachine : Registry.CurrentUser;
-        try { return b.OpenSubKey(subPath); } catch { return null; }
+        try { return HiveKey(hive).OpenSubKey(subPath); } catch { return null; }
     }
 
     // 一次读出某 StartupApproved 子键的全部标志 → 值名 → 是否启用。缺记录=启用（调用方默认）。
     private static Dictionary<string, bool> GetApprovedMap(string hive, string subKey)
     {
         var map = new Dictionary<string, bool>(StringComparer.Ordinal);
-        using var key = OpenKey(hive, $@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\{subKey}");
+        using var key = OpenKey(hive, ApprovedPath(subKey));
         if (key == null) return map;
         foreach (var name in key.GetValueNames())
         {
@@ -51,17 +54,21 @@ public static class SystemStartupReader
         return map;
     }
 
+    // Run 键规格表：枚举（GetItems）与删除（RunKeyPath）共用——RunKind ↔ 实际路径只声明这一份，
+    // 新增/修正条目两边自动同步，不会出现「列表里看得见、删除却找不到路径」的漂移。
+    private static readonly (string Hive, string Path, string Scope, string RunKind, string Approved)[] RunSpecs =
+    {
+        ("HKCU", @"Software\Microsoft\Windows\CurrentVersion\Run", "User", "Run", "Run"),
+        ("HKLM", @"Software\Microsoft\Windows\CurrentVersion\Run", "Machine", "Run", "Run"),
+        ("HKLM", @"Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run", "Machine", "Run32", "Run32"),
+    };
+
     public static List<SystemStartupItem> GetItems()
     {
         var items = new List<SystemStartupItem>();
 
         // 注册表 Run
-        foreach (var spec in new[]
-        {
-            (Hive: "HKCU", Path: @"Software\Microsoft\Windows\CurrentVersion\Run", Scope: "User", RunKind: "Run", Approved: "Run"),
-            (Hive: "HKLM", Path: @"Software\Microsoft\Windows\CurrentVersion\Run", Scope: "Machine", RunKind: "Run", Approved: "Run"),
-            (Hive: "HKLM", Path: @"Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run", Scope: "Machine", RunKind: "Run32", Approved: "Run32"),
-        })
+        foreach (var spec in RunSpecs)
         {
             using var key = OpenKey(spec.Hive, spec.Path);
             if (key == null) continue;
@@ -243,9 +250,48 @@ public static class SystemStartupReader
 
     private static void SetApprovedState(string hive, string subKey, string valueName, bool enable)
     {
-        var b = hive == "HKLM" ? Registry.LocalMachine : Registry.CurrentUser;
-        using var key = b.CreateSubKey($@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\{subKey}", true);
+        using var key = HiveKey(hive).CreateSubKey(ApprovedPath(subKey), true);
         key!.SetValue(valueName, StartupApproved.ApprovedBlob(enable), RegistryValueKind.Binary);
+    }
+
+    // 开关/删除共用的错误口径：唯一一份映射，新的「拒绝访问」形态只需在此补一处。
+    // COM 的 E_ACCESSDENIED 按 HResult 判（与系统语言无关），文本正则只是最后一层兜底。
+    private static string GuardAdminErrors(Func<string> body)
+    {
+        try { return body(); }
+        catch (UnauthorizedAccessException) { return "NeedsAdmin"; }
+        catch (System.Security.SecurityException) { return "NeedsAdmin"; }
+        catch (Exception ex)
+        {
+            const int E_ACCESSDENIED = unchecked((int)0x80070005);
+            if (ex.HResult == E_ACCESSDENIED || AdminError.IsAccessDenied(ex.Message)) return "NeedsAdmin";
+            return "Error: " + ex.Message;
+        }
+    }
+
+    // 计划任务的开关/删除改走 COM Schedule.Service（与枚举同通道），不再经 schtasks：
+    // schtasks 的失败只有本地化文本可供分类，「是不是权限问题」在非中英文系统上只能靠猜——
+    // 猜偏哪头都错（认不出的「拒绝访问」丢一键提权；非权限失败被拉去无效提权）。COM 的
+    // E_ACCESSDENIED(0x80070005) 语义与系统语言无关，GuardAdminErrors 按 HResult 精确归类，
+    // 任务不存在等其他失败则带真实 HRESULT 信息如实上报。
+    private static void RunTaskOp(string taskPath, Action<dynamic> op)
+    {
+        var svcType = Type.GetTypeFromProgID("Schedule.Service") ?? throw new Exception("Schedule.Service unavailable");
+        dynamic? svc = null;
+        try
+        {
+            svc = Activator.CreateInstance(svcType);
+            svc!.Connect();
+            var p = taskPath.TrimEnd('\\');
+            dynamic? folder = null;
+            try
+            {
+                folder = svc.GetFolder(p == "" ? "\\" : p);
+                op(folder);
+            }
+            finally { if (folder != null) { try { Marshal.ReleaseComObject((object)folder); } catch { } } }
+        }
+        finally { if (svc != null) { try { Marshal.ReleaseComObject(svc); } catch { } } }
     }
 
     // 开关某启动项。返回 Ok / NeedsAdmin / ReadOnly / Error:...。
@@ -254,28 +300,79 @@ public static class SystemStartupReader
         // 只读项(策略/RunOnce/Winlogon/ActiveSetup 等)一律拒改：它们 RegRunKind 为空，硬写会误建
         // StartupApproved 空子键+无效值。UI 复选框已按 CanEdit 禁用、接管也加了守卫，此处再兜一层源头防护。
         if (!item.CanToggle) return "ReadOnly";
-        try
+        return GuardAdminErrors(() =>
         {
             switch (item.Type)
             {
                 case "Registry": SetApprovedState(item.RegHive, item.RegRunKind, item.ValueName, enable); break;
                 case "StartupFolder": SetApprovedState(item.RegHive, "StartupFolder", item.ValueName, enable); break;
                 case "ScheduledTask":
-                    var tn = item.TaskPath + item.TaskName;
-                    var (code, output) = RunSchtasks($"/change /tn \"{tn}\" /{(enable ? "enable" : "disable")}");
-                    if (code != 0) throw new Exception("schtasks: " + output);
+                    RunTaskOp(item.TaskPath, folder =>
+                    {
+                        dynamic task = folder.GetTask(item.TaskName);
+                        try { task.Enabled = enable; }
+                        finally { try { Marshal.ReleaseComObject((object)task); } catch { } }
+                    });
                     break;
             }
             return "Ok";
-        }
-        catch (UnauthorizedAccessException) { return "NeedsAdmin"; }
-        catch (System.Security.SecurityException) { return "NeedsAdmin"; }
-        catch (Exception ex)
+        });
+    }
+
+    // RegRunKind → Run 键实际路径（开关只写 StartupApproved，删除要动真正的 Run 值）。查 RunSpecs 单一来源。
+    private static string? RunKeyPath(string hive, string runKind)
+    {
+        foreach (var s in RunSpecs)
+            if (s.Hive == hive && s.RunKind == runKind) return s.Path;
+        return null;
+    }
+
+    // 彻底删除某启动项（注册表值 / 启动文件夹快捷方式 / 计划任务）。返回 Ok / NeedsAdmin / ReadOnly / Error:...。
+    // 错误映射与 SetItemEnabled 共用 GuardAdminErrors；只读项（策略/RunOnce/Winlogon/ActiveSetup 等）一律拒删。
+    public static string DeleteItem(SystemStartupItem item)
+    {
+        if (!item.CanToggle) return "ReadOnly";
+        return GuardAdminErrors(() =>
         {
-            var msg = ex.Message;
-            if (AdminError.IsAccessDenied(msg)) return "NeedsAdmin";
-            return "Error: " + msg;
+            switch (item.Type)
+            {
+                case "Registry":
+                    var path = RunKeyPath(item.RegHive, item.RegRunKind);
+                    if (path == null) return "ReadOnly";
+                    using (var key = HiveKey(item.RegHive).OpenSubKey(path, writable: true))
+                        key?.DeleteValue(item.ValueName, throwOnMissingValue: false);
+                    DeleteApprovedState(item.RegHive, item.RegRunKind, item.ValueName);
+                    break;
+                case "StartupFolder":
+                    if (File.Exists(item.LnkPath))
+                    {
+                        // 只读属性会让 File.Delete 抛 UnauthorizedAccessException（与权限无关，提权也治不了），
+                        // 若不先清位会被映射成 NeedsAdmin、引导用户绕一圈注定无效的 UAC → 先去只读再删。
+                        var attrs = File.GetAttributes(item.LnkPath);
+                        if ((attrs & FileAttributes.ReadOnly) != 0)
+                            File.SetAttributes(item.LnkPath, attrs & ~FileAttributes.ReadOnly);
+                        File.Delete(item.LnkPath);
+                    }
+                    DeleteApprovedState(item.RegHive, "StartupFolder", item.ValueName);
+                    break;
+                case "ScheduledTask":
+                    RunTaskOp(item.TaskPath, folder => folder.DeleteTask(item.TaskName, 0));
+                    break;
+                default: return "ReadOnly";
+            }
+            return "Ok";
+        });
+    }
+
+    // 主体已删后清掉对应 StartupApproved 记录（残留无害但脏）。失败不影响删除结果，静默。
+    private static void DeleteApprovedState(string hive, string subKey, string valueName)
+    {
+        try
+        {
+            using var key = HiveKey(hive).OpenSubKey(ApprovedPath(subKey), writable: true);
+            key?.DeleteValue(valueName, throwOnMissingValue: false);
         }
+        catch { }
     }
 
     // 据系统启动项构造「接管」用的 app 步骤（延迟 2000ms 体现接管价值）。

@@ -73,6 +73,9 @@ public sealed class SystemStartupVm
 
     public void SetItems(List<SystemStartupItem> items) { _all = items ?? new(); ApplyFilter(); }
 
+    // 系统删除成功后本地移除该项（重扫较慢，没必要为一次删除全量重扫）。
+    public void Remove(SystemStartupItem item) { _all.Remove(item); ApplyFilter(); }
+
     // 前端过滤：默认隐藏只读项（策略/系统/一次性等，管不着）；搜索按名称或命令。纯函数、可测。
     public static List<SystemStartupItem> Filter(IEnumerable<SystemStartupItem> items, string search, bool showReadOnly)
     {

@@ -48,6 +48,17 @@ public class SystemStartupVmTests
     }
 
     [Fact]
+    public void Remove_drops_item_from_rows()
+    {
+        var items = Items();
+        var vm = new SystemStartupVm((i, e) => "Ok", _ => { });
+        vm.SetItems(items);
+        vm.Remove(items[0]);
+        Assert.Single(vm.Rows);
+        Assert.DoesNotContain(vm.Rows, r => r.Name == "Steam");
+    }
+
+    [Fact]
     public void Toggle_success_updates_item()
     {
         var item = new SystemStartupItem { Name = "x", Enabled = true, CanToggle = true };
