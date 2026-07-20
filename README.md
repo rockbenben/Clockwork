@@ -38,7 +38,7 @@ No install, fully portable single folder, everything configurable by mouse; dark
 
 ## Getting started
 
-1. Download the latest `Clockwork.exe` from [Releases](https://github.com/rockbenben/Clockwork/releases) and drop it into any folder (portable — put it wherever). To build it yourself, see **For developers** below.
+1. Download the latest `Clockwork-<version>.zip` from [Releases](https://github.com/rockbenben/Clockwork/releases) and unzip it — inside is a single `Clockwork.exe`; drop it into any folder (portable — put it wherever). To build it yourself, see **For developers** below.
 2. Double-click **`Clockwork.exe`** to open the settings window.
    - On **first run** it loads a **sample config** (demonstrating startup / reminders / action groups) so you can adapt it to your own. Your settings live in `clockwork.settings.json` next to the exe — local only, never committed.
 3. To run it every boot: on the **Settings** tab, click **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
@@ -78,7 +78,7 @@ Need to focus or take a meeting? The tray offers **Pause reminders for 1 / 2 / 4
 
 ### System startup items
 
-Lists **everything that auto-starts** (registry Run keys, Startup folders, scheduled tasks). Uncheck **Enable** to switch an item off — **disabled, not deleted; re-check to restore** (takes effect immediately). Items marked **needs admin** prompt to relaunch elevated. System / policy / one-time items (Group-Policy Run, RunOnce, Winlogon, Active Setup) can't be toggled normally and are **hidden by default** — tick **Show system / read-only items** to view them (greyed out). **Take over into startup list** hands an item to Clockwork (registry Run keys and Startup-folder items only). A top **filter** searches by name / command; hover a truncated command to read it in full.
+Lists **everything that auto-starts** (registry Run keys, Startup folders, scheduled tasks). Uncheck **Enable** to switch an item off — **disabled, not deleted; re-check to restore** (takes effect immediately). Items marked **needs admin** prompt to relaunch elevated. System / policy / one-time items (Group-Policy Run, RunOnce, Winlogon, Active Setup) can't be touched and are **hidden by default** — tick **Show system / read-only items** to view them (greyed out). Right-click a row for **Take over into launch list** (hands the item to Clockwork; registry Run keys and Startup-folder items only) or **Delete from system** (removes the entry for good — asks first, and can't be undone; unchecking is the reversible option). A top **filter** searches by name / command; hover a truncated command to read it in full.
 
 ### Action groups
 
@@ -90,9 +90,13 @@ Bundle actions into a reusable group. **Add ▾** starts one from a **built-in t
 
 **Startup delay** (0–600 s, boot only), **start minimized to tray**, **panic hotkey** (click the box and press your shortcut; Esc cancels, Delete clears; default `Ctrl+Alt+Q`), and **UI language** (Simplified Chinese, English, 日本語 and 15 more — 18 total; switching restarts the app to apply).
 
+**Export / Import Config** — move your whole setup to another PC or keep a backup. Export writes a copy of `clockwork.settings.json` anywhere you like; import replaces **everything** (startup list / reminders / action groups / settings), so it confirms first, backs the current config up to `clockwork.settings.json.bak`, and restarts the app to apply.
+
 ## Tips
 
 - **Double-click a row to edit** it. When filling paths / processes / shortcuts / dates you don't have to type by hand: **Browse…**, **Pick…** (searchable process picker), **Capture**, and **Pick date**.
+- **Duplicate** (Reminders / Action groups tabs) clones the selected row right below it — quicker than rebuilding a near-identical one; a duplicated group is named "… (copy)".
+- **Deleting always asks first**, everywhere — list rows, steps inside the group editor, and system startup items.
 - Double-clicking `Clockwork.exe` only opens settings — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.
 - **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers block low-level calls, so send-keys / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).
 - Your config is `clockwork.settings.json` (local only). Delete it to reset to the sample. Reminder state is `clockwork.state.json` (also local; safe to delete).
@@ -111,7 +115,7 @@ C#/.NET WPF; source in `app/` (needs the .NET 10 SDK). Layers: `Core/` pure logi
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Output: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / releases** (GitHub Actions): push / PR builds and runs all tests on a Windows runner; pushing a `v*` tag (e.g. `v2.0.0`) builds, stamps the file version from the tag, creates a GitHub Release and attaches `Clockwork.exe`.
+- **CI / releases** (GitHub Actions): push / PR builds and runs all tests on a Windows runner; pushing a `v*` tag (e.g. `v2.0.0`) builds, stamps the file version from the tag, creates a GitHub Release and attaches `Clockwork-<tag>.zip` (containing `Clockwork.exe`).
 
 ## About the 365 Open-Source Plan
 

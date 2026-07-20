@@ -29,6 +29,8 @@ Un piccolo strumento da area di notifica per Windows che si occupa delle parti d
 
 Nessuna installazione, completamente portatile in un'unica cartella, tutto configurabile con il mouse; interfaccia scura, compatibile con l'alta risoluzione (high-DPI).
 
+> 📖 **Guida completa:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+
 ## Requisiti
 
 - Windows 10 / 11 (x64)
@@ -36,7 +38,7 @@ Nessuna installazione, completamente portatile in un'unica cartella, tutto confi
 
 ## Per iniziare
 
-1. Scarica l'ultimo `Clockwork.exe` dalle [Releases](https://github.com/rockbenben/Clockwork/releases) e mettilo in una cartella qualsiasi (portatile — mettilo dove vuoi). Per compilarlo tu stesso, vedi **Per gli sviluppatori** più sotto.
+1. Scarica l'ultimo `Clockwork-<versione>.zip` dalle [Releases](https://github.com/rockbenben/Clockwork/releases) e decomprimilo — all'interno c'è un unico `Clockwork.exe`; mettilo in una cartella qualsiasi (portatile — mettilo dove vuoi). Per compilarlo tu stesso, vedi **Per gli sviluppatori** più sotto.
 2. Fai doppio clic su **`Clockwork.exe`** per aprire la finestra delle impostazioni.
    - Al **primo avvio** carica una **configurazione di esempio** (che mostra avvio / promemoria / gruppi di azioni) così puoi adattarla alla tua. Le tue impostazioni risiedono in `clockwork.settings.json` accanto all'exe — solo in locale, mai inviato al repository.
 3. Per eseguirlo a ogni accensione: nella scheda **Impostazioni**, clicca su **Avvia all'accesso** (registra un'operazione pianificata con diritti di amministratore, così niente valanga di richieste UAC all'avvio).
@@ -76,7 +78,7 @@ Hai bisogno di concentrarti o di partecipare a una riunione? L'area di notifica 
 
 ### Elementi di avvio del sistema
 
-Elenca **tutto ciò che si avvia automaticamente** (chiavi Run del registro, cartelle Esecuzione automatica, operazioni pianificate). Deseleziona **Abilita** per disattivare un elemento — **disattivato, non eliminato; riseleziona per ripristinare** (ha effetto immediato). Gli elementi contrassegnati come **richiede l'amministratore** chiedono di riavviare con privilegi elevati. Gli elementi di sistema / criterio / una tantum (Run di Criteri di gruppo, RunOnce, Winlogon, Active Setup) non possono essere commutati normalmente e sono **nascosti per impostazione predefinita** — spunta **Mostra elementi di sistema / di sola lettura** per vederli (in grigio). **Prendi in carico nell'elenco di avvio** affida un elemento a Clockwork (solo chiavi Run del registro ed elementi della cartella Esecuzione automatica). Un **filtro** in alto cerca per nome / comando; passa il mouse su un comando troncato per leggerlo per intero.
+Elenca **tutto ciò che si avvia automaticamente** (chiavi Run del registro, cartelle Esecuzione automatica, operazioni pianificate). Deseleziona **Abilita** per disattivare un elemento — **disattivato, non eliminato; riseleziona per ripristinare** (ha effetto immediato). Gli elementi contrassegnati come **richiede l'amministratore** chiedono di riavviare con privilegi elevati. Gli elementi di sistema / criterio / una tantum (Run di Criteri di gruppo, RunOnce, Winlogon, Active Setup) non possono essere toccati e sono **nascosti per impostazione predefinita** — spunta **Mostra elementi di sistema / di sola lettura** per vederli (in grigio). Clicca con il tasto destro su una riga per **Assumi nell'elenco di avvio** (affida l'elemento a Clockwork; solo chiavi Run del registro ed elementi della cartella Esecuzione automatica) oppure **Elimina dal sistema** (rimuove la voce per sempre — chiede prima conferma e non si può annullare; deselezionare la casella è l'opzione reversibile). Un **filtro** in alto cerca per nome / comando; passa il mouse su un comando troncato per leggerlo per intero.
 
 ### Gruppi di azioni
 
@@ -88,9 +90,13 @@ Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da u
 
 **Ritardo di avvio** (0–600 s, solo all'accensione), **avvia ridotto a icona nell'area di notifica**, **scorciatoia di emergenza** (clicca sulla casella e premi la tua scorciatoia; Esc annulla, Canc cancella; predefinita `Ctrl+Alt+Q`) e **lingua dell'interfaccia** (cinese semplificato, inglese, 日本語 e altre 15 — 18 in totale; cambiarla riavvia l'applicazione per applicarla).
 
+**Esporta configurazione / Importa configurazione** — sposta tutta la tua configurazione su un altro PC o tienine un backup. L'esportazione scrive una copia di `clockwork.settings.json` dove preferisci; l'importazione sostituisce **tutto** (elenco di avvio / promemoria / gruppi di azioni / impostazioni), quindi chiede prima conferma, esegue il backup della configurazione attuale in `clockwork.settings.json.bak` e riavvia l'applicazione per applicarla.
+
 ## Suggerimenti
 
 - **Fai doppio clic su una riga per modificarla**. Quando compili percorsi / processi / scorciatoie / date non devi digitare a mano: **Sfoglia…**, **Scegli…** (selettore di processi con ricerca), **Cattura** e **Scegli data**.
+- **Duplica** (schede Promemoria / Gruppi di azioni) clona la riga selezionata subito sotto di essa — più veloce che ricostruirne una quasi identica; un gruppo duplicato si chiama «… (copia)».
+- **L'eliminazione chiede sempre conferma**, ovunque — righe degli elenchi, passaggi nell'editor del gruppo ed elementi di avvio del sistema.
 - Fare doppio clic su `Clockwork.exe` apre solo le impostazioni — **non** esegue subito l'elenco di avvio; per quello usa **Riesegui l'elenco di avvio** dall'area di notifica.
 - **Avvialo normalmente** (doppio clic / area di notifica / operazione pianificata). Alcuni launcher in sandbox / a privilegi ridotti bloccano le chiamate di basso livello, quindi invia-tasti / azioni finestra / attiva-se-in-esecuzione / invia-testo-a-processo / volume potrebbero non funzionare (riceverai un avviso chiaro; il semplice «avvia programma» non ne è influenzato).
 - La tua configurazione è `clockwork.settings.json` (solo in locale). Eliminala per ripristinare l'esempio. Lo stato dei promemoria è `clockwork.state.json` (anch'esso locale; eliminabile senza problemi).
@@ -109,7 +115,7 @@ C#/.NET WPF; sorgente in `app/` (richiede l'SDK .NET 10). Livelli: `Core/` logic
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Output: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / releases** (GitHub Actions): le build di push / PR compilano ed eseguono tutti i test su un runner Windows; il push di un tag `v*` (ad es. `v2.0.0`) compila, marca la versione del file dal tag, crea una Release GitHub e vi allega `Clockwork.exe`.
+- **CI / releases** (GitHub Actions): le build di push / PR compilano ed eseguono tutti i test su un runner Windows; il push di un tag `v*` (ad es. `v2.0.0`) compila, marca la versione del file dal tag, crea una Release GitHub e vi allega `Clockwork-<tag>.zip` (contenente `Clockwork.exe`).
 
 ## Informazioni sul Piano Open Source 365
 

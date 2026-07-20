@@ -29,6 +29,8 @@ Ein kleines Windows-Tray-Tool, das sich um die Routineteile deines Tagesstarts a
 
 Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Maus konfigurierbar; dunkle Oberfläche, High-DPI-tauglich.
 
+> 📖 **Vollständige Anleitung:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+
 ## Voraussetzungen
 
 - Windows 10 / 11 (x64)
@@ -36,7 +38,7 @@ Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Ma
 
 ## Erste Schritte
 
-1. Lade die neueste `Clockwork.exe` aus den [Releases](https://github.com/rockbenben/Clockwork/releases) herunter und lege sie in einen beliebigen Ordner (portabel — leg sie ab, wo du willst). Zum Selbstbauen siehe **Für Entwickler** weiter unten.
+1. Lade die neueste `Clockwork-<Version>.zip` aus den [Releases](https://github.com/rockbenben/Clockwork/releases) herunter und entpacke sie — darin steckt eine einzelne `Clockwork.exe`; lege sie in einen beliebigen Ordner (portabel — leg sie ab, wo du willst). Zum Selbstbauen siehe **Für Entwickler** weiter unten.
 2. Doppelklicke **`Clockwork.exe`**, um das Einstellungsfenster zu öffnen.
    - Beim **ersten Start** wird eine **Beispielkonfiguration** geladen (die Autostart / Erinnerungen / Aktionsgruppen demonstriert), damit du sie an deine Bedürfnisse anpassen kannst. Deine Einstellungen liegen in `clockwork.settings.json` neben der exe — nur lokal, wird nie eingecheckt.
 3. Um es bei jedem Start auszuführen: klicke auf dem Tab **Einstellungen** auf **Beim Anmelden starten** (registriert eine geplante Aufgabe mit Administratorrechten, sodass beim Start keine Flut von UAC-Abfragen erscheint).
@@ -76,7 +78,7 @@ Musst du dich konzentrieren oder in ein Meeting? Der Tray bietet **Erinnerungen 
 
 ### System-Autostart-Einträge
 
-Listet **alles auf, das automatisch startet** (Registry-Run-Schlüssel, Autostart-Ordner, geplante Aufgaben). Entferne das Häkchen bei **Aktiviert**, um einen Eintrag abzuschalten — **deaktiviert, nicht gelöscht; erneut anhaken zum Wiederherstellen** (wirkt sofort). Als **benötigt Administrator** markierte Einträge fordern zum erhöhten Neustart auf. System- / Richtlinien- / einmalige Einträge (Gruppenrichtlinien-Run, RunOnce, Winlogon, Active Setup) lassen sich nicht auf normale Weise umschalten und sind **standardmäßig ausgeblendet** — setze ein Häkchen bei **System- / schreibgeschützte Einträge anzeigen**, um sie zu sehen (ausgegraut). **In Startliste übernehmen** übergibt einen Eintrag an Clockwork (nur Registry-Run-Schlüssel und Autostart-Ordner-Einträge). Ein **Filter** oben durchsucht nach Name / Befehl; fahre über einen abgeschnittenen Befehl, um ihn vollständig zu lesen.
+Listet **alles auf, das automatisch startet** (Registry-Run-Schlüssel, Autostart-Ordner, geplante Aufgaben). Entferne das Häkchen bei **Aktiviert**, um einen Eintrag abzuschalten — **deaktiviert, nicht gelöscht; erneut anhaken zum Wiederherstellen** (wirkt sofort). Als **benötigt Administrator** markierte Einträge fordern zum erhöhten Neustart auf. System- / Richtlinien- / einmalige Einträge (Gruppenrichtlinien-Run, RunOnce, Winlogon, Active Setup) lassen sich nicht anfassen und sind **standardmäßig ausgeblendet** — setze ein Häkchen bei **System- / schreibgeschützte Einträge anzeigen**, um sie zu sehen (ausgegraut). Ein Rechtsklick auf eine Zeile bietet **In Startliste übernehmen** (übergibt den Eintrag an Clockwork; nur Registry-Run-Schlüssel und Autostart-Ordner-Einträge) oder **Aus dem System löschen** (entfernt den Eintrag endgültig — fragt vorher nach und lässt sich nicht rückgängig machen; das Häkchen zu entfernen ist die umkehrbare Variante). Ein **Filter** oben durchsucht nach Name / Befehl; fahre über einen abgeschnittenen Befehl, um ihn vollständig zu lesen.
 
 ### Aktionsgruppen
 
@@ -88,9 +90,13 @@ Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt
 
 **Startverzögerung** (0–600 s, nur beim Start), **minimiert in den Tray starten**, **Notfall-Hotkey** (klicke in das Feld und drücke dein Kürzel; Esc bricht ab, Entf löscht; Standard `Ctrl+Alt+Q`) und **UI-Sprache** (vereinfachtes Chinesisch, English, 日本語 und 15 weitere — 18 insgesamt; ein Wechsel startet die App zur Übernahme neu).
 
+**Konfiguration exportieren / Konfiguration importieren** — verschiebe deine gesamte Einrichtung auf einen anderen PC oder bewahre ein Backup auf. Der Export schreibt eine Kopie von `clockwork.settings.json` an einen beliebigen Ort; der Import ersetzt **alles** (Startliste / Erinnerungen / Aktionsgruppen / Einstellungen), fragt daher zuerst nach, sichert die aktuelle Konfiguration nach `clockwork.settings.json.bak` und startet die App zur Übernahme neu.
+
 ## Tipps
 
 - **Doppelklicke eine Zeile zum Bearbeiten**. Beim Ausfüllen von Pfaden / Prozessen / Kürzeln / Daten musst du nicht von Hand tippen: **Durchsuchen…**, **Auswählen…** (durchsuchbarer Prozess-Picker), **Aufzeichnen** und **Datum auswählen**.
+- **Duplizieren** (Tabs „Erinnerungen“ / „Aktionsgruppen“) klont die ausgewählte Zeile direkt darunter — schneller, als eine fast identische neu aufzubauen; eine duplizierte Gruppe heißt „… (Kopie)“.
+- **Löschen fragt immer zuerst nach**, überall — Listenzeilen, Schritte im Gruppeneditor und System-Autostart-Einträge.
 - Ein Doppelklick auf `Clockwork.exe` öffnet nur die Einstellungen — er führt die Startliste **nicht** sofort aus; nutze dafür **Startliste erneut ausführen** im Tray.
 - **Starte es normal** (Doppelklick / Tray / geplante Aufgabe). Manche Sandbox- / Launcher mit reduzierten Rechten blockieren Low-Level-Aufrufe, sodass Tasten senden / Fensteraktionen / Aktivieren-falls-läuft / Text-an-Prozess-senden / Lautstärke möglicherweise nicht funktionieren (du bekommst einen klaren Hinweis; das schlichte „Programm starten“ ist nicht betroffen).
 - Deine Konfiguration ist `clockwork.settings.json` (nur lokal). Lösche sie, um auf das Beispiel zurückzusetzen. Der Erinnerungsstatus ist `clockwork.state.json` (ebenfalls lokal; kann gefahrlos gelöscht werden).
@@ -109,7 +115,7 @@ C#/.NET WPF; Quelltext in `app/` (benötigt das .NET-10-SDK). Schichten: `Core/`
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Ausgabe: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / Releases** (GitHub Actions): Push / PR baut und führt alle Tests auf einem Windows-Runner aus; das Pushen eines `v*`-Tags (z. B. `v2.0.0`) baut, prägt die Dateiversion aus dem Tag ein, erstellt ein GitHub Release und hängt `Clockwork.exe` an.
+- **CI / Releases** (GitHub Actions): Push / PR baut und führt alle Tests auf einem Windows-Runner aus; das Pushen eines `v*`-Tags (z. B. `v2.0.0`) baut, prägt die Dateiversion aus dem Tag ein, erstellt ein GitHub Release und hängt `Clockwork-<Tag>.zip` (enthält `Clockwork.exe`) an.
 
 ## Über den 365-Open-Source-Plan
 

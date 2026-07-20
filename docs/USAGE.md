@@ -15,7 +15,7 @@ A small Windows tray tool that manages four everyday things (plus a Settings tab
 
 ## Getting started
 
-1. Unzip into any folder (portable — put it wherever).
+1. Unzip `Clockwork-<version>.zip` into any folder (portable — put it wherever); inside is a single `Clockwork.exe`.
 2. Double-click **`Clockwork.exe`** to open the settings window.
 3. To run it every boot: on the **Settings** tab, click **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
 
@@ -28,7 +28,7 @@ On first run the startup list / reminders / action groups already contain **samp
 The most common need, "open my everyday apps at login":
 
 1. Go to **Startup list**.
-2. Delete the samples you don't need (select → delete; the next row is auto-selected, so deleting in a row is quick).
+2. Delete the samples you don't need (select → delete → confirm; the next row is auto-selected, so deleting in a row is quick).
 3. **Add ▾ → Launch program**, and fill **Target** with the app you want:
    - Apps the system can find: just the name — `msedge.exe` (Edge), `notepad.exe` (Notepad).
    - Otherwise a **full path**: right-click the app → "Open file location" → right-click the icon → "Properties", and copy the **Target** path.
@@ -78,14 +78,17 @@ Tray → **Stop running actions**, or the global **panic hotkey** (set on the Se
 - **State persistence:** "fired today" and "snoozed until" are saved to `clockwork.state.json`, surviving restarts — a snooze carries across a restart and the same reminder never double-fires in a day.
 - **Do-Not-Disturb:** tray → **Pause reminders for 1 / 2 / 4 hours**. Everything (including silent groups) is suppressed and auto-resumes when the time is up; you can also **Resume** early. Anything missed follows the normal grace / catch-up rules.
 - **Silent action group:** run a group on time with **no popup**. Selecting a reminder and clicking **Run** previews it once — note that for a silent reminder, Run **actually executes** the group.
+- **Duplicate** clones the selected reminder right below it (same text and settings, its own schedule state) — handy for "same reminder, second time of day": duplicate, then just change the time.
 
 ## System startup items
 
 - Lists **everything that auto-starts** (registry Run keys, Startup folders, scheduled tasks).
 - Uncheck **Enable** to switch an item off — **disabled, not deleted; re-check to restore** (takes effect immediately).
 - Items marked **needs admin**: acting on them prompts to relaunch as administrator, then you can proceed.
-- System / policy / one-time items (Group-Policy Run, RunOnce, Winlogon, Active Setup) can't be toggled normally and are **hidden by default** — tick **Show system / read-only items** (top-right) to view them (greyed out).
-- **Take over into startup list** hands an item to Clockwork (disables the original + adds it to your list). Registry Run keys and Startup-folder items only; scheduled tasks aren't supported yet (you'll get a notice).
+- System / policy / one-time items (Group-Policy Run, RunOnce, Winlogon, Active Setup) can't be touched and are **hidden by default** — tick **Show system / read-only items** (top-right) to view them (greyed out; the right-click actions below are disabled for them).
+- **Right-click a row** for two actions:
+  - **Take over into launch list** — hands the item to Clockwork (disables the original + adds it to your list). Registry Run keys and Startup-folder items only; scheduled tasks aren't supported yet (you'll get a notice).
+  - **Delete from system** — removes the entry for good (registry value / Startup-folder shortcut / scheduled task). It asks first and **cannot be undone** — if you only want to stop it running at boot, uncheck **Enable** instead. If the item was taken over earlier and a step still points at its shortcut file, the confirmation says so, because deleting the shortcut breaks that step.
 - A top **filter** searches by name / command; hover a truncated command to read it in full.
 
 ## Action groups
@@ -95,6 +98,8 @@ Tray → **Stop running actions**, or the global **panic hotkey** (set on the Se
 - Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a reminder's **On-Yes / silent group**.
 - **Global hotkey:** in the group editor, click the hotkey box and press a combo (e.g. `Ctrl+Alt+F`) to run the group from any app — no menu needed. Esc cancels, Delete clears. Changes apply live (no restart). A **disabled** group releases its combo so another group can use it. Refused with a notice: **system-reserved** combos (Alt+F4, Alt+Tab, Ctrl+Shift+Esc…), a combo already bound to **another enabled group** or the **panic hotkey**, or one **already taken by another app** (use a different combo).
 - A **message** step can act as a confirmation gate — answering **No** aborts the rest of the group (e.g. "Did you log today's tasks?" before wrap-up).
+- **Duplicate** clones the selected group as "… (copy)" — a quick base for a variant. The copy gets **no hotkey** (two groups can't share one), so assign a new one if you want it.
+- Deleting a group that is **referenced** (by a reminder's On-Yes / silent group, or an action-group step) tells you how many references there are and clears them along with it, so nothing is left pointing at a group that no longer exists.
 
 ## Settings
 
@@ -102,11 +107,15 @@ Tray → **Stop running actions**, or the global **panic hotkey** (set on the Se
 - **Start minimized to tray** (opening manually goes straight to the tray).
 - **Panic hotkey** — click the box and press your shortcut; Esc cancels, Delete clears; default `Ctrl+Alt+Q`.
 - **UI language** — Simplified Chinese, English, 日本語 and 15 more (18 total); switching restarts the app to apply.
+- **Export Config** — saves a copy of `clockwork.settings.json` wherever you choose (default name `clockwork.settings.backup.json`). Use it to back up before a big change, or to move your setup to another PC.
+- **Import Config** — replaces **all** current config (startup list / reminders / action groups / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Reminder state (`clockwork.state.json`) is not touched.
 
 ## Tips
 
 - Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.
-- Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Reminder state is `clockwork.state.json` (also local; safe to delete — at most a reminder fires once more today).
+- **Deleting always asks for confirmation** — list rows, steps inside the group editor, and system startup items alike. The dialog names what you're about to delete, so you can catch a wrong selection before it's gone.
+- Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Reminder state is `clockwork.state.json` (also local; safe to delete — at most a reminder fires once more today). Prefer the Settings tab's **Export / Import Config** for backups and moving between PCs.
+- **Where those files live:** next to `Clockwork.exe` when that folder is writable (the normal portable case). If it isn't — e.g. you put the exe under `C:\Program Files` — both files fall back to `%APPDATA%\Clockwork\` automatically. Export always copies whichever one is actually in use, so you never have to hunt for it.
 - When filling paths / processes / shortcuts / dates you don't have to type by hand: **Browse…**, **Pick…** (searchable process picker), **Capture**, and **Pick date**. The process picker and the system-startup list both have a search/filter box.
 - **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers (e.g. Lucy) block low-level calls, so send-keys / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).
 - Global hotkeys can **run action groups** (set per group, above). Arbitrary key remapping / text expansion is still out of scope — that's AutoHotkey's strength (an `.ahk` step needs AutoHotkey installed).

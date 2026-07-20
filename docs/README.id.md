@@ -29,6 +29,8 @@ Alat tray Windows kecil yang mengurus bagian-bagian rutin saat memulai hari Anda
 
 Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigurasi dengan mouse; antarmuka gelap, sadar high-DPI.
 
+> 📖 **Panduan lengkap:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+
 ## Persyaratan
 
 - Windows 10 / 11 (x64)
@@ -36,7 +38,7 @@ Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigu
 
 ## Memulai
 
-1. Unduh `Clockwork.exe` terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases) dan letakkan di folder mana pun (portabel — taruh di mana saja). Untuk membangunnya sendiri, lihat **Untuk pengembang** di bawah.
+1. Unduh `Clockwork-<versi>.zip` terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases) lalu ekstrak — di dalamnya ada satu `Clockwork.exe`; letakkan di folder mana pun (portabel — taruh di mana saja). Untuk membangunnya sendiri, lihat **Untuk pengembang** di bawah.
 2. Klik dua kali **`Clockwork.exe`** untuk membuka jendela pengaturan.
    - Pada **jalankan pertama** ia memuat **konfigurasi contoh** (mendemonstrasikan startup / pengingat / grup aksi) sehingga Anda dapat menyesuaikannya dengan milik Anda sendiri. Pengaturan Anda tersimpan di `clockwork.settings.json` di samping exe — hanya lokal, tidak pernah di-commit.
 3. Agar berjalan setiap boot: pada tab **Pengaturan**, klik **Mulai saat login** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
@@ -76,7 +78,7 @@ Perlu fokus atau ikut rapat? Tray menawarkan **Jeda pengingat selama 1 / 2 / 4 j
 
 ### Item startup sistem
 
-Mendaftar **semua yang berjalan otomatis** (kunci Run registri, folder Startup, tugas terjadwal). Hapus centang **Aktifkan** untuk mematikan sebuah item — **dinonaktifkan, bukan dihapus; centang kembali untuk memulihkan** (berlaku seketika). Item yang ditandai **butuh admin** meminta untuk diluncurkan ulang dengan hak lebih tinggi. Item sistem / kebijakan / sekali-pakai (Group-Policy Run, RunOnce, Winlogon, Active Setup) tidak dapat dialihkan secara normal dan **disembunyikan secara bawaan** — centang **Tampilkan item sistem / hanya-baca** untuk melihatnya (berwarna abu-abu). **Ambil alih ke daftar startup** menyerahkan sebuah item ke Clockwork (hanya kunci Run registri dan item folder Startup). Sebuah **filter** di atas mencari menurut nama / perintah; arahkan kursor ke perintah yang terpotong untuk membacanya secara penuh.
+Mendaftar **semua yang berjalan otomatis** (kunci Run registri, folder Startup, tugas terjadwal). Hapus centang **Aktifkan** untuk mematikan sebuah item — **dinonaktifkan, bukan dihapus; centang kembali untuk memulihkan** (berlaku seketika). Item yang ditandai **butuh admin** meminta untuk diluncurkan ulang dengan hak lebih tinggi. Item sistem / kebijakan / sekali-pakai (Group-Policy Run, RunOnce, Winlogon, Active Setup) tidak dapat disentuh dan **disembunyikan secara bawaan** — centang **Tampilkan item sistem / hanya-baca** untuk melihatnya (berwarna abu-abu). Klik kanan sebuah baris untuk **Ambil alih ke daftar mulai** (menyerahkan item itu ke Clockwork; hanya kunci Run registri dan item folder Startup) atau **Hapus dari sistem** (menghapus entri itu selamanya — bertanya lebih dulu, dan tidak dapat dibatalkan; menghapus centang adalah opsi yang dapat dibalikkan). Sebuah **filter** di atas mencari menurut nama / perintah; arahkan kursor ke perintah yang terpotong untuk membacanya secara penuh.
 
 ### Grup aksi
 
@@ -88,9 +90,13 @@ Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah �
 
 **Penundaan startup** (0–600 dtk, hanya saat boot), **mulai terminimalkan ke tray**, **tombol pintas panik** (klik kotaknya dan tekan pintasan Anda; Esc membatalkan, Delete mengosongkan; bawaan `Ctrl+Alt+Q`), dan **bahasa antarmuka** (Tionghoa Sederhana, Inggris, 日本語 dan 15 lagi — total 18; beralih akan memulai ulang aplikasi untuk menerapkannya).
 
+**Ekspor konfigurasi / Impor konfigurasi** — pindahkan seluruh penyiapan Anda ke PC lain atau simpan sebagai cadangan. Ekspor menuliskan salinan `clockwork.settings.json` ke mana pun Anda suka; impor menggantikan **semuanya** (daftar startup / pengingat / grup aksi / pengaturan), jadi ia mengonfirmasi lebih dulu, mencadangkan konfigurasi saat ini ke `clockwork.settings.json.bak`, dan memulai ulang aplikasi untuk menerapkannya.
+
 ## Tips
 
 - **Klik dua kali sebuah baris untuk menyuntingnya**. Ketika mengisi jalur / proses / pintasan / tanggal Anda tidak perlu mengetik dengan tangan: **Telusuri…**, **Pilih…** (pemilih proses yang dapat dicari), **Rekam**, dan **Pilih tanggal**.
+- **Duplikat** (tab Pengingat / Grup aksi) mengkloning baris yang dipilih tepat di bawahnya — lebih cepat daripada menyusun ulang yang nyaris sama; grup hasil duplikasi diberi nama "… (salinan)".
+- **Penghapusan selalu bertanya lebih dulu**, di mana pun — baris daftar, langkah di dalam editor grup, dan item startup sistem.
 - Mengklik dua kali `Clockwork.exe` hanya membuka pengaturan — ia **tidak** langsung menjalankan daftar startup; gunakan **Jalankan ulang daftar startup** di tray untuk itu.
 - **Luncurkan secara normal** (klik dua kali / tray / tugas terjadwal). Beberapa peluncur sandbox / berhak-akses-berkurang memblokir panggilan tingkat rendah, sehingga kirim-tombol / aksi jendela / aktifkan-jika-berjalan / kirim-teks-ke-proses / volume mungkin tidak berfungsi (Anda akan mendapat pemberitahuan yang jelas; "luncurkan program" biasa tidak terpengaruh).
 - Konfigurasi Anda adalah `clockwork.settings.json` (hanya lokal). Hapus untuk mengatur ulang ke contoh. Status pengingat adalah `clockwork.state.json` (juga lokal; aman dihapus).
@@ -109,7 +115,7 @@ C#/.NET WPF; sumber di `app/` (membutuhkan .NET 10 SDK). Lapisan: `Core/` logika
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Keluaran: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / rilis** (GitHub Actions): push / PR membangun dan menjalankan semua tes pada Windows runner; men-push tag `v*` (mis. `v2.0.0`) membangun, mencap versi berkas dari tag, membuat GitHub Release dan melampirkan `Clockwork.exe`.
+- **CI / rilis** (GitHub Actions): push / PR membangun dan menjalankan semua tes pada Windows runner; men-push tag `v*` (mis. `v2.0.0`) membangun, mencap versi berkas dari tag, membuat GitHub Release dan melampirkan `Clockwork-<tag>.zip` (berisi `Clockwork.exe`).
 
 ## Tentang 365 Open-Source Plan
 

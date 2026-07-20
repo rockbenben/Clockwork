@@ -29,6 +29,8 @@ Un petit outil de barre d'état système pour Windows qui prend en charge les t�
 
 Sans installation, entièrement portable dans un dossier unique, tout se configure à la souris ; interface sombre, compatible haute résolution (high-DPI).
 
+> 📖 **Guide complet :** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+
 ## Prérequis
 
 - Windows 10 / 11 (x64)
@@ -36,7 +38,7 @@ Sans installation, entièrement portable dans un dossier unique, tout se configu
 
 ## Prise en main
 
-1. Téléchargez le dernier `Clockwork.exe` depuis [Releases](https://github.com/rockbenben/Clockwork/releases) et déposez-le dans n'importe quel dossier (portable — mettez-le où vous voulez). Pour le compiler vous-même, voir **Pour les développeurs** ci-dessous.
+1. Téléchargez le dernier `Clockwork-<version>.zip` depuis [Releases](https://github.com/rockbenben/Clockwork/releases) et décompressez-le — à l'intérieur se trouve un unique `Clockwork.exe` ; déposez-le dans n'importe quel dossier (portable — mettez-le où vous voulez). Pour le compiler vous-même, voir **Pour les développeurs** ci-dessous.
 2. Double-cliquez sur **`Clockwork.exe`** pour ouvrir la fenêtre des paramètres.
    - Au **premier lancement**, il charge une **configuration d'exemple** (illustrant démarrage / rappels / groupes d'actions) que vous pouvez adapter à la vôtre. Vos paramètres résident dans `clockwork.settings.json` à côté de l'exe — en local uniquement, jamais poussé sur le dépôt.
 3. Pour le lancer à chaque démarrage : dans l'onglet **Paramètres**, cliquez sur **Démarrer à l'ouverture de session** (enregistre une tâche planifiée avec droits d'administrateur, donc pas de déluge d'invites UAC au démarrage).
@@ -76,7 +78,7 @@ Besoin de vous concentrer ou de participer à une réunion ? La barre d'état sy
 
 ### Éléments de démarrage du système
 
-Répertorie **tout ce qui démarre automatiquement** (clés Run du registre, dossiers Démarrage, tâches planifiées). Décochez **Activer** pour désactiver un élément — **désactivé, pas supprimé ; recochez pour restaurer** (effet immédiat). Les éléments marqués **nécessite l'administrateur** invitent à relancer en mode élevé. Les éléments système / de stratégie / à usage unique (Run de stratégie de groupe, RunOnce, Winlogon, Active Setup) ne peuvent pas être basculés normalement et sont **masqués par défaut** — cochez **Afficher les éléments système / en lecture seule** pour les voir (grisés). **Récupérer dans la liste de démarrage** confie un élément à Clockwork (uniquement les clés Run du registre et les éléments du dossier Démarrage). Un **filtre** en haut recherche par nom / commande ; survolez une commande tronquée pour la lire en entier.
+Répertorie **tout ce qui démarre automatiquement** (clés Run du registre, dossiers Démarrage, tâches planifiées). Décochez **Activer** pour désactiver un élément — **désactivé, pas supprimé ; recochez pour restaurer** (effet immédiat). Les éléments marqués **nécessite l'administrateur** invitent à relancer en mode élevé. Les éléments système / de stratégie / à usage unique (Run de stratégie de groupe, RunOnce, Winlogon, Active Setup) ne peuvent pas être touchés et sont **masqués par défaut** — cochez **Afficher les éléments système / en lecture seule** pour les voir (grisés). Faites un clic droit sur une ligne pour **Reprendre dans la liste de démarrage** (confie l'élément à Clockwork ; uniquement les clés Run du registre et les éléments du dossier Démarrage) ou **Supprimer du système** (retire l'entrée définitivement — demande d'abord confirmation et c'est irréversible ; décocher est l'option réversible). Un **filtre** en haut recherche par nom / commande ; survolez une commande tronquée pour la lire en entier.
 
 ### Groupes d'actions
 
@@ -88,9 +90,13 @@ Regroupe des actions dans un groupe réutilisable. **Ajouter ▾** en démarre u
 
 **Délai de démarrage** (0–600 s, au démarrage uniquement), **démarrer réduit dans la barre d'état système**, **raccourci panique** (cliquez sur la case et appuyez sur votre raccourci ; Échap annule, Suppr efface ; par défaut `Ctrl+Alt+Q`) et **langue de l'interface** (chinois simplifié, anglais, 日本語 et 15 autres — 18 au total ; changer de langue redémarre l'application pour l'appliquer).
 
+**Exporter la configuration / Importer la configuration** — transférez toute votre installation sur un autre PC ou gardez une sauvegarde. L'export écrit une copie de `clockwork.settings.json` où vous voulez ; l'import remplace **tout** (liste de démarrage / rappels / groupes d'actions / paramètres), il demande donc d'abord confirmation, sauvegarde la configuration actuelle dans `clockwork.settings.json.bak` et redémarre l'application pour l'appliquer.
+
 ## Astuces
 
 - **Double-cliquez sur une ligne pour la modifier**. Pour remplir les chemins / processus / raccourcis / dates, pas besoin de tout taper à la main : **Parcourir…**, **Choisir…** (sélecteur de processus avec recherche), **Capturer** et **Choisir la date**.
+- **Dupliquer** (onglets Rappels / Groupes d'actions) clone la ligne sélectionnée juste en dessous — plus rapide que de refaire une ligne presque identique ; un groupe dupliqué est nommé « … (copie) ».
+- **La suppression demande toujours confirmation**, partout — lignes des listes, étapes dans l'éditeur de groupe et éléments de démarrage du système.
 - Double-cliquer sur `Clockwork.exe` ouvre seulement les paramètres — cela **n'**exécute **pas** immédiatement la liste de démarrage ; pour cela, utilisez **Réexécuter la liste de démarrage** de la barre d'état système.
 - **Lancez-le normalement** (double-clic / barre d'état système / tâche planifiée). Certains lanceurs en bac à sable / à privilèges réduits bloquent les appels de bas niveau, de sorte que envoyer-des-touches / actions de fenêtre / activer-si-déjà-en-cours / envoyer-du-texte-à-un-processus / volume peuvent ne pas fonctionner (vous recevrez un avertissement clair ; le simple « lancer un programme » n'est pas affecté).
 - Votre configuration est `clockwork.settings.json` (en local uniquement). Supprimez-la pour revenir à l'exemple. L'état des rappels est `clockwork.state.json` (également local ; suppression sans risque).
@@ -109,7 +115,7 @@ C#/.NET WPF ; source dans `app/` (nécessite le SDK .NET 10). Couches : `Core/` 
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Sortie : `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / releases** (GitHub Actions) : les builds de push / PR compilent et exécutent tous les tests sur un runner Windows ; pousser un tag `v*` (par ex. `v2.0.0`) compile, estampille la version du fichier à partir du tag, crée une Release GitHub et y attache `Clockwork.exe`.
+- **CI / releases** (GitHub Actions) : les builds de push / PR compilent et exécutent tous les tests sur un runner Windows ; pousser un tag `v*` (par ex. `v2.0.0`) compile, estampille la version du fichier à partir du tag, crée une Release GitHub et y attache `Clockwork-<tag>.zip` (contenant `Clockwork.exe`).
 
 ## À propos du Plan Open Source 365
 

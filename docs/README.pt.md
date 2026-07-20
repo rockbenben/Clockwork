@@ -29,6 +29,8 @@ Uma pequena ferramenta de bandeja do Windows que cuida das partes rotineiras de 
 
 Sem instalação, totalmente portátil em uma única pasta, tudo configurável com o mouse; interface escura, com suporte a alta resolução (high-DPI).
 
+> 📖 **Guia completo:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+
 ## Requisitos
 
 - Windows 10 / 11 (x64)
@@ -36,7 +38,7 @@ Sem instalação, totalmente portátil em uma única pasta, tudo configurável c
 
 ## Como começar
 
-1. Baixe o `Clockwork.exe` mais recente em [Releases](https://github.com/rockbenben/Clockwork/releases) e coloque-o em qualquer pasta (portátil — ponha onde quiser). Para compilá-lo você mesmo, veja **Para desenvolvedores** abaixo.
+1. Baixe o `Clockwork-<versão>.zip` mais recente em [Releases](https://github.com/rockbenben/Clockwork/releases) e descompacte-o — dentro há um único `Clockwork.exe`; coloque-o em qualquer pasta (portátil — ponha onde quiser). Para compilá-lo você mesmo, veja **Para desenvolvedores** abaixo.
 2. Dê um duplo clique em **`Clockwork.exe`** para abrir a janela de configurações.
    - No **primeiro uso** ele carrega uma **configuração de exemplo** (demonstrando inicialização / lembretes / grupos de ações) para você adaptar à sua realidade. Suas configurações ficam em `clockwork.settings.json` ao lado do exe — só locais, nunca versionadas.
 3. Para executá-lo a cada inicialização: na aba **Configurações**, clique em **Iniciar ao entrar** (registra uma tarefa agendada com direitos de administrador, evitando uma enxurrada de avisos do UAC na inicialização).
@@ -76,7 +78,7 @@ Precisa se concentrar ou entrar em uma reunião? A bandeja oferece **Pausar lemb
 
 ### Itens de inicialização do sistema
 
-Lista **tudo que inicia automaticamente** (chaves Run do registro, pastas de Inicialização, tarefas agendadas). Desmarque **Ativar** para desligar um item — **desativado, não excluído; marque de novo para restaurar** (efeito imediato). Itens marcados como **precisa de administrador** pedem para reiniciar com elevação. Itens de sistema / política / de uso único (Run de Política de Grupo, RunOnce, Winlogon, Active Setup) não podem ser alternados normalmente e ficam **ocultos por padrão** — marque **Mostrar itens de sistema / somente leitura** para vê-los (esmaecidos). **Assumir na lista de inicialização** entrega um item ao Clockwork (apenas chaves Run do registro e itens da pasta de Inicialização). Um **filtro** no topo busca por nome / comando; passe o mouse sobre um comando truncado para lê-lo por inteiro.
+Lista **tudo que inicia automaticamente** (chaves Run do registro, pastas de Inicialização, tarefas agendadas). Desmarque **Ativar** para desligar um item — **desativado, não excluído; marque de novo para restaurar** (efeito imediato). Itens marcados como **precisa de administrador** pedem para reiniciar com elevação. Itens de sistema / política / de uso único (Run de Política de Grupo, RunOnce, Winlogon, Active Setup) não podem ser mexidos e ficam **ocultos por padrão** — marque **Mostrar itens de sistema / somente leitura** para vê-los (esmaecidos). Clique com o botão direito em uma linha para **Assumir na lista de inicialização** (entrega o item ao Clockwork; apenas chaves Run do registro e itens da pasta de Inicialização) ou **Excluir do sistema** (remove a entrada de vez — pede confirmação antes e não pode ser desfeito; desmarcar é a opção reversível). Um **filtro** no topo busca por nome / comando; passe o mouse sobre um comando truncado para lê-lo por inteiro.
 
 ### Grupos de ações
 
@@ -88,9 +90,13 @@ Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir d
 
 **Atraso de inicialização** (0–600 s, apenas no boot), **iniciar minimizado na bandeja**, **tecla de pânico** (clique na caixa e pressione seu atalho; Esc cancela, Delete limpa; padrão `Ctrl+Alt+Q`) e **idioma da interface** (chinês simplificado, inglês, 日本語 e mais 15 — 18 no total; a troca reinicia o app para aplicar).
 
+**Exportar configuração / Importar configuração** — leve toda a sua configuração para outro PC ou mantenha um backup. Exportar grava uma cópia do `clockwork.settings.json` onde você quiser; importar substitui **tudo** (lista de inicialização / lembretes / grupos de ações / configurações), então pede confirmação antes, faz backup da configuração atual em `clockwork.settings.json.bak` e reinicia o app para aplicar.
+
 ## Dicas
 
 - **Dê um duplo clique em uma linha para editá-la.** Ao preencher caminhos / processos / atalhos / datas você não precisa digitar manualmente: **Procurar…**, **Escolher…** (seletor de processos com busca), **Capturar** e **Escolher data**.
+- **Duplicar** (abas Lembretes / Grupos de ações) clona a linha selecionada logo abaixo dela — mais rápido que refazer uma quase idêntica; um grupo duplicado recebe o nome "… (cópia)".
+- **Excluir sempre pede confirmação**, em todo lugar — linhas das listas, etapas dentro do editor de grupos e itens de inicialização do sistema.
 - Dar um duplo clique em `Clockwork.exe` só abre as configurações — **não** executa imediatamente a lista de inicialização; para isso use **Reexecutar lista de inicialização** na bandeja.
 - **Inicie-o normalmente** (duplo clique / bandeja / tarefa agendada). Alguns lançadores de sandbox / com privilégios reduzidos bloqueiam chamadas de baixo nível, então envio de teclas / ações de janela / ativar-se-já-estiver-aberto / enviar-texto-a-processo / volume podem não funcionar (você receberá um aviso claro; o simples "executar programa" não é afetado).
 - Sua configuração é o `clockwork.settings.json` (só local). Exclua-o para redefinir ao exemplo. O estado dos lembretes é o `clockwork.state.json` (também local; seguro para excluir).
@@ -109,7 +115,7 @@ C#/.NET WPF; código-fonte em `app/` (requer o SDK do .NET 10). Camadas: `Core/`
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Saída: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / lançamentos** (GitHub Actions): pushes / PRs compilam e executam todos os testes em um runner Windows; enviar uma tag `v*` (por exemplo, `v2.0.0`) compila, carimba a versão do arquivo a partir da tag, cria um GitHub Release e anexa o `Clockwork.exe`.
+- **CI / lançamentos** (GitHub Actions): pushes / PRs compilam e executam todos os testes em um runner Windows; enviar uma tag `v*` (por exemplo, `v2.0.0`) compila, carimba a versão do arquivo a partir da tag, cria um GitHub Release e anexa o `Clockwork-<tag>.zip` (contendo o `Clockwork.exe`).
 
 ## Sobre o Plano Open-Source 365
 

@@ -29,6 +29,8 @@ Una pequeña herramienta de bandeja para Windows que se encarga de las partes ru
 
 Sin instalación, totalmente portátil en una sola carpeta, todo configurable con el ratón; interfaz oscura, compatible con alta resolución (high-DPI).
 
+> 📖 **Guía completa:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+
 ## Requisitos
 
 - Windows 10 / 11 (x64)
@@ -36,7 +38,7 @@ Sin instalación, totalmente portátil en una sola carpeta, todo configurable co
 
 ## Primeros pasos
 
-1. Descarga el último `Clockwork.exe` desde [Releases](https://github.com/rockbenben/Clockwork/releases) y colócalo en cualquier carpeta (portátil — ponlo donde quieras). Para compilarlo tú mismo, consulta **Para desarrolladores** más abajo.
+1. Descarga el último `Clockwork-<versión>.zip` desde [Releases](https://github.com/rockbenben/Clockwork/releases) y descomprímelo — dentro hay un único `Clockwork.exe`; colócalo en cualquier carpeta (portátil — ponlo donde quieras). Para compilarlo tú mismo, consulta **Para desarrolladores** más abajo.
 2. Haz doble clic en **`Clockwork.exe`** para abrir la ventana de configuración.
    - En la **primera ejecución** carga una **configuración de ejemplo** (que muestra inicio / recordatorios / grupos de acciones) para que la adaptes a la tuya. Tu configuración vive en `clockwork.settings.json` junto al exe — solo local, nunca se sube al repositorio.
 3. Para ejecutarlo en cada arranque: en la pestaña **Ajustes**, haz clic en **Iniciar al arrancar sesión** (registra una tarea programada con permisos de administrador, así no hay una avalancha de avisos de UAC al arrancar).
@@ -76,7 +78,7 @@ Avanzado: **cierre automático**, **insistencia repetida** (vuelve a saltar cada
 
 ### Elementos de inicio del sistema
 
-Lista **todo lo que se inicia automáticamente** (claves Run del registro, carpetas de Inicio, tareas programadas). Desmarca **Habilitar** para desactivar un elemento — **desactivado, no eliminado; vuelve a marcarlo para restaurarlo** (surte efecto de inmediato). Los elementos marcados como **requiere administrador** piden relanzar con permisos elevados. Los elementos de sistema / directiva / de una sola vez (Run de directiva de grupo, RunOnce, Winlogon, Active Setup) no se pueden alternar de forma normal y están **ocultos por defecto** — marca **Mostrar elementos de sistema / de solo lectura** para verlos (atenuados). **Asumir el control en la lista de inicio** entrega un elemento a Clockwork (solo claves Run del registro y elementos de la carpeta de Inicio). Un **filtro** en la parte superior busca por nombre / comando; pasa el cursor sobre un comando truncado para leerlo completo.
+Lista **todo lo que se inicia automáticamente** (claves Run del registro, carpetas de Inicio, tareas programadas). Desmarca **Habilitar** para desactivar un elemento — **desactivado, no eliminado; vuelve a marcarlo para restaurarlo** (surte efecto de inmediato). Los elementos marcados como **requiere administrador** piden relanzar con permisos elevados. Los elementos de sistema / directiva / de una sola vez (Run de directiva de grupo, RunOnce, Winlogon, Active Setup) no se pueden tocar y están **ocultos por defecto** — marca **Mostrar elementos de sistema / de solo lectura** para verlos (atenuados). Haz clic derecho en una fila para **Asumir en la lista de inicio** (entrega el elemento a Clockwork; solo claves Run del registro y elementos de la carpeta de Inicio) o **Eliminar del sistema** (borra la entrada para siempre — pide confirmación primero y no se puede deshacer; desmarcarla es la opción reversible). Un **filtro** en la parte superior busca por nombre / comando; pasa el cursor sobre un comando truncado para leerlo completo.
 
 ### Grupos de acciones
 
@@ -88,9 +90,13 @@ Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de
 
 **Retardo de inicio** (0–600 s, solo en el arranque), **iniciar minimizado en la bandeja**, **atajo de pánico** (haz clic en el cuadro y pulsa tu atajo; Esc cancela, Supr lo borra; por defecto `Ctrl+Alt+Q`) e **idioma de la interfaz** (chino simplificado, inglés, 日本語 y 15 más — 18 en total; cambiarlo reinicia la aplicación para aplicarlo).
 
+**Exportar configuración / Importar configuración** — lleva toda tu configuración a otro PC o guarda una copia de seguridad. Exportar escribe una copia de `clockwork.settings.json` donde quieras; importar reemplaza **todo** (lista de inicio / recordatorios / grupos de acciones / ajustes), así que pide confirmación primero, hace una copia de seguridad de la configuración actual en `clockwork.settings.json.bak` y reinicia la aplicación para aplicarla.
+
 ## Consejos
 
 - **Haz doble clic en una fila para editarla**. Al rellenar rutas / procesos / atajos / fechas no tienes que escribir a mano: **Examinar…**, **Elegir…** (selector de procesos con búsqueda), **Capturar** y **Elegir fecha**.
+- **Duplicar** (pestañas Recordatorios / Grupos de acciones) clona la fila seleccionada justo debajo de ella — más rápido que rehacer una casi idéntica; un grupo duplicado se llama «… (copia)».
+- **Eliminar siempre pide confirmación**, en todas partes — filas de las listas, pasos dentro del editor de grupos y elementos de inicio del sistema.
 - Hacer doble clic en `Clockwork.exe` solo abre los ajustes — **no** ejecuta de inmediato la lista de inicio; para eso usa **Re-ejecutar lista de inicio** de la bandeja.
 - **Láncalo con normalidad** (doble clic / bandeja / tarea programada). Algunos lanzadores de sandbox / privilegios reducidos bloquean las llamadas de bajo nivel, por lo que enviar-teclas / acciones de ventana / activar-si-ya-se-está-ejecutando / enviar-texto-a-proceso / volumen podrían no funcionar (recibirás un aviso claro; el simple «ejecutar programa» no se ve afectado).
 - Tu configuración es `clockwork.settings.json` (solo local). Bórrala para restablecer al ejemplo. El estado de los recordatorios es `clockwork.state.json` (también local; se puede borrar sin problema).
@@ -109,7 +115,7 @@ C#/.NET WPF; código fuente en `app/` (necesita el SDK de .NET 10). Capas: `Core
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Salida: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / releases** (GitHub Actions): las compilaciones de push / PR construyen y ejecutan todas las pruebas en un runner de Windows; al subir una etiqueta `v*` (p. ej. `v2.0.0`) se compila, se sella la versión del archivo a partir de la etiqueta, se crea un Release de GitHub y se adjunta `Clockwork.exe`.
+- **CI / releases** (GitHub Actions): las compilaciones de push / PR construyen y ejecutan todas las pruebas en un runner de Windows; al subir una etiqueta `v*` (p. ej. `v2.0.0`) se compila, se sella la versión del archivo a partir de la etiqueta, se crea un Release de GitHub y se adjunta `Clockwork-<tag>.zip` (que contiene `Clockwork.exe`).
 
 ## Acerca del Plan de Código Abierto 365
 

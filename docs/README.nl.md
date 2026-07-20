@@ -29,6 +29,8 @@ Een kleine Windows-systeemvaktool die de routineklusjes afhandelt waarmee je je 
 
 Geen installatie, volledig draagbaar in één map, alles met de muis in te stellen; donkere interface, geschikt voor hoge resolutie (high-DPI).
 
+> 📖 **Volledige handleiding:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+
 ## Vereisten
 
 - Windows 10 / 11 (x64)
@@ -36,7 +38,7 @@ Geen installatie, volledig draagbaar in één map, alles met de muis in te stell
 
 ## Aan de slag
 
-1. Download de nieuwste `Clockwork.exe` van [Releases](https://github.com/rockbenben/Clockwork/releases) en zet hem in een willekeurige map (draagbaar — zet hem waar je wilt). Om hem zelf te bouwen, zie **Voor ontwikkelaars** hieronder.
+1. Download de nieuwste `Clockwork-<versie>.zip` van [Releases](https://github.com/rockbenben/Clockwork/releases) en pak hem uit — daarin zit één `Clockwork.exe`; zet hem in een willekeurige map (draagbaar — zet hem waar je wilt). Om hem zelf te bouwen, zie **Voor ontwikkelaars** hieronder.
 2. Dubbelklik op **`Clockwork.exe`** om het instellingenvenster te openen.
    - Bij de **eerste keer starten** laadt hij een **voorbeeldconfiguratie** (die opstart / herinneringen / actiegroepen demonstreert) zodat je die naar je eigen situatie kunt aanpassen. Je instellingen staan in `clockwork.settings.json` naast de exe — alleen lokaal, nooit vastgelegd in de repository.
 3. Om hem bij elke keer opstarten uit te voeren: klik op het tabblad **Instellingen** op **Starten bij aanmelden** (registreert een geplande taak met beheerdersrechten, dus geen stortvloed aan UAC-meldingen bij het opstarten).
@@ -76,7 +78,7 @@ Moet je je concentreren of een vergadering bijwonen? Het systeemvak biedt **Heri
 
 ### Opstartitems van het systeem
 
-Toont **alles dat automatisch opstart** (Run-sleutels in het register, Opstartmappen, geplande taken). Vink **Inschakelen** uit om een item uit te schakelen — **uitgeschakeld, niet verwijderd; opnieuw aanvinken om te herstellen** (heeft direct effect). Items die als **vereist beheerder** zijn gemarkeerd, vragen om verhoogd opnieuw te starten. Systeem- / beleids- / eenmalige items (Groepsbeleid-Run, RunOnce, Winlogon, Active Setup) kunnen niet normaal worden omgeschakeld en zijn **standaard verborgen** — vink **Systeem- / alleen-lezen-items weergeven** aan om ze te bekijken (grijs weergegeven). **Overnemen in opstartlijst** draagt een item over aan Clockwork (alleen Run-sleutels in het register en items in de Opstartmap). Een **filter** bovenaan zoekt op naam / opdracht; beweeg de muis over een afgekapte opdracht om hem volledig te lezen.
+Toont **alles dat automatisch opstart** (Run-sleutels in het register, Opstartmappen, geplande taken). Vink **Inschakelen** uit om een item uit te schakelen — **uitgeschakeld, niet verwijderd; opnieuw aanvinken om te herstellen** (heeft direct effect). Items die als **vereist beheerder** zijn gemarkeerd, vragen om verhoogd opnieuw te starten. Systeem- / beleids- / eenmalige items (Groepsbeleid-Run, RunOnce, Winlogon, Active Setup) kun je niet aanraken en zijn **standaard verborgen** — vink **Systeem- / alleen-lezen-items weergeven** aan om ze te bekijken (grijs weergegeven). Klik met de rechtermuisknop op een rij voor **Overnemen naar startlijst** (draagt het item over aan Clockwork; alleen Run-sleutels in het register en items in de Opstartmap) of **Uit het systeem verwijderen** (verwijdert de vermelding definitief — vraagt eerst om bevestiging en kan niet ongedaan worden gemaakt; uitvinken is de omkeerbare optie). Een **filter** bovenaan zoekt op naam / opdracht; beweeg de muis over een afgekapte opdracht om hem volledig te lezen.
 
 ### Actiegroepen
 
@@ -88,9 +90,13 @@ Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis
 
 **Opstartvertraging** (0–600 s, alleen bij opstarten), **geminimaliseerd naar het systeemvak starten**, **paniek-sneltoets** (klik op het vak en druk je sneltoets in; Esc annuleert, Delete wist; standaard `Ctrl+Alt+Q`) en **UI-taal** (Vereenvoudigd Chinees, Engels, 日本語 en 15 meer — 18 in totaal; wisselen herstart de app om het toe te passen).
 
+**Configuratie exporteren / Configuratie importeren** — verhuis je hele opzet naar een andere pc of houd een back-up. Exporteren schrijft een kopie van `clockwork.settings.json` waar je maar wilt; importeren vervangt **alles** (opstartlijst / herinneringen / actiegroepen / instellingen), dus het vraagt eerst om bevestiging, maakt van de huidige configuratie een back-up in `clockwork.settings.json.bak` en herstart de app om het toe te passen.
+
 ## Tips
 
 - **Dubbelklik op een rij om die te bewerken**. Bij het invullen van paden / processen / sneltoetsen / datums hoef je niet met de hand te typen: **Bladeren…**, **Kiezen…** (doorzoekbare proceskiezer), **Vastleggen** en **Datum kiezen**.
+- **Dupliceren** (tabbladen Herinneringen / Actiegroepen) kloont de geselecteerde rij er direct onder — sneller dan een bijna identieke opnieuw opbouwen; een gedupliceerde groep krijgt de naam «… (kopie)».
+- **Verwijderen vraagt altijd eerst om bevestiging**, overal — rijen in lijsten, stappen in de groepseditor en opstartitems van het systeem.
 - Dubbelklikken op `Clockwork.exe` opent alleen de instellingen — het voert **niet** meteen de opstartlijst uit; gebruik daarvoor **Opstartlijst opnieuw uitvoeren** in het systeemvak.
 - **Start hem op de normale manier** (dubbelklik / systeemvak / geplande taak). Sommige sandbox- / verlaagde-rechten-lanceerders blokkeren aanroepen op laag niveau, dus toetsen-versturen / vensteracties / activeren-indien-actief / tekst-naar-proces-versturen / volume werken mogelijk niet (je krijgt een duidelijke melding; het gewone «programma starten» wordt niet beïnvloed).
 - Je configuratie is `clockwork.settings.json` (alleen lokaal). Verwijder hem om terug te zetten naar het voorbeeld. De herinneringsstatus is `clockwork.state.json` (ook lokaal; veilig te verwijderen).
@@ -109,7 +115,7 @@ C#/.NET WPF; broncode in `app/` (vereist de .NET 10-SDK). Lagen: `Core/` pure lo
   dotnet publish app/Clockwork.csproj -c Release -r win-x64
   ```
   Uitvoer: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / releases** (GitHub Actions): push- / PR-builds compileren en draaien alle tests op een Windows-runner; het pushen van een `v*`-tag (bijv. `v2.0.0`) bouwt, stempelt de bestandsversie uit de tag, maakt een GitHub-Release en voegt `Clockwork.exe` toe.
+- **CI / releases** (GitHub Actions): push- / PR-builds compileren en draaien alle tests op een Windows-runner; het pushen van een `v*`-tag (bijv. `v2.0.0`) bouwt, stempelt de bestandsversie uit de tag, maakt een GitHub-Release en voegt `Clockwork-<tag>.zip` toe (met daarin `Clockwork.exe`).
 
 ## Over het 365 Open-Source Plan
 
