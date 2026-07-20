@@ -77,12 +77,36 @@ public class KeyComboTests
 
     [Theory]
     [InlineData("", true)]
+    [InlineData(null, true)]
+    [InlineData("hello", true)]
     [InlineData("{ENTER}", true)]
-    [InlineData("{TAB}{ENTER}", true)]      // 合法序列：成对
-    [InlineData("abc", true)]               // 无花括号：视为平衡
-    [InlineData("{ENTE", false)]            // 缺右括号：运行时必抛
-    [InlineData("ENTER}", false)]           // 多右括号
-    [InlineData("{a}}", false)]
-    public void BracesBalanced_only_flags_unbalanced(string s, bool expected)
-        => Assert.Equal(expected, KeyCombo.BracesBalanced(s));
+    [InlineData("{enter}", true)]        // SendKeys 关键字大小写不敏感
+    [InlineData("{ESCAPE}", true)]       // ESC/ESCAPE 双写法都在 WinForms 关键字表里，漏了会拒存能跑的步骤
+    [InlineData("{CLEAR}", true)]
+    [InlineData("^a%{F4}", true)]        // 修饰前缀 + 功能键
+    [InlineData("{LEFT 4}", true)]       // 重复次数：恰好一个空白 + 纯数字 + 紧跟 }
+    [InlineData("{} 5}", true)]          // 「{} n}」特例：发 n 个字面 }（真实解析器专门分支支持）
+    [InlineData("{{}", true)]            // 字面 {
+    [InlineData("{}}", true)]            // 字面 }
+    [InlineData("{{}{}}", true)]         // ToSendKeysLiteral("{}") 的输出必须被判合法（校验与转义闭环）
+    [InlineData("{%}", true)]            // 单字符元字符组
+    [InlineData("+(abc)", true)]         // 圆括号分组
+    [InlineData("(a)(b)", true)]         // 顺序多组合法
+    [InlineData("+(a(b))", true)]        // 嵌套 ≤3 层合法（真实解析器 cGrp>3 才抛）
+    [InlineData("^(a(b(c)))", true)]     // 恰好 3 层
+    [InlineData("{中}", true)]           // 单字符（非 ASCII）组
+    [InlineData("{ENTE", false)]         // 花括号未闭合
+    [InlineData("{ENTE}", false)]        // 未知键名
+    [InlineData("{}", false)]            // 空组
+    [InlineData("abc}", false)]          // 组外孤立 }
+    [InlineData("(abc", false)]          // 圆括号未闭合
+    [InlineData("abc)", false)]          // 无起括号的 )
+    [InlineData("(a(b(c(d))))", false)]  // 第 4 层嵌套：真实解析器抛 SendKeysNestingError
+    [InlineData("{LEFT x}", false)]      // 次数不是数字
+    [InlineData("{LEFT  4}", false)]     // 双空格：真实解析器只跳一个空白、随后必须是数字（InvalidSendKeysRepeat）
+    [InlineData("{LEFT 4 }", false)]     // 数字后必须紧跟 }（尾随空白必抛）
+    [InlineData("{LEFT -4}", false)]     // 符号不是数字
+    [InlineData("{F17}", false)]         // SendKeys 只到 F16
+    public void IsValidSendKeys_accepts_legal_rejects_guaranteed_throws(string? s, bool ok)
+        => Assert.Equal(ok, KeyCombo.IsValidSendKeys(s));
 }

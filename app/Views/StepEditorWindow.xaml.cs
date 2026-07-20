@@ -97,11 +97,13 @@ public partial class StepEditorWindow : Window
         int delay = ParseOr(DelayBox.Text, 0);
         var days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7);
         ParseBeforeTime(BeforeTimeBox.Text, out int beforeHour, out int beforeMinute);
-
-        // 发送键可自由打字，仅挡「花括号不成对」这一运行时必抛的明显笔误（合法序列/字面/组合都放行）。
-        if (kind == "window" && ComboVal(WinActionCombo) == "sendkey" && !KeyCombo.BracesBalanced(SendKeyBox.Text))
+        // 发送键编辑期校验：IsValidSendKeys 按 SendKeys 真实语法精确解析，只拦 SendWait 必抛的串
+        //（未闭合/空花括号组、未知键名、孤立 } 等），合法转义（{{} {}}）不误伤——
+        // 旧的「花括号是否成对」廉价校验因误伤被移除，没有编辑期兜底则畸形串要到每次开机运行时才暴露。
+        if (kind == "window" && ComboVal(WinActionCombo) == "sendkey" && !KeyCombo.IsValidSendKeys(SendKeyBox.Text))
         {
-            BrandDialog.Warn(this, "Clockwork", Strings.Get("Val_SendKey")); return;
+            BrandDialog.Warn(this, "Clockwork", Strings.Get("Val_SendKeys"));
+            return;
         }
 
         var r = new LaunchStep
