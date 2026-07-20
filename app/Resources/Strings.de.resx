@@ -257,6 +257,13 @@ Protokoll: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klicken, dann die Tastenkombination drücken. Esc bricht ab, Entf löscht sie. „Stoppen“ im Infobereich funktioniert immer.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Tastenkombination drücken…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>In Startliste übernehmen</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Aus dem System löschen</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>„{0}“ wirklich löschen?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Autostart-Eintrag „{0}“ endgültig aus dem System löschen? Dies kann nicht rückgängig gemacht werden (zum bloßen Deaktivieren einfach das Häkchen entfernen).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Der Autostart-Eintrag „{0}“ wurde in die Startliste übernommen, und ein Schritt verweist noch auf seine Verknüpfungsdatei. Beim Löschen aus dem System wird auch die Verknüpfung entfernt – dieser Schritt kann ihn dann nicht mehr starten. Trotzdem löschen?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Löschen von „{0}“ fehlgeschlagen: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>Das Exportziel darf nicht die Konfigurationsdatei selbst sein – bitte anderen Namen oder Ort wählen.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>Der Sendetasten-Text ist keine gültige Tastenfolge: Prüfen Sie ungeschlossene geschweifte Klammern und unbekannte Tastennamen (z. B. {ENTER}; ein literales { wird als {{}, ein literales } als {}} geschrieben).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Verpasste nachholen (nach Ruhezustand/Aus)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} Min.</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Tastenkürzel "{0}" hat keine Haupttaste; nicht gesendet</value></data>
@@ -316,5 +323,15 @@ Protokoll: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Tastenkombination {1} für Aktionsgruppe „{0}“ konnte nicht registriert werden: möglicherweise bereits belegt</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tastenkombination {0} wird bereits von „{1}“ verwendet; bitte eine andere wählen</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} ist eine systemreservierte Kombination (ihre Registrierung würde eine Systemtaste kapern) und kann nicht als Tastenkombination verwendet werden</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Ungültige Sendetaste: unpaarige geschweifte Klammern (z. B. fehlt bei „{ENTER“ die schließende Klammer)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Duplizieren</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Konfiguration exportieren</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Konfiguration importieren</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Konfiguration exportiert nach: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Konfiguration importiert. Wird zum Übernehmen neu gestartet.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Import fehlgeschlagen: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>Der Import überschreibt alle aktuellen Einstellungen (Startliste / Erinnerungen / Aktionsgruppen / Einstellungen). Fortfahren?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Clockwork-Konfiguration|*.json|Alle Dateien|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Export fehlgeschlagen: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (Kopie)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Automatischer Neustart nicht möglich. Bitte öffnen Sie Clockwork manuell erneut. ({0})</value></data>
 </root>

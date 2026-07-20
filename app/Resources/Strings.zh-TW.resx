@@ -43,6 +43,7 @@
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ 執行這一步</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ 執行整組</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ 預覽這條</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>複製</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>開機延遲(秒)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>啟動時最小化到系統匣</value></data>
@@ -257,6 +258,13 @@
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>點擊後按下快捷鍵；Esc 取消、Del 清空停用。工作列右鍵「停止」始終可用。</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>按下快捷鍵…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>接管到啟動清單</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>從系統中刪除</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>確定要刪除「{0}」嗎？</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>確定要從系統中徹底刪除啟動項「{0}」嗎？此操作無法復原（若只想阻止它開機啟動，取消勾選即可）。</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>啟動項「{0}」已被接管到啟動清單，仍有步驟指向它的捷徑檔案。從系統中刪除會連同捷徑一併移除，該步驟將無法再啟動它。仍要刪除嗎？</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」刪除失敗：{1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>匯出目標不能是設定檔本身，請換一個檔名或位置。</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>發送按鍵內容不是有效的按鍵序列：請檢查花括號是否閉合、鍵名是否正確（如 {ENTER}；字面 { 寫作 {{}、字面 } 寫作 {}}）。</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>錯過必補（休眠/關機也補彈）</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} 分鐘</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>熱鍵「{0}」缺少主鍵，未發送</value></data>
@@ -316,5 +324,15 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>動作組「{0}」的快速鍵 {1} 註冊失敗：可能已被其他程式或快速鍵佔用</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>快速鍵 {0} 已被「{1}」使用，請換一個組合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系統保留組合（註冊會劫走系統按鍵），不能用作快速鍵</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>傳送鍵格式有誤：大括號不成對（如「{ENTER」缺右括號）</value></data>
+
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>匯出設定</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>匯入設定</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>設定已匯出到：{0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>設定已匯入，即將重新啟動生效。</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>匯入失敗：{0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>匯入將覆蓋目前所有設定（啟動清單 / 提醒 / 動作組 / 設定）。確定繼續？</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Clockwork 設定|*.json|所有檔案|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>匯出失敗：{0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value>（副本）</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>無法自動重啟，請手動重新開啟 Clockwork。（{0}）</value></data>
 </root>

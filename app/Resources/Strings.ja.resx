@@ -43,6 +43,7 @@
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ このステップを実行</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ グループ実行</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ プレビュー</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>複製</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>起動待機(秒)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>起動時にトレイへ最小化</value></data>
@@ -257,6 +258,13 @@
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>クリックしてショートカットを押します。Esc で取消、Del で解除。トレイの「停止」はいつでも使えます。</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>ショートカットを押してください…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>起動リストに取り込む</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>システムから削除</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>「{0}」を削除しますか？</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>スタートアップ項目「{0}」をシステムから完全に削除しますか？この操作は元に戻せません（起動時の実行を止めるだけならチェックを外してください）。</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>スタートアップ項目「{0}」は起動リストに取り込まれており、そのショートカットファイルを指すステップが残っています。システムから削除するとショートカットも消え、そのステップは起動できなくなります。それでも削除しますか？</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」の削除に失敗：{1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>エクスポート先に設定ファイル自身は指定できません。別の名前または場所を選んでください。</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>送信キーの内容が有効なキー列ではありません。波括弧の閉じ忘れやキー名の誤りを確認してください（例：{ENTER}。字面の { は {{}、} は {}} と書きます）。</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>逃したら後で通知（スリープ/電源オフ後も）</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} 分</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>ホットキー「{0}」に主キーがありません。送信しませんでした</value></data>
@@ -316,5 +324,15 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>アクショングループ「{0}」のホットキー {1} を登録できませんでした：既に使用されている可能性があります</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ホットキー {0} は「{1}」で既に使用されています。別の組み合わせを選んでください</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} はシステム予約の組み合わせです（登録するとシステムキーを奪ってしまうため）ホットキーには使えません</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>送信キーの形式が不正です：波かっこが対になっていません（例:「{ENTER」は閉じかっこがありません）</value></data>
+
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>設定エクスポート</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>設定インポート</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>設定をエクスポートしました：{0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>設定をインポートしました。再起動して反映します。</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>インポート失敗：{0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>インポートすると現在のすべての設定（起動リスト / リマインダー / アクショングループ / 設定）が上書きされます。続行しますか？</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Clockwork 設定|*.json|すべてのファイル|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>エクスポートに失敗しました：{0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value>（コピー）</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>自動的に再起動できませんでした。Clockwork を手動で開き直してください。（{0}）</value></data>
 </root>

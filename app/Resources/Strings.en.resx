@@ -45,6 +45,7 @@
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Run This Step</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Run Group</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ Preview</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Duplicate</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>Startup delay (s)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Start minimized to tray</value></data>
@@ -259,6 +260,13 @@ Log: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Click, then press the shortcut. Esc cancels, Del clears it. "Stop" in the tray menu always works.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Press a shortcut…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Take over into launch list</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Delete from system</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Delete "{0}"?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Permanently delete startup item "{0}" from the system? This cannot be undone (to just stop it from launching at startup, uncheck it instead).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Startup item "{0}" has been taken over into the launch list, and a step still points to its shortcut file. Deleting it from the system also removes the shortcut, so that step will no longer be able to launch it. Delete anyway?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>"{0}" delete failed: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>The export target cannot be the config file itself — choose a different name or location.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>The send-keys text is not a valid key sequence: check for unclosed braces and unknown key names (e.g. {ENTER}; write a literal { as {{} and a literal } as {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Catch up if missed (after sleep/off)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Hotkey "{0}" has no main key; not sent</value></data>
@@ -318,5 +326,15 @@ Log: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Failed to register hotkey {1} for action group “{0}”: it may already be in use</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Invalid send-key: unbalanced braces (e.g. “{ENTER” is missing its closing brace)</value></data>
+
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Export Config</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Import Config</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Config exported to: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Config imported. Restarting to apply.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Import failed: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>Importing will overwrite ALL current config (startup list / reminders / action groups / settings). Continue?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Clockwork config|*.json|All files|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Export failed: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (copy)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Couldn't restart automatically. Please reopen Clockwork manually. ({0})</value></data>
 </root>

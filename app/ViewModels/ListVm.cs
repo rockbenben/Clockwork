@@ -87,5 +87,32 @@ public abstract class ListVm<TModel, TRow> : ListVmBase where TModel : class whe
     // 替换前的 id 处理钩子：Reminder 换新 id（重置运行态）、Group 保留旧 id（被引用）、Launch 无 id。
     protected virtual void OnReplacing(TModel newModel, TModel oldModel) { }
 
+    // 复制选中项：深克隆插到选中之后。与 Reminder/Group 各写一份的旧写法统一到此（同 OnReplacing 的钩子模式）。
+    public void DuplicateSelected()
+    {
+        var sel = Selected;
+        if (sel == null) return;
+        var clone = ConfigStore.DeepClone(sel);
+        OnDuplicating(clone);
+        Add(clone);
+    }
+
+    // 克隆后的调整钩子：Reminder/Group 均须换新 id，Group 另加名称后缀并清热键。
+    protected virtual void OnDuplicating(TModel clone) { }
+
+    // 上/下移：三个列表页共用。
+    public void MoveUp() => Move(-1);
+    public void MoveDown() => Move(1);
+
+    private void Move(int dir)
+    {
+        int i = SelectedIndex, j = i + dir;
+        if (i < 0 || i >= Rows.Count || j < 0 || j >= Rows.Count) return;
+        (Models[i], Models[j]) = (Models[j], Models[i]);
+        Rows.Move(i, j);
+        SelectedIndex = j;
+        Save();
+    }
+
     protected TModel? Selected => SelectedIndex >= 0 && SelectedIndex < Rows.Count ? Models[SelectedIndex] : null;
 }

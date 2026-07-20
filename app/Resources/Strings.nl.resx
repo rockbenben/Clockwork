@@ -257,6 +257,13 @@ Log: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klik en druk op de sneltoets. Esc annuleert, Del wist het. «Stoppen» in het systeemvak werkt altijd.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Druk op een sneltoets…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Overnemen naar startlijst</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Uit het systeem verwijderen</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» verwijderen?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Opstartitem «{0}» definitief uit het systeem verwijderen? Dit kan niet ongedaan worden gemaakt (om alleen het opstarten te blokkeren, vink het uit).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Opstartitem «{0}» is overgenomen naar de startlijst en een stap verwijst nog naar het snelkoppelingsbestand. Verwijderen uit het systeem verwijdert ook de snelkoppeling, waardoor die stap het niet meer kan starten. Toch verwijderen?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Verwijderen van «{0}» mislukt: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>Het exportdoel kan niet het configuratiebestand zelf zijn — kies een andere naam of locatie.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>De te verzenden toetsen vormen geen geldige toetsreeks: controleer niet-gesloten accolades en onbekende toetsnamen (bv. {ENTER}; een letterlijke { schrijf je als {{} en een letterlijke } als {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Inhalen indien gemist (na slaap/uit)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Sneltoets "{0}" heeft geen hoofdtoets; niet verzonden</value></data>
@@ -316,5 +323,15 @@ Log: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Sneltoets {1} voor actiegroep “{0}” kon niet worden geregistreerd: mogelijk al in gebruik</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Sneltoets {0} is al in gebruik door “{1}”; kies een andere combinatie</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is een door het systeem gereserveerde combinatie (registreren zou een systeemtoets kapen) en kan niet als sneltoets worden gebruikt</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Ongeldige verzendtoets: niet-gebalanceerde accolades (bijv. “{ENTER” mist de sluitaccolade)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Dupliceren</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Configuratie exporteren</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Configuratie importeren</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Configuratie geëxporteerd naar: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Configuratie geïmporteerd. Opnieuw opstarten om toe te passen.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Importeren mislukt: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>Importeren overschrijft alle huidige configuratie (opstartlijst / herinneringen / actiegroepen / instellingen). Doorgaan?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Clockwork-configuratie|*.json|Alle bestanden|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Exporteren mislukt: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (kopie)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Automatisch herstarten mislukt. Open Clockwork handmatig opnieuw. ({0})</value></data>
 </root>

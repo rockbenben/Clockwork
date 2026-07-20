@@ -37,6 +37,11 @@ public partial class BrandDialog : Window
     public static bool Confirm(Window? owner, string? title, string message, ToastLevel level = ToastLevel.Info)
         => Show(owner, title, message, true, level);
 
+    // 删除确认的唯一口径（标题/文案键/Warn 红轨）：主窗口三列表、系统启动项、组编辑器共用，
+    // 契约变更（换键、加「不再询问」等）只改这一处。
+    public static bool ConfirmDelete(Window? owner, string label)
+        => Confirm(owner, Strings.Get("Confirm_Title"), Strings.Lf("Confirm_DeleteItem", label), ToastLevel.Warn);
+
     public static bool Show(Window? owner, string? title, string message, bool confirm, ToastLevel level)
     {
         var dlg = new BrandDialog(title, message, confirm, level);

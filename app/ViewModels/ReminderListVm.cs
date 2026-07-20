@@ -42,7 +42,7 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
     }
 }
 
-// 提醒页 ViewModel（增删改即存盘；无排序）。公共增删改在 ListVm。
+// 提醒页 ViewModel（增删改移即存盘）。公共增删改移在 ListVm。
 public sealed class ReminderListVm : ListVm<Reminder, ReminderRowVm>
 {
     // 换 id 时迁移运行态的钩子(旧 id→新 id)，由 App 注入；null 时不迁移。
@@ -61,6 +61,11 @@ public sealed class ReminderListVm : ListVm<Reminder, ReminderRowVm>
         newModel.Id = Guid.NewGuid().ToString();
         _migrateState?.Invoke(oldId, newModel.Id);
     }
+
+    // 复制出的提醒换新 id（运行态按 id 做键，共用会串状态）。
+    // 有意不给 Message 加「副本」后缀：Message 就是弹窗/通知里念给用户的正文（不像组名是纯元数据），
+    // 后缀会原样出现在提醒弹窗里。列表区分靠「插到原条目之后并选中」+ 用户随后改时间/文案。
+    protected override void OnDuplicating(Reminder clone) => clone.Id = Guid.NewGuid().ToString();
 
     public Reminder? SelectedReminder => Selected;
 }

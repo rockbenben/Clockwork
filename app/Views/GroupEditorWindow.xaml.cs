@@ -81,6 +81,8 @@ public partial class GroupEditorWindow : Window
     {
         int i = Sel;
         if (i < 0 || i >= _rows.Count) return;
+        // 与三个列表页同一条删除契约：必先确认。虽然取消编辑器可整体回退，但用户不该为救一个误删丢掉本次全部编辑。
+        if (!BrandDialog.ConfirmDelete(this, StepDisplay.StepListSummary(_rows[i].Step))) return;
         _rows.RemoveAt(i);
         if (_rows.Count > 0) Steps.SelectedIndex = Math.Min(i, _rows.Count - 1);
     }

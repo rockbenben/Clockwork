@@ -513,6 +513,34 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- ============ ToolTip（系统启动项单元格全文提示等，默认是白色，须主题化） ============ -->
+    <Style TargetType="ToolTip">
+        <Setter Property="Background" Value="{StaticResource BrushSteel}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
+        <Setter Property="FontSize" Value="12.5"/>
+        <Setter Property="HasDropShadow" Value="False"/>
+        <Setter Property="MaxWidth" Value="640"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1" CornerRadius="6" Padding="10,6">
+                        <ContentPresenter>
+                            <ContentPresenter.Resources>
+                                <!-- 长命令行/路径在 MaxWidth 内换行显示，而非拖出一条超宽白条 -->
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="Separator">
         <Setter Property="Template">
             <Setter.Value>

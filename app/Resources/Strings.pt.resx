@@ -257,6 +257,13 @@ Registro: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Clique e pressione o atalho. Esc cancela, Del limpa. «Parar» na bandeja sempre funciona.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Pressione um atalho…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Assumir na lista de inicialização</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Excluir do sistema</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Excluir «{0}»?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Excluir permanentemente o item de inicialização «{0}» do sistema? Esta ação não pode ser desfeita (para apenas impedir que ele inicie com o sistema, desmarque-o).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>O item de inicialização «{0}» foi assumido na lista de inicialização e uma etapa ainda aponta para o seu arquivo de atalho. Excluí-lo do sistema também removerá o atalho, e essa etapa não poderá mais iniciá-lo. Excluir mesmo assim?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Falha ao excluir «{0}»: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>O destino da exportação não pode ser o próprio arquivo de configuração — escolha outro nome ou local.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>O texto de teclas a enviar não é uma sequência válida: verifique chaves não fechadas e nomes de tecla desconhecidos (ex.: {ENTER}; um { literal escreve-se {{} e um } literal, {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Recuperar se perdido (após suspender/desligar)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>O atalho "{0}" não tem tecla principal; não enviado</value></data>
@@ -316,5 +323,15 @@ Registro: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Não foi possível registrar o atalho {1} do grupo de ações “{0}”: pode já estar em uso</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>O atalho {0} já é usado por “{1}”; escolha outra combinação</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} é uma combinação reservada do sistema (registrá-la sequestraria uma tecla do sistema) e não pode ser usada como atalho</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Tecla de envio inválida: chaves não emparelhadas (ex.: falta a chave de fechamento em “{ENTER”)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Duplicar</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Exportar configuração</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Importar configuração</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Configuração exportada para: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Configuração importada. Reiniciando para aplicar.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Falha ao importar: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>A importação substituirá toda a configuração atual (lista de inicialização / lembretes / grupos de ações / configurações). Continuar?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Configuração do Clockwork|*.json|Todos os arquivos|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Falha ao exportar: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (cópia)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Não foi possível reiniciar automaticamente. Reabra o Clockwork manualmente. ({0})</value></data>
 </root>

@@ -257,6 +257,13 @@
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัด Esc เพื่อยกเลิก Del เพื่อล้าง เมนู «หยุด» ในถาดใช้ได้เสมอ</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>กดปุ่มลัด…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>นำเข้าสู่รายการเริ่มต้น</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>ลบออกจากระบบ</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>ลบ «{0}» หรือไม่?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>ลบรายการเริ่มต้น «{0}» ออกจากระบบอย่างถาวรหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้ (หากต้องการเพียงหยุดไม่ให้ทำงานตอนเปิดเครื่อง ให้ยกเลิกการเลือกแทน)</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>รายการเริ่มต้น «{0}» ถูกนำเข้าสู่รายการเริ่มต้นแล้ว และยังมีขั้นตอนที่ชี้ไปยังไฟล์ทางลัดของมัน การลบออกจากระบบจะลบทางลัดไปด้วย ทำให้ขั้นตอนนั้นไม่สามารถเรียกใช้งานได้อีก ยังต้องการลบหรือไม่?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>ลบ «{0}» ไม่สำเร็จ: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>ปลายทางการส่งออกต้องไม่ใช่ไฟล์การตั้งค่าเอง โปรดเลือกชื่อหรือตำแหน่งอื่น</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>ข้อความปุ่มที่จะส่งไม่ใช่ลำดับปุ่มที่ถูกต้อง: ตรวจสอบวงเล็บปีกกาที่ไม่ปิดและชื่อปุ่มที่ไม่รู้จัก (เช่น {ENTER}; { ตามตัวอักษรเขียนเป็น {{} และ } เขียนเป็น {}})</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>แจ้งย้อนหลังถ้าพลาด (หลังสลีป/ปิดเครื่อง)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} นาที</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>คีย์ลัด "{0}" ไม่มีปุ่มหลัก จึงไม่ได้ส่ง</value></data>
@@ -316,5 +323,15 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>ลงทะเบียนปุ่มลัด {1} ของกลุ่มการทำงาน “{0}” ไม่สำเร็จ: อาจถูกใช้งานอยู่แล้ว</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย “{1}” แล้ว โปรดเลือกชุดอื่น</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} เป็นชุดปุ่มที่ระบบสงวนไว้ (การลงทะเบียนจะยึดปุ่มระบบ) ใช้เป็นปุ่มลัดไม่ได้</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>รูปแบบปุ่มส่งไม่ถูกต้อง: วงเล็บปีกกาไม่ครบคู่ (เช่น “{ENTER” ขาดวงเล็บปิด)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>ทำสำเนา</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>ส่งออกการตั้งค่า</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>นำเข้าการตั้งค่า</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>ส่งออกการตั้งค่าไปยัง: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>นำเข้าการตั้งค่าแล้ว กำลังรีสตาร์ทเพื่อใช้งาน</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>นำเข้าล้มเหลว: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>การนำเข้าจะเขียนทับการตั้งค่าปัจจุบันทั้งหมด (รายการเริ่มต้น / การเตือน / กลุ่มการกระทำ / การตั้งค่า) ดำเนินการต่อหรือไม่?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>การตั้งค่า Clockwork|*.json|ไฟล์ทั้งหมด|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>ส่งออกล้มเหลว: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (สำเนา)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>ไม่สามารถรีสตาร์ทอัตโนมัติได้ โปรดเปิด Clockwork ใหม่ด้วยตนเอง ({0})</value></data>
 </root>

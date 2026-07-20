@@ -257,6 +257,13 @@
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>انقر ثم اضغط الاختصار. Esc للإلغاء، Del للمسح. «إيقاف» في علبة النظام يعمل دائمًا.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>اضغط اختصارًا…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>نقل إلى قائمة البدء</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>حذف من النظام</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>هل تريد حذف «{0}»؟</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>هل تريد حذف عنصر بدء التشغيل «{0}» نهائيًا من النظام؟ لا يمكن التراجع عن هذا الإجراء (لمنع تشغيله عند البدء فقط، ألغِ التحديد بدلًا من ذلك).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>عنصر بدء التشغيل «{0}» تم نقله إلى قائمة البدء، وما زالت هناك خطوة تشير إلى ملف الاختصار الخاص به. حذفه من النظام سيحذف الاختصار أيضًا، فلن تتمكن تلك الخطوة من تشغيله بعد الآن. هل تريد الحذف على أي حال؟</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>فشل حذف «{0}»: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>لا يمكن أن تكون وجهة التصدير ملف الإعدادات نفسه — اختر اسمًا أو موقعًا آخر.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>نص المفاتيح المرسلة ليس تسلسل مفاتيح صالحًا: تحقق من الأقواس المعقوفة غير المغلقة وأسماء المفاتيح غير المعروفة (مثل {ENTER}؛ يُكتب { الحرفي {{} و } الحرفي {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>التعويض إذا فات (بعد السكون/الإيقاف)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} دقيقة</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>الاختصار "{0}" لا يحتوي على مفتاح رئيسي؛ لم يُرسَل</value></data>
@@ -316,5 +323,15 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>تعذّر تسجيل الاختصار {1} لمجموعة الإجراءات «{0}»: قد يكون مستخدمًا بالفعل</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>الاختصار {0} مستخدم بالفعل بواسطة «{1}»؛ اختر تركيبة أخرى</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} تركيبة محجوزة للنظام (تسجيلها سيخطف مفتاح نظام) ولا يمكن استخدامها كاختصار</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>مفتاح الإرسال غير صالح: أقواس معقوفة غير متوازنة (مثل «{ENTER» ينقصه قوس الإغلاق)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>تكرار</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>تصدير الإعدادات</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>استيراد الإعدادات</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>تم تصدير الإعدادات إلى: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>تم استيراد الإعدادات. جارٍ إعادة التشغيل للتطبيق.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>فشل الاستيراد: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>سيؤدي الاستيراد إلى الكتابة فوق جميع الإعدادات الحالية (قائمة البدء / التذكيرات / مجموعات الإجراءات / الإعدادات). هل تريد المتابعة؟</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>إعدادات Clockwork|*.json|كل الملفات|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>فشل التصدير: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (نسخة)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>تعذّرت إعادة التشغيل تلقائيًا. يُرجى إعادة فتح Clockwork يدويًا. ({0})</value></data>
 </root>

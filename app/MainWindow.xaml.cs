@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +10,7 @@ using Clockwork.Engine;
 using Clockwork.I18n;
 using Clockwork.Native;
 using Clockwork.ViewModels;
+using Microsoft.Win32;
 
 namespace Clockwork;
 
@@ -219,6 +221,69 @@ public partial class MainWindow : Window
         base.OnClosing(e);
     }
 
+    // —— 配置导入/导出 ——
+    private void ExportConfig_Click(object sender, RoutedEventArgs e)
+    {
+        var cfgPath = AppInstance?.ConfigFilePath;
+        if (string.IsNullOrEmpty(cfgPath) || !File.Exists(cfgPath)) return;
+        var dlg = new Microsoft.Win32.SaveFileDialog   // 限定 Win32：与 WinForms 同名类消歧义（沿用 Pickers 惯例）
+        {
+            // 默认名不能是配置文件本名：初始目录就是配置所在目录，同名默认值=导出目标即源文件自身，
+            // File.Copy(源==目标) 必抛共享冲突，「一路确认」的默认流程永远失败。
+            Filter = Strings.Get("Config_Filter"),
+            FileName = "clockwork.settings.backup.json",
+            InitialDirectory = Path.GetDirectoryName(cfgPath),
+        };
+        if (dlg.ShowDialog(this) != true) return;
+        try
+        {
+            // 用户仍可手动选中配置文件本身 → 同路径守卫，给明确指引而非裸 IOException
+            if (string.Equals(Path.GetFullPath(dlg.FileName), Path.GetFullPath(cfgPath), StringComparison.OrdinalIgnoreCase))
+            {
+                Views.BrandDialog.Warn(this, "Clockwork", Strings.Get("Config_ExportSamePath"));
+                return;
+            }
+            File.Copy(cfgPath, dlg.FileName, overwrite: true);
+            Views.BrandDialog.Info(this, "Clockwork", Lf("Config_Exported", dlg.FileName));
+        }
+        catch (Exception ex) { Views.BrandDialog.Warn(this, "Clockwork", Lf("Config_ExportFail", ex.Message)); }
+    }
+
+    private void ImportConfig_Click(object sender, RoutedEventArgs e)
+    {
+        var app = AppInstance;
+        if (app == null) return;   // 直接守卫 app（而非只判 cfgPath）：末尾要调 app.RelaunchForLanguage
+        var cfgPath = app.ConfigFilePath;
+        if (string.IsNullOrEmpty(cfgPath)) return;
+        // 导入=整份配置覆盖，全应用最重的破坏性操作，与删除同用 Warn 红轨（别让它比删一行还显得温和）
+        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), Strings.Get("Config_ImportConfirm"), Views.ToastLevel.Warn)) return;
+        var dlg = new Microsoft.Win32.OpenFileDialog   // 同上：限定 Win32
+        {
+            Filter = Strings.Get("Config_Filter"),
+            InitialDirectory = Path.GetDirectoryName(cfgPath),
+        };
+        if (dlg.ShowDialog(this) != true) return;
+        try
+        {
+            // 验证 JSON 可解析为 RootConfig，防止导入无效文件后应用启动异常。
+            var json = File.ReadAllText(dlg.FileName);
+            var test = System.Text.Json.JsonSerializer.Deserialize<RootConfig>(json, ConfigStore.JsonOptions);
+            if (test == null) throw new InvalidOperationException("JSON 解析结果为 null");
+            // 与启动读取同一套规范化管线（剔 null 元素/补重 id/OnYes 归一）：导入落盘的就是规范形，
+            // 「什么算合法配置」不在此另定义一份浅版本，也不把修补推迟到重启后的 Read。
+            ConfigStore.Normalize(test);
+            // 覆盖前把现有配置备份到 .bak：JSON 能解析≠语义正确（选错文件/不兼容配置照样通过 null 检查），
+            // 备份给用户留一条撤销路径，避免唯一一份配置被无声覆盖后无法找回。
+            try { if (File.Exists(cfgPath)) File.Copy(cfgPath, cfgPath + ".bak", overwrite: true); } catch { }
+            // 用 ConfigStore 原子写（写临时文件再替换），而非 File.Copy 直接覆盖——避免中途 I/O 失败
+            // 把唯一一份 config 截断成半截损坏的 JSON（下次启动会被 Read 当解析失败、回落默认配置）。
+            ConfigStore.Write(test, cfgPath);
+            Views.BrandDialog.Info(this, "Clockwork", Strings.Get("Config_Imported"));
+            app.RelaunchForLanguage();   // 复用重启逻辑：重开自身 + 退出当前实例
+        }
+        catch (Exception ex) { Views.BrandDialog.Warn(this, "Clockwork", Lf("Config_ImportFail", ex.Message)); }
+    }
+
     // 变更(增/改/删/移)后把 VM 的选中回推到对应 DataGrid。三个列表页统一走它。
     private static void SyncSel(System.Windows.Controls.DataGrid grid, ListVmBase? vm) { if (vm != null) grid.SelectedIndex = vm.SelectedIndex; }
     private void SyncSelection() => SyncSel(GridLaunch, _launch);
@@ -252,7 +317,15 @@ public partial class MainWindow : Window
 
     private void GridLaunch_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => LEdit_Click(sender, e);
 
-    private void LDel_Click(object sender, RoutedEventArgs e) { _launch?.DeleteSelected(); SyncSelection(); }
+    // 删除统一先确认：口径（文案/红轨）在 BrandDialog.ConfirmDelete 一处维护。
+    private bool ConfirmDelete(string label) => Views.BrandDialog.ConfirmDelete(this, label);
+
+    private void LDel_Click(object sender, RoutedEventArgs e)
+    {
+        var sel = _launch?.SelectedStep;
+        if (sel == null || !ConfirmDelete(StepDisplay.StepListSummary(sel))) return;
+        _launch?.DeleteSelected(); SyncSelection();
+    }
     private void LUp_Click(object sender, RoutedEventArgs e) { _launch?.MoveUp(); SyncSelection(); }
     private void LDown_Click(object sender, RoutedEventArgs e) { _launch?.MoveDown(); SyncSelection(); }
 
@@ -296,7 +369,15 @@ public partial class MainWindow : Window
         var sel = _reminders?.SelectedReminder;
         if (sel != null) AppInstance?.PreviewReminder(sel);
     }
-    private void RDel_Click(object sender, RoutedEventArgs e) { _reminders?.DeleteSelected(); SyncSel(GridRemind, _reminders); }
+    private void RDel_Click(object sender, RoutedEventArgs e)
+    {
+        var sel = _reminders?.SelectedReminder;
+        if (sel == null || !ConfirmDelete(sel.Message)) return;
+        _reminders?.DeleteSelected(); SyncSel(GridRemind, _reminders);
+    }
+    private void RUp_Click(object sender, RoutedEventArgs e) { _reminders?.MoveUp(); SyncSel(GridRemind, _reminders); }
+    private void RDown_Click(object sender, RoutedEventArgs e) { _reminders?.MoveDown(); SyncSel(GridRemind, _reminders); }
+    private void RCopy_Click(object sender, RoutedEventArgs e) { _reminders?.DuplicateSelected(); SyncSel(GridRemind, _reminders); }
 
     private void GAdd_Click(object sender, RoutedEventArgs e)
     {
@@ -332,6 +413,9 @@ public partial class MainWindow : Window
         if (edited != null) { _groups?.ReplaceSelected(edited); SyncSel(GridGroup, _groups); }
     }
     private void GridGroup_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => GEdit_Click(sender, e);
+    private void GUp_Click(object sender, RoutedEventArgs e) { _groups?.MoveUp(); SyncSel(GridGroup, _groups); }
+    private void GDown_Click(object sender, RoutedEventArgs e) { _groups?.MoveDown(); SyncSel(GridGroup, _groups); }
+    private void GCopy_Click(object sender, RoutedEventArgs e) { _groups?.DuplicateSelected(); SyncSel(GridGroup, _groups); }
     // 删除动作组：先扫引用（提醒的静默组/点是后、启动清单与其他组里的「动作组」步骤），有引用则确认并联动清理，
     // 防止悬空引用静默失效（旧版 $gDelGuard 的移植，并补上组内嵌套引用）。
     private void GDel_Click(object sender, RoutedEventArgs e)
@@ -345,8 +429,9 @@ public partial class MainWindow : Window
                      + _config.ActionGroups.Where(x => x.Id != g.Id).Sum(x => x.Steps.Count(RefsGroup));
         if (refReminders.Count > 0 || refSteps > 0)
         {
+            // 有引用走专用确认文案（说明会联动清理），无引用走通用删除确认——两条路径都必确认。
             if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
-                    Lf("Confirm_DeleteGroupRefs", g.Name, refReminders.Count, refSteps))) return;
+                    Lf("Confirm_DeleteGroupRefs", g.Name, refReminders.Count, refSteps), Views.ToastLevel.Warn)) return;
             foreach (var r in refReminders)
             {
                 if (r.SilentGroupId == g.Id) r.SilentGroupId = "";
@@ -359,6 +444,7 @@ public partial class MainWindow : Window
                 if (other.Steps.Any(RefsGroup)) other.Steps = other.Steps.Where(s => !RefsGroup(s)).ToList();
             if (_reminders != null) foreach (var row in _reminders.Rows) row.Refresh();
         }
+        else if (!ConfirmDelete(g.Name)) return;
         _groups?.DeleteSelected();
         if (_groups != null) foreach (var row in _groups.Rows) row.Refresh();   // 其他组的步骤数可能变了
         SyncSel(GridGroup, _groups);
@@ -398,6 +484,15 @@ public partial class MainWindow : Window
             AppInstance?.RelaunchElevated();
     }
 
+    // 菜单弹出前按选中行刷新可用态：只读项（策略/系统/一次性等）禁用「接管/删除」——
+    // 此前点了静默无反应，看起来像功能坏了。行内代码守卫仍保留作兜底。
+    private void GridSystem_MenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        bool can = GridSystem.SelectedItem is SystemStartupRowVm row && row.CanEdit;
+        SysMenuTakeover.IsEnabled = can;
+        SysMenuDelete.IsEnabled = can;
+    }
+
     // 右键先选中光标下的行，使随后的上下文菜单作用于该行。
     private void GridSystem_RightClick(object sender, MouseButtonEventArgs e)
     {
@@ -424,6 +519,31 @@ public partial class MainWindow : Window
         Tabs.SelectedItem = TabLaunch;           // 切到启动清单，让接管结果直接可见（按名，不用魔数序号）
         _launch.SelectedIndex = idx;
         GridLaunch.SelectedIndex = idx;
+    }
+
+    // 「从系统中删除」：彻底移除注册表值/启动文件夹快捷方式/计划任务（区别于取消勾选=仅禁用）。
+    // 专用确认文案强调不可撤销；NeedsAdmin 复用「以管理员身份重开？」一键提权。
+    private void SysDelete_Click(object sender, RoutedEventArgs e)
+    {
+        if (GridSystem.SelectedItem is not SystemStartupRowVm row || _system == null) return;
+        if (!row.CanEdit) return;   // 只读项(策略/系统/一次性等)不可删，与开关/接管同守卫
+        // 启动文件夹项被接管后，导入的 app 步骤 Target 直指这个 .lnk（见 ToImportedStep）；
+        // 删除会连文件一起移除、该步骤随之失效 → 换专用文案把后果讲清，决定权交还用户。
+        bool takenOver = row.Item.Type == "StartupFolder" && StepRefersToFile(row.Item.LnkPath);
+        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
+                Lf(takenOver ? "Confirm_DeleteSysItemTakenOver" : "Confirm_DeleteSysItem", row.Name), Views.ToastLevel.Warn)) return;
+        var res = SystemStartupReader.DeleteItem(row.Item);
+        if (res == "Ok") _system.Remove(row.Item);
+        else if (res == "NeedsAdmin") PromptRelaunchAdmin();
+        else ReportSystemMsg(Lf("SysMsg_DeleteFail", row.Name, res));
+    }
+
+    // 启动清单或动作组里是否有 app 步骤直指该文件（接管启动文件夹项时 Target=.lnk 路径）。
+    private bool StepRefersToFile(string path)
+    {
+        if (_config == null || string.IsNullOrEmpty(path)) return false;
+        bool Hit(LaunchStep s) => s.Kind == "app" && string.Equals(s.Target, path, StringComparison.OrdinalIgnoreCase);
+        return _config.LaunchSteps.Any(Hit) || _config.ActionGroups.Any(g => g.Steps.Any(Hit));
     }
 }
 

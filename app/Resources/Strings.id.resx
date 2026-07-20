@@ -257,6 +257,13 @@ Log: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klik, lalu tekan pintasan. Esc batal, Del menghapus. «Berhenti» di baki selalu bisa.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Tekan pintasan…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Ambil alih ke daftar mulai</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Hapus dari sistem</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Hapus «{0}»?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Hapus permanen item startup «{0}» dari sistem? Tindakan ini tidak dapat dibatalkan (untuk sekadar mencegahnya berjalan saat mulai, hapus centangnya).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Item startup «{0}» telah diambil alih ke daftar mulai dan sebuah langkah masih menunjuk ke berkas pintasannya. Menghapusnya dari sistem juga menghapus pintasan itu, sehingga langkah tersebut tidak bisa lagi menjalankannya. Tetap hapus?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Gagal menghapus «{0}»: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>Tujuan ekspor tidak boleh berkas konfigurasi itu sendiri — pilih nama atau lokasi lain.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>Teks tombol yang dikirim bukan urutan tombol yang valid: periksa kurung kurawal yang belum ditutup dan nama tombol yang tidak dikenal (mis. {ENTER}; { literal ditulis {{} dan } literal ditulis {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Kejar jika terlewat (setelah tidur/mati)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} mnt</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Pintasan "{0}" tidak memiliki tombol utama; tidak dikirim</value></data>
@@ -316,5 +323,15 @@ Log: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Gagal mendaftarkan tombol pintas {1} untuk grup aksi “{0}”: mungkin sudah dipakai</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tombol pintas {0} sudah dipakai oleh “{1}”; pilih kombinasi lain</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} adalah kombinasi yang dicadangkan sistem (mendaftarkannya akan membajak tombol sistem) dan tidak bisa dipakai sebagai tombol pintas</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Tombol kirim tidak valid: kurung kurawal tidak berpasangan (mis. “{ENTER” tanpa kurung penutup)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Duplikat</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Ekspor konfigurasi</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Impor konfigurasi</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Konfigurasi diekspor ke: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Konfigurasi diimpor. Memulai ulang untuk menerapkan.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Impor gagal: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>Mengimpor akan menimpa semua konfigurasi saat ini (daftar mulai / pengingat / grup tindakan / pengaturan). Lanjutkan?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Konfigurasi Clockwork|*.json|Semua file|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Ekspor gagal: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (salinan)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Tidak dapat memulai ulang otomatis. Buka kembali Clockwork secara manual. ({0})</value></data>
 </root>

@@ -257,6 +257,13 @@ Registro: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Fai clic e premi la scorciatoia. Esc annulla, Canc la cancella. «Ferma» nella barra funziona sempre.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Premi una scorciatoia…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Assumi nell'elenco di avvio</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Elimina dal sistema</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Eliminare «{0}»?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Eliminare definitivamente l'elemento di avvio «{0}» dal sistema? L'operazione non può essere annullata (per impedirne solo l'avvio, deseleziona la casella).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>L'elemento di avvio «{0}» è stato assunto nell'elenco di avvio e un passaggio punta ancora al suo file di collegamento. Eliminandolo dal sistema verrà rimosso anche il collegamento e quel passaggio non potrà più avviarlo. Eliminare comunque?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Eliminazione di «{0}» non riuscita: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>La destinazione di esportazione non può essere il file di configurazione stesso: scegli un altro nome o percorso.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>Il testo dei tasti da inviare non è una sequenza valida: controlla graffe non chiuse e nomi di tasti sconosciuti (es. {ENTER}; una { letterale si scrive {{} e una } letterale {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Recupera se perso (dopo sospensione/spegnimento)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>La scorciatoia "{0}" non ha un tasto principale; non inviata</value></data>
@@ -316,5 +323,15 @@ Registro: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossibile registrare la scorciatoia {1} del gruppo di azioni “{0}”: potrebbe essere già in uso</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>La scorciatoia {0} è già usata da “{1}”; scegline un'altra</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} è una combinazione riservata al sistema (registrarla dirotterebbe un tasto di sistema) e non può essere usata come scorciatoia</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Tasto da inviare non valido: parentesi graffe non bilanciate (es. a “{ENTER” manca la graffa di chiusura)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Duplica</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Esporta configurazione</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Importa configurazione</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Configurazione esportata in: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Configurazione importata. Riavvio per applicare.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Importazione non riuscita: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>L'importazione sovrascriverà tutta la configurazione attuale (elenco di avvio / promemoria / gruppi di azioni / impostazioni). Continuare?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Configurazione Clockwork|*.json|Tutti i file|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Esportazione non riuscita: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (copia)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Impossibile riavviare automaticamente. Riapri Clockwork manualmente. ({0})</value></data>
 </root>

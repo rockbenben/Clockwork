@@ -4,24 +4,11 @@ using Clockwork.Core;
 namespace Clockwork.ViewModels;
 
 // 启动清单页 ViewModel：ObservableCollection 与 config.LaunchSteps 保持同步；增删改移即存盘。
-// 公共增删改在 ListVm；这里只加启动清单独有的上/下移。
+// 公共增删改移在 ListVm。
 public sealed class LaunchListVm : ListVm<LaunchStep, StepRowVm>
 {
     public LaunchListVm(RootConfig config, Action save)
         : base(config, config.LaunchSteps, s => new StepRowVm(s, save), save) { }
-
-    public void MoveUp() => Move(-1);
-    public void MoveDown() => Move(1);
-
-    private void Move(int dir)
-    {
-        int i = SelectedIndex, j = i + dir;
-        if (i < 0 || i >= Rows.Count || j < 0 || j >= Rows.Count) return;
-        (Models[i], Models[j]) = (Models[j], Models[i]);
-        Rows.Move(i, j);
-        SelectedIndex = j;
-        Save();
-    }
 
     public LaunchStep? SelectedStep => Selected;
 

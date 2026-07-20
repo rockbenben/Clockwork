@@ -46,7 +46,8 @@
             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Style="{StaticResource ListPanel}">
-                <DataGrid x:Name="Steps" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                <!-- 禁点表头排序：步骤顺序即执行顺序，排序会让选中索引与模型错位（与主窗口三列表同理） -->
+                <DataGrid x:Name="Steps" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
                           HeadersVisibility="Column" SelectionMode="Single" MouseDoubleClick="SEdit_Click">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="24" CanUserResize="False" CellTemplate="{StaticResource RailCell}" CellStyle="{StaticResource RailCellStyle}"/>

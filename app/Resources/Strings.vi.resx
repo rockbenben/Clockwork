@@ -257,6 +257,13 @@ Nhật ký: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Bấm rồi nhấn phím tắt. Esc để hủy, Del để xóa. «Dừng» ở khay luôn dùng được.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Nhấn phím tắt…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Đưa vào danh sách khởi động</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Xóa khỏi hệ thống</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Xóa «{0}»?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Xóa vĩnh viễn mục khởi động «{0}» khỏi hệ thống? Thao tác này không thể hoàn tác (nếu chỉ muốn ngăn nó chạy khi khởi động, hãy bỏ chọn).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Mục khởi động «{0}» đã được đưa vào danh sách khởi động và vẫn có một bước trỏ tới tệp lối tắt của nó. Xóa khỏi hệ thống sẽ xóa cả lối tắt, khiến bước đó không thể khởi chạy nó nữa. Vẫn xóa?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Xóa «{0}» thất bại: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>Đích xuất không thể là chính tệp cấu hình — hãy chọn tên hoặc vị trí khác.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>Nội dung phím gửi không phải chuỗi phím hợp lệ: kiểm tra dấu ngoặc nhọn chưa đóng và tên phím không xác định (vd. {ENTER}; { nguyên văn viết là {{}, } nguyên văn viết là {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Bù nếu bỏ lỡ (sau khi ngủ/tắt máy)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} phút</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Phím tắt "{0}" thiếu phím chính; chưa gửi</value></data>
@@ -316,5 +323,15 @@ Nhật ký: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Không thể đăng ký phím tắt {1} cho nhóm hành động “{0}”: có thể đã bị chiếm dụng</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Phím gửi không hợp lệ: dấu ngoặc nhọn không cân (ví dụ “{ENTER” thiếu ngoặc đóng)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Nhân bản</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Xuất cấu hình</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Nhập cấu hình</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Đã xuất cấu hình đến: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Đã nhập cấu hình. Đang khởi động lại để áp dụng.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Nhập thất bại: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>Việc nhập sẽ ghi đè toàn bộ cấu hình hiện tại (danh sách khởi động / lời nhắc / nhóm hành động / cài đặt). Tiếp tục?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Cấu hình Clockwork|*.json|Tất cả tệp|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Xuất thất bại: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (bản sao)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Không thể tự khởi động lại. Vui lòng mở lại Clockwork thủ công. ({0})</value></data>
 </root>

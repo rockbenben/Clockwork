@@ -257,6 +257,13 @@
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Нажмите, затем нажмите сочетание клавиш. Esc — отмена, Del — очистить. «Стоп» в трее работает всегда.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Нажмите сочетание…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Перенести в список запуска</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Удалить из системы</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Удалить «{0}»?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Навсегда удалить элемент автозагрузки «{0}» из системы? Это действие нельзя отменить (чтобы просто отключить запуск, снимите флажок).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Элемент автозагрузки «{0}» перенесён в список запуска, и один из шагов всё ещё указывает на его файл ярлыка. Удаление из системы удалит и ярлык — этот шаг больше не сможет его запустить. Всё равно удалить?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Не удалось удалить «{0}»: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>Файл назначения экспорта не может совпадать с самим файлом конфигурации — выберите другое имя или папку.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>Текст отправляемых клавиш — не корректная последовательность: проверьте незакрытые фигурные скобки и неизвестные имена клавиш (напр. {ENTER}; литеральная { записывается как {{}, а } — как {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Наверстать пропущенное (после сна/выключения)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} мин</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>У сочетания «{0}» нет основной клавиши; не отправлено</value></data>
@@ -316,5 +323,15 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Не удалось зарегистрировать горячую клавишу {1} для группы действий «{0}»: возможно, она уже занята</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Сочетание {0} уже используется «{1}»; выберите другое</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} — зарезервированное системой сочетание (его регистрация перехватила бы системную клавишу), его нельзя использовать как горячую клавишу</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Неверная клавиша отправки: непарные фигурные скобки (например, в «{ENTER» нет закрывающей)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Дублировать</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Экспорт конфигурации</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Импорт конфигурации</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Конфигурация экспортирована в: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Конфигурация импортирована. Перезапуск для применения.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Не удалось импортировать: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>Импорт перезапишет всю текущую конфигурацию (список запуска / напоминания / группы действий / настройки). Продолжить?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Конфигурация Clockwork|*.json|Все файлы|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Не удалось экспортировать: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (копия)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Не удалось перезапустить автоматически. Откройте Clockwork вручную. ({0})</value></data>
 </root>

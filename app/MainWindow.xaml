@@ -29,7 +29,9 @@
                 <Grid Margin="2,10,2,2">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="168"/></Grid.ColumnDefinitions>
                         <Border Grid.Column="0" Style="{StaticResource ListPanel}">
-                        <DataGrid x:Name="GridLaunch" AutoGenerateColumns="False" CanUserAddRows="False"
+                        <!-- 三个列表页禁点表头排序：清单顺序即执行/显示顺序，排序只改视图不改模型，
+                             会让 SelectedIndex(视图序)与 Models(配置序)错位——删除/上移/复制会操作错行并落盘。 -->
+                        <DataGrid x:Name="GridLaunch" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridLaunch_DoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="24" CanUserResize="False" CellTemplate="{StaticResource RailCell}" CellStyle="{StaticResource RailCellStyle}"/>
@@ -83,7 +85,7 @@
                 <Grid Margin="2,10,2,2">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="168"/></Grid.ColumnDefinitions>
                         <Border Grid.Column="0" Style="{StaticResource ListPanel}">
-                        <DataGrid x:Name="GridRemind" AutoGenerateColumns="False" CanUserAddRows="False"
+                        <DataGrid x:Name="GridRemind" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridRemind_DoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
@@ -113,6 +115,12 @@
                             <Button x:Name="RAdd" Content="{loc:Loc Btn_Add}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="RAdd_Click"/>
                             <Button x:Name="REdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="REdit_Click"/>
                             <Button x:Name="RDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="RDel_Click"/>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Button x:Name="RUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="RUp_Click"/>
+                                <Button x:Name="RDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="RDown_Click"/>
+                            </Grid>
+                            <Button x:Name="RCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="RCopy_Click"/>
                             <Button x:Name="RPreview" Content="{loc:Loc Btn_Preview}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="RPreview_Click"/>
                             </StackPanel>
                         </DockPanel>
@@ -124,7 +132,7 @@
                 <Grid Margin="2,10,2,2">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="168"/></Grid.ColumnDefinitions>
                         <Border Grid.Column="0" Style="{StaticResource ListPanel}">
-                        <DataGrid x:Name="GridGroup" AutoGenerateColumns="False" CanUserAddRows="False"
+                        <DataGrid x:Name="GridGroup" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridGroup_DoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
@@ -148,6 +156,12 @@
                             <Button x:Name="GAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="GAdd_Click"/>
                             <Button x:Name="GEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="GEdit_Click"/>
                             <Button x:Name="GDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="GDel_Click"/>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Button x:Name="GUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="GUp_Click"/>
+                                <Button x:Name="GDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="GDown_Click"/>
+                            </Grid>
+                            <Button x:Name="GCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="GCopy_Click"/>
                             <Button x:Name="GRun" Content="{loc:Loc Btn_RunGroup}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="GRun_Click"/>
                             </StackPanel>
                         </DockPanel>
@@ -168,10 +182,12 @@
                     </Grid>
                     <Border Grid.Row="1" Margin="0,10,0,0" Style="{StaticResource ListPanel}">
                     <DataGrid x:Name="GridSystem" AutoGenerateColumns="False" CanUserAddRows="False"
-                              CanUserDeleteRows="False" SelectionMode="Single" PreviewMouseRightButtonDown="GridSystem_RightClick">
+                              CanUserDeleteRows="False" SelectionMode="Single" PreviewMouseRightButtonDown="GridSystem_RightClick"
+                              ContextMenuOpening="GridSystem_MenuOpening">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="{loc:Loc Sys_Takeover}" Click="SysTakeOver_Click"/>
+                                <MenuItem x:Name="SysMenuTakeover" Header="{loc:Loc Sys_Takeover}" Click="SysTakeOver_Click"/>
+                                <MenuItem x:Name="SysMenuDelete" Header="{loc:Loc Sys_Delete}" Click="SysDelete_Click"/>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
@@ -261,6 +277,12 @@
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Button Grid.Column="1" x:Name="AutostartBtn" Content="{loc:Loc Autostart_Checking}" HorizontalAlignment="Left" Click="Autostart_Click"/>
                                 </Grid>
+
+                                <!-- 配置导入/导出 -->
+                                <StackPanel Orientation="Horizontal" Margin="0,14,0,2">
+                                    <Button x:Name="ExportBtn" Content="{loc:Loc Btn_ExportConfig}" Click="ExportConfig_Click" Margin="0,0,10,0"/>
+                                    <Button x:Name="ImportBtn" Content="{loc:Loc Btn_ImportConfig}" Click="ImportConfig_Click"/>
+                                </StackPanel>
                             </StackPanel>
 
                             <!-- 竖分隔 -->

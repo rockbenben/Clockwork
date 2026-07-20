@@ -257,6 +257,13 @@
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>क्लिक करें, फिर शॉर्टकट दबाएँ। Esc रद्द करता है, Del मिटाता है। ट्रे में «रोकें» हमेशा काम करता है।</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>शॉर्टकट दबाएँ…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>स्टार्टअप सूची में लें</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>सिस्टम से हटाएँ</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>क्या «{0}» हटाना है?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>क्या स्टार्टअप आइटम «{0}» को सिस्टम से स्थायी रूप से हटाना है? यह क्रिया पूर्ववत नहीं की जा सकती (सिर्फ़ स्टार्टअप पर चलने से रोकने के लिए अनचेक करें)।</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>स्टार्टअप आइटम «{0}» को स्टार्टअप सूची में लिया जा चुका है और एक चरण अब भी उसकी शॉर्टकट फ़ाइल की ओर इशारा करता है। सिस्टम से हटाने पर शॉर्टकट भी हट जाएगा, जिससे वह चरण उसे चला नहीं पाएगा। फिर भी हटाएँ?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>«{0}» हटाना विफल: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>निर्यात लक्ष्य कॉन्फ़िग फ़ाइल स्वयं नहीं हो सकता — कोई अन्य नाम या स्थान चुनें।</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>भेजी जाने वाली कुंजियों का पाठ मान्य कुंजी क्रम नहीं है: बिना बंद घुंघराले कोष्ठक और अज्ञात कुंजी नाम जाँचें (जैसे {ENTER}; शाब्दिक { को {{} और शाब्दिक } को {}} लिखें)।</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>छूटने पर बाद में दिखाएँ (स्लीप/बंद के बाद भी)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} मिनट</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>हॉटकी "{0}" में मुख्य कुंजी नहीं है; नहीं भेजा गया</value></data>
@@ -316,5 +323,15 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>क्रिया समूह “{0}” की हॉटकी {1} पंजीकृत नहीं हो सकी: संभवतः पहले से उपयोग में है</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>हॉटकी {0} पहले से “{1}” द्वारा उपयोग में है; कोई और संयोजन चुनें</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} सिस्टम-आरक्षित संयोजन है (पंजीकरण से सिस्टम कुंजी छिन जाएगी), इसे हॉटकी नहीं बनाया जा सकता</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>अमान्य सेंड-की: कर्ली ब्रैकेट असंतुलित (जैसे “{ENTER” में समापन ब्रैकेट नहीं)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>प्रतिलिपि</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन निर्यात करें</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन आयात करें</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>कॉन्फ़िगरेशन यहाँ निर्यात किया गया: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>कॉन्फ़िगरेशन आयात किया गया। लागू करने के लिए पुनरारंभ हो रहा है।</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>आयात विफल: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>आयात करने से वर्तमान सभी कॉन्फ़िगरेशन (स्टार्टअप सूची / अनुस्मारक / क्रिया समूह / सेटिंग्स) अधिलेखित हो जाएंगे। जारी रखें?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Clockwork कॉन्फ़िगरेशन|*.json|सभी फ़ाइलें|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>निर्यात विफल: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (प्रतिलिपि)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>स्वचालित रूप से पुनरारंभ नहीं हो सका। कृपया Clockwork को मैन्युअल रूप से फिर से खोलें। ({0})</value></data>
 </root>

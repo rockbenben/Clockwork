@@ -257,6 +257,13 @@ Registro: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Haz clic y pulsa el atajo. Esc cancela, Supr lo borra. «Detener» en la bandeja siempre funciona.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Pulsa un atajo…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Asumir en la lista de inicio</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Eliminar del sistema</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>¿Eliminar «{0}»?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>¿Eliminar permanentemente el elemento de inicio «{0}» del sistema? Esta acción no se puede deshacer (para solo impedir que se ejecute al inicio, desmárquelo).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>El elemento de inicio «{0}» fue asumido en la lista de inicio y un paso todavía apunta a su archivo de acceso directo. Al eliminarlo del sistema también se eliminará el acceso directo, y ese paso ya no podrá iniciarlo. ¿Eliminar de todos modos?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>No se pudo eliminar «{0}»: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>El destino de exportación no puede ser el propio archivo de configuración; elija otro nombre o ubicación.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>El texto de teclas a enviar no es una secuencia válida: revise llaves sin cerrar y nombres de tecla desconocidos (p. ej. {ENTER}; una { literal se escribe {{} y una } literal, {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Recuperar si se pierde (tras suspender/apagar)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>El atajo "{0}" no tiene tecla principal; no se envió</value></data>
@@ -316,5 +323,15 @@ Registro: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>No se pudo registrar el atajo {1} del grupo de acciones «{0}»: puede que ya esté en uso</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>El atajo {0} ya lo usa «{1}»; elige otra combinación</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} es una combinación reservada del sistema (registrarla secuestraría una tecla del sistema) y no puede usarse como atajo</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Tecla de envío no válida: llaves desemparejadas (p. ej., a «{ENTER» le falta la llave de cierre)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Duplicar</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Exportar configuración</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Importar configuración</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Configuración exportada a: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Configuración importada. Reiniciando para aplicar.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Error al importar: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>La importación sobrescribirá toda la configuración actual (lista de inicio / recordatorios / grupos de acciones / ajustes). ¿Continuar?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Configuración de Clockwork|*.json|Todos los archivos|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Error al exportar: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (copia)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>No se pudo reiniciar automáticamente. Vuelve a abrir Clockwork manualmente. ({0})</value></data>
 </root>

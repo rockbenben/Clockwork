@@ -257,6 +257,13 @@ Journal : {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Cliquez puis appuyez sur le raccourci. Échap annule, Suppr l'efface. « Arrêter » dans la barre d'état fonctionne toujours.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Appuyez sur un raccourci…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Reprendre dans la liste de démarrage</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Supprimer du système</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Supprimer « {0} » ?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Supprimer définitivement l'élément de démarrage « {0} » du système ? Cette action est irréversible (pour seulement l'empêcher de se lancer au démarrage, décochez-le).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>L'élément de démarrage « {0} » a été repris dans la liste de démarrage, et une étape pointe encore vers son fichier de raccourci. Le supprimer du système supprimera aussi le raccourci : cette étape ne pourra plus le lancer. Supprimer quand même ?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Échec de la suppression de « {0} » : {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>La destination d'export ne peut pas être le fichier de configuration lui-même — choisissez un autre nom ou emplacement.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>Le texte des touches à envoyer n'est pas une séquence valide : vérifiez les accolades non fermées et les noms de touches inconnus (ex. {ENTER} ; un { littéral s'écrit {{} et un } littéral s'écrit {}}).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Rattraper si manqué (après veille/arrêt)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Le raccourci « {0} » n'a pas de touche principale ; non envoyé</value></data>
@@ -316,5 +323,15 @@ Journal : {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossible d'enregistrer le raccourci {1} du groupe d'actions « {0} » : il est peut-être déjà utilisé</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par « {1} » ; choisissez une autre combinaison</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} est une combinaison réservée au système (l'enregistrer détournerait une touche système) et ne peut pas servir de raccourci</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Touche à envoyer non valide : accolades non appariées (p. ex. « {ENTER » sans accolade fermante)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Dupliquer</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Exporter la configuration</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Importer la configuration</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Configuration exportée vers : {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Configuration importée. Redémarrage pour appliquer.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>Échec de l'importation : {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>L'importation écrasera toute la configuration actuelle (liste de démarrage / rappels / groupes d'actions / paramètres). Continuer ?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Configuration Clockwork|*.json|Tous les fichiers|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Échec de l'exportation : {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (copie)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Impossible de redémarrer automatiquement. Veuillez rouvrir Clockwork manuellement. ({0})</value></data>
 </root>

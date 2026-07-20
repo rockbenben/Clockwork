@@ -257,6 +257,13 @@ Günlük: {1}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Tıklayın, sonra kısayola basın. Esc iptal eder, Del temizler. Tepsideki «Durdur» her zaman çalışır.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Bir kısayola basın…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Başlangıç listesine al</value></data>
+  <data name="Sys_Delete" xml:space="preserve"><value>Sistemden sil</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» silinsin mi?</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Başlangıç öğesi «{0}» sistemden kalıcı olarak silinsin mi? Bu işlem geri alınamaz (yalnızca açılışta çalışmasını engellemek için işaretini kaldırın).</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Başlangıç öğesi «{0}» başlangıç listesine alındı ve bir adım hâlâ kısayol dosyasına işaret ediyor. Sistemden silmek kısayolu da kaldırır; o adım artık onu başlatamaz. Yine de silinsin mi?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>«{0}» silinemedi: {1}</value></data>
+  <data name="Config_ExportSamePath" xml:space="preserve"><value>Dışa aktarma hedefi yapılandırma dosyasının kendisi olamaz — başka bir ad veya konum seçin.</value></data>
+  <data name="Val_SendKeys" xml:space="preserve"><value>Gönderilecek tuş metni geçerli bir tuş dizisi değil: kapatılmamış süslü parantezleri ve bilinmeyen tuş adlarını kontrol edin (örn. {ENTER}; düz { için {{}, düz } için {}} yazılır).</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Kaçarsa telafi et (uyku/kapanma sonrası)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} dk</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>"{0}" kısayolunun ana tuşu yok; gönderilmedi</value></data>
@@ -316,5 +323,15 @@ Günlük: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>“{0}” eylem grubunun {1} kısayolu kaydedilemedi: başka bir yerde kullanılıyor olabilir</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>{0} kısayolu zaten “{1}” tarafından kullanılıyor; başka bir kombinasyon seçin</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} sistem için ayrılmış bir kombinasyondur (kaydedilmesi bir sistem tuşunu ele geçirir) ve kısayol olarak kullanılamaz</value></data>
-  <data name="Val_SendKey" xml:space="preserve"><value>Geçersiz gönderme tuşu: süslü parantezler eşleşmiyor (ör. “{ENTER” kapanış parantezi eksik)</value></data>
+  <data name="Btn_Copy" xml:space="preserve"><value>Çoğalt</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Yapılandırmayı dışa aktar</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Yapılandırmayı içe aktar</value></data>
+  <data name="Config_Exported" xml:space="preserve"><value>Yapılandırma şuraya aktarıldı: {0}</value></data>
+  <data name="Config_Imported" xml:space="preserve"><value>Yapılandırma içe aktarıldı. Uygulamak için yeniden başlatılıyor.</value></data>
+  <data name="Config_ImportFail" xml:space="preserve"><value>İçe aktarma başarısız: {0}</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>İçe aktarma, mevcut tüm yapılandırmanın (başlangıç listesi / hatırlatıcılar / eylem grupları / ayarlar) üzerine yazar. Devam edilsin mi?</value></data>
+  <data name="Config_Filter" xml:space="preserve"><value>Clockwork yapılandırması|*.json|Tüm dosyalar|*.*</value></data>
+  <data name="Config_ExportFail" xml:space="preserve"><value>Dışa aktarma başarısız: {0}</value></data>
+  <data name="Dup_Suffix" xml:space="preserve"><value> (kopya)</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Otomatik olarak yeniden başlatılamadı. Lütfen Clockwork'ü elle yeniden açın. ({0})</value></data>
 </root>
