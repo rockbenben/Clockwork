@@ -17,7 +17,9 @@
     <InvariantGlobalization>false</InvariantGlobalization>
 
     <ApplicationIcon>..\assets\logo.ico</ApplicationIcon>
-    <Version>1.0.0</Version>
+    <!-- 与发布 tag 保持同步。正式发版由 CI 用 -p:Version=<tag 去 v> 覆盖，此处的值供本地构建用——
+         留旧值会让自建版本号永远落后、「检查更新」恒提示有新版。 -->
+    <Version>2.3.0</Version>
     <Product>Clockwork</Product>
     <Company>rockbenben</Company>
     <Authors>rockbenben</Authors>
