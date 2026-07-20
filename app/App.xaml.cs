@@ -153,18 +153,30 @@ public partial class App : System.Windows.Application
 
     public void ExitApp()
     {
+        _reminderTimer?.Stop();
         if (_main != null) _main.AllowClose = true;
         _tray?.Dispose();
         try { _mutex?.ReleaseMutex(); } catch { }
         Shutdown();
     }
 
+    // 所有退出路径（托盘退出/语言切换重启/提权重启）都过 Shutdown → 在此兜底：
+    // 提醒状态的后台补写是 fire-and-forget，进程退出会带走未落盘的快照，退出前同步补写最后一份。
+    protected override void OnExit(ExitEventArgs e)
+    {
+        ReminderStateStore.FlushPending();
+        base.OnExit(e);
+    }
+
     // 语言切换：重开自身（--show 强制显示窗口）后退出当前实例。新实例读到已保存的新语言，
     // 建窗前 ApplyCulture 即全量生效。单实例：本实例先释放互斥体/退出，新实例的等待(1200ms)随即接管。
     public void RelaunchForLanguage()
     {
+        // 重开失败也必须退出：导入只改了磁盘文件、切换语言只改了 _config，都靠新实例重读生效。
+        // 若留着旧实例不退，它内存里的旧 _config 会被之后任一次 SaveConfig 覆盖回磁盘——把刚导入的配置无声还原（数据丢失）。
+        // 故失败时先弹「模态」提示手动重开（toast 会随进程退出看不到），再照常退出。
         try { Process.Start(new ProcessStartInfo { FileName = _exePath, Arguments = "--show", UseShellExecute = true }); }
-        catch { }
+        catch (Exception ex) { if (_main != null) Views.BrandDialog.Warn(_main, "Clockwork", Lf("Relaunch_Fail", ex.Message)); }
         ExitApp();
     }
 
@@ -256,7 +268,8 @@ public partial class App : System.Windows.Application
     // 每次进出捕捉框都会重注册，被占用时不该每次都弹同一条（组热键同款策略）。
     private void RebindStopHotkey(string? combo)
     {
-        if (_hotkeyHwnd == 0) return;
+        // 句柄已销毁（退出时主窗 Closed 触发的恢复）就跳过：否则在死句柄上注册失败、又弹「注册失败」气泡。
+        if (_hotkeyHwnd == 0 || !HotKey.IsWindow(_hotkeyHwnd)) return;
         try { HotKey.UnregisterHotKey(_hotkeyHwnd, HotkeyId); } catch { }
         if (string.IsNullOrWhiteSpace(combo)) { _stopHotkeyFail = null; return; }   // 空=禁用
         var p = KeyInput.ToHotkeyParams(combo);
@@ -285,7 +298,7 @@ public partial class App : System.Windows.Application
     // 不随之后每次无关的保存反复刷屏；失败消除（改键/解除占用）后再失败会重新提示。
     private void RebindGroupHotkeys()
     {
-        if (_hotkeyHwnd == 0) return;
+        if (_hotkeyHwnd == 0 || !HotKey.IsWindow(_hotkeyHwnd)) return;   // 句柄已销毁则跳过（同 RebindStopHotkey）
         UnregisterGroupHotkeys();
         // 清掉已删除组的槽位映射：字典有界（≤当前组数），回绕后它们的号可安全复用。
         var liveIds = new HashSet<string>(_config.ActionGroups.Select(x => x.Id));
@@ -404,7 +417,8 @@ public partial class App : System.Windows.Application
                 {
                     // 仅"时间型首触发"(本次 Decide 刚把 LastFiredDate 置为今天)在弹模态前先落盘，防被杀/断电后次日重复弹。
                     // 稍后/重复型触发不预存——它们清掉的 SnoozeUntil/NextRepeatAt 若在弹窗时被杀，宁可从盘上旧值恢复重弹也别丢。
-                    if (st.LastFiredDate != firedBefore) ReminderStateStore.Save(_statePath, _reminderStates);
+                    // durable：此处的意义就是「先写成盘再弹窗」，不能走失败转后台的快路径（后台没落地就被杀等于没存）。
+                    if (st.LastFiredDate != firedBefore) ReminderStateStore.Save(_statePath, _reminderStates, durable: true);
                     var (action, snooze) = FireReminder(r);
                     if (snooze is int m) ReminderEngine.Snooze(st, now, m);
                     else ReminderEngine.UpdateAfterFire(r, now, action, st);
@@ -490,6 +504,9 @@ public partial class App : System.Windows.Application
 
     // 托盘菜单重建用：当前动作组列表（「运行：某组」项）。
     public IReadOnlyList<ActionGroup> Groups => _config.ActionGroups;
+
+    // 配置文件路径（导入/导出用）。
+    public string ConfigFilePath => _cfgPath;
 
     // 托盘「查看上次启动日志」：按系统关联打开 clockwork.run.log；还没跑过启动清单则提示。
     public void OpenRunLog()

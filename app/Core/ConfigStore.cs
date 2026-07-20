@@ -18,27 +18,38 @@ public static class ConfigStore
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,   // 中文/+ 不转义成 \uXXXX，保持可读 JSON
     };
 
+    // 深拷贝：序列化再反序列化。复制动作组/提醒共用一处，与读写走同一套 JsonOptions（含未来的 [JsonIgnore] 等约定），
+    // 避免各 VM 各写一份、日后改克隆策略时漏改其一。
+    public static T DeepClone<T>(T obj) => JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(obj, JsonOptions), JsonOptions)!;
+
     public static void Write(RootConfig config, string path)
+        => WriteTextAtomic(path, JsonSerializer.Serialize(config, JsonOptions), attempts: 5, delayMs: 100, throwOnFail: true);
+
+    // 单次原子写（不睡眠、失败返回 false 不抛）：给不能在调用线程阻塞重试的场景（如 UI 线程上的状态存盘快路径）。
+    public static bool TryWriteTextAtomic(string path, string text, int attempts = 1, int delayMs = 0)
+        => WriteTextAtomic(path, text, attempts, delayMs, throwOnFail: false);
+
+    // 原子写文本的唯一实现：Write（配置）与 ReminderStateStore（运行态）共用，写策略只此一份。
+    // 整个「写临时 + 替换」都在重试循环内：临时与目标都可能被瞬时占用（OneDrive/索引/杀软持句柄，文件常在 Documents 下）；
+    // 且 File.Replace 出错时已消耗 tmp，只有每轮重写临时文件，下次重试才有源可用、不退化成 FileNotFound 误报。
+    private static bool WriteTextAtomic(string path, string text, int attempts, int delayMs, bool throwOnFail)
     {
-        var json = JsonSerializer.Serialize(config, JsonOptions);
         var tmp = path + ".tmp";
         var enc = new UTF8Encoding(false); // 无 BOM
         for (int i = 0; ; i++)
         {
             try
             {
-                // 整个「写临时 + 替换」都在重试循环内：临时与目标都可能被瞬时占用（OneDrive/索引/杀软持句柄，配置常在 Documents 下）；
-                // 且 File.Replace 出错时已消耗 tmp，只有每轮重写临时文件，下次重试才有源可用、不退化成 FileNotFound 误报。
-                File.WriteAllText(tmp, json, enc);
+                File.WriteAllText(tmp, text, enc);
                 if (File.Exists(path)) File.Replace(tmp, path, null); // 第三参 null=不留备份
                 else File.Move(tmp, path);
-                return;
+                return true;
             }
             catch
             {
-                // 重试 5 次（约 0.5s）仍失败（持久占用）→ 清掉本轮临时文件（尽力）再如实抛；目标文件保持原样、绝不损坏。
-                if (i >= 4) { try { File.Delete(tmp); } catch { } throw; }
-                Thread.Sleep(100);
+                // 重试耗尽（持久占用）→ 清掉本轮临时文件（尽力）；目标文件保持原样、绝不损坏。
+                if (i >= attempts - 1) { try { File.Delete(tmp); } catch { } if (throwOnFail) throw; return false; }
+                if (delayMs > 0) Thread.Sleep(delayMs);
             }
         }
     }
@@ -62,6 +73,15 @@ public static class ConfigStore
             return RootConfig.Default(); // 解析失败落回默认（不损坏、不崩溃）
         }
         if (cfg is null) return RootConfig.Default();
+        normalized = Normalize(cfg);
+        return cfg;
+    }
+
+    // 反序列化后的规范化管线：启动读取与配置导入共用——「什么算合法配置」只定义这一份，
+    // 导入落盘的就是规范形，不把修补推迟到下次启动。返回是否做了「重启后有影响」的修补。
+    public static bool Normalize(RootConfig cfg)
+    {
+        bool normalized = false;
         // 缺集合容错：任一为 null（json 显式 null）用默认补齐，避免下游 NRE。
         var def = RootConfig.Default();
         cfg.LaunchSteps = OrDefault(cfg.LaunchSteps, def.LaunchSteps);
@@ -90,7 +110,7 @@ public static class ConfigStore
         // json 显式 "repeatUntil":null 会覆盖模型的 "" 默认；UpdateAfterFire 直接 Regex.IsMatch(它) 会 NPE 崩，补回空串。
         foreach (var r in cfg.Reminders) { r.OnYes ??= new(); r.RepeatUntil ??= ""; normalized |= NormalizeOnYes(r.OnYes); }
         foreach (var g in cfg.ActionGroups) { g.Steps ??= new(); normalized |= g.Steps.RemoveAll(s => s is null) > 0; foreach (var s in g.Steps) { s.OnYes ??= new(); normalized |= NormalizeOnYes(s.OnYes); } }
-        return cfg;
+        return normalized;
     }
 
     private static T OrDefault<T>(T? value, T fallback) where T : class => value ?? fallback;

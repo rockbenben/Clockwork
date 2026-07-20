@@ -68,7 +68,7 @@ public static class Win32
     public static IntPtr[] WindowsForProcess(string procName)
     {
         var pids = new HashSet<uint>();
-        foreach (var pr in Process.GetProcessesByName(procName)) pids.Add((uint)pr.Id);
+        foreach (var pr in Process.GetProcessesByName(procName)) { pids.Add((uint)pr.Id); pr.Dispose(); }
         var list = new List<IntPtr>();
         EnumWindows((h, p) =>
         {
