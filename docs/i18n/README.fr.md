@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,13 @@ Lancez vos applications automatiquement à l'ouverture de session · rappels pro
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · **Français** · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · **Français** · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Plan Open Source 365 #020 · Un outil de barre d'état système pour Windows : lanceur au démarrage · rappels · éléments de démarrage du système · groupes d'actions
 
-![Clockwork](../assets/social-card.png)
+![Clockwork](../../assets/social-card.png)
 
 Un petit outil de barre d'état système pour Windows qui prend en charge les tâches routinières du début de votre journée devant l'ordinateur :
 
@@ -29,7 +29,7 @@ Un petit outil de barre d'état système pour Windows qui prend en charge les t�
 
 Sans installation, entièrement portable dans un dossier unique, tout se configure à la souris ; interface sombre, compatible haute résolution (high-DPI).
 
-> 📖 **Guide complet :** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Guide complet :** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Prérequis
 
@@ -45,9 +45,11 @@ Sans installation, entièrement portable dans un dossier unique, tout se configu
 
 > Il reste discret dans la barre d'état système. Double-cliquez sur l'icône de la barre pour ouvrir la fenêtre ; le bouton de fermeture de la fenêtre ne fait que la masquer dans la barre. Pour quitter vraiment, utilisez **Quitter** dans le clic droit de la barre.
 
+> **Un avertissement au premier lancement, c'est normal.** L'exe n'est pas signé, donc SmartScreen affiche « Windows a protégé votre ordinateur » — cliquez sur **Informations complémentaires → Exécuter quand même**. Un antivirus peut aussi réagir : écrire des clés Run du registre et des tâches planifiées, c'est exactement le travail d'un gestionnaire de démarrage — et aussi ce que fait un logiciel malveillant ; de l'extérieur, rien ne les distingue. Si vous préférez ne pas l'accepter sur parole, compilez-le vous-même via **Pour les développeurs** ci-dessous : même résultat, votre propre binaire.
+
 ## Capture d'écran
 
-![Capture d'écran](../assets/screenshot.png)
+![Capture d'écran](../../assets/screenshot.png)
 
 ## Les cinq onglets
 
@@ -117,10 +119,6 @@ C#/.NET WPF ; source dans `app/` (nécessite le SDK .NET 10). Couches : `Core/` 
   Sortie : `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / releases** (GitHub Actions) : les builds de push / PR compilent et exécutent tous les tests sur un runner Windows ; pousser un tag `v*` (par ex. `v2.0.0`) compile, estampille la version du fichier à partir du tag, crée une Release GitHub et y attache `Clockwork-<tag>.zip` (contenant `Clockwork.exe`).
 
-## À propos du Plan Open Source 365
+## À propos du 365 Open Source Plan
 
-Il s'agit du projet #20 du [Plan Open Source 365](https://github.com/rockbenben/365opensource) — une personne + l'IA, plus de 300 projets open source en un an. [Soumettre une demande →](https://365.aishort.top/)
-
-## Licence
-
-[MIT](../LICENSE) © rockbenben
+Projet **#020** du [365 Open Source Plan](https://github.com/rockbenben/365opensource) — une personne + l'IA, plus de 300 projets open source en un an. [Proposez votre idée →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

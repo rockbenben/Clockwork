@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@ Apps beim Anmelden automatisch starten · zeitgesteuerte Erinnerungen · eine ga
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · **Deutsch** · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · **Deutsch** · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365-Open-Source-Plan #020 · Ein Windows-Tray-Tool: Autostart-Launcher · Erinnerungen · System-Autostart-Einträge · Aktionsgruppen
+> Ein Windows-Tray-Tool: Autostart-Launcher · Erinnerungen · System-Autostart-Einträge · Aktionsgruppen
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 Ein kleines Windows-Tray-Tool, das sich um die Routineteile deines Tagesstarts am Computer kümmert:
 
@@ -29,7 +31,7 @@ Ein kleines Windows-Tray-Tool, das sich um die Routineteile deines Tagesstarts a
 
 Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Maus konfigurierbar; dunkle Oberfläche, High-DPI-tauglich.
 
-> 📖 **Vollständige Anleitung:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Vollständige Anleitung:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Voraussetzungen
 
@@ -45,9 +47,11 @@ Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Ma
 
 > Es sitzt still im Tray. Doppelklicke das Tray-Symbol, um das Fenster zu öffnen; die Schließen-Schaltfläche des Fensters blendet es nur in den Tray aus. Wirklich beenden über den Rechtsklick im Tray → **Beenden**.
 
+> **Beim ersten Start kommt eine Warnung — das ist normal.** Die exe ist nicht signiert, daher zeigt SmartScreen „Der Computer wurde durch Windows geschützt“ — klicken Sie auf **Weitere Informationen → Trotzdem ausführen**. Auch Virenscanner können anschlagen: Registry-Run-Schlüssel und geplante Aufgaben zu schreiben ist genau das, was ein Autostart-Manager tut — und zugleich das, was Schadsoftware tut; von außen ist das nicht zu unterscheiden. Wer das nicht auf Vertrauen hin hinnehmen möchte, baut sich die Anwendung nach **Für Entwickler** unten selbst — gleiches Ergebnis, eigene Binärdatei.
+
 ## Screenshot
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## Die fünf Tabs
 
@@ -117,10 +121,6 @@ C#/.NET WPF; Quelltext in `app/` (benötigt das .NET-10-SDK). Schichten: `Core/`
   Ausgabe: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / Releases** (GitHub Actions): Push / PR baut und führt alle Tests auf einem Windows-Runner aus; das Pushen eines `v*`-Tags (z. B. `v2.0.0`) baut, prägt die Dateiversion aus dem Tag ein, erstellt ein GitHub Release und hängt `Clockwork-<Tag>.zip` (enthält `Clockwork.exe`) an.
 
-## Über den 365-Open-Source-Plan
+## Über den 365 Open Source Plan
 
-Dies ist Projekt Nr. 20 des [365-Open-Source-Plans](https://github.com/rockbenben/365opensource) — eine Person + KI, 300+ Open-Source-Projekte in einem Jahr. [Einen Wunsch einreichen →](https://365.aishort.top/)
-
-## Lizenz
-
-[MIT](../LICENSE) © rockbenben
+Projekt **#020** des [365 Open Source Plan](https://github.com/rockbenben/365opensource) — eine Person + KI, über 300 Open-Source-Projekte in einem Jahr. [Reiche deine Idee ein →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

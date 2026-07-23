@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · **繁體中文** · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · **繁體中文** · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 開源計畫 #020 · 一款 Windows 工作列小工具：啟動啟動器 · 提醒 · 系統開機自啟項 · 動作群組
+> 一款 Windows 工作列小工具：啟動啟動器 · 提醒 · 系統開機自啟項 · 動作群組
 
-![Clockwork](../assets/social-card.png)
+[![365 開源計畫 #020](https://img.shields.io/badge/365%20%E9%96%8B%E6%BA%90%E8%A8%88%E7%95%AB-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 一款小巧的 Windows 工作列工具，替你打理每天坐到電腦前那些例行公事：
 
@@ -29,7 +31,7 @@
 
 免安裝、完全可攜的單一資料夾、一切都能用滑鼠設定；深色介面、支援高 DPI。
 
-> 📖 **詳細使用說明：** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **詳細使用說明：** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## 系統需求
 
@@ -45,9 +47,11 @@
 
 > 它會安靜地待在工作列。雙擊工作列圖示即可開啟視窗；視窗的關閉按鈕只是把它縮回工作列。要真正結束，請用工作列圖示的右鍵 **結束**。
 
+> **首次執行會有警告，屬正常。** 程式未做程式碼簽章，SmartScreen 會跳出「已保護您的電腦」——點「其他資訊」→「仍要執行」。部分防毒軟體也可能報警，因為寫登錄檔 Run 機碼與排程工作，既是啟動管理器該做的事，也是惡意程式常做的事，從外部無法區分。不想憑信任接受的話，依下方**開發者建置**自行編譯一份，結果一樣、執行檔是你自己的。
+
 ## 螢幕截圖
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## 五個分頁
 
@@ -117,10 +121,6 @@ C#/.NET WPF；原始碼在 `app/`（需要 .NET 10 SDK）。分層：`Core/` 純
   輸出：`app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`。
 - **CI / 發行**（GitHub Actions）：push / PR 會在 Windows runner 上建置並執行所有測試；推送 `v*` 標籤（例如 `v2.0.0`）會建置、依標籤標記檔案版本、建立 GitHub Release 並附上 `Clockwork-<標籤>.zip`（內含 `Clockwork.exe`）。
 
-## 關於 365 開源計畫
+## 關於 365 開源計劃
 
-這是 [365 開源計畫](https://github.com/rockbenben/365opensource) 的第 20 號專案——一個人 + AI，一年 300+ 個開源專案。[提交需求 →](https://365.aishort.top/)
-
-## 授權
-
-[MIT](../LICENSE) © rockbenben
+[365 開源計劃](https://github.com/rockbenben/365opensource) 的第 **#020** 個專案——一人 + AI，一年 300+ 個開源專案。[提交你的點子 →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

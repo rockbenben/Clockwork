@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@ Start je apps automatisch bij het aanmelden · herinneringen op tijd · met éé
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Nederlands** · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Nederlands** · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 Open-Source Plan #020 · Een Windows-systeemvaktool: opstartlanceerder · herinneringen · opstartitems van het systeem · actiegroepen
+> Een Windows-systeemvaktool: opstartlanceerder · herinneringen · opstartitems van het systeem · actiegroepen
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 Een kleine Windows-systeemvaktool die de routineklusjes afhandelt waarmee je je dag achter de computer begint:
 
@@ -29,7 +31,7 @@ Een kleine Windows-systeemvaktool die de routineklusjes afhandelt waarmee je je 
 
 Geen installatie, volledig draagbaar in één map, alles met de muis in te stellen; donkere interface, geschikt voor hoge resolutie (high-DPI).
 
-> 📖 **Volledige handleiding:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Volledige handleiding:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Vereisten
 
@@ -45,9 +47,11 @@ Geen installatie, volledig draagbaar in één map, alles met de muis in te stell
 
 > Hij zit rustig in het systeemvak. Dubbelklik op het systeemvakpictogram om het venster te openen; de sluitknop van het venster verbergt het alleen in het systeemvak. Echt afsluiten doe je via **Afsluiten** in het rechtsklikmenu van het systeemvak.
 
+> **Een waarschuwing bij de eerste start is normaal.** De exe is niet ondertekend, dus SmartScreen toont «Windows heeft uw pc beschermd» — klik op **Meer informatie → Toch uitvoeren**. Ook een virusscanner kan aanslaan: Run-sleutels in het register en geplande taken schrijven is precies wat een opstartbeheerder doet — en ook wat malware doet; van buitenaf zijn ze niet te onderscheiden. Wil je dat niet op vertrouwen aannemen, bouw hem dan zelf via **Voor ontwikkelaars** hieronder: zelfde resultaat, je eigen binary.
+
 ## Schermafbeelding
 
-![Schermafbeelding](../assets/screenshot.png)
+![Schermafbeelding](../../assets/screenshot.png)
 
 ## De vijf tabbladen
 
@@ -119,8 +123,4 @@ C#/.NET WPF; broncode in `app/` (vereist de .NET 10-SDK). Lagen: `Core/` pure lo
 
 ## Over het 365 Open-Source Plan
 
-Dit is project #20 van het [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — één persoon + AI, 300+ opensourceprojecten in een jaar. [Een verzoek indienen →](https://365.aishort.top/)
-
-## Licentie
-
-[MIT](../LICENSE) © rockbenben
+Project **#020** van het [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — één persoon + AI, 300+ opensourceprojecten in een jaar. [Een verzoek indienen →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

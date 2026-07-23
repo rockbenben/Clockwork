@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · **हिन्दी** · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · **हिन्दी** · [العربية](README.ar.md)
 
 </div>
 
-> 365 Open-Source Plan #020 · एक Windows ट्रे टूल: स्टार्टअप लॉन्चर · रिमाइंडर · सिस्टम स्टार्टअप आइटम · एक्शन समूह
+> एक Windows ट्रे टूल: स्टार्टअप लॉन्चर · रिमाइंडर · सिस्टम स्टार्टअप आइटम · एक्शन समूह
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 एक छोटा Windows ट्रे टूल जो कंप्यूटर पर आपका दिन शुरू करने के दोहराव वाले हिस्सों को संभाल लेता है:
 
@@ -29,7 +31,7 @@
 
 कोई इंस्टॉल नहीं, पूरी तरह पोर्टेबल एकल फ़ोल्डर, सब कुछ माउस से कॉन्फ़िगर करने योग्य; डार्क UI, हाई-DPI अनुकूल।
 
-> 📖 **पूरी गाइड:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **पूरी गाइड:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## आवश्यकताएँ
 
@@ -45,9 +47,11 @@
 
 > यह चुपचाप ट्रे में बैठा रहता है। विंडो खोलने के लिए ट्रे आइकन पर डबल-क्लिक करें; विंडो का क्लोज़ बटन बस उसे ट्रे में छिपा देता है। पूरी तरह बंद करने के लिए ट्रे पर राइट-क्लिक कर **Exit** चुनें।
 
+> **पहली बार चलाने पर चेतावनी आना सामान्य है।** exe कोड-साइन नहीं है, इसलिए SmartScreen «Windows protected your PC» दिखाता है — **More info → Run anyway** पर क्लिक करें। एंटीवायरस भी चेतावनी दे सकता है: रजिस्ट्री की Run कुंजियाँ और शेड्यूल्ड टास्क लिखना ठीक वही है जो एक स्टार्टअप मैनेजर करता है — और वही मैलवेयर भी करता है; बाहर से दोनों में फ़र्क़ नहीं दिखता। अगर आप इसे सिर्फ़ भरोसे पर स्वीकार नहीं करना चाहते, तो नीचे **डेवलपर्स के लिए** देखकर खुद बिल्ड करें — नतीजा वही, और बाइनरी आपकी अपनी।
+
 ## स्क्रीनशॉट
 
-![स्क्रीनशॉट](../assets/screenshot.png)
+![स्क्रीनशॉट](../../assets/screenshot.png)
 
 ## पाँच टैब
 
@@ -117,10 +121,6 @@ C#/.NET WPF; स्रोत `app/` में (`.NET 10 SDK` चाहिए)।
   आउटपुट: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`।
 - **CI / रिलीज़** (GitHub Actions): push / PR एक Windows runner पर बिल्ड करता है और सभी टेस्ट चलाता है; एक `v*` टैग पुश करना (जैसे `v2.0.0`) बिल्ड करता है, टैग से फ़ाइल संस्करण अंकित करता है, एक GitHub Release बनाता है और `Clockwork-<टैग>.zip` (जिसमें `Clockwork.exe` होता है) संलग्न करता है।
 
-## 365 Open-Source Plan के बारे में
+## 365 ओपन सोर्स प्लान के बारे में
 
-यह [365 Open-Source Plan](https://github.com/rockbenben/365opensource) की परियोजना #20 है — एक व्यक्ति + AI, एक साल में 300+ ओपन-सोर्स परियोजनाएँ। [अनुरोध भेजें →](https://365.aishort.top/)
-
-## लाइसेंस
-
-[MIT](../LICENSE) © rockbenben
+[365 ओपन सोर्स प्लान](https://github.com/rockbenben/365opensource) का प्रोजेक्ट **#020** — एक व्यक्ति + AI, एक साल में 300+ ओपन सोर्स प्रोजेक्ट्स। [अपना आइडिया सबमिट करें →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

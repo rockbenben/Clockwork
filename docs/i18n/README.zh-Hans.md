@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@
 
 <div align="center">
 
-[English](../README.md) · **简体中文** · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · **简体中文** · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 开源计划 #020 · Windows 托盘小工具：开机启动 · 定时提醒 · 系统启动项 · 动作组
+> Windows 托盘小工具：开机启动 · 定时提醒 · 系统启动项 · 动作组
 
-![Clockwork](../assets/social-card.png)
+[![365 开源计划 #020](https://img.shields.io/badge/365%20%E5%BC%80%E6%BA%90%E8%AE%A1%E5%88%92-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 一个给 Windows 用的托盘小工具，帮你**管好开机与日常这几件事**：
 
@@ -29,7 +31,7 @@
 
 免安装、绿色单文件夹、所有设置点点鼠标就能改；暗色界面、高分屏自适应。界面提供 **18 种语言**，首次运行默认跟随系统显示语言。
 
-> 📖 **详细使用说明：** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **详细使用说明：** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## 运行要求
 
@@ -45,9 +47,11 @@
 
 > 平时它安静待在右下角托盘。双击托盘图标打开窗口；点窗口关闭按钮只是收起到托盘，不会退出。彻底退出用托盘右键「退出」。
 
+> **首次运行会有告警，属正常。** 程序未做代码签名，SmartScreen 会弹「已保护你的电脑」——点「更多信息」→「仍要运行」。部分杀毒软件也可能报警，因为写注册表 Run 键和计划任务既是启动管理器该干的事，也是恶意软件常干的事，从外部无法区分。不想凭信任接受的话，按下方**开发者构建**自己编译一份，结果一样、二进制是你自己的。
+
 ## 长这样
 
-![界面截图](../assets/screenshot.png)
+![界面截图](../../assets/screenshot.png)
 
 ## 五个标签页
 
@@ -119,8 +123,4 @@ C#/.NET WPF，源码在 `app/`（需 .NET 10 SDK）。分层：`Core/` 纯逻辑
 
 ## 关于 365 开源计划
 
-本项目是 [365 开源计划](https://github.com/rockbenben/365opensource) 的第 20 个项目 —— 一个人 + AI，一年 300+ 个开源项目。[提交你的需求 →](https://365.aishort.top/)
-
-## 许可
-
-[MIT](../LICENSE) © rockbenben
+[365 开源计划](https://github.com/rockbenben/365opensource) 的第 **#020** 个项目——一个人 + AI，一年 300+ 个开源项目。[提交你的需求 →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

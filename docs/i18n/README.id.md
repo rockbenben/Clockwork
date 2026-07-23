@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · **Bahasa Indonesia** · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · **Bahasa Indonesia** · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 Open-Source Plan #020 · Alat tray Windows: peluncur startup · pengingat · item startup sistem · grup aksi
+> Alat tray Windows: peluncur startup · pengingat · item startup sistem · grup aksi
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 Alat tray Windows kecil yang mengurus bagian-bagian rutin saat memulai hari Anda di depan komputer:
 
@@ -29,7 +31,7 @@ Alat tray Windows kecil yang mengurus bagian-bagian rutin saat memulai hari Anda
 
 Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigurasi dengan mouse; antarmuka gelap, sadar high-DPI.
 
-> 📖 **Panduan lengkap:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Panduan lengkap:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Persyaratan
 
@@ -45,9 +47,11 @@ Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigu
 
 > Ia bertengger diam di tray. Klik dua kali ikon tray untuk membuka jendela; tombol tutup jendela hanya menyembunyikannya ke tray. Untuk benar-benar keluar, klik kanan tray lalu pilih **Keluar**.
 
+> **Peringatan saat pertama dijalankan itu wajar.** File exe tidak ditandatangani, jadi SmartScreen menampilkan «Windows protected your PC» — klik **More info → Run anyway**. Antivirus pun bisa ikut memperingatkan: menulis kunci Run di registry dan tugas terjadwal memang persis pekerjaan sebuah pengelola startup — dan juga yang biasa dilakukan malware; dari luar keduanya tak terbedakan. Kalau tak mau menerimanya atas dasar percaya saja, bangun sendiri lewat **Untuk pengembang** di bawah: hasilnya sama, binernya milik Anda.
+
 ## Tangkapan layar
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## Lima tab
 
@@ -117,10 +121,6 @@ C#/.NET WPF; sumber di `app/` (membutuhkan .NET 10 SDK). Lapisan: `Core/` logika
   Keluaran: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / rilis** (GitHub Actions): push / PR membangun dan menjalankan semua tes pada Windows runner; men-push tag `v*` (mis. `v2.0.0`) membangun, mencap versi berkas dari tag, membuat GitHub Release dan melampirkan `Clockwork-<tag>.zip` (berisi `Clockwork.exe`).
 
-## Tentang 365 Open-Source Plan
+## Tentang 365 Open Source Plan
 
-Ini adalah proyek #20 dari [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — satu orang + AI, 300+ proyek open-source dalam setahun. [Kirim permintaan →](https://365.aishort.top/)
-
-## Lisensi
-
-[MIT](../LICENSE) © rockbenben
+Proyek **#020** dari [365 Open Source Plan](https://github.com/rockbenben/365opensource) — satu orang + AI, 300+ proyek open-source dalam setahun. [Ajukan ide Anda →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

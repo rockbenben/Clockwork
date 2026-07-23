@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,13 @@
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · **Русский** · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · **Русский** · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Открытый план 365 #020 · Утилита в трее Windows: запуск при старте · напоминания · элементы автозагрузки системы · группы действий
 
-![Clockwork](../assets/social-card.png)
+![Clockwork](../../assets/social-card.png)
 
 Небольшая утилита в трее Windows, которая берёт на себя рутину при начале рабочего дня за компьютером:
 
@@ -29,7 +29,7 @@
 
 Без установки, полностью портативна в одной папке, всё настраивается мышью; тёмный интерфейс, поддержка высокого DPI.
 
-> 📖 **Полное руководство:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Полное руководство:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Требования
 
@@ -45,9 +45,11 @@
 
 > Она тихо сидит в трее. Дважды щёлкните по значку в трее, чтобы открыть окно; кнопка закрытия окна лишь сворачивает его в трей. Чтобы выйти по-настоящему, используйте **Выход** в контекстном меню трея.
 
+> **Предупреждение при первом запуске — это нормально.** Файл exe не подписан, поэтому SmartScreen показывает «Система Windows защитила ваш компьютер» — нажмите **Подробнее → Выполнить в любом случае**. Антивирус тоже может сработать: запись ключей Run в реестре и заданий планировщика — это ровно то, чем занимается менеджер автозагрузки, и одновременно то, чем занимается вредонос; снаружи их не различить. Если не хотите принимать это на веру, соберите программу сами по разделу **Для разработчиков** ниже — результат тот же, а бинарник ваш собственный.
+
 ## Скриншот
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## Пять вкладок
 
@@ -117,10 +119,6 @@ C#/.NET WPF; исходники в `app/` (нужен .NET 10 SDK). Слои: `C
   Результат: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / релизы** (GitHub Actions): push / PR собирают и прогоняют все тесты на Windows-раннере; отправка тега `v*` (например, `v2.0.0`) собирает, проставляет версию файла из тега, создаёт GitHub Release и прикрепляет `Clockwork-<тег>.zip` (содержащий `Clockwork.exe`).
 
-## Об открытом плане 365
+## О плане 365 Open Source
 
-Это проект #20 [открытого плана 365](https://github.com/rockbenben/365opensource) — один человек + ИИ, более 300 open-source проектов за год. [Отправить запрос →](https://365.aishort.top/)
-
-## Лицензия
-
-[MIT](../LICENSE) © rockbenben
+Проект **#020** из [плана 365 Open Source](https://github.com/rockbenben/365opensource) — один человек + ИИ, 300+ открытых проектов за год. [Предложить свою идею →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · **ไทย** · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · **ไทย** · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 Open-Source Plan #020 · เครื่องมือใน System Tray ของ Windows: ตัวเปิดโปรแกรมตอนเริ่มระบบ · การเตือน · รายการเริ่มต้นของระบบ · กลุ่มการทำงาน
+> เครื่องมือใน System Tray ของ Windows: ตัวเปิดโปรแกรมตอนเริ่มระบบ · การเตือน · รายการเริ่มต้นของระบบ · กลุ่มการทำงาน
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 เครื่องมือเล็ก ๆ ใน System Tray ของ Windows ที่ช่วยจัดการส่วนงานซ้ำ ๆ ในตอนเริ่มต้นวันทำงานหน้าคอมพิวเตอร์ของคุณ:
 
@@ -29,7 +31,7 @@
 
 ไม่ต้องติดตั้ง พกพาได้เต็มรูปแบบในโฟลเดอร์เดียว ตั้งค่าทุกอย่างได้ด้วยเมาส์ ธีมมืด รองรับหน้าจอความละเอียดสูง (high-DPI)
 
-> 📖 **คู่มือฉบับเต็ม:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **คู่มือฉบับเต็ม:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## ความต้องการของระบบ
 
@@ -45,9 +47,11 @@
 
 > มันจะอยู่เงียบ ๆ ใน System Tray ดับเบิลคลิกไอคอนใน Tray เพื่อเปิดหน้าต่าง; ปุ่มปิดของหน้าต่างเพียงซ่อนมันลง Tray เท่านั้น หากต้องการปิดจริง ๆ ให้คลิกขวาที่ Tray แล้วเลือก **ออก**
 
+> **มีคำเตือนตอนเปิดครั้งแรกถือเป็นเรื่องปกติ** ไฟล์ exe ไม่ได้เซ็นรับรองโค้ด SmartScreen จึงขึ้นว่า «Windows protected your PC» — คลิก **More info → Run anyway** โปรแกรมแอนตี้ไวรัสก็อาจแจ้งเตือนได้ เพราะการเขียนคีย์ Run ในรีจิสทรีและงานตามกำหนดเวลา คือสิ่งที่ตัวจัดการโปรแกรมเริ่มต้นต้องทำ และก็เป็นสิ่งที่มัลแวร์มักทำเช่นกัน จากภายนอกแยกไม่ออก ถ้าไม่อยากยอมรับด้วยความเชื่อใจ ให้คอมไพล์เองตามหัวข้อ **สำหรับนักพัฒนา** ด้านล่าง ผลลัพธ์เหมือนกัน และไบนารีเป็นของคุณเอง
+
 ## ภาพหน้าจอ
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## ห้าแท็บ
 
@@ -117,10 +121,6 @@ C#/.NET WPF; ซอร์สโค้ดอยู่ใน `app/` (ต้อง�
   ผลลัพธ์: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`
 - **CI / releases** (GitHub Actions): การ push / PR จะบิลด์และรันเทสต์ทั้งหมดบน Windows runner; การ push แท็ก `v*` (เช่น `v2.0.0`) จะบิลด์, ประทับเวอร์ชันไฟล์จากแท็ก, สร้าง GitHub Release และแนบ `Clockwork-<แท็ก>.zip` (ซึ่งมี `Clockwork.exe` อยู่ข้างใน)
 
-## เกี่ยวกับ 365 Open-Source Plan
+## เกี่ยวกับโครงการ 365 Open Source
 
-นี่คือโปรเจกต์ #20 ของ [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — คนหนึ่งคน + AI, โปรเจกต์โอเพนซอร์ส 300+ โปรเจกต์ในหนึ่งปี [ส่งคำขอ →](https://365.aishort.top/)
-
-## สัญญาอนุญาต
-
-[MIT](../LICENSE) © rockbenben
+โปรเจกต์ **#020** ของ[โครงการ 365 Open Source](https://github.com/rockbenben/365opensource) — หนึ่งคน + AI, มากกว่า 300 โปรเจกต์โอเพนซอร์สในหนึ่งปี [ส่งไอเดียของคุณ →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

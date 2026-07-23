@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · **한국어** · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · **한국어** · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 오픈소스 계획 #020 · Windows 트레이 도구: 시작 프로그램 실행기 · 알림 · 시스템 시작 항목 · 액션 그룹
+> Windows 트레이 도구: 시작 프로그램 실행기 · 알림 · 시스템 시작 항목 · 액션 그룹
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 컴퓨터 앞에서 하루를 시작할 때의 반복적인 일들을 대신 처리해 주는 작은 Windows 트레이 도구입니다:
 
@@ -29,7 +31,7 @@
 
 설치 불필요, 완전히 이동 가능한 단일 폴더, 모든 것을 마우스로 설정 가능; 다크 UI, 고 DPI 지원.
 
-> 📖 **자세한 사용법:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **자세한 사용법:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## 요구 사항
 
@@ -45,9 +47,11 @@
 
 > 조용히 트레이에 머무릅니다. 트레이 아이콘을 더블클릭하면 창이 열립니다; 창의 닫기 버튼은 트레이로 숨길 뿐입니다. 완전히 종료하려면 트레이 아이콘을 우클릭해 **종료**를 사용하세요.
 
+> **처음 실행할 때 경고가 뜨는 것은 정상입니다.** 이 exe는 코드 서명이 없어 SmartScreen이 「Windows의 PC 보호」를 표시합니다 —— 「추가 정보」→「실행」을 클릭하세요. 백신이 반응할 수도 있습니다. 레지스트리 Run 키와 예약 작업에 쓰는 것은 시작 프로그램 관리자가 당연히 하는 일이면서 동시에 악성코드가 흔히 하는 일이라, 밖에서는 구분할 방법이 없기 때문입니다. 신뢰만으로 받아들이고 싶지 않다면 아래 **개발자 빌드**를 따라 직접 빌드하세요 —— 결과는 같고, 바이너리는 당신 것입니다.
+
 ## 스크린샷
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## 다섯 개의 탭
 
@@ -117,10 +121,6 @@ C#/.NET WPF; 소스는 `app/`(.NET 10 SDK 필요). 레이어: `Core/` 순수 로
   출력: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / 릴리스**(GitHub Actions): push / PR은 Windows 러너에서 빌드하고 모든 테스트를 실행합니다; `v*` 태그(예: `v2.0.0`)를 push하면 빌드하고, 태그에서 파일 버전을 새기고, GitHub Release를 만들어 `Clockwork-<태그>.zip`(`Clockwork.exe` 포함)을 첨부합니다.
 
-## 365 오픈소스 계획에 대하여
+## 365 오픈소스 프로젝트 소개
 
-이것은 [365 오픈소스 계획](https://github.com/rockbenben/365opensource)의 20번째 프로젝트입니다 — 한 사람 + AI가 1년에 300개 이상의 오픈소스 프로젝트를. [요청 보내기 →](https://365.aishort.top/)
-
-## 라이선스
-
-[MIT](../LICENSE) © rockbenben
+[365 오픈소스 프로젝트](https://github.com/rockbenben/365opensource)의 **#020**번째 프로젝트 — 한 사람 + AI, 1년에 오픈소스 프로젝트 300개 이상. [아이디어 제안하기 →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

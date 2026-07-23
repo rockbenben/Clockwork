@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,13 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · **Español** · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · **Español** · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Plan de Código Abierto 365 #020 · Una herramienta de bandeja para Windows: lanzador de inicio · recordatorios · elementos de inicio del sistema · grupos de acciones
 
-![Clockwork](../assets/social-card.png)
+![Clockwork](../../assets/social-card.png)
 
 Una pequeña herramienta de bandeja para Windows que se encarga de las partes rutinarias de empezar tu día frente al ordenador:
 
@@ -29,7 +29,7 @@ Una pequeña herramienta de bandeja para Windows que se encarga de las partes ru
 
 Sin instalación, totalmente portátil en una sola carpeta, todo configurable con el ratón; interfaz oscura, compatible con alta resolución (high-DPI).
 
-> 📖 **Guía completa:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Guía completa:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Requisitos
 
@@ -45,9 +45,11 @@ Sin instalación, totalmente portátil en una sola carpeta, todo configurable co
 
 > Se queda tranquilo en la bandeja. Haz doble clic en el icono de la bandeja para abrir la ventana; el botón de cerrar de la ventana solo la oculta en la bandeja. Para salir de verdad, usa **Salir** en el clic derecho de la bandeja.
 
+> **La primera vez saldrá una advertencia: es normal.** El exe no está firmado, así que SmartScreen muestra «Windows protegió su PC» — haz clic en **Más información → Ejecutar de todas formas**. Algún antivirus también puede alertar: escribir claves Run del registro y tareas programadas es justo lo que hace un gestor de arranque… y también lo que hace el malware; desde fuera no se distinguen. Si prefieres no aceptarlo por confianza, compílalo tú mismo siguiendo **Para desarrolladores** más abajo: mismo resultado, binario propio.
+
 ## Captura de pantalla
 
-![Captura de pantalla](../assets/screenshot.png)
+![Captura de pantalla](../../assets/screenshot.png)
 
 ## Las cinco pestañas
 
@@ -117,10 +119,6 @@ C#/.NET WPF; código fuente en `app/` (necesita el SDK de .NET 10). Capas: `Core
   Salida: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / releases** (GitHub Actions): las compilaciones de push / PR construyen y ejecutan todas las pruebas en un runner de Windows; al subir una etiqueta `v*` (p. ej. `v2.0.0`) se compila, se sella la versión del archivo a partir de la etiqueta, se crea un Release de GitHub y se adjunta `Clockwork-<tag>.zip` (que contiene `Clockwork.exe`).
 
-## Acerca del Plan de Código Abierto 365
+## Sobre el Plan 365 de código abierto
 
-Este es el proyecto #20 del [Plan de Código Abierto 365](https://github.com/rockbenben/365opensource) — una persona + IA, más de 300 proyectos de código abierto en un año. [Envía una solicitud →](https://365.aishort.top/)
-
-## Licencia
-
-[MIT](../LICENSE) © rockbenben
+Proyecto **#020** del [Plan 365 de código abierto](https://github.com/rockbenben/365opensource) — una persona + IA, más de 300 proyectos de código abierto en un año. [Envía tu idea →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

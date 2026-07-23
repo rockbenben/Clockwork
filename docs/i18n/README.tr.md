@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · **Türkçe** · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · **Türkçe** · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 Açık Kaynak Planı #020 · Bir Windows tepsi aracı: başlangıç başlatıcısı · hatırlatıcılar · sistem başlangıç öğeleri · eylem grupları
+> Bir Windows tepsi aracı: başlangıç başlatıcısı · hatırlatıcılar · sistem başlangıç öğeleri · eylem grupları
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 Bilgisayar başında gününüze başlarken karşılaşılan rutin işleri üstlenen küçük bir Windows tepsi aracı:
 
@@ -29,7 +31,7 @@ Bilgisayar başında gününüze başlarken karşılaşılan rutin işleri üstl
 
 Kurulum yok, tek klasörde tamamen taşınabilir, her şey fareyle yapılandırılabilir; koyu arayüz, yüksek DPI uyumlu.
 
-> 📖 **Tam kılavuz:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Tam kılavuz:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Gereksinimler
 
@@ -45,9 +47,11 @@ Kurulum yok, tek klasörde tamamen taşınabilir, her şey fareyle yapılandır�
 
 > Sessizce tepside durur. Pencereyi açmak için tepsi simgesine çift tıklayın; pencerenin kapat düğmesi onu yalnızca tepsiye gizler. Gerçekten çıkmak için tepsinin sağ tık menüsündeki **Çıkış**'ı kullanın.
 
+> **İlk çalıştırmada uyarı çıkması normaldir.** exe kod imzalı değil, bu yüzden SmartScreen «Windows bilgisayarınızı korudu» der — **Daha fazla bilgi → Yine de çalıştır**'a tıklayın. Antivirüs de tepki verebilir: kayıt defteri Run anahtarları ve zamanlanmış görevler yazmak, bir başlangıç yöneticisinin tam olarak yaptığı iştir — ve aynı zamanda kötü amaçlı yazılımın yaptığı iştir; dışarıdan ayırt edilemez. Bunu güvene dayanarak kabul etmek istemiyorsanız, aşağıdaki **Geliştiriciler için** bölümüyle kendiniz derleyin: aynı sonuç, kendi ikili dosyanız.
+
 ## Ekran görüntüsü
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## Beş sekme
 
@@ -119,8 +123,4 @@ C#/.NET WPF; kaynak `app/` içinde (.NET 10 SDK gerekir). Katmanlar: `Core/` saf
 
 ## 365 Açık Kaynak Planı hakkında
 
-Bu, [365 Açık Kaynak Planı](https://github.com/rockbenben/365opensource)'nın 20 numaralı projesidir — bir kişi + yapay zeka, bir yılda 300'ün üzerinde açık kaynak proje. [İstek gönder →](https://365.aishort.top/)
-
-## Lisans
-
-[MIT](../LICENSE) © rockbenben
+[365 Açık Kaynak Planı](https://github.com/rockbenben/365opensource) kapsamındaki **#020** numaralı proje — bir kişi + yapay zeka, bir yılda 300'den fazla açık kaynak proje. [Fikrinizi paylaşın →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

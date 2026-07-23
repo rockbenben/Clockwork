@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · **Tiếng Việt** · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · **Tiếng Việt** · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 Open-Source Plan #020 · Công cụ khay hệ thống cho Windows: trình khởi động · nhắc nhở · mục khởi động hệ thống · nhóm thao tác
+> Công cụ khay hệ thống cho Windows: trình khởi động · nhắc nhở · mục khởi động hệ thống · nhóm thao tác
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 Một công cụ nhỏ nằm ở khay hệ thống Windows, lo giúp bạn những phần lặp lại khi bắt đầu ngày làm việc bên máy tính:
 
@@ -29,7 +31,7 @@ Một công cụ nhỏ nằm ở khay hệ thống Windows, lo giúp bạn nhữ
 
 Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ cấu hình bằng chuột; giao diện tối, tương thích DPI cao.
 
-> 📖 **Hướng dẫn đầy đủ:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Hướng dẫn đầy đủ:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Yêu cầu
 
@@ -45,9 +47,11 @@ Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ c
 
 > Nó nằm im trong khay hệ thống. Nhấp đúp biểu tượng khay để mở cửa sổ; nút đóng của cửa sổ chỉ thu vào khay. Muốn thoát hẳn, nhấp chuột phải vào khay và chọn **Thoát**.
 
+> **Lần chạy đầu có cảnh báo là bình thường.** Tệp exe không được ký số nên SmartScreen hiện «Windows đã bảo vệ PC của bạn» — bấm **More info → Run anyway**. Phần mềm diệt virus cũng có thể báo: ghi khoá Run trong registry và tác vụ theo lịch đúng là việc mà một trình quản lý khởi động phải làm — và cũng là việc mà mã độc hay làm; từ bên ngoài không phân biệt được. Nếu không muốn chấp nhận bằng niềm tin, hãy tự build theo mục **Dành cho nhà phát triển** bên dưới: kết quả như nhau, tệp nhị phân là của bạn.
+
 ## Ảnh chụp màn hình
 
-![Ảnh chụp màn hình](../assets/screenshot.png)
+![Ảnh chụp màn hình](../../assets/screenshot.png)
 
 ## Năm tab
 
@@ -117,10 +121,6 @@ C#/.NET WPF; mã nguồn ở `app/` (cần .NET 10 SDK). Các lớp: `Core/` log
   Kết quả: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / phát hành** (GitHub Actions): push / PR sẽ dựng và chạy toàn bộ kiểm thử trên Windows runner; đẩy một thẻ `v*` (ví dụ `v2.0.0`) sẽ dựng, đóng dấu phiên bản tệp từ thẻ, tạo một GitHub Release và đính kèm `Clockwork-<thẻ>.zip` (chứa `Clockwork.exe`).
 
-## Về 365 Open-Source Plan
+## Giới thiệu về 365 Open Source Plan
 
-Đây là dự án #20 của [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — một người + AI, 300+ dự án mã nguồn mở trong một năm. [Gửi yêu cầu →](https://365.aishort.top/)
-
-## Giấy phép
-
-[MIT](../LICENSE) © rockbenben
+Dự án **#020** của [365 Open Source Plan](https://github.com/rockbenben/365opensource) — một người + AI, hơn 300 dự án mã nguồn mở trong một năm. [Gửi ý tưởng của bạn →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

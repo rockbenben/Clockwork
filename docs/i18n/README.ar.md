@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · **العربية**
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · **العربية**
 
 </div>
 
-> 365 Open-Source Plan #020 · أداة في شريط نظام Windows: مُشغّل بدء التشغيل · تذكيرات · عناصر بدء تشغيل النظام · مجموعات إجراءات
+> أداة في شريط نظام Windows: مُشغّل بدء التشغيل · تذكيرات · عناصر بدء تشغيل النظام · مجموعات إجراءات
 
-![Clockwork](../assets/social-card.png)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 أداة صغيرة في شريط نظام Windows تتولّى الأجزاء الروتينية من بداية يومك أمام الحاسوب:
 
@@ -29,7 +31,7 @@
 
 بلا تثبيت، مجلد واحد محمول بالكامل، كل شيء قابل للضبط بالفأرة؛ واجهة داكنة، متوافقة مع DPI العالي.
 
-> 📖 **الدليل الكامل:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **الدليل الكامل:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## المتطلبات
 
@@ -45,9 +47,11 @@
 
 > يبقى بهدوء في الشريط. انقر نقرًا مزدوجًا على أيقونة الشريط لفتح النافذة؛ زر الإغلاق يخفيها إلى الشريط فقط. للخروج فعليًا، انقر بالزر الأيمن على الشريط واختر **خروج**.
 
+> **ظهور تحذير عند أول تشغيل أمر طبيعي.** ملف exe غير موقَّع رقميًا، لذا يعرض SmartScreen «Windows protected your PC» — اضغط **More info → Run anyway**. وقد ينبّه مضاد الفيروسات أيضًا: كتابة مفاتيح Run في السجل والمهام المجدولة هي بالضبط ما يفعله مدير بدء التشغيل — وهي أيضًا ما تفعله البرمجيات الخبيثة؛ ولا سبيل للتفريق بينهما من الخارج. وإن كنت تفضّل ألّا تقبل ذلك ثقةً فحسب، فابنِ البرنامج بنفسك حسب قسم **للمطوّرين** أدناه: النتيجة ذاتها، والملف التنفيذي ملكك.
+
 ## لقطة الشاشة
 
-![لقطة الشاشة](../assets/screenshot.png)
+![لقطة الشاشة](../../assets/screenshot.png)
 
 ## التبويبات الخمسة
 
@@ -117,10 +121,6 @@ C#/.NET WPF؛ المصدر في `app/` (يتطلب .NET 10 SDK). الطبقات:
   الناتج: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / الإصدارات** (GitHub Actions): يبني push / PR ويشغّل كل الاختبارات على Windows runner؛ ودفع وسم `v*` (مثل `v2.0.0`) يبني، ويطبع إصدار الملف من الوسم، وينشئ GitHub Release ويرفق `Clockwork-<الوسم>.zip` (يحتوي على `Clockwork.exe`).
 
-## عن 365 Open-Source Plan
+## عن خطة 365 مفتوح المصدر
 
-هذا المشروع رقم #20 من [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — شخص واحد + ذكاء اصطناعي، 300+ مشروع مفتوح المصدر في سنة. [أرسل طلبًا →](https://365.aishort.top/)
-
-## الترخيص
-
-[MIT](../LICENSE) © rockbenben
+المشروع **#020** من [خطة 365 مفتوح المصدر](https://github.com/rockbenben/365opensource) — شخص واحد + ذكاء اصطناعي، أكثر من 300 مشروع مفتوح المصدر في عام واحد. [شارك فكرتك ←](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

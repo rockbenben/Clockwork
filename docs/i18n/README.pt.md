@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,13 @@ Abra seus apps automaticamente ao entrar · lembretes com hora marcada · um toq
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · **Português** · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · **Português** · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Plano Open-Source 365 #020 · Uma ferramenta de bandeja do Windows: lançador de inicialização · lembretes · itens de inicialização do sistema · grupos de ações
 
-![Clockwork](../assets/social-card.png)
+![Clockwork](../../assets/social-card.png)
 
 Uma pequena ferramenta de bandeja do Windows que cuida das partes rotineiras de começar o seu dia no computador:
 
@@ -29,7 +29,7 @@ Uma pequena ferramenta de bandeja do Windows que cuida das partes rotineiras de 
 
 Sem instalação, totalmente portátil em uma única pasta, tudo configurável com o mouse; interface escura, com suporte a alta resolução (high-DPI).
 
-> 📖 **Guia completo:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Guia completo:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Requisitos
 
@@ -45,9 +45,11 @@ Sem instalação, totalmente portátil em uma única pasta, tudo configurável c
 
 > Ele fica quietinho na bandeja. Dê um duplo clique no ícone da bandeja para abrir a janela; o botão de fechar da janela apenas a oculta na bandeja. Para sair de verdade, use **Sair** no menu de contexto da bandeja.
 
+> **Um aviso no primeiro uso é normal.** O exe não é assinado, então o SmartScreen mostra «O Windows protegeu o seu PC» — clique em **Mais informações → Executar assim mesmo**. Algum antivírus também pode alertar: gravar chaves Run do registo e tarefas agendadas é exatamente o que um gestor de arranque faz — e também o que o malware faz; de fora não dá para distinguir. Se preferir não aceitar por confiança, compile você mesmo seguindo **Para programadores** abaixo: mesmo resultado, binário seu.
+
 ## Captura de tela
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## As cinco abas
 
@@ -117,10 +119,6 @@ C#/.NET WPF; código-fonte em `app/` (requer o SDK do .NET 10). Camadas: `Core/`
   Saída: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / lançamentos** (GitHub Actions): pushes / PRs compilam e executam todos os testes em um runner Windows; enviar uma tag `v*` (por exemplo, `v2.0.0`) compila, carimba a versão do arquivo a partir da tag, cria um GitHub Release e anexa o `Clockwork-<tag>.zip` (contendo o `Clockwork.exe`).
 
-## Sobre o Plano Open-Source 365
+## Sobre o Plano 365 Open Source
 
-Este é o projeto #20 do [Plano Open-Source 365](https://github.com/rockbenben/365opensource) — uma pessoa + IA, mais de 300 projetos open-source em um ano. [Enviar um pedido →](https://365.aishort.top/)
-
-## Licença
-
-[MIT](../LICENSE) © rockbenben
+Projeto **#020** do [Plano 365 Open Source](https://github.com/rockbenben/365opensource) — uma pessoa + IA, mais de 300 projetos open-source em um ano. [Envie sua ideia →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

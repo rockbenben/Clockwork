@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,13 @@ Avvia le tue app automaticamente all'accesso · promemoria a tempo · un tocco p
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · **Italiano** · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · **Italiano** · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Piano Open Source 365 #020 · Uno strumento da area di notifica per Windows: avvio automatico · promemoria · elementi di avvio del sistema · gruppi di azioni
 
-![Clockwork](../assets/social-card.png)
+![Clockwork](../../assets/social-card.png)
 
 Un piccolo strumento da area di notifica per Windows che si occupa delle parti di routine dell'inizio della tua giornata al computer:
 
@@ -29,7 +29,7 @@ Un piccolo strumento da area di notifica per Windows che si occupa delle parti d
 
 Nessuna installazione, completamente portatile in un'unica cartella, tutto configurabile con il mouse; interfaccia scura, compatibile con l'alta risoluzione (high-DPI).
 
-> 📖 **Guida completa:** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **Guida completa:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## Requisiti
 
@@ -45,9 +45,11 @@ Nessuna installazione, completamente portatile in un'unica cartella, tutto confi
 
 > Se ne sta tranquillo nell'area di notifica. Fai doppio clic sull'icona nell'area di notifica per aprire la finestra; il pulsante di chiusura della finestra la nasconde solo nell'area di notifica. Per uscire davvero, usa **Esci** dal clic destro sull'area di notifica.
 
+> **Al primo avvio compare un avviso: è normale.** L'exe non è firmato, quindi SmartScreen mostra «Windows ha protetto il PC» — fai clic su **Ulteriori informazioni → Esegui comunque**. Anche un antivirus può segnalarlo: scrivere chiavi Run del registro e attività pianificate è esattamente ciò che fa un gestore dell'avvio — ed è anche ciò che fa il malware; dall'esterno non si distinguono. Se preferisci non accettarlo sulla fiducia, compilalo tu seguendo **Per gli sviluppatori** più sotto: stesso risultato, binario tuo.
+
 ## Schermata
 
-![Schermata](../assets/screenshot.png)
+![Schermata](../../assets/screenshot.png)
 
 ## Le cinque schede
 
@@ -117,10 +119,6 @@ C#/.NET WPF; sorgente in `app/` (richiede l'SDK .NET 10). Livelli: `Core/` logic
   Output: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / releases** (GitHub Actions): le build di push / PR compilano ed eseguono tutti i test su un runner Windows; il push di un tag `v*` (ad es. `v2.0.0`) compila, marca la versione del file dal tag, crea una Release GitHub e vi allega `Clockwork-<tag>.zip` (contenente `Clockwork.exe`).
 
-## Informazioni sul Piano Open Source 365
+## Informazioni sul 365 Open Source Plan
 
-Questo è il progetto #20 del [Piano Open Source 365](https://github.com/rockbenben/365opensource) — una persona + IA, oltre 300 progetti open source in un anno. [Invia una richiesta →](https://365.aishort.top/)
-
-## Licenza
-
-[MIT](../LICENSE) © rockbenben
+Progetto **#020** del [365 Open Source Plan](https://github.com/rockbenben/365opensource) — una persona + l'IA, oltre 300 progetti open source in un anno. [Proponi la tua idea →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

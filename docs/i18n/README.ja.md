@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="../assets/logo-256.png" width="112" alt="Clockwork">
+<img src="../../assets/logo-256.png" width="112" alt="Clockwork">
 
 # Clockwork
 
@@ -12,13 +12,15 @@
 
 <div align="center">
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · **日本語** · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · **日本語** · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> 365 オープンソース計画 #020 · Windows のトレイツール：スタートアップランチャー · リマインダー · システムのスタートアップ項目 · アクショングループ
+> Windows のトレイツール：スタートアップランチャー · リマインダー · システムのスタートアップ項目 · アクショングループ
 
-![Clockwork](../assets/social-card.png)
+[![365 开源计划 #020](https://img.shields.io/badge/365%20%E5%BC%80%E6%BA%90%E8%AE%A1%E5%88%92-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
+![Clockwork](../../assets/social-card.png)
 
 一日のはじめに PC でおこなう決まりきった作業を引き受けてくれる、小さな Windows トレイツールです：
 
@@ -29,7 +31,7 @@
 
 インストール不要、完全ポータブルな単一フォルダ、すべてマウスで設定可能；ダーク UI、高 DPI 対応。
 
-> 📖 **詳しい使い方：** [English](USAGE.md) · [中文](USAGE.zh-CN.md)
+> 📖 **詳しい使い方：** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
 
 ## 動作要件
 
@@ -45,9 +47,11 @@
 
 > 静かにトレイに常駐します。トレイアイコンをダブルクリックするとウィンドウが開きます；ウィンドウの閉じるボタンはトレイに隠すだけです。完全に終了するには、トレイの右クリック **終了** から。
 
+> **初回起動時に警告が出ますが、正常です。** この exe はコード署名されていないため、SmartScreen が「Windows によって PC が保護されました」と表示します —— 「詳細情報」→「実行」をクリックしてください。ウイルス対策ソフトが反応することもあります。レジストリの Run キーやタスクスケジューラーへの書き込みは、スタートアップ管理ツールの本来の仕事であると同時に、マルウェアがよくやることでもあり、外から見分ける手立てがないからです。信用だけで受け入れたくない場合は、下の**開発者向けビルド**の手順でご自身でビルドしてください。結果は同じで、バイナリはあなたのものです。
+
 ## スクリーンショット
 
-![Screenshot](../assets/screenshot.png)
+![Screenshot](../../assets/screenshot.png)
 
 ## 5 つのタブ
 
@@ -117,10 +121,6 @@ C#/.NET WPF；ソースは `app/`（.NET 10 SDK が必要）。レイヤー：`C
   出力：`app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`。
 - **CI / リリース**（GitHub Actions）：push / PR で Windows ランナー上でビルドし、すべてのテストを実行；`v*` タグ（例：`v2.0.0`）を push すると、ビルドし、タグからファイルバージョンを刻印し、GitHub Release を作成して `Clockwork-<タグ>.zip`（`Clockwork.exe` を同梱）を添付します。
 
-## 365 オープンソース計画について
+## 365オープンソース計画について
 
-これは [365 オープンソース計画](https://github.com/rockbenben/365opensource) の 20 番目のプロジェクトです——1 人 + AI で、1 年に 300 以上のオープンソースプロジェクト。[リクエストを送る →](https://365.aishort.top/)
-
-## ライセンス
-
-[MIT](../LICENSE) © rockbenben
+[365オープンソース計画](https://github.com/rockbenben/365opensource) の **#020** 番目のプロジェクト——一人 + AIで、1年に300以上のオープンソースプロジェクトを。[あなたのアイデアを投稿する →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

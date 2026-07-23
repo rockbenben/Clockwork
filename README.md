@@ -8,15 +8,20 @@
 
 Auto-launch your apps at login · timed reminders · one tap to run a whole routine
 
+**[⬇ Download for Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portable, no installer
+
 </div>
 
 <div align="center">
 
-**English** · [简体中文](docs/README.zh-CN.md) · [繁體中文](docs/README.zh-TW.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [Deutsch](docs/README.de.md) · [Español](docs/README.es.md) · [Français](docs/README.fr.md) · [Italiano](docs/README.it.md) · [Nederlands](docs/README.nl.md) · [Português](docs/README.pt.md) · [Русский](docs/README.ru.md) · [Türkçe](docs/README.tr.md) · [Tiếng Việt](docs/README.vi.md) · [ไทย](docs/README.th.md) · [Bahasa Indonesia](docs/README.id.md) · [हिन्दी](docs/README.hi.md) · [العربية](docs/README.ar.md)
+**English** · [简体中文](docs/i18n/README.zh-Hans.md) · [繁體中文](docs/i18n/README.zh-Hant.md) · [日本語](docs/i18n/README.ja.md) · [한국어](docs/i18n/README.ko.md) · [Deutsch](docs/i18n/README.de.md) · [Español](docs/i18n/README.es.md) · [Français](docs/i18n/README.fr.md) · [Italiano](docs/i18n/README.it.md) · [Nederlands](docs/i18n/README.nl.md) · [Português](docs/i18n/README.pt.md) · [Русский](docs/i18n/README.ru.md) · [Türkçe](docs/i18n/README.tr.md) · [Tiếng Việt](docs/i18n/README.vi.md) · [ไทย](docs/i18n/README.th.md) · [Bahasa Indonesia](docs/i18n/README.id.md) · [हिन्दी](docs/i18n/README.hi.md) · [العربية](docs/i18n/README.ar.md)
 
 </div>
 
-> 365 Open-Source Plan #020 · A Windows tray tool: startup launcher · reminders · system startup items · action groups
+> A Windows tray tool: startup launcher · reminders · system startup items · action groups
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
 
 ![Clockwork](assets/social-card.png)
 
@@ -45,9 +50,11 @@ No install, fully portable single folder, everything configurable by mouse; dark
 
 > It sits quietly in the tray. Double-click the tray icon to open the window; the window's close button only hides it to the tray. Quit for real via the tray's right-click **Exit**.
 
+> **Expect a warning on first run.** The exe isn't code-signed, so SmartScreen shows "Windows protected your PC" — click **More info → Run anyway**. Some antivirus may also flag it, because writing registry Run keys and scheduled tasks is exactly what a startup manager does and also what malware does; there is no way to tell those apart from the outside. If you'd rather not take that on faith, build it yourself from source (**For developers** below) — same result, your own binary.
+
 ## Screenshot
 
-![Screenshot](assets/screenshot.png)
+![Clockwork's startup list — an ordered set of login steps, each with its own type, delay and conditions](assets/screenshot.png)
 
 ## The five tabs
 
@@ -117,10 +124,6 @@ C#/.NET WPF; source in `app/` (needs the .NET 10 SDK). Layers: `Core/` pure logi
   Output: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
 - **CI / releases** (GitHub Actions): push / PR builds and runs all tests on a Windows runner; pushing a `v*` tag (e.g. `v2.0.0`) builds, stamps the file version from the tag, creates a GitHub Release and attaches `Clockwork-<tag>.zip` (containing `Clockwork.exe`).
 
-## About the 365 Open-Source Plan
+## About the 365 Open Source Plan
 
-This is project #20 of the [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — one person + AI, 300+ open-source projects in a year. [Submit a request →](https://365.aishort.top/)
-
-## License
-
-[MIT](LICENSE) © rockbenben
+Project **#020** of the [365 Open Source Plan](https://github.com/rockbenben/365opensource) — one person + AI, 300+ open-source projects in a year. [Submit your idea →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
