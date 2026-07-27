@@ -5,13 +5,16 @@ using System.Text.Json;
 namespace Clockwork.Core;
 
 // 提醒运行态的持久化。只存"耐久"部分：上次触发日期(防同日重复弹 + 供「错过必补」判当天是否已弹) +
-// 「稍后」到点时刻。会话性字段(pending/repeat/startupHandled)有意不落盘——每次启动重新判定。
+// 「稍后」到点时刻 + 循环运行下一轮时刻。会话性字段(pending/repeat/startupHandled)有意不落盘——
+// 每次启动重新判定；NextRepeatAt 也刻意不落盘——nag 链是短程弹窗追问，每次启动从头重判，
+// 而 NextIntervalAt 是全天日程，两者语义不同不能混为一谈。
 public static class ReminderStateStore
 {
     public sealed class Persisted
     {
         public string LastFiredDate { get; set; } = "";
         public string SnoozeUntil { get; set; } = "";   // ISO8601("o") 或空
+        public string NextIntervalAt { get; set; } = "";   // ISO8601("o") 或空——循环运行是全天日程，不落盘等于中午重启丢半天
     }
 
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = true };
@@ -36,11 +39,12 @@ public static class ReminderStateStore
         var map = new Dictionary<string, Persisted>();
         foreach (var (id, st) in states)
         {
-            if (string.IsNullOrEmpty(st.LastFiredDate) && st.SnoozeUntil == null) continue;   // 无耐久内容不写
+            if (string.IsNullOrEmpty(st.LastFiredDate) && st.SnoozeUntil == null && st.NextIntervalAt == null) continue;   // 无耐久内容不写
             map[id] = new Persisted
             {
                 LastFiredDate = st.LastFiredDate,
                 SnoozeUntil = st.SnoozeUntil?.ToString("o", CultureInfo.InvariantCulture) ?? "",
+                NextIntervalAt = st.NextIntervalAt?.ToString("o", CultureInfo.InvariantCulture) ?? "",
             };
         }
         var json = JsonSerializer.Serialize(map, JsonOpts);
@@ -125,6 +129,9 @@ public static class ReminderStateStore
                 if (!string.IsNullOrEmpty(p.SnoozeUntil) &&
                     DateTime.TryParse(p.SnoozeUntil, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var su))
                     st.SnoozeUntil = su;
+                if (!string.IsNullOrEmpty(p.NextIntervalAt) &&
+                    DateTime.TryParse(p.NextIntervalAt, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var nia))
+                    st.NextIntervalAt = nia;
                 result[id] = st;
             }
         }

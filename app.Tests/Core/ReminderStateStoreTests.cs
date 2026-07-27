@@ -20,6 +20,7 @@ public class ReminderStateStoreTests
                     NextRepeatAt = new DateTime(2026, 7, 15, 9, 30, 0),
                     RepeatCount = 3,
                     StartupHandled = true,
+                    NextIntervalAt = new DateTime(2026, 7, 15, 10, 30, 0),
                 },
                 ["b"] = new ReminderState(),   // 无耐久内容 → 不写
             };
@@ -30,11 +31,29 @@ public class ReminderStateStoreTests
             Assert.False(loaded.ContainsKey("b"));
             Assert.Equal("2026-07-15", loaded["a"].LastFiredDate);
             Assert.Equal(new DateTime(2026, 7, 15, 10, 0, 0), loaded["a"].SnoozeUntil);
+            Assert.Equal(new DateTime(2026, 7, 15, 10, 30, 0), loaded["a"].NextIntervalAt);
             // 会话字段一律回到默认（不持久化）
             Assert.Null(loaded["a"].PendingFireAt);
             Assert.Null(loaded["a"].NextRepeatAt);
             Assert.Equal(0, loaded["a"].RepeatCount);
             Assert.False(loaded["a"].StartupHandled);
+        }
+        finally { File.Delete(path); }
+    }
+
+    [Fact]
+    public void Interval_only_state_is_durable()
+    {
+        // 只有 NextIntervalAt（静默循环任务刚排上第一轮、还没确认过任何弹窗）也必须写盘——
+        // 「无耐久内容不写」的守卫漏了它，中午重启就丢当天剩余轮次。
+        var path = Path.Combine(Path.GetTempPath(), "cw_state_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var states = new Dictionary<string, ReminderState> { ["x"] = new ReminderState { NextIntervalAt = new DateTime(2026, 7, 15, 11, 0, 0) } };
+            ReminderStateStore.Save(path, states);
+            var loaded = ReminderStateStore.Load(path);
+            Assert.True(loaded.ContainsKey("x"));
+            Assert.Equal(new DateTime(2026, 7, 15, 11, 0, 0), loaded["x"].NextIntervalAt);
         }
         finally { File.Delete(path); }
     }
