@@ -39,12 +39,80 @@ public static class LaunchSequence
         var plan = LaunchPlan.Build(config, hour, isoDay, nowDt.Minute);
         var lines = new List<string>();
         int fail = 0, unver = 0, total = 0;
+        // 执行步数预算：环由沿途访问集挡住，这里兜「×999 套 ×999」的有限爆炸（与 ActionGroupRunner 同一常量）。
+        int budgetLeft = RunBudget.MaxRunSteps;
+        bool budgetOut = false;
+
+        bool Consume()
+        {
+            if (budgetLeft > 0) { budgetLeft--; return true; }
+            if (!budgetOut) { budgetOut = true; lines.Add($"[{Ts(now)}] ⚠ 单次运行已达 {RunBudget.MaxRunSteps} 步上限，剩余步骤未执行"); }
+            return false;
+        }
+
+        // 跑一个普通步骤 rep 次（顶层与组内共用；pad=日志缩进）。
+        void RunPlain(LaunchStep s, string pad)
+        {
+            int rep = StepHelpers.StepRepeat(s);
+            for (int i = 1; i <= rep && !stopped; i++)
+            {
+                if (!Consume()) { stopped = true; break; }
+                var rr = stepMark(s);
+                var sfx = rep > 1 ? $"（第 {i}/{rep} 次）" : "";
+                lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(s)}{sfx}  {rr.Mark}");
+                fail += rr.Fail; unver += rr.Unver; total++;
+                if (StopSignal.IsRequested) stopped = true;
+                else if (i < rep && s.DelayMs > 0 && !StopSignal.InterruptibleSleep(s.DelayMs)) stopped = true;
+            }
+        }
+
+        // 递归展开动作组：整组 g.Repeat 轮（轮间睡 RepeatDelayMs）；组内 group 步骤继续下钻。
+        // pathIds=当前引用链上的组 id：同链再现即环（手改 json 造出，编辑器 DFS 拦不到的），告警跳过；
+        // 同级引用同一组两次不在同链上，照常各跑。深度由访问集自然封顶（每组每链至多一次）。
+        void RunGroupInline(ActionGroup g, int depth, HashSet<string> pathIds)
+        {
+            string pad = new string(' ', 4 * depth);
+            int rounds = StepHelpers.ClampRepeat(g.Repeat);
+            for (int round = 1; round <= rounds && !stopped; round++)
+            {
+                foreach (var sub in g.Steps)
+                {
+                    if (!stopped && StopSignal.IsRequested) stopped = true;
+                    if (stopped) break;
+                    if (!sub.Enabled) continue;
+                    if (!StepCondition.IsSatisfied(sub, hour, isoDay, nowDt.Minute)) continue;   // 组内步骤同样遵守时间条件
+                    if (sub.Kind == "message") continue;                                        // 启动展开跳过 message（启动静默，不弹确认）
+                    if (sub.Kind == "group")
+                    {
+                        var ng = ActionGroupResolver.Resolve(config.ActionGroups, sub.GroupId);
+                        if (ng == null) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  ⚠ 找不到动作组"); fail++; total++; continue; }
+                        if (!ng.Enabled) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  · 动作组「{ng.Name}」已禁用，跳过"); continue; }
+                        if (pathIds.Contains(ng.Id)) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  ⚠ 环引用，已跳过"); fail++; total++; continue; }
+                        int rep = StepHelpers.StepRepeat(sub);
+                        for (int i = 1; i <= rep && !stopped; i++)
+                        {
+                            var hdr = rep > 1 ? $"运行动作组：{ng.Name}（第 {i}/{rep} 次）" : $"运行动作组：{ng.Name}";
+                            lines.Add($"[{Ts(now)}] {pad}{hdr}");
+                            pathIds.Add(ng.Id);
+                            RunGroupInline(ng, depth + 1, pathIds);
+                            pathIds.Remove(ng.Id);
+                            if (StopSignal.IsRequested) stopped = true;
+                            else if (i < rep && sub.DelayMs > 0 && !StopSignal.InterruptibleSleep(sub.DelayMs)) stopped = true;
+                        }
+                        if (!stopped && sub.DelayMs > 0 && !StopSignal.InterruptibleSleep(sub.DelayMs)) stopped = true;
+                        continue;
+                    }
+                    RunPlain(sub, pad + "    ");
+                    if (!stopped && sub.DelayMs > 0 && !StopSignal.InterruptibleSleep(sub.DelayMs)) stopped = true;
+                }
+                if (!stopped && round < rounds && g.RepeatDelayMs > 0 && !StopSignal.InterruptibleSleep(g.RepeatDelayMs)) stopped = true;
+            }
+        }
 
         foreach (var step in plan)
         {
             if (!stopped && StopSignal.IsRequested) stopped = true;
             if (stopped) break;
-            int rep = StepHelpers.StepRepeat(step);
 
             if (step.Kind == "group")
             {
@@ -53,49 +121,21 @@ public static class LaunchSequence
                 else if (!g.Enabled) { lines.Add($"[{Ts(now)}] {StepDisplay.StepSummary(step)}  · 动作组「{g.Name}」已禁用，跳过"); }
                 else
                 {
+                    int rep = StepHelpers.StepRepeat(step);
                     for (int gi = 1; gi <= rep && !stopped; gi++)
                     {
                         var hdr = rep > 1 ? $"运行动作组：{g.Name}（第 {gi}/{rep} 次）" : $"运行动作组：{g.Name}";
                         lines.Add($"[{Ts(now)}] {hdr}");
-                        foreach (var sub in g.Steps)
-                        {
-                            if (!stopped && StopSignal.IsRequested) stopped = true;
-                            if (stopped) break;
-                            if (!sub.Enabled) continue;
-                            if (!StepCondition.IsSatisfied(sub, hour, isoDay, nowDt.Minute)) continue;   // 组内步骤同样遵守时间条件
-                            if (sub.Kind == "message") continue;                            // 启动展开跳过 message（启动静默，不弹确认）
-                            if (sub.Kind == "group") { lines.Add($"[{Ts(now)}]     {StepDisplay.StepSummary(sub)}  · 开机时不展开嵌套动作组，已跳过"); continue; }
-                            int subRep = StepHelpers.StepRepeat(sub);
-                            for (int si = 1; si <= subRep && !stopped; si++)
-                            {
-                                var rr = stepMark(sub);
-                                var subSfx = subRep > 1 ? $"（第 {si}/{subRep} 次）" : "";
-                                lines.Add($"[{Ts(now)}]     {StepDisplay.StepSummary(sub)}{subSfx}  {rr.Mark}");
-                                fail += rr.Fail; unver += rr.Unver; total++;
-                                if (StopSignal.IsRequested) stopped = true;
-                                else if (sub.DelayMs > 0 && !StopSignal.InterruptibleSleep(sub.DelayMs)) stopped = true;
-                            }
-                        }
+                        RunGroupInline(g, 1, new HashSet<string> { g.Id });
                         if (!stopped && gi < rep && step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
                     }
                 }
             }
-            else
-            {
-                for (int i = 1; i <= rep && !stopped; i++)
-                {
-                    var rr = stepMark(step);
-                    var sfx = rep > 1 ? $"（第 {i}/{rep} 次）" : "";
-                    lines.Add($"[{Ts(now)}] {StepDisplay.StepSummary(step)}{sfx}  {rr.Mark}");
-                    fail += rr.Fail; unver += rr.Unver; total++;
-                    if (StopSignal.IsRequested) stopped = true;
-                    else if (i < rep && step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
-                }
-            }
+            else RunPlain(step, "");
             if (!stopped && step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
         }
 
-        if (stopped) lines.Add($"[{Ts(now)}] ⏹ 已手动停止，后续步骤未执行");
+        if (stopped && !budgetOut) lines.Add($"[{Ts(now)}] ⏹ 已手动停止，后续步骤未执行");
         return new LaunchRunResult(new LaunchSummary(total, fail, unver, stopped), lines, bootNote);
     }
 
