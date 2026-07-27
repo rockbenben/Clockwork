@@ -333,6 +333,9 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>تعذّر تسجيل الاختصار {1} لمجموعة الإجراءات «{0}»: قد يكون مستخدمًا بالفعل</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>الاختصار {0} مستخدم بالفعل بواسطة «{1}»؛ اختر تركيبة أخرى</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} تركيبة محجوزة للنظام (تسجيلها سيخطف مفتاح نظام) ولا يمكن استخدامها كاختصار</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>تكرار المجموعة بالكامل</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>التأخير بين الجولات</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>توجد حلقة إشارة دائرية للمجموعة ({0})، يرجى فك سلسلة الإشارات قبل الحفظ</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>تكرار</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>تصدير الإعدادات</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>استيراد الإعدادات</value></data>

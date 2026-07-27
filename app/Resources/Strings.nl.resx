@@ -333,6 +333,9 @@ Log: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Sneltoets {1} voor actiegroep “{0}” kon niet worden geregistreerd: mogelijk al in gebruik</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Sneltoets {0} is al in gebruik door “{1}”; kies een andere combinatie</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is een door het systeem gereserveerde combinatie (registreren zou een systeemtoets kapen) en kan niet als sneltoets worden gebruikt</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>Hele groep herhalen</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>vertraging tussen rondes</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>Circulaire groepsverwijzing ({0}) — verbreek de verwijzingsketen voor het opslaan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Dupliceren</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Configuratie exporteren</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Configuratie importeren</value></data>

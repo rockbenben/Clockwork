@@ -333,6 +333,9 @@ Log: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Gagal mendaftarkan tombol pintas {1} untuk grup aksi “{0}”: mungkin sudah dipakai</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tombol pintas {0} sudah dipakai oleh “{1}”; pilih kombinasi lain</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} adalah kombinasi yang dicadangkan sistem (mendaftarkannya akan membajak tombol sistem) dan tidak bisa dipakai sebagai tombol pintas</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>Ulangi seluruh grup</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>jeda antar putaran</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>Referensi grup melingkar ({0}) — putuskan rantai referensi sebelum menyimpan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplikat</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Ekspor konfigurasi</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Impor konfigurasi</value></data>

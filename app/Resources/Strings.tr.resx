@@ -333,6 +333,9 @@ Günlük: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>“{0}” eylem grubunun {1} kısayolu kaydedilemedi: başka bir yerde kullanılıyor olabilir</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>{0} kısayolu zaten “{1}” tarafından kullanılıyor; başka bir kombinasyon seçin</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} sistem için ayrılmış bir kombinasyondur (kaydedilmesi bir sistem tuşunu ele geçirir) ve kısayol olarak kullanılamaz</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>Tüm grubu tekrarla</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>turlar arası gecikme</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>Döngüsel grup referansı ({0}) — kaydetmeden önce referans zincirini kırın</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Çoğalt</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Yapılandırmayı dışa aktar</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Yapılandırmayı içe aktar</value></data>

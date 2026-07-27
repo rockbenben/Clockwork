@@ -333,6 +333,9 @@
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>क्रिया समूह “{0}” की हॉटकी {1} पंजीकृत नहीं हो सकी: संभवतः पहले से उपयोग में है</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>हॉटकी {0} पहले से “{1}” द्वारा उपयोग में है; कोई और संयोजन चुनें</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} सिस्टम-आरक्षित संयोजन है (पंजीकरण से सिस्टम कुंजी छिन जाएगी), इसे हॉटकी नहीं बनाया जा सकता</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>पूरे समूह को दोहराएं</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>राउंड के बीच विलंब</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>समूह संदर्भ चक्रीय है ({0}), सहेजने से पहले संदर्भ श्रृंखला तोड़ें</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>प्रतिलिपि</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन निर्यात करें</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन आयात करें</value></data>

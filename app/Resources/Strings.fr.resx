@@ -333,6 +333,9 @@ Journal : {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossible d'enregistrer le raccourci {1} du groupe d'actions « {0} » : il est peut-être déjà utilisé</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par « {1} » ; choisissez une autre combinaison</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} est une combinaison réservée au système (l'enregistrer détournerait une touche système) et ne peut pas servir de raccourci</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>Répéter tout le groupe</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>délai entre les tours</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>Référence de groupe circulaire ({0}) — rompez la chaîne de références avant d'enregistrer</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Dupliquer</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Exporter la configuration</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Importer la configuration</value></data>

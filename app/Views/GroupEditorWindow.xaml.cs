@@ -7,6 +7,7 @@ using Clockwork.Core;
 using Clockwork.I18n;
 using Clockwork.Native;
 using Clockwork.ViewModels;
+using static Clockwork.Views.EditorUi;
 
 namespace Clockwork.Views;
 
@@ -20,10 +21,9 @@ public partial class GroupEditorWindow : Window
 
     public ActionGroup? Result { get; private set; }
 
-    // 组内步骤可选类型：复用 StepDisplay.StepKinds 的规范顺序，去掉「group」（组不能再嵌套组）。
-    // 标签一律经 StepKindLabel 本地化——不再在此内联硬编码中文（那份还是死数据、从不显示）。
-    private static readonly string[] Kinds =
-        StepDisplay.StepKinds.Where(k => k != "group").ToArray();
+    // 组内步骤可选类型：现含「group」——组可嵌套引用组（部分步骤循环 = 子组引用 ×N）。
+    // 环引用由保存时 FindCycle DFS 拦（主防线），运行期重入集兜手改 json。
+    private static readonly string[] Kinds = StepDisplay.StepKinds;
 
     public GroupEditorWindow(ActionGroup group, IReadOnlyList<ActionGroup> groups, string stopHotkey)
     {
@@ -33,6 +33,8 @@ public partial class GroupEditorWindow : Window
         _groups = groups;
         _stopHotkey = stopHotkey;
         NameBox.Text = group.Name;
+        GroupRepeatBox.Text = StepHelpers.ClampRepeat(group.Repeat).ToString();
+        GroupRepeatDelayBox.Text = group.RepeatDelayMs.ToString();
         _hotkey = group.Hotkey ?? "";
         // 全局热键「点击即录键」，与急停键/发送键统一走 KeyCaptureBox。只改工作副本 _hotkey，
         // 点「确定」才随 Result 落库——取消编辑不影响已有热键。
@@ -47,6 +49,9 @@ public partial class GroupEditorWindow : Window
 
     private int Sel => Steps.SelectedIndex;
 
+    // 选组下拉排除本组：直环在挑选时就选不出来；间接环（A→B→A）由 Ok_Click 的 FindCycle 拦。
+    private IReadOnlyList<ActionGroup> StepGroups => _groups.Where(g => g.Id != _original.Id).ToList();
+
     private void SAdd_Click(object sender, RoutedEventArgs e)
     {
         var menu = new ContextMenu();
@@ -56,7 +61,7 @@ public partial class GroupEditorWindow : Window
             var mi = new MenuItem { Header = StepDisplay.StepKindLabel(k) };
             mi.Click += (s, _) =>
             {
-                var step = StepEditorWindow.Edit(this, null, k, _groups);
+                var step = StepEditorWindow.Edit(this, null, k, StepGroups);
                 if (step == null) return;
                 int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
                 _rows.Insert(pos, new StepRowVm(step, () => { }));
@@ -73,7 +78,7 @@ public partial class GroupEditorWindow : Window
         int i = Sel;
         if (i < 0 || i >= _rows.Count) return;
         var step = _rows[i].Step;
-        var edited = StepEditorWindow.Edit(this, step, step.Kind, _groups);
+        var edited = StepEditorWindow.Edit(this, step, step.Kind, StepGroups);
         if (edited != null) { _rows[i] = new StepRowVm(edited, () => { }); Steps.SelectedIndex = i; }
     }
 
@@ -122,14 +127,28 @@ public partial class GroupEditorWindow : Window
                 : string.Equals(_stopHotkey, _hotkey, StringComparison.OrdinalIgnoreCase) ? Strings.Get("Settings_StopHotkey") : null;
             if (owner != null) { BrandDialog.Warn(this, "Clockwork", Strings.Lf("Val_HotkeyDup", _hotkey, owner)); return; }
         }
-        Result = new ActionGroup
+        var candidate = new ActionGroup
         {
             Id = _original.Id,
             Name = NameBox.Text.Trim(),
             Enabled = _original.Enabled,
             Hotkey = _hotkey,
+            Repeat = StepHelpers.ClampRepeat(ParseOr(GroupRepeatBox.Text, 1)),
+            RepeatDelayMs = ParseOr(GroupRepeatDelayBox.Text, 0, min: 0),
             Steps = _rows.Select(r => r.Step).ToList(),
         };
+        // 环引用校验：候选列表 = 其余组 + 本组编辑结果（新建组即追加），从本组出发 DFS。
+        // 编辑期是主防线——运行期重入集只会静默空转，用户会以为组坏了。
+        var cycle = ActionGroupResolver.FindCycle(
+            _groups.Where(g => g.Id != _original.Id).Append(candidate).ToList(), _original.Id);
+        if (cycle != null)
+        {
+            // 环路径上可能有手改配置留下的空名组：逐段替空为占位符，别让消息渲成 "A →  → A" 指不出是谁。
+            var path = string.Join(" → ", cycle.Select(n => string.IsNullOrWhiteSpace(n) ? Strings.Get("Ed_Group_None") : n));
+            BrandDialog.Warn(this, "Clockwork", Strings.Lf("Val_GroupCycle", path));
+            return;
+        }
+        Result = candidate;
         DialogResult = true;
     }
 

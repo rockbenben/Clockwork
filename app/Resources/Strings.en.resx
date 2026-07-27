@@ -336,6 +336,9 @@ Log: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Failed to register hotkey {1} for action group “{0}”: it may already be in use</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>Repeat whole group</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>delay between rounds</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>Circular group reference ({0}) — break the reference chain before saving</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Export Config</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Import Config</value></data>

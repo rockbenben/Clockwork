@@ -333,6 +333,9 @@ Registro: {1}</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>No se pudo registrar el atajo {1} del grupo de acciones «{0}»: puede que ya esté en uso</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>El atajo {0} ya lo usa «{1}»; elige otra combinación</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} es una combinación reservada del sistema (registrarla secuestraría una tecla del sistema) y no puede usarse como atajo</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>Repetir todo el grupo</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>retraso entre rondas</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>Referencia circular de grupo ({0}); rompa la cadena de referencias antes de guardar</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplicar</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Exportar configuración</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Importar configuración</value></data>
