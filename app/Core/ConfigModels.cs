@@ -97,10 +97,12 @@ public sealed class ActionGroup
     public string Name { get; set; } = "";
     public bool Enabled { get; set; } = true;
     public string Hotkey { get; set; } = "";   // 全局热键（如 "Ctrl+Alt+F"），空=不绑定；随时一键运行本组
+    public int Repeat { get; set; } = 1;       // 整组重复轮数（每次被触发时内部跑几轮）；与 group 引用步骤的 Repeat 相乘
+    public int RepeatDelayMs { get; set; }     // 每轮之间间隔
     public List<LaunchStep> Steps { get; set; } = new();
 
     // 运行快照：浅拷贝步骤列表（步骤对象共享，字段级并发读写无害），后台枚举不受 UI 增删干扰。
-    public ActionGroup SnapshotForRun() => new() { Id = Id, Name = Name, Enabled = Enabled, Hotkey = Hotkey, Steps = new List<LaunchStep>(Steps) };
+    public ActionGroup SnapshotForRun() => new() { Id = Id, Name = Name, Enabled = Enabled, Hotkey = Hotkey, Repeat = Repeat, RepeatDelayMs = RepeatDelayMs, Steps = new List<LaunchStep>(Steps) };
 }
 
 public sealed class AppSettings

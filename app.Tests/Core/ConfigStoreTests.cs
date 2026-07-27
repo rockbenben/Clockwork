@@ -183,4 +183,29 @@ public class ConfigStoreTests : IDisposable
         }
         finally { File.Delete(path); }
     }
+
+    // 快照浅拷贝手抄字段的典型漏项守卫：漏带 Repeat/RepeatDelayMs 时后台运行永远只跑 1 轮。
+    [Fact]
+    public void Group_snapshot_carries_repeat_fields()
+    {
+        var g = new ActionGroup { Name = "g", Repeat = 3, RepeatDelayMs = 250 };
+        var snap = g.SnapshotForRun();
+        Assert.Equal(3, snap.Repeat);
+        Assert.Equal(250, snap.RepeatDelayMs);
+    }
+
+    [Fact]
+    public void Group_repeat_fields_roundtrip()
+    {
+        var path = Path.Combine(Path.GetTempPath(), "cw_cfg_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var cfg = new RootConfig { ActionGroups = new() { new ActionGroup { Name = "g", Repeat = 5, RepeatDelayMs = 100 } } };
+            ConfigStore.Write(cfg, path);
+            var back = ConfigStore.Read(path).ActionGroups[0];
+            Assert.Equal(5, back.Repeat);
+            Assert.Equal(100, back.RepeatDelayMs);
+        }
+        finally { File.Delete(path); }
+    }
 }
