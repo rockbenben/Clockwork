@@ -164,4 +164,23 @@ public class ConfigStoreTests : IDisposable
         Assert.Single(c.ActionGroups[0].Steps);
         Assert.Equal("system", c.ActionGroups[0].Steps[0].Kind);
     }
+
+    [Fact]
+    public void New_step_default_delay_is_100ms()
+        => Assert.Equal(100, new LaunchStep().DelayMs);
+
+    // 钉死「改默认值不动老配置」的前提：JsonOptions 不忽略默认值，盘上显式 delayMs:0 必须原样读回，
+    // 不被新的 C# 默认 100 覆盖。这条一红，说明有人给 JsonOptions 加了 DefaultIgnoreCondition。
+    [Fact]
+    public void Explicit_zero_delay_on_disk_survives_roundtrip()
+    {
+        var path = Path.Combine(Path.GetTempPath(), "cw_cfg_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var cfg = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "app", Label = "x", DelayMs = 0 } } };
+            ConfigStore.Write(cfg, path);
+            Assert.Equal(0, ConfigStore.Read(path).LaunchSteps[0].DelayMs);
+        }
+        finally { File.Delete(path); }
+    }
 }

@@ -16,7 +16,9 @@ public sealed class LaunchStep
     public bool Enabled { get; set; } = true;
     public string Kind { get; set; } = "";
     public string Label { get; set; } = "";
-    public int DelayMs { get; set; }
+    // 默认 100ms：多数动作（开程序后发按键、切窗口后发文本）需要一点缓冲；0 会打空。
+    // 只影响新建对象——盘上既有步骤都带显式 delayMs（JsonOptions 不忽略默认值），读回原样。
+    public int DelayMs { get; set; } = 100;
     // app
     public string Target { get; set; } = "";
     public string Args { get; set; } = "";
