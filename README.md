@@ -28,7 +28,7 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 A small Windows tray tool that takes care of the routine parts of starting your day at the computer:
 
 - 🚀 **Startup list** — automatically open your everyday apps at login, in order (per-step admin rights, delays, only-on-certain-weekdays / only-before-N-o'clock, window style, activate-if-running, fallback paths), and do a few chores along the way (close or focus windows, send keystrokes / text, set volume…).
-- ⏰ **Reminders** — pop a reminder on time; speak it aloud; repeat by weekday / every-N-days / monthly; or trigger "at login". Clicking **Yes** can run a program, open a file (e.g. music) or a URL, or run an action group.
+- ⏰ **Scheduled tasks** — pop a reminder on time; speak it aloud; repeat by weekday / every-N-days / monthly; or trigger "at login". Clicking **Yes** can run a program, open a file (e.g. music) or a URL, or run an action group; also supports interval runs and run-once scheduling.
 - 🧹 **System startup items** — list **everything on your PC that auto-starts** and switch off what you don't need (disabled, not deleted — flip it back anytime). One click "takes over" an item into your own startup list.
 - 🎛️ **Action groups** — bundle a series of actions into a reusable group (Focus / Meeting / Wrap-up / Bedtime…) and trigger it with one click from the tray, a **global hotkey**, the startup list, or a reminder. Built-in templates included.
 

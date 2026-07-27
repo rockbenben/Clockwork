@@ -105,6 +105,21 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 - **Duplicate** clones the selected group as "… (copy)" — a quick base for a variant. The copy gets **no hotkey** (two groups can't share one), so assign a new one if you want it.
 - Deleting a group that is **referenced** (by a reminder's On-Yes / silent group, or an action-group step) tells you how many references there are and clears them along with it, so nothing is left pointing at a group that no longer exists.
 
+## Loops
+
+- **Repeat a whole group**: set "Repeat whole group / delay between rounds" in the group editor.
+- **Loop a subset of steps**: extract those steps into their own action group, then reference it with a "group" step and set its repeat count.
+- Three repeat knobs multiply: per-step repeat × reference-step repeat × whole-group rounds.
+- Groups can nest group references; saving validates circular references (A→B→A is rejected with the chain shown).
+- Safety fuse: a single run executes at most 5000 steps, then stops with a warning. The stop hotkey works at any time.
+
+## Scheduled tasks
+
+- Each task either **pops a reminder** (text / speech / on-Yes action) or **silently runs an action group**.
+- **Interval runs**: "every N minutes until HH:mm" (empty = end of day). Distinct from "nag until confirmed" — nagging stops on confirmation, interval runs keep going. Intervals never cross midnight; the next day starts fresh from the task's base time.
+- **Run once**: pick "Once" and a date. After it completes, the entry unticks itself but stays in the list — set a new date and re-enable to reuse.
+- Interval progress is persisted: restarting the app mid-day keeps the remaining rounds.
+
 ## Settings
 
 - **Startup delay** (0–600 s, boot only).

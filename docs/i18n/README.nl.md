@@ -25,7 +25,7 @@ Start je apps automatisch bij het aanmelden · herinneringen op tijd · met éé
 Een kleine Windows-systeemvaktool die de routineklusjes afhandelt waarmee je je dag achter de computer begint:
 
 - 🚀 **Opstartlijst** — opent automatisch je dagelijkse apps bij het aanmelden, op volgorde (beheerdersrechten per stap, vertragingen, alleen-op-bepaalde-weekdagen / alleen-vóór-N-uur, vensterstijl, activeren-indien-actief, terugvalpaden) en doet onderweg wat klusjes (vensters sluiten of naar de voorgrond halen, toetsaanslagen / tekst versturen, volume instellen…).
-- ⏰ **Herinneringen** — laat een herinnering op tijd verschijnen; leest hem hardop voor; herhaalt per weekdag / om-de-N-dagen / maandelijks; of triggert «bij het aanmelden». Op **Ja** klikken kan een programma starten, een bestand (bijv. muziek) of een URL openen, of een actiegroep uitvoeren.
+- ⏰ **Geplande taken** — laat een herinnering op tijd verschijnen; leest hem hardop voor; herhaalt per weekdag / om-de-N-dagen / maandelijks; of triggert «bij het aanmelden». Op **Ja** klikken kan een programma starten, een bestand (bijv. muziek) of een URL openen, of een actiegroep uitvoeren. Ondersteunt ook interval-uitvoering en eenmalige planning.
 - 🧹 **Opstartitems van het systeem** — toont **alles op je pc dat automatisch opstart** en schakelt uit wat je niet nodig hebt (uitgeschakeld, niet verwijderd — zet het wanneer je wilt weer aan). Met één klik «neem je een item over» in je eigen opstartlijst.
 - 🎛️ **Actiegroepen** — bundel een reeks acties in een herbruikbare groep (Focus / Vergadering / Afronden / Bedtijd…) en trigger die met één klik vanuit het systeemvak, een **globale sneltoets**, de opstartlijst of een herinnering. Ingebouwde sjablonen inbegrepen.
 

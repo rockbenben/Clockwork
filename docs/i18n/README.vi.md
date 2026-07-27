@@ -25,7 +25,7 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 Một công cụ nhỏ nằm ở khay hệ thống Windows, lo giúp bạn những phần lặp lại khi bắt đầu ngày làm việc bên máy tính:
 
 - 🚀 **Danh sách khởi động** — tự động mở các ứng dụng thường dùng khi đăng nhập, theo thứ tự (quyền admin theo từng bước, độ trễ, chỉ vào một số ngày trong tuần / chỉ trước N giờ, kiểu cửa sổ, kích hoạt nếu đang chạy, đường dẫn dự phòng), và làm vài việc lặt vặt trên đường (đóng hoặc đưa cửa sổ ra trước, gửi phím / văn bản, chỉnh âm lượng…).
-- ⏰ **Nhắc nhở** — bật lời nhắc đúng giờ; đọc to; lặp theo ngày trong tuần / mỗi N ngày / hằng tháng; hoặc kích hoạt "khi đăng nhập". Nhấn **Có** có thể chạy một chương trình, mở một tệp (ví dụ nhạc) hay URL, hoặc chạy một nhóm thao tác.
+- ⏰ **Tác vụ theo lịch** — bật lời nhắc đúng giờ; đọc to; lặp theo ngày trong tuần / mỗi N ngày / hằng tháng; hoặc kích hoạt "khi đăng nhập". Nhấn **Có** có thể chạy một chương trình, mở một tệp (ví dụ nhạc) hay URL, hoặc chạy một nhóm thao tác. Cũng hỗ trợ chạy lặp lại theo khoảng thời gian và chạy một lần duy nhất.
 - 🧹 **Mục khởi động hệ thống** — liệt kê **mọi thứ tự khởi động trên máy** và tắt những gì bạn không cần (bị vô hiệu hóa, không bị xóa — bật lại bất cứ lúc nào). Một cú nhấp "tiếp quản" một mục vào danh sách khởi động của riêng bạn.
 - 🎛️ **Nhóm thao tác** — gói một chuỗi thao tác thành nhóm tái sử dụng (Tập trung / Họp / Kết thúc / Trước khi ngủ…) và kích hoạt bằng một cú nhấp từ khay, một **phím tắt toàn cục**, danh sách khởi động, hoặc một lời nhắc. Có sẵn các mẫu dựng sẵn.
 

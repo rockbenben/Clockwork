@@ -25,7 +25,7 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 Bilgisayar başında gününüze başlarken karşılaşılan rutin işleri üstlenen küçük bir Windows tepsi aracı:
 
 - 🚀 **Başlangıç listesi** — oturum açınca günlük uygulamalarınızı sırayla otomatik açar (adım başına yönetici hakları, gecikmeler, yalnızca-belirli-hafta-günlerinde / yalnızca-saat-N'den-önce, pencere stili, çalışıyorsa-etkinleştir, yedek yollar) ve bu arada birkaç işi de halleder (pencereleri kapat veya odakla, tuş vuruşu / metin gönder, ses düzeyini ayarla…).
-- ⏰ **Hatırlatıcılar** — zamanı gelince bir hatırlatma gösterir; sesli okur; hafta gününe göre / her-N-günde / aylık tekrarlar; ya da "oturum açınca" tetiklenir. **Evet**'e tıklamak bir program çalıştırabilir, bir dosya (örneğin müzik) veya bir URL açabilir ya da bir eylem grubu çalıştırabilir.
+- ⏰ **Zamanlanmış görevler** — zamanı gelince bir hatırlatma gösterir; sesli okur; hafta gününe göre / her-N-günde / aylık tekrarlar; ya da "oturum açınca" tetiklenir. **Evet**'e tıklamak bir program çalıştırabilir, bir dosya (örneğin müzik) veya bir URL açabilir ya da bir eylem grubu çalıştırabilir. Ayrıca aralıklı çalıştırmayı ve tek seferlik zamanlamayı da destekler.
 - 🧹 **Sistem başlangıç öğeleri** — **PC'nizde otomatik başlayan her şeyi** listeler ve ihtiyacınız olmayanları kapatır (silinmez, devre dışı bırakılır — istediğiniz zaman geri açın). Tek tıkla bir öğeyi kendi başlangıç listenize "devralır".
 - 🎛️ **Eylem grupları** — bir dizi eylemi yeniden kullanılabilir bir grupta toplayın (Odak / Toplantı / Kapanış / Uyku vakti…) ve tepsiden, bir **genel kısayoldan**, başlangıç listesinden ya da bir hatırlatıcıdan tek tıkla tetikleyin. Yerleşik şablonlar dahildir.
 

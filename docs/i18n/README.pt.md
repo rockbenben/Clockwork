@@ -23,7 +23,7 @@ Abra seus apps automaticamente ao entrar · lembretes com hora marcada · um toq
 Uma pequena ferramenta de bandeja do Windows que cuida das partes rotineiras de começar o seu dia no computador:
 
 - 🚀 **Lista de inicialização** — abre automaticamente os apps do dia a dia ao entrar, em ordem (direitos de administrador por etapa, atrasos, apenas-em-certos-dias-da-semana / apenas-antes-das-N-horas, estilo de janela, ativar-se-já-estiver-aberto, caminhos alternativos) e faz algumas tarefas pelo caminho (fechar ou focar janelas, enviar teclas / texto, ajustar o volume…).
-- ⏰ **Lembretes** — exibe um lembrete na hora certa; fala em voz alta; repete por dia da semana / a-cada-N-dias / mensalmente; ou dispara "ao entrar". Clicar em **Sim** pode executar um programa, abrir um arquivo (por exemplo, uma música) ou uma URL, ou executar um grupo de ações.
+- ⏰ **Tarefas agendadas** — exibe um lembrete na hora certa; fala em voz alta; repete por dia da semana / a-cada-N-dias / mensalmente; ou dispara "ao entrar". Clicar em **Sim** pode executar um programa, abrir um arquivo (por exemplo, uma música) ou uma URL, ou executar um grupo de ações. Também oferece suporte a execuções por intervalo e agendamento de execução única.
 - 🧹 **Itens de inicialização do sistema** — lista **tudo no seu PC que inicia automaticamente** e desliga o que você não precisa (desativado, não excluído — reative quando quiser). Um clique "assume" um item, passando-o para a sua própria lista de inicialização.
 - 🎛️ **Grupos de ações** — agrupe uma série de ações em um grupo reutilizável (Foco / Reunião / Encerramento / Hora de dormir…) e dispare-o com um clique a partir da bandeja, de uma **tecla global**, da lista de inicialização ou de um lembrete. Modelos prontos incluídos.
 

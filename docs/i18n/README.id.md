@@ -25,7 +25,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 Alat tray Windows kecil yang mengurus bagian-bagian rutin saat memulai hari Anda di depan komputer:
 
 - 🚀 **Daftar startup** — otomatis membuka aplikasi sehari-hari Anda saat login, secara berurutan (hak admin per-langkah, penundaan, hanya-pada-hari-tertentu / hanya-sebelum-pukul-N, gaya jendela, aktifkan-jika-sedang-berjalan, jalur cadangan), dan mengerjakan beberapa tugas kecil di sepanjang jalan (menutup atau memfokuskan jendela, mengirim penekanan tombol / teks, mengatur volume…).
-- ⏰ **Pengingat** — memunculkan pengingat tepat waktu; membacakannya dengan lantang; mengulang menurut hari dalam seminggu / setiap-N-hari / bulanan; atau memicu "saat login". Mengklik **Ya** dapat menjalankan program, membuka berkas (mis. musik) atau sebuah URL, atau menjalankan grup aksi.
+- ⏰ **Tugas terjadwal** — memunculkan pengingat tepat waktu; membacakannya dengan lantang; mengulang menurut hari dalam seminggu / setiap-N-hari / bulanan; atau memicu "saat login". Mengklik **Ya** dapat menjalankan program, membuka berkas (mis. musik) atau sebuah URL, atau menjalankan grup aksi. Juga mendukung eksekusi berkala (interval) dan penjadwalan sekali saja.
 - 🧹 **Item startup sistem** — mendaftar **semua yang berjalan otomatis di PC Anda** dan mematikan yang tidak Anda perlukan (dinonaktifkan, bukan dihapus — kembalikan kapan saja). Satu klik "mengambil alih" sebuah item ke daftar startup Anda sendiri.
 - 🎛️ **Grup aksi** — menggabungkan serangkaian aksi menjadi satu grup yang dapat digunakan ulang (Fokus / Rapat / Beres-beres / Menjelang tidur…) dan memicunya dengan satu klik dari tray, sebuah **tombol pintas global**, daftar startup, atau sebuah pengingat. Templat bawaan disertakan.
 
