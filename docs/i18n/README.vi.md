@@ -76,6 +76,8 @@ Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi 
 
 Đặt một **thời điểm** (hoặc chuyển sang **khi đăng nhập**), một **chu kỳ** (ngày trong tuần / mỗi N ngày / hằng tháng), và **nội dung**; tùy chọn đọc to. Lời nhắc có thao tác **Khi-Có** (chạy chương trình / mở tệp / URL / chạy nhóm thao tác) sẽ bật hộp thoại **Có / Không** kèm nút **Hoãn** (mặc định 10 phút, menu ▾ 5–60 phút); những lời nhắc còn lại trượt vào góc dưới dạng **thẻ nhắc** (tự đóng sau số giây đã đặt, **0 = ở lại đến khi bạn bỏ qua**). Bạn cũng có thể đặt một **nhóm thao tác im lặng** — chạy một nhóm đúng giờ mà không bật cửa sổ.
 
+Hộp thoại không được trả lời sẽ không chặn hàng đợi và cũng không bị mất: sau tối đa một phút, nó tự chuyển thành **hoãn 10 phút** và quay lại sau. Trạng thái này được ghi xuống đĩa như mọi lần hoãn — sống sót qua khởi động lại, và nếu bật **bù nếu bị lỡ** thì dù ngủ qua nửa đêm nó vẫn bật lại một lần vào hôm sau. Các lần bật lặp lại của cùng một nhắc nhở dùng chung một thẻ (đánh dấu **×N**), và thẻ đã đóng hoặc tự tắt có thể hiện lại từ menu **Gần đây** trên khay hệ thống.
+
 Nâng cao: **tự đóng**, **nhắc lặp lại** (bật lại mỗi N phút cho đến một hạn), **độ trễ sau kích hoạt + dao động ngẫu nhiên**, **thời gian ân hạn** (bắt lại một lần bị lỡ do tắt máy/ngủ ngắn), **bù nếu bị lỡ** (bật lại một lần sau khi ngủ đông/tắt máy làm lỡ), và một **ngày mốc** cho chu kỳ mỗi N ngày (**Chọn ngày**). Trạng thái "đã bật hôm nay" và "hoãn đến" tồn tại qua các lần khởi động lại (`clockwork.state.json`), nên một lần hoãn vẫn giữ qua lần khởi động lại và không có gì bật hai lần.
 
 Cần tập trung hay họp? Khay cung cấp **Tạm dừng nhắc nhở 1 / 2 / 4 giờ** (Không làm phiền): mọi thứ (kể cả nhóm im lặng) bị chặn và tự nối lại khi hết giờ.

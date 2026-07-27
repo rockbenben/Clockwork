@@ -79,6 +79,8 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 
 Set a **time** (or switch to **at login**), a **recurrence** (weekdays / every-N-days / monthly), and the **text**; optionally speak it aloud. Reminders with an **On-Yes** action (run program / open file / URL / run action group) pop a **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5–60 min); the rest slide in as a **reminder card** in the corner (auto-close after the configured seconds, **0 = stays until you dismiss it**). You can also set a **silent action group** — run a group on time with no popup.
 
+An unanswered dialog neither blocks the queue nor gets lost: after at most a minute it turns into an automatic **snooze** (10 min) and comes back later. The pending state is saved to disk like any snooze — it survives restarts, and with **catch up if missed** enabled it re-fires once the next day even after sleeping through midnight. Repeat fires of one reminder share a single card (marked **×N**), and cards you dismissed (or that auto-closed) can be re-shown from the tray's **Recent** menu.
+
 Advanced: **auto-close**, **repeat nagging** (re-pop every N minutes until a deadline), **post-trigger delay + random jitter**, **grace** (catch a fire missed by a brief shutdown/sleep), **catch up if missed** (re-fire once after hibernation/shutdown skipped it), and an **anchor date** for every-N-days (**Pick date**). "Fired today" and "snoozed until" survive restarts (`clockwork.state.json`), so a snooze carries across a restart and nothing double-fires.
 
 Need to focus or take a meeting? The tray offers **Pause reminders for 1 / 2 / 4 hours** (Do-Not-Disturb): everything (including silent groups) is suppressed and auto-resumes when the time is up.
