@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Startup · Pengingat · Aksi sekali ketuk</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Daftar startup</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Pengingat</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Tugas terjadwal</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Grup aksi</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Startup sistem</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Berjalan dari atas ke bawah saat startup · setiap langkah mendukung jeda setelahnya, pengulangan, dan syarat (hari / sebelum jam N)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Pengingat terjadwal · suara opsional · pada «Ya» jalankan program / buka file / URL / grup</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Tampilkan popup atau jalankan grup aksi secara senyap sesuai jadwal · mendukung jalankan berulang dan sekali jalan · pada «Ya» dapat menjalankan program / membuka URL / menjalankan grup aksi</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Gabungkan sederet aksi menjadi grup dan picu sekali ketuk dari baki / daftar startup / pengingat</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Semua entri startup otomatis PC ini — matikan yang tak perlu sekali ketuk. Hanya nonaktif, tak pernah dihapus; bisa dikembalikan kapan saja.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Centang/hapus berlaku segera (menonaktifkan, bukan menghapus; bisa dikembalikan). Item «perlu admin» butuh hak administrator. Item sistem / kebijakan / sekali pakai read-only disembunyikan secara default.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Grup hanya mendefinisikan aksi; picu dari Daftar startup atau Pengingat.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Silakan isi nama grup.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Edit pengingat</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Edit tugas terjadwal</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Pemicu</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Terjadwal (pada jam)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>Pada jam tertentu</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>Saat masuk</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Waktu (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Syarat masuk</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>Per hari</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Setiap N hari</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Bulanan</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Sekali</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Setiap</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>hari; mulai dari</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; kosong = hari ini)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Tanggal</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Grup senyap</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Jika diatur, jalankan grup secara senyap pada waktunya (abaikan teks / suara / setelah «Ya»)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Tanggal</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Pengingat popup</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Jalankan grup aksi secara senyap</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Jalankan grup aksi</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Jalankan grup aksi</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Tutup otomatis (dtk)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>tutup sendiri tanpa klik (0 = tak pernah; pengingat berulang: default 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Ingatkan berulang</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Ingatkan sampai dikonfirmasi</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>mnt (0 = tak berulang), sampai</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, kosong = tanpa batas)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Jalankan berulang, setiap</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>mnt (0 = nonaktif), sampai</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, kosong = akhir hari)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Jeda setelah pemicu</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>dtk, plus acak 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>dtk</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>Waktu harus dalam format HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Ulangi sampai» harus HH:mm (atau kosong)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Tanggal mulai harus yyyy-MM-dd (atau kosong)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>Tanggal harus berformat yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Tanggal itu sudah lewat — tugas ini tidak akan berjalan setelah disimpan (ubah tanggal dan aktifkan lagi untuk memakainya kembali)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>«Jalankan grup aksi secara senyap» dipilih tetapi belum ada grup yang dipilih</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Konfirmasi</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Yakin ingin menjalankan «{0}»?</value></data>

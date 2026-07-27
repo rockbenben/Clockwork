@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Başlangıç · Hatırlatma · Tek dokunuş eylemler</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Başlangıç listesi</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Hatırlatmalar</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Zamanlanmış görevler</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Eylem grupları</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Sistem başlangıcı</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Başlangıçta yukarıdan aşağıya çalışır · her adım sonraki gecikme, tekrar sayısı ve koşulları destekler (hafta günü / N saatten önce)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Zamana dayalı hatırlatma · sesli okuma · «Evet» olduğunda program çalıştır / dosya / URL / grup aç</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Zamanı geldiğinde açılır pencere gösterir veya eylem grubunu sessizce çalıştırır · yinelenen çalıştırmayı ve tek seferlik çalıştırmayı destekler · «Evet» ile program çalıştırabilir, URL açabilir veya eylem grubu çalıştırabilir</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bir dizi eylemi grupta topla ve tepsiden / başlangıç listesinden / hatırlatmadan tek dokunuşla tetikle</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Bilgisayarınızın tüm otomatik başlangıç öğeleri — gereksizleri tek dokunuşla kapatın. Yalnızca devre dışı bırakır, silmez; istediğiniz zaman geri alın.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>İşaretleme/kaldırma anında geçerlidir (devre dışı bırakır, silmez; geri alınabilir). «Yönetici gerekir» öğeleri yönetici hakkı ister. Sistem / ilke / tek seferlik salt okunur öğeler varsayılan olarak gizlidir.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Grup yalnızca eylemleri tanımlar; Başlangıç listesinden veya Hatırlatmalardan tetiklenir.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Lütfen bir grup adı girin.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Hatırlatmayı düzenle</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Zamanlanmış görevi düzenle</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Tetikleyici</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Zamana dayalı (bir saatte)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>Belirli bir saatte</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>Oturum açıldığında</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Saat (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Oturum açma koşulu</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>Hafta gününe göre</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Her N günde</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Aylık</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Tek seferlik</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Her</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>günde; şu tarihten sayılır</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; boş = bugün)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Ayın günü</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Sessiz grup</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Ayarlanırsa, grubu zamanında sessizce çalıştırır (metin / ses / «Evet»ten sonra atlanır)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Tarih</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Açılır pencere hatırlatması</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Eylem grubunu sessizce çalıştır</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Eylem grubunu çalıştır</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Eylem grubunu çalıştır</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Otomatik kapat (sn)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>tıklanmazsa kendi kapanır (0 = asla; yinelenen hatırlatma: varsayılan 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Yinele</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Onaylanana kadar hatırlat</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>dakikada bir (0 = yineleme yok), şuna kadar</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, boş = sınırsız)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Yinelenen çalıştırma, her</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>dk (0 = kapalı), şuna kadar</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, boş = gün sonu)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Tetikten sonra gecikme</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>sn, artı rastgele 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>sn</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>Saat HH:mm biçiminde olmalı</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Şuna kadar yinele» HH:mm olmalı (veya boş)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Başlangıç tarihi yyyy-MM-dd olmalı (veya boş)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>Tarih yyyy-MM-dd biçiminde olmalı</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Bu tarih geçti — bu görev kaydedildikten sonra tetiklenmeyecek (yeni bir tarih belirleyip yeniden etkinleştirerek tekrar kullanabilirsiniz)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>«Eylem grubunu sessizce çalıştır» seçildi ama henüz bir grup seçilmedi</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Onay</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>«{0}» çalıştırmak istediğinizden emin misiniz?</value></data>

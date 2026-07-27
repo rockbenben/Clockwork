@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Khởi động · Nhắc nhở · Thao tác một chạm</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Danh sách khởi động</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Nhắc nhở</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Tác vụ theo lịch</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Nhóm hành động</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Khởi động hệ thống</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Chạy từ trên xuống khi khởi động · mỗi bước hỗ trợ độ trễ sau, số lần lặp và điều kiện (thứ trong tuần / trước N giờ)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Nhắc theo giờ · đọc tùy chọn · khi «Có» chạy chương trình / mở tệp / URL / nhóm</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Hiện cửa sổ nhắc hoặc âm thầm chạy nhóm hành động theo lịch · hỗ trợ chạy lặp lại và chạy một lần · khi «Có» có thể chạy chương trình / mở URL / chạy nhóm hành động</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Gộp một loạt hành động thành nhóm và kích hoạt một chạm từ khay / danh sách khởi động / nhắc nhở</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Mọi mục khởi động tự động của PC — tắt thứ không cần một chạm. Chỉ vô hiệu, không xóa; hoàn tác bất cứ lúc nào.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Chọn/bỏ chọn có hiệu lực ngay (vô hiệu, không xóa; hoàn tác được). Mục «cần admin» cần quyền quản trị. Mục hệ thống / chính sách / một lần chỉ đọc được ẩn theo mặc định.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Nhóm chỉ định nghĩa hành động; kích hoạt từ Danh sách khởi động hoặc Nhắc nhở.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Vui lòng nhập tên nhóm.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Sửa nhắc nhở</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Sửa tác vụ theo lịch</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Kích hoạt</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Theo giờ (vào một giờ)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>Theo giờ</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>Khi đăng nhập</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Giờ (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Điều kiện đăng nhập</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>Theo thứ</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Mỗi N ngày</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Hằng tháng</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Một lần</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Mỗi</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>ngày; tính từ</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; trống = hôm nay)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Ngày trong tháng</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Nhóm im lặng</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Nếu đặt, chạy nhóm im lặng đúng giờ (bỏ qua văn bản / giọng / sau «Có»)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Ngày</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Nhắc bằng cửa sổ bật lên</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Âm thầm chạy nhóm hành động</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Chạy nhóm hành động</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Chạy nhóm hành động</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Tự đóng (giây)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>tự đóng nếu không bấm (0 = không bao giờ; nhắc lặp: mặc định 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Nhắc lặp lại</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Nhắc đến khi xác nhận</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>phút (0 = không lặp), đến</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, trống = không giới hạn)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Chạy lặp lại, mỗi</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>phút (0 = tắt), đến</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, trống = cuối ngày)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Trễ sau khi kích hoạt</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>giây, cộng ngẫu nhiên 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>giây</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>Giờ phải theo định dạng HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Lặp đến» phải là HH:mm (hoặc trống)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Ngày bắt đầu phải là yyyy-MM-dd (hoặc trống)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>Ngày phải theo định dạng yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Ngày đó đã qua — tác vụ này sẽ không kích hoạt sau khi lưu (đặt ngày mới và bật lại để dùng tiếp)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>Đã chọn «Âm thầm chạy nhóm hành động» nhưng chưa chọn nhóm cụ thể</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Xác nhận</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Bạn có chắc muốn chạy «{0}»?</value></data>

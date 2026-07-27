@@ -8,12 +8,12 @@
   <data name="App_Subtitle" xml:space="preserve"><value>Startup · Reminders · One-tap Actions</value></data>
 
   <data name="Tab_Launch" xml:space="preserve"><value>Startup List</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Reminders</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Scheduled tasks</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Action Groups</value></data>
   <data name="Tab_System" xml:space="preserve"><value>System Startup</value></data>
 
   <data name="Launch_Hint" xml:space="preserve"><value>Runs top-to-bottom at startup · each step supports post-delay, repeat count, and weekday / before-N-hour conditions</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Timed reminders · optional speech · on "Yes" run a program / open a file / a URL / an action group</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Pop a reminder or silently run an action group on schedule · supports interval runs and run-once · "Yes" can launch apps, open URLs, or run action groups</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundle a series of actions into a group, triggered from the tray / startup list / reminders</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Every autostart entry on this PC — turn off what you don't need. Disable only, never delete; reversible anytime.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Checking / unchecking takes effect immediately (disable, not delete; reversible). Items marked "needs admin" require administrator rights. System / policy / one-time read-only items are hidden by default.</value></data>
@@ -196,9 +196,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>A group only defines actions; trigger it from the Startup List or Reminders.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Please enter a group name.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Edit Reminder</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Edit scheduled task</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Trigger</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Timed</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>At a time</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>At logon</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Time (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Logon timing</value></data>
@@ -212,18 +212,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>By weekday</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Every N days</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Monthly</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Once</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Every</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>days; from</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; blank = today)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Day of month</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Silent group</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>If set, runs the group silently at trigger (ignoring text / speech / on-Yes)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Date</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Popup reminder</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Silently run action group</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Run action group</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Run action group</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Auto-close (s)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>auto-close if no click (0 = never; repeat default 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Repeat nag</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Nag until confirmed</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = off), until</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, blank = no limit)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Interval run, every</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>min (0 = off), until</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, empty = end of day)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Delay after trigger</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>s, plus random 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>s</value></data>
@@ -232,6 +238,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>Time must be in HH:mm format</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>"Repeat until" must be HH:mm (or blank)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Start date must be yyyy-MM-dd (or blank)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>Date must be yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>That date has passed — this task will not fire (set a new date and re-enable to reuse)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>"Silently run action group" is selected but no group is chosen</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Confirm</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Are you sure you want to "{0}"?</value></data>

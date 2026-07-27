@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Démarrage · Rappels · Actions en un clic</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Liste de démarrage</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Rappels</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Tâches planifiées</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Groupes d'actions</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Démarrage système</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>S'exécute de haut en bas au démarrage · chaque étape gère un délai après, un nombre de répétitions et des conditions jour de semaine / avant N h</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Rappels programmés · lecture vocale possible · sur « Oui » lance un programme / ouvre un fichier / une URL / un groupe</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Affiche une alerte ou exécute un groupe d'actions en silence à l'heure prévue · prend en charge l'exécution périodique et l'exécution unique · sur « Oui » peut lancer un programme, ouvrir une URL ou exécuter un groupe d'actions</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Regroupez une série d'actions et déclenchez-les en un clic depuis la zone de notification / la liste de démarrage / les rappels</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Toutes les entrées de démarrage automatique du PC : désactivez celles inutiles. Désactivation seule, jamais de suppression ; réversible à tout moment.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Cocher/décocher prend effet immédiatement (désactivation, pas suppression ; réversible). Les éléments « admin requis » nécessitent des droits administrateur. Les éléments système / stratégie / uniques en lecture seule sont masqués par défaut.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Un groupe ne définit que des actions ; déclenchez-le depuis la Liste de démarrage ou les Rappels.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Veuillez saisir un nom de groupe.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Modifier le rappel</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Modifier la tâche planifiée</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Déclencheur</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Programmé (à une heure)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>À une heure</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>À l'ouverture de session</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Heure (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Condition d'ouverture</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>Par jour de semaine</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Tous les N jours</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Mensuel</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Une seule fois</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Tous les</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>jours ; à partir du</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd ; vide = aujourd'hui)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Jour du mois</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Groupe silencieux</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Si défini, exécute le groupe en silence à l'heure (ignore texte / voix / après « Oui »)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Date</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Alerte contextuelle</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Exécuter un groupe d'actions en silence</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Exécuter un groupe d'actions</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Exécuter un groupe d'actions</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Fermeture auto (s)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>se ferme seul sans clic (0 = jamais ; rappel répété : 60 par défaut)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Rappel insistant</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Insister jusqu'à confirmation</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = pas de répétition), jusqu'à</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, vide = sans limite)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Exécution périodique, toutes les</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>min (0 = désactivé), jusqu'à</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, vide = fin de journée)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Délai après déclenchement</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>s, plus aléatoire 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>s</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>L'heure doit être au format HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>« Répéter jusqu'à » doit être HH:mm (ou vide)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>La date de départ doit être yyyy-MM-dd (ou vide)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>La date doit être au format yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Cette date est déjà passée — cette tâche ne se déclenchera pas après l'enregistrement (changez la date et réactivez pour la réutiliser)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>« Exécuter un groupe d'actions en silence » est sélectionné mais aucun groupe n'est encore choisi</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Confirmer</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Voulez-vous vraiment exécuter « {0} » ?</value></data>

@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Autostart · Erinnerungen · Aktionen per Klick</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Startliste</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Erinnerungen</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Geplante Aufgaben</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Aktionsgruppen</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Systemautostart</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Läuft beim Start von oben nach unten · jeder Schritt unterstützt Verzögerung danach, Wiederholungen und Bedingungen (Wochentag / vor N Uhr)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Zeitgesteuerte Erinnerungen · optionale Sprachausgabe · bei „Ja“ Programm starten / Datei öffnen / URL / Gruppe ausführen</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Zeigt zur Zeit ein Popup oder führt eine Aktionsgruppe still aus · unterstützt wiederkehrende Läufe und Einmalausführung · bei „Ja“ Programm starten / URL öffnen / Aktionsgruppe ausführen</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bündeln Sie mehrere Aktionen zu einer Gruppe und lösen Sie sie per Klick aus (Infobereich / Startliste / Erinnerungen)</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Alle Autostart-Einträge dieses PCs — Unnötiges per Klick abschalten. Nur deaktivieren, nie löschen; jederzeit umkehrbar.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Ändern wirkt sofort (deaktivieren, nicht löschen; umkehrbar). Einträge mit „Admin nötig“ erfordern Administratorrechte. System- / Richtlinien- / einmalige schreibgeschützte Einträge sind standardmäßig ausgeblendet.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Eine Gruppe definiert nur Aktionen; lösen Sie sie über die Startliste oder Erinnerungen aus.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Bitte einen Gruppennamen eingeben.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Erinnerung bearbeiten</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Geplante Aufgabe bearbeiten</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Auslöser</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Zeitgesteuert (zu einer Uhrzeit)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>Zeitgesteuert</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>Bei Anmeldung</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Zeit (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Anmeldebedingung</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>Nach Wochentag</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Alle N Tage</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Monatlich</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Einmalig</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Alle</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>Tage; ab</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; leer = heute)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Tag im Monat</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Stille Gruppe</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Wenn gesetzt, wird die Gruppe zur Zeit ohne Popup ausgeführt (Text / Sprache / Nach „Ja“ werden ignoriert)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Datum</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Popup-Erinnerung</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Aktionsgruppe still ausführen</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Aktionsgruppe ausführen</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Aktionsgruppe ausführen</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Auto-Schließen (s)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>schließt sich ohne Klick (0 = nie; wiederholte Erinnerung: Standard 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Wiederholtes Mahnen</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Mahnen bis Bestätigung</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>Min (0 = keine Wiederholung), bis</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, leer = unbegrenzt)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Wiederkehrender Lauf, alle</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>Min (0 = aus), bis</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, leer = Tagesende)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Verzögerung nach Auslösen</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>s, plus zufällig 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>s</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>Zeit muss im Format HH:mm sein</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>„Wiederholen bis“ muss HH:mm sein (oder leer)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Startdatum muss yyyy-MM-dd sein (oder leer)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>Datum muss yyyy-MM-dd sein</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Dieses Datum liegt in der Vergangenheit — die Aufgabe wird nach dem Speichern nicht ausgelöst (neues Datum setzen und erneut aktivieren, um sie wiederzuverwenden)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>„Aktionsgruppe still ausführen“ ist gewählt, aber es wurde noch keine Gruppe ausgewählt</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Bestätigen</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>„{0}“ wirklich ausführen?</value></data>

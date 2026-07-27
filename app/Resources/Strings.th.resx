@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>เริ่มต้นระบบ · การเตือน · การทำงานแบบแตะเดียว</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>รายการเริ่มต้น</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>การเตือน</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>งานตามกำหนดเวลา</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
   <data name="Tab_System" xml:space="preserve"><value>การเริ่มต้นของระบบ</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>ทำงานจากบนลงล่างเมื่อเริ่มต้น · แต่ละขั้นรองรับการหน่วงหลังจากนั้น จำนวนรอบ และเงื่อนไข (วันในสัปดาห์ / ก่อน N นาฬิกา)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>การเตือนตามเวลา · อ่านออกเสียงได้ · เมื่อ «ใช่» เรียกโปรแกรม / เปิดไฟล์ / URL / กลุ่ม</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>แสดงป๊อปอัปเตือนหรือรันกลุ่มการทำงานแบบเงียบตามกำหนดเวลา · รองรับการรันซ้ำและรันครั้งเดียว · เมื่อกด «ใช่» สามารถเรียกโปรแกรม / เปิด URL / รันกลุ่มการทำงานได้</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่มแล้วสั่งด้วยแตะเดียวจากถาด / รายการเริ่มต้น / การเตือน</value></data>
   <data name="System_Hint" xml:space="preserve"><value>รายการเริ่มต้นอัตโนมัติทั้งหมดของเครื่อง — ปิดสิ่งที่ไม่ต้องการด้วยแตะเดียว ปิดใช้งานเท่านั้น ไม่ลบ ย้อนกลับได้ทุกเมื่อ</value></data>
   <data name="System_Footer" xml:space="preserve"><value>ติ๊ก/เอาออกมีผลทันที (ปิดใช้งาน ไม่ใช่ลบ ย้อนกลับได้) รายการ «ต้องใช้แอดมิน» ต้องการสิทธิ์ผู้ดูแล รายการระบบ / นโยบาย / ครั้งเดียวแบบอ่านอย่างเดียวถูกซ่อนโดยค่าเริ่มต้น</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>กลุ่มกำหนดเฉพาะการทำงาน; สั่งได้จากรายการเริ่มต้นหรือการเตือน</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>โปรดกรอกชื่อกลุ่ม</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>แก้ไขการเตือน</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>แก้ไขงานตามกำหนดเวลา</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>ทริกเกอร์</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>ตามเวลา (ที่ชั่วโมงหนึ่ง)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>ตามเวลา</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>เมื่อเข้าสู่ระบบ</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>เวลา (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>เงื่อนไขเข้าสู่ระบบ</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>ตามวันในสัปดาห์</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>ทุก N วัน</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>รายเดือน</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>ครั้งเดียว</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>ทุก</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>วัน; เริ่มนับจาก</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; ว่าง = วันนี้)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>วันที่ของเดือน</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>กลุ่มเงียบ</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>ถ้าตั้ง จะรันกลุ่มแบบเงียบเมื่อถึงเวลา (ละเว้นข้อความ / เสียง / หลัง «ใช่»)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>วันที่</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>แจ้งเตือนแบบป๊อปอัป</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>รันกลุ่มการทำงานแบบเงียบ</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>รันกลุ่มการทำงาน</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>รันกลุ่มการทำงาน</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>ปิดอัตโนมัติ (วิ)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>ปิดเองถ้าไม่กด (0 = ไม่ปิด; การเตือนซ้ำ: ค่าเริ่มต้น 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>เตือนซ้ำ</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>เตือนซ้ำจนกว่าจะยืนยัน</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>นาทีต่อครั้ง (0 = ไม่ซ้ำ), จนถึง</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, ว่าง = ไม่จำกัด)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>รันซ้ำทุก</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>นาที (0 = ปิด), จนถึง</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, ว่าง = สิ้นสุดวัน)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>หน่วงหลังทริกเกอร์</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>วิ, บวกสุ่ม 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>วิ</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>เวลาต้องอยู่ในรูปแบบ HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«ทำซ้ำจนถึง» ต้องเป็น HH:mm (หรือว่าง)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>วันเริ่มต้องเป็น yyyy-MM-dd (หรือว่าง)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>วันที่ต้องอยู่ในรูปแบบ yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>วันที่นี้ผ่านไปแล้ว — งานนี้จะไม่ทำงานหลังบันทึก (ตั้งวันที่ใหม่แล้วเปิดใช้งานอีกครั้งเพื่อใช้ซ้ำ)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>เลือก «รันกลุ่มการทำงานแบบเงียบ» แล้วแต่ยังไม่ได้เลือกกลุ่ม</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · ยืนยัน</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>แน่ใจหรือไม่ว่าจะเรียกใช้ «{0}»?</value></data>

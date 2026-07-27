@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>स्टार्टअप · रिमाइंडर · एक-टैप क्रियाएँ</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>स्टार्टअप सूची</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>रिमाइंडर</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>शेड्यूल किए गए कार्य</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>क्रिया समूह</value></data>
   <data name="Tab_System" xml:space="preserve"><value>सिस्टम स्टार्टअप</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>स्टार्टअप पर ऊपर से नीचे चलता है · हर चरण में बाद में देरी, दोहराव और शर्तें (सप्ताह का दिन / N बजे से पहले) समर्थित</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>समयबद्ध रिमाइंडर · वैकल्पिक वाचन · «हाँ» पर प्रोग्राम चलाएँ / फ़ाइल खोलें / URL / समूह चलाएँ</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>समय पर पॉपअप दिखाए या क्रिया समूह को चुपचाप चलाए · दोहराव और एक बार चलाना दोनों समर्थित · «हाँ» पर प्रोग्राम चलाएँ / URL खोलें / क्रिया समूह चलाएँ</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>क्रियाओं की शृंखला को समूह में बाँधें और ट्रे / स्टार्टअप सूची / रिमाइंडर से एक टैप में चलाएँ</value></data>
   <data name="System_Hint" xml:space="preserve"><value>इस PC की सभी ऑटो-स्टार्ट प्रविष्टियाँ — अनावश्यक को एक टैप में बंद करें। केवल अक्षम, कभी नहीं हटाया; कभी भी पूर्ववत।</value></data>
   <data name="System_Footer" xml:space="preserve"><value>चेक/अनचेक तुरंत लागू (अक्षम, हटाना नहीं; पूर्ववत)। «एडमिन आवश्यक» वाले आइटम को व्यवस्थापक अधिकार चाहिए। सिस्टम / नीति / एक-बार केवल-पठन आइटम डिफ़ॉल्ट रूप से छिपे हैं।</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>समूह केवल क्रियाएँ परिभाषित करता है; इसे स्टार्टअप सूची या रिमाइंडर से चलाएँ।</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>कृपया समूह का नाम भरें।</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>रिमाइंडर संपादित करें</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>शेड्यूल किया गया कार्य संपादित करें</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>ट्रिगर</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>समयबद्ध (एक समय पर)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>समय पर</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>लॉगऑन पर</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>समय (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>लॉगऑन शर्त</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>सप्ताह के दिन अनुसार</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>हर N दिन</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>मासिक</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>एक बार</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>हर</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>दिन; आरंभ से</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; खाली = आज)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>महीने का दिन</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>मौन समूह</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>सेट होने पर समय पर बिना पॉपअप समूह को चुपचाप चलाता है (पाठ / वाणी / «हाँ» के बाद अनदेखा)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>तिथि</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>पॉपअप रिमाइंडर</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>क्रिया समूह चुपचाप चलाएँ</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>क्रिया समूह चलाएँ</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>क्रिया समूह चलाएँ</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>स्वतः बंद (से)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>क्लिक न होने पर स्वयं बंद (0 = कभी नहीं; दोहराव रिमाइंडर: डिफ़ॉल्ट 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>बार-बार याद दिलाना</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>पुष्टि होने तक याद दिलाएँ</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>मिनट (0 = कोई दोहराव नहीं), तक</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, खाली = बिना सीमा)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>दोहराव चलाना, हर</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>मिनट (0 = बंद), तक</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, खाली = दिन का अंत)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>ट्रिगर के बाद देरी</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>से, साथ में यादृच्छिक 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>से</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>समय HH:mm प्रारूप में होना चाहिए</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«दोहराव तक» HH:mm होना चाहिए (या खाली)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>आरंभ तिथि yyyy-MM-dd होनी चाहिए (या खाली)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>तिथि yyyy-MM-dd प्रारूप में होनी चाहिए</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>यह तिथि बीत चुकी है — सहेजने के बाद यह कार्य ट्रिगर नहीं होगा (नई तिथि सेट करें और फिर से सक्षम करें)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>«क्रिया समूह चुपचाप चलाएँ» चुना गया है लेकिन अभी तक कोई समूह नहीं चुना गया</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · पुष्टि</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>क्या आप वाकई «{0}» चलाना चाहते हैं?</value></data>

@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Автозапуск · Напоминания · Действия в один клик</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Список запуска</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Напоминания</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Задачи по расписанию</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Группы действий</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Автозагрузка системы</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Выполняется сверху вниз при запуске · каждый шаг поддерживает задержку после, повторы и условия (день недели / до N часов)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Напоминания по времени · озвучивание опционально · при «Да» запуск программы / открытие файла / URL / группы</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Показывает окно или тихо запускает группу действий по расписанию · поддерживает периодический и однократный запуск · при «Да» можно запустить программу, открыть URL или группу действий</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Объедините ряд действий в группу и запускайте одним кликом из трея / списка запуска / напоминаний</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Все элементы автозагрузки ПК — отключите ненужное одним кликом. Только отключение, без удаления; обратимо в любой момент.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Установка/снятие флажка действует сразу (отключение, не удаление; обратимо). Элементы «нужен админ» требуют прав администратора. Системные / политики / однократные элементы только для чтения по умолчанию скрыты.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Группа только определяет действия; запускайте её из Списка запуска или Напоминаний.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Введите имя группы.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Изменить напоминание</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Изменить задачу по расписанию</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Триггер</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>По времени (в определённый час)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>В заданное время</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>При входе</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Время (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Условие входа</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>По дням недели</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Каждые N дней</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Ежемесячно</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Один раз</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Каждые</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>дн.; отсчёт с</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; пусто = сегодня)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>День месяца</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Тихая группа</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Если задано, группа выполняется без окна в назначенное время (текст / голос / после «Да» игнорируются)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Дата</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Всплывающее напоминание</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Тихо выполнить группу действий</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Выполнить группу действий</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Выполнить группу действий</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Автозакрытие (с)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>закрывается само без нажатия (0 = никогда; повторное напоминание: по умолчанию 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Повторное напоминание</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Напоминать до подтверждения</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>мин (0 = без повтора), до</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, пусто = без ограничения)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Периодический запуск, каждые</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>мин (0 = выкл), до</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, пусто = конец дня)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Задержка после срабатывания</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>с, плюс случайно 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>с</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>Время должно быть в формате HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Повторять до» должно быть HH:mm (или пусто)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Дата начала должна быть yyyy-MM-dd (или пусто)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>Дата должна быть в формате yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Эта дата уже прошла — после сохранения задача не сработает (укажите новую дату и включите заново, чтобы использовать снова)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>Выбрано «Тихо выполнить группу действий», но группа ещё не выбрана</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Подтверждение</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Вы уверены, что хотите выполнить «{0}»?</value></data>

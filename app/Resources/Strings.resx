@@ -8,12 +8,12 @@
   <data name="App_Subtitle" xml:space="preserve"><value>开机助手 · 定时提醒 · 一键动作</value></data>
 
   <data name="Tab_Launch" xml:space="preserve"><value>我的启动清单</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>定时提醒</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>定时任务</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>动作组</value></data>
   <data name="Tab_System" xml:space="preserve"><value>系统启动项</value></data>
 
   <data name="Launch_Hint" xml:space="preserve"><value>开机时从上到下依次执行 · 每步可设「执行后延时」「重复次数」和「仅某些星期 / 仅 N 点前」</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>到点提醒 · 可朗读 · 点「是」后运行程序 / 打开文件 / 开网页 / 跑动作组</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>到点弹窗提醒或静默运行动作组 · 支持循环运行 / 仅一次 · 点「是」后可运行程序 / 开网页 / 跑动作组</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>把一串动作打包成组，托盘 / 开机清单 / 提醒里一键触发</value></data>
   <data name="System_Hint" xml:space="preserve"><value>电脑里所有开机自启，一键关掉不需要的 — 只禁用、不删除，随时恢复</value></data>
   <data name="System_Footer" xml:space="preserve"><value>勾选 / 取消即时生效（非删除，可恢复）；标「需管理员」的项需管理员身份。系统 / 策略 / 一次性等只读项默认隐藏。</value></data>
@@ -196,9 +196,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>动作组只定义动作；触发请在「启动清单」或「提醒」里引用本组。</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>请填写动作组名称。</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>编辑提醒</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>编辑定时任务</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>触发</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>定时（到点提醒）</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>按时间</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>登录时</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>时间(HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>登录时机</value></data>
@@ -212,18 +212,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>按星期</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>每 N 天</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>每月某号</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>仅一次</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>每几天</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>天；起算日</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd；留空=今天)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>每月几号</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>静默动作组</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>选了则到点不弹窗，直接静默运行该动作组（忽略文本/语音/点是后）</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>日期</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>弹窗提醒</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>静默运行动作组</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>运行动作组</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>运行动作组</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>自动关闭(秒)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>没人点就自动关（0=不关；重复提醒默认60）</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>重复催促</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>未确认时催促</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分钟一次(0=不重复)，直到</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm，留空=不限)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>循环运行</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>分钟一次(0=不循环)，直到</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm，留空=当天结束)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>触发后延迟</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>秒，再随机加 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>秒</value></data>
@@ -232,6 +238,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>时间格式应为 HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>「重复直到」格式应为 HH:mm（或留空）</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>起算日格式应为 yyyy-MM-dd（或留空）</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>日期需为 yyyy-MM-dd 格式</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>该日期已过，此任务保存后不会触发（改日期并重新勾选即可再用）</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>选择了「静默运行动作组」但还没选具体的组</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · 确认</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>确定要执行「{0}」吗？</value></data>

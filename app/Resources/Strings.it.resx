@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Avvio · Promemoria · Azioni con un tocco</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Elenco di avvio</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Promemoria</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Attività pianificate</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Gruppi di azioni</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Avvio di sistema</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Viene eseguito dall'alto in basso all'avvio · ogni passo supporta ritardo successivo, ripetizioni e condizioni (giorno della settimana / prima delle N)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Promemoria a orario · voce opzionale · con «Sì» avvia un programma / apre un file / un URL / un gruppo</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Mostra un avviso o esegue un gruppo di azioni in silenzio all'orario previsto · supporta esecuzioni ripetute e singole · con «Sì» può avviare un programma, aprire un URL o eseguire un gruppo di azioni</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Raggruppa una serie di azioni e attivale con un tocco dalla barra delle applicazioni / elenco di avvio / promemoria</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Tutte le voci di avvio automatico del PC: disattiva ciò che non serve. Solo disabilitazione, mai eliminazione; reversibile in qualsiasi momento.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Selezionare/deselezionare ha effetto immediato (disabilita, non elimina; reversibile). Le voci «richiede admin» necessitano di diritti di amministratore. Le voci di sistema / criterio / una tantum in sola lettura sono nascoste per impostazione predefinita.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Un gruppo definisce solo azioni; attivalo dall'Elenco di avvio o dai Promemoria.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Inserisci un nome per il gruppo.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Modifica promemoria</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Modifica attività pianificata</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Attivazione</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>A orario (a un'ora)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>A un'ora</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>All'accesso</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Ora (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Condizione di accesso</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>Per giorno della settimana</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Ogni N giorni</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Mensile</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Una volta</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Ogni</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>giorni; da</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; vuoto = oggi)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Giorno del mese</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Gruppo silenzioso</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Se impostato, esegue il gruppo in silenzio all'ora (ignora testo / voce / dopo «Sì»)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Data</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Avviso popup</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Esegui gruppo di azioni in silenzio</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Esegui gruppo di azioni</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Esegui gruppo di azioni</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Chiusura auto (s)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>si chiude da solo senza clic (0 = mai; promemoria ripetuto: 60 predefinito)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Sollecito ripetuto</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Sollecita fino a conferma</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = nessuna ripetizione), fino a</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, vuoto = senza limite)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Esecuzione ripetuta, ogni</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>min (0 = disattivato), fino a</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, vuoto = fine giornata)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Ritardo dopo attivazione</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>s, più casuale 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>s</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>L'ora deve essere nel formato HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Ripeti fino a» deve essere HH:mm (o vuoto)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>La data di inizio deve essere yyyy-MM-dd (o vuoto)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>La data deve essere nel formato yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Questa data è già passata: l'attività non si attiverà dopo il salvataggio (imposta una nuova data e riattivala per riutilizzarla)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>È selezionato «Esegui gruppo di azioni in silenzio» ma non è ancora stato scelto un gruppo</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Conferma</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Vuoi davvero eseguire «{0}»?</value></data>

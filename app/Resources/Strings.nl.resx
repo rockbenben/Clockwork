@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>Opstart · Herinneringen · Eén-tik acties</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>Opstartlijst</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Herinneringen</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>Geplande taken</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Actiegroepen</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Systeemopstart</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Draait van boven naar beneden bij opstart · elke stap ondersteunt vertraging erna, aantal herhalingen en voorwaarden (weekdag / vóór N uur)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Herinnering op tijd · voorlezen · bij «Ja» programma starten / bestand / URL / groep openen</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Toont een melding of voert stil een actiegroep uit op het geplande tijdstip · ondersteunt herhaalde uitvoering en eenmalige uitvoering · bij «Ja» kan een programma starten / een URL openen / een actiegroep uitvoeren</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundel een reeks acties in een groep en start met één tik vanuit systeemvak / opstartlijst / herinnering</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Alle automatische opstartitems van je pc — schakel overbodige met één tik uit. Alleen uitschakelen, niet verwijderen; altijd terug te draaien.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Aan-/uitvinken werkt direct (uitschakelen, niet verwijderen; omkeerbaar). Items «admin vereist» hebben beheerdersrechten nodig. Systeem- / beleid- / eenmalige alleen-lezen items zijn standaard verborgen.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>Een groep definieert alleen acties; wordt geactiveerd vanuit Opstartlijst of Herinneringen.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Voer een groepsnaam in.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Herinnering bewerken</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Geplande taak bewerken</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>Trigger</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Op tijd (op een uur)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>Op een tijdstip</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>Bij aanmelden</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>Tijd (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Aanmeldvoorwaarde</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>Op weekdag</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Elke N dagen</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Maandelijks</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>Eenmalig</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>Elke</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>dagen; geteld vanaf</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; leeg = vandaag)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>Dag van de maand</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Stille groep</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>Indien ingesteld, draait de groep stil op tijd (tekst / stem / na «Ja» overgeslagen)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>Datum</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>Pop-upmelding</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>Actiegroep stil uitvoeren</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>Actiegroep uitvoeren</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Actiegroep uitvoeren</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Automatisch sluiten (s)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>sluit vanzelf als niet geklikt (0 = nooit; herhaalde herinnering: standaard 60)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Herhalen</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>Aandringen tot bevestiging</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>minuten (0 = niet herhalen), tot</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, leeg = onbeperkt)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>Herhaalde uitvoering, elke</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>min (0 = uit), tot</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, leeg = einde van de dag)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>Vertraging na trigger</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>s, plus willekeurig 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>s</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>Tijd moet in HH:mm-formaat zijn</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Herhalen tot» moet HH:mm zijn (of leeg)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Begindatum moet yyyy-MM-dd zijn (of leeg)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>Datum moet yyyy-MM-dd zijn</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>Die datum is al voorbij — deze taak wordt na het opslaan niet uitgevoerd (stel een nieuwe datum in en schakel opnieuw in om te hergebruiken)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>«Actiegroep stil uitvoeren» is geselecteerd, maar er is nog geen groep gekozen</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Bevestigen</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Weet je zeker dat je «{0}» wilt uitvoeren?</value></data>

@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>بدء التشغيل · التذكيرات · إجراءات بلمسة واحدة</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>قائمة البدء</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>التذكيرات</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>المهام المجدولة</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>مجموعات الإجراءات</value></data>
   <data name="Tab_System" xml:space="preserve"><value>بدء تشغيل النظام</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>تُنفَّذ من الأعلى للأسفل عند البدء · كل خطوة تدعم تأخيرًا بعدها وعدد تكرارات وشروط (يوم الأسبوع / قبل الساعة N)</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>تذكيرات مجدولة · نطق اختياري · عند «نعم» تشغيل برنامج / فتح ملف / رابط / مجموعة</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>منبثقة عند الوقت أو تشغيل مجموعة إجراءات بصمت · يدعم التشغيل الدوري / لمرة واحدة · عند «نعم» يمكن تشغيل برنامج أو فتح رابط أو تشغيل مجموعة إجراءات</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>اجمع سلسلة من الإجراءات في مجموعة وشغّلها بلمسة من علبة النظام / قائمة البدء / التذكيرات</value></data>
   <data name="System_Hint" xml:space="preserve"><value>كل عناصر البدء التلقائي في هذا الجهاز — أوقف ما لا تحتاجه بلمسة. تعطيل فقط دون حذف؛ قابل للتراجع في أي وقت.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>التحديد/إلغاؤه يسري فورًا (تعطيل لا حذف؛ قابل للتراجع). العناصر «تتطلب مسؤولًا» تحتاج صلاحيات المسؤول. عناصر النظام / السياسة / المرة الواحدة للقراءة فقط مخفية افتراضيًا.</value></data>
@@ -193,9 +193,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>المجموعة تُعرّف الإجراءات فقط؛ شغّلها من قائمة البدء أو التذكيرات.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>يرجى إدخال اسم المجموعة.</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>تعديل التذكير</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>تعديل المهمة المجدولة</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>المشغّل</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>مجدول (في وقت محدد)</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>في وقت محدد</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>عند تسجيل الدخول</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>الوقت (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>شرط تسجيل الدخول</value></data>
@@ -209,18 +209,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>حسب يوم الأسبوع</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>كل N أيام</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>شهريًا</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>لمرة واحدة</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>كل</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>أيام؛ ابتداءً من</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd؛ فارغ = اليوم)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>يوم الشهر</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>مجموعة صامتة</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>إذا حُدِّدت، تُشغَّل المجموعة بصمت في الوقت (تجاهل النص / الصوت / بعد «نعم»)</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>التاريخ</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>تذكير منبثق</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>تشغيل مجموعة إجراءات بصمت</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>تشغيل مجموعة الإجراءات</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>تشغيل مجموعة إجراءات</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>إغلاق تلقائي (ث)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>يُغلق تلقائيًا دون نقر (0 = أبدًا؛ التذكير المتكرر: 60 افتراضيًا)</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>تذكير متكرر</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>التذكير حتى التأكيد</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>دقيقة (0 = بلا تكرار)، حتى</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = بلا حد)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>تشغيل دوري</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>دقيقة (0 = إيقاف)، حتى</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = نهاية اليوم)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>تأخير بعد التشغيل</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>ث، بالإضافة إلى عشوائي 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>ث</value></data>
@@ -229,6 +235,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>يجب أن يكون الوقت بصيغة HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«التكرار حتى» يجب أن يكون HH:mm (أو فارغًا)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>يجب أن يكون تاريخ البدء yyyy-MM-dd (أو فارغًا)</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>يجب أن يكون التاريخ بصيغة yyyy-MM-dd</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>هذا التاريخ قد مضى — لن تُشغَّل هذه المهمة بعد الحفظ (غيّر التاريخ وأعد التفعيل لاستخدامها مجددًا)</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>تم اختيار «تشغيل مجموعة إجراءات بصمت» لكن لم يتم اختيار مجموعة بعد</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · تأكيد</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>هل أنت متأكد من تنفيذ «{0}»؟</value></data>

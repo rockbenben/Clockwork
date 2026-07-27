@@ -7,11 +7,11 @@
 
   <data name="App_Subtitle" xml:space="preserve"><value>開機助手 · 定時提醒 · 一鍵動作</value></data>
   <data name="Tab_Launch" xml:space="preserve"><value>我的開機清單</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>定時提醒</value></data>
+  <data name="Tab_Reminder" xml:space="preserve"><value>定時任務</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>動作組</value></data>
   <data name="Tab_System" xml:space="preserve"><value>系統開機項目</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>開機時由上到下依序執行 · 每步可設「執行後延遲」「重複次數」與「僅某些星期 / 僅 N 點前」</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>到點提醒 · 可朗讀 · 按「是」後執行程式 / 開啟檔案 / 開網頁 / 跑動作組</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>到點彈窗提醒或靜默執行動作組 · 支援循環執行 / 僅一次 · 按「是」後可執行程式 / 開網頁 / 跑動作組</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>把一串動作打包成組，可在系統匣 / 開機清單 / 提醒裡一鍵觸發</value></data>
   <data name="System_Hint" xml:space="preserve"><value>電腦裡所有開機自動啟動，一鍵關掉不需要的 — 只停用、不刪除，隨時還原</value></data>
   <data name="System_Footer" xml:space="preserve"><value>勾選 / 取消即時生效（非刪除，可還原）；標「需管理員」的項目需管理員身分。系統 / 原則 / 一次性等唯讀項目預設隱藏。</value></data>
@@ -194,9 +194,9 @@
   <data name="Ed_GroupHint" xml:space="preserve"><value>動作組只定義動作；觸發請在「開機清單」或「提醒」裡引用本組。</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>請填寫動作組名稱。</value></data>
 
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>編輯提醒</value></data>
+  <data name="Ed_Title_Reminder" xml:space="preserve"><value>編輯定時任務</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>觸發</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>定時（到點提醒）</value></data>
+  <data name="Ed_Trig_Time" xml:space="preserve"><value>按時間</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>登入時</value></data>
   <data name="Ed_Time" xml:space="preserve"><value>時間(HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>登入時機</value></data>
@@ -210,18 +210,24 @@
   <data name="Ed_Rec_Daily" xml:space="preserve"><value>按星期</value></data>
   <data name="Ed_Rec_EveryN" xml:space="preserve"><value>每 N 天</value></data>
   <data name="Ed_Rec_Monthly" xml:space="preserve"><value>每月某號</value></data>
+  <data name="Ed_Rec_Once" xml:space="preserve"><value>僅一次</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>每幾天</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>天；起算日</value></data>
   <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd；留空=今天)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>每月幾號</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>靜默動作組</value></data>
-  <data name="Ed_SilentHint" xml:space="preserve"><value>選了則到點不彈窗，直接靜默執行該動作組（忽略文字/語音/按是後）</value></data>
+  <data name="Ed_OnceDate" xml:space="preserve"><value>日期</value></data>
+  <data name="Ed_ActPopup" xml:space="preserve"><value>彈窗提醒</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>靜默執行動作組</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>執行動作組</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>執行動作組</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>自動關閉(秒)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>沒人按就自動關（0=不關；重複提醒預設60）</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>重複催促</value></data>
+  <data name="Ed_RepeatNag" xml:space="preserve"><value>未確認時催促</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分鐘一次(0=不重複)，直到</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm，留空=不限)</value></data>
+  <data name="Ed_LoopEvery" xml:space="preserve"><value>循環執行</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>分鐘一次(0=不循環)，直到</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm，留空=當天結束)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>觸發後延遲</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>秒，再隨機加 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>秒</value></data>
@@ -230,6 +236,9 @@
   <data name="Val_TimeFormat" xml:space="preserve"><value>時間格式應為 HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>「重複直到」格式應為 HH:mm（或留空）</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>起算日格式應為 yyyy-MM-dd（或留空）</value></data>
+  <data name="Val_OnceDate" xml:space="preserve"><value>日期須為 yyyy-MM-dd 格式</value></data>
+  <data name="Val_OnceDatePast" xml:space="preserve"><value>該日期已過，此任務儲存後不會觸發（改日期並重新勾選即可再用）</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>選擇了「靜默執行動作組」但還沒選具體的組</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · 確認</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>確定要執行「{0}」嗎？</value></data>

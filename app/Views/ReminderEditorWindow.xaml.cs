@@ -23,7 +23,7 @@ public partial class ReminderEditorWindow : Window
 
         FillCombo(TrigCombo, new[] { (Strings.Get("Ed_Trig_Time"), "time"), (Strings.Get("Ed_Trig_Startup"), "startup") }, r.Trigger);
         FillCombo(SModeCombo, new[] { (Strings.Get("Ed_SMode_Any"), "any"), (Strings.Get("Ed_SMode_Before"), "before"), (Strings.Get("Ed_SMode_After"), "after") }, r.StartupHourMode);
-        FillCombo(RecurCombo, new[] { (Strings.Get("Ed_Rec_Daily"), "daily"), (Strings.Get("Ed_Rec_EveryN"), "everyNDays"), (Strings.Get("Ed_Rec_Monthly"), "monthly") }, r.RecurType);
+        FillCombo(RecurCombo, new[] { (Strings.Get("Ed_Rec_Daily"), "daily"), (Strings.Get("Ed_Rec_EveryN"), "everyNDays"), (Strings.Get("Ed_Rec_Monthly"), "monthly"), (Strings.Get("Ed_Rec_Once"), "once") }, r.RecurType);
         var groupItems = new[] { (Strings.Get("Ed_Group_None"), "") }.Concat(groups.Select(g => (g.Name, g.Id))).ToArray();
         FillCombo(SilentCombo, groupItems, r.SilentGroupId);
         FillCombo(OnYesTypeCombo, new[] { (Strings.Get("Ed_OnYes_None"), "none"), (Strings.Get("Ed_OnYes_Run"), "run"), (Strings.Get("Ed_OnYes_Url"), "url"), (Strings.Get("Ed_OnYes_Group"), "group") }, r.OnYes.Type == "sound" ? "run" : r.OnYes.Type);
@@ -46,14 +46,32 @@ public partial class ReminderEditorWindow : Window
         GraceBox.Text = r.GraceMinutes.ToString();
         CatchUpChk.IsChecked = r.CatchUpIfMissed;
         LoadDays(r.Days, Day1, Day2, Day3, Day4, Day5, Day6, Day7);
+        OnceDateBox.Text = r.OnceDate;
+        LoopMinBox.Text = r.IntervalMinutes.ToString();
+        LoopUntilBox.Text = r.IntervalUntil;
+        // 动作二选一是 SilentGroupId 的视图：非空=静默运行动作组。
+        if (string.IsNullOrWhiteSpace(r.SilentGroupId)) ActPopup.IsChecked = true; else ActSilent.IsChecked = true;
 
-        UpdateTrig(); UpdateSMode(); UpdateRecur(); UpdateOnYes();
+        UpdateTrig(); UpdateSMode(); UpdateRecur(); UpdateOnYes(); UpdateAction();
     }
 
     private void Trig_Changed(object sender, SelectionChangedEventArgs e) => UpdateTrig();
     private void SMode_Changed(object sender, SelectionChangedEventArgs e) => UpdateSMode();
     private void Recur_Changed(object sender, SelectionChangedEventArgs e) => UpdateRecur();
     private void OnYesType_Changed(object sender, SelectionChangedEventArgs e) => UpdateOnYes();
+    private void Action_Changed(object sender, RoutedEventArgs e) => UpdateAction();
+
+    // 动作二选一：选哪边就只显示哪边的控件——填了不生效的假控件不出现（与「点是后」死控件同一条思路）。
+    // MsgBox 两边都留：它是列表「文本」列与静默组告警文案的来源，静默任务也需要名字。
+    private void UpdateAction()
+    {
+        bool silent = ActSilent.IsChecked == true;
+        Vis(SilentRow, silent);
+        Vis(SpeakChk, !silent);
+        Vis(OnYesRow, !silent);
+        Vis(AutoRow, !silent);
+        Vis(NagRow, !silent);
+    }
 
     private void UpdateTrig()
     {
@@ -69,6 +87,8 @@ public partial class ReminderEditorWindow : Window
     {
         var r = ComboVal(RecurCombo);
         Vis(DaysRow, r == "daily"); Vis(IntervalRow, r == "everyNDays"); Vis(MonthlyRow, r == "monthly");
+        Vis(OnceRow, r == "once");
+        Vis(LoopRow, r != "once");   // 仅一次与循环运行互斥：once 隐藏循环行，保存时强制 IntervalMinutes=0
     }
     private void UpdateOnYes()
     {
@@ -86,6 +106,7 @@ public partial class ReminderEditorWindow : Window
 
     // —— 选择器：取消则不动原值 ——
     private void PickAnchor_Click(object sender, RoutedEventArgs e) { if (Pickers.PickDate(this, AnchorBox.Text) is string d) AnchorBox.Text = d; }
+    private void PickOnce_Click(object sender, RoutedEventArgs e) { if (Pickers.PickDate(this, OnceDateBox.Text) is string d) OnceDateBox.Text = d; }
     private void BrowseOnYes_Click(object sender, RoutedEventArgs e) { if (Pickers.BrowseFile(this) is string p) OnYesTargetBox.Text = p; }
 
     private void Ok_Click(object sender, RoutedEventArgs e)
@@ -96,6 +117,20 @@ public partial class ReminderEditorWindow : Window
         if (repUntil != "" && !HhmmRe.IsMatch(DurationText.FormatTimeHHmm(repUntil))) { Warn(Strings.Get("Val_RepeatUntil")); return; }
         var anchor = AnchorBox.Text.Trim();
         if (anchor != "" && !DateRe.IsMatch(anchor)) { Warn(Strings.Get("Val_Anchor")); return; }
+
+        // recur 提前到这里声明：仅一次日期校验、循环行互斥都要用到，避免和 brief 草稿里的 recurSel 重复一个同义变量。
+        var recur = ComboVal(RecurCombo);
+        var onceDate = OnceDateBox.Text.Trim();
+        if (recur == "once" && onceDate != "" && !DateRe.IsMatch(onceDate)) { Warn(Strings.Get("Val_OnceDate")); return; }
+        // 日期已过：提示但放行——不替用户做主（与项目校验风格一致，只拦真正会崩的）。
+        if (recur == "once" && onceDate != ""
+            && DateTime.TryParseExact(onceDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var od)
+            && od.Date < DateTime.Today)
+            Warn(Strings.Get("Val_OnceDatePast"));
+        var loopUntil = LoopUntilBox.Text.Trim();
+        if (loopUntil != "" && !HhmmRe.IsMatch(DurationText.FormatTimeHHmm(loopUntil))) { Warn(Strings.Get("Val_RepeatUntil")); return; }
+        // 选了静默却没挑组=没配动作，必须拦：静默任务到点悄悄什么都不做是最难察觉的配置错误。
+        if (ActSilent.IsChecked == true && string.IsNullOrWhiteSpace(ComboVal(SilentCombo))) { Warn(Strings.Get("Val_SilentNoGroup")); return; }
 
         // 解析失败/越界回退默认。
         int iv = ParseOr(IntervalBox.Text, 1, min: 1);
@@ -108,7 +143,6 @@ public partial class ReminderEditorWindow : Window
         int rd = ParseOr(RandomBox.Text, 0, min: 0);
         int gm = ParseOr(GraceBox.Text, 5, min: 0);
 
-        var recur = ComboVal(RecurCombo);
         if (recur == "everyNDays" && anchor == "") anchor = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
         var days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7);
@@ -139,7 +173,10 @@ public partial class ReminderEditorWindow : Window
             RepeatUntil = DurationText.FormatTimeHHmm(RepeatUntilBox.Text),
             AnchorDate = anchor,
             PopupTimeoutSeconds = au,
-            SilentGroupId = ComboVal(SilentCombo),
+            SilentGroupId = ActSilent.IsChecked == true ? ComboVal(SilentCombo) : "",
+            IntervalMinutes = recur == "once" ? 0 : ParseOr(LoopMinBox.Text, 0, min: 0),
+            IntervalUntil = DurationText.FormatTimeHHmm(LoopUntilBox.Text),
+            OnceDate = onceDate,
             Enabled = _original.Enabled,   // 保留启用/禁用态：编辑提醒不应把用户关掉的提醒又打开
         };
         DialogResult = true;
