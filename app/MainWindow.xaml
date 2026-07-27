@@ -26,9 +26,12 @@
         <TabControl x:Name="Tabs" Margin="8,4,8,6">
             <!-- ===== 启动清单 ===== -->
             <TabItem x:Name="TabLaunch" Header="{loc:Loc Tab_Launch}">
+                <!-- 两行：上＝列表+操作栏，下＝整宽脚注。说明文字原来塞在 168px 侧栏底部，
+                     中文在那个宽度里会在任意位置断行（「仅某些/星期」），而且离它解释的列表隔着一大片空。 -->
                 <Grid Margin="2,10,2,2">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="168"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Style="{StaticResource ListPanel}">
+                        <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <!-- 三个列表页禁点表头排序：清单顺序即执行/显示顺序，排序只改视图不改模型，
                              会让 SelectedIndex(视图序)与 Models(配置序)错位——删除/上移/复制会操作错行并落盘。 -->
                         <DataGrid x:Name="GridLaunch" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
@@ -58,13 +61,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         </Border>
-                        <DockPanel Grid.Column="1" Margin="14,0,0,0">
-                            <Grid DockPanel.Dock="Bottom" Margin="2,14,0,2">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Width="2" Background="{StaticResource BrushLine}" Margin="0,1,9,1"/>
-                                <TextBlock Grid.Column="1" Text="{loc:Loc Launch_Hint}" Style="{StaticResource Hint}" TextWrapping="Wrap"/>
-                            </Grid>
-                            <StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="14,0,0,0">
                             <TextBlock Text="{loc:Loc Tab_Launch}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
                             <Button x:Name="LAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="LAdd_Click"/>
                             <Button x:Name="LEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="LEdit_Click"/>
@@ -75,8 +72,12 @@
                                 <Button x:Name="LDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="LDown_Click"/>
                             </Grid>
                             <Button x:Name="LRun" Content="{loc:Loc Btn_RunStep}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="LRun_Click"/>
-                            </StackPanel>
-                        </DockPanel>
+                        </StackPanel>
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="2" Background="{StaticResource BrushLine}" Margin="0,1,9,1"/>
+                            <TextBlock Grid.Column="1" Text="{loc:Loc Launch_Hint}" Style="{StaticResource Hint}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        </Grid>
                 </Grid>
             </TabItem>
 
@@ -84,7 +85,8 @@
             <TabItem Header="{loc:Loc Tab_Reminder}">
                 <Grid Margin="2,10,2,2">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="168"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Style="{StaticResource ListPanel}">
+                        <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <DataGrid x:Name="GridRemind" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridRemind_DoubleClick">
                             <DataGrid.Columns>
@@ -104,13 +106,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         </Border>
-                        <DockPanel Grid.Column="1" Margin="14,0,0,0">
-                            <Grid DockPanel.Dock="Bottom" Margin="2,14,0,2">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Width="2" Background="{StaticResource BrushLine}" Margin="0,1,9,1"/>
-                                <TextBlock Grid.Column="1" Text="{loc:Loc Reminder_Hint}" Style="{StaticResource Hint}" TextWrapping="Wrap"/>
-                            </Grid>
-                            <StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="14,0,0,0">
                             <TextBlock Text="{loc:Loc Tab_Reminder}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
                             <Button x:Name="RAdd" Content="{loc:Loc Btn_Add}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="RAdd_Click"/>
                             <Button x:Name="REdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="REdit_Click"/>
@@ -122,8 +118,12 @@
                             </Grid>
                             <Button x:Name="RCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="RCopy_Click"/>
                             <Button x:Name="RPreview" Content="{loc:Loc Btn_Preview}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="RPreview_Click"/>
-                            </StackPanel>
-                        </DockPanel>
+                        </StackPanel>
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="2" Background="{StaticResource BrushLine}" Margin="0,1,9,1"/>
+                            <TextBlock Grid.Column="1" Text="{loc:Loc Reminder_Hint}" Style="{StaticResource Hint}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        </Grid>
                 </Grid>
             </TabItem>
 
@@ -131,7 +131,8 @@
             <TabItem Header="{loc:Loc Tab_Group}">
                 <Grid Margin="2,10,2,2">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="168"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Style="{StaticResource ListPanel}">
+                        <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <DataGrid x:Name="GridGroup" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridGroup_DoubleClick">
                             <DataGrid.Columns>
@@ -145,13 +146,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         </Border>
-                        <DockPanel Grid.Column="1" Margin="14,0,0,0">
-                            <Grid DockPanel.Dock="Bottom" Margin="2,14,0,2">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Width="2" Background="{StaticResource BrushLine}" Margin="0,1,9,1"/>
-                                <TextBlock Grid.Column="1" Text="{loc:Loc Group_Hint}" Style="{StaticResource Hint}" TextWrapping="Wrap"/>
-                            </Grid>
-                            <StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="14,0,0,0">
                             <TextBlock Text="{loc:Loc Tab_Group}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
                             <Button x:Name="GAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="GAdd_Click"/>
                             <Button x:Name="GEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="GEdit_Click"/>
@@ -163,8 +158,12 @@
                             </Grid>
                             <Button x:Name="GCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="GCopy_Click"/>
                             <Button x:Name="GRun" Content="{loc:Loc Btn_RunGroup}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="GRun_Click"/>
-                            </StackPanel>
-                        </DockPanel>
+                        </StackPanel>
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="2" Background="{StaticResource BrushLine}" Margin="0,1,9,1"/>
+                            <TextBlock Grid.Column="1" Text="{loc:Loc Group_Hint}" Style="{StaticResource Hint}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        </Grid>
                 </Grid>
             </TabItem>
 
@@ -220,8 +219,11 @@
                      不再是几张小卡片浮在暗色空地上；随窗口拉伸，天生自适应。 -->
                 <Border Style="{StaticResource Card}" Margin="8,8,8,6" Padding="0" ClipToBounds="True">
                     <Grid>
-                        <!-- 氛围擒纵轮：黄铜低透明、右下溢出，把稀疏处填成品牌纹理而非空地 -->
-                        <Path Fill="{StaticResource BrushBrass}" Opacity="0.06" Stretch="Uniform" Width="480" Height="480"
+                        <!-- 氛围擒纵轮：黄铜线描、右下溢出，把稀疏处填成品牌纹理而非空地。
+                             用描边而非填充——实心剪影在 6% 透明度下只剩一团发灰的色块，认不出是什么，
+                             等于噪点；细线条能保住黄铜的色相，读作这台仪器的机构图。内圈也从「挖空」
+                             变成画出来的一道轴圈，更像图纸。 -->
+                        <Path Stroke="{StaticResource BrushBrass}" StrokeThickness="1" Opacity="0.28" Stretch="Uniform" Width="480" Height="480"
                               HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-80,-110" IsHitTestVisible="False"
                               Data="F0 M128,36 L128,24 L156.43,40.5 L160.14,29.09 L182.08,53.57 L189.13,43.86 L202.43,73.92 L212.14,66.87 L215.5,99.57 L226.91,95.86 L220,128 L232,128 L215.5,156.43 L226.91,160.14 L202.43,182.08 L212.14,189.13 L182.08,202.43 L189.13,212.14 L156.43,215.5 L160.14,226.91 L128,220 L128,232 L99.57,215.5 L95.86,226.91 L73.92,202.43 L66.87,212.14 L53.57,182.08 L43.86,189.13 L40.5,156.43 L29.09,160.14 L36,128 L24,128 L40.5,99.57 L29.09,95.86 L53.57,73.92 L43.86,66.87 L73.92,53.57 L66.87,43.86 L99.57,40.5 L95.86,29.09 Z M192,128 A64,64 0 1 0 64,128 A64,64 0 1 0 192,128Z"/>
 
@@ -255,7 +257,10 @@
                                 <!-- 急停键（按键捕捉） -->
                                 <Grid Margin="0,5">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StopHotkey}" Style="{StaticResource FieldLabel}"/>
+                                    <!-- 右列是「控件+说明」的竖排时，标签必须顶对齐再下压半个控件高；
+                                         否则 FieldLabel 的居中会让它去和说明文字齐平，看着像标错了行。 -->
+                                    <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StopHotkey}" Style="{StaticResource FieldLabel}"
+                                               VerticalAlignment="Top" Margin="0,7,14,0"/>
                                     <StackPanel Grid.Column="1">
                                         <TextBox x:Name="HotkeyBox" Width="190" Height="32" HorizontalAlignment="Left" Style="{StaticResource HotkeyCapture}"/>
                                         <TextBlock Text="{loc:Loc Settings_HotkeyCaptureTip}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap" MaxWidth="380"/>
@@ -265,7 +270,8 @@
                                 <!-- 语言 -->
                                 <Grid Margin="0,10,0,5">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{loc:Loc Settings_Language}" Style="{StaticResource FieldLabel}"/>
+                                    <TextBlock Grid.Column="0" Text="{loc:Loc Settings_Language}" Style="{StaticResource FieldLabel}"
+                                               VerticalAlignment="Top" Margin="0,6,14,0"/>
                                     <StackPanel Grid.Column="1">
                                         <ComboBox x:Name="LangCombo" Width="170" Height="30" HorizontalAlignment="Left" SelectionChanged="Lang_Changed"/>
                                         <TextBlock Text="{loc:Loc Settings_LangRestart}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap" MaxWidth="380"/>
@@ -278,11 +284,15 @@
                                     <Button Grid.Column="1" x:Name="AutostartBtn" Content="{loc:Loc Autostart_Checking}" HorizontalAlignment="Left" Click="Autostart_Click"/>
                                 </Grid>
 
-                                <!-- 配置导入/导出 -->
-                                <StackPanel Orientation="Horizontal" Margin="0,14,0,2">
-                                    <Button x:Name="ExportBtn" Content="{loc:Loc Btn_ExportConfig}" Click="ExportConfig_Click" Margin="0,0,10,0"/>
-                                    <Button x:Name="ImportBtn" Content="{loc:Loc Btn_ImportConfig}" Click="ImportConfig_Click"/>
-                                </StackPanel>
+                                <!-- 配置导入/导出。走同一个 112px 标签列：原来这行直接贴在面板左内边距上，
+                                     是整页唯一一处跳出字段左缘的控件，看着像掉出了栏。 -->
+                                <Grid Margin="0,14,0,2">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button x:Name="ExportBtn" Content="{loc:Loc Btn_ExportConfig}" Click="ExportConfig_Click" Margin="0,0,10,0"/>
+                                        <Button x:Name="ImportBtn" Content="{loc:Loc Btn_ImportConfig}" Click="ImportConfig_Click"/>
+                                    </StackPanel>
+                                </Grid>
                             </StackPanel>
 
                             <!-- 竖分隔 -->

@@ -37,6 +37,7 @@ public partial class StepEditorWindow : Window
         ShowPanelForKind(step.Kind);
         UpdateVolRow();
         UpdateWinRows();
+        UpdateOnYes();
 
         // 「组合键」是单个组合（keys 步骤经 SendKeyCombo 单发），与热键同性质，改「点击即录键」——去掉多余的捕捉按钮。
         // 值就在框里、确定时读取，故 set 空。（「发送键」是 SendKeys 序列，可含 {TAB}{ENTER}/字面文本，必须能打字，
@@ -51,6 +52,16 @@ public partial class StepEditorWindow : Window
     private void CaptureSendKey_Click(object sender, RoutedEventArgs e)
     {
         if (Pickers.CaptureKey(this, KeyCombo.CanEncodeForSendKeys) is string s) SendKeyBox.Text = s;
+    }
+
+    // 「点是后」选「无」时，目标框和「浏览…」什么也控制不了——原来这行根本没接切换事件，
+    // 两个假控件一直摆在那儿：看着能填、填了不生效。没有可填的东西就别显示。
+    private void OnYesType_Changed(object sender, SelectionChangedEventArgs e) => UpdateOnYes();
+
+    private void UpdateOnYes()
+    {
+        bool target = ComboVal(OnYesTypeCombo) != "none";
+        Vis(OnYesTargetBox, target); Vis(OnYesBrowseBtn, target);
     }
 
     private void LoadStep(LaunchStep s)

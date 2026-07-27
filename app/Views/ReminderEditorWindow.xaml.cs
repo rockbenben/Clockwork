@@ -72,8 +72,12 @@ public partial class ReminderEditorWindow : Window
     }
     private void UpdateOnYes()
     {
-        bool group = ComboVal(OnYesTypeCombo) == "group";
-        Vis(OnYesGroupCombo, group); Vis(OnYesTargetBox, !group); Vis(OnYesBrowseBtn, !group);
+        var type = ComboVal(OnYesTypeCombo);
+        bool group = type == "group";
+        // 选「无」时目标框和「浏览…」什么也控制不了——留着等于在表单里摆两个假控件，
+        // 看着能填、填了不生效。没有可填的东西就别显示。
+        bool target = type != "group" && type != "none";
+        Vis(OnYesGroupCombo, group); Vis(OnYesTargetBox, target); Vis(OnYesBrowseBtn, target);
     }
 
     // HH:mm 校验用引擎共享 pattern；先经 FormatTimeHHmm 规整，"9:00" 这类单位数小时输入不再被拒（保存时同样走规整）。
