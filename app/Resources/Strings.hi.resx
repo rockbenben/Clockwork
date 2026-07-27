@@ -119,6 +119,9 @@
 
   <data name="Period_EveryNDays" xml:space="preserve"><value>हर {0} दिन</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>हर महीने {0} तारीख</value></data>
+  <data name="Period_Once" xml:space="preserve"><value>केवल एक बार {0}</value></data>
+  <data name="Time_LoopEvery" xml:space="preserve"><value>हर {0} मिनट</value></data>
+  <data name="Time_LoopUntil" xml:space="preserve"><value>{0} तक</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>लॉगऑन पर</value></data>
   <data name="Time_Startup_Before" xml:space="preserve"><value>लॉगऑन पर · {0}:00 से पहले</value></data>
   <data name="Time_Startup_After" xml:space="preserve"><value>लॉगऑन पर · {0}:00 के बाद</value></data>

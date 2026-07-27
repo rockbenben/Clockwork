@@ -14,4 +14,20 @@ public class ReminderDisplayTests
     [Fact] public void Period_daily_empty_everyday() => Assert.Equal("每天", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "daily", Days = new() }));
 
     [Fact] public void Text_strips_newlines() => Assert.Equal("a b", ReminderDisplay.TextSummary(new Reminder { Message = "a\r\nb" }));
+
+    [Fact]
+    public void Period_once_shows_date()
+        => Assert.Equal("仅一次 2026-08-01", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "once", OnceDate = "2026-08-01" }));
+
+    [Fact]
+    public void Period_once_without_date()
+        => Assert.Equal("仅一次", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "once", OnceDate = "" }));
+
+    [Fact]
+    public void Time_shows_interval_suffix()
+        => Assert.Equal("09:00 每 30 分钟 至 18:00", ReminderDisplay.TimeLabel(new Reminder { Time = "09:00", IntervalMinutes = 30, IntervalUntil = "18:00" }));
+
+    [Fact]
+    public void Time_interval_without_until()
+        => Assert.Equal("09:00 每 30 分钟", ReminderDisplay.TimeLabel(new Reminder { Time = "09:00", IntervalMinutes = 30 }));
 }

@@ -119,6 +119,9 @@
 
   <data name="Period_EveryNDays" xml:space="preserve"><value>Каждые {0} дн.</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>{0}-го числа каждого месяца</value></data>
+  <data name="Period_Once" xml:space="preserve"><value>Один раз {0}</value></data>
+  <data name="Time_LoopEvery" xml:space="preserve"><value>каждые {0} мин</value></data>
+  <data name="Time_LoopUntil" xml:space="preserve"><value>до {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>При входе</value></data>
   <data name="Time_Startup_Before" xml:space="preserve"><value>При входе · до {0}:00</value></data>
   <data name="Time_Startup_After" xml:space="preserve"><value>При входе · после {0}:00</value></data>

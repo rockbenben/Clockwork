@@ -122,6 +122,9 @@
 
   <data name="Period_EveryNDays" xml:space="preserve"><value>每{0}天</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>每月{0}号</value></data>
+  <data name="Period_Once" xml:space="preserve"><value>仅一次 {0}</value></data>
+  <data name="Time_LoopEvery" xml:space="preserve"><value>每 {0} 分钟</value></data>
+  <data name="Time_LoopUntil" xml:space="preserve"><value>至 {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>登录时</value></data>
   <data name="Time_Startup_Before" xml:space="preserve"><value>登录时·{0}点前</value></data>
   <data name="Time_Startup_After" xml:space="preserve"><value>登录时·{0}点后</value></data>

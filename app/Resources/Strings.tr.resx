@@ -119,6 +119,9 @@
 
   <data name="Period_EveryNDays" xml:space="preserve"><value>Her {0} günde</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Her ayın {0}. günü</value></data>
+  <data name="Period_Once" xml:space="preserve"><value>Yalnızca bir kez {0}</value></data>
+  <data name="Time_LoopEvery" xml:space="preserve"><value>her {0} dakikada bir</value></data>
+  <data name="Time_LoopUntil" xml:space="preserve"><value>{0}'e kadar</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>Oturum açıldığında</value></data>
   <data name="Time_Startup_Before" xml:space="preserve"><value>Oturum açıldığında · {0}:00'dan önce</value></data>
   <data name="Time_Startup_After" xml:space="preserve"><value>Oturum açıldığında · {0}:00'dan sonra</value></data>

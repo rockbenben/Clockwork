@@ -8,22 +8,31 @@ public static class ReminderDisplay
 {
     public static string TimeLabel(Reminder r)
     {
+        string baseLabel;
         if (r.Trigger == "startup")
         {
-            return r.StartupHourMode switch
+            baseLabel = r.StartupHourMode switch
             {
                 "before" => Strings.Lf("Time_Startup_Before", r.StartupHour),
                 "after" => Strings.Lf("Time_Startup_After", r.StartupHour),
                 _ => Strings.Get("Time_Startup"),
             };
         }
-        return r.Time;
+        else baseLabel = r.Time;
+        // 循环运行后缀：一眼看出这条不是一天一响。两种基础文案（登录时短语 / 原始 HH:mm）都要追加。
+        if (r.IntervalMinutes > 0)
+        {
+            baseLabel += " " + Strings.Lf("Time_LoopEvery", r.IntervalMinutes);
+            if (!string.IsNullOrWhiteSpace(r.IntervalUntil)) baseLabel += " " + Strings.Lf("Time_LoopUntil", r.IntervalUntil);
+        }
+        return baseLabel;
     }
 
     public static string PeriodLabel(Reminder r) => r.RecurType switch
     {
         "everyNDays" => Strings.Lf("Period_EveryNDays", r.IntervalDays),
         "monthly" => Strings.Lf("Period_Monthly", r.MonthlyDay),
+        "once" => Strings.Lf("Period_Once", r.OnceDate ?? "").Trim(),   // 无日期=今天：只显示「仅一次」
         _ => StepDisplay.DaysLabel(r.Days),
     };
 

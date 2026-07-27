@@ -119,6 +119,9 @@
 
   <data name="Period_EveryNDays" xml:space="preserve"><value>Tous les {0} jours</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Le {0} de chaque mois</value></data>
+  <data name="Period_Once" xml:space="preserve"><value>Une fois {0}</value></data>
+  <data name="Time_LoopEvery" xml:space="preserve"><value>toutes les {0} min</value></data>
+  <data name="Time_LoopUntil" xml:space="preserve"><value>jusqu'à {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>À l'ouverture de session</value></data>
   <data name="Time_Startup_Before" xml:space="preserve"><value>À l'ouverture · avant {0} h</value></data>
   <data name="Time_Startup_After" xml:space="preserve"><value>À l'ouverture · après {0} h</value></data>

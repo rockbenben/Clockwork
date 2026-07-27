@@ -120,6 +120,9 @@
 
   <data name="Period_EveryNDays" xml:space="preserve"><value>{0}日ごと</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>毎月{0}日</value></data>
+  <data name="Period_Once" xml:space="preserve"><value>1回のみ {0}</value></data>
+  <data name="Time_LoopEvery" xml:space="preserve"><value>{0}分ごと</value></data>
+  <data name="Time_LoopUntil" xml:space="preserve"><value>{0}まで</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>ログオン時</value></data>
   <data name="Time_Startup_Before" xml:space="preserve"><value>ログオン時·{0}時前</value></data>
   <data name="Time_Startup_After" xml:space="preserve"><value>ログオン時·{0}時後</value></data>
