@@ -70,7 +70,7 @@ Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi 
 
 > **Độ trễ khởi động** (tab Cài đặt, chỉ khi khởi động máy): chờ một số giây cố định sau khi đăng nhập để "cơn bão đăng nhập" (tranh chấp đĩa/CPU do mọi thứ tự khởi động) đi qua trước khi danh sách chạy; chạy lại thủ công thì không bị ảnh hưởng. Tăng lên (0–600 giây) nếu mọi thứ khởi động quá sớm.
 
-> **Dừng bất cứ lúc nào** — khay → **Dừng các thao tác đang chạy**, hoặc **phím tắt khẩn** toàn cục (đặt ở tab Cài đặt; mặc định `Ctrl+Alt+Q`). Bất cứ thứ gì đang chạy sẽ dừng sau thao tác hiện tại; các khoảng chờ dài (độ trễ khởi động, chờ cửa sổ) bị ngắt ngay lập tức.
+> **Dừng bất cứ lúc nào** — **nút dừng** ở đầu bên phải thanh tab của cửa sổ (chỉ hiện khi có thứ gì đó đang chạy), khay → **Dừng các thao tác đang chạy**, hoặc **phím tắt khẩn** toàn cục (đặt ở tab Cài đặt; mặc định `Ctrl+Alt+Q`). Bất cứ thứ gì đang chạy sẽ dừng sau thao tác hiện tại; các khoảng chờ dài (độ trễ khởi động, chờ cửa sổ) bị ngắt ngay lập tức.
 
 ### Nhắc nhở
 

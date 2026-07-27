@@ -68,7 +68,7 @@ Uma **lista ordenada de etapas** executadas de cima para baixo ao entrar. Clique
 
 > **Atraso de inicialização** (aba Configurações, apenas no boot): espera um número fixo de segundos após o login para que a "tempestade de login" (disputa de disco/CPU de todo autostart) passe antes de a lista rodar; uma reexecução manual não é afetada. Aumente-o (0–600 s) se as coisas começarem cedo demais.
 
-> **Pare a qualquer momento** — bandeja → **Parar ações em execução**, ou a **tecla de pânico** global (definida na aba Configurações; padrão `Ctrl+Alt+Q`). O que estiver em execução para após a ação atual; esperas longas (atraso de inicialização, aguardar uma janela) são interrompidas imediatamente.
+> **Pare a qualquer momento** — o **botão de parada** na extremidade direita da barra de abas da janela (só aparece enquanto algo está em execução), bandeja → **Parar ações em execução**, ou a **tecla de pânico** global (definida na aba Configurações; padrão `Ctrl+Alt+Q`). O que estiver em execução para após a ação atual; esperas longas (atraso de inicialização, aguardar uma janela) são interrompidas imediatamente.
 
 ### Lembretes
 

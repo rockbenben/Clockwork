@@ -31,6 +31,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        RefreshStopButton();   // 无配置也先摆正：默认隐藏，别让设计器/兜底路径漏出一颗常驻按钮
     }
 
     public MainWindow(RootConfig config, Action save, Action<string, string>? migrateReminderState = null)
@@ -62,6 +63,14 @@ public partial class MainWindow : Window
         StartupDelayBox.Text = config.Settings.StartupDelaySeconds.ToString();
         StartMinChk.IsChecked = config.Settings.StartMinimized;
         WireHotkeyBox();   // 急停键「点击即录键」（Attach 内会填入当前值）
+        // 急停按钮跟着运行状态走：订阅一次，窗口真正关闭（托盘退出）时摘掉——
+        // 平时关窗只是隐到托盘，窗口对象还在，摘早了再打开就不会更新了。
+        if (AppInstance is { } app)
+        {
+            app.RunStateChanged += RefreshStopButton;
+            Closed += (_, _) => app.RunStateChanged -= RefreshStopButton;
+        }
+        RefreshStopButton();   // 建窗时可能已有东西在跑（开机清单先跑、用户随后才打开窗口）
         int langSel = 0;
         for (int i = 0; i < Languages.All.Length; i++)
         {
@@ -104,7 +113,40 @@ public partial class MainWindow : Window
         if (_config == null) return;
         Views.KeyCaptureBox.Attach(HotkeyBox, HotkeyCapture.KeyCaptureMode.Hotkey, null,
             () => _config.Settings.StopHotkey,
-            combo => { _config.Settings.StopHotkey = combo; _save?.Invoke(); });   // 保存→SaveConfig→按新配置重注册全部热键
+            // 保存→SaveConfig→按新配置重注册全部热键；急停按钮的提示里印着这个键，一并刷新
+            combo => { _config.Settings.StopHotkey = combo; _save?.Invoke(); RefreshStopButton(); });
+    }
+
+    // 标签条右端的急停按钮：只在真有东西在跑时存在。
+    // 常驻一个永不变化的图标会被读成「正在运行」指示灯，而且按下去毫无变化，两头都在说谎；
+    // 「出现＝真有东西在跑、消失＝真的停了」之后，它同时是状态也是控件。
+    //
+    // 这里刻意没有「已请求停止、正在收尾」的中间态：引擎里每一处不可打断的等待都很短且每轮都查急停
+    // （等窗口 500ms 一轮、置前台发键 200+500ms、前台切换 120ms），那个中间态实际只活几毫秒到最多 0.7 秒，
+    // 只会在一颗马上要消失的按钮上闪一下灰。「我收到了」的回执由气泡保证（每条急停路径都弹），不靠它。
+    //
+    // 提示与屏幕阅读器名共用一串：纯图形按钮没有可读文字，只给 ToolTip 等于对读屏用户什么都没给。
+    private void RefreshStopButton()
+    {
+        StopAllBtn.Visibility = AppInstance?.IsRunning == true ? Visibility.Visible : Visibility.Collapsed;
+        var hint = StopHint.Compose(Strings.Get("Tray_Stop"), _config?.Settings.StopHotkey);
+        StopAllBtn.ToolTip = hint;
+        System.Windows.Automation.AutomationProperties.SetName(StopAllBtn, hint);
+    }
+
+    // 鼠标点完不把焦点环留在急停按钮上：环是黄铜色，而黄铜在本应用里读作「活动 / 正在跑」
+    // （选中标签的刻度线、「运行这一步」都是它），一直亮在一颗红色急停按钮上会被误读成「还有东西在运行」。
+    // 只对鼠标这么做：键盘激活(空格/回车)时保留焦点——那是用户自己 Tab 过来的位置，抹掉会让下一次 Tab 从头开始。
+    private bool _stopClickedByMouse;
+
+    private void StopAll_PreviewMouseDown(object sender, MouseButtonEventArgs e) => _stopClickedByMouse = true;
+
+    // 三个急停入口（热键 / 托盘 / 本按钮）统一走 App.RequestStop，行为与提示一致。
+    private void StopAll_Click(object sender, RoutedEventArgs e)
+    {
+        AppInstance?.RequestStop();
+        if (_stopClickedByMouse) Keyboard.ClearFocus();
+        _stopClickedByMouse = false;
     }
 
     // —— 关于 ——

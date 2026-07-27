@@ -70,7 +70,7 @@ Een **geordende lijst met stappen** die bij het aanmelden van boven naar beneden
 
 > **Opstartvertraging** (tabblad Instellingen, alleen bij opstarten): wacht een vast aantal seconden na het aanmelden zodat de «opstartstorm» (schijf-/CPU-belasting van alles dat automatisch opstart) voorbij is voordat de lijst wordt uitgevoerd; een handmatige herstart wordt niet beïnvloed. Verhoog het (0–600 s) als dingen te vroeg starten.
 
-> **Stop op elk moment** — systeemvak → **Actieve acties stoppen**, of de globale **paniek-sneltoets** (ingesteld op het tabblad Instellingen; standaard `Ctrl+Alt+Q`). Wat er draait stopt na de huidige actie; lange wachttijden (opstartvertraging, wachten op een venster) worden onmiddellijk onderbroken.
+> **Stop op elk moment** — de **stopknop** rechts in de tabbladbalk van het venster (alleen zichtbaar terwijl er iets draait), systeemvak → **Actieve acties stoppen**, of de globale **paniek-sneltoets** (ingesteld op het tabblad Instellingen; standaard `Ctrl+Alt+Q`). Wat er draait stopt na de huidige actie; lange wachttijden (opstartvertraging, wachten op een venster) worden onmiddellijk onderbroken.
 
 ### Herinneringen
 

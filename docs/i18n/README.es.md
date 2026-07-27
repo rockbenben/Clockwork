@@ -68,7 +68,7 @@ Una **lista ordenada de pasos** que se ejecutan de arriba abajo al iniciar sesi�
 
 > **Retardo de inicio** (pestaña Ajustes, solo en el arranque): espera un número fijo de segundos tras iniciar sesión para que pase la «tormenta de inicio» (contención de disco/CPU de todos los programas que arrancan automáticamente) antes de que se ejecute la lista; una re-ejecución manual no se ve afectada. Súbelo (0–600 s) si las cosas arrancan demasiado pronto.
 
-> **Detén cuando quieras** — bandeja → **Detener acciones en ejecución**, o el **atajo de pánico** global (se configura en la pestaña Ajustes; por defecto `Ctrl+Alt+Q`). Lo que se esté ejecutando se detiene tras la acción actual; las esperas largas (retardo de inicio, esperar a una ventana) se interrumpen de inmediato.
+> **Detén cuando quieras** — el **botón de parada** en el extremo derecho de la barra de pestañas de la ventana (solo aparece mientras algo se está ejecutando), bandeja → **Detener acciones en ejecución**, o el **atajo de pánico** global (se configura en la pestaña Ajustes; por defecto `Ctrl+Alt+Q`). Lo que se esté ejecutando se detiene tras la acción actual; las esperas largas (retardo de inicio, esperar a una ventana) se interrumpen de inmediato.
 
 ### Recordatorios
 

@@ -30,6 +30,34 @@ public class RunGateTests
         StopSignal.Clear();
     }
 
+    // 急停按钮靠这个事件决定显示/隐藏：每次 Begin/End 都得响一次，
+    // 且回调里读到的 Active 必须已是新值（漏掉最后一次 End 会让按钮永远留在界面上）。
+    [Fact]
+    public void ActiveChanged_fires_on_every_begin_and_end()
+    {
+        var gate = new RunGate();
+        var seen = new List<int>();
+        gate.ActiveChanged += () => seen.Add(gate.Active);
+
+        gate.Begin();   // 1
+        gate.Begin();   // 2
+        gate.End();     // 1
+        gate.End();     // 0
+
+        Assert.Equal(new[] { 1, 2, 1, 0 }, seen);
+        StopSignal.Clear();
+    }
+
+    [Fact]
+    public void ActiveChanged_without_subscriber_does_not_throw()
+    {
+        var gate = new RunGate();
+        gate.Begin();
+        gate.End();
+        Assert.Equal(0, gate.Active);
+        StopSignal.Clear();
+    }
+
     [Fact]
     public void Fresh_run_after_all_finished_clears_again()
     {

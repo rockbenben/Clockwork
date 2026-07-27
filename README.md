@@ -73,7 +73,7 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 
 > **Startup delay** (Settings tab, boot only): wait a fixed number of seconds after login so the "login storm" (disk/CPU contention from every autostart) passes before the list runs; a manual re-run is not affected. Raise it (0–600 s) if things start too early.
 
-> **Stop anytime** — tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately.
+> **Stop anytime** — the **stop button** at the right end of the window's tab bar (it only shows while something is running), tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately.
 
 ### Reminders
 

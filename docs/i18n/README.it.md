@@ -68,7 +68,7 @@ Un **elenco ordinato di passaggi** eseguiti dall'alto verso il basso all'accesso
 
 > **Ritardo di avvio** (scheda Impostazioni, solo all'accensione): aspetta un numero fisso di secondi dopo l'accesso in modo che la «tempesta di avvio» (contesa di disco/CPU di tutti i programmi che partono automaticamente) sia passata prima che l'elenco venga eseguito; una riesecuzione manuale non ne è influenzata. Aumentalo (0–600 s) se le cose partono troppo presto.
 
-> **Ferma quando vuoi** — area di notifica → **Ferma le azioni in esecuzione**, oppure la **scorciatoia di emergenza** globale (impostata nella scheda Impostazioni; predefinita `Ctrl+Alt+Q`). Ciò che è in esecuzione si ferma dopo l'azione corrente; le lunghe attese (ritardo di avvio, attesa di una finestra) vengono interrotte immediatamente.
+> **Ferma quando vuoi** — il **pulsante di stop** all'estremità destra della barra delle schede della finestra (appare solo mentre qualcosa è in esecuzione), area di notifica → **Ferma le azioni in esecuzione**, oppure la **scorciatoia di emergenza** globale (impostata nella scheda Impostazioni; predefinita `Ctrl+Alt+Q`). Ciò che è in esecuzione si ferma dopo l'azione corrente; le lunghe attese (ritardo di avvio, attesa di una finestra) vengono interrotte immediatamente.
 
 ### Promemoria
 

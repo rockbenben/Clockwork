@@ -115,6 +115,9 @@ public partial class App : System.Windows.Application
             FrameworkElement.FlowDirectionProperty.OverrideMetadata(
                 typeof(Window), new FrameworkPropertyMetadata(System.Windows.FlowDirection.RightToLeft));
 
+        // 运行闸的变化搬到 UI 线程再广播：Begin/End 都在后台运行线程上调，订阅方（急停按钮）要动控件。
+        _runGate.ActiveChanged += () => Dispatcher.BeginInvoke(() => RunStateChanged?.Invoke());
+
         _main = new MainWindow(_config, SaveConfig, MigrateReminderState);
         _tray = new TrayIcon(this);
 
@@ -363,8 +366,7 @@ public partial class App : System.Windows.Application
         int id = wParam.ToInt32();
         if (id == HotkeyId)
         {
-            StopSignal.Request();
-            ShowToast("Clockwork", Strings.Get("Hotkey_Stopped"), Views.ToastLevel.Warn);
+            RequestStop();
             handled = true;
         }
         else if (_groupHotkeyIds.TryGetValue(id, out var gid))
@@ -503,6 +505,23 @@ public partial class App : System.Windows.Application
 
     // 警告气泡的便捷入口（RunOnYes 等回调用）。ShowToast 自身已全 try/catch 守护、可跨线程调。
     private void WarnToast(string msg) => ShowToast("Clockwork", msg, Views.ToastLevel.Warn);
+
+    // 急停唯一出口：全局热键、托盘菜单、主窗口按钮三个入口都走这里，免得日后长出第四种写法。
+    // 置位后由各运行线程在动作边界自查退出，长等待（启动延迟/等窗口）被 InterruptibleSleep 立刻打断。
+    // 气泡是必须的：按下去当场没有任何反应，用户会以为按钮是坏的、然后接着乱按。
+    public void RequestStop()
+    {
+        StopSignal.Request();
+        ShowToast("Clockwork", Strings.Get("Hotkey_Stopped"), Views.ToastLevel.Warn);
+        // 不在这儿动急停按钮：它只由「有没有东西在跑」决定，而那个变化由运行闸(RunGate)统一广播。
+        // 按下急停到真正停下之间最多几百毫秒，中间态没有观察价值，回执由上面这条气泡负责。
+    }
+
+    // —— 运行状态（主窗口急停按钮据此显示/隐藏）——
+    // 三条运行路径（启动清单 / 单步 / 动作组，提醒的静默组走动作组）都过同一个闸，故这是唯一可信来源。
+    public bool IsRunning => _runGate.Active > 0;
+
+    public event Action? RunStateChanged;
 
     // —— 勿扰（暂停提醒）——旧版同款：会话级、不落盘；生效期间提醒 tick 整体跳过（含静默组），
     // 到期自动恢复；期间错过的提醒按宽限/错过必补的正常规则处理。

@@ -64,7 +64,9 @@ On the **Settings** tab, "Startup delay N seconds" applies **only when auto-star
 
 ### Stop anytime
 
-Tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running (startup list / action group / single step) stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately. The run log records "manually stopped". If the hotkey is taken by another app and fails to register, a tray toast warns you (use the tray menu's Stop as a fallback).
+Three ways, all doing exactly the same thing: the **stop button** at the right end of the window's tab bar, tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running (startup list / action group / single step) stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately. The run log records "manually stopped". If the hotkey is taken by another app and fails to register, a tray toast warns you (use the button or the tray menu's Stop as a fallback).
+
+> The stop button **only exists while something is actually running** — that is the point: its presence tells you something is running, and its disappearance tells you the stop went through. Hover it for the current panic hotkey.
 
 > **Advanced:** to "wait until the network / desktop is ready" instead of a fixed delay, set `startupWaitForReady` to `true` in `clockwork.settings.json` (default `false`; proceeds as soon as ready, capped at 90 s).
 

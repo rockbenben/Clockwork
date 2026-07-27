@@ -47,7 +47,7 @@ public sealed class TrayIcon : IDisposable
         // 启动清单区（小标题复用「我的启动清单」标签页名，已多语言）
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Launch")));
         menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Rerun"), TrayGlyph.Rerun, (s, e) => app.RunLaunchAsync(false)));
-        menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Stop"), TrayGlyph.Stop, (s, e) => StopSignal.Request()));
+        menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Stop"), TrayGlyph.Stop, (s, e) => app.RequestStop()));
         // Tray_LaunchWarn 的气泡文案让用户「右键托盘→查看上次启动日志」——菜单里必须真有这一项。
         menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_ViewLog"), TrayGlyph.Log, (s, e) => app.OpenRunLog()));
 

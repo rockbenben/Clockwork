@@ -30,6 +30,7 @@
     <SolidColorBrush x:Key="BrushFilament"  Color="{StaticResource Filament}"/>
     <SolidColorBrush x:Key="BrushClay"      Color="{StaticResource Clay}"/>
     <SolidColorBrush x:Key="BrushBrassTint" Color="{StaticResource Brass}" Opacity="0.12"/>
+    <SolidColorBrush x:Key="BrushClayTint"  Color="{StaticResource Clay}"  Opacity="0.18"/>
 
     <LinearGradientBrush x:Key="BrassGrad" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="{StaticResource Brass}" Offset="0"/>
@@ -223,6 +224,27 @@
         <Setter Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/>
     </Style>
 
+    <!-- 纯图形的方形小按钮（急停）：内容是图形不是字符串，所以要把默认 Button 的 ContentTemplate 拆掉——
+         那个 DataTemplate 是 <TextBlock Text="{Binding}">，喂给它一个图形对象只会画出类型名。
+         悬停改 Background 而不是像默认按钮那样只描边：这是个危险动作，手放上去要看得出来。
+         默认模板里 bd 的 Background 就是 {TemplateBinding Background}，故样式触发器能直接接管；
+         按下态由模板自身的 TargetName 触发器接手(Slate)，两者不冲突。 -->
+    <Style x:Key="IconDangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Foreground" Value="{StaticResource BrushClay}"/>
+        <!-- clay 描边不是装饰：没有轮廓时，深色底上一块实心暖色只会被读成状态指示灯而不是可点的控件
+             （真机比对过实心方块/实心八边形/空心八边形等七版，差别就在这道边上）。 -->
+        <Setter Property="BorderBrush" Value="{StaticResource BrushClay}"/>
+        <Setter Property="ContentTemplate" Value="{x:Null}"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="28"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BrushClayTint}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- ============ TextBox ============ -->
     <Style TargetType="TextBox">
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
@@ -366,10 +388,25 @@
                     <Grid>
                         <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                         <Border Grid.Row="0" BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
-                            <TabPanel IsItemsHost="True" Margin="4,0,0,0" Background="Transparent"/>
+                            <!-- 标签条两列：左＝标签本身，右＝挂在 Tag 上的常驻控件（急停按钮）。
+                                 右侧控件不做成「在窗口根 Grid 上浮一层」——那样 TabPanel 不知道右边被占，
+                                 而 18 种语言的标签总宽差很多（德语/俄语明显更长），窗口拉到 MinWidth 时
+                                 标签会钻到按钮底下。占掉一列才是真约束。Tag 为空时这一列不占地方。 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TabPanel Grid.Column="0" IsItemsHost="True" Margin="4,0,0,0" Background="Transparent"/>
+                                <ContentPresenter Grid.Column="1" Content="{TemplateBinding Tag}"
+                                                  VerticalAlignment="Center" Margin="10,0,6,5"/>
+                            </Grid>
                         </Border>
                         <Border Grid.Row="1" Background="Transparent">
-                            <ContentPresenter ContentSource="SelectedContent"/>
+                            <!-- 名字不能改：TabControlAutomationPeer 按 "PART_SelectedContentHost" 这个名字找选中页的
+                                 内容宿主，找不到就不把内容挂进无障碍树。本模板原来没给名字，于是五个标签页里的所有控件
+                                 对读屏软件整体不可见（UIA 树里只剩窗口＋5 个标签头）。 -->
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent"/>
                         </Border>
                     </Grid>
                 </ControlTemplate>

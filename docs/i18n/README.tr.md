@@ -70,7 +70,7 @@ Oturum açınca yukarıdan aşağıya çalıştırılan **sıralı bir adımlar 
 
 > **Başlangıç gecikmesi** (Ayarlar sekmesi, yalnızca açılışta): oturum açtıktan sonra sabit bir saniye sayısı bekleyerek "oturum açma fırtınası" (her otomatik başlangıçtan gelen disk/CPU çekişmesi) geçene dek liste çalışmasın; elle yeniden çalıştırma bundan etkilenmez. Her şey çok erken başlıyorsa artırın (0–600 sn).
 
-> **İstediğiniz an durdurun** — tepsi → **Çalışan eylemleri durdur** ya da genel **panik kısayolu** (Ayarlar sekmesinde ayarlanır; varsayılan `Ctrl+Alt+Q`). Çalışmakta olan, geçerli eylemden sonra durur; uzun beklemeler (başlangıç gecikmesi, bir pencereyi bekleme) hemen kesilir.
+> **İstediğiniz an durdurun** — pencerenin sekme çubuğunun sağ ucundaki **durdurma düğmesi** (yalnızca bir şey çalışırken görünür), tepsi → **Çalışan eylemleri durdur** ya da genel **panik kısayolu** (Ayarlar sekmesinde ayarlanır; varsayılan `Ctrl+Alt+Q`). Çalışmakta olan, geçerli eylemden sonra durur; uzun beklemeler (başlangıç gecikmesi, bir pencereyi bekleme) hemen kesilir.
 
 ### Hatırlatıcılar
 

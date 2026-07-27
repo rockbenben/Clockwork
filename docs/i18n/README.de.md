@@ -70,7 +70,7 @@ Eine **geordnete Liste von Schritten**, die beim Anmelden von oben nach unten au
 
 > **Startverzögerung** (Tab „Einstellungen“, nur beim Start): wartet nach dem Anmelden eine feste Anzahl Sekunden, damit der „Anmeldesturm“ (Datenträger-/CPU-Konkurrenz durch alle Autostarts) vorbei ist, bevor die Liste läuft; ein manueller Neustart der Liste ist davon nicht betroffen. Erhöhe sie (0–600 s), wenn Dinge zu früh starten.
 
-> **Jederzeit stoppen** — Tray → **Laufende Aktionen stoppen**, oder das globale **Notfall-Hotkey** (auf dem Tab „Einstellungen“ festgelegt; Standard `Ctrl+Alt+Q`). Was gerade läuft, stoppt nach der aktuellen Aktion; lange Wartezeiten (Startverzögerung, Warten auf ein Fenster) werden sofort unterbrochen.
+> **Jederzeit stoppen** — die **Stopp-Schaltfläche** rechts in der Registerleiste des Fensters (erscheint nur, während etwas läuft), Tray → **Laufende Aktionen stoppen**, oder das globale **Notfall-Hotkey** (auf dem Tab „Einstellungen“ festgelegt; Standard `Ctrl+Alt+Q`). Was gerade läuft, stoppt nach der aktuellen Aktion; lange Wartezeiten (Startverzögerung, Warten auf ein Fenster) werden sofort unterbrochen.
 
 ### Erinnerungen
 

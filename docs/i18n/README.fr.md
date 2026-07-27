@@ -68,7 +68,7 @@ Une **liste ordonnée d'étapes** exécutées de haut en bas à l'ouverture de s
 
 > **Délai de démarrage** (onglet Paramètres, au démarrage uniquement) : attend un nombre fixe de secondes après l'ouverture de session pour laisser passer la « tempête de démarrage » (contention disque/CPU de tous les programmes qui se lancent automatiquement) avant l'exécution de la liste ; une réexécution manuelle n'est pas concernée. Augmentez-le (0–600 s) si les choses démarrent trop tôt.
 
-> **Arrêtez à tout moment** — barre d'état système → **Arrêter les actions en cours**, ou le **raccourci panique** global (défini dans l'onglet Paramètres ; par défaut `Ctrl+Alt+Q`). Ce qui est en cours s'arrête après l'action courante ; les longues attentes (délai de démarrage, attente d'une fenêtre) sont interrompues immédiatement.
+> **Arrêtez à tout moment** — le **bouton d'arrêt** à l'extrémité droite de la barre d'onglets de la fenêtre (visible uniquement pendant une exécution), barre d'état système → **Arrêter les actions en cours**, ou le **raccourci panique** global (défini dans l'onglet Paramètres ; par défaut `Ctrl+Alt+Q`). Ce qui est en cours s'arrête après l'action courante ; les longues attentes (délai de démarrage, attente d'une fenêtre) sont interrompues immédiatement.
 
 ### Rappels
 

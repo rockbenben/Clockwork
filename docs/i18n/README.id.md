@@ -70,7 +70,7 @@ Sebuah **daftar langkah yang berurutan** dijalankan dari atas ke bawah saat logi
 
 > **Penundaan startup** (tab Pengaturan, hanya saat boot): tunggu sejumlah detik tetap setelah login agar "badai login" (perebutan disk/CPU dari setiap autostart) mereda sebelum daftar dijalankan; menjalankan ulang secara manual tidak terpengaruh. Naikkan (0–600 dtk) jika segala sesuatu mulai terlalu awal.
 
-> **Hentikan kapan saja** — tray → **Hentikan aksi yang berjalan**, atau **tombol pintas panik** global (diatur pada tab Pengaturan; bawaan `Ctrl+Alt+Q`). Apa pun yang sedang berjalan berhenti setelah aksi saat ini; penungguan yang lama (penundaan startup, menunggu jendela) diinterupsi seketika.
+> **Hentikan kapan saja** — **tombol berhenti** di ujung kanan bilah tab jendela (hanya muncul saat ada yang berjalan), tray → **Hentikan aksi yang berjalan**, atau **tombol pintas panik** global (diatur pada tab Pengaturan; bawaan `Ctrl+Alt+Q`). Apa pun yang sedang berjalan berhenti setelah aksi saat ini; penungguan yang lama (penundaan startup, menunggu jendela) diinterupsi seketika.
 
 ### Pengingat
 
