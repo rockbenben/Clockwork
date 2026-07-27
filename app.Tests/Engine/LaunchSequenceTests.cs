@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using Clockwork.Engine;
 using Clockwork.Core;
@@ -114,6 +115,8 @@ public class LaunchSequenceTests
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "out" } }, ActionGroups = new() { outer, inner } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
         Assert.Equal(2, r.Summary.Total);
+        Assert.Equal(0, r.Summary.Fail);        // 不是环：不该有环告警——挡「visited 集永不移除」的误实现（该实现下 Total 也是 2，但会带 1 条假警告）
+        Assert.DoesNotContain(r.LogLines, l => l.Contains("环引用"));
     }
 
     [Fact]
@@ -134,5 +137,20 @@ public class LaunchSequenceTests
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
         Assert.Equal(RunBudget.MaxRunSteps, r.Summary.Total);
         Assert.Contains(r.LogLines, l => l.Contains("5000"));
+        // 预算截停 ≠ 手动急停：Stopped 为 true 只是循环提前退出的副作用，正文不该叠打「已手动停止」
+        // （budgetOut 的告警行已经说清楚了截停原因）。
+        Assert.DoesNotContain(r.LogLines, l => l.Contains("已手动停止"));
+        Assert.True(r.Summary.Truncated);
+
+        // 日志文件头同理不该声称用户按了急停/托盘「停止」——这是 WriteLog 侧的同一个诚实性要求。
+        var path = Path.Combine(Path.GetTempPath(), "cw_launchlog_" + Guid.NewGuid().ToString("N") + ".txt");
+        try
+        {
+            LaunchSequence.WriteLog(path, r, Now());
+            var text = File.ReadAllText(path);
+            Assert.DoesNotContain("手动停止", text);
+            Assert.Contains("5000", text);
+        }
+        finally { try { File.Delete(path); } catch { } }
     }
 }

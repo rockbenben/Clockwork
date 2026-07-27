@@ -4,10 +4,10 @@ using Clockwork.Core;
 
 namespace Clockwork.Engine;
 
-public sealed record LaunchSummary(int Total, int Fail, int Unverified, bool Stopped);
+public sealed record LaunchSummary(int Total, int Fail, int Unverified, bool Stopped, bool Truncated);
 public sealed record LaunchRunResult(LaunchSummary Summary, IReadOnlyList<string> LogLines, string? BootNote);
 
-// 启动序列编排：就绪门控 + 开机延时 + 建计划 + group 展开 + 循环 + 急停 + 三态日志。
+// 启动序列编排：就绪门控 + 开机延时 + 建计划 + group 递归展开（沿途访问集挡环）+ 组级轮次 + 单步预算 + 循环 + 急停 + 三态日志。
 // 单步执行经注入 stepMark（默认 StepRunner.RunStepMark），便于测展开/循环/急停/计数；boot 门控用真实 ReadyGate/StopSignal。
 public static class LaunchSequence
 {
@@ -46,7 +46,7 @@ public static class LaunchSequence
         bool Consume()
         {
             if (budgetLeft > 0) { budgetLeft--; return true; }
-            if (!budgetOut) { budgetOut = true; lines.Add($"[{Ts(now)}] ⚠ 单次运行已达 {RunBudget.MaxRunSteps} 步上限，剩余步骤未执行"); }
+            if (!budgetOut) { budgetOut = true; fail++; lines.Add($"[{Ts(now)}] ⚠ 单次运行已达 {RunBudget.MaxRunSteps} 步上限，剩余步骤未执行"); }
             return false;
         }
 
@@ -136,7 +136,7 @@ public static class LaunchSequence
         }
 
         if (stopped && !budgetOut) lines.Add($"[{Ts(now)}] ⏹ 已手动停止，后续步骤未执行");
-        return new LaunchRunResult(new LaunchSummary(total, fail, unver, stopped), lines, bootNote);
+        return new LaunchRunResult(new LaunchSummary(total, fail, unver, stopped, budgetOut), lines, bootNote);
     }
 
     private static string Ts(Func<DateTime> now) => now().ToString("HH:mm:ss");
@@ -147,7 +147,10 @@ public static class LaunchSequence
     {
         var s = r.Summary;
         var bootHdr = string.IsNullOrEmpty(r.BootNote) ? "" : r.BootNote + "\r\n";
-        var stopHdr = s.Stopped ? "⏹ 本次运行被手动停止（急停键 / 托盘「停止」）\r\n" : "";
+        // 截停与手动急停是两回事：截停时 Stopped 也为 true（循环因此提前退出），但真相是撞了步数上限，
+        // 不是用户按了急停/托盘「停止」——两者都占位时优先说更具体、更真实的截停（复用正文预算行的措辞）。
+        var stopHdr = s.Truncated ? $"⏹ 本次运行已达 {RunBudget.MaxRunSteps} 步上限，剩余步骤未执行\r\n"
+            : s.Stopped ? "⏹ 本次运行被手动停止（急停键 / 托盘「停止」）\r\n" : "";
         var sb = new StringBuilder();
         sb.Append("Clockwork · 上次启动清单运行日志\r\n");
         sb.Append($"时间：{when:yyyy-MM-dd HH:mm:ss}\r\n");
