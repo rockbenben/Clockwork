@@ -87,6 +87,16 @@ public partial class GroupEditorWindow : Window
         if (_rows.Count > 0) Steps.SelectedIndex = Math.Min(i, _rows.Count - 1);
     }
 
+    // 复制选中步骤：深拷贝插到选中之后（与主窗口三列表的「复制」同一条插入契约）。
+    private void SCopy_Click(object sender, RoutedEventArgs e)
+    {
+        int i = Sel;
+        if (i < 0 || i >= _rows.Count) return;
+        int pos = StepHelpers.InsertPosition(i, _rows.Count);
+        _rows.Insert(pos, new StepRowVm(Clone(_rows[i].Step), () => { }));
+        Steps.SelectedIndex = pos;
+    }
+
     private void SUp_Click(object sender, RoutedEventArgs e)
     {
         int i = Sel;

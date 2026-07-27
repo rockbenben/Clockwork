@@ -370,6 +370,7 @@ public partial class MainWindow : Window
     }
     private void LUp_Click(object sender, RoutedEventArgs e) { _launch?.MoveUp(); SyncSelection(); }
     private void LDown_Click(object sender, RoutedEventArgs e) { _launch?.MoveDown(); SyncSelection(); }
+    private void LCopy_Click(object sender, RoutedEventArgs e) { _launch?.DuplicateSelected(); SyncSelection(); }
 
     private static App? AppInstance => App.Instance;   // 转发到唯一出处（App.Instance），本类内仍用短名
 
