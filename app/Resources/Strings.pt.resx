@@ -275,6 +275,7 @@ Registro: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Falha ao salvar a configuração: {0} (as alterações estão apenas na memória e serão perdidas ao reiniciar)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>O grupo de ações referenciado pelo lembrete "{0}" não existe mais; nada foi executado desta vez</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>O grupo de ações referenciado pelo lembrete "{0}" está desabilitado; nada foi executado desta vez</value></data>
+  <data name="Warn_RunBudget" xml:space="preserve"><value>A execução parou no limite de 5000 passos; os passos restantes foram ignorados (verifique se há contagens de repetição excessivas)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>O grupo de ações a executar ao clicar em "Sim" não existe mais; ignorado</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>O grupo de ações a executar ao clicar em "Sim" está desabilitado; ignorado</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Tarefas agendadas ainda não podem ser assumidas; apenas chaves Run do registro e itens da pasta Inicializar são suportados</value></data>

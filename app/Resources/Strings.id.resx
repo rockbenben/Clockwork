@@ -275,6 +275,7 @@ Log: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Gagal menyimpan konfigurasi: {0} (perubahan hanya di memori dan akan hilang saat mulai ulang)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Grup aksi yang dirujuk pengingat "{0}" sudah tidak ada; kali ini tidak ada yang dijalankan</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Grup aksi yang dirujuk pengingat "{0}" dinonaktifkan; kali ini tidak ada yang dijalankan</value></data>
+  <data name="Warn_RunBudget" xml:space="preserve"><value>Proses berhenti pada batas 5000 langkah; langkah yang tersisa dilewati (periksa apakah ada jumlah pengulangan yang terlalu besar)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Grup aksi yang dijalankan saat "Ya" sudah tidak ada; dilewati</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Grup aksi yang dijalankan saat "Ya" dinonaktifkan; dilewati</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Tugas terjadwal belum dapat diambil alih; hanya kunci Run registri dan item folder Startup yang didukung</value></data>

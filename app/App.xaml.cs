@@ -622,11 +622,18 @@ public partial class App : System.Windows.Application
         {
             RunStep = s => StepRunner.InvokeStepAction(s, ConfirmDestructive, selfPaths),
             ShowMessage = ShowGroupMessage,
-            RunOnYes = s => ReminderActions.RunOnYes(s.OnYes, groups, g => ActionGroupRunner.RunGroup(g.SnapshotForRun(), deps), WarnToast),
+            RunOnYes = s => ReminderActions.RunOnYes(s.OnYes, groups, g => { ActionGroupRunner.RunGroup(g.SnapshotForRun(), deps); }, WarnToast),
             Speak = ReminderActions.Speak,
             OnStepError = (s, ex) => LogGroupStepError(s, ex),
-            // 组内嵌套「动作组」步骤：跑引用组的快照（防运行中被编辑/清理）。按 id 互斥天然防环（A→B→A 时内层 A 直接返回）。
-            RunGroupStep = s => { var ng = ActionGroupResolver.Resolve(groups, s.GroupId); if (ng != null && ng.Enabled) ActionGroupRunner.RunGroup(ng.SnapshotForRun(), deps); },
+            Budget = new RunBudget(() => WarnToast(Strings.Get("Warn_RunBudget"))),
+            // 组内嵌套「动作组」步骤：跑引用组的快照（防运行中被编辑/清理）。重入（环引用/已在运行）返回 false，
+            // 经 OnStepError 记一笔——夜间静默任务里环导致的空转不该零反馈。
+            RunGroupStep = s =>
+            {
+                var ng = ActionGroupResolver.Resolve(groups, s.GroupId);
+                if (ng != null && ng.Enabled && !ActionGroupRunner.RunGroup(ng.SnapshotForRun(), deps))
+                    deps.OnStepError(s, new InvalidOperationException("动作组重入（环引用或已在运行），已跳过"));
+            },
         };
         return deps;
     }

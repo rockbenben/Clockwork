@@ -275,6 +275,7 @@ Günlük: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Yapılandırma kaydedilemedi: {0} (değişiklikler yalnızca bellekte ve yeniden başlatınca kaybolur)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>"{0}" hatırlatıcısının başvurduğu eylem grubu artık yok; bu sefer hiçbir şey çalıştırılmadı</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>"{0}" hatırlatıcısının başvurduğu eylem grubu devre dışı; bu sefer hiçbir şey çalıştırılmadı</value></data>
+  <data name="Warn_RunBudget" xml:space="preserve"><value>Çalıştırma 5000 adım sınırında durdu; kalan adımlar atlandı (aşırı büyük tekrar sayıları olup olmadığını kontrol edin)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu artık yok; atlandı</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu devre dışı; atlandı</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Zamanlanmış görevler henüz devralınamıyor; yalnızca kayıt defteri Run anahtarları ve Başlangıç klasörü öğeleri desteklenir</value></data>

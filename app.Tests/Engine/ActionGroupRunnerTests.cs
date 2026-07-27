@@ -1,3 +1,4 @@
+using System.Linq;
 using Clockwork.Engine;
 using Clockwork.Core;
 using Xunit;
@@ -97,5 +98,48 @@ public class ActionGroupRunnerTests
         ActionGroupRunner.RunGroup(g, deps);
         Assert.Equal(new[] { "after" }, ran.ToArray());   // 抛异常步骤后面的步骤仍执行
         Assert.Equal(new[] { "boom" }, errors.ToArray());  // 失败被上报（不静默）
+    }
+
+    [Fact]
+    public void Group_level_repeat_runs_rounds()
+    {
+        var ran = new List<string>();
+        var g = new ActionGroup { Id = "gr1", Repeat = 3, Steps = new() { new LaunchStep { Kind = "keys", Combo = "a", Label = "x" } } };
+        Assert.True(ActionGroupRunner.RunGroup(g, Deps(ran)));
+        Assert.Equal(3, ran.Count);   // 整组 3 轮 × 每轮 1 步
+    }
+
+    [Fact]
+    public void Group_repeat_multiplies_with_step_repeat()
+    {
+        var ran = new List<string>();
+        var g = new ActionGroup { Id = "gr2", Repeat = 2, Steps = new() { new LaunchStep { Kind = "keys", Combo = "a", Label = "x", Repeat = 3 } } };
+        ActionGroupRunner.RunGroup(g, Deps(ran));
+        Assert.Equal(6, ran.Count);   // 2 轮 × 单步 3 次
+    }
+
+    [Fact]
+    public void Reentry_returns_false()
+    {
+        // 同 id 已在跑 → 第二次进入直接 false（环重入的运行期兜底；上报由调用方决定）。
+        var g = new ActionGroup { Id = "gr3", Steps = new() { new LaunchStep { Kind = "keys", Combo = "a", Label = "x" } } };
+        bool inner = true;
+        var deps = new GroupDeps { Hour = 10, IsoDay = 3, RunStep = _ => inner = ActionGroupRunner.RunGroup(g, Deps(new List<string>())) };
+        Assert.True(ActionGroupRunner.RunGroup(g, deps));
+        Assert.False(inner);
+    }
+
+    [Fact]
+    public void Budget_exhaustion_stops_and_fires_once()
+    {
+        var ran = new List<string>();
+        int warned = 0;
+        var deps = new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => ran.Add(s.Label), Budget = new RunBudget(() => warned++) };
+        // 999 × 6 = 5994 > 5000：预算耗尽即停，回调只响一次。DelayMs=0 必写——默认 100 会让这条测试真睡 500 秒。
+        var g = new ActionGroup { Id = "gr4", Steps = Enumerable.Range(0, 6).Select(_ => new LaunchStep { Kind = "keys", Combo = "a", Label = "x", Repeat = 999, DelayMs = 0 }).ToList() };
+        ActionGroupRunner.RunGroup(g, deps);
+        Assert.Equal(RunBudget.MaxRunSteps, ran.Count);
+        Assert.Equal(1, warned);
+        Assert.True(deps.Budget.Exhausted);
     }
 }

@@ -275,6 +275,7 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>कॉन्फ़िगरेशन सहेजना विफल: {0} (बदलाव केवल मेमोरी में हैं और पुनरारंभ पर खो जाएँगे)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>रिमाइंडर "{0}" द्वारा संदर्भित एक्शन समूह अब मौजूद नहीं है; इस बार कुछ नहीं चला</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>रिमाइंडर "{0}" द्वारा संदर्भित एक्शन समूह अक्षम है; इस बार कुछ नहीं चला</value></data>
+  <data name="Warn_RunBudget" xml:space="preserve"><value>रन 5000-चरण की सीमा पर रुक गया; शेष चरण छोड़ दिए गए (जांचें कि कहीं दोहराव की संख्या बहुत बड़ी तो नहीं है)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"हाँ" पर चलने वाला एक्शन समूह अब मौजूद नहीं है; छोड़ दिया गया</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"हाँ" पर चलने वाला एक्शन समूह अक्षम है; छोड़ दिया गया</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>शेड्यूल किए गए कार्य अभी अधिग्रहण का समर्थन नहीं करते; केवल रजिस्ट्री Run कुंजियाँ और स्टार्टअप फ़ोल्डर आइटम समर्थित हैं</value></data>

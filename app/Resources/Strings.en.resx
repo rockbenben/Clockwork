@@ -278,6 +278,7 @@ Log: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Failed to save config: {0} (changes are only in memory and will be lost on restart)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>The action group referenced by reminder "{0}" no longer exists; nothing was run this time</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>The action group referenced by reminder "{0}" is disabled; nothing was run this time</value></data>
+  <data name="Warn_RunBudget" xml:space="preserve"><value>Run stopped at the 5000-step limit; remaining steps were skipped (check for oversized repeat counts)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>The action group to run on "Yes" no longer exists; skipped</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>The action group to run on "Yes" is disabled; skipped</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Scheduled tasks can't be taken over yet; only registry Run keys and Startup-folder items are supported</value></data>

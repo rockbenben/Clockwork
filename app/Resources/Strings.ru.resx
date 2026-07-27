@@ -275,6 +275,7 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Не удалось сохранить настройки: {0} (изменения только в памяти и будут потеряны при перезапуске)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Группа действий, на которую ссылается напоминание «{0}», больше не существует; на этот раз ничего не выполнено</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Группа действий, на которую ссылается напоминание «{0}», отключена; на этот раз ничего не выполнено</value></data>
+  <data name="Warn_RunBudget" xml:space="preserve"><value>Выполнение остановлено при достижении лимита в 5000 шагов; оставшиеся шаги пропущены (проверьте, нет ли слишком большого количества повторений)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Группа действий для запуска по «Да» больше не существует; пропущено</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Группа действий для запуска по «Да» отключена; пропущено</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Задачи планировщика пока нельзя перехватить; поддерживаются только ключи Run реестра и элементы папки автозагрузки</value></data>

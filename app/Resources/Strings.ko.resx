@@ -275,6 +275,7 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>설정 저장 실패: {0} (변경 사항은 메모리에만 있으며 재시작 시 사라집니다)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>알림 "{0}"이(가) 참조하는 동작 그룹이 없어 이번에는 아무것도 실행되지 않았습니다</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>알림 "{0}"이(가) 참조하는 동작 그룹이 비활성화되어 이번에는 아무것도 실행되지 않았습니다</value></data>
+  <data name="Warn_RunBudget" xml:space="preserve"><value>실행이 5000단계 한도에 도달하여 중지되었으며 나머지 단계는 건너뛰었습니다(반복 횟수가 너무 크지 않은지 확인하세요)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"예" 클릭 시 실행할 동작 그룹이 없어 건너뛰었습니다</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"예" 클릭 시 실행할 동작 그룹이 비활성화되어 건너뛰었습니다</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>예약 작업 항목은 아직 인수를 지원하지 않습니다. 레지스트리 Run 키와 시작 폴더 항목만 지원됩니다</value></data>
