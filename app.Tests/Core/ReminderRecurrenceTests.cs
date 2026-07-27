@@ -48,4 +48,20 @@ public class ReminderRecurrenceTests
     [Fact] public void PopupTimeout_explicit_wins() => Assert.Equal(15, ReminderEngine.PopupTimeoutSeconds(new Reminder { PopupTimeoutSeconds = 15 }));
     [Fact] public void PopupTimeout_repeat_default_60() => Assert.Equal(60, ReminderEngine.PopupTimeoutSeconds(new Reminder { RepeatMinutes = 5 }));
     [Fact] public void PopupTimeout_none_zero() => Assert.Equal(0, ReminderEngine.PopupTimeoutSeconds(new Reminder()));
+
+    [Fact]
+    public void Once_due_on_its_date_only()
+    {
+        var r = new Reminder { RecurType = "once", OnceDate = "2026-07-15" };
+        Assert.True(ReminderEngine.IsRecurrenceDueToday(r, new DateTime(2026, 7, 15)));
+        Assert.False(ReminderEngine.IsRecurrenceDueToday(r, new DateTime(2026, 7, 14)));   // 未到
+        Assert.False(ReminderEngine.IsRecurrenceDueToday(r, new DateTime(2026, 7, 16)));   // 已过
+    }
+
+    [Fact]
+    public void Once_empty_or_bad_date_means_today()
+    {
+        Assert.True(ReminderEngine.IsRecurrenceDueToday(new Reminder { RecurType = "once", OnceDate = "" }, new DateTime(2026, 7, 15)));
+        Assert.True(ReminderEngine.IsRecurrenceDueToday(new Reminder { RecurType = "once", OnceDate = "garbage" }, new DateTime(2026, 7, 15)));
+    }
 }

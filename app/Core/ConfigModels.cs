@@ -89,6 +89,11 @@ public sealed class Reminder
     public int StartupWithinMinutes { get; set; } = 10;
     // 非空=到点静默(不弹窗)运行该动作组
     public string SilentGroupId { get; set; } = "";
+    // 循环运行：>0 则本条到点后每隔 N 分钟再跑一轮（确认不终止——与「催促」的区别），直到 intervalUntil（空=当天 23:59）。
+    public int IntervalMinutes { get; set; }
+    public string IntervalUntil { get; set; } = "";
+    // 周期=once 时的目标日期（yyyy-MM-dd，空=今天）。触发完成后由 App 自动取消勾选（条目保留）。
+    public string OnceDate { get; set; } = "";
 }
 
 public sealed class ActionGroup

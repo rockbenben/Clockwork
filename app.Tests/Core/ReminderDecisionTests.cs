@@ -192,4 +192,58 @@ public class ReminderDecisionTests
         Assert.Equal("fire", d.Action);
         Assert.Null(st.NextRepeatAt);
     }
+
+    [Fact]
+    public void Interval_fires_even_after_fired_today()
+    {
+        // 循环轮次不被「今天已弹过」挡掉——interval 分支在 LastFiredDate 判断之前。
+        var r = new Reminder { Trigger = "time", Time = "09:00", IntervalMinutes = 30, Days = new() };
+        var st = new ReminderState { LastFiredDate = "2026-07-15", NextIntervalAt = D(10, 0) };
+        var d = ReminderEngine.Decide(r, D(10, 0), D(8, 0), st);
+        Assert.Equal("fire", d.Action);
+        Assert.Null(st.NextIntervalAt);
+    }
+
+    [Fact]
+    public void Snooze_beats_interval()
+    {
+        var r = new Reminder { Trigger = "time", Time = "09:00", IntervalMinutes = 30, Days = new() };
+        var st = new ReminderState { SnoozeUntil = D(10, 0), NextIntervalAt = D(10, 0) };
+        var d = ReminderEngine.Decide(r, D(10, 0), D(8, 0), st);
+        Assert.Equal("fire", d.Action);
+        Assert.Null(st.SnoozeUntil);              // 消耗的是 snooze
+        Assert.Equal(D(10, 0), st.NextIntervalAt); // interval 原样留着
+    }
+
+    [Fact]
+    public void Repeat_beats_interval()
+    {
+        var r = new Reminder { Trigger = "time", Time = "09:00", RepeatMinutes = 5, IntervalMinutes = 30, Days = new() };
+        var st = new ReminderState { NextRepeatAt = D(10, 0), NextIntervalAt = D(10, 0) };
+        var d = ReminderEngine.Decide(r, D(10, 0), D(8, 0), st);
+        Assert.Equal("fire", d.Action);
+        Assert.Null(st.NextRepeatAt);
+        Assert.Equal(D(10, 0), st.NextIntervalAt);
+    }
+
+    [Fact]
+    public void Stale_crossday_interval_discarded_catchup_does_not_revive_it()
+    {
+        // 昨天的轮次不补（漏掉的轮询没有补发价值）；但当天正常首发照走——错过必补作用于 base 时刻，不作用于轮次。
+        var r = new Reminder { Trigger = "time", Time = "09:00", IntervalMinutes = 30, CatchUpIfMissed = true, Days = new() };
+        var st = new ReminderState { LastFiredDate = "2026-07-14", NextIntervalAt = new DateTime(2026, 7, 14, 18, 0, 0) };
+        var d = ReminderEngine.Decide(r, D(11, 0), D(8, 0), st);
+        Assert.Null(st.NextIntervalAt);        // 陈旧轮次丢弃
+        Assert.Equal("arm", d.Action);         // 当天 09:00 首发经错过必补正常武装
+        Assert.Equal(new DateTime(2026, 7, 15, 9, 0, 0), d.Base);
+    }
+
+    [Fact]
+    public void Sameday_overdue_interval_fires()
+    {
+        // 休眠唤醒后当天已过期的轮次：到点即发一次（与 snooze 的 now>=snooze 分支同型）。
+        var r = new Reminder { Trigger = "time", Time = "09:00", IntervalMinutes = 30, Days = new() };
+        var st = new ReminderState { LastFiredDate = "2026-07-15", NextIntervalAt = D(10, 0) };
+        Assert.Equal("fire", ReminderEngine.Decide(r, D(11, 30), D(8, 0), st).Action);
+    }
 }

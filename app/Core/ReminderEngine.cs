@@ -37,6 +37,11 @@ public static class ReminderEngine
                 int d = r.MonthlyDay; if (d < 1) d = 1; if (d > 31) d = 31;
                 int eff = Math.Min(d, DateTime.DaysInMonth(today.Year, today.Month));
                 return today.Day == eff;
+            case "once":
+                // 空/非法日期按「今天」——新建未填日期的 once 应当天生效，而不是永不触发。
+                if (string.IsNullOrWhiteSpace(r.OnceDate)) return true;
+                if (!DateTime.TryParseExact(r.OnceDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var od)) return true;
+                return today.Date == od.Date;
             default:
                 var days = r.Days ?? new();
                 if (days.Count == 0) return true;
@@ -89,6 +94,17 @@ public static class ReminderEngine
         {
             if (now >= nr) { st.NextRepeatAt = null; return new("fire", null); }
             return new("none", null);
+        }
+
+        // 循环运行到点：确认不终止循环（与催促的根本区别）。与催促同侧、放在周期过滤与 LastFiredDate 之前——
+        // 放后面的话当天第二轮会被「今天已弹过」挡掉，循环永远只跑一次。
+        // 跨天陈旧轮次丢弃（与 snooze 陈旧口径一致；漏掉的轮询没有补发价值，「错过必补」不使其复活——
+        // 它作用于 base 时刻的当天首发，下面照常判定）；当天已过期的到点即发（休眠唤醒后补上本轮，随后照常续排）。
+        if (st.NextIntervalAt is DateTime ni)
+        {
+            if (ni.Date < now.Date) st.NextIntervalAt = null;
+            else if (now >= ni) { st.NextIntervalAt = null; return new("fire", null); }
+            else return new("none", null);
         }
 
         var today = now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -145,17 +161,19 @@ public static class ReminderEngine
         return new("none", null);
     }
 
-    // 弹窗后推进周期重复状态。确认(yes/no/ok)=停；未确认('')按 repeatMinutes 排下次，受 repeatUntil 截止与 MaxRepeats 约束。
-    // 「稍后」由 Snooze 单独处理，不经此。
+    // 弹窗后推进周期重复状态。确认(yes/no/ok)=催促停；未确认('')按 repeatMinutes 排下次，受 repeatUntil 截止与 MaxRepeats 约束。
+    // 循环运行(intervalMinutes)与催促是两条链：催促链结束的每个出口（确认/未配催促/达上限/过截止）都排下一轮循环——
+    // 确认不终止循环正是它与催促的区别（静默组固定返回 "ok"，静默任务的周期轮询靠这条路径成立）。
+    // 链在途（NextRepeatAt 刚排上）不排循环，两条链同时挂会互相插队刷屏。「稍后」由 Snooze 单独处理，不经此。
     public static ReminderState UpdateAfterFire(Reminder r, DateTime now, string result, ReminderState st)
     {
-        if (result is "yes" or "no" or "ok") { st.NextRepeatAt = null; st.RepeatCount = 0; return st; }
+        if (result is "yes" or "no" or "ok") { st.NextRepeatAt = null; st.RepeatCount = 0; return ScheduleInterval(r, now, st); }
 
         int rep = r.RepeatMinutes;
-        if (rep <= 0) { st.NextRepeatAt = null; return st; }
+        if (rep <= 0) { st.NextRepeatAt = null; return ScheduleInterval(r, now, st); }
 
         int count = st.RepeatCount + 1;
-        if (count >= MaxRepeats) { st.NextRepeatAt = null; st.RepeatCount = 0; return st; }
+        if (count >= MaxRepeats) { st.NextRepeatAt = null; st.RepeatCount = 0; return ScheduleInterval(r, now, st); }
 
         var next = now.AddMinutes(rep);
         // 两个时刻都先规整：手改 json 的 "9:30" 会过不了严格 HH:mm 校验、整个截止判定被静默跳过；
@@ -167,10 +185,26 @@ public static class ReminderEngine
             // 仅当 repeatUntil 时刻早于提醒自身触发时刻（窗口真跨午夜，如 23:50→00:30）才把截止顺延到次日。
             // 若 repeatUntil 只是"今天已过"（如触发被延时推过当天截止），仍按原样停——不误判为次日、避免刷屏。
             if (until < now && string.CompareOrdinal(untilStr, DurationText.FormatTimeHHmm(r.Time)) < 0) until = until.AddDays(1);
-            if (next > until) { st.NextRepeatAt = null; st.RepeatCount = 0; return st; }
+            if (next > until) { st.NextRepeatAt = null; st.RepeatCount = 0; return ScheduleInterval(r, now, st); }
         }
         st.RepeatCount = count;
         st.NextRepeatAt = next;
+        return st;
+    }
+
+    // 催促链结束时排下一轮循环。IntervalUntil 走与 RepeatUntil 同一套规整+校验；空/非法 = 当天 23:59。
+    // 循环有意不跨午夜——「直到」的语义就是当天窗口，超截止即本日结束、次日由当天首发重新开链。
+    private static ReminderState ScheduleInterval(Reminder r, DateTime now, ReminderState st)
+    {
+        st.NextIntervalAt = null;
+        if (r.IntervalMinutes < 1) return st;
+        var next = now.AddMinutes(r.IntervalMinutes);
+        var untilStr = DurationText.FormatTimeHHmm(r.IntervalUntil ?? "");
+        var until = Regex.IsMatch(untilStr, HhmmPattern)
+            ? DateTime.ParseExact($"{now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} {untilStr}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)
+            : now.Date.AddHours(23).AddMinutes(59);
+        if (next > until) return st;
+        st.NextIntervalAt = next;
         return st;
     }
 
@@ -183,6 +217,13 @@ public static class ReminderEngine
         st.SnoozeUntil = now.AddMinutes(minutes);
         return st;
     }
+
+    // 「仅一次」触发完成后是否应自动取消勾选：已实际弹过（LastFiredDate 非空）且催促/稍后链都已结束。
+    // 立刻停用是错的——Decide 开头就 if(!Enabled) return none，会把已武装的催促链和用户刚点的「稍后」一起掐死。
+    // 引擎不改 Reminder（保持纯函数边界）：判定在此，停用动作（Enabled=false + 存盘 + 刷新列表）归 App。
+    public static bool ShouldDisableAfterOnce(Reminder r, ReminderState st)
+        => r.RecurType == "once" && r.Enabled && !string.IsNullOrEmpty(st.LastFiredDate)
+           && st.NextRepeatAt == null && st.SnoozeUntil == null && st.NextIntervalAt == null;
 }
 
 // 触发决策结果：action ∈ none|arm|fire；base 在 arm 时为触发基准时刻，供上层据以算 pendingFireAt（含随机延迟）。

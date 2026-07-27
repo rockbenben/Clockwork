@@ -9,4 +9,7 @@ public sealed class ReminderState
     public DateTime? NextRepeatAt { get; set; }
     public int RepeatCount { get; set; }
     public DateTime? SnoozeUntil { get; set; }
+    // 循环运行的下一轮时刻。与 SnoozeUntil 同为耐久字段（落盘）——不落盘的话中午重启一次，
+    // LastFiredDate 已是今天、Decide 不再武装，当天剩余轮次全部静默丢失。
+    public DateTime? NextIntervalAt { get; set; }
 }

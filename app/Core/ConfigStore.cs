@@ -108,7 +108,7 @@ public static class ConfigStore
         // 嵌套引用容错：json 显式写 "onYes":null / "steps":null 会覆盖模型初始化器，下游（编辑器读 .OnYes.Type、遍历 Steps）会 NRE。
         foreach (var s in cfg.LaunchSteps) { s.OnYes ??= new(); normalized |= NormalizeOnYes(s.OnYes); }
         // json 显式 "repeatUntil":null 会覆盖模型的 "" 默认；UpdateAfterFire 直接 Regex.IsMatch(它) 会 NPE 崩，补回空串。
-        foreach (var r in cfg.Reminders) { r.OnYes ??= new(); r.RepeatUntil ??= ""; normalized |= NormalizeOnYes(r.OnYes); }
+        foreach (var r in cfg.Reminders) { r.OnYes ??= new(); r.RepeatUntil ??= ""; r.IntervalUntil ??= ""; r.OnceDate ??= ""; normalized |= NormalizeOnYes(r.OnYes); }
         foreach (var g in cfg.ActionGroups) { g.Steps ??= new(); normalized |= g.Steps.RemoveAll(s => s is null) > 0; foreach (var s in g.Steps) { s.OnYes ??= new(); normalized |= NormalizeOnYes(s.OnYes); } }
         return normalized;
     }

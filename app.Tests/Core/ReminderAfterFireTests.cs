@@ -111,4 +111,60 @@ public class ReminderAfterFireTests
         ReminderEngine.Snooze(st, N(10, 0), 0);
         Assert.Equal(N(10, 10), st.SnoozeUntil);
     }
+
+    [Fact]
+    public void Confirm_schedules_next_interval()
+    {
+        // 确认不终止循环——这正是它与催促的区别（静默组固定返回 "ok"，静默任务的轮询靠这条路径成立）。
+        var st = new ReminderState();
+        ReminderEngine.UpdateAfterFire(new Reminder { IntervalMinutes = 30 }, N(10, 0), "ok", st);
+        Assert.Equal(N(10, 30), st.NextIntervalAt);
+    }
+
+    [Fact]
+    public void Ongoing_nag_chain_defers_interval()
+    {
+        // 催促链在途（NextRepeatAt 排上了）→ 不排 interval，两条链不互相插队。
+        var st = new ReminderState();
+        ReminderEngine.UpdateAfterFire(new Reminder { RepeatMinutes = 10, IntervalMinutes = 30 }, N(10, 0), "", st);
+        Assert.Equal(N(10, 10), st.NextRepeatAt);
+        Assert.Null(st.NextIntervalAt);
+    }
+
+    [Fact]
+    public void Nag_chain_end_schedules_interval()
+    {
+        // 催促确认收尾的那一刻排下一轮循环。
+        var st = new ReminderState { RepeatCount = 2, NextRepeatAt = N(10, 5) };
+        ReminderEngine.UpdateAfterFire(new Reminder { RepeatMinutes = 10, IntervalMinutes = 30 }, N(10, 6), "yes", st);
+        Assert.Null(st.NextRepeatAt);
+        Assert.Equal(N(10, 36), st.NextIntervalAt);
+    }
+
+    [Fact]
+    public void Interval_until_stops_for_the_day()
+    {
+        var st = new ReminderState();
+        ReminderEngine.UpdateAfterFire(new Reminder { IntervalMinutes = 30, IntervalUntil = "10:20" }, N(10, 0), "ok", st);
+        Assert.Null(st.NextIntervalAt);   // 10:30 > 10:20
+    }
+
+    [Fact]
+    public void Interval_defaults_to_end_of_day()
+    {
+        var st = new ReminderState();
+        ReminderEngine.UpdateAfterFire(new Reminder { IntervalMinutes = 30, IntervalUntil = "" }, new DateTime(2026, 7, 15, 23, 40, 0), "ok", st);
+        Assert.Null(st.NextIntervalAt);   // 00:10 越过当天 23:59 → 本日循环结束，不跨午夜
+    }
+
+    [Fact]
+    public void Once_disables_only_after_chains_end()
+    {
+        var r = new Reminder { RecurType = "once" };
+        Assert.False(ReminderEngine.ShouldDisableAfterOnce(r, new ReminderState()));                                        // 还没弹过
+        Assert.False(ReminderEngine.ShouldDisableAfterOnce(r, new ReminderState { LastFiredDate = "2026-07-15", SnoozeUntil = N(10, 10) }));   // 稍后在途
+        Assert.False(ReminderEngine.ShouldDisableAfterOnce(r, new ReminderState { LastFiredDate = "2026-07-15", NextRepeatAt = N(10, 5) }));   // 催促在途
+        Assert.True(ReminderEngine.ShouldDisableAfterOnce(r, new ReminderState { LastFiredDate = "2026-07-15" }));           // 链清 → 停用
+        Assert.False(ReminderEngine.ShouldDisableAfterOnce(new Reminder { RecurType = "daily" }, new ReminderState { LastFiredDate = "2026-07-15" }));
+    }
 }
