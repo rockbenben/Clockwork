@@ -281,6 +281,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>排程工作項暫不支援接管；僅支援登錄 Run 鍵與啟動資料夾項</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>啟動清單執行中斷：{0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>檢視上次啟動日誌</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>最近通知</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>還沒有啟動日誌（先跑一次啟動清單）</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>清空剪貼簿失敗：{0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>清空資源回收筒失敗：{0}</value></data>

@@ -280,6 +280,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>ยังไม่รองรับการรับช่วงงานตามกำหนดเวลา รองรับเฉพาะคีย์ Run ในรีจิสทรีและรายการในโฟลเดอร์เริ่มต้นเท่านั้น</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>การรันรายการเริ่มต้นถูกขัดจังหวะ: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>ดูบันทึกการเริ่มต้นครั้งล่าสุด</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>ล่าสุด</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>ยังไม่มีบันทึกการเริ่มต้น (รันรายการเริ่มต้นหนึ่งครั้งก่อน)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>ล้างคลิปบอร์ดไม่สำเร็จ: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>ล้างถังรีไซเคิลไม่สำเร็จ: {0}</value></data>

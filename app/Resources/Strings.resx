@@ -283,6 +283,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>计划任务项暂不支持接管；仅支持注册表 Run 键与启动文件夹项</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>启动清单运行中断：{0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>查看上次启动日志</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>最近通知</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>还没有启动日志（先跑一次启动清单）</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>清空剪贴板失败：{0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>清空回收站失败：{0}</value></data>

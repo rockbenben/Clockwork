@@ -280,6 +280,7 @@ Registro: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Las tareas programadas aún no admiten la toma de control; solo se admiten claves Run del registro y elementos de la carpeta de inicio</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Ejecución de la lista de inicio interrumpida: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Ver el último registro de inicio</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Recientes</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Aún no hay registro de inicio (ejecute primero la lista de inicio)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Error al vaciar el portapapeles: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Error al vaciar la papelera: {0}</value></data>

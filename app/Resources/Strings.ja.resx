@@ -281,6 +281,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>タスクスケジューラ項目の引き継ぎは未対応です。レジストリ Run キーとスタートアップフォルダー項目のみ対応</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>起動リストの実行が中断：{0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>前回の起動ログを表示</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>最近の通知</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>起動ログはまだありません（先に起動リストを一度実行してください）</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>クリップボードのクリアに失敗：{0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>ごみ箱を空にできませんでした：{0}</value></data>

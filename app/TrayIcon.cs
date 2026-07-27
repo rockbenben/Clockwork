@@ -75,9 +75,28 @@ public sealed class TrayIcon : IDisposable
             menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_DndResume", (int)Math.Ceiling(left.TotalMinutes)), TrayGlyph.Run,
                 (s, e) => app.ResumeReminders()));
 
+        // 最近通知区——回看被点掉 / 被挤掉 / 已自动消失的卡片；点一条把它重新弹出来。
+        // 会话级：重启即空，所以没通知时整区不出现（不留一个常年空着的小标题）。
+        var recent = app.RecentNotifications;
+        if (recent.Count > 0)
+        {
+            menu.Items.Add(TrayMenu.Header(Strings.Get("Tray_History")));
+            foreach (var n in recent)
+            {
+                var nn = n;
+                menu.Items.Add(TrayMenu.Item($"{n.At:HH:mm}  {StepHelpers.Ellipsis(OneLine(n.Message), 36)}", TrayGlyph.Log,
+                    (s, e) => app.ReplayNotification(nn)));
+            }
+        }
+
         menu.Items.Add(new WinForms.ToolStripSeparator());
         menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Exit"), TrayGlyph.Exit, (s, e) => app.ExitApp()));
     }
+
+    // 摘要压成单行：提醒/消息步骤的文本框允许多行，而 ToolStrip 菜单按单行测绘，
+    // 硬换行会把自绘菜单画花（第二行被裁掉/压住相邻项）。与 ReminderDisplay.TextSummary 同口径。
+    private static string OneLine(string s)
+        => string.Join(" ", s.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
 
     public void Dispose()
     {

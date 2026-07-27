@@ -5,24 +5,29 @@
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <!-- 无系统标题栏的品牌卡片（避免 OS 标题与内部眉标重复）：左侧强调轨(黄铜=信息/问询, clay=警示) +
-         品牌标记 + 眉标 + 正文 + 是/否或确定。Esc 取消。 -->
+         眉标 + 正文 + 是/否或确定。Esc 取消。
+         轨是「实心细轨」而非提醒那种刻度轨——刻度＝有钟在走，实心＝没有钟。本框没有倒计时、
+         不会自己消失；同一套语汇里，它该安静地站着。
+         不放品牌标记：来源全靠眉标写明——本框可能由后台动作组的消息步骤/破坏性命令确认不请自来地
+         弹出（正因此 code-behind 有 600ms 误触保护），不能指望「用户刚点了什么」的上下文来辨识来源；
+         眉标已经承担了这件事，再摆 logo 是重复装饰。 -->
     <Border Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}" BorderThickness="1"
             CornerRadius="12" Margin="12" ClipToBounds="True">
         <Border.Effect>
             <DropShadowEffect Color="#0A0D12" BlurRadius="22" ShadowDepth="5" Direction="270" Opacity="0.55"/>
         </Border.Effect>
         <Grid>
-            <Border x:Name="Rail" Width="3" Background="{StaticResource BrushBrass}" HorizontalAlignment="Left"/>
+            <Border x:Name="Rail" Width="2" Background="{StaticResource BrushBrass}" HorizontalAlignment="Left"
+                    Margin="9,14,0,14"/>
             <Grid Margin="26,22,24,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
-                    <Image Source="/logo-256.png" Width="20" Height="20" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,14">
                     <TextBlock x:Name="Eyebrow" FontFamily="{StaticResource FontMono}" FontSize="12"
-                               Foreground="{StaticResource BrushBrass}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                               Foreground="{StaticResource BrushMuted}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <TextBlock Grid.Row="1" x:Name="MsgText" TextWrapping="Wrap" FontSize="15" Foreground="{StaticResource BrushPaper}"
                            LineStackingStrategy="BlockLineHeight" LineHeight="23" Margin="0,0,0,22"/>

@@ -36,6 +36,32 @@
         <GradientStop Color="{StaticResource BrassDeep}" Offset="1"/>
     </LinearGradientBrush>
 
+    <!-- ============ 擒纵刻度（竖向） ============ -->
+    <!-- 一格 = 6px 齿 + 4px 齿隙，与下方 TabItem 选中下划线同一节拍——横着是「当前在这一页」，
+         竖着是「这张界面还剩多少时间」。提醒卡片/弹窗左缘的轨用它；不涉及时间的对话框用实心细轨。
+         见 Views/EscapementRail.cs。 -->
+    <DrawingBrush x:Key="TickSteel" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
+        <DrawingBrush.Drawing>
+            <GeometryDrawing Brush="{StaticResource BrushSteel}">
+                <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,3,6"/></GeometryDrawing.Geometry>
+            </GeometryDrawing>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+    <DrawingBrush x:Key="TickBrass" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
+        <DrawingBrush.Drawing>
+            <GeometryDrawing Brush="{StaticResource BrushBrass}">
+                <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,3,6"/></GeometryDrawing.Geometry>
+            </GeometryDrawing>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+    <DrawingBrush x:Key="TickClay" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
+        <DrawingBrush.Drawing>
+            <GeometryDrawing Brush="{StaticResource BrushClay}">
+                <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,3,6"/></GeometryDrawing.Geometry>
+            </GeometryDrawing>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
     <!-- fonts (all Windows-native, no external dependency) -->
     <FontFamily x:Key="FontDisplay">Bahnschrift, DIN, Segoe UI, Microsoft YaHei</FontFamily>
     <FontFamily x:Key="FontBody">Segoe UI, Microsoft YaHei, PingFang SC</FontFamily>
@@ -115,27 +141,39 @@
         <Setter Property="Padding" Value="7,7"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <!-- 按钮文字可换行：长译文(如德语「Diesen Schritt ausführen」)在窄侧栏按钮里换行而非被截断 -->
+        <!-- 按钮文字可换行：长译文(如德语「Diesen Schritt ausführen」)在窄侧栏按钮里换行而非被截断。
+             Foreground 必须显式回绑按钮：模板里这个 TextBlock 会命中全局 TextBlock 样式的 Paper，
+             把按钮自己的前景色盖掉——DangerButton 的 clay 文字色因此一直没生效过（四个「删除」按钮全是纸白）。 -->
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap" TextAlignment="Center"
+                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1" CornerRadius="8" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
-                    </Border>
+                    <Grid>
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="8" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <!-- 键盘焦点环：内嵌 2px 黄铜环，不改变布局(不像加边框那样把内容挤动 1px)。
+                             暗色自绘模板下系统默认的虚线焦点框几乎不可见——没有它，"焦点默认落在稍后"就等于没落。 -->
+                        <Border x:Name="ring" CornerRadius="8" BorderBrush="{StaticResource BrushBrass}" BorderThickness="2"
+                                Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSlate}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="ring" Property="Visibility" Value="Visible"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="bd" Property="Opacity" Value="0.45"/>
@@ -153,12 +191,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
-                    </Border>
+                    <Grid>
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <!-- 主按钮本身就是黄铜，焦点环改用刻字深棕(同其文字色)，读作铜面上的一道刻痕。 -->
+                        <Border x:Name="ring" CornerRadius="8" BorderBrush="#231708" BorderThickness="2"
+                                Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushFilament}"/></Trigger>
                         <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrassDeep}"/></Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="ring" Property="Visibility" Value="Visible"/></Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Opacity" Value="0.45"/></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -166,10 +210,11 @@
         </Setter>
     </Style>
 
+    <!-- 破坏性按钮：只把文字换成 clay，保留和同列其它按钮一样的钢底＋描边。
+         原来还抽掉了底色和描边——在一竖排包着框的按钮里，「删除」变成一条悬空的文字，
+         把列的节奏戳了个洞。降调一次就够（不给黄铜），不必降两次。 -->
     <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Foreground" Value="{StaticResource BrushClay}"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
     </Style>
 
     <Style x:Key="RunButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">

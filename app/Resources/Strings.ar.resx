@@ -280,6 +280,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>المهام المجدولة لا تدعم الاستيلاء بعد؛ يُدعم فقط مفاتيح Run في السجل وعناصر مجلد بدء التشغيل</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>توقف تشغيل قائمة البدء: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>عرض سجل بدء التشغيل الأخير</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>الأخيرة</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>لا يوجد سجل بدء تشغيل بعد (شغّل قائمة البدء مرة أولاً)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>فشل مسح الحافظة: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>فشل إفراغ سلة المحذوفات: {0}</value></data>

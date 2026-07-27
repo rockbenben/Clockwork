@@ -280,6 +280,7 @@ Registro: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Le attività pianificate non supportano ancora l'acquisizione; sono supportati solo le chiavi Run del registro e gli elementi della cartella Esecuzione automatica</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Esecuzione dell'elenco di avvio interrotta: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Visualizza l'ultimo log di avvio</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Recenti</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Nessun log di avvio (esegui prima l'elenco di avvio)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Impossibile svuotare gli appunti: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Impossibile svuotare il cestino: {0}</value></data>

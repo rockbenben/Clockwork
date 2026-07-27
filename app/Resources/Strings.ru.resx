@@ -280,6 +280,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Задачи планировщика пока нельзя перехватить; поддерживаются только ключи Run реестра и элементы папки автозагрузки</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Выполнение списка запуска прервано: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Показать последний журнал запуска</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Недавние</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Журнала запуска ещё нет (сначала запустите список запуска)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Не удалось очистить буфер обмена: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Не удалось очистить корзину: {0}</value></data>

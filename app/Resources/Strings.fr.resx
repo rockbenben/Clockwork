@@ -280,6 +280,7 @@ Journal : {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Les tâches planifiées ne peuvent pas encore être reprises ; seules les clés Run du registre et les éléments du dossier Démarrage sont pris en charge</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Exécution de la liste de démarrage interrompue : {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Voir le dernier journal de démarrage</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Récents</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Pas encore de journal de démarrage (exécutez d'abord la liste de démarrage)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Échec de l'effacement du presse-papiers : {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Échec du vidage de la corbeille : {0}</value></data>

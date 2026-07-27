@@ -280,6 +280,7 @@ Nhật ký: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Chưa hỗ trợ tiếp quản tác vụ đã lên lịch; chỉ hỗ trợ khóa Run trong registry và mục thư mục Khởi động</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Chạy danh sách khởi động bị gián đoạn: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Xem nhật ký khởi động lần trước</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Gần đây</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Chưa có nhật ký khởi động (hãy chạy danh sách khởi động một lần trước)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Xóa clipboard thất bại: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Dọn thùng rác thất bại: {0}</value></data>

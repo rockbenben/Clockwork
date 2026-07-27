@@ -280,6 +280,7 @@ Protokoll: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Geplante Aufgaben können noch nicht übernommen werden; nur Registry-Run-Schlüssel und Autostart-Ordner-Einträge werden unterstützt</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Startlisten-Lauf abgebrochen: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Letztes Startprotokoll anzeigen</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Zuletzt</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Noch kein Startprotokoll (Startliste zuerst einmal ausführen)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Zwischenablage konnte nicht geleert werden: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Papierkorb konnte nicht geleert werden: {0}</value></data>

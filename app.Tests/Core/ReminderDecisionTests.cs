@@ -108,6 +108,19 @@ public class ReminderDecisionTests
     }
 
     [Fact]
+    public void Stale_snooze_with_catchup_fires_once()
+    {
+        // 「错过必补」例外：挂着的稍后（含无人应答的自动稍后）跨天后补发一次——即使今天不在周期日
+        // （周六限定+今天周三照补，与到点稍后的越周期语义一致），且只补这一次（SnoozeUntil 已清）。
+        var r = new Reminder { Trigger = "time", Time = "10:00", Days = new() { 6 }, CatchUpIfMissed = true };
+        var st = new ReminderState { SnoozeUntil = new DateTime(2026, 7, 14, 23, 41, 0) };
+        Assert.Equal("fire", ReminderEngine.Decide(r, D(9, 0), D(9, 0), st).Action);
+        Assert.Null(st.SnoozeUntil);
+        // 第二次判定不再补：稍后已清，回到正常周期判定（周六限定 → none）。
+        Assert.Equal("none", ReminderEngine.Decide(r, D(9, 1), D(9, 0), st).Action);
+    }
+
+    [Fact]
     public void Startup_arms_when_fresh()
     {
         var r = new Reminder { Trigger = "startup", StartupWithinMinutes = 10, StartupHourMode = "any" };

@@ -283,6 +283,7 @@ Log: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Scheduled tasks can't be taken over yet; only registry Run keys and Startup-folder items are supported</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Launch-list run aborted: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>View last startup log</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Recent</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>No startup log yet (run the launch list once first)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Failed to clear clipboard: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Failed to empty recycle bin: {0}</value></data>

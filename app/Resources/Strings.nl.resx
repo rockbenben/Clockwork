@@ -280,6 +280,7 @@ Log: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Geplande taken kunnen nog niet worden overgenomen; alleen register-Run-sleutels en opstartmap-items worden ondersteund</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Uitvoering van opstartlijst afgebroken: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Laatste opstartlogboek bekijken</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Recent</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Nog geen opstartlogboek (voer eerst de opstartlijst uit)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Klembord wissen mislukt: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Prullenbak legen mislukt: {0}</value></data>

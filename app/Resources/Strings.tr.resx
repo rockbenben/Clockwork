@@ -280,6 +280,7 @@ Günlük: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Zamanlanmış görevler henüz devralınamıyor; yalnızca kayıt defteri Run anahtarları ve Başlangıç klasörü öğeleri desteklenir</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Başlangıç listesi çalıştırması kesildi: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Son başlangıç günlüğünü görüntüle</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Son bildirimler</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Henüz başlangıç günlüğü yok (önce başlangıç listesini bir kez çalıştırın)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Pano temizlenemedi: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Geri dönüşüm kutusu boşaltılamadı: {0}</value></data>

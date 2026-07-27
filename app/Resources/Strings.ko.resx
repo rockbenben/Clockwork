@@ -280,6 +280,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>예약 작업 항목은 아직 인수를 지원하지 않습니다. 레지스트리 Run 키와 시작 폴더 항목만 지원됩니다</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>시작 목록 실행 중단: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>마지막 시작 로그 보기</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>최근 알림</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>아직 시작 로그가 없습니다(먼저 시작 목록을 한 번 실행하세요)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>클립보드 지우기 실패: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>휴지통 비우기 실패: {0}</value></data>

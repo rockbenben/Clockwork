@@ -280,6 +280,7 @@
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>शेड्यूल किए गए कार्य अभी अधिग्रहण का समर्थन नहीं करते; केवल रजिस्ट्री Run कुंजियाँ और स्टार्टअप फ़ोल्डर आइटम समर्थित हैं</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>स्टार्टअप सूची का निष्पादन बाधित: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>पिछला स्टार्टअप लॉग देखें</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>हाल के</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>अभी कोई स्टार्टअप लॉग नहीं (पहले स्टार्टअप सूची एक बार चलाएँ)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>क्लिपबोर्ड साफ़ करने में विफल: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>रीसायकल बिन खाली करने में विफल: {0}</value></data>

@@ -280,6 +280,7 @@ Log: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Tugas terjadwal belum dapat diambil alih; hanya kunci Run registri dan item folder Startup yang didukung</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Eksekusi daftar mulai terputus: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Lihat log mulai terakhir</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Terbaru</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Belum ada log mulai (jalankan daftar mulai sekali dulu)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Gagal mengosongkan papan klip: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Gagal mengosongkan keranjang sampah: {0}</value></data>

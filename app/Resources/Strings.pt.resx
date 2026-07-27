@@ -280,6 +280,7 @@ Registro: {1}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Tarefas agendadas ainda não podem ser assumidas; apenas chaves Run do registro e itens da pasta Inicializar são suportados</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Execução da lista de inicialização interrompida: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Ver o último log de inicialização</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Recentes</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Ainda não há log de inicialização (execute a lista de inicialização primeiro)</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Falha ao limpar a área de transferência: {0}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Falha ao esvaziar a lixeira: {0}</value></data>

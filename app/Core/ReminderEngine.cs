@@ -8,6 +8,16 @@ public static class ReminderEngine
 {
     public const int MaxRepeats = 20;
 
+    // 无人应答的弹窗兜底。弹窗是模态的，其嵌套消息循环期间 _reminderTickBusy 会挡掉所有其他提醒——
+    // 一个永不自动关的弹窗等于把整个提醒引擎冻结到有人点为止。故弹窗一律有超时：
+    // 用户没设「自动关闭」的，挂满 UnattendedPopupSeconds 收起；没配重复催促的提醒，超时视作
+    // 「稍后 UnattendedSnoozeMinutes 分钟」自动重发——SnoozeUntil 落盘、重启不丢、跨天由 Decide 丢弃
+    // （「错过必补」的提醒例外：跨天补发一次）、提醒被删后由孤儿清理回收。
+    // 绝不把无人应答记成已处理/未确认然后静默丢弃。
+    // 配了重复催促的提醒超时仍走 UpdateAfterFire 按用户节奏续催（受 repeatUntil/MaxRepeats 约束）。见 App.FireReminder。
+    public const int UnattendedPopupSeconds = 60;
+    public const int UnattendedSnoozeMinutes = 10;
+
     // HH:mm 校验（编辑器与 repeatUntil 判定共用一份，避免两处手抄漂移）。宽松输入先经 DurationText.FormatTimeHHmm 规整。
     public const string HhmmPattern = @"^([01]\d|2[0-3]):[0-5]\d$";
 
@@ -63,8 +73,11 @@ public static class ReminderEngine
         // 稍后(snooze)：一次性、显式请求，优先于周期门——跨午夜落到非周期日也照发一次，到点即清。
         if (st.SnoozeUntil is DateTime snooze)
         {
-            // 过期的稍后(早于今天，多为跨日停机后从盘载入的旧 snooze)：丢弃不补，继续走正常判定，不在开机时突然弹一条几天前的。
-            if (snooze.Date < now.Date) { st.SnoozeUntil = null; }
+            // 过期的稍后(早于今天，多为跨日停机后从盘载入的旧 snooze)：默认丢弃不补，继续走正常判定，
+            // 不在开机时突然弹一条几天前的。「错过必补」例外——挂着的稍后（含无人应答的自动稍后）
+            // 就是一次没送达的投递，睡眠/关机跨了天不该把它无声吞掉；该开关正是用户对「错过怎么办」
+            // 的表态，补发一次。（App 启动时的陈旧稍后清理对这类提醒同样放行，两处口径一致。）
+            if (snooze.Date < now.Date) { st.SnoozeUntil = null; if (r.CatchUpIfMissed) return new("fire", null); }
             else if (now >= snooze) { st.SnoozeUntil = null; return new("fire", null); }
             else return new("none", null);
         }

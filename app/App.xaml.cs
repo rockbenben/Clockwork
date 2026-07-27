@@ -98,9 +98,16 @@ public partial class App : System.Windows.Application
         _statePath = Path.Combine(CfgDir, "clockwork.state.json");
         foreach (var kv in ReminderStateStore.Load(_statePath)) _reminderStates[kv.Key] = kv.Value;
         // 载入时顺手清掉过期(早于今天)的稍后，别让陈旧记录长期留在盘里（Decide 也有运行期兜底）。
+        // 「错过必补」且启用的提醒例外：保留陈旧稍后交给 Decide 补发一次（跨天未应答不无声吞掉），
+        // 与 Decide 的过期分支同一口径。禁用的照清——Decide 对禁用项直接 none，留着只会烂在盘里。
         bool cleaned = false;
-        foreach (var st in _reminderStates.Values)
-            if (st.SnoozeUntil is DateTime su && su.Date < DateTime.Now.Date) { st.SnoozeUntil = null; cleaned = true; }
+        foreach (var kv in _reminderStates)
+            if (kv.Value.SnoozeUntil is DateTime su && su.Date < DateTime.Now.Date)
+            {
+                var owner = _config.Reminders.FirstOrDefault(x => x.Id == kv.Key);
+                if (owner is { Enabled: true, CatchUpIfMissed: true }) continue;
+                kv.Value.SnoozeUntil = null; cleaned = true;
+            }
         if (cleaned) ReminderStateStore.Save(_statePath, _reminderStates);
         _startupReminderIds = new HashSet<string>(_config.Reminders.Select(x => x.Id));
         Strings.ApplyCulture(_config.Settings.Language);   // 建任何窗口前设 UI 文化
@@ -420,8 +427,12 @@ public partial class App : System.Windows.Application
                     // durable：此处的意义就是「先写成盘再弹窗」，不能走失败转后台的快路径（后台没落地就被杀等于没存）。
                     if (st.LastFiredDate != firedBefore) ReminderStateStore.Save(_statePath, _reminderStates, durable: true);
                     var (action, snooze) = FireReminder(r);
-                    if (snooze is int m) ReminderEngine.Snooze(st, now, m);
-                    else ReminderEngine.UpdateAfterFire(r, now, action, st);
+                    // 排下一步（稍后/重复）必须用弹窗返回后的时刻，不能用 tick 开头的 now——弹窗是模态的，
+                    // 自动关闭设得长（如 30 分钟）时 now 已陈旧半小时，「稍后 10 分钟」会算出一个已经过去的
+                    // SnoozeUntil，下个 tick 立即重弹、再挂 30 分钟，成了永久模态循环；重复催促同理会背靠背连弹。
+                    var after = DateTime.Now;
+                    if (snooze is int m) ReminderEngine.Snooze(st, after, m);
+                    else ReminderEngine.UpdateAfterFire(r, after, action, st);
                     durableChanged = true;   // 稍后/重复又改了状态 → 循环末再存一次
                 }
             }
@@ -446,25 +457,46 @@ public partial class App : System.Windows.Application
         }
         if (r.Speak) ReminderActions.Speak(r.Message);
         bool confirm = r.OnYes != null && r.OnYes.Type != "none";
-        // 无动作、非重复 → 走托盘气泡（不置顶抢视线）。气泡时长遵循配置的显示时长（未设则 5s）。
+        // 无动作、非重复 → 走右下角提醒卡片（不置顶抢视线）。时长遵循配置的「自动关闭」（0=常驻到点击）。
         if (!confirm && r.RepeatMinutes <= 0)
         {
-            // 提醒 toast：显示时长取配置的「自动关闭(秒)」；0=不自动关(常驻到点击)——离屏也不会错过，
-            // 与编辑器"自动关闭 0=不关"的说明一致（状态类 toast 仍固定几秒自动关）。
             int secs = ReminderEngine.PopupTimeoutSeconds(r);   // 已在源头封顶 24h，secs*1000 不会越界
             int dur = secs > 0 ? secs * 1000 : (preview ? 5000 : 0);   // 预览固定 5s 自动关；真触发 0=常驻
-            ShowToast(Strings.Get("Tray_ReminderTitle"), r.Message, Views.ToastLevel.Info, dur);
+            // 真触发按提醒 id 合并（同一条反复触发只占一张卡、标 ×N，不堆满右下角）；预览不带合并键——
+            // 带了会并入同一条提醒还没人读的常驻卡片，并把它改写成 5 秒自动关，等于替用户把未读提醒销掉。
+            // 预览也不留痕（log:false）：试看不该在托盘「最近通知」里冒充一次真投递。
+            ShowToast(Strings.Get("Tray_ReminderTitle"), r.Message, Views.ToastLevel.Info, dur,
+                key: preview ? null : ReminderToastKey(r), log: !preview);
             return ("ok", null);
         }
-        int autoDismiss = ReminderEngine.PopupTimeoutSeconds(r);
-        var (act, snooze) = Views.ReminderPopupWindow.Show(_main, r.Message, confirm, autoDismiss);
+        // 弹窗路径。弹窗是模态的，其嵌套消息循环期间 _reminderTickBusy 挡住所有其他提醒——
+        // 所以弹窗一律有超时（用户没设就兜底 60s），引擎不能没有下车点。
+        // 超时（无人应答）的去向由「是否配了重复催促」决定：
+        //   配了 → ""（超时未确认，交 UpdateAfterFire 按用户设的节奏续催，受 repeatUntil/MaxRepeats 约束）；
+        //   没配 → 自动「稍后 10 分钟」——这类提醒没有任何续催机制，超时记成已处理或未确认都等于静默丢弃。
+        // 「未应答」因此落在引擎的持久状态（SnoozeUntil 落盘，重启也不丢，删除提醒后由孤儿清理回收），
+        // 而不是落在某个 UI 构件上——卡片会被挤掉/误点/比配置活得久，投递保证不能跟着 UI 的生死走。
+        int psecs = ReminderEngine.PopupTimeoutSeconds(r);
+        int timeoutSecs = psecs > 0 ? psecs : ReminderEngine.UnattendedPopupSeconds;
+        int? autoSnooze = r.RepeatMinutes > 0 ? null : ReminderEngine.UnattendedSnoozeMinutes;
+        var (act, snooze) = Views.ReminderPopupWindow.Show(_main, r.Message, confirm, timeoutSecs, autoSnooze);
         if (act == "yes") ReminderActions.RunOnYes(r.OnYes, _config.ActionGroups, RunGroupAsync, WarnToast);
         if (act == "snooze") return ("", snooze);
         return (act, null);
     }
 
-    // 「预览这条」：立即触发一次（不改运行状态）。
-    public void PreviewReminder(Reminder r) => FireReminder(r, preview: true);
+    private static string ReminderToastKey(Reminder r) => "reminder:" + r.Id;
+
+    // 「预览这条」：立即触发一次。预览不改任何运行状态——FireReminder 的返回值（含超时自动稍后）整个丢弃。
+    // 与 tick 共用重入守卫：预览的模态弹窗期间 tick 不再往上叠新提醒窗；反向 tick 正忙时预览静默忽略
+    // （用户面前已经有一个提醒模态窗了）。
+    public void PreviewReminder(Reminder r)
+    {
+        if (_reminderTickBusy) return;
+        _reminderTickBusy = true;
+        try { FireReminder(r, preview: true); }
+        finally { _reminderTickBusy = false; }
+    }
 
     // 配置所在目录（state/run.log/error.log 都落在配置旁）：一处定义，5 个落点共用。
     private string CfgDir => Path.GetDirectoryName(_cfgPath) ?? _exeDir;
@@ -611,12 +643,47 @@ public partial class App : System.Windows.Application
     // 品牌化非模态通知（右下角 toast，替代系统托盘气泡）。自动切到 UI 线程；整体兜底绝不抛。
     // 后台线程(动作组/单步)调用时 Dispatcher.Invoke 遇正在关闭的调度器会抛(TaskCanceled/InvalidOperation)，
     // 必须一并吞掉——否则会从 OnStepError 逃出、掀掉动作组剩余步骤(收工/睡前组的锁屏/关机就不执行了)。
-    private void ShowToast(string title, string message, Views.ToastLevel level = Views.ToastLevel.Info, int durationMs = 5000)
+    // 分级默认时长：运行回执看过就算；警示是「你需要知道」的（配置写盘失败、热键被占、动作组步骤异常），
+    // 用同一个 5 秒等于错过就没了。durationMs<0=按级别取默认，0=常驻到点击，>0=显式毫秒。
+    private const int InfoToastMs = 5000;
+    private const int WarnToastMs = 12000;
+
+    // log=false：不写「最近通知」（预览等试看场景——留痕会让托盘历史出现和真投递无法区分的幻影条目，
+    // 反复预览还会把 8 格环形缓冲里的真条目全部挤掉）。
+    private void ShowToast(string title, string message, Views.ToastLevel level = Views.ToastLevel.Info,
+                           int durationMs = -1, string? key = null, bool log = true)
+    {
+        int dur = durationMs >= 0 ? durationMs : (level == Views.ToastLevel.Warn ? WarnToastMs : InfoToastMs);
+        // 留痕与弹卡片一起做（都在 UI 线程）：_notifications 不是线程安全的，后台线程调本方法时不能就地写。
+        void Post()
+        {
+            if (log) _notifications.Add(new NotificationEntry(DateTime.Now, title, message, level == Views.ToastLevel.Warn, key, dur));
+            Views.NotificationToast.Show(title, message, level, dur, key);
+        }
+        try
+        {
+            if (Dispatcher.CheckAccess()) Post();
+            else Dispatcher.Invoke(Post);
+        }
+        catch { }
+    }
+
+    // 托盘「最近通知」：回看被点掉 / 被挤掉 / 已自动消失的卡片（会话级，不落盘）。
+    private readonly NotificationLog _notifications = new();
+
+    public IReadOnlyList<NotificationEntry> RecentNotifications => _notifications.Recent;
+
+    // 从托盘重放一条：忠实还原——原时长（120s 的长文卡不会被放成 5 秒一闪、常驻仍常驻）、原时刻
+    // （眉标显示它当初几点发生，不是重放的现在）、原合并键（同键卡片还在屏时就地更新而非叠双份，
+    //  且 countMerge:false——重放不是一次新触发，不涨 ×N、不改在屏卡片的时刻戳）。
+    // 不再记一笔留痕（否则回看动作本身会把缓冲刷乱）。
+    public void ReplayNotification(NotificationEntry n)
     {
         try
         {
-            if (Dispatcher.CheckAccess()) Views.NotificationToast.Show(title, message, level, durationMs);
-            else Dispatcher.Invoke(() => Views.NotificationToast.Show(title, message, level, durationMs));
+            Views.NotificationToast.Show(n.Title, n.Message,
+                n.Warn ? Views.ToastLevel.Warn : Views.ToastLevel.Info,
+                n.DurationMs, n.Key, at: n.At, countMerge: false);
         }
         catch { }
     }
@@ -633,7 +700,9 @@ public partial class App : System.Windows.Application
     public void SaveConfig()
     {
         try { ConfigStore.Write(_config, _cfgPath); }
-        catch (Exception ex) { ShowToast("Clockwork", Lf("Warn_SaveConfigFail", ex.Message), Views.ToastLevel.Warn); }
+        // 写盘失败=界面看着已保存、重启全回退的静默数据丢失。这条不给它自动消失：常驻到用户点掉。
+        // 同键合并：连续几次保存失败只留一张（标 ×N），不至于把屏幕糊满。
+        catch (Exception ex) { ShowToast("Clockwork", Lf("Warn_SaveConfigFail", ex.Message), Views.ToastLevel.Warn, 0, key: "saveconfig"); }
         // 组增删改/启停/改键都走此保存——热键跟着当前配置即时重建。
         // 捕捉挂起期间跳过（改急停键的保存正发生在挂起中）：此刻重建会让组抢注急停的新组合；
         // 捕捉一定以 ResumeHotkeys 收尾，那里会按「急停先、组后」的次序统一重建。
