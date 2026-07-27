@@ -435,6 +435,14 @@ public partial class App : System.Windows.Application
                     var after = DateTime.Now;
                     if (snooze is int m) ReminderEngine.Snooze(st, after, m);
                     else ReminderEngine.UpdateAfterFire(r, after, action, st);
+                    // 「仅一次」触发完成（催促/稍后链都结束）→ 自动取消勾选：条目保留（想再用改个日期重新勾上），
+                    // 用完即焚会让误设时间没得救。时机必须在链结束后——立刻停用会被 Decide 的 !Enabled 早退掐死在途链。
+                    if (ReminderEngine.ShouldDisableAfterOnce(r, st))
+                    {
+                        r.Enabled = false;
+                        SaveConfig();
+                        _main?.RefreshReminderRows();
+                    }
                     durableChanged = true;   // 稍后/重复又改了状态 → 循环末再存一次
                 }
             }
@@ -453,8 +461,9 @@ public partial class App : System.Windows.Application
             if (g != null && g.Enabled) RunGroupAsync(g);
             // 引用的组被删/被禁用时不再静默装作成功——夜间例程停摆却零反馈是最难察觉的故障；警告但仍记已处理（不重弹刷屏）。
             else WarnToast(Lf(g == null ? "Warn_SilentGroupMissing" : "Warn_SilentGroupDisabled", StepHelpers.Ellipsis(r.Message)));
-            // 静默组无确认交互，跑一次即完结（返回 "ok" 让 UpdateAfterFire 停）——否则配了 repeatMinutes
-            // 会每 N 分钟把整组（可能含静音/关应用/锁屏）重跑，最多 20 次。要周期催促请用非静默提醒。
+            // 静默组无确认交互，跑一次即完结——返回 "ok"：让 UpdateAfterFire 停掉催促（否则配了 repeatMinutes
+            // 会每 N 分钟把整组（可能含静音/关应用/锁屏）重跑），同时排下一轮「循环运行」（intervalMinutes）——
+            // 静默任务的周期轮询正是靠这个返回值成立，改动它会悄悄弄断循环。
             return ("ok", null);
         }
         if (r.Speak) ReminderActions.Speak(r.Message);

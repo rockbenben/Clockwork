@@ -330,6 +330,14 @@ public partial class MainWindow : Window
     private static void SyncSel(System.Windows.Controls.DataGrid grid, ListVmBase? vm) { if (vm != null) grid.SelectedIndex = vm.SelectedIndex; }
     private void SyncSelection() => SyncSel(GridLaunch, _launch);
 
+    // App 在「仅一次」触发完成后自动取消勾选提醒时调用：把模型层的 Enabled 变化刷回列表复选框。
+    // 只发通知不触发存盘（Refresh 不走 Enabled setter）。
+    public void RefreshReminderRows()
+    {
+        if (_reminders == null) return;
+        foreach (var row in _reminders.Rows) row.Refresh();
+    }
+
     private void LAdd_Click(object sender, RoutedEventArgs e)
     {
         // 新增 ▾：弹类型菜单 → 打开对应编辑器 → 插入。
