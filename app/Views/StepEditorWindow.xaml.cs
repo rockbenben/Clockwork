@@ -44,8 +44,11 @@ public partial class StepEditorWindow : Window
         // 保留普通文本框 + 捕捉按钮，不套 KeyCaptureBox。）
         // allowTyping：Win+D / Win+E 这类被 Explorer 全局注册的组合，系统在应用之前就吃掉了按键、捕捉不到，
         // 但它们作为发送内容完全有效（SendKeyCombo 会真发 LWIN）——双击切手输才录得进来。
+        // HasUnknownModifier：手输才需要的一道关。ToHotkeyParams 单独用不够——它对 "Ctrl+Shft+A" 也返回非空
+        // （Shft 被当主键、又被 A 覆盖），结果框里显示 Ctrl+Shft+A、实际发 Ctrl+A。捕捉出来的串不会畸形。
         KeyCaptureBox.Attach(ComboBox2, Native.HotkeyCapture.KeyCaptureMode.SendKeys,
-            c => Native.KeyInput.ToHotkeyParams(c) != null, () => ComboBox2.Text, _ => { }, allowTyping: true);
+            c => Native.KeyInput.ToHotkeyParams(c) != null && !KeyCombo.HasUnknownModifier(c),
+            () => ComboBox2.Text, _ => { }, allowTyping: true);
     }
 
     // （关窗恢复全局热键的兜底由 KeyCaptureBox 统一负责——挂宿主窗口 Closed，此处不再各写一份。）

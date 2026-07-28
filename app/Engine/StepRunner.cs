@@ -88,6 +88,12 @@ public static class StepRunner
         }
     }
 
+    // 是否走「已在运行则激活」的捷径而不真的启动。带「参数」时不走——参数的意思是「做这件具体的事」
+    // （msedge.exe + 一个网址、notepad.exe + 一个文件）；只把已有窗口带到前台等于把这件事悄悄吞掉，
+    // 而且还会记成 ✓ 成功。本选项默认开启，不留这道口子的话每个带参数的新步骤都会中招。
+    public static bool ShouldActivateInsteadOfLaunch(LaunchStep s)
+        => s.ActivateIfRunning && string.IsNullOrEmpty(s.Args);
+
     // 活：启动 app 步骤。
     public static ActionResult RunLaunchItem(LaunchStep item, IReadOnlyList<string> selfPaths)
     {
@@ -97,7 +103,7 @@ public static class StepRunner
             return ActionResult.Warn(Strings.Lf("Warn_SelfSkip", item.Label));
 
         // 已运行则激活窗口、不重复启动。
-        if (item.ActivateIfRunning)
+        if (ShouldActivateInsteadOfLaunch(item))
         {
             var pn = !string.IsNullOrEmpty(item.ActivateProcess) ? item.ActivateProcess : LaunchTarget.TargetProcessName(tgt);
             pn = StepHelpers.ToProcessName(pn);   // 统一进程名规范化（剥目录+.exe），与其余调用点一致

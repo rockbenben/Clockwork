@@ -35,6 +35,18 @@ public static class KeyCombo
         return new ParsedCombo { Modifiers = mods, Key = key, UseWin = mods.Contains("Win") };
     }
 
+    // 组合串里是否有拼错/多余的修饰键段。ParseCombo 对不认识的段是「当成主键」，后面的段再把它覆盖掉——
+    // 于是 "Ctrl+Shft+A" 静默变成 Ctrl+A、"Wn+D" 静默变成 D：框里显示一套、发出去另一套。
+    // 捕捉出来的串不会畸形，手输的会，故手输校验必须过这一关。
+    // 判据：以 + 切开、去掉空段后，除最后一段（主键）外都必须是认识的修饰键。
+    public static bool HasUnknownModifier(string combo)
+    {
+        var parts = (combo ?? "").Split('+').Select(x => x.Trim()).Where(x => x.Length > 0).ToList();
+        for (int i = 0; i < parts.Count - 1; i++)
+            if (parts[i].ToLowerInvariant() is not ("win" or "ctrl" or "control" or "alt" or "shift")) return true;
+        return false;
+    }
+
     private static readonly Dictionary<string, string> NamedSendKeys = new()
     {
         ["enter"] = "{ENTER}", ["return"] = "{ENTER}", ["tab"] = "{TAB}", ["esc"] = "{ESC}", ["escape"] = "{ESC}", ["space"] = " ",

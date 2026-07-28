@@ -109,4 +109,28 @@ public class KeyComboTests
     [InlineData("{F17}", false)]         // SendKeys 只到 F16
     public void IsValidSendKeys_accepts_legal_rejects_guaranteed_throws(string? s, bool ok)
         => Assert.Equal(ok, KeyCombo.IsValidSendKeys(s));
+
+    // —— 手输组合键的修饰键拼写校验 ——
+    // ParseCombo 对不认识的段是「当成主键」、后面的段再覆盖它，于是 "Ctrl+Shft+A" 静默变成 Ctrl+A。
+    // 框里显示一套、发出去另一套，是本校验要挡的东西（捕捉出来的串不会畸形，只有手输会）。
+    [Theory]
+    [InlineData("Ctrl+Shift+A", false)]   // 正常
+    [InlineData("Win+6", false)]          // 手输的主要用途：系统占用的 Win 组合捕捉不到
+    [InlineData("Win+Ctrl+Alt+Shift+F1", false)]
+    [InlineData("F5", false)]             // 裸键（发送模式允许）
+    [InlineData("control+a", false)]      // 别名 + 小写照样认
+    [InlineData("Ctrl+Shft+A", true)]     // Shift 拼错 → 实际会发 Ctrl+A
+    [InlineData("Wn+D", true)]            // Win 拼错 → 实际会发 D
+    [InlineData("Ctrl+Shift+A+B", true)]  // 多打一段 → A 被 B 覆盖
+    public void HasUnknownModifier_flags_typos_in_modifier_positions(string combo, bool bad)
+        => Assert.Equal(bad, KeyCombo.HasUnknownModifier(combo));
+
+    // 拼错的串真的会变成另一个键——上面那条校验存在的理由，不是理论担忧。
+    [Fact]
+    public void Typo_in_modifier_silently_becomes_a_different_combo()
+    {
+        var p = KeyCombo.ParseCombo("Ctrl+Shft+A");
+        Assert.Equal("A", p.Key);
+        Assert.DoesNotContain("Shift", p.Modifiers);   // 用户以为按的是 Ctrl+Shift+A
+    }
 }
