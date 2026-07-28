@@ -132,18 +132,19 @@ public class ConfigStoreTests : IDisposable
     public void Group_hotkey_roundtrips_and_defaults_blank()
     {
         // 全局热键字段：写读往返保留；旧配置（无该键）读入默认空=不绑定；运行快照带上（热键触发跑的是快照）。
+        // Default() 现在预置两个组，新增的这条排在它们后面——用 [^1]（最后一条）钉住"刚加的那条"，不依赖它是不是索引 0。
         var path = Path.Combine(_dir, "ghk.json");
         var cfg = RootConfig.Default();
         cfg.ActionGroups.Add(new ActionGroup { Name = "专注", Hotkey = "Ctrl+Alt+F" });
         ConfigStore.Write(cfg, path);
         var back = ConfigStore.Read(path);
-        Assert.Equal("Ctrl+Alt+F", back.ActionGroups[0].Hotkey);
+        Assert.Equal("Ctrl+Alt+F", back.ActionGroups[^1].Hotkey);
 
         var legacy = Path.Combine(_dir, "ghk_legacy.json");
         File.WriteAllText(legacy, "{\"actionGroups\":[{\"name\":\"旧组\"}]}");
         Assert.Equal("", ConfigStore.Read(legacy).ActionGroups[0].Hotkey);
 
-        Assert.Equal("Ctrl+Alt+F", cfg.ActionGroups[0].SnapshotForRun().Hotkey);
+        Assert.Equal("Ctrl+Alt+F", cfg.ActionGroups[^1].SnapshotForRun().Hotkey);
     }
 
     [Fact]

@@ -9,7 +9,7 @@ public class DefaultConfigTests
         var c = RootConfig.Default();
         Assert.Equal(5, c.LaunchSteps.Count);           // 一个真实的早晨：5 步
         Assert.Equal(4, c.Reminders.Count);             // 工作日两条 + 每天一条 + 每月一条：4 条
-        Assert.Empty(c.ActionGroups);
+        Assert.Equal(2, c.ActionGroups.Count);          // 首启预置「离开一下」+「收工·下班」两个可运行的动作组
         Assert.Equal(30, c.Settings.TickSeconds);
         Assert.Equal("Ctrl+Alt+Q", c.Settings.StopHotkey);
     }

@@ -132,7 +132,7 @@ public sealed class RootConfig
         LaunchSteps = DefaultLaunchSteps(),
         Reminders = DefaultReminders(),
         Settings = new AppSettings(),
-        ActionGroups = new(),
+        ActionGroups = DefaultActionGroups(),
     };
 
     // 供后台运行拍快照：浅拷贝各列表，枚举不再受 UI 线程增删的并发修改干扰（开机延迟期间增删步骤会
@@ -170,4 +170,16 @@ public sealed class RootConfig
         new Reminder { Time = "23:00", Message = Strings.Get("Smp_RemSleep"), Enabled = false },
         new Reminder { Time = "09:00", RecurType = "monthly", MonthlyDay = 1, Message = Strings.Get("Smp_RemBills"), Enabled = false },
     };
+
+    // 首次预置的动作组：直接从模板里挑，避免同一套步骤在两处各写一份、日后漂移。
+    // 挑「离开一下」（零配置、任何机器都能跑）与「收工·下班」（最有代表性，含确认闸门）。
+    // 启用但不带热键——组不会自己跑，禁用只会让托盘里多两条灰的；而开箱占用全局组合键太越界。
+    public static List<ActionGroup> DefaultActionGroups()
+    {
+        var all = ActionGroupTemplates.All();
+        var names = new[] { Strings.Get("Tpl_Away"), Strings.Get("Tpl_EndOfDay") };
+        return names.Select(n => all.FirstOrDefault(g => g.Name == n))
+                    .Where(g => g != null).Select(g => g!)
+                    .ToList();
+    }
 }
