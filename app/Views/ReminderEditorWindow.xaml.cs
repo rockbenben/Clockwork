@@ -102,7 +102,11 @@ public partial class ReminderEditorWindow : Window
 
     // HH:mm 校验用引擎共享 pattern；先经 FormatTimeHHmm 规整，"9:00" 这类单位数小时输入不再被拒（保存时同样走规整）。
     private static readonly Regex HhmmRe = new(ReminderEngine.HhmmPattern);
-    private static readonly Regex DateRe = new("^\\d{4}-\\d{2}-\\d{2}$");
+
+    // 日期校验必须用真实解析而非「形状」正则：^\d{4}-\d{2}-\d{2}$ 会放行 2026-02-30 / 2026-13-45 这种
+    // 日历上不存在的日期，而 IsRecurrenceDueToday 对解析不了的日期一律按「今天」兜底——
+    // 于是「每 7 天」静默退化成每天、「仅一次」当场就弹。拦在输入处，别让打错一位变成天天弹。
+    public static bool IsDate(string s) => DurationText.TryParseDate(s, out _);
 
     // —— 选择器：取消则不动原值 ——
     private void PickAnchor_Click(object sender, RoutedEventArgs e) { if (Pickers.PickDate(this, AnchorBox.Text) is string d) AnchorBox.Text = d; }
@@ -116,12 +120,12 @@ public partial class ReminderEditorWindow : Window
         var repUntil = RepeatUntilBox.Text.Trim();
         if (repUntil != "" && !HhmmRe.IsMatch(DurationText.FormatTimeHHmm(repUntil))) { Warn(Strings.Get("Val_RepeatUntil")); return; }
         var anchor = AnchorBox.Text.Trim();
-        if (anchor != "" && !DateRe.IsMatch(anchor)) { Warn(Strings.Get("Val_Anchor")); return; }
+        if (anchor != "" && !IsDate(anchor)) { Warn(Strings.Get("Val_Anchor")); return; }
 
         // recur 提前到这里声明：仅一次日期校验、循环行互斥都要用到，避免和 brief 草稿里的 recurSel 重复一个同义变量。
         var recur = ComboVal(RecurCombo);
         var onceDate = OnceDateBox.Text.Trim();
-        if (recur == "once" && onceDate != "" && !DateRe.IsMatch(onceDate)) { Warn(Strings.Get("Val_OnceDate")); return; }
+        if (recur == "once" && onceDate != "" && !IsDate(onceDate)) { Warn(Strings.Get("Val_OnceDate")); return; }
         // 日期已过：提示但放行——不替用户做主（与项目校验风格一致，只拦真正会崩的）。
         if (recur == "once" && onceDate != ""
             && DateTime.TryParseExact(onceDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var od)

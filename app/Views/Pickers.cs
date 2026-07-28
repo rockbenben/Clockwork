@@ -70,7 +70,9 @@ public static class Pickers
         return dlg.ShowDialog() == true ? (list.SelectedItem as ListBoxItem)?.Tag as string : null;
     }
 
-    // 日期选择（yyyy-MM-dd）。current 可解析则定位到该日期；取消 → null。
+    // 日期选择（公历 yyyy-MM-dd）。current 可解析则定位到该日期；取消 → null。
+    // 读写都过 DurationText（InvariantCulture）：Calendar 控件按系统区域显示（泰历/回历也照常用），
+    // 但落进配置的字符串必须是公历——不然泰历区域下选出来的是 2569 年，那条提醒永远不到期。
     public static string? PickDate(Window owner, string current)
     {
         var dlg = NewDialog(owner, Strings.Get("Date_Pick"), 300, 340);
@@ -78,12 +80,12 @@ public static class Pickers
         var buttons = OkCancelRow(dlg, out var ok);
         DockPanel.SetDock(buttons, Dock.Bottom);
         var cal = new Calendar { HorizontalAlignment = HorizontalAlignment.Center };
-        if (DateTime.TryParse(current, out var cur)) { cal.SelectedDate = cur; cal.DisplayDate = cur; }
+        if (Core.DurationText.TryParseDate(current, out var cur)) { cal.SelectedDate = cur; cal.DisplayDate = cur; }
         else cal.SelectedDate = DateTime.Today;
         ok.Click += (_, _) => { if (cal.SelectedDate != null) dlg.DialogResult = true; };
         root.Children.Add(buttons); root.Children.Add(cal);
         dlg.Content = root;
-        return dlg.ShowDialog() == true && cal.SelectedDate is DateTime d ? d.ToString("yyyy-MM-dd") : null;
+        return dlg.ShowDialog() == true && cal.SelectedDate is DateTime d ? Core.DurationText.FormatDate(d) : null;
     }
 
     // 按键捕获：弹小窗提示「按下快捷键…」，按下即返回组合串（修饰键可选，裸 F5/Enter 也接受——发送按键不要求修饰键）。
