@@ -439,7 +439,7 @@ public partial class MainWindow : Window
 
     private void GAdd_Click(object sender, RoutedEventArgs e)
     {
-        // 新增 ▾：空白组 + 内置模板（专注/会议/收工/睡前/离开/截图，旧版 Get-ActionGroupTemplates 的移植）。
+        // 新增 ▾：空白组 + 内置模板（专注/会议/收工/睡前/离开/截图/久坐，旧版 Get-ActionGroupTemplates 的移植）。
         // 模板每次现生成新 id，选中即开编辑器预填，按需改进程名再保存。
         var menu = new ContextMenu();
         var blank = new MenuItem { Header = Strings.Get("Menu_BlankGroup") };
