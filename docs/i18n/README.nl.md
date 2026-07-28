@@ -66,7 +66,7 @@ Een **geordende lijst met stappen** die bij het aanmelden van boven naar beneden
 - **Vensteractie** — op procesnaam (**Kiezen…**, doorzoekbaar): sluiten / minimaliseren / maximaliseren / naar-voorgrond / naar-voorgrond-en-toetsen-versturen; trage apps kunnen **tot N seconden wachten tot het venster verschijnt**.
 - **Systeemopdracht** — bureaublad weergeven / vergrendelen / monitor uitzetten / prullenbak legen / klembord wissen / Instellingen openen / Taakbeheer / schermafbeelding / slaapstand / sluimerstand / afmelden / opnieuw opstarten / afsluiten (de laatste drie vragen eerst om bevestiging).
 - **Vertraging** — wacht gewoon N seconden vóór de volgende stap.
-- **Actiegroep** — voert een gedefinieerde actiegroep uit; stel een aantal herhalingen in om de hele groep te herhalen.
+- **Actiegroep** — voert een gedefinieerde actiegroep uit; het aantal herhalingen zegt hoe vaak *deze verwijzing* afgaat (de groep kan zich ook intern herhalen — zie **Actiegroepen** hieronder).
 
 > **Opstartvertraging** (tabblad Instellingen, alleen bij opstarten): wacht een vast aantal seconden na het aanmelden zodat de «opstartstorm» (schijf-/CPU-belasting van alles dat automatisch opstart) voorbij is voordat de lijst wordt uitgevoerd; een handmatige herstart wordt niet beïnvloed. Verhoog het (0–600 s) als dingen te vroeg starten.
 
@@ -74,7 +74,13 @@ Een **geordende lijst met stappen** die bij het aanmelden van boven naar beneden
 
 ### Geplande taken
 
-Stel een **tijd** in (of schakel over naar **bij het aanmelden**), een **herhaling** (weekdagen / om-de-N-dagen / maandelijks) en de **tekst**; lees hem eventueel hardop voor. Herinneringen met een **Bij-Ja**-actie (programma starten / bestand openen / URL / actiegroep uitvoeren) tonen een **Ja / Nee**-dialoogvenster met een knop **Uitstellen** (standaard 10 min, ▾-menu 5–60 min); de rest schuift als een **herinneringskaart** in de hoek naar binnen (sluit vanzelf na het ingestelde aantal seconden, **0 = blijft staan tot je hem sluit**). Je kunt ook een **stille actiegroep** instellen — voert een groep op tijd uit zonder enige pop-up.
+Stel een **tijd** in (of schakel over naar **bij het aanmelden**), een **herhaling** (weekdagen / om-de-N-dagen / maandelijks / **eenmalig op een datum**) en kies één **actie**: **een herinnering tonen** of **een actiegroep stil uitvoeren**. Alleen de velden van de gekozen actie blijven staan, zodat je nooit een vakje invult dat niets doet.
+
+Herinneringen met een **Bij-Ja**-actie (programma starten / bestand openen / URL / actiegroep uitvoeren) tonen een **Ja / Nee**-dialoogvenster met een knop **Uitstellen** (standaard 10 min, ▾-menu 5–60 min); de rest schuift als een **herinneringskaart** in de hoek naar binnen (sluit vanzelf na het ingestelde aantal seconden, **0 = blijft staan tot je hem sluit**). De tekst kan worden voorgelezen.
+
+**Intervalruns** maken van één taak een dagschema: *elke N minuten tot HH:mm* (leeg = einde van de dag). Anders dan **blijven porren**, dat stopt zodra je bevestigt, gaat een interval na je antwoord verder — precies daardoor is een stille groep bruikbaar als poller. Intervallen blijven binnen de dag; morgen begint opnieuw op de eigen tijd van de taak. De voortgang wordt bewaard: de app om twaalf uur herstarten houdt de resterende rondes van die dag.
+
+**Eenmalig** gaat af op zijn datum en **vinkt zichzelf daarna uit**, maar blijft in de lijst — verander de datum en vink opnieuw aan om hem te hergebruiken. Hij wacht tot porren of uitstellen klaar is voordat hij uitgaat, en kapt dus nooit een lopende bezorging af.
 
 Een onbeantwoord dialoogvenster blokkeert niets en raakt niet zoek: na hooguit een minuut wordt het een **automatisch uitstel van 10 minuten** en komt het later terug. Die toestand wordt net als elk uitstel naar schijf geschreven — hij overleeft herstarts, en met **inhalen indien gemist** aan vuurt hij zelfs na een nacht over middernacht de volgende dag nog één keer. Herhaalde meldingen van één herinnering delen één kaart (gemarkeerd **×N**), en gesloten of verlopen kaarten zijn opnieuw te tonen via het traymenu **Recent**.
 
@@ -88,7 +94,11 @@ Toont **alles dat automatisch opstart** (Run-sleutels in het register, Opstartma
 
 ### Actiegroepen
 
-Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis van een **ingebouwd sjabloon** (Focus / Vergadering / Afronden / Bedtijd / Even weg / Schermafbeelding) — pas de procesnamen aan en sla op. Een groep **definieert alleen acties**; trigger hem op vier manieren: vanuit het systeemvak (**Uitvoeren: <groep>**), een **globale sneltoets**, als een **actiegroep-stap** in de opstartlijst (bij het opstarten) of vanuit een geplande taak (**Bij-Ja / stille groep**). Een groep draait telkens maar één kopie tegelijk; een **bericht**-stap kan als bevestigingspoort dienen (met **Nee** antwoorden breekt de rest af).
+Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis van een **ingebouwd sjabloon** (Focus / Vergadering / Afronden / Bedtijd / Even weg / Schermafbeelding) — pas de procesnamen aan en sla op. Een groep **definieert alleen acties**; trigger hem op vier manieren: vanuit het systeemvak (**Uitvoeren: <groep>**), een **globale sneltoets**, als een **actiegroep-stap** in de opstartlijst (bij het opstarten) of vanuit een geplande taak (**Bij-Ja / stille groep**). Een groep draait telkens maar één kopie tegelijk.
+
+**Lussen.** Een groep kan zich **in zijn geheel herhalen** (aantal herhalingen + pauze tussen rondes, in de groepseditor). Wil je maar *een deel* van een reeks herhalen, zet die stappen dan in hun eigen groep en verwijs ernaar met een **actiegroep**-stap waarvan jij het aantal herhalingen instelt — groepen mogen naar groepen verwijzen, en bij opslaan worden kringverwijzingen geweigerd met de keten erbij (`A → B → A`). De drie herhaalknoppen vermenigvuldigen: per stap × per verwijzing × hele groep. Eén run heeft een zekering van **5000 stappen**, zodat een te grote combinatie stopt in plaats van eindeloos door te draaien.
+
+Een **bericht**-stap is een bevestigingspoort: met **Nee** antwoorden breekt de rest van de groep af *inclusief de resterende rondes*, en plant zich naar buiten voort naar de groep die ernaar verwees — één keer weigeren is genoeg, ook in een subgroep die ×N wordt herhaald.
 
 > **Globale sneltoets** — klik in de groepseditor op het sneltoetsvak en druk op een sneltoets (bijv. `Ctrl+Alt+F`) om die groep overal vandaan uit te voeren, zonder menu. Esc annuleert, Delete wist. Uitgeschakelde groepen geven hun combinatie vrij; systeemgereserveerde combinaties (Alt+F4, Ctrl+Shift+Esc…) en combinaties die al door een andere groep of de paniek-sneltoets in gebruik zijn, worden met een melding geweigerd.
 

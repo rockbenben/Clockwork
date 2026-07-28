@@ -64,7 +64,7 @@ Un **elenco ordinato di passaggi** eseguiti dall'alto verso il basso all'accesso
 - **Azione finestra** — per nome del processo (**Scegli…**, con ricerca): chiudi / riduci a icona / ingrandisci / porta-in-primo-piano / porta-in-primo-piano-e-invia-tasti; le app lente possono **attendere fino a N secondi la comparsa della finestra**.
 - **Comando di sistema** — mostra il desktop / blocca / spegni il monitor / svuota il cestino / cancella gli appunti / apri Impostazioni / Gestione attività / schermata / sospendi / ibernazione / disconnetti / riavvia / arresta (le ultime tre chiedono prima conferma).
 - **Ritardo** — aspetta semplicemente N secondi prima del passaggio successivo.
-- **Gruppo di azioni** — esegue un gruppo di azioni definito; imposta un numero di ripetizioni per ripetere l'intero gruppo.
+- **Gruppo di azioni** — esegue un gruppo di azioni definito; il suo numero di ripetizioni indica quante volte scatta *questo riferimento* (il gruppo può anche ripetersi internamente — vedi **Gruppi di azioni** più sotto).
 
 > **Ritardo di avvio** (scheda Impostazioni, solo all'accensione): aspetta un numero fisso di secondi dopo l'accesso in modo che la «tempesta di avvio» (contesa di disco/CPU di tutti i programmi che partono automaticamente) sia passata prima che l'elenco venga eseguito; una riesecuzione manuale non ne è influenzata. Aumentalo (0–600 s) se le cose partono troppo presto.
 
@@ -72,7 +72,13 @@ Un **elenco ordinato di passaggi** eseguiti dall'alto verso il basso all'accesso
 
 ### Attività pianificate
 
-Imposta un'**ora** (o passa a **all'accesso**), una **ricorrenza** (giorni della settimana / ogni-N-giorni / mensile) e il **testo**; facoltativamente leggilo ad alta voce. I promemoria con un'azione **Al-Sì** (avvia programma / apri file / URL / esegui gruppo di azioni) mostrano una finestra di dialogo **Sì / No** con un pulsante **Posticipa** (predefinito 10 min, menu ▾ da 5–60 min); gli altri scivolano dentro come una **scheda promemoria** nell'angolo (si chiude da sola dopo i secondi configurati, **0 = resta finché non la chiudi**). Puoi anche impostare un **gruppo di azioni silenzioso** — esegue un gruppo all'ora stabilita senza alcun popup.
+Imposta un'**ora** (o passa a **all'accesso**), una **ricorrenza** (giorni della settimana / ogni-N-giorni / mensile / **una sola volta in una data**) e scegli una **azione**: **mostrare un promemoria** o **eseguire un gruppo di azioni in silenzio**. Restano a schermo solo i campi dell'azione scelta, così non compili mai una casella che non fa nulla.
+
+I promemoria con un'azione **Al-Sì** (esegui programma / apri file / URL / esegui gruppo di azioni) mostrano una finestra **Sì / No** con un pulsante **Rinvia** (10 min predefiniti, menu ▾ 5–60 min); gli altri entrano nell'angolo come **scheda promemoria** (si chiude dopo i secondi configurati, **0 = resta finché non la scarti**). Il testo può essere letto ad alta voce.
+
+**Le esecuzioni a intervallo** trasformano un'attività in un programma per l'intera giornata: *ogni N minuti fino a HH:mm* (vuoto = fine giornata). A differenza del **sollecito**, che si ferma appena confermi, un intervallo continua dopo la tua risposta — è esattamente ciò che rende un gruppo silenzioso usabile come sonda periodica. Gli intervalli restano dentro la giornata; domani riparte dall'ora propria dell'attività. L'avanzamento viene salvato: riavviare l'app a mezzogiorno conserva i giri rimanenti della giornata.
+
+**Una sola volta** scatta alla sua data e poi **si deseleziona da sé**, restando in elenco — cambia la data e riseleziona per riusarla. Aspetta che sollecito o rinvio siano finiti prima di spegnersi, così non tronca mai una consegna in corso.
 
 Una finestra rimasta senza risposta non blocca la coda né va persa: dopo al massimo un minuto diventa un **rinvio automatico di 10 minuti** e ricompare più tardi. Quello stato viene salvato su disco come qualsiasi rinvio — sopravvive ai riavvii e, con **recupera se mancato** attivo, si riattiva una volta il giorno dopo anche se la notte ha superato la mezzanotte. Le attivazioni ripetute di uno stesso promemoria condividono un'unica scheda (contrassegnata **×N**), e le schede chiuse o scadute possono essere rimostrate dal menu **Recenti** della tray.
 
@@ -86,7 +92,11 @@ Elenca **tutto ciò che si avvia automaticamente** (chiavi Run del registro, car
 
 ### Gruppi di azioni
 
-Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da un **modello integrato** (Concentrazione / Riunione / Chiusura / Prima di dormire / Allontanarsi / Schermata) — modifica i nomi dei processi e salva. Un gruppo **definisce solo azioni**; attivalo in quattro modi: dall'area di notifica (**Esegui: <gruppo>**), una **scorciatoia globale**, come un **passaggio di gruppo di azioni** nell'elenco di avvio (all'accensione) o da un'attività pianificata (**Al-Sì / gruppo silenzioso**). Un gruppo esegue una sola copia alla volta; un passaggio **messaggio** può fungere da barriera di conferma (rispondere **No** interrompe il resto).
+Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da un **modello integrato** (Concentrazione / Riunione / Chiusura / Prima di dormire / Allontanarsi / Schermata) — modifica i nomi dei processi e salva. Un gruppo **definisce solo azioni**; attivalo in quattro modi: dall'area di notifica (**Esegui: <gruppo>**), una **scorciatoia globale**, come un **passaggio di gruppo di azioni** nell'elenco di avvio (all'accensione) o da un'attività pianificata (**Al-Sì / gruppo silenzioso**). Un gruppo esegue una sola copia alla volta.
+
+**Cicli.** Un gruppo può **ripetersi per intero** (numero di ripetizioni + attesa tra i giri, nell'editor del gruppo). Per ciclare solo *una parte* di una sequenza, metti quei passaggi in un gruppo a parte e richiamalo con un passaggio **gruppo di azioni** di cui imposti il numero di ripetizioni — i gruppi possono richiamare gruppi, e al salvataggio i riferimenti circolari vengono rifiutati mostrando la catena (`A → B → A`). Le tre manopole di ripetizione si moltiplicano: per passaggio × per riferimento × gruppo intero. Una singola esecuzione ha un fusibile di **5000 passaggi**, così una combinazione eccessiva si ferma invece di andare avanti all'infinito.
+
+Un passaggio **messaggio** è una barriera di conferma: rispondere **No** interrompe il resto del gruppo *e i suoi giri rimanenti*, e si propaga verso l'esterno al gruppo che lo ha richiamato — rifiutare una volta basta, anche dentro un sottogruppo ripetuto ×N.
 
 > **Scorciatoia globale** — nell'editor del gruppo, clicca sulla casella della scorciatoia e premi una combinazione (es. `Ctrl+Alt+F`) per eseguire quel gruppo da qualsiasi punto, senza menu. Esc annulla, Canc cancella. I gruppi disabilitati rilasciano la loro combinazione; le combinazioni riservate dal sistema (Alt+F4, Ctrl+Shift+Esc…) e le combinazioni già occupate da un altro gruppo o dalla scorciatoia di emergenza vengono rifiutate con un avviso.
 

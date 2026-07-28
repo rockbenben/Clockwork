@@ -114,7 +114,9 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 - **Loop a subset of steps**: extract those steps into their own action group, then reference it with a "group" step and set its repeat count.
 - Three repeat knobs multiply: per-step repeat × reference-step repeat × whole-group rounds.
 - Groups can nest group references; saving validates cycles among action-group **step** references (A→B→A is rejected with the chain shown). A cycle formed through a message step's "on Yes → run group" target is not checked at save time, but is caught at run time by re-entry protection (skipped with a warning, never spinning).
-- Safety fuse: a single run executes at most 5000 steps, then stops with a warning. The stop hotkey works at any time.
+- **Answering "No" to a message step stops everything**: the rest of that group **and its remaining rounds**, and if the group was reached through a reference from another group, that caller's remaining iterations too. So when you loop a subsequence the recommended way (sub-group referenced ×N), declining once is enough — the same dialog will not chase you N times.
+- A referenced group that is **missing** (deleted, or no group picked when the step was created), **disabled**, or **already running** (including a cycle) is never silently skipped: missing and re-entrant are reported as warnings, disabled as a plain notice (you turned it off yourself — that is not a fault). Re-entry also stops that reference's remaining iterations, so one notice never repeats N times.
+- Safety fuse: a single run executes at most **5000 steps** — every execution of a normal step counts as one, and so does every "action group" reference iteration (otherwise a chain of nothing but references, with empty leaf groups, would slip past the fuse). Past that it stops and says so in the run log. The stop hotkey works at any time.
 
 ## Settings
 

@@ -69,7 +69,7 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 - **Window action** — by process name (**Pick…**, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys; slow apps can **wait up to N seconds for the window to appear**.
 - **System command** — show desktop / lock / turn off monitor / empty recycle bin / clear clipboard / open Settings / Task Manager / screenshot / sleep / hibernate / sign out / restart / shut down (the last three confirm first).
 - **Delay** — just wait N seconds before the next step.
-- **Action group** — run a defined action group; set a repeat count to loop the whole group.
+- **Action group** — run a defined action group; its repeat count says how many times *this reference* fires (the group can also repeat internally — see **Action groups** below).
 
 > **Startup delay** (Settings tab, boot only): wait a fixed number of seconds after login so the "login storm" (disk/CPU contention from every autostart) passes before the list runs; a manual re-run is not affected. Raise it (0–600 s) if things start too early.
 
@@ -77,7 +77,13 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 
 ### Scheduled tasks
 
-Set a **time** (or switch to **at login**), a **recurrence** (weekdays / every-N-days / monthly), and the **text**; optionally speak it aloud. Reminders with an **On-Yes** action (run program / open file / URL / run action group) pop a **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5–60 min); the rest slide in as a **reminder card** in the corner (auto-close after the configured seconds, **0 = stays until you dismiss it**). You can also set a **silent action group** — run a group on time with no popup.
+Set a **time** (or switch to **at login**), a **recurrence** (weekdays / every-N-days / monthly / **once on a given date**), and pick one **action**: **pop a reminder** or **silently run an action group**. Only the chosen action's fields stay on screen, so you never fill in a box that does nothing.
+
+Reminders with an **On-Yes** action (run program / open file / URL / run action group) pop a **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5–60 min); the rest slide in as a **reminder card** in the corner (auto-close after the configured seconds, **0 = stays until you dismiss it**). Text can be spoken aloud.
+
+**Interval runs** turn one task into an all-day schedule: *every N minutes until HH:mm* (blank = end of day). Unlike **repeat nagging**, which stops the moment you confirm, an interval run keeps going after you answer — that is what makes a silent group usable as a poller. Intervals stay inside the day; tomorrow starts fresh from the task's own time. Progress is saved, so restarting the app at noon keeps the rest of the day's rounds.
+
+**Once** fires on its date and then **unticks itself**, staying in the list — change the date and re-tick to reuse it. It waits for any nagging or snooze to finish before switching off, so it never cuts a delivery short.
 
 An unanswered dialog neither blocks the queue nor gets lost: after at most a minute it turns into an automatic **snooze** (10 min) and comes back later. The pending state is saved to disk like any snooze — it survives restarts, and with **catch up if missed** enabled it re-fires once the next day even after sleeping through midnight. Repeat fires of one reminder share a single card (marked **×N**), and cards you dismissed (or that auto-closed) can be re-shown from the tray's **Recent** menu.
 
@@ -91,7 +97,11 @@ Lists **everything that auto-starts** (registry Run keys, Startup folders, sched
 
 ### Action groups
 
-Bundle actions into a reusable group. **Add ▾** starts one from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save. A group **only defines actions**; trigger it four ways: from the tray (**Run: <group>**), a **global hotkey**, an **action-group step** in the startup list (at boot), or a scheduled task (**On-Yes / silent group**). A group runs only one copy at a time; a **message** step can act as a confirmation gate (answering **No** aborts the rest).
+Bundle actions into a reusable group. **Add ▾** starts one from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save. A group **only defines actions**; trigger it four ways: from the tray (**Run: <group>**), a **global hotkey**, an **action-group step** in the startup list (at boot), or a scheduled task (**On-Yes / silent group**). A group runs only one copy at a time.
+
+**Looping.** A group can **repeat as a whole** (repeat count + delay between rounds, set in the group editor). To loop just *part* of a sequence, put those steps in their own group and reference it with an **action group** step whose repeat count you set — groups may reference groups, and saving rejects circular references with the chain spelled out (`A → B → A`). The three repeat knobs multiply: per-step × per-reference × whole-group. A single run is fused at **5000 steps** so an oversized combination stops instead of running forever.
+
+A **message** step is a confirmation gate: answering **No** aborts the rest of the group *and its remaining rounds*, and propagates outward to whichever group referenced it — decline once and you are done, even inside a sub-group looped ×N.
 
 > **Global hotkey** — in the group editor, click the hotkey box and press a shortcut (e.g. `Ctrl+Alt+F`) to run that group from anywhere, no menu needed. Esc cancels, Delete clears. Disabled groups release their combo; system-reserved combos (Alt+F4, Ctrl+Shift+Esc…) and combos already taken by another group or the panic hotkey are refused with a notice.
 

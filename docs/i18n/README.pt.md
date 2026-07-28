@@ -64,7 +64,7 @@ Uma **lista ordenada de etapas** executadas de cima para baixo ao entrar. Clique
 - **Ação de janela** — por nome de processo (**Escolher…**, com busca): fechar / minimizar / maximizar / trazer-para-frente / trazer-para-frente-e-enviar-teclas; apps lentos podem **esperar até N segundos até a janela aparecer**.
 - **Comando de sistema** — mostrar a área de trabalho / bloquear / desligar o monitor / esvaziar a lixeira / limpar a área de transferência / abrir as Configurações / o Gerenciador de Tarefas / captura de tela / suspender / hibernar / sair da conta / reiniciar / desligar (os três últimos pedem confirmação antes).
 - **Atraso** — apenas espera N segundos antes da próxima etapa.
-- **Grupo de ações** — executa um grupo de ações definido; defina uma contagem de repetições para repetir o grupo inteiro.
+- **Grupo de ações** — executa um grupo de ações definido; seu número de repetições diz quantas vezes *esta referência* dispara (o grupo também pode se repetir internamente — veja **Grupos de ações** abaixo).
 
 > **Atraso de inicialização** (aba Configurações, apenas no boot): espera um número fixo de segundos após o login para que a "tempestade de login" (disputa de disco/CPU de todo autostart) passe antes de a lista rodar; uma reexecução manual não é afetada. Aumente-o (0–600 s) se as coisas começarem cedo demais.
 
@@ -72,7 +72,13 @@ Uma **lista ordenada de etapas** executadas de cima para baixo ao entrar. Clique
 
 ### Tarefas agendadas
 
-Defina uma **hora** (ou mude para **ao entrar**), uma **recorrência** (dias da semana / a-cada-N-dias / mensal) e o **texto**; opcionalmente fale-o em voz alta. Lembretes com uma ação **Ao-Sim** (executar programa / abrir arquivo / URL / executar grupo de ações) exibem um diálogo **Sim / Não** com um botão **Adiar** (padrão 10 min, menu ▾ de 5–60 min); os demais deslizam como um **cartão de lembrete** no canto (fecha automaticamente após os segundos configurados, **0 = permanece até você dispensá-lo**). Você também pode definir um **grupo de ações silencioso** — executar um grupo na hora certa sem nenhum pop-up.
+Defina uma **hora** (ou mude para **ao fazer login**), uma **periodicidade** (dias da semana / a-cada-N-dias / mensal / **uma única vez em uma data**) e escolha uma **ação**: **exibir um lembrete** ou **executar um grupo de ações em silêncio**. Só os campos da ação escolhida permanecem na tela, então você nunca preenche uma caixa que não faz nada.
+
+Lembretes com uma ação **Ao-Sim** (executar programa / abrir arquivo / URL / executar grupo de ações) abrem um diálogo **Sim / Não** com um botão **Adiar** (padrão 10 min, menu ▾ 5–60 min); os demais entram no canto como um **cartão de lembrete** (fecha sozinho após os segundos configurados, **0 = fica até você descartar**). O texto pode ser lido em voz alta.
+
+**Execuções por intervalo** transformam uma tarefa em uma agenda do dia inteiro: *a cada N minutos até HH:mm* (em branco = fim do dia). Diferente da **insistência**, que para no instante em que você confirma, um intervalo continua depois da sua resposta — é isso que torna um grupo silencioso utilizável como sondagem. Intervalos não cruzam a meia-noite; amanhã recomeça a partir da hora da própria tarefa. O progresso é gravado: reiniciar o app ao meio-dia mantém as rodadas restantes do dia.
+
+**Uma única vez** dispara na sua data e depois **se desmarca**, permanecendo na lista — troque a data e marque de novo para reutilizar. Ela espera a insistência ou o adiamento terminarem antes de se desligar, então nunca corta uma entrega no meio.
 
 Um diálogo sem resposta não bloqueia a fila nem se perde: depois de no máximo um minuto ele vira um **adiamento automático de 10 minutos** e volta mais tarde. Esse estado é gravado em disco como qualquer adiamento — sobrevive a reinicializações e, com **recuperar se perdido** ativado, dispara mais uma vez no dia seguinte mesmo que a noite tenha cruzado a meia-noite. Disparos repetidos de um mesmo lembrete compartilham um único cartão (marcado **×N**), e cartões fechados ou expirados podem ser reexibidos pelo menu **Recentes** da bandeja.
 
@@ -86,7 +92,11 @@ Lista **tudo que inicia automaticamente** (chaves Run do registro, pastas de Ini
 
 ### Grupos de ações
 
-Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir de um **modelo pronto** (Foco / Reunião / Encerramento / Hora de dormir / Ausência / Captura de tela) — ajuste os nomes dos processos e salve. Um grupo **apenas define ações**; dispare-o de quatro formas: pela bandeja (**Executar: <grupo>**), uma **tecla global**, como uma **etapa de grupo de ações** na lista de inicialização (no boot) ou por uma tarefa agendada (**Ao-Sim / grupo silencioso**). Um grupo executa apenas uma cópia por vez; uma etapa de **mensagem** pode funcionar como uma barreira de confirmação (responder **Não** aborta o restante).
+Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir de um **modelo pronto** (Foco / Reunião / Encerramento / Hora de dormir / Ausência / Captura de tela) — ajuste os nomes dos processos e salve. Um grupo **apenas define ações**; dispare-o de quatro formas: pela bandeja (**Executar: <grupo>**), uma **tecla global**, como uma **etapa de grupo de ações** na lista de inicialização (no boot) ou por uma tarefa agendada (**Ao-Sim / grupo silencioso**). Um grupo executa apenas uma cópia por vez.
+
+**Laços.** Um grupo pode **repetir por inteiro** (número de repetições + espera entre rodadas, no editor de grupos). Para repetir só *parte* de uma sequência, coloque essas etapas em um grupo próprio e referencie-o com uma etapa de **grupo de ações** cujo número de repetições você define — grupos podem referenciar grupos, e ao salvar as referências circulares são recusadas com a cadeia detalhada (`A → B → A`). Os três controles de repetição se multiplicam: por etapa × por referência × grupo inteiro. Uma execução tem um fusível de **5000 etapas**, para que uma combinação exagerada pare em vez de rodar sem fim.
+
+Uma etapa de **mensagem** é uma barreira de confirmação: responder **Não** aborta o restante do grupo *e as rodadas que faltam*, e se propaga para fora até o grupo que a referenciou — recusar uma vez basta, mesmo dentro de um subgrupo repetido ×N.
 
 > **Tecla global** — no editor de grupos, clique na caixa da tecla e pressione um atalho (ex.: `Ctrl+Alt+F`) para executar esse grupo de qualquer lugar, sem menu. Esc cancela, Delete limpa. Grupos desativados liberam sua combinação; combinações reservadas pelo sistema (Alt+F4, Ctrl+Shift+Esc…) e combinações já ocupadas por outro grupo ou pela tecla de pânico são recusadas com um aviso.
 

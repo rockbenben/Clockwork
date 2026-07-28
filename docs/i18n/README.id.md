@@ -66,7 +66,7 @@ Sebuah **daftar langkah yang berurutan** dijalankan dari atas ke bawah saat logi
 - **Aksi jendela** — menurut nama proses (**Pilih…**, dapat dicari): tutup / minimalkan / maksimalkan / bawa-ke-depan / bawa-ke-depan-dan-kirim-tombol; aplikasi yang lambat dapat **menunggu hingga N detik agar jendela muncul**.
 - **Perintah sistem** — tampilkan desktop / kunci / matikan monitor / kosongkan tempat sampah / bersihkan clipboard / buka Pengaturan / Task Manager / tangkapan layar / tidur / hibernasi / keluar akun / mulai ulang / matikan (tiga yang terakhir mengonfirmasi lebih dulu).
 - **Penundaan** — cukup menunggu N detik sebelum langkah berikutnya.
-- **Grup aksi** — menjalankan grup aksi yang telah ditentukan; atur jumlah pengulangan untuk mengulang seluruh grup.
+- **Grup aksi** — menjalankan grup aksi yang telah ditentukan; jumlah pengulangannya menyatakan berapa kali *referensi ini* memicu (grup itu sendiri juga bisa berulang secara internal — lihat **Grup aksi** di bawah).
 
 > **Penundaan startup** (tab Pengaturan, hanya saat boot): tunggu sejumlah detik tetap setelah login agar "badai login" (perebutan disk/CPU dari setiap autostart) mereda sebelum daftar dijalankan; menjalankan ulang secara manual tidak terpengaruh. Naikkan (0–600 dtk) jika segala sesuatu mulai terlalu awal.
 
@@ -74,7 +74,13 @@ Sebuah **daftar langkah yang berurutan** dijalankan dari atas ke bawah saat logi
 
 ### Tugas terjadwal
 
-Atur sebuah **waktu** (atau beralih ke **saat login**), sebuah **pengulangan** (hari dalam seminggu / setiap-N-hari / bulanan), dan **teks**-nya; opsional bacakan dengan lantang. Pengingat dengan aksi **Saat-Ya** (jalankan program / buka berkas / URL / jalankan grup aksi) memunculkan dialog **Ya / Tidak** dengan tombol **Tunda** (bawaan 10 mnt, menu ▾ 5–60 mnt); selebihnya meluncur masuk sebagai **kartu pengingat** di sudut (menutup otomatis setelah detik yang dikonfigurasi, **0 = tetap ada hingga Anda menutupnya**). Anda juga dapat mengatur **grup aksi senyap** — menjalankan grup tepat waktu tanpa popup.
+Atur sebuah **waktu** (atau beralih ke **saat login**), sebuah **pengulangan** (hari dalam seminggu / setiap-N-hari / bulanan / **sekali saja pada tanggal tertentu**), lalu pilih satu **aksi**: **memunculkan pengingat** atau **menjalankan grup aksi secara senyap**. Hanya kolom milik aksi yang dipilih yang tetap tampil, jadi Anda tidak akan pernah mengisi kotak yang tidak berpengaruh.
+
+Pengingat dengan aksi **Saat-Ya** (jalankan program / buka berkas / URL / jalankan grup aksi) memunculkan dialog **Ya / Tidak** dengan tombol **Tunda** (bawaan 10 mnt, menu ▾ 5–60 mnt); selebihnya meluncur masuk sebagai **kartu pengingat** di sudut (menutup otomatis setelah detik yang dikonfigurasi, **0 = tetap ada hingga Anda menutupnya**). Teks dapat dibacakan dengan lantang.
+
+**Jalan berinterval** mengubah satu tugas menjadi jadwal sepanjang hari: *setiap N menit hingga HH:mm* (kosong = akhir hari). Berbeda dengan **desakan berulang** yang berhenti begitu Anda mengonfirmasi, jalan berinterval terus berlanjut setelah Anda menjawab — justru itu yang membuat grup senyap berguna sebagai penjajakan berkala. Interval tidak melewati tengah malam; besok mulai lagi dari waktu tugas itu sendiri. Kemajuannya disimpan, jadi memulai ulang aplikasi tengah hari tetap mempertahankan putaran sisa hari itu.
+
+**Sekali saja** memicu pada tanggalnya lalu **melepas centangnya sendiri**, tetap berada di daftar — ubah tanggalnya dan centang lagi untuk memakainya kembali. Ia menunggu desakan atau penundaan selesai sebelum mematikan diri, jadi tidak pernah memutus pengiriman di tengah jalan.
 
 Dialog yang tak dijawab tidak menyumbat antrean dan tidak hilang: setelah paling lama satu menit ia berubah menjadi **penundaan otomatis 10 menit** lalu muncul kembali. Status ini ditulis ke disk seperti penundaan biasa — bertahan melewati mulai ulang, dan dengan **kejar jika terlewat** aktif ia tetap terpicu sekali lagi keesokan harinya meski malam melewati tengah malam. Pemicuan berulang dari satu pengingat berbagi satu kartu (bertanda **×N**), dan kartu yang ditutup atau kedaluwarsa bisa ditampilkan lagi dari menu **Terbaru** di tray.
 
@@ -88,7 +94,11 @@ Mendaftar **semua yang berjalan otomatis** (kunci Run registri, folder Startup, 
 
 ### Grup aksi
 
-Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah ▾** memulai satu dari **templat bawaan** (Fokus / Rapat / Beres-beres / Menjelang tidur / Meninggalkan meja / Tangkapan layar) — sesuaikan nama proses lalu simpan. Sebuah grup **hanya mendefinisikan aksi**; picu dengan empat cara: dari tray (**Jalankan: <grup>**), sebuah **tombol pintas global**, sebagai **langkah grup-aksi** dalam daftar startup (saat boot), atau dari sebuah tugas terjadwal (**Saat-Ya / grup senyap**). Sebuah grup hanya menjalankan satu salinan pada satu waktu; sebuah langkah **pesan** dapat bertindak sebagai gerbang konfirmasi (menjawab **Tidak** membatalkan sisanya).
+Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah ▾** memulai satu dari **templat bawaan** (Fokus / Rapat / Beres-beres / Menjelang tidur / Meninggalkan meja / Tangkapan layar) — sesuaikan nama proses lalu simpan. Sebuah grup **hanya mendefinisikan aksi**; picu dengan empat cara: dari tray (**Jalankan: <grup>**), sebuah **tombol pintas global**, sebagai **langkah grup-aksi** dalam daftar startup (saat boot), atau dari sebuah tugas terjadwal (**Saat-Ya / grup senyap**). Sebuah grup hanya menjalankan satu salinan pada satu waktu.
+
+**Pengulangan.** Sebuah grup dapat **berulang secara utuh** (jumlah pengulangan + jeda antar putaran, diatur di editor grup). Untuk mengulang hanya *sebagian* urutan, taruh langkah-langkah itu di grup tersendiri lalu rujuk dengan langkah **grup aksi** yang jumlah pengulangannya Anda tentukan — grup boleh merujuk grup, dan saat menyimpan rujukan berputar ditolak dengan rantainya diuraikan (`A → B → A`). Ketiga tuas pengulangan saling dikalikan: per langkah × per rujukan × seluruh grup. Satu kali jalan diberi sekring **5000 langkah**, sehingga kombinasi yang berlebihan berhenti alih-alih berjalan tanpa akhir.
+
+Langkah **pesan** adalah gerbang konfirmasi: menjawab **Tidak** membatalkan sisa grup *beserta putaran yang tersisa*, dan menjalar ke luar ke grup yang merujuknya — menolak sekali sudah cukup, bahkan di dalam subgrup yang diulang ×N.
 
 > **Tombol pintas global** — di editor grup, klik kotak tombol pintas dan tekan sebuah pintasan (mis. `Ctrl+Alt+F`) untuk menjalankan grup itu dari mana saja, tanpa perlu menu. Esc membatalkan, Delete mengosongkan. Grup yang dinonaktifkan melepaskan kombinasinya; kombinasi yang dicadangkan sistem (Alt+F4, Ctrl+Shift+Esc…) dan kombinasi yang sudah dipakai oleh grup lain atau tombol pintas panik ditolak dengan sebuah pemberitahuan.
 

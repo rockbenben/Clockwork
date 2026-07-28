@@ -66,7 +66,7 @@ Eine **geordnete Liste von Schritten**, die beim Anmelden von oben nach unten au
 - **Fensteraktion** — nach Prozessname (**Auswählen…**, durchsuchbar): schließen / minimieren / maximieren / nach vorn holen / nach vorn holen und Tasten senden; langsame Apps können **bis zu N Sekunden warten, bis das Fenster erscheint**.
 - **Systembefehl** — Desktop anzeigen / sperren / Monitor ausschalten / Papierkorb leeren / Zwischenablage löschen / Einstellungen öffnen / Task-Manager / Screenshot / Energie sparen / Ruhezustand / abmelden / neu starten / herunterfahren (die letzten drei fragen zuerst nach).
 - **Verzögerung** — einfach N Sekunden warten, bevor der nächste Schritt kommt.
-- **Aktionsgruppe** — führt eine definierte Aktionsgruppe aus; mit einer Wiederholungszahl lässt sich die ganze Gruppe wiederholen.
+- **Aktionsgruppe** — führt eine definierte Aktionsgruppe aus; ihre Wiederholungszahl sagt, wie oft *dieser Verweis* feuert (die Gruppe kann sich zusätzlich intern wiederholen — siehe **Aktionsgruppen** unten).
 
 > **Startverzögerung** (Tab „Einstellungen“, nur beim Start): wartet nach dem Anmelden eine feste Anzahl Sekunden, damit der „Anmeldesturm“ (Datenträger-/CPU-Konkurrenz durch alle Autostarts) vorbei ist, bevor die Liste läuft; ein manueller Neustart der Liste ist davon nicht betroffen. Erhöhe sie (0–600 s), wenn Dinge zu früh starten.
 
@@ -74,7 +74,13 @@ Eine **geordnete Liste von Schritten**, die beim Anmelden von oben nach unten au
 
 ### Geplante Aufgaben
 
-Lege eine **Zeit** fest (oder wechsle zu **beim Anmelden**), eine **Wiederholung** (Wochentage / alle N Tage / monatlich) und den **Text**; optional laut vorlesen. Erinnerungen mit einer **Bei-Ja-Aktion** (Programm ausführen / Datei öffnen / URL / Aktionsgruppe ausführen) blenden ein **Ja / Nein**-Dialogfeld mit einer **Schlummern**-Schaltfläche ein (Standard 10 Min., ▾-Menü 5–60 Min.); die übrigen gleiten als **Erinnerungskarte** in die Ecke (schließt nach den konfigurierten Sekunden automatisch, **0 = bleibt, bis du sie schließt**). Du kannst auch eine **stille Aktionsgruppe** einstellen — eine Gruppe pünktlich ohne Popup ausführen.
+Lege eine **Zeit** fest (oder wechsle zu **beim Anmelden**), eine **Wiederholung** (Wochentage / alle N Tage / monatlich / **einmalig an einem Datum**) und wähle eine **Aktion**: **Erinnerung anzeigen** oder **Aktionsgruppe still ausführen**. Nur die Felder der gewählten Aktion bleiben sichtbar — du füllst also nie ein Feld aus, das nichts tut.
+
+Erinnerungen mit einer **Bei-Ja-Aktion** (Programm ausführen / Datei öffnen / URL / Aktionsgruppe ausführen) blenden ein **Ja / Nein**-Dialogfeld mit einer **Schlummern**-Schaltfläche ein (Standard 10 Min., ▾-Menü 5–60 Min.); die übrigen gleiten als **Erinnerungskarte** in die Ecke (schließt nach den konfigurierten Sekunden automatisch, **0 = bleibt, bis du sie schließt**). Der Text kann vorgelesen werden.
+
+**Intervall-Läufe** machen aus einer Aufgabe einen Ganztagsplan: *alle N Minuten bis HH:mm* (leer = Tagesende). Anders als das **Nachfassen**, das beim Bestätigen aufhört, läuft ein Intervall nach deiner Antwort weiter — genau das macht eine stille Gruppe als Poller brauchbar. Intervalle bleiben innerhalb des Tages; morgen beginnt frisch bei der eigenen Zeit der Aufgabe. Der Fortschritt wird gespeichert: ein Neustart um die Mittagszeit behält die restlichen Runden des Tages.
+
+**Einmalig** feuert an seinem Datum und **entfernt danach selbst den Haken**, bleibt aber in der Liste — Datum ändern, Haken neu setzen, weiterverwenden. Es wartet, bis Nachfassen oder Schlummern beendet sind, und schneidet so keine laufende Zustellung ab.
 
 Ein unbeantworteter Dialog blockiert weder die Warteschlange noch geht er verloren: Nach höchstens einer Minute wird er automatisch zu **„10 Minuten schlummern“** und kommt später wieder. Dieser Zustand wird wie jedes Schlummern auf die Festplatte geschrieben — er überlebt Neustarts, und mit aktiviertem **„nachholen, wenn verpasst“** feuert er selbst nach einer Nacht über Mitternacht am nächsten Tag noch einmal. Wiederholte Auslösungen einer Erinnerung teilen sich eine einzige Karte (markiert **×N**); weggeklickte oder automatisch geschlossene Karten lassen sich über das Tray-Menü **„Zuletzt“** erneut anzeigen.
 
@@ -88,7 +94,11 @@ Listet **alles auf, das automatisch startet** (Registry-Run-Schlüssel, Autostar
 
 ### Aktionsgruppen
 
-Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt eine aus einer **integrierten Vorlage** (Fokus / Meeting / Feierabend / Schlafenszeit / Kurz weg / Screenshot) — passe die Prozessnamen an und speichere. Eine Gruppe **definiert nur Aktionen**; löse sie auf vier Wegen aus: aus dem Tray (**Ausführen: <Gruppe>**), einem **globalen Hotkey**, als **Aktionsgruppen-Schritt** in der Startliste (beim Start) oder aus einer geplanten Aufgabe (**Bei-Ja / stille Gruppe**). Eine Gruppe läuft immer nur in einer Kopie zugleich; ein **Nachrichten**-Schritt kann als Bestätigungssperre dienen (die Antwort **Nein** bricht den Rest ab).
+Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt eine aus einer **integrierten Vorlage** (Fokus / Meeting / Feierabend / Schlafenszeit / Kurz weg / Screenshot) — passe die Prozessnamen an und speichere. Eine Gruppe **definiert nur Aktionen**; löse sie auf vier Wegen aus: aus dem Tray (**Ausführen: <Gruppe>**), einem **globalen Hotkey**, als **Aktionsgruppen-Schritt** in der Startliste (beim Start) oder aus einer geplanten Aufgabe (**Bei-Ja / stille Gruppe**). Eine Gruppe läuft immer nur in einer Kopie zugleich.
+
+**Schleifen.** Eine Gruppe kann sich **als Ganzes wiederholen** (Wiederholungszahl + Pause zwischen den Runden, im Gruppeneditor). Um nur *einen Teil* einer Abfolge zu wiederholen, lege diese Schritte in eine eigene Gruppe und verweise mit einem **Aktionsgruppen**-Schritt darauf, dessen Wiederholungszahl du setzt — Gruppen dürfen auf Gruppen verweisen, und beim Speichern werden Ringverweise mit der ausgeschriebenen Kette abgelehnt (`A → B → A`). Die drei Wiederholungsregler multiplizieren sich: pro Schritt × pro Verweis × ganze Gruppe. Ein einzelner Lauf ist bei **5000 Schritten** abgesichert, damit eine überdimensionierte Kombination stoppt statt endlos zu laufen.
+
+Ein **Nachrichten**-Schritt ist eine Bestätigungssperre: **Nein** bricht den Rest der Gruppe *samt ihrer verbleibenden Runden* ab und pflanzt sich nach außen zu der Gruppe fort, die sie aufgerufen hat — einmal ablehnen genügt, auch in einer ×N wiederholten Untergruppe.
 
 > **Globales Hotkey** — klicke im Gruppeneditor in das Hotkey-Feld und drücke ein Kürzel (z. B. `Ctrl+Alt+F`), um diese Gruppe von überall auszuführen, ganz ohne Menü. Esc bricht ab, Entf löscht. Deaktivierte Gruppen geben ihre Kombination frei; systemreservierte Kombinationen (Alt+F4, Ctrl+Shift+Esc…) und Kombinationen, die bereits von einer anderen Gruppe oder dem Notfall-Hotkey belegt sind, werden mit einem Hinweis abgelehnt.
 

@@ -66,7 +66,7 @@ Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi 
 - **Thao tác cửa sổ** — theo tên tiến trình (**Chọn…**, có tìm kiếm): đóng / thu nhỏ / phóng to / đưa ra trước / đưa ra trước rồi gửi phím; ứng dụng khởi động chậm có thể **chờ cửa sổ xuất hiện tối đa N giây**.
 - **Lệnh hệ thống** — hiện màn hình nền / khóa / tắt màn hình / dọn thùng rác / xóa clipboard / mở Cài đặt / Task Manager / chụp màn hình / ngủ / ngủ đông / đăng xuất / khởi động lại / tắt máy (ba mục cuối hỏi xác nhận trước).
 - **Độ trễ** — chỉ chờ N giây trước bước tiếp theo.
-- **Nhóm thao tác** — chạy một nhóm thao tác đã định nghĩa; đặt số lần lặp để lặp cả nhóm.
+- **Nhóm thao tác** — chạy một nhóm thao tác đã định nghĩa; số lần lặp của nó cho biết *tham chiếu này* kích hoạt bao nhiêu lần (bản thân nhóm cũng có thể tự lặp — xem **Nhóm thao tác** bên dưới).
 
 > **Độ trễ khởi động** (tab Cài đặt, chỉ khi khởi động máy): chờ một số giây cố định sau khi đăng nhập để "cơn bão đăng nhập" (tranh chấp đĩa/CPU do mọi thứ tự khởi động) đi qua trước khi danh sách chạy; chạy lại thủ công thì không bị ảnh hưởng. Tăng lên (0–600 giây) nếu mọi thứ khởi động quá sớm.
 
@@ -74,7 +74,13 @@ Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi 
 
 ### Tác vụ theo lịch
 
-Đặt một **thời điểm** (hoặc chuyển sang **khi đăng nhập**), một **chu kỳ** (ngày trong tuần / mỗi N ngày / hằng tháng), và **nội dung**; tùy chọn đọc to. Lời nhắc có thao tác **Khi-Có** (chạy chương trình / mở tệp / URL / chạy nhóm thao tác) sẽ bật hộp thoại **Có / Không** kèm nút **Hoãn** (mặc định 10 phút, menu ▾ 5–60 phút); những lời nhắc còn lại trượt vào góc dưới dạng **thẻ nhắc** (tự đóng sau số giây đã đặt, **0 = ở lại đến khi bạn bỏ qua**). Bạn cũng có thể đặt một **nhóm thao tác im lặng** — chạy một nhóm đúng giờ mà không bật cửa sổ.
+Đặt một **thời điểm** (hoặc chuyển sang **khi đăng nhập**), một **chu kỳ** (ngày trong tuần / mỗi N ngày / hằng tháng / **chỉ một lần vào một ngày chỉ định**), rồi chọn một **thao tác**: **bật lời nhắc** hoặc **chạy nhóm thao tác im lặng**. Chỉ những ô của thao tác đã chọn còn hiển thị, nên bạn không bao giờ điền vào một ô không có tác dụng.
+
+Lời nhắc có thao tác **Khi-Có** (chạy chương trình / mở tệp / URL / chạy nhóm thao tác) sẽ bật hộp thoại **Có / Không** kèm nút **Hoãn** (mặc định 10 phút, menu ▾ 5–60 phút); những lời nhắc còn lại trượt vào góc dưới dạng **thẻ nhắc** (tự đóng sau số giây đã đặt, **0 = ở lại đến khi bạn bỏ qua**). Nội dung có thể được đọc to.
+
+**Chạy theo khoảng** biến một tác vụ thành lịch cho cả ngày: *mỗi N phút cho đến HH:mm* (để trống = hết ngày). Khác với **nhắc lại khi chưa xác nhận** — vốn dừng ngay khi bạn xác nhận — chạy theo khoảng vẫn tiếp tục sau khi bạn trả lời; chính điều đó khiến một nhóm im lặng dùng được như một vòng thăm dò. Khoảng không vượt qua nửa đêm; ngày mai bắt đầu lại từ giờ của chính tác vụ. Tiến độ được lưu, nên khởi động lại ứng dụng vào giữa trưa vẫn giữ các lượt còn lại của ngày.
+
+**Chỉ một lần** kích hoạt vào ngày của nó rồi **tự bỏ dấu chọn**, vẫn nằm trong danh sách — đổi ngày và tích lại là dùng tiếp. Nó đợi phần nhắc lại hoặc hoãn kết thúc rồi mới tự tắt, nên không bao giờ cắt ngang một lần gửi đang dở.
 
 Hộp thoại không được trả lời sẽ không chặn hàng đợi và cũng không bị mất: sau tối đa một phút, nó tự chuyển thành **hoãn 10 phút** và quay lại sau. Trạng thái này được ghi xuống đĩa như mọi lần hoãn — sống sót qua khởi động lại, và nếu bật **bù nếu bị lỡ** thì dù ngủ qua nửa đêm nó vẫn bật lại một lần vào hôm sau. Các lần bật lặp lại của cùng một nhắc nhở dùng chung một thẻ (đánh dấu **×N**), và thẻ đã đóng hoặc tự tắt có thể hiện lại từ menu **Gần đây** trên khay hệ thống.
 
@@ -88,7 +94,11 @@ Liệt kê **mọi thứ tự khởi động** (khóa Run trong registry, thư m
 
 ### Nhóm thao tác
 
-Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một tác vụ theo lịch (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm; một bước **thông báo** có thể làm cổng xác nhận (trả lời **Không** sẽ hủy phần còn lại).
+Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một tác vụ theo lịch (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm.
+
+**Vòng lặp.** Một nhóm có thể **lặp toàn bộ** (số lần lặp + khoảng nghỉ giữa các lượt, đặt trong trình sửa nhóm). Nếu chỉ muốn lặp *một đoạn*, hãy tách đoạn bước đó thành nhóm riêng rồi tham chiếu bằng một bước **nhóm thao tác** với số lần lặp do bạn đặt — nhóm có thể tham chiếu nhóm, và khi lưu, tham chiếu vòng sẽ bị từ chối kèm chuỗi tham chiếu (`A → B → A`). Ba núm lặp nhân với nhau: theo bước × theo tham chiếu × toàn nhóm. Mỗi lần chạy có cầu chì **5000 bước**, nên một tổ hợp quá lớn sẽ dừng thay vì chạy mãi.
+
+Bước **thông báo** là một cổng xác nhận: trả lời **Không** sẽ hủy phần còn lại của nhóm *cùng các lượt còn lại*, và lan ra ngoài tới nhóm đã tham chiếu nó — từ chối một lần là đủ, kể cả khi nó là nhóm con đang được lặp ×N.
 
 > **Phím tắt toàn cục** — trong trình chỉnh sửa nhóm, nhấp vào ô phím tắt rồi nhấn một tổ hợp (ví dụ `Ctrl+Alt+F`) để chạy nhóm đó từ bất cứ đâu, không cần menu. Esc hủy, Delete xóa. Các nhóm bị tắt sẽ nhả tổ hợp của chúng; các tổ hợp dành riêng cho hệ thống (Alt+F4, Ctrl+Shift+Esc…) và các tổ hợp đã bị một nhóm khác hoặc phím tắt khẩn chiếm dụng sẽ bị từ chối kèm thông báo.
 

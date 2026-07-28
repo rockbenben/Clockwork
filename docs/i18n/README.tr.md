@@ -66,7 +66,7 @@ Oturum açınca yukarıdan aşağıya çalıştırılan **sıralı bir adımlar 
 - **Pencere eylemi** — işlem adına göre (**Seç…**, aranabilir): kapat / simge durumuna küçült / tam ekran yap / öne getir / öne-getir-ve-tuş-gönder; yavaş uygulamalar için **pencere görünene dek N saniyeye kadar bekle**.
 - **Sistem komutu** — masaüstünü göster / kilitle / monitörü kapat / geri dönüşüm kutusunu boşalt / panoyu temizle / Ayarlar'ı aç / Görev Yöneticisi / ekran görüntüsü / uyku / hazırda beklet / oturumu kapat / yeniden başlat / kapat (son üçü önce onay ister).
 - **Gecikme** — sonraki adımdan önce yalnızca N saniye bekle.
-- **Eylem grubu** — tanımlı bir eylem grubunu çalıştır; tüm grubu döngüye almak için bir tekrar sayısı ayarla.
+- **Eylem grubu** — tanımlı bir eylem grubunu çalıştırır; tekrar sayısı *bu başvurunun* kaç kez tetiklendiğini söyler (grubun kendisi de içeriden tekrarlanabilir — aşağıdaki **Eylem grupları**'na bakın).
 
 > **Başlangıç gecikmesi** (Ayarlar sekmesi, yalnızca açılışta): oturum açtıktan sonra sabit bir saniye sayısı bekleyerek "oturum açma fırtınası" (her otomatik başlangıçtan gelen disk/CPU çekişmesi) geçene dek liste çalışmasın; elle yeniden çalıştırma bundan etkilenmez. Her şey çok erken başlıyorsa artırın (0–600 sn).
 
@@ -74,7 +74,13 @@ Oturum açınca yukarıdan aşağıya çalıştırılan **sıralı bir adımlar 
 
 ### Zamanlanmış görevler
 
-Bir **saat** ayarlayın (ya da **oturum açınca**'ya geçin), bir **yineleme** (hafta günleri / her-N-günde / aylık) ve **metin**; isteğe bağlı olarak sesli okutun. **Evet'te** eylemi olan (program çalıştır / dosya aç / URL / eylem grubu çalıştır) hatırlatıcılar, **Ertele** düğmeli (varsayılan 10 dk, ▾ menüsü 5–60 dk) bir **Evet / Hayır** iletişim kutusu açar; geri kalanı köşeye bir **hatırlatma kartı** olarak kayar (yapılandırılan saniyeden sonra otomatik kapanır, **0 = siz kapatana dek kalır**). Ayrıca bir **sessiz eylem grubu** da ayarlayabilirsiniz — zamanı gelince açılır pencere olmadan bir grup çalıştırır.
+Bir **saat** ayarlayın (ya da **oturum açınca**'ya geçin), bir **yineleme** (hafta günleri / her-N-günde / aylık / **belirli bir tarihte yalnızca bir kez**) seçin ve bir **eylem** belirleyin: **hatırlatıcı göster** ya da **eylem grubunu sessizce çalıştır**. Ekranda yalnızca seçtiğiniz eylemin alanları kalır; böylece hiçbir işe yaramayan bir kutuyu asla doldurmazsınız.
+
+**Evet'te** eylemi olan (program çalıştır / dosya aç / URL / eylem grubu çalıştır) hatırlatıcılar, **Ertele** düğmeli (varsayılan 10 dk, ▾ menüsü 5–60 dk) bir **Evet / Hayır** iletişim kutusu açar; geri kalanı köşeye bir **hatırlatma kartı** olarak kayar (yapılandırılan saniyeden sonra otomatik kapanır, **0 = siz kapatana dek kalır**). Metin sesli okutulabilir.
+
+**Aralıklı çalıştırmalar** tek bir görevi gün boyu süren bir programa dönüştürür: *HH:mm'ye kadar her N dakikada* (boş = gün sonu). Onaylar onaylamaz duran **ısrarlı hatırlatma**'nın aksine, aralıklı çalıştırma yanıtınızdan sonra da sürer — sessiz bir grubu yoklama aracı olarak kullanılabilir kılan tam olarak budur. Aralıklar gece yarısını aşmaz; yarın görevin kendi saatinden yeniden başlar. İlerleme kaydedilir, dolayısıyla uygulamayı öğlen yeniden başlatmak günün kalan turlarını korur.
+
+**Yalnızca bir kez**, tarihinde tetiklenir ve ardından **kendi işaretini kaldırır**, listede kalmaya devam eder — tarihi değiştirip yeniden işaretleyerek tekrar kullanabilirsiniz. Kapanmadan önce ısrarın veya ertelemenin bitmesini bekler, böylece süren bir teslimi asla yarıda kesmez.
 
 Yanıtsız kalan bir iletişim kutusu ne kuyruğu tıkar ne de kaybolur: en fazla bir dakika sonra otomatik olarak **10 dakikalık ertelemeye** dönüşür ve daha sonra geri gelir. Bu durum, elle yapılan erteleme gibi diske yazılır — yeniden başlatmalardan sağ çıkar ve **kaçırıldıysa telafi et** açıksa gece yarısını aşan bir uykudan sonra bile ertesi gün bir kez daha tetiklenir. Aynı hatırlatıcının tekrarlanan tetiklemeleri tek bir kartı paylaşır (**×N** işaretli); kapatılan veya süresi dolan kartlar tepsideki **Son bildirimler** menüsünden yeniden gösterilebilir.
 
@@ -88,7 +94,11 @@ Odaklanmanız ya da bir toplantıya girmeniz mi gerekiyor? Tepsi **Hatırlatıc�
 
 ### Eylem grupları
 
-Eylemleri yeniden kullanılabilir bir grupta toplayın. **Ekle ▾**, bir **yerleşik şablondan** (Odak / Toplantı / Kapanış / Uyku vakti / Uzaklaşma / Ekran görüntüsü) başlatır — işlem adlarını ayarlayıp kaydedin. Bir grup **yalnızca eylemleri tanımlar**; onu dört şekilde tetikleyin: tepsiden (**Çalıştır: <grup>**), bir **genel kısayolla**, başlangıç listesinde bir **eylem grubu adımı** olarak (açılışta) ya da zamanlanmış bir görevden (**Evet'te / sessiz grup**). Bir grubun aynı anda yalnızca tek bir kopyası çalışır; bir **mesaj** adımı bir onay kapısı işlevi görebilir (**Hayır** yanıtı geri kalanı iptal eder).
+Eylemleri yeniden kullanılabilir bir grupta toplayın. **Ekle ▾**, bir **yerleşik şablondan** (Odak / Toplantı / Kapanış / Uyku vakti / Uzaklaşma / Ekran görüntüsü) başlatır — işlem adlarını ayarlayıp kaydedin. Bir grup **yalnızca eylemleri tanımlar**; onu dört şekilde tetikleyin: tepsiden (**Çalıştır: <grup>**), bir **genel kısayolla**, başlangıç listesinde bir **eylem grubu adımı** olarak (açılışta) ya da zamanlanmış bir görevden (**Evet'te / sessiz grup**). Bir grubun aynı anda yalnızca tek bir kopyası çalışır.
+
+**Döngüler.** Bir grup **bütün olarak yinelenebilir** (tekrar sayısı + turlar arası bekleme, grup düzenleyicide ayarlanır). Bir dizinin yalnızca *bir kısmını* döngüye almak için o adımları ayrı bir gruba koyun ve tekrar sayısını kendiniz belirlediğiniz bir **eylem grubu** adımıyla ona başvurun — gruplar gruplara başvurabilir ve kaydederken döngüsel başvurular zincir açıkça yazılarak reddedilir (`A → B → A`). Üç tekrar ayarı çarpılır: adım başına × başvuru başına × tüm grup. Tek bir çalıştırma **5000 adım** sigortasıyla sınırlıdır; böylece aşırı büyük bir birleşim sonsuza dek koşmak yerine durur.
+
+Bir **mesaj** adımı onay kapısıdır: **Hayır** yanıtı grubun geri kalanını *ve kalan turlarını* iptal eder, ayrıca ona başvuran gruba doğru dışa yayılır — ×N döngüye alınmış bir alt grubun içinde bile bir kez reddetmek yeterlidir.
 
 > **Genel kısayol** — grup düzenleyicide kısayol kutusuna tıklayın ve bir kısayola (ör. `Ctrl+Alt+F`) basarak o grubu menüye gerek kalmadan her yerden çalıştırın. Esc iptal eder, Delete temizler. Devre dışı gruplar kombinasyonlarını serbest bırakır; sistemce ayrılmış kombinasyonlar (Alt+F4, Ctrl+Shift+Esc…) ve başka bir grup ya da panik kısayolu tarafından zaten kullanılan kombinasyonlar bir bildirimle reddedilir.
 

@@ -64,7 +64,7 @@ Una **lista ordenada de pasos** que se ejecutan de arriba abajo al iniciar sesi�
 - **Acción de ventana** — por nombre de proceso (**Elegir…**, con búsqueda): cerrar / minimizar / maximizar / traer-al-frente / traer-al-frente-y-enviar-teclas; las aplicaciones lentas pueden **esperar hasta N segundos a que aparezca la ventana**.
 - **Comando del sistema** — mostrar el escritorio / bloquear / apagar el monitor / vaciar la papelera de reciclaje / borrar el portapapeles / abrir Configuración / Administrador de tareas / captura de pantalla / suspender / hibernar / cerrar sesión / reiniciar / apagar (los tres últimos piden confirmación primero).
 - **Retardo** — simplemente espera N segundos antes del siguiente paso.
-- **Grupo de acciones** — ejecuta un grupo de acciones definido; fija un número de repeticiones para repetir todo el grupo.
+- **Grupo de acciones** — ejecuta un grupo de acciones definido; su número de repeticiones indica cuántas veces se dispara *esta referencia* (el grupo también puede repetirse internamente — véase **Grupos de acciones** más abajo).
 
 > **Retardo de inicio** (pestaña Ajustes, solo en el arranque): espera un número fijo de segundos tras iniciar sesión para que pase la «tormenta de inicio» (contención de disco/CPU de todos los programas que arrancan automáticamente) antes de que se ejecute la lista; una re-ejecución manual no se ve afectada. Súbelo (0–600 s) si las cosas arrancan demasiado pronto.
 
@@ -72,7 +72,13 @@ Una **lista ordenada de pasos** que se ejecutan de arriba abajo al iniciar sesi�
 
 ### Tareas programadas
 
-Fija una **hora** (o cambia a **al iniciar sesión**), una **periodicidad** (días de la semana / cada-N-días / mensual) y el **texto**; opcionalmente léelo en voz alta. Los recordatorios con una acción **Al-pulsar-Sí** (ejecutar programa / abrir archivo / URL / ejecutar grupo de acciones) muestran un diálogo **Sí / No** con un botón **Posponer** (por defecto 10 min, menú ▾ de 5–60 min); el resto se deslizan como una **tarjeta de recordatorio** en la esquina (se cierra sola tras los segundos configurados, **0 = permanece hasta que la descartes**). También puedes fijar un **grupo de acciones silencioso** — ejecuta un grupo a su hora sin ninguna ventana emergente.
+Fija una **hora** (o cambia a **al iniciar sesión**), una **periodicidad** (días de la semana / cada-N-días / mensual / **una sola vez en una fecha dada**) y elige una **acción**: **mostrar un recordatorio** o **ejecutar un grupo de acciones en silencio**. Solo permanecen en pantalla los campos de la acción elegida, así que nunca rellenas una casilla que no hace nada.
+
+Los recordatorios con una acción **Al-pulsar-Sí** (ejecutar programa / abrir archivo / URL / ejecutar grupo de acciones) muestran un diálogo **Sí / No** con un botón **Posponer** (por defecto 10 min, menú ▾ de 5–60 min); el resto se deslizan como una **tarjeta de recordatorio** en la esquina (se cierra sola tras los segundos configurados, **0 = permanece hasta que la descartes**). El texto puede leerse en voz alta.
+
+**Las ejecuciones por intervalo** convierten una tarea en una agenda para todo el día: *cada N minutos hasta HH:mm* (en blanco = fin del día). A diferencia de la **insistencia**, que se detiene en cuanto confirmas, un intervalo sigue después de que respondas — eso es justo lo que hace utilizable un grupo silencioso como sondeo. Los intervalos no cruzan la medianoche; mañana empieza de nuevo desde la hora propia de la tarea. El progreso se guarda: reiniciar la aplicación a mediodía conserva las rondas que quedan del día.
+
+**Una sola vez** se dispara en su fecha y luego **se desmarca solo**, quedándose en la lista — cambia la fecha y vuelve a marcarlo para reutilizarlo. Espera a que termine cualquier insistencia o posposición antes de apagarse, así que nunca corta una entrega a medias.
 
 Un diálogo sin respuesta ni bloquea la cola ni se pierde: tras un minuto como máximo se convierte en una **posposición automática de 10 minutos** y vuelve más tarde. Ese estado se guarda en disco como cualquier posposición — sobrevive a los reinicios y, con **recuperar si se perdió** activado, vuelve a dispararse una vez al día siguiente aunque la noche haya cruzado la medianoche. Los disparos repetidos de un mismo recordatorio comparten una sola tarjeta (marcada **×N**), y las tarjetas cerradas o expiradas pueden volver a mostrarse desde el menú **Recientes** de la bandeja.
 
@@ -86,7 +92,11 @@ Lista **todo lo que se inicia automáticamente** (claves Run del registro, carpe
 
 ### Grupos de acciones
 
-Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de una **plantilla integrada** (Concentración / Reunión / Cierre / Antes de dormir / Ausentarse / Captura de pantalla) — ajusta los nombres de los procesos y guarda. Un grupo **solo define acciones**; actívalo de cuatro maneras: desde la bandeja (**Ejecutar: <grupo>**), un **atajo global**, como un **paso de grupo de acciones** en la lista de inicio (en el arranque) o desde una tarea programada (**Al-pulsar-Sí / grupo silencioso**). Un grupo ejecuta solo una copia a la vez; un paso de **mensaje** puede actuar como una puerta de confirmación (responder **No** aborta el resto).
+Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de una **plantilla integrada** (Concentración / Reunión / Cierre / Antes de dormir / Ausentarse / Captura de pantalla) — ajusta los nombres de los procesos y guarda. Un grupo **solo define acciones**; actívalo de cuatro maneras: desde la bandeja (**Ejecutar: <grupo>**), un **atajo global**, como un **paso de grupo de acciones** en la lista de inicio (en el arranque) o desde una tarea programada (**Al-pulsar-Sí / grupo silencioso**). Un grupo ejecuta solo una copia a la vez.
+
+**Bucles.** Un grupo puede **repetirse por completo** (número de repeticiones + espera entre rondas, en el editor de grupos). Para repetir solo *una parte* de una secuencia, pon esos pasos en su propio grupo y referéncialo con un paso de **grupo de acciones** cuyo número de repeticiones fijes — los grupos pueden referenciar grupos, y al guardar se rechazan las referencias circulares mostrando la cadena (`A → B → A`). Los tres mandos de repetición se multiplican: por paso × por referencia × grupo entero. Una ejecución tiene un fusible de **5000 pasos**, de modo que una combinación desmedida se detiene en vez de correr sin fin.
+
+Un paso de **mensaje** es una puerta de confirmación: responder **No** aborta el resto del grupo *y sus rondas restantes*, y se propaga hacia fuera al grupo que lo referenció — rechazar una vez basta, incluso dentro de un subgrupo repetido ×N.
 
 > **Atajo global** — en el editor de grupos, haz clic en el cuadro del atajo y pulsa un atajo (p. ej. `Ctrl+Alt+F`) para ejecutar ese grupo desde cualquier parte, sin necesidad de menús. Esc cancela, Supr lo borra. Los grupos deshabilitados liberan su combinación; las combinaciones reservadas por el sistema (Alt+F4, Ctrl+Shift+Esc…) y las combinaciones ya ocupadas por otro grupo o por el atajo de pánico se rechazan con un aviso.
 
