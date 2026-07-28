@@ -34,7 +34,7 @@ public partial class MainWindow : Window
         RefreshStopButton();   // 无配置也先摆正：默认隐藏，别让设计器/兜底路径漏出一颗常驻按钮
     }
 
-    public MainWindow(RootConfig config, Action save, Action<string, string>? migrateReminderState = null)
+    public MainWindow(RootConfig config, Action save, Action<string, Reminder>? migrateReminderState = null)
     {
         InitializeComponent();
         SourceInitialized += (_, _) => Native.DarkTitleBar.Apply(this);
@@ -320,10 +320,17 @@ public partial class MainWindow : Window
             // 用 ConfigStore 原子写（写临时文件再替换），而非 File.Copy 直接覆盖——避免中途 I/O 失败
             // 把唯一一份 config 截断成半截损坏的 JSON（下次启动会被 Read 当解析失败、回落默认配置）。
             ConfigStore.Write(test, cfgPath);
-            Views.BrandDialog.Info(this, "Clockwork", Strings.Get("Config_Imported"));
-            app.RelaunchForLanguage();   // 复用重启逻辑：重开自身 + 退出当前实例
+            // 从这一刻起 App 内存里的 _config 已作废：它靠重开新实例重读生效，本实例不得再回写。
+            app.MarkConfigSuperseded();
         }
-        catch (Exception ex) { Views.BrandDialog.Warn(this, "Clockwork", Lf("Config_ImportFail", ex.Message)); }
+        catch (Exception ex) { Views.BrandDialog.Warn(this, "Clockwork", Lf("Config_ImportFail", ex.Message)); return; }
+        // 写盘成功之后的收尾刻意放在 try 外：这里再抛异常也绝不能落回上面的「导入失败」分支而跳过重启——
+        // 那会留下一个「新配置已在盘上、旧 _config 还在内存里」的实例。下面的确认框还是模态的，其嵌套消息
+        // 循环期间提醒计时器照常在走（DispatcherTimer 不因模态停摆，正是 _reminderTickBusy 存在的原因），
+        // 一次 SaveConfig（如「仅一次」提醒触发完自动取消勾选）就会把旧配置写回、无声还原导入——
+        // 上面那道 MarkConfigSuperseded 闸门就是为这段窗口设的。
+        Views.BrandDialog.Info(this, "Clockwork", Strings.Get("Config_Imported"));
+        app.RelaunchForLanguage();   // 复用重启逻辑：重开自身 + 退出当前实例（内部保证无论成败都退出）
     }
 
     // 变更(增/改/删/移)后把 VM 的选中回推到对应 DataGrid。三个列表页统一走它。

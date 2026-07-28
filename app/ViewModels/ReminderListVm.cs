@@ -45,21 +45,22 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
 // 提醒页 ViewModel（增删改移即存盘）。公共增删改移在 ListVm。
 public sealed class ReminderListVm : ListVm<Reminder, ReminderRowVm>
 {
-    // 换 id 时迁移运行态的钩子(旧 id→新 id)，由 App 注入；null 时不迁移。
-    private readonly Action<string, string>? _migrateState;
+    // 换 id 时迁移运行态的钩子(旧 id → 编辑后的提醒)，由 App 注入；null 时不迁移。
+    // 传整个新 Reminder 而非只传 newId：迁移要按新配置决定迁什么（如循环已关掉就不该续上下一轮）。
+    private readonly Action<string, Reminder>? _migrateState;
 
-    public ReminderListVm(RootConfig config, Action save, Action<string, string>? migrateState = null)
+    public ReminderListVm(RootConfig config, Action save, Action<string, Reminder>? migrateState = null)
         : base(config, config.Reminders, r => new ReminderRowVm(r, save), save)
         => _migrateState = migrateState;
 
     // 编辑后必须换新 id：运行态(是否今天已触发/稍后延迟)按 id 做键，沿用旧 id 会让改了时间的提醒
     // 因旧状态「今天已触发」当天不再响。（reminder id 仅用于运行态，不被任何配置引用，可安全更换。）
-    // 但正在进行的「稍后」不该因编辑丢失——把 SnoozeUntil 迁到新 id（App 负责，只迁 snooze、不迁「今天已弹」）。
+    // 但在途的「稍后」与「循环运行下一轮」不该因编辑丢失——迁到新 id（App 负责，不迁「今天已弹」）。
     protected override void OnReplacing(Reminder newModel, Reminder oldModel)
     {
         var oldId = oldModel.Id;
         newModel.Id = Guid.NewGuid().ToString();
-        _migrateState?.Invoke(oldId, newModel.Id);
+        _migrateState?.Invoke(oldId, newModel);
     }
 
     // 复制出的提醒换新 id（运行态按 id 做键，共用会串状态）。

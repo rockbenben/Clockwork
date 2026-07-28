@@ -27,6 +27,7 @@ public partial class App : System.Windows.Application
     private MainWindow? _main;
     private RootConfig _config = new();
     private string _cfgPath = "";
+    private bool _configSuperseded;   // 导入已把新配置写盘：本实例内存里的 _config 从此作废，禁止回写（见 MarkConfigSuperseded）
     private string _statePath = "";   // clockwork.state.json：提醒耐久运行态
     private string _exeDir = "";
     private string _exePath = "";
@@ -772,6 +773,7 @@ public partial class App : System.Windows.Application
     // 界面看着已保存、重启全回退是静默数据丢失，至少弹个警告让用户知道改动只在内存里。
     public void SaveConfig()
     {
+        if (_configSuperseded) return;   // 内存里的 _config 已作废，任何回写都是「无声还原」——见 MarkConfigSuperseded
         try { ConfigStore.Write(_config, _cfgPath); }
         // 写盘失败=界面看着已保存、重启全回退的静默数据丢失。这条不给它自动消失：常驻到用户点掉。
         // 同键合并：连续几次保存失败只留一张（标 ×N），不至于把屏幕糊满。
@@ -782,18 +784,33 @@ public partial class App : System.Windows.Application
         if (!_hotkeysSuspended) RebindGroupHotkeys();
     }
 
-    // 编辑提醒会换新 id（借此重置「今天已弹」态），但正在进行的「稍后」不该丢：把 SnoozeUntil 迁到新 id。
-    // 只迁 snooze，不迁 LastFiredDate——「编辑即可当天重弹」正是换 id 的本意。迁完即耐久落盘，防编辑后崩溃丢 snooze。
-    public void MigrateReminderState(string oldId, string newId)
+    // 导入配置：新配置已原子写入磁盘，本实例内存里的 _config 就此作废——它靠重开新实例重读生效。
+    // 从此禁止任何回写。否则「写盘 → 弹『已导入』确认框 → 重开自身」中间那段模态期间，提醒计时器照常在走
+    //（DispatcherTimer 在嵌套消息循环里不会停，这正是 _reminderTickBusy 存在的原因），一条「仅一次」提醒
+    // 触发完毕会自动取消勾选并调 SaveConfig，把旧 _config 覆盖回刚导入的文件——用户点完确定重启，
+    // 导入无声还原。RelaunchForLanguage 失败时的模态提示同理，一并被这道闸挡住。
+    public void MarkConfigSuperseded() => _configSuperseded = true;
+
+    // 编辑提醒会换新 id（借此重置「今天已弹」态），但两项在途的耐久投递不该丢：
+    //   SnoozeUntil    —— 用户明确要求的一次推迟；
+    //   NextIntervalAt —— 「循环运行」的下一轮。它与 SnoozeUntil 同属落盘状态（见 ReminderState），
+    //                     漏迁的后果是：改一下文案，跑了一上午的「每 30 分钟」当场停到明天——
+    //                     换新 id 后 LastFiredDate 也清空了，当天首发窗口早已过去，Decide 一路返回 none。
+    // 只在新配置仍配了循环时迁 NextIntervalAt：在编辑里把循环关掉的，不该再多跑一轮（静默组会整组重跑）。
+    // 不迁 LastFiredDate——「编辑即可当天重弹」正是换 id 的本意。迁完即耐久落盘，防编辑后崩溃丢状态。
+    public void MigrateReminderState(string oldId, Reminder updated)
     {
+        var newId = updated.Id;
         if (string.IsNullOrEmpty(oldId) || oldId == newId) return;
         // 「启动时就存在」资格随编辑迁移：否则编辑过的提醒 existedAtStartup=false，「错过必补」当天失效。
         if (_startupReminderIds.Remove(oldId)) _startupReminderIds.Add(newId);
         if (!_reminderStates.TryGetValue(oldId, out var old)) return;
-        if (old.SnoozeUntil is DateTime)
+        var carryInterval = updated.IntervalMinutes >= 1 ? old.NextIntervalAt : null;
+        if (old.SnoozeUntil != null || carryInterval != null)
         {
             if (!_reminderStates.TryGetValue(newId, out var st)) { st = new ReminderState(); _reminderStates[newId] = st; }
             st.SnoozeUntil = old.SnoozeUntil;
+            st.NextIntervalAt = carryInterval;
         }
         // PendingFireAt 有意不迁：它按旧时间算出，编辑就是要按新配置重新判定。
         _reminderStates.Remove(oldId);   // 旧 id 已不被任何提醒引用，成孤儿；显式移除并落盘
