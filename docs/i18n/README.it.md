@@ -70,7 +70,7 @@ Un **elenco ordinato di passaggi** eseguiti dall'alto verso il basso all'accesso
 
 > **Ferma quando vuoi** — il **pulsante di stop** all'estremità destra della barra delle schede della finestra (appare solo mentre qualcosa è in esecuzione), area di notifica → **Ferma le azioni in esecuzione**, oppure la **scorciatoia di emergenza** globale (impostata nella scheda Impostazioni; predefinita `Ctrl+Alt+Q`). Ciò che è in esecuzione si ferma dopo l'azione corrente; le lunghe attese (ritardo di avvio, attesa di una finestra) vengono interrotte immediatamente.
 
-### Promemoria
+### Attività pianificate
 
 Imposta un'**ora** (o passa a **all'accesso**), una **ricorrenza** (giorni della settimana / ogni-N-giorni / mensile) e il **testo**; facoltativamente leggilo ad alta voce. I promemoria con un'azione **Al-Sì** (avvia programma / apri file / URL / esegui gruppo di azioni) mostrano una finestra di dialogo **Sì / No** con un pulsante **Posticipa** (predefinito 10 min, menu ▾ da 5–60 min); gli altri scivolano dentro come una **scheda promemoria** nell'angolo (si chiude da sola dopo i secondi configurati, **0 = resta finché non la chiudi**). Puoi anche impostare un **gruppo di azioni silenzioso** — esegue un gruppo all'ora stabilita senza alcun popup.
 
@@ -86,7 +86,7 @@ Elenca **tutto ciò che si avvia automaticamente** (chiavi Run del registro, car
 
 ### Gruppi di azioni
 
-Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da un **modello integrato** (Concentrazione / Riunione / Chiusura / Prima di dormire / Allontanarsi / Schermata) — modifica i nomi dei processi e salva. Un gruppo **definisce solo azioni**; attivalo in quattro modi: dall'area di notifica (**Esegui: <gruppo>**), una **scorciatoia globale**, come un **passaggio di gruppo di azioni** nell'elenco di avvio (all'accensione) o da un promemoria (**Al-Sì / gruppo silenzioso**). Un gruppo esegue una sola copia alla volta; un passaggio **messaggio** può fungere da barriera di conferma (rispondere **No** interrompe il resto).
+Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da un **modello integrato** (Concentrazione / Riunione / Chiusura / Prima di dormire / Allontanarsi / Schermata) — modifica i nomi dei processi e salva. Un gruppo **definisce solo azioni**; attivalo in quattro modi: dall'area di notifica (**Esegui: <gruppo>**), una **scorciatoia globale**, come un **passaggio di gruppo di azioni** nell'elenco di avvio (all'accensione) o da un'attività pianificata (**Al-Sì / gruppo silenzioso**). Un gruppo esegue una sola copia alla volta; un passaggio **messaggio** può fungere da barriera di conferma (rispondere **No** interrompe il resto).
 
 > **Scorciatoia globale** — nell'editor del gruppo, clicca sulla casella della scorciatoia e premi una combinazione (es. `Ctrl+Alt+F`) per eseguire quel gruppo da qualsiasi punto, senza menu. Esc annulla, Canc cancella. I gruppi disabilitati rilasciano la loro combinazione; le combinazioni riservate dal sistema (Alt+F4, Ctrl+Shift+Esc…) e le combinazioni già occupate da un altro gruppo o dalla scorciatoia di emergenza vengono rifiutate con un avviso.
 
@@ -94,16 +94,16 @@ Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da u
 
 **Ritardo di avvio** (0–600 s, solo all'accensione), **avvia ridotto a icona nell'area di notifica**, **scorciatoia di emergenza** (clicca sulla casella e premi la tua scorciatoia; Esc annulla, Canc cancella; predefinita `Ctrl+Alt+Q`) e **lingua dell'interfaccia** (cinese semplificato, inglese, 日本語 e altre 15 — 18 in totale; cambiarla riavvia l'applicazione per applicarla).
 
-**Esporta configurazione / Importa configurazione** — sposta tutta la tua configurazione su un altro PC o tienine un backup. L'esportazione scrive una copia di `clockwork.settings.json` dove preferisci; l'importazione sostituisce **tutto** (elenco di avvio / promemoria / gruppi di azioni / impostazioni), quindi chiede prima conferma, esegue il backup della configurazione attuale in `clockwork.settings.json.bak` e riavvia l'applicazione per applicarla.
+**Esporta configurazione / Importa configurazione** — sposta tutta la tua configurazione su un altro PC o tienine un backup. L'esportazione scrive una copia di `clockwork.settings.json` dove preferisci; l'importazione sostituisce **tutto** (elenco di avvio / attività pianificate / gruppi di azioni / impostazioni), quindi chiede prima conferma, esegue il backup della configurazione attuale in `clockwork.settings.json.bak` e riavvia l'applicazione per applicarla.
 
 ## Suggerimenti
 
 - **Fai doppio clic su una riga per modificarla**. Quando compili percorsi / processi / scorciatoie / date non devi digitare a mano: **Sfoglia…**, **Scegli…** (selettore di processi con ricerca), **Cattura** e **Scegli data**.
-- **Duplica** (schede Promemoria / Gruppi di azioni) clona la riga selezionata subito sotto di essa — più veloce che ricostruirne una quasi identica; un gruppo duplicato si chiama «… (copia)».
+- **Duplica** (schede Attività pianificate / Gruppi di azioni) clona la riga selezionata subito sotto di essa — più veloce che ricostruirne una quasi identica; un gruppo duplicato si chiama «… (copia)».
 - **L'eliminazione chiede sempre conferma**, ovunque — righe degli elenchi, passaggi nell'editor del gruppo ed elementi di avvio del sistema.
 - Fare doppio clic su `Clockwork.exe` apre solo le impostazioni — **non** esegue subito l'elenco di avvio; per quello usa **Riesegui l'elenco di avvio** dall'area di notifica.
 - **Avvialo normalmente** (doppio clic / area di notifica / operazione pianificata). Alcuni launcher in sandbox / a privilegi ridotti bloccano le chiamate di basso livello, quindi invia-tasti / azioni finestra / attiva-se-in-esecuzione / invia-testo-a-processo / volume potrebbero non funzionare (riceverai un avviso chiaro; il semplice «avvia programma» non ne è influenzato).
-- La tua configurazione è `clockwork.settings.json` (solo in locale). Eliminala per ripristinare l'esempio. Lo stato dei promemoria è `clockwork.state.json` (anch'esso locale; eliminabile senza problemi).
+- La tua configurazione è `clockwork.settings.json` (solo in locale). Eliminala per ripristinare l'esempio. Lo stato delle attività è `clockwork.state.json` (anch'esso locale; eliminabile senza problemi).
 - Aggiungere un passaggio `.ahk` richiede l'installazione di AutoHotkey. Le scorciatoie globali / l'espansione di testo sono fuori ambito — quello è il punto forte di AutoHotkey.
 
 ## Per gli sviluppatori

@@ -72,7 +72,7 @@ Eine **geordnete Liste von Schritten**, die beim Anmelden von oben nach unten au
 
 > **Jederzeit stoppen** — die **Stopp-Schaltfläche** rechts in der Registerleiste des Fensters (erscheint nur, während etwas läuft), Tray → **Laufende Aktionen stoppen**, oder das globale **Notfall-Hotkey** (auf dem Tab „Einstellungen“ festgelegt; Standard `Ctrl+Alt+Q`). Was gerade läuft, stoppt nach der aktuellen Aktion; lange Wartezeiten (Startverzögerung, Warten auf ein Fenster) werden sofort unterbrochen.
 
-### Erinnerungen
+### Geplante Aufgaben
 
 Lege eine **Zeit** fest (oder wechsle zu **beim Anmelden**), eine **Wiederholung** (Wochentage / alle N Tage / monatlich) und den **Text**; optional laut vorlesen. Erinnerungen mit einer **Bei-Ja-Aktion** (Programm ausführen / Datei öffnen / URL / Aktionsgruppe ausführen) blenden ein **Ja / Nein**-Dialogfeld mit einer **Schlummern**-Schaltfläche ein (Standard 10 Min., ▾-Menü 5–60 Min.); die übrigen gleiten als **Erinnerungskarte** in die Ecke (schließt nach den konfigurierten Sekunden automatisch, **0 = bleibt, bis du sie schließt**). Du kannst auch eine **stille Aktionsgruppe** einstellen — eine Gruppe pünktlich ohne Popup ausführen.
 
@@ -88,7 +88,7 @@ Listet **alles auf, das automatisch startet** (Registry-Run-Schlüssel, Autostar
 
 ### Aktionsgruppen
 
-Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt eine aus einer **integrierten Vorlage** (Fokus / Meeting / Feierabend / Schlafenszeit / Kurz weg / Screenshot) — passe die Prozessnamen an und speichere. Eine Gruppe **definiert nur Aktionen**; löse sie auf vier Wegen aus: aus dem Tray (**Ausführen: <Gruppe>**), einem **globalen Hotkey**, als **Aktionsgruppen-Schritt** in der Startliste (beim Start) oder aus einer Erinnerung (**Bei-Ja / stille Gruppe**). Eine Gruppe läuft immer nur in einer Kopie zugleich; ein **Nachrichten**-Schritt kann als Bestätigungssperre dienen (die Antwort **Nein** bricht den Rest ab).
+Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt eine aus einer **integrierten Vorlage** (Fokus / Meeting / Feierabend / Schlafenszeit / Kurz weg / Screenshot) — passe die Prozessnamen an und speichere. Eine Gruppe **definiert nur Aktionen**; löse sie auf vier Wegen aus: aus dem Tray (**Ausführen: <Gruppe>**), einem **globalen Hotkey**, als **Aktionsgruppen-Schritt** in der Startliste (beim Start) oder aus einer geplanten Aufgabe (**Bei-Ja / stille Gruppe**). Eine Gruppe läuft immer nur in einer Kopie zugleich; ein **Nachrichten**-Schritt kann als Bestätigungssperre dienen (die Antwort **Nein** bricht den Rest ab).
 
 > **Globales Hotkey** — klicke im Gruppeneditor in das Hotkey-Feld und drücke ein Kürzel (z. B. `Ctrl+Alt+F`), um diese Gruppe von überall auszuführen, ganz ohne Menü. Esc bricht ab, Entf löscht. Deaktivierte Gruppen geben ihre Kombination frei; systemreservierte Kombinationen (Alt+F4, Ctrl+Shift+Esc…) und Kombinationen, die bereits von einer anderen Gruppe oder dem Notfall-Hotkey belegt sind, werden mit einem Hinweis abgelehnt.
 
@@ -96,16 +96,16 @@ Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt
 
 **Startverzögerung** (0–600 s, nur beim Start), **minimiert in den Tray starten**, **Notfall-Hotkey** (klicke in das Feld und drücke dein Kürzel; Esc bricht ab, Entf löscht; Standard `Ctrl+Alt+Q`) und **UI-Sprache** (vereinfachtes Chinesisch, English, 日本語 und 15 weitere — 18 insgesamt; ein Wechsel startet die App zur Übernahme neu).
 
-**Konfiguration exportieren / Konfiguration importieren** — verschiebe deine gesamte Einrichtung auf einen anderen PC oder bewahre ein Backup auf. Der Export schreibt eine Kopie von `clockwork.settings.json` an einen beliebigen Ort; der Import ersetzt **alles** (Startliste / Erinnerungen / Aktionsgruppen / Einstellungen), fragt daher zuerst nach, sichert die aktuelle Konfiguration nach `clockwork.settings.json.bak` und startet die App zur Übernahme neu.
+**Konfiguration exportieren / Konfiguration importieren** — verschiebe deine gesamte Einrichtung auf einen anderen PC oder bewahre ein Backup auf. Der Export schreibt eine Kopie von `clockwork.settings.json` an einen beliebigen Ort; der Import ersetzt **alles** (Startliste / Geplante Aufgaben / Aktionsgruppen / Einstellungen), fragt daher zuerst nach, sichert die aktuelle Konfiguration nach `clockwork.settings.json.bak` und startet die App zur Übernahme neu.
 
 ## Tipps
 
 - **Doppelklicke eine Zeile zum Bearbeiten**. Beim Ausfüllen von Pfaden / Prozessen / Kürzeln / Daten musst du nicht von Hand tippen: **Durchsuchen…**, **Auswählen…** (durchsuchbarer Prozess-Picker), **Aufzeichnen** und **Datum auswählen**.
-- **Duplizieren** (Tabs „Erinnerungen“ / „Aktionsgruppen“) klont die ausgewählte Zeile direkt darunter — schneller, als eine fast identische neu aufzubauen; eine duplizierte Gruppe heißt „… (Kopie)“.
+- **Duplizieren** (Tabs „Geplante Aufgaben“ / „Aktionsgruppen“) klont die ausgewählte Zeile direkt darunter — schneller, als eine fast identische neu aufzubauen; eine duplizierte Gruppe heißt „… (Kopie)“.
 - **Löschen fragt immer zuerst nach**, überall — Listenzeilen, Schritte im Gruppeneditor und System-Autostart-Einträge.
 - Ein Doppelklick auf `Clockwork.exe` öffnet nur die Einstellungen — er führt die Startliste **nicht** sofort aus; nutze dafür **Startliste erneut ausführen** im Tray.
 - **Starte es normal** (Doppelklick / Tray / geplante Aufgabe). Manche Sandbox- / Launcher mit reduzierten Rechten blockieren Low-Level-Aufrufe, sodass Tasten senden / Fensteraktionen / Aktivieren-falls-läuft / Text-an-Prozess-senden / Lautstärke möglicherweise nicht funktionieren (du bekommst einen klaren Hinweis; das schlichte „Programm starten“ ist nicht betroffen).
-- Deine Konfiguration ist `clockwork.settings.json` (nur lokal). Lösche sie, um auf das Beispiel zurückzusetzen. Der Erinnerungsstatus ist `clockwork.state.json` (ebenfalls lokal; kann gefahrlos gelöscht werden).
+- Deine Konfiguration ist `clockwork.settings.json` (nur lokal). Lösche sie, um auf das Beispiel zurückzusetzen. Der Aufgabenstatus ist `clockwork.state.json` (ebenfalls lokal; kann gefahrlos gelöscht werden).
 - Das Hinzufügen eines `.ahk`-Schritts erfordert eine installierte AutoHotkey. Globale Hotkeys / Textexpansion sind außerhalb des Umfangs — das ist die Stärke von AutoHotkey.
 
 ## Für Entwickler

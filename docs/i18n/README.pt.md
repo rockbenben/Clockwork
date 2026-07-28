@@ -70,7 +70,7 @@ Uma **lista ordenada de etapas** executadas de cima para baixo ao entrar. Clique
 
 > **Pare a qualquer momento** — o **botão de parada** na extremidade direita da barra de abas da janela (só aparece enquanto algo está em execução), bandeja → **Parar ações em execução**, ou a **tecla de pânico** global (definida na aba Configurações; padrão `Ctrl+Alt+Q`). O que estiver em execução para após a ação atual; esperas longas (atraso de inicialização, aguardar uma janela) são interrompidas imediatamente.
 
-### Lembretes
+### Tarefas agendadas
 
 Defina uma **hora** (ou mude para **ao entrar**), uma **recorrência** (dias da semana / a-cada-N-dias / mensal) e o **texto**; opcionalmente fale-o em voz alta. Lembretes com uma ação **Ao-Sim** (executar programa / abrir arquivo / URL / executar grupo de ações) exibem um diálogo **Sim / Não** com um botão **Adiar** (padrão 10 min, menu ▾ de 5–60 min); os demais deslizam como um **cartão de lembrete** no canto (fecha automaticamente após os segundos configurados, **0 = permanece até você dispensá-lo**). Você também pode definir um **grupo de ações silencioso** — executar um grupo na hora certa sem nenhum pop-up.
 
@@ -86,7 +86,7 @@ Lista **tudo que inicia automaticamente** (chaves Run do registro, pastas de Ini
 
 ### Grupos de ações
 
-Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir de um **modelo pronto** (Foco / Reunião / Encerramento / Hora de dormir / Ausência / Captura de tela) — ajuste os nomes dos processos e salve. Um grupo **apenas define ações**; dispare-o de quatro formas: pela bandeja (**Executar: <grupo>**), uma **tecla global**, como uma **etapa de grupo de ações** na lista de inicialização (no boot) ou por um lembrete (**Ao-Sim / grupo silencioso**). Um grupo executa apenas uma cópia por vez; uma etapa de **mensagem** pode funcionar como uma barreira de confirmação (responder **Não** aborta o restante).
+Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir de um **modelo pronto** (Foco / Reunião / Encerramento / Hora de dormir / Ausência / Captura de tela) — ajuste os nomes dos processos e salve. Um grupo **apenas define ações**; dispare-o de quatro formas: pela bandeja (**Executar: <grupo>**), uma **tecla global**, como uma **etapa de grupo de ações** na lista de inicialização (no boot) ou por uma tarefa agendada (**Ao-Sim / grupo silencioso**). Um grupo executa apenas uma cópia por vez; uma etapa de **mensagem** pode funcionar como uma barreira de confirmação (responder **Não** aborta o restante).
 
 > **Tecla global** — no editor de grupos, clique na caixa da tecla e pressione um atalho (ex.: `Ctrl+Alt+F`) para executar esse grupo de qualquer lugar, sem menu. Esc cancela, Delete limpa. Grupos desativados liberam sua combinação; combinações reservadas pelo sistema (Alt+F4, Ctrl+Shift+Esc…) e combinações já ocupadas por outro grupo ou pela tecla de pânico são recusadas com um aviso.
 
@@ -94,16 +94,16 @@ Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir d
 
 **Atraso de inicialização** (0–600 s, apenas no boot), **iniciar minimizado na bandeja**, **tecla de pânico** (clique na caixa e pressione seu atalho; Esc cancela, Delete limpa; padrão `Ctrl+Alt+Q`) e **idioma da interface** (chinês simplificado, inglês, 日本語 e mais 15 — 18 no total; a troca reinicia o app para aplicar).
 
-**Exportar configuração / Importar configuração** — leve toda a sua configuração para outro PC ou mantenha um backup. Exportar grava uma cópia do `clockwork.settings.json` onde você quiser; importar substitui **tudo** (lista de inicialização / lembretes / grupos de ações / configurações), então pede confirmação antes, faz backup da configuração atual em `clockwork.settings.json.bak` e reinicia o app para aplicar.
+**Exportar configuração / Importar configuração** — leve toda a sua configuração para outro PC ou mantenha um backup. Exportar grava uma cópia do `clockwork.settings.json` onde você quiser; importar substitui **tudo** (lista de inicialização / tarefas agendadas / grupos de ações / configurações), então pede confirmação antes, faz backup da configuração atual em `clockwork.settings.json.bak` e reinicia o app para aplicar.
 
 ## Dicas
 
 - **Dê um duplo clique em uma linha para editá-la.** Ao preencher caminhos / processos / atalhos / datas você não precisa digitar manualmente: **Procurar…**, **Escolher…** (seletor de processos com busca), **Capturar** e **Escolher data**.
-- **Duplicar** (abas Lembretes / Grupos de ações) clona a linha selecionada logo abaixo dela — mais rápido que refazer uma quase idêntica; um grupo duplicado recebe o nome "… (cópia)".
+- **Duplicar** (abas Tarefas agendadas / Grupos de ações) clona a linha selecionada logo abaixo dela — mais rápido que refazer uma quase idêntica; um grupo duplicado recebe o nome "… (cópia)".
 - **Excluir sempre pede confirmação**, em todo lugar — linhas das listas, etapas dentro do editor de grupos e itens de inicialização do sistema.
 - Dar um duplo clique em `Clockwork.exe` só abre as configurações — **não** executa imediatamente a lista de inicialização; para isso use **Reexecutar lista de inicialização** na bandeja.
 - **Inicie-o normalmente** (duplo clique / bandeja / tarefa agendada). Alguns lançadores de sandbox / com privilégios reduzidos bloqueiam chamadas de baixo nível, então envio de teclas / ações de janela / ativar-se-já-estiver-aberto / enviar-texto-a-processo / volume podem não funcionar (você receberá um aviso claro; o simples "executar programa" não é afetado).
-- Sua configuração é o `clockwork.settings.json` (só local). Exclua-o para redefinir ao exemplo. O estado dos lembretes é o `clockwork.state.json` (também local; seguro para excluir).
+- Sua configuração é o `clockwork.settings.json` (só local). Exclua-o para redefinir ao exemplo. O estado das tarefas é o `clockwork.state.json` (também local; seguro para excluir).
 - Adicionar uma etapa `.ahk` requer o AutoHotkey instalado. Teclas de atalho globais / expansão de texto estão fora do escopo — essa é a força do AutoHotkey.
 
 ## Para desenvolvedores

@@ -72,7 +72,7 @@ Sebuah **daftar langkah yang berurutan** dijalankan dari atas ke bawah saat logi
 
 > **Hentikan kapan saja** — **tombol berhenti** di ujung kanan bilah tab jendela (hanya muncul saat ada yang berjalan), tray → **Hentikan aksi yang berjalan**, atau **tombol pintas panik** global (diatur pada tab Pengaturan; bawaan `Ctrl+Alt+Q`). Apa pun yang sedang berjalan berhenti setelah aksi saat ini; penungguan yang lama (penundaan startup, menunggu jendela) diinterupsi seketika.
 
-### Pengingat
+### Tugas terjadwal
 
 Atur sebuah **waktu** (atau beralih ke **saat login**), sebuah **pengulangan** (hari dalam seminggu / setiap-N-hari / bulanan), dan **teks**-nya; opsional bacakan dengan lantang. Pengingat dengan aksi **Saat-Ya** (jalankan program / buka berkas / URL / jalankan grup aksi) memunculkan dialog **Ya / Tidak** dengan tombol **Tunda** (bawaan 10 mnt, menu ▾ 5–60 mnt); selebihnya meluncur masuk sebagai **kartu pengingat** di sudut (menutup otomatis setelah detik yang dikonfigurasi, **0 = tetap ada hingga Anda menutupnya**). Anda juga dapat mengatur **grup aksi senyap** — menjalankan grup tepat waktu tanpa popup.
 
@@ -88,7 +88,7 @@ Mendaftar **semua yang berjalan otomatis** (kunci Run registri, folder Startup, 
 
 ### Grup aksi
 
-Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah ▾** memulai satu dari **templat bawaan** (Fokus / Rapat / Beres-beres / Menjelang tidur / Meninggalkan meja / Tangkapan layar) — sesuaikan nama proses lalu simpan. Sebuah grup **hanya mendefinisikan aksi**; picu dengan empat cara: dari tray (**Jalankan: <grup>**), sebuah **tombol pintas global**, sebagai **langkah grup-aksi** dalam daftar startup (saat boot), atau dari sebuah pengingat (**Saat-Ya / grup senyap**). Sebuah grup hanya menjalankan satu salinan pada satu waktu; sebuah langkah **pesan** dapat bertindak sebagai gerbang konfirmasi (menjawab **Tidak** membatalkan sisanya).
+Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah ▾** memulai satu dari **templat bawaan** (Fokus / Rapat / Beres-beres / Menjelang tidur / Meninggalkan meja / Tangkapan layar) — sesuaikan nama proses lalu simpan. Sebuah grup **hanya mendefinisikan aksi**; picu dengan empat cara: dari tray (**Jalankan: <grup>**), sebuah **tombol pintas global**, sebagai **langkah grup-aksi** dalam daftar startup (saat boot), atau dari sebuah tugas terjadwal (**Saat-Ya / grup senyap**). Sebuah grup hanya menjalankan satu salinan pada satu waktu; sebuah langkah **pesan** dapat bertindak sebagai gerbang konfirmasi (menjawab **Tidak** membatalkan sisanya).
 
 > **Tombol pintas global** — di editor grup, klik kotak tombol pintas dan tekan sebuah pintasan (mis. `Ctrl+Alt+F`) untuk menjalankan grup itu dari mana saja, tanpa perlu menu. Esc membatalkan, Delete mengosongkan. Grup yang dinonaktifkan melepaskan kombinasinya; kombinasi yang dicadangkan sistem (Alt+F4, Ctrl+Shift+Esc…) dan kombinasi yang sudah dipakai oleh grup lain atau tombol pintas panik ditolak dengan sebuah pemberitahuan.
 
@@ -96,16 +96,16 @@ Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah �
 
 **Penundaan startup** (0–600 dtk, hanya saat boot), **mulai terminimalkan ke tray**, **tombol pintas panik** (klik kotaknya dan tekan pintasan Anda; Esc membatalkan, Delete mengosongkan; bawaan `Ctrl+Alt+Q`), dan **bahasa antarmuka** (Tionghoa Sederhana, Inggris, 日本語 dan 15 lagi — total 18; beralih akan memulai ulang aplikasi untuk menerapkannya).
 
-**Ekspor konfigurasi / Impor konfigurasi** — pindahkan seluruh penyiapan Anda ke PC lain atau simpan sebagai cadangan. Ekspor menuliskan salinan `clockwork.settings.json` ke mana pun Anda suka; impor menggantikan **semuanya** (daftar startup / pengingat / grup aksi / pengaturan), jadi ia mengonfirmasi lebih dulu, mencadangkan konfigurasi saat ini ke `clockwork.settings.json.bak`, dan memulai ulang aplikasi untuk menerapkannya.
+**Ekspor konfigurasi / Impor konfigurasi** — pindahkan seluruh penyiapan Anda ke PC lain atau simpan sebagai cadangan. Ekspor menuliskan salinan `clockwork.settings.json` ke mana pun Anda suka; impor menggantikan **semuanya** (daftar startup / tugas terjadwal / grup aksi / pengaturan), jadi ia mengonfirmasi lebih dulu, mencadangkan konfigurasi saat ini ke `clockwork.settings.json.bak`, dan memulai ulang aplikasi untuk menerapkannya.
 
 ## Tips
 
 - **Klik dua kali sebuah baris untuk menyuntingnya**. Ketika mengisi jalur / proses / pintasan / tanggal Anda tidak perlu mengetik dengan tangan: **Telusuri…**, **Pilih…** (pemilih proses yang dapat dicari), **Rekam**, dan **Pilih tanggal**.
-- **Duplikat** (tab Pengingat / Grup aksi) mengkloning baris yang dipilih tepat di bawahnya — lebih cepat daripada menyusun ulang yang nyaris sama; grup hasil duplikasi diberi nama "… (salinan)".
+- **Duplikat** (tab Tugas terjadwal / Grup aksi) mengkloning baris yang dipilih tepat di bawahnya — lebih cepat daripada menyusun ulang yang nyaris sama; grup hasil duplikasi diberi nama "… (salinan)".
 - **Penghapusan selalu bertanya lebih dulu**, di mana pun — baris daftar, langkah di dalam editor grup, dan item startup sistem.
 - Mengklik dua kali `Clockwork.exe` hanya membuka pengaturan — ia **tidak** langsung menjalankan daftar startup; gunakan **Jalankan ulang daftar startup** di tray untuk itu.
 - **Luncurkan secara normal** (klik dua kali / tray / tugas terjadwal). Beberapa peluncur sandbox / berhak-akses-berkurang memblokir panggilan tingkat rendah, sehingga kirim-tombol / aksi jendela / aktifkan-jika-berjalan / kirim-teks-ke-proses / volume mungkin tidak berfungsi (Anda akan mendapat pemberitahuan yang jelas; "luncurkan program" biasa tidak terpengaruh).
-- Konfigurasi Anda adalah `clockwork.settings.json` (hanya lokal). Hapus untuk mengatur ulang ke contoh. Status pengingat adalah `clockwork.state.json` (juga lokal; aman dihapus).
+- Konfigurasi Anda adalah `clockwork.settings.json` (hanya lokal). Hapus untuk mengatur ulang ke contoh. Status tugas adalah `clockwork.state.json` (juga lokal; aman dihapus).
 - Menambah langkah `.ahk` membutuhkan AutoHotkey terinstal. Tombol pintas global / ekspansi teks di luar cakupan — itulah keunggulan AutoHotkey.
 
 ## Untuk pengembang

@@ -72,7 +72,7 @@ Een **geordende lijst met stappen** die bij het aanmelden van boven naar beneden
 
 > **Stop op elk moment** — de **stopknop** rechts in de tabbladbalk van het venster (alleen zichtbaar terwijl er iets draait), systeemvak → **Actieve acties stoppen**, of de globale **paniek-sneltoets** (ingesteld op het tabblad Instellingen; standaard `Ctrl+Alt+Q`). Wat er draait stopt na de huidige actie; lange wachttijden (opstartvertraging, wachten op een venster) worden onmiddellijk onderbroken.
 
-### Herinneringen
+### Geplande taken
 
 Stel een **tijd** in (of schakel over naar **bij het aanmelden**), een **herhaling** (weekdagen / om-de-N-dagen / maandelijks) en de **tekst**; lees hem eventueel hardop voor. Herinneringen met een **Bij-Ja**-actie (programma starten / bestand openen / URL / actiegroep uitvoeren) tonen een **Ja / Nee**-dialoogvenster met een knop **Uitstellen** (standaard 10 min, ▾-menu 5–60 min); de rest schuift als een **herinneringskaart** in de hoek naar binnen (sluit vanzelf na het ingestelde aantal seconden, **0 = blijft staan tot je hem sluit**). Je kunt ook een **stille actiegroep** instellen — voert een groep op tijd uit zonder enige pop-up.
 
@@ -88,7 +88,7 @@ Toont **alles dat automatisch opstart** (Run-sleutels in het register, Opstartma
 
 ### Actiegroepen
 
-Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis van een **ingebouwd sjabloon** (Focus / Vergadering / Afronden / Bedtijd / Even weg / Schermafbeelding) — pas de procesnamen aan en sla op. Een groep **definieert alleen acties**; trigger hem op vier manieren: vanuit het systeemvak (**Uitvoeren: <groep>**), een **globale sneltoets**, als een **actiegroep-stap** in de opstartlijst (bij het opstarten) of vanuit een herinnering (**Bij-Ja / stille groep**). Een groep draait telkens maar één kopie tegelijk; een **bericht**-stap kan als bevestigingspoort dienen (met **Nee** antwoorden breekt de rest af).
+Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis van een **ingebouwd sjabloon** (Focus / Vergadering / Afronden / Bedtijd / Even weg / Schermafbeelding) — pas de procesnamen aan en sla op. Een groep **definieert alleen acties**; trigger hem op vier manieren: vanuit het systeemvak (**Uitvoeren: <groep>**), een **globale sneltoets**, als een **actiegroep-stap** in de opstartlijst (bij het opstarten) of vanuit een geplande taak (**Bij-Ja / stille groep**). Een groep draait telkens maar één kopie tegelijk; een **bericht**-stap kan als bevestigingspoort dienen (met **Nee** antwoorden breekt de rest af).
 
 > **Globale sneltoets** — klik in de groepseditor op het sneltoetsvak en druk op een sneltoets (bijv. `Ctrl+Alt+F`) om die groep overal vandaan uit te voeren, zonder menu. Esc annuleert, Delete wist. Uitgeschakelde groepen geven hun combinatie vrij; systeemgereserveerde combinaties (Alt+F4, Ctrl+Shift+Esc…) en combinaties die al door een andere groep of de paniek-sneltoets in gebruik zijn, worden met een melding geweigerd.
 
@@ -96,16 +96,16 @@ Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis
 
 **Opstartvertraging** (0–600 s, alleen bij opstarten), **geminimaliseerd naar het systeemvak starten**, **paniek-sneltoets** (klik op het vak en druk je sneltoets in; Esc annuleert, Delete wist; standaard `Ctrl+Alt+Q`) en **UI-taal** (Vereenvoudigd Chinees, Engels, 日本語 en 15 meer — 18 in totaal; wisselen herstart de app om het toe te passen).
 
-**Configuratie exporteren / Configuratie importeren** — verhuis je hele opzet naar een andere pc of houd een back-up. Exporteren schrijft een kopie van `clockwork.settings.json` waar je maar wilt; importeren vervangt **alles** (opstartlijst / herinneringen / actiegroepen / instellingen), dus het vraagt eerst om bevestiging, maakt van de huidige configuratie een back-up in `clockwork.settings.json.bak` en herstart de app om het toe te passen.
+**Configuratie exporteren / Configuratie importeren** — verhuis je hele opzet naar een andere pc of houd een back-up. Exporteren schrijft een kopie van `clockwork.settings.json` waar je maar wilt; importeren vervangt **alles** (opstartlijst / geplande taken / actiegroepen / instellingen), dus het vraagt eerst om bevestiging, maakt van de huidige configuratie een back-up in `clockwork.settings.json.bak` en herstart de app om het toe te passen.
 
 ## Tips
 
 - **Dubbelklik op een rij om die te bewerken**. Bij het invullen van paden / processen / sneltoetsen / datums hoef je niet met de hand te typen: **Bladeren…**, **Kiezen…** (doorzoekbare proceskiezer), **Vastleggen** en **Datum kiezen**.
-- **Dupliceren** (tabbladen Herinneringen / Actiegroepen) kloont de geselecteerde rij er direct onder — sneller dan een bijna identieke opnieuw opbouwen; een gedupliceerde groep krijgt de naam «… (kopie)».
+- **Dupliceren** (tabbladen Geplande taken / Actiegroepen) kloont de geselecteerde rij er direct onder — sneller dan een bijna identieke opnieuw opbouwen; een gedupliceerde groep krijgt de naam «… (kopie)».
 - **Verwijderen vraagt altijd eerst om bevestiging**, overal — rijen in lijsten, stappen in de groepseditor en opstartitems van het systeem.
 - Dubbelklikken op `Clockwork.exe` opent alleen de instellingen — het voert **niet** meteen de opstartlijst uit; gebruik daarvoor **Opstartlijst opnieuw uitvoeren** in het systeemvak.
 - **Start hem op de normale manier** (dubbelklik / systeemvak / geplande taak). Sommige sandbox- / verlaagde-rechten-lanceerders blokkeren aanroepen op laag niveau, dus toetsen-versturen / vensteracties / activeren-indien-actief / tekst-naar-proces-versturen / volume werken mogelijk niet (je krijgt een duidelijke melding; het gewone «programma starten» wordt niet beïnvloed).
-- Je configuratie is `clockwork.settings.json` (alleen lokaal). Verwijder hem om terug te zetten naar het voorbeeld. De herinneringsstatus is `clockwork.state.json` (ook lokaal; veilig te verwijderen).
+- Je configuratie is `clockwork.settings.json` (alleen lokaal). Verwijder hem om terug te zetten naar het voorbeeld. De taakstatus is `clockwork.state.json` (ook lokaal; veilig te verwijderen).
 - Een `.ahk`-stap toevoegen vereist dat AutoHotkey geïnstalleerd is. Globale sneltoetsen / tekstuitbreiding vallen buiten de scope — dat is de kracht van AutoHotkey.
 
 ## Voor ontwikkelaars

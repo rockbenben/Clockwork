@@ -72,7 +72,7 @@ Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi 
 
 > **Dừng bất cứ lúc nào** — **nút dừng** ở đầu bên phải thanh tab của cửa sổ (chỉ hiện khi có thứ gì đó đang chạy), khay → **Dừng các thao tác đang chạy**, hoặc **phím tắt khẩn** toàn cục (đặt ở tab Cài đặt; mặc định `Ctrl+Alt+Q`). Bất cứ thứ gì đang chạy sẽ dừng sau thao tác hiện tại; các khoảng chờ dài (độ trễ khởi động, chờ cửa sổ) bị ngắt ngay lập tức.
 
-### Nhắc nhở
+### Tác vụ theo lịch
 
 Đặt một **thời điểm** (hoặc chuyển sang **khi đăng nhập**), một **chu kỳ** (ngày trong tuần / mỗi N ngày / hằng tháng), và **nội dung**; tùy chọn đọc to. Lời nhắc có thao tác **Khi-Có** (chạy chương trình / mở tệp / URL / chạy nhóm thao tác) sẽ bật hộp thoại **Có / Không** kèm nút **Hoãn** (mặc định 10 phút, menu ▾ 5–60 phút); những lời nhắc còn lại trượt vào góc dưới dạng **thẻ nhắc** (tự đóng sau số giây đã đặt, **0 = ở lại đến khi bạn bỏ qua**). Bạn cũng có thể đặt một **nhóm thao tác im lặng** — chạy một nhóm đúng giờ mà không bật cửa sổ.
 
@@ -88,7 +88,7 @@ Liệt kê **mọi thứ tự khởi động** (khóa Run trong registry, thư m
 
 ### Nhóm thao tác
 
-Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một lời nhắc (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm; một bước **thông báo** có thể làm cổng xác nhận (trả lời **Không** sẽ hủy phần còn lại).
+Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một tác vụ theo lịch (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm; một bước **thông báo** có thể làm cổng xác nhận (trả lời **Không** sẽ hủy phần còn lại).
 
 > **Phím tắt toàn cục** — trong trình chỉnh sửa nhóm, nhấp vào ô phím tắt rồi nhấn một tổ hợp (ví dụ `Ctrl+Alt+F`) để chạy nhóm đó từ bất cứ đâu, không cần menu. Esc hủy, Delete xóa. Các nhóm bị tắt sẽ nhả tổ hợp của chúng; các tổ hợp dành riêng cho hệ thống (Alt+F4, Ctrl+Shift+Esc…) và các tổ hợp đã bị một nhóm khác hoặc phím tắt khẩn chiếm dụng sẽ bị từ chối kèm thông báo.
 
@@ -96,16 +96,16 @@ Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đ�
 
 **Độ trễ khởi động** (0–600 giây, chỉ khi khởi động máy), **thu nhỏ vào khay khi khởi động**, **phím tắt khẩn** (nhấp vào ô rồi nhấn tổ hợp của bạn; Esc hủy, Delete xóa; mặc định `Ctrl+Alt+Q`), và **ngôn ngữ giao diện** (Tiếng Trung giản thể, English, 日本語 và 15 ngôn ngữ nữa — tổng 18; đổi ngôn ngữ sẽ khởi động lại ứng dụng để áp dụng).
 
-**Xuất cấu hình / Nhập cấu hình** — chuyển toàn bộ thiết lập của bạn sang máy khác hoặc giữ một bản sao lưu. Xuất là lưu một bản `clockwork.settings.json` ra bất cứ đâu bạn muốn; nhập sẽ thay thế **toàn bộ** (danh sách khởi động / nhắc nhở / nhóm thao tác / cài đặt), nên nó hỏi xác nhận trước, sao lưu cấu hình hiện tại thành `clockwork.settings.json.bak`, rồi khởi động lại ứng dụng để áp dụng.
+**Xuất cấu hình / Nhập cấu hình** — chuyển toàn bộ thiết lập của bạn sang máy khác hoặc giữ một bản sao lưu. Xuất là lưu một bản `clockwork.settings.json` ra bất cứ đâu bạn muốn; nhập sẽ thay thế **toàn bộ** (danh sách khởi động / tác vụ theo lịch / nhóm thao tác / cài đặt), nên nó hỏi xác nhận trước, sao lưu cấu hình hiện tại thành `clockwork.settings.json.bak`, rồi khởi động lại ứng dụng để áp dụng.
 
 ## Mẹo
 
 - **Nhấp đúp một dòng để chỉnh sửa** nó. Khi điền đường dẫn / tiến trình / lối tắt / ngày, bạn không phải gõ tay: **Duyệt…**, **Chọn…** (trình chọn tiến trình có tìm kiếm), **Bắt phím**, và **Chọn ngày**.
-- **Nhân bản** (tab Nhắc nhở / Nhóm thao tác) tạo một bản sao của dòng đang chọn ngay bên dưới nó — nhanh hơn là dựng lại một mục gần giống; nhóm được nhân bản sẽ có tên "… (bản sao)".
+- **Nhân bản** (tab Tác vụ theo lịch / Nhóm thao tác) tạo một bản sao của dòng đang chọn ngay bên dưới nó — nhanh hơn là dựng lại một mục gần giống; nhóm được nhân bản sẽ có tên "… (bản sao)".
 - **Xóa luôn hỏi xác nhận trước**, ở mọi nơi — các dòng trong danh sách, các bước trong trình chỉnh sửa nhóm, và cả mục khởi động hệ thống.
 - Nhấp đúp `Clockwork.exe` chỉ mở cài đặt — **không** chạy ngay danh sách khởi động; dùng **Chạy lại danh sách khởi động** ở khay cho việc đó.
 - **Khởi chạy nó theo cách bình thường** (nhấp đúp / khay / tác vụ theo lịch). Một số trình khởi chạy dạng sandbox / hạn chế quyền chặn các lời gọi cấp thấp, nên gửi phím / thao tác cửa sổ / kích hoạt nếu đang chạy / gửi văn bản đến tiến trình / âm lượng có thể không hoạt động (bạn sẽ nhận thông báo rõ ràng; "khởi chạy chương trình" thuần túy không bị ảnh hưởng).
-- Cấu hình của bạn là `clockwork.settings.json` (chỉ trên máy). Xóa nó để đặt lại về mẫu. Trạng thái nhắc nhở là `clockwork.state.json` (cũng chỉ trên máy; xóa được).
+- Cấu hình của bạn là `clockwork.settings.json` (chỉ trên máy). Xóa nó để đặt lại về mẫu. Trạng thái tác vụ là `clockwork.state.json` (cũng chỉ trên máy; xóa được).
 - Thêm một bước `.ahk` cần cài AutoHotkey. Phím tắt toàn cục / mở rộng văn bản nằm ngoài phạm vi — đó là thế mạnh của AutoHotkey.
 
 ## Dành cho nhà phát triển

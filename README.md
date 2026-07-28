@@ -18,7 +18,7 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 
 </div>
 
-> A Windows tray tool: startup launcher · reminders · system startup items · action groups
+> A Windows tray tool: startup launcher · scheduled tasks · system startup items · action groups
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
@@ -30,7 +30,7 @@ A small Windows tray tool that takes care of the routine parts of starting your 
 - 🚀 **Startup list** — automatically open your everyday apps at login, in order (per-step admin rights, delays, only-on-certain-weekdays / only-before-N-o'clock, window style, activate-if-running, fallback paths), and do a few chores along the way (close or focus windows, send keystrokes / text, set volume…).
 - ⏰ **Scheduled tasks** — pop a reminder on time; speak it aloud; repeat by weekday / every-N-days / monthly; or trigger "at login". Clicking **Yes** can run a program, open a file (e.g. music) or a URL, or run an action group; also supports interval runs and run-once scheduling.
 - 🧹 **System startup items** — list **everything on your PC that auto-starts** and switch off what you don't need (disabled, not deleted — flip it back anytime). One click "takes over" an item into your own startup list.
-- 🎛️ **Action groups** — bundle a series of actions into a reusable group (Focus / Meeting / Wrap-up / Bedtime…) and trigger it with one click from the tray, a **global hotkey**, the startup list, or a reminder. Built-in templates included.
+- 🎛️ **Action groups** — bundle a series of actions into a reusable group (Focus / Meeting / Wrap-up / Bedtime…) and trigger it with one click from the tray, a **global hotkey**, the startup list, or a scheduled task. Built-in templates included.
 
 No install, fully portable single folder, everything configurable by mouse; dark UI, high-DPI aware. The UI ships in **18 languages** and follows your Windows display language on first run.
 
@@ -45,7 +45,7 @@ No install, fully portable single folder, everything configurable by mouse; dark
 
 1. Download the latest `Clockwork-<version>.zip` from [Releases](https://github.com/rockbenben/Clockwork/releases) and unzip it — inside is a single `Clockwork.exe`; drop it into any folder (portable — put it wherever). To build it yourself, see **For developers** below.
 2. Double-click **`Clockwork.exe`** to open the settings window.
-   - On **first run** it loads a few **samples** in the startup list and the reminders so you can adapt them to your own — all of them start unticked, so nothing runs until you tick it. Your settings live in `clockwork.settings.json` next to the exe — local only, never committed.
+   - On **first run** it loads a few **samples** in the startup list and the scheduled tasks so you can adapt them to your own — all of them start unticked, so nothing runs until you tick it. Your settings live in `clockwork.settings.json` next to the exe — local only, never committed.
 3. To run it every boot: on the **Settings** tab, click **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
 
 > It sits quietly in the tray. Double-click the tray icon to open the window; the window's close button only hides it to the tray. Quit for real via the tray's right-click **Exit**.
@@ -75,7 +75,7 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 
 > **Stop anytime** — the **stop button** at the right end of the window's tab bar (it only shows while something is running), tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately.
 
-### Reminders
+### Scheduled tasks
 
 Set a **time** (or switch to **at login**), a **recurrence** (weekdays / every-N-days / monthly), and the **text**; optionally speak it aloud. Reminders with an **On-Yes** action (run program / open file / URL / run action group) pop a **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5–60 min); the rest slide in as a **reminder card** in the corner (auto-close after the configured seconds, **0 = stays until you dismiss it**). You can also set a **silent action group** — run a group on time with no popup.
 
@@ -91,7 +91,7 @@ Lists **everything that auto-starts** (registry Run keys, Startup folders, sched
 
 ### Action groups
 
-Bundle actions into a reusable group. **Add ▾** starts one from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save. A group **only defines actions**; trigger it four ways: from the tray (**Run: <group>**), a **global hotkey**, an **action-group step** in the startup list (at boot), or a reminder (**On-Yes / silent group**). A group runs only one copy at a time; a **message** step can act as a confirmation gate (answering **No** aborts the rest).
+Bundle actions into a reusable group. **Add ▾** starts one from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save. A group **only defines actions**; trigger it four ways: from the tray (**Run: <group>**), a **global hotkey**, an **action-group step** in the startup list (at boot), or a scheduled task (**On-Yes / silent group**). A group runs only one copy at a time; a **message** step can act as a confirmation gate (answering **No** aborts the rest).
 
 > **Global hotkey** — in the group editor, click the hotkey box and press a shortcut (e.g. `Ctrl+Alt+F`) to run that group from anywhere, no menu needed. Esc cancels, Delete clears. Disabled groups release their combo; system-reserved combos (Alt+F4, Ctrl+Shift+Esc…) and combos already taken by another group or the panic hotkey are refused with a notice.
 
@@ -99,16 +99,16 @@ Bundle actions into a reusable group. **Add ▾** starts one from a **built-in t
 
 **Startup delay** (0–600 s, boot only), **start minimized to tray**, **panic hotkey** (click the box and press your shortcut; Esc cancels, Delete clears; default `Ctrl+Alt+Q`), and **UI language** (Simplified Chinese, English, 日本語 and 15 more — 18 total; switching restarts the app to apply).
 
-**Export / Import Config** — move your whole setup to another PC or keep a backup. Export writes a copy of `clockwork.settings.json` anywhere you like; import replaces **everything** (startup list / reminders / action groups / settings), so it confirms first, backs the current config up to `clockwork.settings.json.bak`, and restarts the app to apply.
+**Export / Import Config** — move your whole setup to another PC or keep a backup. Export writes a copy of `clockwork.settings.json` anywhere you like; import replaces **everything** (startup list / scheduled tasks / action groups / settings), so it confirms first, backs the current config up to `clockwork.settings.json.bak`, and restarts the app to apply.
 
 ## Tips
 
 - **Double-click a row to edit** it. When filling paths / processes / shortcuts / dates you don't have to type by hand: **Browse…**, **Pick…** (searchable process picker), **Capture**, and **Pick date**.
-- **Duplicate** (Reminders / Action groups tabs) clones the selected row right below it — quicker than rebuilding a near-identical one; a duplicated group is named "… (copy)".
+- **Duplicate** (Scheduled tasks / Action groups tabs) clones the selected row right below it — quicker than rebuilding a near-identical one; a duplicated group is named "… (copy)".
 - **Deleting always asks first**, everywhere — list rows, steps inside the group editor, and system startup items.
 - Double-clicking `Clockwork.exe` only opens settings — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.
 - **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers block low-level calls, so send-keys / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).
-- Your config is `clockwork.settings.json` (local only). Delete it to reset to the sample. Reminder state is `clockwork.state.json` (also local; safe to delete).
+- Your config is `clockwork.settings.json` (local only). Delete it to reset to the sample. Task state is `clockwork.state.json` (also local; safe to delete).
 - Adding an `.ahk` step needs AutoHotkey installed. Global hotkeys / text expansion are out of scope — that's AutoHotkey's strength.
 
 ## For developers

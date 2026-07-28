@@ -70,7 +70,7 @@ Una **lista ordenada de pasos** que se ejecutan de arriba abajo al iniciar sesi�
 
 > **Detén cuando quieras** — el **botón de parada** en el extremo derecho de la barra de pestañas de la ventana (solo aparece mientras algo se está ejecutando), bandeja → **Detener acciones en ejecución**, o el **atajo de pánico** global (se configura en la pestaña Ajustes; por defecto `Ctrl+Alt+Q`). Lo que se esté ejecutando se detiene tras la acción actual; las esperas largas (retardo de inicio, esperar a una ventana) se interrumpen de inmediato.
 
-### Recordatorios
+### Tareas programadas
 
 Fija una **hora** (o cambia a **al iniciar sesión**), una **periodicidad** (días de la semana / cada-N-días / mensual) y el **texto**; opcionalmente léelo en voz alta. Los recordatorios con una acción **Al-pulsar-Sí** (ejecutar programa / abrir archivo / URL / ejecutar grupo de acciones) muestran un diálogo **Sí / No** con un botón **Posponer** (por defecto 10 min, menú ▾ de 5–60 min); el resto se deslizan como una **tarjeta de recordatorio** en la esquina (se cierra sola tras los segundos configurados, **0 = permanece hasta que la descartes**). También puedes fijar un **grupo de acciones silencioso** — ejecuta un grupo a su hora sin ninguna ventana emergente.
 
@@ -86,7 +86,7 @@ Lista **todo lo que se inicia automáticamente** (claves Run del registro, carpe
 
 ### Grupos de acciones
 
-Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de una **plantilla integrada** (Concentración / Reunión / Cierre / Antes de dormir / Ausentarse / Captura de pantalla) — ajusta los nombres de los procesos y guarda. Un grupo **solo define acciones**; actívalo de cuatro maneras: desde la bandeja (**Ejecutar: <grupo>**), un **atajo global**, como un **paso de grupo de acciones** en la lista de inicio (en el arranque) o desde un recordatorio (**Al-pulsar-Sí / grupo silencioso**). Un grupo ejecuta solo una copia a la vez; un paso de **mensaje** puede actuar como una puerta de confirmación (responder **No** aborta el resto).
+Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de una **plantilla integrada** (Concentración / Reunión / Cierre / Antes de dormir / Ausentarse / Captura de pantalla) — ajusta los nombres de los procesos y guarda. Un grupo **solo define acciones**; actívalo de cuatro maneras: desde la bandeja (**Ejecutar: <grupo>**), un **atajo global**, como un **paso de grupo de acciones** en la lista de inicio (en el arranque) o desde una tarea programada (**Al-pulsar-Sí / grupo silencioso**). Un grupo ejecuta solo una copia a la vez; un paso de **mensaje** puede actuar como una puerta de confirmación (responder **No** aborta el resto).
 
 > **Atajo global** — en el editor de grupos, haz clic en el cuadro del atajo y pulsa un atajo (p. ej. `Ctrl+Alt+F`) para ejecutar ese grupo desde cualquier parte, sin necesidad de menús. Esc cancela, Supr lo borra. Los grupos deshabilitados liberan su combinación; las combinaciones reservadas por el sistema (Alt+F4, Ctrl+Shift+Esc…) y las combinaciones ya ocupadas por otro grupo o por el atajo de pánico se rechazan con un aviso.
 
@@ -94,16 +94,16 @@ Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de
 
 **Retardo de inicio** (0–600 s, solo en el arranque), **iniciar minimizado en la bandeja**, **atajo de pánico** (haz clic en el cuadro y pulsa tu atajo; Esc cancela, Supr lo borra; por defecto `Ctrl+Alt+Q`) e **idioma de la interfaz** (chino simplificado, inglés, 日本語 y 15 más — 18 en total; cambiarlo reinicia la aplicación para aplicarlo).
 
-**Exportar configuración / Importar configuración** — lleva toda tu configuración a otro PC o guarda una copia de seguridad. Exportar escribe una copia de `clockwork.settings.json` donde quieras; importar reemplaza **todo** (lista de inicio / recordatorios / grupos de acciones / ajustes), así que pide confirmación primero, hace una copia de seguridad de la configuración actual en `clockwork.settings.json.bak` y reinicia la aplicación para aplicarla.
+**Exportar configuración / Importar configuración** — lleva toda tu configuración a otro PC o guarda una copia de seguridad. Exportar escribe una copia de `clockwork.settings.json` donde quieras; importar reemplaza **todo** (lista de inicio / tareas programadas / grupos de acciones / ajustes), así que pide confirmación primero, hace una copia de seguridad de la configuración actual en `clockwork.settings.json.bak` y reinicia la aplicación para aplicarla.
 
 ## Consejos
 
 - **Haz doble clic en una fila para editarla**. Al rellenar rutas / procesos / atajos / fechas no tienes que escribir a mano: **Examinar…**, **Elegir…** (selector de procesos con búsqueda), **Capturar** y **Elegir fecha**.
-- **Duplicar** (pestañas Recordatorios / Grupos de acciones) clona la fila seleccionada justo debajo de ella — más rápido que rehacer una casi idéntica; un grupo duplicado se llama «… (copia)».
+- **Duplicar** (pestañas Tareas programadas / Grupos de acciones) clona la fila seleccionada justo debajo de ella — más rápido que rehacer una casi idéntica; un grupo duplicado se llama «… (copia)».
 - **Eliminar siempre pide confirmación**, en todas partes — filas de las listas, pasos dentro del editor de grupos y elementos de inicio del sistema.
 - Hacer doble clic en `Clockwork.exe` solo abre los ajustes — **no** ejecuta de inmediato la lista de inicio; para eso usa **Re-ejecutar lista de inicio** de la bandeja.
 - **Láncalo con normalidad** (doble clic / bandeja / tarea programada). Algunos lanzadores de sandbox / privilegios reducidos bloquean las llamadas de bajo nivel, por lo que enviar-teclas / acciones de ventana / activar-si-ya-se-está-ejecutando / enviar-texto-a-proceso / volumen podrían no funcionar (recibirás un aviso claro; el simple «ejecutar programa» no se ve afectado).
-- Tu configuración es `clockwork.settings.json` (solo local). Bórrala para restablecer al ejemplo. El estado de los recordatorios es `clockwork.state.json` (también local; se puede borrar sin problema).
+- Tu configuración es `clockwork.settings.json` (solo local). Bórrala para restablecer al ejemplo. El estado de las tareas es `clockwork.state.json` (también local; se puede borrar sin problema).
 - Añadir un paso `.ahk` requiere tener AutoHotkey instalado. Los atajos globales / la expansión de texto quedan fuera del alcance — esa es la fortaleza de AutoHotkey.
 
 ## Para desarrolladores
