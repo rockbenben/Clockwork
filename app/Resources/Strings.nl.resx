@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>triggert alsnog als de tijd binnen deze periode wordt gemist</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Tijd moet in HH:mm-formaat zijn</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Herhalen tot» moet HH:mm zijn (of leeg)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«Herhaalde uitvoering tot» moet HH:mm zijn (of leeg)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Begindatum moet yyyy-MM-dd zijn (of leeg)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Datum moet yyyy-MM-dd zijn</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Die datum is al voorbij — deze taak wordt na het opslaan niet uitgevoerd (stel een nieuwe datum in en schakel opnieuw in om te hergebruiken)</value></data>
@@ -346,7 +347,7 @@ Log: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Sneltoets {0} is al in gebruik door “{1}”; kies een andere combinatie</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is een door het systeem gereserveerde combinatie (registreren zou een systeemtoets kapen) en kan niet als sneltoets worden gebruikt</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Hele groep herhalen</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>vertraging tussen rondes</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>vertraging tussen rondes (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Circulaire groepsverwijzing ({0}) — verbreek de verwijzingsketen voor het opslaan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Dupliceren</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Configuratie exporteren</value></data>

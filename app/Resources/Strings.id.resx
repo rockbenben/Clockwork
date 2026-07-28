@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>tetap memicu jika waktu terlewat dalam</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Waktu harus dalam format HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Ulangi sampai» harus HH:mm (atau kosong)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«Jalankan berulang sampai» harus HH:mm (atau kosong)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Tanggal mulai harus yyyy-MM-dd (atau kosong)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Tanggal harus berformat yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Tanggal itu sudah lewat — tugas ini tidak akan berjalan setelah disimpan (ubah tanggal dan aktifkan lagi untuk memakainya kembali)</value></data>
@@ -346,7 +347,7 @@ Log: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tombol pintas {0} sudah dipakai oleh “{1}”; pilih kombinasi lain</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} adalah kombinasi yang dicadangkan sistem (mendaftarkannya akan membajak tombol sistem) dan tidak bisa dipakai sebagai tombol pintas</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Ulangi seluruh grup</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>jeda antar putaran</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>jeda antar putaran (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Referensi grup melingkar ({0}) — putuskan rantai referensi sebelum menyimpan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplikat</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Ekspor konfigurasi</value></data>

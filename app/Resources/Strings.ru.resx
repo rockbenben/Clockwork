@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>всё ещё сработает, если время было пропущено в течение</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Время должно быть в формате HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Повторять до» должно быть HH:mm (или пусто)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«Периодический запуск до» должно быть HH:mm (или пусто)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Дата начала должна быть yyyy-MM-dd (или пусто)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Дата должна быть в формате yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Эта дата уже прошла — после сохранения задача не сработает (укажите новую дату и включите заново, чтобы использовать снова)</value></data>
@@ -346,7 +347,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Сочетание {0} уже используется «{1}»; выберите другое</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} — зарезервированное системой сочетание (его регистрация перехватила бы системную клавишу), его нельзя использовать как горячую клавишу</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Повторить всю группу</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>задержка между раундами</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>задержка между раундами (мс)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Циклическая ссылка группы ({0}) — разорвите цепочку ссылок перед сохранением</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Дублировать</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Экспорт конфигурации</value></data>

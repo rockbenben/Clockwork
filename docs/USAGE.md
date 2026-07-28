@@ -113,7 +113,7 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 - **Repeat a whole group**: set "Repeat whole group / delay between rounds" in the group editor.
 - **Loop a subset of steps**: extract those steps into their own action group, then reference it with a "group" step and set its repeat count.
 - Three repeat knobs multiply: per-step repeat × reference-step repeat × whole-group rounds.
-- Groups can nest group references; saving validates circular references (A→B→A is rejected with the chain shown).
+- Groups can nest group references; saving validates cycles among action-group **step** references (A→B→A is rejected with the chain shown). A cycle formed through a message step's "on Yes → run group" target is not checked at save time, but is caught at run time by re-entry protection (skipped with a warning, never spinning).
 - Safety fuse: a single run executes at most 5000 steps, then stops with a warning. The stop hotkey works at any time.
 
 ## Settings

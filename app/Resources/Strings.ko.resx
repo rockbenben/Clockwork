@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>이내면 시각을 놓쳐도 알림</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>시간은 HH:mm 형식이어야 합니다</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>「반복 종료」는 HH:mm(또는 비움)이어야 합니다</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>「반복 실행 종료」는 HH:mm(또는 비움)이어야 합니다</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>기준일은 yyyy-MM-dd(또는 비움)이어야 합니다</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>날짜는 yyyy-MM-dd 형식이어야 합니다</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>이 날짜는 이미 지났습니다 — 저장해도 이 작업은 실행되지 않습니다(새 날짜를 설정하고 다시 활성화하면 재사용할 수 있습니다)</value></data>
@@ -346,7 +347,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>단축키 {0}은(는) 이미 “{1}”에서 사용 중입니다. 다른 조합을 선택하세요</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0}은(는) 시스템 예약 조합입니다(등록하면 시스템 키를 가로챔). 단축키로 사용할 수 없습니다</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>그룹 전체 반복</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>라운드 간 지연</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>라운드 간 지연(ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>그룹 순환 참조가 있습니다({0}). 저장하기 전에 참조 체인을 해제하세요</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>복제</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>설정 내보내기</value></data>

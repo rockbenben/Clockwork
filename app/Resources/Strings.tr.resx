@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>saati bu süre içinde kaçırırsa yine de tetiklenir</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Saat HH:mm biçiminde olmalı</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Şuna kadar yinele» HH:mm olmalı (veya boş)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«Yinelenen çalıştırma şuna kadar» HH:mm olmalı (veya boş)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Başlangıç tarihi yyyy-MM-dd olmalı (veya boş)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Tarih yyyy-MM-dd biçiminde olmalı</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Bu tarih geçti — bu görev kaydedildikten sonra tetiklenmeyecek (yeni bir tarih belirleyip yeniden etkinleştirerek tekrar kullanabilirsiniz)</value></data>
@@ -346,7 +347,7 @@ Günlük: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>{0} kısayolu zaten “{1}” tarafından kullanılıyor; başka bir kombinasyon seçin</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} sistem için ayrılmış bir kombinasyondur (kaydedilmesi bir sistem tuşunu ele geçirir) ve kısayol olarak kullanılamaz</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Tüm grubu tekrarla</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>turlar arası gecikme</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>turlar arası gecikme (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Döngüsel grup referansı ({0}) — kaydetmeden önce referans zincirini kırın</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Çoğalt</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Yapılandırmayı dışa aktar</value></data>

@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>vẫn kích hoạt nếu bỏ lỡ giờ trong khoảng</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Giờ phải theo định dạng HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Lặp đến» phải là HH:mm (hoặc trống)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«Chạy lặp lại đến» phải là HH:mm (hoặc trống)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Ngày bắt đầu phải là yyyy-MM-dd (hoặc trống)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Ngày phải theo định dạng yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Ngày đó đã qua — tác vụ này sẽ không kích hoạt sau khi lưu (đặt ngày mới và bật lại để dùng tiếp)</value></data>
@@ -346,7 +347,7 @@ Nhật ký: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Lặp lại toàn bộ nhóm</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>độ trễ giữa các vòng</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>độ trễ giữa các vòng (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Có tham chiếu nhóm vòng lặp ({0}), hãy phá vỡ chuỗi tham chiếu trước khi lưu</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Nhân bản</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Xuất cấu hình</value></data>

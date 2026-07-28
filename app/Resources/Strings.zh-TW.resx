@@ -235,6 +235,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>內錯過時點仍補彈</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>時間格式應為 HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>「重複直到」格式應為 HH:mm（或留空）</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>「循環直到」格式應為 HH:mm（或留空）</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>起算日格式應為 yyyy-MM-dd（或留空）</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>日期須為 yyyy-MM-dd 格式</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>該日期已過，此任務儲存後不會觸發（改日期並重新勾選即可再用）</value></data>
@@ -347,7 +348,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>快速鍵 {0} 已被「{1}」使用，請換一個組合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系統保留組合（註冊會劫走系統按鍵），不能用作快速鍵</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>整組重複次數</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>每輪間隔</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>每輪間隔(ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>動作組存在環引用（{0}），請先解開引用鏈再儲存</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>匯出設定</value></data>

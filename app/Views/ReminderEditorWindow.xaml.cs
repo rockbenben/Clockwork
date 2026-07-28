@@ -128,7 +128,9 @@ public partial class ReminderEditorWindow : Window
             && od.Date < DateTime.Today)
             Warn(Strings.Get("Val_OnceDatePast"));
         var loopUntil = LoopUntilBox.Text.Trim();
-        if (loopUntil != "" && !HhmmRe.IsMatch(DurationText.FormatTimeHHmm(loopUntil))) { Warn(Strings.Get("Val_RepeatUntil")); return; }
+        // 专用文案：弹窗模式下催促行与循环行同时可见、各有一个 HH:mm 截止框，复用「重复直到」的提示
+        // 会把用户指向另一个框去改（他改了也不会好）。
+        if (loopUntil != "" && !HhmmRe.IsMatch(DurationText.FormatTimeHHmm(loopUntil))) { Warn(Strings.Get("Val_LoopUntil")); return; }
         // 选了静默却没挑组=没配动作，必须拦：静默任务到点悄悄什么都不做是最难察觉的配置错误。
         if (ActSilent.IsChecked == true && string.IsNullOrWhiteSpace(ComboVal(SilentCombo))) { Warn(Strings.Get("Val_SilentNoGroup")); return; }
 

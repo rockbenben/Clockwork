@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>يظل يُشغَّل إذا فات الوقت خلال</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>يجب أن يكون الوقت بصيغة HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«التكرار حتى» يجب أن يكون HH:mm (أو فارغًا)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«التشغيل الدوري حتى» يجب أن يكون HH:mm (أو فارغًا)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>يجب أن يكون تاريخ البدء yyyy-MM-dd (أو فارغًا)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>يجب أن يكون التاريخ بصيغة yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>هذا التاريخ قد مضى — لن تُشغَّل هذه المهمة بعد الحفظ (غيّر التاريخ وأعد التفعيل لاستخدامها مجددًا)</value></data>
@@ -346,7 +347,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>الاختصار {0} مستخدم بالفعل بواسطة «{1}»؛ اختر تركيبة أخرى</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} تركيبة محجوزة للنظام (تسجيلها سيخطف مفتاح نظام) ولا يمكن استخدامها كاختصار</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>تكرار المجموعة بالكامل</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>التأخير بين الجولات</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>التأخير بين الجولات (مث)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>توجد حلقة إشارة دائرية للمجموعة ({0})، يرجى فك سلسلة الإشارات قبل الحفظ</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>تكرار</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>تصدير الإعدادات</value></data>

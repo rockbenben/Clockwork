@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>aún se dispara si se perdió la hora dentro de</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>La hora debe tener el formato HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Repetir hasta» debe ser HH:mm (o vacío)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«Ejecución repetida hasta» debe ser HH:mm (o vacío)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>La fecha de inicio debe ser yyyy-MM-dd (o vacío)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>La fecha debe tener el formato yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Esa fecha ya pasó: esta tarea no se activará después de guardarla (cambia la fecha y vuelve a activarla para reutilizarla)</value></data>
@@ -346,7 +347,7 @@ Registro: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>El atajo {0} ya lo usa «{1}»; elige otra combinación</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} es una combinación reservada del sistema (registrarla secuestraría una tecla del sistema) y no puede usarse como atajo</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Repetir todo el grupo</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>retraso entre rondas</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>retraso entre rondas (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Referencia circular de grupo ({0}); rompa la cadena de referencias antes de guardar</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplicar</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Exportar configuración</value></data>

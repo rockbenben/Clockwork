@@ -235,6 +235,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>以内なら時刻を過ぎても通知</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>時刻は HH:mm 形式で入力してください</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>「繰り返し終了」は HH:mm（または空）で入力してください</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>「定期実行の終了時刻」は HH:mm（または空）で入力してください</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>起算日は yyyy-MM-dd（または空）で入力してください</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>日付は yyyy-MM-dd 形式で入力してください</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>その日付は過ぎています — 保存してもこのタスクは発火しません（日付を変更して再度有効にすると使えます）</value></data>
@@ -347,7 +348,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ホットキー {0} は「{1}」で既に使用されています。別の組み合わせを選んでください</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} はシステム予約の組み合わせです（登録するとシステムキーを奪ってしまうため）ホットキーには使えません</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>グループ全体を繰り返す</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>ラウンド間の間隔</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>ラウンド間の間隔(ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>グループの循環参照があります（{0}）。保存する前に参照チェーンを解消してください</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>設定エクスポート</value></data>

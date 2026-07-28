@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>ยังเตือนถ้าพลาดเวลาภายใน</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>เวลาต้องอยู่ในรูปแบบ HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«ทำซ้ำจนถึง» ต้องเป็น HH:mm (หรือว่าง)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«รันซ้ำจนถึง» ต้องเป็น HH:mm (หรือว่าง)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>วันเริ่มต้องเป็น yyyy-MM-dd (หรือว่าง)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>วันที่ต้องอยู่ในรูปแบบ yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>วันที่นี้ผ่านไปแล้ว — งานนี้จะไม่ทำงานหลังบันทึก (ตั้งวันที่ใหม่แล้วเปิดใช้งานอีกครั้งเพื่อใช้ซ้ำ)</value></data>
@@ -346,7 +347,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย “{1}” แล้ว โปรดเลือกชุดอื่น</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} เป็นชุดปุ่มที่ระบบสงวนไว้ (การลงทะเบียนจะยึดปุ่มระบบ) ใช้เป็นปุ่มลัดไม่ได้</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>ทำซ้ำทั้งกลุ่ม</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>หน่วงเวลาระหว่างรอบ</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>หน่วงเวลาระหว่างรอบ (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>มีการอ้างอิงกลุ่มแบบวนซ้ำ ({0}) โปรดตัดห่วงโซ่การอ้างอิงก่อนบันทึก</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>ทำสำเนา</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>ส่งออกการตั้งค่า</value></data>

@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>löst noch aus, wenn die Zeit innerhalb verpasst wurde</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Zeit muss im Format HH:mm sein</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>„Wiederholen bis“ muss HH:mm sein (oder leer)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>„Wiederkehrender Lauf bis“ muss HH:mm sein (oder leer)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Startdatum muss yyyy-MM-dd sein (oder leer)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Datum muss yyyy-MM-dd sein</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Dieses Datum liegt in der Vergangenheit — die Aufgabe wird nach dem Speichern nicht ausgelöst (neues Datum setzen und erneut aktivieren, um sie wiederzuverwenden)</value></data>
@@ -346,7 +347,7 @@ Protokoll: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tastenkombination {0} wird bereits von „{1}“ verwendet; bitte eine andere wählen</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} ist eine systemreservierte Kombination (ihre Registrierung würde eine Systemtaste kapern) und kann nicht als Tastenkombination verwendet werden</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Gesamte Gruppe wiederholen</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>Verzögerung zwischen den Runden</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>Verzögerung zwischen den Runden (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Zirkuläre Gruppenreferenz ({0}) — Referenzkette vor dem Speichern auflösen</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplizieren</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Konfiguration exportieren</value></data>

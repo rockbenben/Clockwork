@@ -237,6 +237,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>still fires if the time was missed within</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Time must be in HH:mm format</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>"Repeat until" must be HH:mm (or blank)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>"Interval run until" must be HH:mm (or blank)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Start date must be yyyy-MM-dd (or blank)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Date must be yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>That date has passed — this task will not fire (set a new date and re-enable to reuse)</value></data>
@@ -349,7 +350,7 @@ Log: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Repeat whole group</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>delay between rounds</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>delay between rounds (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Circular group reference ({0}) — break the reference chain before saving</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Export Config</value></data>

@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>si attiva ancora se l'ora è stata mancata entro</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>L'ora deve essere nel formato HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>«Ripeti fino a» deve essere HH:mm (o vuoto)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>«Esecuzione ripetuta fino a» deve essere HH:mm (o vuoto)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>La data di inizio deve essere yyyy-MM-dd (o vuoto)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>La data deve essere nel formato yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Questa data è già passata: l'attività non si attiverà dopo il salvataggio (imposta una nuova data e riattivala per riutilizzarla)</value></data>
@@ -346,7 +347,7 @@ Registro: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>La scorciatoia {0} è già usata da “{1}”; scegline un'altra</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} è una combinazione riservata al sistema (registrarla dirotterebbe un tasto di sistema) e non può essere usata come scorciatoia</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Ripeti l'intero gruppo</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>ritardo tra i round</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>ritardo tra i round (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Riferimento di gruppo circolare ({0}) — interrompi la catena di riferimenti prima di salvare</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplica</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Esporta configurazione</value></data>

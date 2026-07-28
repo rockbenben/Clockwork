@@ -234,6 +234,7 @@
   <data name="Ed_GraceHint" xml:space="preserve"><value>se déclenche encore si l'heure a été manquée dans ce délai</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>L'heure doit être au format HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>« Répéter jusqu'à » doit être HH:mm (ou vide)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>« Exécution périodique jusqu'à » doit être HH:mm (ou vide)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>La date de départ doit être yyyy-MM-dd (ou vide)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>La date doit être au format yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>Cette date est déjà passée — cette tâche ne se déclenchera pas après l'enregistrement (changez la date et réactivez pour la réutiliser)</value></data>
@@ -346,7 +347,7 @@ Journal : {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par « {1} » ; choisissez une autre combinaison</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} est une combinaison réservée au système (l'enregistrer détournerait une touche système) et ne peut pas servir de raccourci</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Répéter tout le groupe</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>délai entre les tours</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>délai entre les tours (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Référence de groupe circulaire ({0}) — rompez la chaîne de références avant d'enregistrer</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Dupliquer</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Exporter la configuration</value></data>
