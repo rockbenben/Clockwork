@@ -42,7 +42,7 @@ Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ c
 
 1. Tải `Clockwork-<phiên bản>.zip` mới nhất từ [Releases](https://github.com/rockbenben/Clockwork/releases) rồi giải nén — bên trong là một tệp `Clockwork.exe` duy nhất; đặt nó vào thư mục bất kỳ (di động — để đâu cũng được). Muốn tự dựng, xem **Dành cho nhà phát triển** bên dưới.
 2. Nhấp đúp **`Clockwork.exe`** để mở cửa sổ cài đặt.
-   - Ở **lần chạy đầu tiên**, chương trình nạp vài **mẫu** trong danh sách khởi động và nhắc nhở để bạn chỉnh thành của mình — tất cả đều chưa được tick, nên không có gì chạy cho tới khi bạn tự tick. Cài đặt của bạn nằm ở `clockwork.settings.json` cạnh tệp exe — chỉ trên máy, không đưa lên kho.
+   - Ở **lần chạy đầu tiên**, chương trình nạp vài **mẫu** trong danh sách khởi động và nhắc nhở để bạn chỉnh thành của mình — tất cả đều chưa được tick, nên không có gì chạy cho tới khi bạn tự tick. Tab **Nhóm thao tác** cũng khởi đầu với hai nhóm sẵn sàng chạy (Rời đi một lát / Kết thúc ngày làm) — hai nhóm này *đã được tick* sẵn, vì một nhóm không bao giờ tự kích hoạt; nó chỉ chạy khi bạn kích hoạt nó. Cài đặt của bạn nằm ở `clockwork.settings.json` cạnh tệp exe — chỉ trên máy, không đưa lên kho.
 3. Để chạy mỗi lần khởi động máy: ở tab **Cài đặt**, nhấp **Khởi động cùng đăng nhập** (đăng ký một tác vụ theo lịch với quyền admin, để không phải chịu một loạt hộp thoại UAC khi khởi động).
 
 > Nó nằm im trong khay hệ thống. Nhấp đúp biểu tượng khay để mở cửa sổ; nút đóng của cửa sổ chỉ thu vào khay. Muốn thoát hẳn, nhấp chuột phải vào khay và chọn **Thoát**.
@@ -94,7 +94,7 @@ Liệt kê **mọi thứ tự khởi động** (khóa Run trong registry, thư m
 
 ### Nhóm thao tác
 
-Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một tác vụ theo lịch (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm.
+Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình / Nhắc ngồi lâu) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một tác vụ theo lịch (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm.
 
 **Vòng lặp.** Một nhóm có thể **lặp toàn bộ** (số lần lặp + khoảng nghỉ giữa các lượt, đặt trong trình sửa nhóm). Nếu chỉ muốn lặp *một đoạn*, hãy tách đoạn bước đó thành nhóm riêng rồi tham chiếu bằng một bước **nhóm thao tác** với số lần lặp do bạn đặt — nhóm có thể tham chiếu nhóm, và khi lưu, tham chiếu vòng sẽ bị từ chối kèm chuỗi tham chiếu (`A → B → A`). Ba núm lặp nhân với nhau: theo bước × theo tham chiếu × toàn nhóm. Mỗi lần chạy có cầu chì **5000 bước**, nên một tổ hợp quá lớn sẽ dừng thay vì chạy mãi.
 

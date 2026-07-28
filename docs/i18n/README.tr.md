@@ -42,7 +42,7 @@ Kurulum yok, tek klasörde tamamen taşınabilir, her şey fareyle yapılandır�
 
 1. En son `Clockwork-<sürüm>.zip`'i [Releases](https://github.com/rockbenben/Clockwork/releases) sayfasından indirin ve arşivden çıkarın — içinde tek bir `Clockwork.exe` var; onu herhangi bir klasöre bırakın (taşınabilir — istediğiniz yere koyun). Kendiniz derlemek için aşağıdaki **Geliştiriciler için** bölümüne bakın.
 2. Ayarlar penceresini açmak için **`Clockwork.exe`**'ye çift tıklayın.
-   - **İlk çalıştırmada** başlangıç listesine ve hatırlatıcılara kendinize uyarlayabileceğiniz birkaç **örnek** yükler — hepsi başlangıçta işaretsizdir, yani siz işaretlemeden hiçbir şey çalışmaz. Ayarlarınız exe'nin yanındaki `clockwork.settings.json` içinde durur — yalnızca yerel, asla depoya işlenmez.
+   - **İlk çalıştırmada** başlangıç listesine ve hatırlatıcılara kendinize uyarlayabileceğiniz birkaç **örnek** yükler — hepsi başlangıçta işaretsizdir, yani siz işaretlemeden hiçbir şey çalışmaz. **Eylem grupları** sekmesi de hemen çalıştırılabilir iki grupla başlar (Kısa mola / Paydos · Gün sonu) — bunlar zaten *işaretlidir*, çünkü bir grup asla kendiliğinden tetiklenmez; yalnızca siz onu çalıştırdığınızda çalışır. Ayarlarınız exe'nin yanındaki `clockwork.settings.json` içinde durur — yalnızca yerel, asla depoya işlenmez.
 3. Her açılışta çalıştırmak için: **Ayarlar** sekmesinde **Oturum açınca başlat**'a tıklayın (yönetici haklarıyla bir zamanlanmış görev kaydeder, böylece açılışta yığınla UAC istemi olmaz).
 
 > Sessizce tepside durur. Pencereyi açmak için tepsi simgesine çift tıklayın; pencerenin kapat düğmesi onu yalnızca tepsiye gizler. Gerçekten çıkmak için tepsinin sağ tık menüsündeki **Çıkış**'ı kullanın.
@@ -94,7 +94,7 @@ Odaklanmanız ya da bir toplantıya girmeniz mi gerekiyor? Tepsi **Hatırlatıc�
 
 ### Eylem grupları
 
-Eylemleri yeniden kullanılabilir bir grupta toplayın. **Ekle ▾**, bir **yerleşik şablondan** (Odak / Toplantı / Kapanış / Uyku vakti / Uzaklaşma / Ekran görüntüsü) başlatır — işlem adlarını ayarlayıp kaydedin. Bir grup **yalnızca eylemleri tanımlar**; onu dört şekilde tetikleyin: tepsiden (**Çalıştır: <grup>**), bir **genel kısayolla**, başlangıç listesinde bir **eylem grubu adımı** olarak (açılışta) ya da zamanlanmış bir görevden (**Evet'te / sessiz grup**). Bir grubun aynı anda yalnızca tek bir kopyası çalışır.
+Eylemleri yeniden kullanılabilir bir grupta toplayın. **Ekle ▾**, bir **yerleşik şablondan** (Odak / Toplantı / Kapanış / Uyku vakti / Uzaklaşma / Ekran görüntüsü / Uzun oturma molası) başlatır — işlem adlarını ayarlayıp kaydedin. Bir grup **yalnızca eylemleri tanımlar**; onu dört şekilde tetikleyin: tepsiden (**Çalıştır: <grup>**), bir **genel kısayolla**, başlangıç listesinde bir **eylem grubu adımı** olarak (açılışta) ya da zamanlanmış bir görevden (**Evet'te / sessiz grup**). Bir grubun aynı anda yalnızca tek bir kopyası çalışır.
 
 **Döngüler.** Bir grup **bütün olarak yinelenebilir** (tekrar sayısı + turlar arası bekleme, grup düzenleyicide ayarlanır). Bir dizinin yalnızca *bir kısmını* döngüye almak için o adımları ayrı bir gruba koyun ve tekrar sayısını kendiniz belirlediğiniz bir **eylem grubu** adımıyla ona başvurun — gruplar gruplara başvurabilir ve kaydederken döngüsel başvurular zincir açıkça yazılarak reddedilir (`A → B → A`). Üç tekrar ayarı çarpılır: adım başına × başvuru başına × tüm grup. Tek bir çalıştırma **5000 adım** sigortasıyla sınırlıdır; böylece aşırı büyük bir birleşim sonsuza dek koşmak yerine durur.
 

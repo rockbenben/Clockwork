@@ -23,7 +23,7 @@ It sits quietly in the tray. The window's close button only hides it to the tray
 
 ## First run: replace the samples with your own
 
-On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — conditional execution, launching an app, opening a URL, sending a key combo, acting on a window. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Action groups tab starts empty — use the ready-made templates under **Add ▾**.
+On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — conditional execution, launching an app, opening a URL, sending a key combo, acting on a window. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Action groups tab starts with two ready-to-run groups already in place (Stepping away / Wrap up · End of day) — add more from the built-in templates under **Add ▾**.
 
 The most common need, "open my everyday apps at login":
 
@@ -83,7 +83,7 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 - **Repeat fires of one reminder share a single card** (`×N` at the top right), so the corner never fills up. Cards you dismissed, evicted, or that auto-closed can be reviewed and re-shown from **tray right-click → Recent** (session-only; cleared on restart).
 - **Advanced:** auto-close · repeat-nagging (re-pop every N minutes until a deadline) · post-trigger delay + random jitter · grace (catch a fire missed by a brief shutdown/sleep) · **catch up if missed** (re-fire once after hibernation/shutdown skipped it) · an **anchor date** for every-N-days (**Pick date**).
 - **State persistence:** "fired today" and "snoozed until" are saved to `clockwork.state.json`, surviving restarts — a snooze carries across a restart and the same reminder never double-fires in a day. Interval progress is persisted the same way, so restarting mid-day keeps the day's remaining rounds.
-- **Do-Not-Disturb:** tray → **Pause reminders for 1 / 2 / 4 hours**. Everything (including silent groups) is suppressed and auto-resumes when the time is up; you can also **Resume** early. Anything missed follows the normal grace / catch-up rules.
+- **Do-Not-Disturb:** tray → **Pause reminders ▸** → 1 / 2 / 4 hours. Everything (including silent groups) is suppressed and auto-resumes when the time is up; you can also **Resume** early. Anything missed follows the normal grace / catch-up rules.
 - **Silent action group:** run a group on time with **no popup**. Selecting a task and clicking **Run** previews it once — note that for a silent task, Run **actually executes** the group.
 - **Duplicate** clones the selected task right below it (same text and settings, its own schedule state) — handy for "same task, second time of day": duplicate, then just change the time.
 
@@ -100,7 +100,8 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 
 ## Action groups
 
-- **Add ▾** starts a group from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot) — tweak the process names and save.
+- **Add ▾** starts a group from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot / Sitting too long) — tweak the process names and save.
+- The list shows each group's **step summary** and **hotkey** columns (an empty group's summary reads **(empty)**).
 - A group runs **only one copy at a time** (repeat triggers are skipped).
 - Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**.
 - **Global hotkey:** in the group editor, click the hotkey box and press a combo (e.g. `Ctrl+Alt+F`) to run the group from any app — no menu needed. Esc cancels, Delete clears. Changes apply live (no restart). A **disabled** group releases its combo so another group can use it. Refused with a notice: **system-reserved** combos (Alt+F4, Alt+Tab, Ctrl+Shift+Esc…), a combo already bound to **another enabled group** or the **panic hotkey**, or one **already taken by another app** (use a different combo).

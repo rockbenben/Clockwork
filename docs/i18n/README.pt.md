@@ -40,7 +40,7 @@ Sem instalação, totalmente portátil em uma única pasta, tudo configurável c
 
 1. Baixe o `Clockwork-<versão>.zip` mais recente em [Releases](https://github.com/rockbenben/Clockwork/releases) e descompacte-o — dentro há um único `Clockwork.exe`; coloque-o em qualquer pasta (portátil — ponha onde quiser). Para compilá-lo você mesmo, veja **Para desenvolvedores** abaixo.
 2. Dê um duplo clique em **`Clockwork.exe`** para abrir a janela de configurações.
-   - No **primeiro uso** ele carrega alguns **exemplos** na lista de inicialização e nos lembretes para você adaptar à sua realidade — todos vêm desmarcados, então nada é executado até você marcar. Suas configurações ficam em `clockwork.settings.json` ao lado do exe — só locais, nunca versionadas.
+   - No **primeiro uso** ele carrega alguns **exemplos** na lista de inicialização e nos lembretes para você adaptar à sua realidade — todos vêm desmarcados, então nada é executado até você marcar. A aba **Grupos de ações** também começa com dois grupos prontos para rodar (Ausente um momento / Encerrar o dia) — esses já vêm *marcados*, porque um grupo nunca dispara sozinho; ele só roda quando você o aciona. Suas configurações ficam em `clockwork.settings.json` ao lado do exe — só locais, nunca versionadas.
 3. Para executá-lo a cada inicialização: na aba **Configurações**, clique em **Iniciar ao entrar** (registra uma tarefa agendada com direitos de administrador, evitando uma enxurrada de avisos do UAC na inicialização).
 
 > Ele fica quietinho na bandeja. Dê um duplo clique no ícone da bandeja para abrir a janela; o botão de fechar da janela apenas a oculta na bandeja. Para sair de verdade, use **Sair** no menu de contexto da bandeja.
@@ -92,7 +92,7 @@ Lista **tudo que inicia automaticamente** (chaves Run do registro, pastas de Ini
 
 ### Grupos de ações
 
-Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir de um **modelo pronto** (Foco / Reunião / Encerramento / Hora de dormir / Ausência / Captura de tela) — ajuste os nomes dos processos e salve. Um grupo **apenas define ações**; dispare-o de quatro formas: pela bandeja (**Executar: <grupo>**), uma **tecla global**, como uma **etapa de grupo de ações** na lista de inicialização (no boot) ou por uma tarefa agendada (**Ao-Sim / grupo silencioso**). Um grupo executa apenas uma cópia por vez.
+Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir de um **modelo pronto** (Foco / Reunião / Encerramento / Hora de dormir / Ausência / Captura de tela / Pausa de quem senta muito) — ajuste os nomes dos processos e salve. Um grupo **apenas define ações**; dispare-o de quatro formas: pela bandeja (**Executar: <grupo>**), uma **tecla global**, como uma **etapa de grupo de ações** na lista de inicialização (no boot) ou por uma tarefa agendada (**Ao-Sim / grupo silencioso**). Um grupo executa apenas uma cópia por vez.
 
 **Laços.** Um grupo pode **repetir por inteiro** (número de repetições + espera entre rodadas, no editor de grupos). Para repetir só *parte* de uma sequência, coloque essas etapas em um grupo próprio e referencie-o com uma etapa de **grupo de ações** cujo número de repetições você define — grupos podem referenciar grupos, e ao salvar as referências circulares são recusadas com a cadeia detalhada (`A → B → A`). Os três controles de repetição se multiplicam: por etapa × por referência × grupo inteiro. Uma execução tem um fusível de **5000 etapas**, para que uma combinação exagerada pare em vez de rodar sem fim.
 
