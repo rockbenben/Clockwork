@@ -291,6 +291,10 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>配置保存失败：{0}（改动暂存内存，重启后会丢失）</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>提醒「{0}」引用的动作组不存在，本次未执行任何动作</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>提醒「{0}」引用的动作组已禁用，本次未执行任何动作</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>找不到动作组</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>动作组「{0}」已禁用，跳过</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>动作组重入（环引用或已在运行），已跳过</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}，{1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>单次运行已达 5000 步上限，剩余步骤未执行（检查是否有过大的循环次数）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「点是后」要运行的动作组不存在，已跳过</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「点是后」要运行的动作组已禁用，已跳过</value></data>

@@ -27,6 +27,11 @@ public sealed class GroupDeps
     // 组内嵌套「group」步骤：跑引用的组。返回结局而非 void——中止/跳过都要能让上层的引用轮次收手。
     public Func<LaunchStep, GroupRunResult> RunGroupStep { get; init; } = _ => GroupRunResult.Completed;
     public Action<LaunchStep, Exception> OnStepError { get; init; } = (_, _) => { };    // 某步抛异常：记录后继续（不中止整组）
+    // 某步被跳过但没有异常（如嵌套「动作组」引用的目标缺失/已禁用/重入）：reason=原因说明（供日志与提示直接展示），
+    // benign=是否「良性」——true 表示这是正常配置状态（如目标组本就被人为禁用），不该被当成故障；false 表示
+    // 值得关注（坏配置/环引用空转）。与 OnStepError 分开是因为三种情况都不是异常，套用「异常：」措辞是在
+    // 给用户一个不存在的故障去查。
+    public Action<LaunchStep, string, bool> OnStepSkipped { get; init; } = (_, _, _) => { };
     public RunBudget Budget { get; init; } = new();                        // 单次顶层运行共享的步数预算（嵌套引用经同一 deps 传递）
 }
 
@@ -70,7 +75,8 @@ public static class ActionGroupRunner
                     else if (step.Kind == "group")
                     {
                         // 组内嵌套动作组：跑引用的组。嵌套调用共享同一 deps → 同一份预算；
-                        // 环重入由 RunGroupStep 包装层经 OnStepError 上报。
+                        // 环重入（以及目标缺失/已禁用等其他「没跑」的结局）由 RunGroupStep 包装层经 OnStepSkipped
+                        // 上报——这些都不是异常，OnStepError 专属 RunStep 真正抛出的异常。
                         // 每次引用迭代自身也占一步预算：否则叶子组只含 group 步骤时，999^depth 的展开
                         // 一步都不计费，5000 步保险丝对纯引用链完全失效（文档承诺的「至多 5000 步」要真成立）。
                         int rep = StepHelpers.StepRepeat(step);

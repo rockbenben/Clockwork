@@ -289,6 +289,10 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>設定の保存に失敗：{0}（変更はメモリ上のみで、再起動で失われます）</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>リマインダー「{0}」が参照するアクショングループが存在しないため、今回は何も実行されませんでした</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>リマインダー「{0}」が参照するアクショングループが無効のため、今回は何も実行されませんでした</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>参照先のアクショングループが見つかりません</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>アクショングループ「{0}」は無効のため、スキップしました</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>アクショングループへの再入（循環参照または実行中）のため、スキップしました</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}、{1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>実行は5000ステップの上限に達したため停止し、残りのステップはスキップされました（繰り返し回数が大きすぎないか確認してください）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「はい」で実行するアクショングループが存在しないため、スキップしました</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「はい」で実行するアクショングループが無効のため、スキップしました</value></data>

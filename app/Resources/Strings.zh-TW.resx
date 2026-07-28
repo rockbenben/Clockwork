@@ -289,6 +289,10 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>設定儲存失敗：{0}（變更僅暫存記憶體，重啟後會遺失）</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>提醒「{0}」引用的動作組不存在，本次未執行任何動作</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>提醒「{0}」引用的動作組已停用，本次未執行任何動作</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>找不到動作組</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>動作組「{0}」已停用，已略過</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>動作組重入（環引用或已在執行），已略過</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}，{1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>單次執行已達 5000 步上限，剩餘步驟未執行（請檢查是否有過大的循環次數）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「點是後」要執行的動作組不存在，已略過</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「點是後」要執行的動作組已停用，已略過</value></data>

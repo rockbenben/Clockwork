@@ -291,6 +291,10 @@ Log: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Failed to save config: {0} (changes are only in memory and will be lost on restart)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>The action group referenced by reminder "{0}" no longer exists; nothing was run this time</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>The action group referenced by reminder "{0}" is disabled; nothing was run this time</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>Referenced action group not found</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Action group "{0}" is disabled; skipped</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Action group re-entered (circular reference or already running); skipped</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Run stopped at the 5000-step limit; remaining steps were skipped (check for oversized repeat counts)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>The action group to run on "Yes" no longer exists; skipped</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>The action group to run on "Yes" is disabled; skipped</value></data>

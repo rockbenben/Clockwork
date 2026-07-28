@@ -288,6 +288,10 @@ Log: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Configuratie opslaan mislukt: {0} (wijzigingen staan alleen in het geheugen en gaan verloren bij herstart)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>De actiegroep waarnaar herinnering "{0}" verwijst bestaat niet meer; er is deze keer niets uitgevoerd</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>De actiegroep waarnaar herinnering "{0}" verwijst is uitgeschakeld; er is deze keer niets uitgevoerd</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>Gerefereerde actiegroep niet gevonden</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Actiegroep "{0}" is uitgeschakeld; overgeslagen</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Actiegroep opnieuw betreden (circulaire verwijzing of al actief); overgeslagen</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>De uitvoering is gestopt bij de limiet van 5000 stappen; de resterende stappen zijn overgeslagen (controleer op te grote herhalingsaantallen)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>De actiegroep die bij "Ja" moet draaien bestaat niet meer; overgeslagen</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>De actiegroep die bij "Ja" moet draaien is uitgeschakeld; overgeslagen</value></data>

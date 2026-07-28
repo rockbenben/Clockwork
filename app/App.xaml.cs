@@ -640,21 +640,27 @@ public partial class App : System.Windows.Application
             RunOnYes = s => ReminderActions.RunOnYes(s.OnYes, groups, g => { _ = ActionGroupRunner.RunGroup(g.SnapshotForRun(), deps); }, WarnToast),
             Speak = ReminderActions.Speak,
             OnStepError = (s, ex) => LogGroupStepError(s, ex),
+            OnStepSkipped = (s, reason, benign) => LogGroupStepSkipped(s, reason, benign),
             Budget = new RunBudget(() => WarnToast(Strings.Get("Warn_RunBudget"))),
-            // 组内嵌套「动作组」步骤：跑引用组的快照（防运行中被编辑/清理）。重入（环引用/已在运行）返回 Skipped，
-            // 经 OnStepError 记一笔——夜间静默任务里环导致的空转不该零反馈。
-            // 目标缺失/已禁用同理必须发声：同一份坏配置在启动清单里有「⚠ 找不到动作组」可查，热键/计划任务
-            // 这条（正是无人值守跑的那条）却什么都不说。StepEditorWindow 不校验组下拉，空 GroupId 存得下来，
-            // 所以「找不到」是能走到的路径，不是理论情况。三种都返回 Skipped：目标不存在/被禁/在跑，
-            // 下一次迭代结论完全相同，让上层引用轮次立刻收手（否则 Repeat=999 就是 999 条重复告警）。
+            // 组内嵌套「动作组」步骤：跑引用组的快照（防运行中被编辑/清理）。三种「这次没跑」的结局——
+            // 目标缺失、目标已禁用、重入（环引用/已在运行）——都必须发声：同一份坏配置在启动清单里有
+            // 「⚠ 找不到动作组」可查，热键/计划任务这条（正是无人值守跑的那条）以前却什么都不说。
+            // StepEditorWindow 不校验组下拉，空 GroupId 存得下来，所以「找不到」是能走到的路径，不是理论情况。
+            // 但三种情况都不是异常，不该经 OnStepError：那条通道套「异常：」措辞，会让「目标组被人手动禁用」
+            // 这种正常配置状态读成故障。改经 OnStepSkipped，并按启动清单（LaunchSequence）同款口径分severity：
+            //   目标不存在 → 坏配置，Warn
+            //   目标已禁用 → 正常状态，Info + benign（与 LaunchSequence「已禁用，跳过」不算失败的判断一致）
+            //   重入/环引用 → 真问题（空转），Warn
+            // 三种都返回 Skipped：目标不存在/被禁/在跑，下一次迭代结论完全相同，让上层引用轮次立刻收手
+            // （否则 Repeat=999 就是 999 条重复告警）。
             RunGroupStep = s =>
             {
                 var ng = ActionGroupResolver.Resolve(groups, s.GroupId);
-                if (ng == null) { deps.OnStepError(s, new InvalidOperationException("找不到动作组")); return GroupRunResult.Skipped; }
-                if (!ng.Enabled) { deps.OnStepError(s, new InvalidOperationException($"动作组「{ng.Name}」已禁用，跳过")); return GroupRunResult.Skipped; }
+                if (ng == null) { deps.OnStepSkipped(s, Strings.Get("Skip_GroupNotFound"), false); return GroupRunResult.Skipped; }
+                if (!ng.Enabled) { deps.OnStepSkipped(s, Lf("Skip_GroupDisabled", ng.Name), true); return GroupRunResult.Skipped; }
                 var res = ActionGroupRunner.RunGroup(ng.SnapshotForRun(), deps);
                 if (res == GroupRunResult.Skipped)
-                    deps.OnStepError(s, new InvalidOperationException("动作组重入（环引用或已在运行），已跳过"));
+                    deps.OnStepSkipped(s, Strings.Get("Skip_GroupReentrant"), false);
                 return res;
             },
         };
@@ -662,6 +668,7 @@ public partial class App : System.Windows.Application
     }
 
     // 动作组内某步抛异常：记一笔到错误日志并弹一次托盘气泡，随后整组继续（不静默中止）。
+    // 仅用于 RunStep 真正抛出的异常——「这次没跑」但没有异常的情况（嵌套组引用缺失/禁用/重入）走 LogGroupStepSkipped。
     private void LogGroupStepError(LaunchStep step, Exception ex)
     {
         var logPath = Path.Combine(CfgDir, "clockwork.error.log");
@@ -670,6 +677,20 @@ public partial class App : System.Windows.Application
         // （整组 Repeat 仍会让同一步失败很多次）；不同步骤的失败仍各占一张，不会互相盖掉。
         ShowToast("Clockwork", Lf("Mark_Exception", StepDisplay.StepSummary(step)), Views.ToastLevel.Warn,
                   key: "groupstep:" + StepDisplay.StepSummary(step));
+    }
+
+    // 动作组内某步被跳过（没有异常，如嵌套组引用的目标缺失/已禁用/重入）：记一笔到错误日志（措辞用「已跳过」
+    // 而非「失败」）并弹一次托盘气泡，气泡文案带上具体原因——不能只报步骤摘要，否则用户只能打开日志文件才知道
+    // 为什么。已禁用是正常配置状态（与 LaunchSequence 对同一条件的判断口径一致），用 Info；其余用 Warn。
+    private void LogGroupStepSkipped(LaunchStep step, string reason, bool benign)
+    {
+        var logPath = Path.Combine(CfgDir, "clockwork.error.log");
+        try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] 动作组步骤已跳过（整组继续）: {StepDisplay.StepSummary(step)} — {reason}\r\n"); } catch { }
+        // 合并键与 LogGroupStepError 分桶（groupskip: vs groupstep:）：同一步骤上一次是真异常这一次只是良性
+        // 跳过（或反过来），两张卡不该互相盖掉——用户需要分别看到「确实失败过」与「最近一次只是被跳过」。
+        ShowToast("Clockwork", Lf("Toast_GroupStepSkipped", StepDisplay.StepSummary(step), reason),
+                  benign ? Views.ToastLevel.Info : Views.ToastLevel.Warn,
+                  key: "groupskip:" + StepDisplay.StepSummary(step));
     }
 
     // 动作组 message 步骤弹窗（confirm=是/否闸门；否则仅确定）。在 UI 线程弹。

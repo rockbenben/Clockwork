@@ -288,6 +288,10 @@ Nhật ký: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Lưu cấu hình thất bại: {0} (thay đổi chỉ nằm trong bộ nhớ và sẽ mất khi khởi động lại)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Nhóm hành động mà lời nhắc "{0}" tham chiếu không còn tồn tại; lần này không chạy gì cả</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Nhóm hành động mà lời nhắc "{0}" tham chiếu đã bị tắt; lần này không chạy gì cả</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>Không tìm thấy nhóm hành động được tham chiếu</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Nhóm hành động "{0}" đã bị tắt; đã bỏ qua</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Vào lại nhóm hành động (tham chiếu vòng lặp hoặc đang chạy); đã bỏ qua</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Quá trình chạy đã dừng tại giới hạn 5000 bước; các bước còn lại đã bị bỏ qua (kiểm tra xem có số lần lặp lại quá lớn không)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Nhóm hành động chạy khi bấm "Có" không còn tồn tại; đã bỏ qua</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Nhóm hành động chạy khi bấm "Có" đã bị tắt; đã bỏ qua</value></data>

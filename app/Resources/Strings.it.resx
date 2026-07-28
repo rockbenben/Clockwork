@@ -288,6 +288,10 @@ Registro: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Salvataggio della configurazione non riuscito: {0} (le modifiche sono solo in memoria e andranno perse al riavvio)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Il gruppo di azioni a cui fa riferimento il promemoria "{0}" non esiste più; questa volta non è stato eseguito nulla</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Il gruppo di azioni a cui fa riferimento il promemoria "{0}" è disabilitato; questa volta non è stato eseguito nulla</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>Gruppo di azioni referenziato non trovato</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Il gruppo di azioni "{0}" è disabilitato; saltato</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Rientro nel gruppo di azioni (riferimento circolare o già in esecuzione); saltato</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>L'esecuzione si è interrotta al limite di 5000 passaggi; i passaggi rimanenti sono stati saltati (verifica la presenza di conteggi di ripetizione eccessivi)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Il gruppo di azioni da eseguire su "Sì" non esiste più; saltato</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Il gruppo di azioni da eseguire su "Sì" è disabilitato; saltato</value></data>

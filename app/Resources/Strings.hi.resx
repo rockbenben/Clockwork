@@ -288,6 +288,10 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>कॉन्फ़िगरेशन सहेजना विफल: {0} (बदलाव केवल मेमोरी में हैं और पुनरारंभ पर खो जाएँगे)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>रिमाइंडर "{0}" द्वारा संदर्भित एक्शन समूह अब मौजूद नहीं है; इस बार कुछ नहीं चला</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>रिमाइंडर "{0}" द्वारा संदर्भित एक्शन समूह अक्षम है; इस बार कुछ नहीं चला</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>संदर्भित एक्शन समूह नहीं मिला</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>एक्शन समूह "{0}" अक्षम है; छोड़ दिया गया</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>एक्शन समूह में पुनः प्रवेश (चक्रीय संदर्भ या पहले से चल रहा है); छोड़ दिया गया</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>रन 5000-चरण की सीमा पर रुक गया; शेष चरण छोड़ दिए गए (जांचें कि कहीं दोहराव की संख्या बहुत बड़ी तो नहीं है)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"हाँ" पर चलने वाला एक्शन समूह अब मौजूद नहीं है; छोड़ दिया गया</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"हाँ" पर चलने वाला एक्शन समूह अक्षम है; छोड़ दिया गया</value></data>

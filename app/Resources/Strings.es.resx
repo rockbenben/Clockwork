@@ -288,6 +288,10 @@ Registro: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Error al guardar la configuración: {0} (los cambios solo están en memoria y se perderán al reiniciar)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>El grupo de acciones referenciado por el recordatorio "{0}" ya no existe; esta vez no se ejecutó nada</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>El grupo de acciones referenciado por el recordatorio "{0}" está deshabilitado; esta vez no se ejecutó nada</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>No se encontró el grupo de acciones referenciado</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>El grupo de acciones "{0}" está deshabilitado; omitido</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Reentrada en el grupo de acciones (referencia circular o ya en ejecución); omitido</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>La ejecución se detuvo al alcanzar el límite de 5000 pasos; los pasos restantes se omitieron (compruebe si hay recuentos de repetición excesivos)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>El grupo de acciones a ejecutar al pulsar "Sí" ya no existe; omitido</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>El grupo de acciones a ejecutar al pulsar "Sí" está deshabilitado; omitido</value></data>

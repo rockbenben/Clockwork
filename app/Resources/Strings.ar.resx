@@ -288,6 +288,10 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>فشل حفظ الإعدادات: {0} (التغييرات في الذاكرة فقط وستُفقد عند إعادة التشغيل)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>مجموعة الإجراءات التي يشير إليها التذكير "{0}" لم تعد موجودة؛ لم يُنفَّذ شيء هذه المرة</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات التي يشير إليها التذكير "{0}" معطّلة؛ لم يُنفَّذ شيء هذه المرة</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>مجموعة الإجراءات المشار إليها غير موجودة</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات "{0}" معطّلة؛ تم التخطي</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>إعادة دخول مجموعة الإجراءات (إشارة دائرية أو قيد التشغيل بالفعل)؛ تم التخطي</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}، {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>توقّف التشغيل عند حد 5000 خطوة؛ تم تخطي الخطوات المتبقية (تحقّق من وجود عدد تكرار كبير جدًا)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" لم تعد موجودة؛ تم التخطي</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" معطّلة؛ تم التخطي</value></data>

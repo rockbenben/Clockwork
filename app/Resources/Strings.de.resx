@@ -288,6 +288,10 @@ Protokoll: {1}</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Konfiguration konnte nicht gespeichert werden: {0} (Änderungen sind nur im Speicher und gehen beim Neustart verloren)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Die von Erinnerung "{0}" referenzierte Aktionsgruppe existiert nicht mehr; diesmal wurde nichts ausgeführt</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Die von Erinnerung "{0}" referenzierte Aktionsgruppe ist deaktiviert; diesmal wurde nichts ausgeführt</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>Referenzierte Aktionsgruppe nicht gefunden</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Aktionsgruppe "{0}" ist deaktiviert; übersprungen</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Aktionsgruppe erneut betreten (Zirkelbezug oder bereits in Ausführung); übersprungen</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Der Lauf wurde beim Limit von 5000 Schritten gestoppt; die restlichen Schritte wurden übersprungen (prüfen Sie auf zu große Wiederholungszahlen)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Die bei "Ja" auszuführende Aktionsgruppe existiert nicht mehr; übersprungen</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Die bei "Ja" auszuführende Aktionsgruppe ist deaktiviert; übersprungen</value></data>

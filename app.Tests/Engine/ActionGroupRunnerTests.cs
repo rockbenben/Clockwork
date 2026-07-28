@@ -206,9 +206,12 @@ public class ActionGroupRunnerTests
     }
 
     [Fact]
-    public void Reentrant_reference_reports_once_and_stops_iterating()
+    public void Reentrant_reference_reports_via_OnStepSkipped_not_OnStepError_and_stops_iterating()
     {
         // 重入注定持续整个循环（同一 id 还在调用栈上）：Repeat=999 的自引用以前会上报 999 次 + 空睡 999 次。
+        // 与生产代码（App.xaml.cs BuildGroupDeps 的 RunGroupStep）同款接线：重入不是异常，经 OnStepSkipped
+        // 上报（benign=false——这是真问题，不是正常配置状态），OnStepError 保留给 RunStep 真正抛出的异常。
+        var skipped = new List<(string Label, string Reason, bool Benign)>();
         var errors = new List<string>();
         int calls = 0;
         var g = new ActionGroup { Id = "self", Steps = new() { new LaunchStep { Kind = "group", GroupId = "self", Label = "ref", Repeat = 999, DelayMs = 0 } } };
@@ -217,17 +220,67 @@ public class ActionGroupRunnerTests
         {
             Hour = 10, IsoDay = 3,
             OnStepError = (s, _) => errors.Add(s.Label),
+            OnStepSkipped = (s, reason, benign) => skipped.Add((s.Label, reason, benign)),
             RunGroupStep = s =>
             {
                 calls++;
                 var r = ActionGroupRunner.RunGroup(g, deps);
-                if (r == GroupRunResult.Skipped) deps.OnStepError(s, new InvalidOperationException("重入"));
+                if (r == GroupRunResult.Skipped) deps.OnStepSkipped(s, "动作组重入（环引用或已在运行），已跳过", false);
                 return r;
             },
         };
         ActionGroupRunner.RunGroup(g, deps);
-        Assert.Equal(1, calls);    // 第一次就知道结论，不再迭代
-        Assert.Single(errors);     // 只记一笔（不是 999 笔日志 + 999 张气泡）
+        Assert.Equal(1, calls);    // 第一次就知道结论，不再迭代（ActionGroupRunner 收到 Skipped 就 break，行为不能被这次改动动到）
+        Assert.Empty(errors);      // 不是异常，不该走 OnStepError
+        var one = Assert.Single(skipped);
+        Assert.Equal("ref", one.Label);
+        Assert.False(string.IsNullOrEmpty(one.Reason));   // 原因文本非空——用户能看懂为什么被跳过
+        Assert.False(one.Benign);   // 重入是真问题，不是良性状态
+    }
+
+    [Fact]
+    public void Benign_skip_still_stops_reference_iterations_but_lets_group_continue()
+    {
+        // 「目标组已禁用」（benign=true，与 App.xaml.cs BuildGroupDeps 的 RunGroupStep 同款接线：
+        // 正常配置状态，不是故障）与「重入」共用同一条 Skipped 通路：ActionGroupRunner 只认 Skipped
+        // 本身，不关心 benign 与否——收到就 break 掉这一步的 rep 循环，但不中止整组（这与「否」中止
+        // 整组不同，是本次改动前后都成立的既有行为，这里锁定它对 benign 分支同样适用）。
+        var skipped = new List<(string Reason, bool Benign)>();
+        var errors = new List<string>();
+        var ran = new List<string>();
+        int calls = 0;
+        var disabledTarget = new ActionGroup { Id = "disabledTarget", Enabled = false, Steps = new() };
+        GroupDeps deps = null!;
+        deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s => ran.Add(s.Label),
+            OnStepError = (s, _) => errors.Add(s.Label),
+            OnStepSkipped = (s, reason, benign) => skipped.Add((reason, benign)),
+            RunGroupStep = s =>
+            {
+                calls++;
+                deps.OnStepSkipped(s, $"动作组「{disabledTarget.Id}」已禁用，跳过", true);
+                return GroupRunResult.Skipped;
+            },
+        };
+        var parent = new ActionGroup
+        {
+            Id = "parent2",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "group", GroupId = "disabledTarget", Label = "ref", Repeat = 5, DelayMs = 0 },
+                new LaunchStep { Kind = "keys", Combo = "b", Label = "afterref", DelayMs = 0 },
+            }
+        };
+        var result = ActionGroupRunner.RunGroup(parent, deps);
+        Assert.Equal(GroupRunResult.Completed, result);   // benign 跳过不中止整组（不同于「否」）
+        Assert.Equal(1, calls);                            // Repeat=5 但只问一次结论——同一目标状态不变，不重复空转
+        Assert.Empty(errors);
+        var one = Assert.Single(skipped);
+        Assert.False(string.IsNullOrEmpty(one.Reason));
+        Assert.True(one.Benign);
+        Assert.Equal(new[] { "afterref" }, ran.ToArray());  // 跳过之后的步骤照常执行
     }
 
     [Fact]

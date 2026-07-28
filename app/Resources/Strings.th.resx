@@ -288,6 +288,10 @@
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>บันทึกการตั้งค่าไม่สำเร็จ: {0} (การเปลี่ยนแปลงอยู่ในหน่วยความจำเท่านั้นและจะหายไปเมื่อรีสตาร์ท)</value></data>
   <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน "{0}" อ้างอิงไม่มีอยู่แล้ว ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน "{0}" อ้างอิงถูกปิดใช้งาน ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>ไม่พบกลุ่มการทำงานที่อ้างอิง</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>กลุ่มการทำงาน "{0}" ถูกปิดใช้งาน ข้ามไป</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>เข้าซ้ำในกลุ่มการทำงาน (การอ้างอิงแบบวนซ้ำหรือกำลังทำงานอยู่แล้ว) ข้ามไป</value></data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>การทำงานหยุดที่ขีดจำกัด 5000 ขั้นตอน ขั้นตอนที่เหลือถูกข้าม (ตรวจสอบว่ามีจำนวนการทำซ้ำมากเกินไปหรือไม่)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ไม่มีอยู่แล้ว ข้ามไป</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ถูกปิดใช้งาน ข้ามไป</value></data>
