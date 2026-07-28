@@ -271,6 +271,7 @@ Log: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Controle op updates mislukt: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klik en druk op de sneltoets. Esc annuleert, Del wist het. «Stoppen» in het systeemvak werkt altijd.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Druk op een sneltoets…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Dubbelklik om het zelf te typen</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Overnemen naar startlijst</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Uit het systeem verwijderen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» verwijderen?</value></data>

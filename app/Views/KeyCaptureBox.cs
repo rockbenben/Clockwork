@@ -13,24 +13,55 @@ internal static class KeyCaptureBox
     // box：目标文本框；mode：热键（要修饰键+拒保留）还是发送键（允许裸键+accept 校验）；
     // accept：目的地可编码校验（SendKeys 用；不过则忽略、继续等）；get/set：读/写当前值
     //         （急停键写配置、组热键写工作副本、发送键写自身文本，各传各的）。
+    // allowTyping：双击切到手输模式。给「发送」类的框用——Win+D / Win+E 这类被 Explorer 全局注册的组合，
+    //         系统在应用拿到之前就吃掉了按键，任何应用都捕捉不到；而它们作为**发送**内容完全有效
+    //         （SendKeyCombo 会真的发 LWIN），没有手输口就等于 UI 里永远录不进来。
+    //         热键框不需要：捕捉不到的那些同样注册不了（RegisterHotKey 会失败），给了也没用。
     public static void Attach(TextBox box, HotkeyCapture.KeyCaptureMode mode, System.Func<string, bool>? accept,
-                              System.Func<string> get, System.Action<string> set)
+                              System.Func<string> get, System.Action<string> set, bool allowTyping = false)
     {
         string prompt = Strings.Get("Hotkey_PressPrompt");
         // 内部记住「已提交值」：聚焦时 box.Text 变成提示文字，失焦复原不能再读 box.Text/get()，否则会把提示当成值。
         string committed = get();
         box.Text = committed;
+        bool typing = false;   // 手输模式：双击进入，期间不捕捉、按键照常落进文本框
+
+        if (allowTyping) box.ToolTip = Strings.Get("Hotkey_TypeHint");
+
+        void EndTyping(bool commit)
+        {
+            if (commit)
+            {
+                var v = box.Text.Trim();
+                // 校验不过就丢弃本次手输（与捕捉模式「组不出有效组合就继续等」同口径，不存一个跑不了的值）
+                if (v.Length > 0 && (accept == null || accept(v))) { committed = v; set(v); }
+            }
+            typing = false;
+            box.IsReadOnly = true;
+            box.Text = committed;
+        }
 
         box.GotKeyboardFocus += (_, _) =>
         {
+            if (typing) return;
             box.Text = prompt;
             App.Instance?.SuspendHotkeys();   // 捕捉期间注销全部全局热键，避免按到已注册组合触发急停/跑组
         };
         box.LostKeyboardFocus += (_, _) =>
         {
-            if (box.Text == prompt) box.Text = committed;   // 未捕捉就离开：复原显示
+            if (typing) EndTyping(commit: true);              // 手输后直接点走：按已输入的值提交（校验不过则复原）
+            else if (box.Text == prompt) box.Text = committed; // 未捕捉就离开：复原显示
             App.Instance?.ResumeHotkeys();
         };
+        if (allowTyping)
+            box.MouseDoubleClick += (_, _) =>
+            {
+                // 双击进手输（与「双击一行编辑」同一个手势习惯）。此时已 GotFocus、框里是提示文字，换回真值再放开只读。
+                typing = true;
+                box.IsReadOnly = false;
+                box.Text = committed;
+                box.SelectAll();
+            };
         // 关窗兜底：捕捉框仍持焦点时窗口被关（如裸 Enter 触发默认按钮）不保证走 LostFocus——
         // 由共享设施挂宿主窗口 Closed→恢复，宿主不必各写一份 OnClosed，将来新宿主也不会漏。ResumeHotkeys 幂等。
         // 构造时通常已能取到宿主窗口；取不到（少见）则等 Loaded 再挂一次，绝不让关窗恢复漏掉——否则急停键会静默失效。
@@ -48,9 +79,20 @@ internal static class KeyCaptureBox
         }
         box.PreviewKeyDown += (_, e) =>
         {
+            var key0 = e.Key == Key.System ? e.SystemKey : e.Key;
+            if (typing)
+            {
+                // 手输模式只认 Enter/Esc，其余按键照常落进文本框（不拦截）。
+                if (key0 == Key.Enter) { EndTyping(commit: true); Keyboard.ClearFocus(); e.Handled = true; }
+                else if (key0 == Key.Escape) { EndTyping(commit: false); Keyboard.ClearFocus(); e.Handled = true; }
+                return;
+            }
             e.Handled = true;   // 捕捉一切按键（PassThrough 分支除外）
-            var key = e.Key == Key.System ? e.SystemKey : e.Key;
-            switch (HotkeyCapture.ProcessCaptureKey(key, Keyboard.Modifiers, mode, accept, out var combo))
+            // WPF 的 Keyboard.Modifiers 只聚合 Alt/Ctrl/Shift，从不含 Windows——必须自己按键态补上，
+            // 否则 Win 组合在热键模式录不进、在发送模式会被静默录成没有 Win 的裸键。详见 HotkeyCapture.WithWin。
+            var mods = HotkeyCapture.WithWin(Keyboard.Modifiers,
+                                             Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin));
+            switch (HotkeyCapture.ProcessCaptureKey(key0, mods, mode, accept, out var combo))
             {
                 case HotkeyCapture.CaptureAction.PassThrough:            // 裸 Tab（热键模式还含裸 Enter）：放行给焦点导航/默认按钮
                     e.Handled = false; break;

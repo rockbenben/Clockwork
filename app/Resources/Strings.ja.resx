@@ -272,6 +272,7 @@
   <data name="Update_Failed" xml:space="preserve"><value>更新の確認に失敗しました：{0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>クリックしてショートカットを押します。Esc で取消、Del で解除。トレイの「停止」はいつでも使えます。</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>ショートカットを押してください…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>ダブルクリックで手入力</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>起動リストに取り込む</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>システムから削除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>「{0}」を削除しますか？</value></data>

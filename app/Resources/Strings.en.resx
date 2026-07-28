@@ -274,6 +274,7 @@ Log: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Update check failed: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Click, then press the shortcut. Esc cancels, Del clears it. "Stop" in the tray menu always works.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Press a shortcut…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Double-click to type it manually</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Take over into launch list</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Delete from system</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Delete "{0}"?</value></data>

@@ -102,6 +102,15 @@ public static class HotkeyCapture
         Captured,     // 捕捉成功，combo 即结果
     }
 
+    // WPF 的 Keyboard.Modifiers 只聚合 Alt/Ctrl/Shift，**从不设 ModifierKeys.Windows**
+    //（KeyboardDevice.Modifiers 只查 LeftAlt/RightAlt、LeftCtrl/RightCtrl、LeftShift/RightShift）。
+    // 捕捉框必须自己按 Keyboard.IsKeyDown(LWin/RWin) 补上，否则：
+    //   热键模式 → 修饰键集为空、BuildCombo 判「至少一个修饰键」失败 → 按 Win 组合毫无反应；
+    //   发送模式 → 悄悄录成没有 Win 的裸键（按 Win+D 存进去的是 D），比录不进更糟。
+    // 运行期两条路径本来都支持 Win（SendKeyCombo 发 LWIN、ToHotkeyParams 给 MOD_WIN），坏的只有取修饰键这一步。
+    public static ModifierKeys WithWin(ModifierKeys wpfMods, bool winDown)
+        => winDown ? wpfMods | ModifierKeys.Windows : wpfMods;
+
     // 调用方先把 Key.System 解包成 SystemKey 再传入。accept 仅 SendKeys 模式用（目的地可编码校验）。
     public static CaptureAction ProcessCaptureKey(Key key, ModifierKeys mods, KeyCaptureMode mode, Func<string, bool>? accept, out string? combo)
     {

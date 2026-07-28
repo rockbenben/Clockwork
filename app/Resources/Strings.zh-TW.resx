@@ -272,6 +272,7 @@
   <data name="Update_Failed" xml:space="preserve"><value>檢查更新失敗：{0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>點擊後按下快捷鍵；Esc 取消、Del 清空停用。工作列右鍵「停止」始終可用。</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>按下快捷鍵…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>雙擊可手動輸入</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>接管到啟動清單</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>從系統中刪除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>確定要刪除「{0}」嗎？</value></data>

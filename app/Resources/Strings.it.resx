@@ -271,6 +271,7 @@ Registro: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Controllo aggiornamenti non riuscito: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Fai clic e premi la scorciatoia. Esc annulla, Canc la cancella. «Ferma» nella barra funziona sempre.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Premi una scorciatoia…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Doppio clic per digitarlo a mano</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Assumi nell'elenco di avvio</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Elimina dal sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Eliminare «{0}»?</value></data>

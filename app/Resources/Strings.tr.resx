@@ -271,6 +271,7 @@ Günlük: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Güncelleme denetimi başarısız: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Tıklayın, sonra kısayola basın. Esc iptal eder, Del temizler. Tepsideki «Durdur» her zaman çalışır.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Bir kısayola basın…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Elle yazmak için çift tıkla</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Başlangıç listesine al</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Sistemden sil</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» silinsin mi?</value></data>

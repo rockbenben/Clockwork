@@ -271,6 +271,7 @@
   <data name="Update_Failed" xml:space="preserve"><value>ตรวจหาการอัปเดตล้มเหลว: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัด Esc เพื่อยกเลิก Del เพื่อล้าง เมนู «หยุด» ในถาดใช้ได้เสมอ</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>กดปุ่มลัด…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>ดับเบิลคลิกเพื่อพิมพ์เอง</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>นำเข้าสู่รายการเริ่มต้น</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>ลบออกจากระบบ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>ลบ «{0}» หรือไม่?</value></data>

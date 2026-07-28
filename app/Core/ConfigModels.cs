@@ -24,7 +24,11 @@ public sealed class LaunchStep
     public string Args { get; set; } = "";
     public string WorkDir { get; set; } = "";
     public bool Elevated { get; set; }
-    public bool ActivateIfRunning { get; set; }
+    // 默认开：「启动程序」步骤的常见意图是「让它到前面来」，不是「再开一个」——尤其开机清单里，
+    // 手动开过的程序会被清单又开一份。目标是 URL/.lnk/.ps1/文档时 TargetProcessName 返回空串
+    // （见 LaunchTarget），本选项自动空转、照常启动，故打开它对这些步骤无副作用。
+    // 只影响新建步骤：盘上既有步骤都带显式 activateIfRunning（JsonOptions 不忽略默认值），读回原样。
+    public bool ActivateIfRunning { get; set; } = true;
     public string ActivateProcess { get; set; } = "";
     public string WindowStyle { get; set; } = "";
     public string AltTargets { get; set; } = "";

@@ -271,6 +271,7 @@
   <data name="Update_Failed" xml:space="preserve"><value>فشل التحقق من التحديثات: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>انقر ثم اضغط الاختصار. Esc للإلغاء، Del للمسح. «إيقاف» في علبة النظام يعمل دائمًا.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>اضغط اختصارًا…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>انقر نقرًا مزدوجًا للكتابة يدويًا</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>نقل إلى قائمة البدء</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>حذف من النظام</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>هل تريد حذف «{0}»؟</value></data>

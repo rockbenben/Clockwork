@@ -42,8 +42,10 @@ public partial class StepEditorWindow : Window
         // 「组合键」是单个组合（keys 步骤经 SendKeyCombo 单发），与热键同性质，改「点击即录键」——去掉多余的捕捉按钮。
         // 值就在框里、确定时读取，故 set 空。（「发送键」是 SendKeys 序列，可含 {TAB}{ENTER}/字面文本，必须能打字，
         // 保留普通文本框 + 捕捉按钮，不套 KeyCaptureBox。）
+        // allowTyping：Win+D / Win+E 这类被 Explorer 全局注册的组合，系统在应用之前就吃掉了按键、捕捉不到，
+        // 但它们作为发送内容完全有效（SendKeyCombo 会真发 LWIN）——双击切手输才录得进来。
         KeyCaptureBox.Attach(ComboBox2, Native.HotkeyCapture.KeyCaptureMode.SendKeys,
-            c => Native.KeyInput.ToHotkeyParams(c) != null, () => ComboBox2.Text, _ => { });
+            c => Native.KeyInput.ToHotkeyParams(c) != null, () => ComboBox2.Text, _ => { }, allowTyping: true);
     }
 
     // （关窗恢复全局热键的兜底由 KeyCaptureBox 统一负责——挂宿主窗口 Closed，此处不再各写一份。）

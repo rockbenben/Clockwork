@@ -271,6 +271,7 @@ Registro: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Error al buscar actualizaciones: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Haz clic y pulsa el atajo. Esc cancela, Supr lo borra. «Detener» en la bandeja siempre funciona.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Pulsa un atajo…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Doble clic para escribirlo a mano</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Asumir en la lista de inicio</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Eliminar del sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>¿Eliminar «{0}»?</value></data>

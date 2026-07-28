@@ -271,6 +271,7 @@
   <data name="Update_Failed" xml:space="preserve"><value>Не удалось проверить обновления: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Нажмите, затем нажмите сочетание клавиш. Esc — отмена, Del — очистить. «Стоп» в трее работает всегда.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Нажмите сочетание…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Двойной щелчок — ввести вручную</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Перенести в список запуска</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Удалить из системы</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Удалить «{0}»?</value></data>

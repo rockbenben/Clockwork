@@ -271,6 +271,7 @@
   <data name="Update_Failed" xml:space="preserve"><value>अपडेट जाँच विफल: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>क्लिक करें, फिर शॉर्टकट दबाएँ। Esc रद्द करता है, Del मिटाता है। ट्रे में «रोकें» हमेशा काम करता है।</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>शॉर्टकट दबाएँ…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>हाथ से टाइप करने के लिए डबल-क्लिक करें</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>स्टार्टअप सूची में लें</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>सिस्टम से हटाएँ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>क्या «{0}» हटाना है?</value></data>

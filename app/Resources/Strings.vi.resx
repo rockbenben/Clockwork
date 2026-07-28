@@ -271,6 +271,7 @@ Nhật ký: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Kiểm tra cập nhật thất bại: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Bấm rồi nhấn phím tắt. Esc để hủy, Del để xóa. «Dừng» ở khay luôn dùng được.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Nhấn phím tắt…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Nhấp đúp để tự nhập</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Đưa vào danh sách khởi động</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Xóa khỏi hệ thống</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Xóa «{0}»?</value></data>

@@ -135,4 +135,46 @@ public class HotkeyCaptureTests
         Assert.Equal(HotkeyCapture.CaptureAction.Ignore, act);
         Assert.Null(combo);
     }
+
+    // —— Win 修饰键：WPF 的 Keyboard.Modifiers 从不含 Windows，捕捉框必须自己补 ——
+    // 本组用例守的是「补」这一步。上面 Capture_sendkeys 里那条 (Key.D, ModifierKeys.Windows, "Win+D")
+    // 一直是绿的，却抓不到真实 bug——它直接喂 ModifierKeys.Windows，恰好绕过了唯一坏掉的那层。
+    [Fact]
+    public void WithWin_adds_windows_flag_only_when_win_is_down()
+    {
+        Assert.Equal(ModifierKeys.Control | ModifierKeys.Windows,
+                     HotkeyCapture.WithWin(ModifierKeys.Control, winDown: true));
+        Assert.Equal(ModifierKeys.Control, HotkeyCapture.WithWin(ModifierKeys.Control, winDown: false));
+        Assert.Equal(ModifierKeys.Windows, HotkeyCapture.WithWin(ModifierKeys.None, winDown: true));
+    }
+
+    // 不补 Win 时的两种坏结局，各钉一条，防止有人「简化」掉调用点的 WithWin。
+    [Fact]
+    public void Hotkey_mode_without_win_flag_captures_nothing()
+    {
+        // 热键模式：Win 丢了 → 修饰键集为空 → BuildCombo 判「至少一个修饰键」失败 → 按键毫无反应
+        var act = HotkeyCapture.ProcessCaptureKey(Key.J, ModifierKeys.None,
+            HotkeyCapture.KeyCaptureMode.Hotkey, null, out var combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Ignore, act);
+        Assert.Null(combo);
+        // 补上之后录得进
+        act = HotkeyCapture.ProcessCaptureKey(Key.J, HotkeyCapture.WithWin(ModifierKeys.None, true),
+            HotkeyCapture.KeyCaptureMode.Hotkey, null, out combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
+        Assert.Equal("Win+J", combo);
+    }
+
+    [Fact]
+    public void SendKeys_mode_without_win_flag_silently_captures_the_bare_key()
+    {
+        // 发送模式更糟：Win 丢了不是录不进，而是把 Win+D 静默录成 D（按下去只会打一个 d）
+        var act = HotkeyCapture.ProcessCaptureKey(Key.D, ModifierKeys.None,
+            HotkeyCapture.KeyCaptureMode.SendKeys, _ => true, out var combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
+        Assert.Equal("D", combo);   // ← 这就是用户实际存进去的值
+        // 补上之后才是真正按下的那个组合
+        act = HotkeyCapture.ProcessCaptureKey(Key.D, HotkeyCapture.WithWin(ModifierKeys.None, true),
+            HotkeyCapture.KeyCaptureMode.SendKeys, _ => true, out combo);
+        Assert.Equal("Win+D", combo);
+    }
 }

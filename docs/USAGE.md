@@ -49,7 +49,7 @@ The most common need, "open my everyday apps at login":
 
 | Type | What it does |
 | --- | --- |
-| **Launch program** | `.exe` / document / shortcut / URL (**Browse…** to pick a file); `.ps1` runs via PowerShell. Working dir blank = target's folder. Advanced: **window style** (minimized / maximized / hidden), **activate if already running** (bring to front instead of relaunching; process name via **Pick…**), **fallback paths** (one full path per line; the first existing one is used — handy when install paths differ across machines). |
+| **Launch program** | `.exe` / document / shortcut / URL (**Browse…** to pick a file); `.ps1` runs via PowerShell. Working dir blank = target's folder. Advanced: **window style** (minimized / maximized / hidden), **activate if already running** (**on by default**: bring to front instead of relaunching; process name via **Pick…**. For a URL / `.lnk` / `.ps1` / document target the process name can't be derived, so the option quietly does nothing and the target launches as usual), **fallback paths** (one full path per line; the first existing one is used — handy when install paths differ across machines). |
 | **Send keys** | e.g. Win+D, Alt+K, Ctrl+Enter, F5 (supports Enter / Tab / Esc / Del / arrows…; **Capture** records a shortcut by pressing it). |
 | **Send text** | Type a string into the focused window (newline = Enter, Tab works). Optional **target process** (**Pick…**) — brings its window to front first, then types; blank = current focus. |
 | **Volume** | Mute / unmute / set level (setting a level unmutes first). |

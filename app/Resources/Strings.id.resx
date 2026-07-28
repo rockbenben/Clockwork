@@ -271,6 +271,7 @@ Log: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Gagal memeriksa pembaruan: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klik, lalu tekan pintasan. Esc batal, Del menghapus. «Berhenti» di baki selalu bisa.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Tekan pintasan…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Klik dua kali untuk mengetik manual</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Ambil alih ke daftar mulai</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Hapus dari sistem</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Hapus «{0}»?</value></data>

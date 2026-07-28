@@ -271,6 +271,7 @@ Journal : {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Échec de la vérification des mises à jour : {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Cliquez puis appuyez sur le raccourci. Échap annule, Suppr l'efface. « Arrêter » dans la barre d'état fonctionne toujours.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Appuyez sur un raccourci…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Double-cliquez pour le saisir manuellement</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Reprendre dans la liste de démarrage</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Supprimer du système</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Supprimer « {0} » ?</value></data>

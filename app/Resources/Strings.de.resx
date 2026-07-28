@@ -271,6 +271,7 @@ Protokoll: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Updateprüfung fehlgeschlagen: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klicken, dann die Tastenkombination drücken. Esc bricht ab, Entf löscht sie. „Stoppen“ im Infobereich funktioniert immer.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Tastenkombination drücken…</value></data>
+  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Zum manuellen Eingeben doppelklicken</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>In Startliste übernehmen</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Aus dem System löschen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>„{0}“ wirklich löschen?</value></data>
