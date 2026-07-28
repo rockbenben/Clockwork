@@ -323,16 +323,13 @@
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Пора спать!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Перерыв от сидения · циклом</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Встаньте и немного разомнитесь</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>Отключить звук при запуске (пример · только до 8 утра)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Отключить звук при запуске (пример · против автовоспроизведения)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Открыть браузер (пример · укажите свой .exe)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Открыть сайт (пример · только по будням; почта или задачи)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Открыть мессенджер (пример · запускается свёрнутым в фоне)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Показать рабочий стол через Win+D (пример · отправка сочетания клавиш)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>Свернуть окно (пример · по имени процесса)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Встаньте и выпейте воды (пример)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>Пора закругляться — остались дела на сегодня? (пример)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>Съешьте фруктов (пример · можно включить озвучивание)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Проверить счета и подписки за месяц (пример · 1-го числа)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Пора спать (пример)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Для этого действия нужны права администратора. Перезапустить Clockwork от имени администратора?</value></data>

@@ -145,23 +145,29 @@ public sealed class RootConfig
         ActionGroups = ActionGroups.Select(g => g.SnapshotForRun()).ToList(),
     };
 
-    // 首次使用的示例清单：只保留最有代表性的几种玩法（条件执行 / 开程序 / 开网址 / 组合键 / 窗口动作），
-    // 且全部默认不勾选——样例是照着改的模板，不该在用户还没看过一眼时就替他动电脑。
-    // 文案经 resx 本地化，与 ActionGroupTemplates 同口径（否则非中文用户首次打开只看得到中文样例）。
+    // 首次使用的示例清单：按「一个真实的早晨」排序，而不是按功能覆盖率排列——
+    // 先静音、开浏览器、开常用网站、把聊天软件最小化挂后台，最后 Win+D 清屏收尾。
+    // 全部默认不勾选：样例是照着改的模板，不该在用户还没看过一眼时就替他动电脑。
+    // 文案经 resx 本地化，与 ActionGroupTemplates 同口径；进程名/路径是全球通用的字面量，不本地化。
     public static List<LaunchStep> DefaultLaunchSteps() => new()
     {
-        new LaunchStep { Kind = "volume", Label = Strings.Get("Smp_MuteEarly"), Action = "mute", OnlyBefore8 = true, Enabled = false },
+        new LaunchStep { Kind = "volume", Label = Strings.Get("Smp_Mute"), Action = "mute", Enabled = false },
         new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenApp"), Target = "msedge.exe", Enabled = false },
-        new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenSite"), Target = "https://github.com", DelayMs = 800, Enabled = false },
+        // 条件执行的演示放这条：「工作日才打开工作网站」是自证的，比原来的「仅 8 点前静音」好懂。
+        new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenSite"), Target = "https://github.com", DelayMs = 800, Days = new() { 1, 2, 3, 4, 5 }, Enabled = false },
+        // windowStyle 一步挂后台，比「开完再用窗口动作最小化」更贴近真实做法。
+        new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenChat"), Target = "Slack.exe", WindowStyle = "minimized", Enabled = false },
+        // 放最后才成立：前面开了 4 个东西，这一下是清屏收尾。
         new LaunchStep { Kind = "keys", Label = Strings.Get("Smp_ShowDesktop"), Combo = "Win+D", Enabled = false },
-        new LaunchStep { Kind = "window", Label = Strings.Get("Smp_Minimize"), Action = "minimize", Process = "msedge", DelayMs = 1000, Enabled = false },
     };
 
-    // 通用示例提醒：工作日重复 / 语音播报 / 每天各留一条，同样默认不启用。
+    // 通用示例提醒：工作日两条（补水 / 收工，后者带语音）、每天一条（睡前）、每月一条（账单）。
+    // 每月那条是唯一演示「按月」周期的样例——原来三条全是每天/工作日。同样默认不启用。
     public static List<Reminder> DefaultReminders() => new()
     {
         new Reminder { Time = "10:00", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemWater"), Enabled = false },
-        new Reminder { Time = "15:30", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemFruit"), Speak = true, Enabled = false },
+        new Reminder { Time = "17:30", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemWrapUp"), Speak = true, Enabled = false },
         new Reminder { Time = "23:00", Message = Strings.Get("Smp_RemSleep"), Enabled = false },
+        new Reminder { Time = "09:00", RecurType = "monthly", MonthlyDay = 1, Message = Strings.Get("Smp_RemBills"), Enabled = false },
     };
 }

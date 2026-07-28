@@ -324,16 +324,13 @@
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>寝る時間です！</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>座りすぎ通知 · 繰り返し</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>立って少し体を動かしましょう</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>起動時にミュート（サンプル・午前 8 時前のみ）</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>起動時にミュート（サンプル・ページの自動再生対策）</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>ブラウザーを開く（サンプル・自分の .exe に変更）</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>よく使うサイトを開く（サンプル・平日のみ、メールや ToDo に変更）</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>チャットアプリを開く（サンプル・最小化してバックグラウンドで常駐）</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D でデスクトップ表示（サンプル・キー操作を送信）</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>ウィンドウを最小化（サンプル・プロセス名で指定）</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>少し立って水を飲みましょう（サンプル）</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>そろそろ終業。今日の ToDo に残りはありませんか（サンプル）</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>果物を食べましょう（サンプル・読み上げも設定可）</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>今月の請求とサブスクを確認（サンプル・毎月 1 日）</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>そろそろ寝る時間です（サンプル）</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>この操作には管理者権限が必要です。Clockwork を管理者として再起動しますか？</value></data>

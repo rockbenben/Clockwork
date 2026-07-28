@@ -323,16 +323,13 @@
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>सोने का समय!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>लंबे समय बैठने की याद · दोहराव</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>उठिए और थोड़ा चलिए</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>शुरू होते ही म्यूट करें (उदाहरण · केवल सुबह 8 बजे से पहले)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>शुरू होते ही म्यूट करें (उदाहरण · ऑटो-प्ले आवाज़ रोकें)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>ब्राउज़र खोलें (उदाहरण · अपनी .exe चुनें)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>पसंदीदा साइट खोलें (उदाहरण · केवल कार्यदिवस; अपना मेल या टू-डू)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>चैट ऐप खोलें (उदाहरण · मिनिमाइज़ होकर बैकग्राउंड में)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D से डेस्कटॉप दिखाएँ (उदाहरण · कुंजी संयोजन भेजें)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>विंडो छोटी करें (उदाहरण · प्रोसेस नाम से)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>उठकर थोड़ा पानी पिएँ (उदाहरण)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>काम समेटने का समय — आज की सूची में कुछ बाकी है? (उदाहरण)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>कुछ फल खाएँ (उदाहरण · आवाज़ चालू की जा सकती है)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>इस महीने के बिल और सब्सक्रिप्शन देखें (उदाहरण · हर 1 तारीख)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>सोने का समय हो गया (उदाहरण)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>इस कार्रवाई के लिए व्यवस्थापक अधिकार चाहिए। Clockwork को व्यवस्थापक के रूप में फिर से खोलें?</value></data>

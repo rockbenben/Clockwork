@@ -323,16 +323,13 @@ Journal : {1}</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>C'est l'heure de dormir !</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Pause assise · en boucle</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Levez-vous et bougez un peu</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>Couper le son au démarrage (exemple · seulement avant 8 h)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Couper le son au démarrage (exemple · évite les lectures automatiques)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Ouvrir le navigateur (exemple · pointez vers votre propre .exe)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Ouvrir un site web (exemple · en semaine seulement ; votre mail ou to-do)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Ouvrir votre messagerie (exemple · démarre réduite en arrière-plan)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Afficher le bureau avec Win+D (exemple · envoyer une combinaison de touches)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>Réduire une fenêtre (exemple · par nom de processus)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Levez-vous et buvez un peu d'eau (exemple)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>C'est l'heure de conclure — reste-t-il des tâches du jour ? (exemple)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>Mangez un fruit (exemple · la synthèse vocale est activable)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Vérifier factures et abonnements du mois (exemple · le 1er)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Il est l'heure de dormir (exemple)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Cette action nécessite des droits d'administrateur. Rouvrir Clockwork en tant qu'administrateur ?</value></data>

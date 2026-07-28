@@ -323,16 +323,13 @@ Log: {1}</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Waktunya tidur!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Pengingat duduk lama · berulang</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Bangun dan gerak sebentar</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>Bisukan saat mulai (contoh · hanya sebelum pukul 8 pagi)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Bisukan saat mulai (contoh · cegah putar otomatis)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Buka peramban (contoh · arahkan ke .exe milikmu)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Buka situs favorit (contoh · hanya hari kerja; email atau daftar tugas)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Buka aplikasi chat (contoh · mulai terkecil di latar belakang)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Tampilkan desktop dengan Win+D (contoh · kirim kombinasi tombol)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>Minimalkan jendela (contoh · berdasarkan nama proses)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Bangun sebentar dan minum air (contoh)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>Waktunya menutup hari — masih ada yang tersisa? (contoh)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>Makan buah sedikit (contoh · suara bisa diaktifkan)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Cek tagihan dan langganan bulan ini (contoh · tanggal 1)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Waktunya tidur (contoh)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Tindakan ini memerlukan hak administrator. Buka ulang Clockwork sebagai administrator?</value></data>

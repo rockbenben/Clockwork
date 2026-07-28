@@ -323,16 +323,13 @@ Registro: {1}</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>¡Hora de dormir!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Pausa por estar sentado · en bucle</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Levántate y muévete un poco</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>Silenciar al iniciar (ejemplo · solo antes de las 8:00)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Silenciar al iniciar (ejemplo · evita reproducciones automáticas)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Abrir el navegador (ejemplo · apunta a tu propio .exe)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Abrir un sitio web (ejemplo · solo días laborables; tu correo o tareas)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Abrir tu app de chat (ejemplo · se inicia minimizada en segundo plano)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Mostrar el escritorio con Win+D (ejemplo · enviar combinación de teclas)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>Minimizar una ventana (ejemplo · por nombre de proceso)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Levántate y bebe agua (ejemplo)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>Hora de terminar: ¿queda algo pendiente de hoy? (ejemplo)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>Come algo de fruta (ejemplo · se puede activar la voz)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Revisar facturas y suscripciones del mes (ejemplo · el día 1)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Hora de dormir (ejemplo)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Esta acción requiere permisos de administrador. ¿Reabrir Clockwork como administrador?</value></data>

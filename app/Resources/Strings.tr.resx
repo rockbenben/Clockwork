@@ -323,16 +323,13 @@ Günlük: {1}</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Yatma vakti!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Uzun oturma molası · döngü</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Kalk ve biraz hareket et</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>Açılışta sesi kapat (örnek · yalnızca sabah 8'den önce)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Açılışta sesi kapat (örnek · otomatik oynatmaya karşı)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Tarayıcıyı aç (örnek · kendi .exe dosyanı seç)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Bir web sitesi aç (örnek · yalnızca hafta içi; postan ya da yapılacaklar)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Sohbet uygulamasını aç (örnek · simge durumunda arka planda başlar)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D ile masaüstünü göster (örnek · tuş bileşimi gönder)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>Bir pencereyi simge durumuna küçült (örnek · işlem adına göre)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Kalk ve biraz su iç (örnek)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>Günü kapatma vakti — bugünden kalan var mı? (örnek)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>Biraz meyve ye (örnek · seslendirme açılabilir)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Bu ayın faturalarını ve aboneliklerini kontrol et (örnek · ayın 1'i)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Uyku vakti (örnek)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Bu işlem yönetici izni gerektirir. Clockwork yönetici olarak yeniden açılsın mı?</value></data>

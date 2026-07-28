@@ -323,16 +323,13 @@ Nhật ký: {1}</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Đến giờ đi ngủ!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Nhắc ngồi lâu · lặp</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Đứng dậy vận động một chút</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>Tắt tiếng khi khởi động (ví dụ · chỉ trước 8 giờ sáng)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Tắt tiếng khi khởi động (ví dụ · tránh tự động phát tiếng)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Mở trình duyệt (ví dụ · trỏ tới .exe của bạn)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Mở trang web (ví dụ · chỉ ngày trong tuần; email hoặc việc cần làm)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Mở ứng dụng chat (ví dụ · thu nhỏ chạy nền)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Hiện màn hình nền bằng Win+D (ví dụ · gửi tổ hợp phím)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>Thu nhỏ một cửa sổ (ví dụ · theo tên tiến trình)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Đứng dậy và uống chút nước (ví dụ)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>Đến giờ kết thúc — còn việc nào của hôm nay chưa xong? (ví dụ)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>Ăn chút trái cây (ví dụ · có thể bật đọc thành tiếng)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Kiểm tra hoá đơn và gói đăng ký tháng này (ví dụ · ngày 1)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Đã đến giờ đi ngủ (ví dụ)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Thao tác này cần quyền quản trị. Mở lại Clockwork với quyền quản trị?</value></data>

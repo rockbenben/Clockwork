@@ -323,16 +323,13 @@
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>حان وقت النوم!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>تنبيه الجلوس الطويل · متكرر</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>قم وتحرّك قليلاً</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>كتم الصوت عند بدء التشغيل (مثال · قبل الثامنة صباحًا فقط)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>كتم الصوت عند البدء (مثال · لمنع التشغيل التلقائي)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>افتح المتصفح (مثال · وجّهه إلى ملف .exe الخاص بك)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>افتح موقعًا تستخدمه (مثال · أيام العمل فقط؛ بريدك أو مهامك)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>افتح تطبيق المحادثة (مثال · يبدأ مصغّرًا في الخلفية)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>إظهار سطح المكتب بـ Win+D (مثال · إرسال اختصار لوحة المفاتيح)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>تصغير نافذة (مثال · حسب اسم العملية)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>قم وتحرك قليلاً واشرب بعض الماء (مثال)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>حان وقت إنهاء العمل — هل بقي شيء من مهام اليوم؟ (مثال)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>تناول بعض الفاكهة (مثال · يمكن تفعيل النطق)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>راجع فواتير الشهر والاشتراكات (مثال · في اليوم الأول)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>حان وقت النوم (مثال)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>يتطلب هذا الإجراء صلاحيات المسؤول. هل تريد إعادة فتح Clockwork كمسؤول؟</value></data>

@@ -324,16 +324,13 @@
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>該睡覺了！</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>久坐提醒 · 循環</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>起來動一動，走兩步</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>開機先靜音（範例·僅上午 8 點前生效）</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>開機先靜音（範例·避免開機後網頁自動外放）</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>開啟瀏覽器（範例·換成你自己的 .exe）</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>開啟常用網站（範例·僅工作日，換成你的信箱 / 待辦）</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>開啟聊天軟體（範例·最小化掛背景，換成你自己的）</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>回到桌面 Win+D（範例·傳送組合鍵）</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>最小化視窗（範例·依處理程序名稱）</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>起來活動一下、喝口水~（範例）</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>該收工了，看看今天的待辦有沒有收尾（範例）</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>吃點水果，補充維生素（範例·可開語音朗讀）</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>檢查這個月的帳單 / 訂閱扣款（範例·每月 1 號）</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>該睡覺了（範例）</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>此操作需要管理員權限。是否以系統管理員身分重新開啟 Clockwork？</value></data>

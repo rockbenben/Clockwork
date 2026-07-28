@@ -7,8 +7,8 @@ public class DefaultConfigTests
     public void Default_has_expected_collections()
     {
         var c = RootConfig.Default();
-        Assert.Equal(5, c.LaunchSteps.Count);           // 精简后的代表性样例：5 条
-        Assert.Equal(3, c.Reminders.Count);             // 精简后的代表性样例：3 条
+        Assert.Equal(5, c.LaunchSteps.Count);           // 一个真实的早晨：5 步
+        Assert.Equal(4, c.Reminders.Count);             // 工作日两条 + 每天一条 + 每月一条：4 条
         Assert.Empty(c.ActionGroups);
         Assert.Equal(30, c.Settings.TickSeconds);
         Assert.Equal("Ctrl+Alt+Q", c.Settings.StopHotkey);
@@ -34,13 +34,14 @@ public class DefaultConfigTests
         Assert.All(c.Reminders, r => Assert.False(string.IsNullOrWhiteSpace(r.Message)));
     }
 
+    // 条件执行的演示挪到了「打开常用网站」那一步（仅工作日），这条静音不再带时间限制。
     [Fact]
-    public void Default_first_step_is_mute_only_before_8()
+    public void Default_first_step_is_mute()
     {
         var s = RootConfig.Default().LaunchSteps[0];
         Assert.Equal("volume", s.Kind);
         Assert.Equal("mute", s.Action);
-        Assert.True(s.OnlyBefore8);
+        Assert.False(s.OnlyBefore8);
     }
 
     [Fact]

@@ -323,16 +323,13 @@ Registro: {1}</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Hora de dormir!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Pausa de quem senta muito · em ciclo</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Levante-se e movimente-se um pouco</value></data>
-  <data name="Smp_MuteEarly" xml:space="preserve"><value>Silenciar ao iniciar (exemplo · apenas antes das 8h)</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Silenciar ao iniciar (exemplo · evita reprodução automática)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Abrir o navegador (exemplo · aponte para o seu .exe)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Abrir um site (exemplo · só em dias úteis; seu e-mail ou tarefas)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Abrir seu app de chat (exemplo · inicia minimizado em segundo plano)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Mostrar a área de trabalho com Win+D (exemplo · enviar combinação de teclas)</value></data>
-  <data name="Smp_Minimize" xml:space="preserve"><value>Minimizar uma janela (exemplo · pelo nome do processo)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Levante-se e beba um pouco de água (exemplo)</value></data>
   <data name="Smp_RemWrapUp" xml:space="preserve"><value>Hora de encerrar — sobrou algo da lista de hoje? (exemplo)</value></data>
-  <data name="Smp_RemFruit" xml:space="preserve"><value>Coma uma fruta (exemplo · a voz pode ser ativada)</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Conferir contas e assinaturas do mês (exemplo · no dia 1)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Hora de dormir (exemplo)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Esta ação requer privilégios de administrador. Reabrir o Clockwork como administrador?</value></data>
