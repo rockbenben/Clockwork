@@ -4,7 +4,7 @@ using Clockwork.I18n;
 
 namespace Clockwork.ViewModels;
 
-// 动作组页一行（启用/名称/步骤数）。
+// 动作组页一行（启用/名称/摘要/热键）。
 public sealed class GroupRowVm : ObservableObject, IRowVm
 {
     private readonly Action _onChanged;
@@ -24,13 +24,29 @@ public sealed class GroupRowVm : ObservableObject, IRowVm
     }
 
     public string Name => Group.Name;
-    public string StepCount => Group.Steps.Count.ToString();
+
+    // 列表摘要：前 3 步的动作摘要串起来。用 StepSummary 而非 StepListSummary——后者会把「用途说明」
+    // 当后缀拼进去，在这个窄列里太长。空组返回占位符：光一个数字 0 说不清"这个组什么都不会做"。
+    public string Summary
+    {
+        get
+        {
+            if (Group.Steps.Count == 0) return Strings.Get("Group_Empty");
+            var head = string.Join(" · ", Group.Steps.Take(3).Select(StepDisplay.StepSummary));
+            return Group.Steps.Count > 3 ? head + " …" : head;
+        }
+    }
+
+    // 组热键此前只在组编辑器里可见，多个组时根本说不出某个组合键属于谁。无热键时留空——
+    // 一列占位符号比空白更吵。
+    public string HotkeyLabel => Group.Hotkey ?? "";
 
     public void Refresh()
     {
         OnPropertyChanged(nameof(Enabled));
         OnPropertyChanged(nameof(Name));
-        OnPropertyChanged(nameof(StepCount));
+        OnPropertyChanged(nameof(Summary));
+        OnPropertyChanged(nameof(HotkeyLabel));
     }
 }
 

@@ -57,7 +57,7 @@ public class ReminderGroupVmTests
         int saves = 0;
         var vm = new GroupListVm(cfg, () => saves++);
         Assert.Equal("组A", vm.Rows[0].Name);
-        Assert.Equal("2", vm.Rows[0].StepCount);
+        Assert.Equal(2, cfg.ActionGroups[0].Steps.Count);
 
         vm.Add(new ActionGroup { Name = "组B" });
         Assert.Equal(2, cfg.ActionGroups.Count);

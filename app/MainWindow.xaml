@@ -159,8 +159,9 @@
                                         <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate></DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="{loc:Loc Col_Steps}" Binding="{Binding StepCount}" Width="72" IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="Auto" MinWidth="160" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Hotkey}" Binding="{Binding HotkeyLabel}" Width="Auto" MinWidth="110" IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         </Border>
