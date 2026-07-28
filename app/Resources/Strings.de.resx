@@ -13,6 +13,7 @@
   <data name="Launch_Hint" xml:space="preserve"><value>Läuft beim Start von oben nach unten · jeder Schritt unterstützt Verzögerung danach, Wiederholungen und Bedingungen (Wochentag / vor N Uhr)</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Zeigt zur Zeit ein Popup oder führt eine Aktionsgruppe still aus · unterstützt wiederkehrende Läufe und Einmalausführung · bei „Ja“ Programm starten / URL öffnen / Aktionsgruppe ausführen</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bündeln Sie mehrere Aktionen zu einer Gruppe und lösen Sie sie per Klick aus (Infobereich / Startliste / Erinnerungen)</value></data>
+  <data name="Group_Empty" xml:space="preserve"><value>(leer)</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Alle Autostart-Einträge dieses PCs — Unnötiges per Klick abschalten. Nur deaktivieren, nie löschen; jederzeit umkehrbar.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Ändern wirkt sofort (deaktivieren, nicht löschen; umkehrbar). Einträge mit „Admin nötig“ erfordern Administratorrechte. System- / Richtlinien- / einmalige schreibgeschützte Einträge sind standardmäßig ausgeblendet.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
@@ -33,6 +34,7 @@
   <data name="Col_Command" xml:space="preserve"><value>Befehl</value></data>
   <data name="Col_Source" xml:space="preserve"><value>Quelle</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Bereich</value></data>
+  <data name="Col_Hotkey" xml:space="preserve"><value>Tastenkombi.</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Hinzufügen</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Hinzufügen ▾</value></data>
@@ -306,6 +308,8 @@ Protokoll: {1}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Ausführen: {0}</value></data>
   <data name="Tray_DndHours" xml:space="preserve"><value>Erinnerungen {0} Std. pausieren</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Erinnerungen fortsetzen (noch {0} Min.)</value></data>
+  <data name="Tray_DndMenu" xml:space="preserve"><value>Erinnerungen pausieren</value></data>
+  <data name="Tray_Hours" xml:space="preserve"><value>{0} Std.</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>Erinnerungen für {0} Std. pausiert</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>Erinnerungen fortgesetzt</value></data>
   <data name="Menu_BlankGroup" xml:space="preserve"><value>Leere Gruppe</value></data>
@@ -317,13 +321,19 @@ Protokoll: {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Screenshot &amp; Anmerkung</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Alle heutigen Aufgaben notiert?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Zeit fürs Bett!</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>Sitzpause · Schleife</value></data>
+  <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Steh auf und beweg dich kurz</value></data>
   <data name="Smp_MuteEarly" xml:space="preserve"><value>Beim Start stummschalten (Beispiel · nur vor 8 Uhr)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>Programm öffnen (Beispiel · trage deine eigene .exe ein)</value></data>
-  <data name="Smp_OpenSite" xml:space="preserve"><value>Website öffnen (Beispiel · nimm deine Mail- oder To-do-URL)</value></data>
+  <data name="Smp_Mute" xml:space="preserve"><value>Beim Start stummschalten (Beispiel · gegen automatisch abspielende Seiten)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Browser öffnen (Beispiel · auf deine eigene .exe zeigen lassen)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Website öffnen (Beispiel · nur werktags; deine Mail- oder To-do-URL)</value></data>
+  <data name="Smp_OpenChat" xml:space="preserve"><value>Chat-App öffnen (Beispiel · startet minimiert im Hintergrund)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Desktop anzeigen mit Win+D (Beispiel · Tastenkombination senden)</value></data>
   <data name="Smp_Minimize" xml:space="preserve"><value>Fenster minimieren (Beispiel · über den Prozessnamen)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Kurz aufstehen und Wasser trinken (Beispiel)</value></data>
+  <data name="Smp_RemWrapUp" xml:space="preserve"><value>Feierabend — noch offene Punkte auf der heutigen Liste? (Beispiel)</value></data>
   <data name="Smp_RemFruit" xml:space="preserve"><value>Iss etwas Obst (Beispiel · Sprachausgabe aktivierbar)</value></data>
+  <data name="Smp_RemBills" xml:space="preserve"><value>Rechnungen und Abos des Monats prüfen (Beispiel · am 1.)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Zeit zum Schlafen (Beispiel)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Diese Aktion erfordert Administratorrechte. Clockwork als Administrator neu öffnen?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Die Aktionsgruppe "{0}" wird von {1} Erinnerung(en) und {2} Schritt(en) referenziert. Beim Löschen werden diese Verweise mit entfernt (Erinnerungen nur noch Popup; referenzierende Schritte entfernt). Trotzdem löschen?</value></data>

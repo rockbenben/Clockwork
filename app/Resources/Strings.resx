@@ -15,6 +15,7 @@
   <data name="Launch_Hint" xml:space="preserve"><value>开机时从上到下依次执行 · 每步可设「执行后延时」「重复次数」和「仅某些星期 / 仅 N 点前」</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>到点弹窗提醒或静默运行动作组 · 支持循环运行 / 仅一次 · 点「是」后可运行程序 / 开网页 / 跑动作组</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>把一串动作打包成组，托盘 / 开机清单 / 提醒里一键触发</value></data>
+  <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
   <data name="System_Hint" xml:space="preserve"><value>电脑里所有开机自启，一键关掉不需要的 — 只禁用、不删除，随时恢复</value></data>
   <data name="System_Footer" xml:space="preserve"><value>勾选 / 取消即时生效（非删除，可恢复）；标「需管理员」的项需管理员身份。系统 / 策略 / 一次性等只读项默认隐藏。</value></data>
   <data name="System_Filter" xml:space="preserve"><value>过滤</value></data>
@@ -35,6 +36,7 @@
   <data name="Col_Command" xml:space="preserve"><value>命令</value></data>
   <data name="Col_Source" xml:space="preserve"><value>来源</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>范围</value></data>
+  <data name="Col_Hotkey" xml:space="preserve"><value>热键</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>新增</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>新增 ▾</value></data>
@@ -309,6 +311,8 @@
   <data name="Tray_RunGroup" xml:space="preserve"><value>运行：{0}</value></data>
   <data name="Tray_DndHours" xml:space="preserve"><value>暂停提醒 {0} 小时</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>恢复提醒（剩 {0} 分钟）</value></data>
+  <data name="Tray_DndMenu" xml:space="preserve"><value>暂停提醒</value></data>
+  <data name="Tray_Hours" xml:space="preserve"><value>{0} 小时</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>已暂停提醒 {0} 小时</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>已恢复提醒</value></data>
   <data name="Menu_BlankGroup" xml:space="preserve"><value>空白组</value></data>
@@ -320,13 +324,19 @@
   <data name="Tpl_Screenshot" xml:space="preserve"><value>截图标注</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今天的任务都记录好了吗？</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>该睡觉了！</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>久坐提醒 · 循环</value></data>
+  <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>起来动一动，走两步</value></data>
   <data name="Smp_MuteEarly" xml:space="preserve"><value>开机先静音（示例·仅上午 8 点前生效）</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>打开常用软件（示例·换成你自己的 .exe）</value></data>
-  <data name="Smp_OpenSite" xml:space="preserve"><value>打开常用网站（示例·换成你的邮箱 / 待办）</value></data>
+  <data name="Smp_Mute" xml:space="preserve"><value>开机先静音（示例·避免开机后网页自动外放）</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>打开浏览器（示例·换成你自己的 .exe）</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>打开常用网站（示例·仅工作日，换成你的邮箱 / 待办）</value></data>
+  <data name="Smp_OpenChat" xml:space="preserve"><value>打开聊天软件（示例·最小化挂后台，换成你自己的）</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>回到桌面 Win+D（示例·发送组合键）</value></data>
   <data name="Smp_Minimize" xml:space="preserve"><value>最小化窗口（示例·按进程名操作）</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>起来活动一下、喝口水~（示例）</value></data>
+  <data name="Smp_RemWrapUp" xml:space="preserve"><value>该收工了，看看今天的待办有没有收尾（示例）</value></data>
   <data name="Smp_RemFruit" xml:space="preserve"><value>吃口水果，补充点维生素（示例·可开语音播报）</value></data>
+  <data name="Smp_RemBills" xml:space="preserve"><value>检查这个月的账单 / 订阅扣费（示例·每月 1 号）</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>该睡觉了（示例）</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>此操作需要管理员权限。是否以管理员身份重新打开 Clockwork？</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>动作组「{0}」正被 {1} 条提醒、{2} 个步骤引用。删除后这些引用将一并清除（提醒改为仅弹窗、引用它的步骤移除）。仍要删除吗？</value></data>

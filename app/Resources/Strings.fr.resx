@@ -13,6 +13,7 @@
   <data name="Launch_Hint" xml:space="preserve"><value>S'exécute de haut en bas au démarrage · chaque étape gère un délai après, un nombre de répétitions et des conditions jour de semaine / avant N h</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Affiche une alerte ou exécute un groupe d'actions en silence à l'heure prévue · prend en charge l'exécution périodique et l'exécution unique · sur « Oui » peut lancer un programme, ouvrir une URL ou exécuter un groupe d'actions</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Regroupez une série d'actions et déclenchez-les en un clic depuis la zone de notification / la liste de démarrage / les rappels</value></data>
+  <data name="Group_Empty" xml:space="preserve"><value>(vide)</value></data>
   <data name="System_Hint" xml:space="preserve"><value>Toutes les entrées de démarrage automatique du PC : désactivez celles inutiles. Désactivation seule, jamais de suppression ; réversible à tout moment.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Cocher/décocher prend effet immédiatement (désactivation, pas suppression ; réversible). Les éléments « admin requis » nécessitent des droits administrateur. Les éléments système / stratégie / uniques en lecture seule sont masqués par défaut.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filtre</value></data>
@@ -33,6 +34,7 @@
   <data name="Col_Command" xml:space="preserve"><value>Commande</value></data>
   <data name="Col_Source" xml:space="preserve"><value>Source</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Portée</value></data>
+  <data name="Col_Hotkey" xml:space="preserve"><value>Raccourci</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Ajouter</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Ajouter ▾</value></data>
@@ -306,6 +308,8 @@ Journal : {1}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Exécuter : {0}</value></data>
   <data name="Tray_DndHours" xml:space="preserve"><value>Suspendre les rappels {0} h</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Reprendre les rappels ({0} min restantes)</value></data>
+  <data name="Tray_DndMenu" xml:space="preserve"><value>Suspendre les rappels</value></data>
+  <data name="Tray_Hours" xml:space="preserve"><value>{0} h</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>Rappels suspendus pendant {0} h</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>Rappels repris</value></data>
   <data name="Menu_BlankGroup" xml:space="preserve"><value>Groupe vide</value></data>
@@ -317,13 +321,19 @@ Journal : {1}</value></data>
   <data name="Tpl_Screenshot" xml:space="preserve"><value>Capture et annotation</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Toutes les tâches du jour sont-elles notées ?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>C'est l'heure de dormir !</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>Pause assise · en boucle</value></data>
+  <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Levez-vous et bougez un peu</value></data>
   <data name="Smp_MuteEarly" xml:space="preserve"><value>Couper le son au démarrage (exemple · seulement avant 8 h)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>Ouvrir une application (exemple · indiquez votre propre .exe)</value></data>
-  <data name="Smp_OpenSite" xml:space="preserve"><value>Ouvrir un site web (exemple · l'URL de votre messagerie ou de vos tâches)</value></data>
+  <data name="Smp_Mute" xml:space="preserve"><value>Couper le son au démarrage (exemple · évite les lectures automatiques)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Ouvrir le navigateur (exemple · pointez vers votre propre .exe)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Ouvrir un site web (exemple · en semaine seulement ; votre mail ou to-do)</value></data>
+  <data name="Smp_OpenChat" xml:space="preserve"><value>Ouvrir votre messagerie (exemple · démarre réduite en arrière-plan)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Afficher le bureau avec Win+D (exemple · envoyer une combinaison de touches)</value></data>
   <data name="Smp_Minimize" xml:space="preserve"><value>Réduire une fenêtre (exemple · par nom de processus)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Levez-vous et buvez un peu d'eau (exemple)</value></data>
+  <data name="Smp_RemWrapUp" xml:space="preserve"><value>C'est l'heure de conclure — reste-t-il des tâches du jour ? (exemple)</value></data>
   <data name="Smp_RemFruit" xml:space="preserve"><value>Mangez un fruit (exemple · la synthèse vocale est activable)</value></data>
+  <data name="Smp_RemBills" xml:space="preserve"><value>Vérifier factures et abonnements du mois (exemple · le 1er)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Il est l'heure de dormir (exemple)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Cette action nécessite des droits d'administrateur. Rouvrir Clockwork en tant qu'administrateur ?</value></data>
   <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Le groupe d'actions « {0} » est référencé par {1} rappel(s) et {2} étape(s). Sa suppression effacera aussi ces références (rappels en simple fenêtre ; étapes le référençant supprimées). Supprimer quand même ?</value></data>
