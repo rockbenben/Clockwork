@@ -23,7 +23,7 @@ It sits quietly in the tray. The window's close button only hides it to the tray
 
 ## First run: replace the samples with your own
 
-On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — conditional execution, launching an app, opening a URL, sending a key combo, acting on a window. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Action groups tab starts with two ready-to-run groups already in place (Stepping away / Wrap up · End of day) — add more from the built-in templates under **Add ▾**.
+On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — muting the speakers, launching an app, opening a URL on weekdays only (conditional execution), starting a chat app minimized in the background, sending a key combo. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Action groups tab starts with two ready-to-run groups already in place (Stepping away / Wrap up · End of day) — add more from the built-in templates under **Add ▾**.
 
 The most common need, "open my everyday apps at login":
 

@@ -311,7 +311,7 @@ Log: {1}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Run: {0}</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Resume reminders ({0} min left)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Pause reminders</value></data>
-  <data name="Tray_Hours" xml:space="preserve"><value>{0} hours</value></data>
+  <data name="Tray_Hours" xml:space="preserve"><value>{0} h</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>Reminders paused for {0} h</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>Reminders resumed</value></data>
   <data name="Menu_BlankGroup" xml:space="preserve"><value>Blank group</value></data>

@@ -26,9 +26,9 @@ public class GroupRowVmSummaryTests
             new LaunchStep { Kind = "volume", Action = "mute" });
         var s = Row(g).Summary;
 
-        Assert.Contains(StepDisplay.StepSummary(g.Steps[0]), s);
-        Assert.Contains(StepDisplay.StepSummary(g.Steps[1]), s);
-        Assert.Contains(StepDisplay.StepSummary(g.Steps[2]), s);
+        // 整串比对而不是逐条 Contains：分隔符「 · 」与步骤顺序都是列表可读性的一部分，
+        // 只断言「包含」的话，把分隔符改成「, 」或把顺序倒过来都照样绿。
+        Assert.Equal(string.Join(" · ", g.Steps.Select(StepDisplay.StepSummary)), s);
         Assert.DoesNotContain("…", s);
     }
 

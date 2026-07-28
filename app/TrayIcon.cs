@@ -41,6 +41,13 @@ public sealed class TrayIcon : IDisposable
 
     private static void Rebuild(WinForms.ContextMenuStrip menu, App app)
     {
+        // 清空前先释放上一轮的项：TrayMenu.SubMenu 会实体化 DropDown（一个 ToolStripDropDownMenu，是 Control），
+        // 展开过一次就持有窗口句柄——只 Items.Clear() 不 Dispose 的话每次开菜单都漏一批 USER 对象，
+        // GC/终结器都收不回（每进程默认上限 10000，而本程序设计成常驻托盘数周）。
+        // 这里 Dispose 与 Dispose() 里「故意不释放菜单」并不矛盾：本方法由 Opening 触发、在菜单显示之前跑，
+        // 释放的是上一轮的旧项，没有任何一项在派发栈上；而「退出」是从菜单项自身的 Click 里回调过来的，
+        // 那时 ContextMenuStrip 仍在派发点击，释放它才会重入崩溃。别为了「一致」把这里也删掉。
+        DisposeItems(menu.Items);
         menu.Items.Clear();
         menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Show"), TrayGlyph.Window, (s, e) => app.ShowMain()));
 
@@ -95,6 +102,19 @@ public sealed class TrayIcon : IDisposable
 
         menu.Items.Add(new WinForms.ToolStripSeparator());
         menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Exit"), TrayGlyph.Exit, (s, e) => app.ExitApp()));
+    }
+
+    // 递归释放菜单项。必须连子项一起：漏的句柄挂在父项的 DropDown 上，子项本身也是 IDisposable，
+    // 只释放顶层项收不干净。倒序按下标取——ToolStripItem.Dispose 会把自己从 Owner.Items 里摘掉，
+    // 正序 foreach 会在集合被就地改动时抛「集合已修改」。
+    private static void DisposeItems(WinForms.ToolStripItemCollection items)
+    {
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            var it = items[i];
+            if (it is WinForms.ToolStripMenuItem { HasDropDownItems: true } sub) DisposeItems(sub.DropDownItems);
+            it.Dispose();
+        }
     }
 
     // 摘要压成单行：提醒/消息步骤的文本框允许多行，而 ToolStrip 菜单按单行测绘，

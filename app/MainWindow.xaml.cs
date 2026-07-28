@@ -504,7 +504,7 @@ public partial class MainWindow : Window
         }
         else if (!ConfirmDelete(g.Name)) return;
         _groups?.DeleteSelected();
-        if (_groups != null) foreach (var row in _groups.Rows) row.Refresh();   // 其他组的步骤数可能变了
+        if (_groups != null) foreach (var row in _groups.Rows) row.Refresh();   // 其他组的步骤摘要可能变了（嵌套引用被联动清掉）
         SyncSel(GridGroup, _groups);
     }
 
