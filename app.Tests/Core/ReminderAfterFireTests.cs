@@ -34,9 +34,12 @@ public class ReminderAfterFireTests
     [Fact]
     public void RepeatUntil_stops_past_deadline()
     {
+        // 同时配了循环：过截止是催促链的一个出口，出口上必须接着排下一轮循环——
+        // 否则「催促 + 循环」的任务在催促窗结束后就静默丢掉当天余下的所有轮次。
         var st = new ReminderState();
-        ReminderEngine.UpdateAfterFire(new Reminder { RepeatMinutes = 30, RepeatUntil = "10:20" }, N(10, 0), "", st);
-        Assert.Null(st.NextRepeatAt);   // 10:30 > 10:20
+        ReminderEngine.UpdateAfterFire(new Reminder { RepeatMinutes = 30, RepeatUntil = "10:20", IntervalMinutes = 30 }, N(10, 0), "", st);
+        Assert.Null(st.NextRepeatAt);            // 10:30 > 10:20
+        Assert.Equal(N(10, 30), st.NextIntervalAt);
     }
 
     [Fact]
@@ -89,10 +92,12 @@ public class ReminderAfterFireTests
     [Fact]
     public void MaxRepeats_caps()
     {
+        // 同时配了循环：达催促上限也是催促链的一个出口，同样要排下一轮循环（理由见 RepeatUntil_stops_past_deadline）。
         var st = new ReminderState { RepeatCount = ReminderEngine.MaxRepeats - 1 };
-        ReminderEngine.UpdateAfterFire(new Reminder { RepeatMinutes = 5 }, N(10, 0), "", st);
+        ReminderEngine.UpdateAfterFire(new Reminder { RepeatMinutes = 5, IntervalMinutes = 30 }, N(10, 0), "", st);
         Assert.Null(st.NextRepeatAt);
         Assert.Equal(0, st.RepeatCount);
+        Assert.Equal(N(10, 30), st.NextIntervalAt);
     }
 
     [Fact]
@@ -147,6 +152,16 @@ public class ReminderAfterFireTests
         var st = new ReminderState();
         ReminderEngine.UpdateAfterFire(new Reminder { IntervalMinutes = 30, IntervalUntil = "10:20" }, N(10, 0), "ok", st);
         Assert.Null(st.NextIntervalAt);   // 10:30 > 10:20
+    }
+
+    [Fact]
+    public void Interval_until_boundary_is_inclusive()
+    {
+        // 正好落在截止时刻的那一轮必须照排：判定是 next > until。10:30 vs 10:20 的用例分不出 > 与 >=，
+        // 而改成 >= 会静默砍掉每个窗口最后一轮合法运行。
+        var st = new ReminderState();
+        ReminderEngine.UpdateAfterFire(new Reminder { IntervalMinutes = 30, IntervalUntil = "10:30" }, N(10, 0), "ok", st);
+        Assert.Equal(N(10, 30), st.NextIntervalAt);
     }
 
     [Fact]
