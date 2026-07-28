@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Als Administrator ausführen</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Ziel kann ein voller exe-Pfad, ein Name, eine URL, ein Protokoll wie ms-settings: oder ein Dokument sein.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Tastenkürzel</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen. Von Windows belegte Kombinationen (Win+D, Win+6 …) lassen sich nicht aufzeichnen – doppelklicke das Feld, um sie einzutippen.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Aktion</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Lautstärke (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Prozess</value></data>
@@ -271,7 +271,6 @@ Protokoll: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Updateprüfung fehlgeschlagen: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klicken, dann die Tastenkombination drücken. Esc bricht ab, Entf löscht sie. „Stoppen“ im Infobereich funktioniert immer.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Tastenkombination drücken…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Zum manuellen Eingeben doppelklicken</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>In Startliste übernehmen</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Aus dem System löschen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>„{0}“ wirklich löschen?</value></data>
@@ -358,6 +357,7 @@ Protokoll: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tastenkombination {0} wird bereits von „{1}“ verwendet; bitte eine andere wählen</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} ist eine systemreservierte Kombination (ihre Registrierung würde eine Systemtaste kapern) und kann nicht als Tastenkombination verwendet werden</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Gesamte Gruppe wiederholen</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Im Infobereich-Menü anzeigen</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>Verzögerung zwischen den Runden (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Zirkuläre Gruppenreferenz ({0}) — Referenzkette vor dem Speichern auflösen</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplizieren</value></data>

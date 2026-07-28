@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Jalankan sebagai administrator</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Target bisa berupa path exe lengkap, nama, URL, protokol seperti ms-settings:, atau dokumen.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Pintasan</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu. Kombinasi milik Windows sendiri (Win+D, Win+6…) tidak bisa ditangkap — klik dua kali kotak ini untuk mengetiknya.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Aksi</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Proses</value></data>
@@ -271,7 +271,6 @@ Log: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Gagal memeriksa pembaruan: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klik, lalu tekan pintasan. Esc batal, Del menghapus. «Berhenti» di baki selalu bisa.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Tekan pintasan…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Klik dua kali untuk mengetik manual</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Ambil alih ke daftar mulai</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Hapus dari sistem</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Hapus «{0}»?</value></data>
@@ -358,6 +357,7 @@ Log: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tombol pintas {0} sudah dipakai oleh “{1}”; pilih kombinasi lain</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} adalah kombinasi yang dicadangkan sistem (mendaftarkannya akan membajak tombol sistem) dan tidak bisa dipakai sebagai tombol pintas</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Ulangi seluruh grup</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Tampilkan di menu baki</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>jeda antar putaran (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Referensi grup melingkar ({0}) — putuskan rantai referensi sebelum menyimpan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplikat</value></data>

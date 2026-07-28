@@ -194,7 +194,7 @@
   ],
   "reminders": [
     {
-      "id": "cf608d1f-e170-4e4d-8d75-d7fa44a4ee54",
+      "id": "dbe45cc2-b520-4556-b23a-1c4513fc3e98",
       "enabled": false,
       "trigger": "time",
       "time": "10:00",
@@ -231,7 +231,7 @@
       "onceDate": ""
     },
     {
-      "id": "872ace4c-4880-4965-b8b1-9f95f80bb6aa",
+      "id": "1abe8532-d508-4f6e-bda9-e0edf6a3ab0a",
       "enabled": false,
       "trigger": "time",
       "time": "17:30",
@@ -268,7 +268,7 @@
       "onceDate": ""
     },
     {
-      "id": "44e316e6-57a9-4025-bde9-10e749bcf97b",
+      "id": "1165ec36-f99e-4aa2-a6b0-b4b94d68d9ef",
       "enabled": false,
       "trigger": "time",
       "time": "23:00",
@@ -299,7 +299,7 @@
       "onceDate": ""
     },
     {
-      "id": "73ecdcc0-8150-4024-8d54-5272ca6991f3",
+      "id": "4075e67b-8636-45a3-9a17-ed7231a52e6a",
       "enabled": false,
       "trigger": "time",
       "time": "09:00",
@@ -340,12 +340,13 @@
   },
   "actionGroups": [
     {
-      "id": "66b5cdb6-aea9-4af8-afbb-393c2b831ac1",
+      "id": "68f2edce-ae80-455f-a46b-8acdaedf5416",
       "name": "离开一下",
       "enabled": true,
       "hotkey": "",
       "repeat": 1,
       "repeatDelayMs": 0,
+      "showInTray": true,
       "steps": [
         {
           "enabled": true,
@@ -424,12 +425,13 @@
       ]
     },
     {
-      "id": "19b14eea-1113-4e7c-9600-99e66f56009b",
+      "id": "ed8f80c7-a6df-4270-80f9-6ffa71f5ba4d",
       "name": "收工·下班",
       "enabled": true,
       "hotkey": "",
       "repeat": 1,
       "repeatDelayMs": 0,
+      "showInTray": true,
       "steps": [
         {
           "enabled": true,

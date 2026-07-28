@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Chạy với quyền quản trị</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Đích có thể là đường dẫn exe đầy đủ, tên, URL, giao thức như ms-settings: hoặc tài liệu.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Phím tắt</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Hành động</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Âm lượng (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Tiến trình</value></data>
@@ -271,7 +271,6 @@ Nhật ký: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Kiểm tra cập nhật thất bại: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Bấm rồi nhấn phím tắt. Esc để hủy, Del để xóa. «Dừng» ở khay luôn dùng được.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Nhấn phím tắt…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Nhấp đúp để tự nhập</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Đưa vào danh sách khởi động</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Xóa khỏi hệ thống</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Xóa «{0}»?</value></data>
@@ -358,6 +357,7 @@ Nhật ký: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Lặp lại toàn bộ nhóm</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Hiện trong menu khay</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>độ trễ giữa các vòng (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Có tham chiếu nhóm vòng lặp ({0}), hãy phá vỡ chuỗi tham chiếu trước khi lưu</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Nhân bản</value></data>

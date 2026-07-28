@@ -209,4 +209,52 @@ public class ConfigStoreTests : IDisposable
         }
         finally { File.Delete(path); }
     }
+
+    // —— 「在托盘菜单显示」的迁移 ——
+    // 老配置里没有 showInTray 字段，读进来是 null。若直接当 false，升级后老用户托盘里的
+    // 动作组会一起消失、看着像功能坏了；故 Normalize 一律补 true 保持升级前的外观。
+    [Fact]
+    public void ShowInTray_missing_in_old_config_migrates_to_true()
+    {
+        var cfg = new RootConfig { ActionGroups = new() { new ActionGroup { Name = "老组" } } };
+        Assert.Null(cfg.ActionGroups[0].ShowInTray);          // 模型默认就是「没表过态」
+        bool normalized = ConfigStore.Normalize(cfg);
+        Assert.True(normalized);                              // 需要写回，否则每次启动都补一遍
+        Assert.True(cfg.ActionGroups[0].ShowInTray);
+    }
+
+    // 显式关掉的必须活下来——否则用户每次重启都会看到自己藏起来的组又冒回托盘。
+    [Fact]
+    public void ShowInTray_explicit_false_survives_normalize()
+    {
+        var cfg = new RootConfig { ActionGroups = new() { new ActionGroup { Name = "藏起来", ShowInTray = false } } };
+        ConfigStore.Normalize(cfg);
+        Assert.False(cfg.ActionGroups[0].ShowInTray);
+    }
+
+    [Fact]
+    public void ShowInTray_roundtrips_through_disk_and_snapshot()
+    {
+        var path = Path.Combine(Path.GetTempPath(), "cw_cfg_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var cfg = new RootConfig { ActionGroups = new()
+            {
+                new ActionGroup { Name = "显示", ShowInTray = true },
+                new ActionGroup { Name = "隐藏", ShowInTray = false },
+            } };
+            ConfigStore.Write(cfg, path);
+            var back = ConfigStore.Read(path).ActionGroups;
+            Assert.True(back[0].ShowInTray);
+            Assert.False(back[1].ShowInTray);
+            // 后台跑组用的是快照，漏带这个字段会让托盘状态在快照里失真
+            Assert.False(back[1].SnapshotForRun().ShowInTray);
+        }
+        finally { File.Delete(path); }
+    }
+
+    // 首启预置的两个组必须进托盘：那时没有任何提醒/热键指向它们，托盘是唯一顺手的入口。
+    [Fact]
+    public void Default_preset_groups_are_shown_in_tray()
+        => Assert.All(RootConfig.Default().ActionGroups, g => Assert.True(g.ShowInTray));
 }

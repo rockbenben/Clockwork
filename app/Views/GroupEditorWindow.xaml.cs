@@ -35,6 +35,8 @@ public partial class GroupEditorWindow : Window
         NameBox.Text = group.Name;
         GroupRepeatBox.Text = StepHelpers.ClampRepeat(group.Repeat).ToString();
         GroupRepeatDelayBox.Text = group.RepeatDelayMs.ToString();
+        // 新建组 / 模板预填的组 ShowInTray 还是 null → 默认不勾（不进托盘）；已有组读盘时已被 Normalize 补过值。
+        ShowInTrayChk.IsChecked = group.ShowInTray ?? false;
         _hotkey = group.Hotkey ?? "";
         // 全局热键「点击即录键」，与急停键/发送键统一走 KeyCaptureBox。只改工作副本 _hotkey，
         // 点「确定」才随 Result 落库——取消编辑不影响已有热键。
@@ -135,6 +137,7 @@ public partial class GroupEditorWindow : Window
             Hotkey = _hotkey,
             Repeat = StepHelpers.ClampRepeat(ParseOr(GroupRepeatBox.Text, 1)),
             RepeatDelayMs = ParseOr(GroupRepeatDelayBox.Text, 0, min: 0),
+            ShowInTray = ShowInTrayChk.IsChecked == true,
             Steps = _rows.Select(r => r.Step).ToList(),
         };
         // 环引用校验：候选列表 = 其余组 + 本组编辑结果（新建组即追加），从本组出发 DFS。

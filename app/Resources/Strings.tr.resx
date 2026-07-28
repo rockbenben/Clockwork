@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Yönetici olarak çalıştır</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Hedef tam exe yolu, ad, URL, ms-settings: gibi bir protokol veya belge olabilir.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Kısayol</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Eylem</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Ses düzeyi (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>İşlem</value></data>
@@ -271,7 +271,6 @@ Günlük: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Güncelleme denetimi başarısız: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Tıklayın, sonra kısayola basın. Esc iptal eder, Del temizler. Tepsideki «Durdur» her zaman çalışır.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Bir kısayola basın…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Elle yazmak için çift tıkla</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Başlangıç listesine al</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Sistemden sil</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» silinsin mi?</value></data>
@@ -358,6 +357,7 @@ Günlük: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>{0} kısayolu zaten “{1}” tarafından kullanılıyor; başka bir kombinasyon seçin</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} sistem için ayrılmış bir kombinasyondur (kaydedilmesi bir sistem tuşunu ele geçirir) ve kısayol olarak kullanılamaz</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Tüm grubu tekrarla</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Tepsi menüsünde göster</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>turlar arası gecikme (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Döngüsel grup referansı ({0}) — kaydetmeden önce referans zincirini kırın</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Çoğalt</value></data>

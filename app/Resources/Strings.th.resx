@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>เรียกใช้ในฐานะผู้ดูแล</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>เป้าหมายเป็นพาธ exe เต็ม ชื่อ URL โปรโตคอลอย่าง ms-settings: หรือเอกสารก็ได้</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>ทางลัด</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>การกระทำ</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>ระดับเสียง (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>โปรเซส</value></data>
@@ -271,7 +271,6 @@
   <data name="Update_Failed" xml:space="preserve"><value>ตรวจหาการอัปเดตล้มเหลว: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัด Esc เพื่อยกเลิก Del เพื่อล้าง เมนู «หยุด» ในถาดใช้ได้เสมอ</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>กดปุ่มลัด…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>ดับเบิลคลิกเพื่อพิมพ์เอง</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>นำเข้าสู่รายการเริ่มต้น</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>ลบออกจากระบบ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>ลบ «{0}» หรือไม่?</value></data>
@@ -358,6 +357,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย “{1}” แล้ว โปรดเลือกชุดอื่น</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} เป็นชุดปุ่มที่ระบบสงวนไว้ (การลงทะเบียนจะยึดปุ่มระบบ) ใช้เป็นปุ่มลัดไม่ได้</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>ทำซ้ำทั้งกลุ่ม</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>แสดงในเมนูถาด</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>หน่วงเวลาระหว่างรอบ (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>มีการอ้างอิงกลุ่มแบบวนซ้ำ ({0}) โปรดตัดห่วงโซ่การอ้างอิงก่อนบันทึก</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>ทำสำเนา</value></data>

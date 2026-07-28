@@ -26,7 +26,8 @@ internal static class KeyCaptureBox
         box.Text = committed;
         bool typing = false;   // 手输模式：双击进入，期间不捕捉、按键照常落进文本框
 
-        if (allowTyping) box.ToolTip = Strings.Get("Hotkey_TypeHint");
+        // 「双击可手输」的说明不在这里挂 tooltip：它和「哪些组合捕捉不到」是同一件事，
+        // 合并写在框下方那行常驻提示里（Ed_KeysHint），免得两处各说一半、日后改一处漏一处。
 
         void EndTyping(bool commit)
         {

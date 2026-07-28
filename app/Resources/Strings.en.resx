@@ -149,7 +149,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Run as administrator</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Target can be a full exe path, bare name, URL, ms-settings: protocol, or a document.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Hotkey</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first. Combos Windows itself owns (Win+D, Win+6…) can't be captured — double-click this box to type one.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Action</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Process</value></data>
@@ -274,7 +274,6 @@ Log: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Update check failed: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Click, then press the shortcut. Esc cancels, Del clears it. "Stop" in the tray menu always works.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Press a shortcut…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Double-click to type it manually</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Take over into launch list</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Delete from system</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Delete "{0}"?</value></data>
@@ -361,6 +360,7 @@ Log: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Repeat whole group</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Show in tray menu</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>delay between rounds (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Circular group reference ({0}) — break the reference chain before saving</value></data>
 

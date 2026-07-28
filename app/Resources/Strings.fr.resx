@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Exécuter en administrateur</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La cible peut être un chemin exe complet, un nom, une URL, un protocole ms-settings: ou un document.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Raccourci</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan. Les combinaisons réservées par Windows (Win+D, Win+6…) ne peuvent pas être capturées — double-cliquez sur le champ pour les saisir.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Action</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Processus</value></data>
@@ -271,7 +271,6 @@ Journal : {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Échec de la vérification des mises à jour : {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Cliquez puis appuyez sur le raccourci. Échap annule, Suppr l'efface. « Arrêter » dans la barre d'état fonctionne toujours.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Appuyez sur un raccourci…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Double-cliquez pour le saisir manuellement</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Reprendre dans la liste de démarrage</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Supprimer du système</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Supprimer « {0} » ?</value></data>
@@ -358,6 +357,7 @@ Journal : {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par « {1} » ; choisissez une autre combinaison</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} est une combinaison réservée au système (l'enregistrer détournerait une touche système) et ne peut pas servir de raccourci</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Répéter tout le groupe</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Afficher dans le menu de la zone de notification</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>délai entre les tours (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Référence de groupe circulaire ({0}) — rompez la chaîne de références avant d'enregistrer</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Dupliquer</value></data>

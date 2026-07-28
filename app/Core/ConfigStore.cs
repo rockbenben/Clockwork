@@ -105,6 +105,9 @@ public static class ConfigStore
                 normalized = true;
             }
         foreach (var g in cfg.ActionGroups) if (string.IsNullOrWhiteSpace(g.Id)) { g.Id = Guid.NewGuid().ToString(); normalized = true; }
+        // 「在托盘显示」的迁移：本字段之前建的组读进来是 null，一律补 true 保持升级前的托盘外观
+        //（新建的组由编辑器给 false）。不补的话老用户升级后托盘里的动作组会全部消失，像功能坏了。
+        foreach (var g in cfg.ActionGroups) if (g.ShowInTray is null) { g.ShowInTray = true; normalized = true; }
         // 嵌套引用容错：json 显式写 "onYes":null / "steps":null 会覆盖模型初始化器，下游（编辑器读 .OnYes.Type、遍历 Steps）会 NRE。
         foreach (var s in cfg.LaunchSteps) { s.OnYes ??= new(); normalized |= NormalizeOnYes(s.OnYes); }
         // json 显式 "repeatUntil":null 会覆盖模型的 "" 默认；UpdateAfterFire 直接 Regex.IsMatch(它) 会 NPE 崩，补回空串。

@@ -35,6 +35,8 @@
                 <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,0"/>
                 <!-- 单位并入 Ed_GroupRepeatDelay 文案（各语言自带 ms 缩写，同 Ed_DelayMs）：写死的 "ms" 阿拉伯语/俄语用户会看到一截拉丁字母 -->
                 <TextBox x:Name="GroupRepeatDelayBox" Width="80" Height="28"/>
+                <!-- 托盘显示开关与「整组重复」同排：都是"这个组怎么被用"的属性，不占额外一行 -->
+                <CheckBox x:Name="ShowInTrayChk" Content="{loc:Loc Ed_GroupShowInTray}" VerticalAlignment="Center" Margin="24,0,0,0"/>
             </StackPanel>
         </Grid>
 

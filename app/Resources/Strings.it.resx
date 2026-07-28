@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Esegui come amministratore</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La destinazione può essere un percorso exe completo, un nome, un URL, un protocollo come ms-settings: o un documento.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Scorciatoia</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Azione</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Processo</value></data>
@@ -271,7 +271,6 @@ Registro: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Controllo aggiornamenti non riuscito: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Fai clic e premi la scorciatoia. Esc annulla, Canc la cancella. «Ferma» nella barra funziona sempre.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Premi una scorciatoia…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Doppio clic per digitarlo a mano</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Assumi nell'elenco di avvio</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Elimina dal sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Eliminare «{0}»?</value></data>
@@ -358,6 +357,7 @@ Registro: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>La scorciatoia {0} è già usata da “{1}”; scegline un'altra</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} è una combinazione riservata al sistema (registrarla dirotterebbe un tasto di sistema) e non può essere usata come scorciatoia</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Ripeti l'intero gruppo</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Mostra nel menu della barra</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>ritardo tra i round (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Riferimento di gruppo circolare ({0}) — interrompi la catena di riferimenti prima di salvare</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplica</value></data>

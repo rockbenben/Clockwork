@@ -108,10 +108,15 @@ public sealed class ActionGroup
     public string Hotkey { get; set; } = "";   // 全局热键（如 "Ctrl+Alt+F"），空=不绑定；随时一键运行本组
     public int Repeat { get; set; } = 1;       // 整组重复轮数（每次被触发时内部跑几轮）；与 group 引用步骤的 Repeat 相乘
     public int RepeatDelayMs { get; set; }     // 每轮之间间隔
+    // 是否在托盘菜单里列一行。新建的组默认 false——组一多托盘就被撑成长条，而多数组是靠热键 / 提醒 /
+    // 被别的组引用来触发的，不需要占一行；隐藏的组仍可从主窗口「运行」按钮跑，不会变成死组。
+    // 可空是为了区分「老配置没有这个字段」与「显式关掉」：null 由 ConfigStore.Normalize 补成 true，
+    // 否则升级后老用户托盘里的组会一起消失，看起来像功能坏了。
+    public bool? ShowInTray { get; set; }
     public List<LaunchStep> Steps { get; set; } = new();
 
     // 运行快照：浅拷贝步骤列表（步骤对象共享，字段级并发读写无害），后台枚举不受 UI 增删干扰。
-    public ActionGroup SnapshotForRun() => new() { Id = Id, Name = Name, Enabled = Enabled, Hotkey = Hotkey, Repeat = Repeat, RepeatDelayMs = RepeatDelayMs, Steps = new List<LaunchStep>(Steps) };
+    public ActionGroup SnapshotForRun() => new() { Id = Id, Name = Name, Enabled = Enabled, Hotkey = Hotkey, Repeat = Repeat, RepeatDelayMs = RepeatDelayMs, ShowInTray = ShowInTray, Steps = new List<LaunchStep>(Steps) };
 }
 
 public sealed class AppSettings
@@ -182,8 +187,12 @@ public sealed class RootConfig
     {
         var all = ActionGroupTemplates.All();
         var names = new[] { Strings.Get("Tpl_Away"), Strings.Get("Tpl_EndOfDay") };
-        return names.Select(n => all.FirstOrDefault(g => g.Name == n))
-                    .Where(g => g != null).Select(g => g!)
-                    .ToList();
+        var picked = names.Select(n => all.FirstOrDefault(g => g.Name == n))
+                          .Where(g => g != null).Select(g => g!)
+                          .ToList();
+        // 显式进托盘：首启时没有任何提醒/热键指向它们，托盘是唯一顺手的入口。
+        // 显式写值（而非留 null 靠 Normalize 补）→ 首份配置就是规范形，读回不会再触发一次写盘。
+        foreach (var g in picked) g.ShowInTray = true;
+        return picked;
     }
 }

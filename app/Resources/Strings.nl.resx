@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Als beheerder uitvoeren</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Doel kan een volledig exe-pad, naam, URL, protocol zoals ms-settings: of document zijn.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Sneltoets</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Bijv. Win+D / Alt+K / Ctrl+Enter / F5. Gaat naar het venster met focus; haal eerst het doel naar voren.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Bijv. Win+D / Alt+K / Ctrl+Enter / F5. Gaat naar het venster met focus; haal eerst het doel naar voren. Combinaties die Windows zelf gebruikt (Win+D, Win+6…) kun je niet opnemen — dubbelklik op het vak om ze te typen.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Actie</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Proces</value></data>
@@ -271,7 +271,6 @@ Log: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Controle op updates mislukt: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Klik en druk op de sneltoets. Esc annuleert, Del wist het. «Stoppen» in het systeemvak werkt altijd.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Druk op een sneltoets…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Dubbelklik om het zelf te typen</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Overnemen naar startlijst</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Uit het systeem verwijderen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» verwijderen?</value></data>
@@ -358,6 +357,7 @@ Log: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Sneltoets {0} is al in gebruik door “{1}”; kies een andere combinatie</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is een door het systeem gereserveerde combinatie (registreren zou een systeemtoets kapen) en kan niet als sneltoets worden gebruikt</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Hele groep herhalen</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Tonen in systeemvakmenu</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>vertraging tussen rondes (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Circulaire groepsverwijzing ({0}) — verbreek de verwijzingsketen voor het opslaan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Dupliceren</value></data>

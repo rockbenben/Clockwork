@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>التشغيل كمسؤول</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>يمكن أن يكون الهدف مسار exe كامل أو اسمًا أو رابطًا أو بروتوكولًا مثل ms-settings: أو مستندًا.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>اختصار</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>مثال: Win+D / Alt+K / Ctrl+Enter / F5. يُرسَل إلى النافذة النشطة؛ أحضر الهدف للأمام أولًا.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>مثال: Win+D / Alt+K / Ctrl+Enter / F5. يُرسَل إلى النافذة النشطة؛ أحضر الهدف للأمام أولًا. التركيبات التي يحجزها ويندوز (Win+D، Win+6…) لا يمكن التقاطها — انقر نقرًا مزدوجًا على الحقل لكتابتها.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>الإجراء</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>مستوى الصوت (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>العملية</value></data>
@@ -271,7 +271,6 @@
   <data name="Update_Failed" xml:space="preserve"><value>فشل التحقق من التحديثات: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>انقر ثم اضغط الاختصار. Esc للإلغاء، Del للمسح. «إيقاف» في علبة النظام يعمل دائمًا.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>اضغط اختصارًا…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>انقر نقرًا مزدوجًا للكتابة يدويًا</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>نقل إلى قائمة البدء</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>حذف من النظام</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>هل تريد حذف «{0}»؟</value></data>
@@ -358,6 +357,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>الاختصار {0} مستخدم بالفعل بواسطة «{1}»؛ اختر تركيبة أخرى</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} تركيبة محجوزة للنظام (تسجيلها سيخطف مفتاح نظام) ولا يمكن استخدامها كاختصار</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>تكرار المجموعة بالكامل</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>إظهار في قائمة علبة النظام</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>التأخير بين الجولات (مث)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>توجد حلقة إشارة دائرية للمجموعة ({0})، يرجى فك سلسلة الإشارات قبل الحفظ</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>تكرار</value></data>

@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Запуск от имени администратора</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Целью может быть полный путь к exe, имя, URL, протокол вроде ms-settings: или документ.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Сочетание клавиш</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план. Комбинации, занятые самой Windows (Win+D, Win+6…), перехватить нельзя — дважды щёлкните поле и введите вручную.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Действие</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Громкость (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Процесс</value></data>
@@ -271,7 +271,6 @@
   <data name="Update_Failed" xml:space="preserve"><value>Не удалось проверить обновления: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Нажмите, затем нажмите сочетание клавиш. Esc — отмена, Del — очистить. «Стоп» в трее работает всегда.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Нажмите сочетание…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Двойной щелчок — ввести вручную</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Перенести в список запуска</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Удалить из системы</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Удалить «{0}»?</value></data>
@@ -358,6 +357,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Сочетание {0} уже используется «{1}»; выберите другое</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} — зарезервированное системой сочетание (его регистрация перехватила бы системную клавишу), его нельзя использовать как горячую клавишу</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Повторить всю группу</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Показывать в меню трея</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>задержка между раундами (мс)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Циклическая ссылка группы ({0}) — разорвите цепочку ссылок перед сохранением</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Дублировать</value></data>

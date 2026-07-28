@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Executar como administrador</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>O destino pode ser um caminho exe completo, um nome, uma URL, um protocolo como ms-settings: ou um documento.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Atalho</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex.: Win+D / Alt+K / Ctrl+Enter / F5. Enviado à janela em foco; traga o destino para a frente primeiro.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex.: Win+D / Alt+K / Ctrl+Enter / F5. Enviado à janela em foco; traga o destino para a frente primeiro. Combinações usadas pelo próprio Windows (Win+D, Win+6…) não podem ser capturadas — clique duas vezes no campo para digitá-las.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Ação</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Processo</value></data>
@@ -271,7 +271,6 @@ Registro: {1}</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Falha ao verificar atualizações: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Clique e pressione o atalho. Esc cancela, Del limpa. «Parar» na bandeja sempre funciona.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Pressione um atalho…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>Clique duas vezes para digitar manualmente</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Assumir na lista de inicialização</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Excluir do sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Excluir «{0}»?</value></data>
@@ -358,6 +357,7 @@ Registro: {1}</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>O atalho {0} já é usado por “{1}”; escolha outra combinação</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} é uma combinação reservada do sistema (registrá-la sequestraria uma tecla do sistema) e não pode ser usada como atalho</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Repetir grupo inteiro</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Mostrar no menu da bandeja</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>atraso entre rodadas (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Referência circular de grupo ({0}) — quebre a cadeia de referências antes de salvar</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplicar</value></data>

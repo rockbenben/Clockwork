@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>व्यवस्थापक के रूप में चलाएँ</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>लक्ष्य पूर्ण exe पथ, नाम, URL, ms-settings: जैसा प्रोटोकॉल या दस्तावेज़ हो सकता है।</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>शॉर्टकट</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>जैसे: Win+D / Alt+K / Ctrl+Enter / F5. फोकस वाली विंडो को भेजा जाता है; पहले लक्ष्य को सामने लाएँ।</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>जैसे: Win+D / Alt+K / Ctrl+Enter / F5. फोकस वाली विंडो को भेजा जाता है; पहले लक्ष्य को सामने लाएँ। Windows द्वारा आरक्षित संयोजन (Win+D, Win+6…) कैप्चर नहीं हो सकते — बॉक्स पर डबल-क्लिक करके टाइप करें।</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>क्रिया</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>वॉल्यूम (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>प्रोसेस</value></data>
@@ -271,7 +271,6 @@
   <data name="Update_Failed" xml:space="preserve"><value>अपडेट जाँच विफल: {0}</value></data>
   <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>क्लिक करें, फिर शॉर्टकट दबाएँ। Esc रद्द करता है, Del मिटाता है। ट्रे में «रोकें» हमेशा काम करता है।</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>शॉर्टकट दबाएँ…</value></data>
-  <data name="Hotkey_TypeHint" xml:space="preserve"><value>हाथ से टाइप करने के लिए डबल-क्लिक करें</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>स्टार्टअप सूची में लें</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>सिस्टम से हटाएँ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>क्या «{0}» हटाना है?</value></data>
@@ -358,6 +357,7 @@
   <data name="Val_HotkeyDup" xml:space="preserve"><value>हॉटकी {0} पहले से “{1}” द्वारा उपयोग में है; कोई और संयोजन चुनें</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} सिस्टम-आरक्षित संयोजन है (पंजीकरण से सिस्टम कुंजी छिन जाएगी), इसे हॉटकी नहीं बनाया जा सकता</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>पूरे समूह को दोहराएं</value></data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>ट्रे मेन्यू में दिखाएँ</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>राउंड के बीच विलंब (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>समूह संदर्भ चक्रीय है ({0}), सहेजने से पहले संदर्भ श्रृंखला तोड़ें</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>प्रतिलिपि</value></data>

@@ -58,8 +58,10 @@ public sealed class TrayIcon : IDisposable
         // Tray_LaunchWarn 的气泡文案让用户「右键托盘→查看上次启动日志」——菜单里必须真有这一项。
         menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_ViewLog"), TrayGlyph.Log, (s, e) => app.OpenRunLog()));
 
-        // 动作组区——托盘触发入口（禁用的组置灰可见）。有组才加小标题。
-        var groups = app.Groups;
+        // 动作组区——托盘触发入口（禁用的组置灰可见）。只列勾了「在托盘菜单显示」的组：
+        // 组一多菜单就被撑成长条，而多数组靠热键/提醒/被引用触发，不必占一行；没勾的仍可从主窗口「运行」跑。
+        // 有可显示的组才加小标题（否则留一个常年空着的标题）。
+        var groups = app.Groups.Where(g => g.ShowInTray != false).ToList();
         if (groups.Count > 0)
         {
             menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Group")));
