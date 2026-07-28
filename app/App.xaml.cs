@@ -645,22 +645,19 @@ public partial class App : System.Windows.Application
             // 组内嵌套「动作组」步骤：跑引用组的快照（防运行中被编辑/清理）。三种「这次没跑」的结局——
             // 目标缺失、目标已禁用、重入（环引用/已在运行）——都必须发声：同一份坏配置在启动清单里有
             // 「⚠ 找不到动作组」可查，热键/计划任务这条（正是无人值守跑的那条）以前却什么都不说。
-            // StepEditorWindow 不校验组下拉，空 GroupId 存得下来，所以「找不到」是能走到的路径，不是理论情况。
-            // 但三种情况都不是异常，不该经 OnStepError：那条通道套「异常：」措辞，会让「目标组被人手动禁用」
-            // 这种正常配置状态读成故障。改经 OnStepSkipped，并按启动清单（LaunchSequence）同款口径分severity：
-            //   目标不存在 → 坏配置，Warn
-            //   目标已禁用 → 正常状态，Info + benign（与 LaunchSequence「已禁用，跳过」不算失败的判断一致）
-            //   重入/环引用 → 真问题（空转），Warn
-            // 三种都返回 Skipped：目标不存在/被禁/在跑，下一次迭代结论完全相同，让上层引用轮次立刻收手
-            // （否则 Repeat=999 就是 999 条重复告警）。
+            // 解析与分类（措辞、良性判定）在 ActionGroupResolver.ResolveForRun/Reentrant 里（WPF 之外，可单测）；
+            // 这里只管接结果转发给 OnStepSkipped——纯接线。三种都返回 Skipped：目标不存在/被禁/在跑，
+            // 下一次迭代结论完全相同，让上层引用轮次立刻收手（否则 Repeat=999 就是 999 条重复告警）。
             RunGroupStep = s =>
             {
-                var ng = ActionGroupResolver.Resolve(groups, s.GroupId);
-                if (ng == null) { deps.OnStepSkipped(s, Strings.Get("Skip_GroupNotFound"), false); return GroupRunResult.Skipped; }
-                if (!ng.Enabled) { deps.OnStepSkipped(s, Lf("Skip_GroupDisabled", ng.Name), true); return GroupRunResult.Skipped; }
-                var res = ActionGroupRunner.RunGroup(ng.SnapshotForRun(), deps);
+                var target = ActionGroupResolver.ResolveForRun(groups, s.GroupId);
+                if (target.Skip != null) { deps.OnStepSkipped(s, target.Skip.Reason, target.Skip.Benign); return GroupRunResult.Skipped; }
+                var res = ActionGroupRunner.RunGroup(target.Group!.SnapshotForRun(), deps);
                 if (res == GroupRunResult.Skipped)
-                    deps.OnStepSkipped(s, Strings.Get("Skip_GroupReentrant"), false);
+                {
+                    var reentrant = ActionGroupResolver.Reentrant();
+                    deps.OnStepSkipped(s, reentrant.Reason, reentrant.Benign);
+                }
                 return res;
             },
         };
