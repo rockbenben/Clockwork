@@ -153,4 +153,23 @@ public class LaunchSequenceTests
         }
         finally { try { File.Delete(path); } catch { } }
     }
+
+    [Fact]
+    public void Budget_charges_group_reference_iterations()
+    {
+        // 纯引用链（叶子组不含普通步骤）以前一步预算都不计：999×999 的展开绕过整个保险丝，
+        // 每次迭代还要写一行「运行动作组：X」——而开机路径上用户还没有窗口可按急停。
+        // DelayMs=0 必写。
+        var leaf = new ActionGroup { Id = "leaf", Name = "叶", Steps = new() };
+        var mid = new ActionGroup { Id = "mid", Name = "中", Steps = new() { new LaunchStep { Kind = "group", GroupId = "leaf", Repeat = 999, DelayMs = 0 } } };
+        var c = new RootConfig
+        {
+            LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "mid", Repeat = 999, DelayMs = 0 } },
+            ActionGroups = new() { mid, leaf },
+        };
+        var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
+        Assert.True(r.Summary.Truncated);                                   // 保险丝真的响了
+        Assert.Contains(r.LogLines, l => l.Contains("5000"));
+        Assert.DoesNotContain(r.LogLines, l => l.Contains("已手动停止"));   // 截停 ≠ 手动急停
+    }
 }

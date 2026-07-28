@@ -105,7 +105,7 @@ public class ActionGroupRunnerTests
     {
         var ran = new List<string>();
         var g = new ActionGroup { Id = "gr1", Repeat = 3, Steps = new() { new LaunchStep { Kind = "keys", Combo = "a", Label = "x" } } };
-        Assert.True(ActionGroupRunner.RunGroup(g, Deps(ran)));
+        Assert.Equal(GroupRunResult.Completed, ActionGroupRunner.RunGroup(g, Deps(ran)));
         Assert.Equal(3, ran.Count);   // 整组 3 轮 × 每轮 1 步
     }
 
@@ -119,14 +119,14 @@ public class ActionGroupRunnerTests
     }
 
     [Fact]
-    public void Reentry_returns_false()
+    public void Reentry_returns_skipped()
     {
-        // 同 id 已在跑 → 第二次进入直接 false（环重入的运行期兜底；上报由调用方决定）。
+        // 同 id 已在跑 → 第二次进入直接 Skipped（环重入的运行期兜底；上报由调用方决定）。
         var g = new ActionGroup { Id = "gr3", Steps = new() { new LaunchStep { Kind = "keys", Combo = "a", Label = "x" } } };
-        bool inner = true;
+        var inner = GroupRunResult.Completed;
         var deps = new GroupDeps { Hour = 10, IsoDay = 3, RunStep = _ => inner = ActionGroupRunner.RunGroup(g, Deps(new List<string>())) };
-        Assert.True(ActionGroupRunner.RunGroup(g, deps));
-        Assert.False(inner);
+        Assert.Equal(GroupRunResult.Completed, ActionGroupRunner.RunGroup(g, deps));
+        Assert.Equal(GroupRunResult.Skipped, inner);
     }
 
     [Fact]
@@ -141,5 +141,116 @@ public class ActionGroupRunnerTests
         Assert.Equal(RunBudget.MaxRunSteps, ran.Count);
         Assert.Equal(1, warned);
         Assert.True(deps.Budget.Exhausted);
+    }
+
+    [Fact]
+    public void Message_no_aborts_remaining_rounds()
+    {
+        // 「否」停的是整组、含后续轮次，不只是当前这一轮：整组 Repeat=3 时答一次否就结束，
+        // 否则同一个确认框会被重弹 3 次。挡「stopped 只 break 当前轮」的实现。
+        var ran = new List<string>();
+        int asked = 0;
+        var g = new ActionGroup
+        {
+            Id = "gno1", Repeat = 3, RepeatDelayMs = 0,
+            Steps = new()
+            {
+                new LaunchStep { Kind = "message", Message = "存盘了吗", Label = "m", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+            }
+        };
+        var res = ActionGroupRunner.RunGroup(g, Deps(ran, msg: _ => { asked++; return MsgResult.No; }));
+        Assert.Equal(GroupRunResult.Aborted, res);   // 结局必须可区分：父级要靠它收手
+        Assert.Equal(1, asked);                      // 只问一次
+        Assert.Empty(ran);
+    }
+
+    [Fact]
+    public void Message_no_in_child_stops_parent_reference_iterations()
+    {
+        // 「循环一段步骤」的推荐做法（抽成子组 + 引用 ×N）恰好穿过这个边界：子组里答一次「否」，
+        // 父组的引用轮次必须立刻收手并把中止继续往上传。挡「RunGroup 恒返回成功」的实现——
+        // 那种实现下同一个模态确认框会被重弹 N 次。
+        var ran = new List<string>();
+        int asked = 0, childRuns = 0;
+        var child = new ActionGroup
+        {
+            Id = "child",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "message", Message = "继续？", Label = "m", DelayMs = 0 },
+                new LaunchStep { Kind = "keys", Combo = "a", Label = "childstep", DelayMs = 0 },
+            }
+        };
+        GroupDeps deps = null!;
+        deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s => ran.Add(s.Label),
+            ShowMessage = _ => { asked++; return MsgResult.No; },
+            RunGroupStep = _ => { childRuns++; return ActionGroupRunner.RunGroup(child, deps); },
+        };
+        var parent = new ActionGroup
+        {
+            Id = "parent",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "group", GroupId = "child", Label = "ref", Repeat = 3, DelayMs = 0 },
+                new LaunchStep { Kind = "keys", Combo = "b", Label = "afterref", DelayMs = 0 },
+            }
+        };
+        Assert.Equal(GroupRunResult.Aborted, ActionGroupRunner.RunGroup(parent, deps));
+        Assert.Equal(1, childRuns);   // 子组只跑一次，父级不再重新引用
+        Assert.Equal(1, asked);
+        Assert.Empty(ran);            // 引用步骤之后的步骤也一并停
+    }
+
+    [Fact]
+    public void Reentrant_reference_reports_once_and_stops_iterating()
+    {
+        // 重入注定持续整个循环（同一 id 还在调用栈上）：Repeat=999 的自引用以前会上报 999 次 + 空睡 999 次。
+        var errors = new List<string>();
+        int calls = 0;
+        var g = new ActionGroup { Id = "self", Steps = new() { new LaunchStep { Kind = "group", GroupId = "self", Label = "ref", Repeat = 999, DelayMs = 0 } } };
+        GroupDeps deps = null!;
+        deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            OnStepError = (s, _) => errors.Add(s.Label),
+            RunGroupStep = s =>
+            {
+                calls++;
+                var r = ActionGroupRunner.RunGroup(g, deps);
+                if (r == GroupRunResult.Skipped) deps.OnStepError(s, new InvalidOperationException("重入"));
+                return r;
+            },
+        };
+        ActionGroupRunner.RunGroup(g, deps);
+        Assert.Equal(1, calls);    // 第一次就知道结论，不再迭代
+        Assert.Single(errors);     // 只记一笔（不是 999 笔日志 + 999 张气泡）
+    }
+
+    [Fact]
+    public void Budget_charges_group_reference_iterations()
+    {
+        // 纯引用链（叶子组不含普通步骤）以前一步预算都不计：999×999 的展开能完全绕过 5000 步保险丝，
+        // 而「单次运行最多 5000 步」是文档写给用户的承诺。每次引用迭代计一步 → 必须截停。
+        // DelayMs=0 必写——默认 100 会让这条测试真睡到超时。
+        int warned = 0;
+        int calls = 0;
+        var leaf = new ActionGroup { Id = "leaf", Steps = new() };   // 空叶子：老实现下永不计费
+        var mid = new ActionGroup { Id = "mid", Steps = new() { new LaunchStep { Kind = "group", GroupId = "leaf", Label = "toLeaf", Repeat = 999, DelayMs = 0 } } };
+        var top = new ActionGroup { Id = "top", Steps = new() { new LaunchStep { Kind = "group", GroupId = "mid", Label = "toMid", Repeat = 999, DelayMs = 0 } } };
+        GroupDeps deps = null!;
+        deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            Budget = new RunBudget(() => warned++),
+            RunGroupStep = s => { calls++; return ActionGroupRunner.RunGroup(s.GroupId == "mid" ? mid : leaf, deps); },
+        };
+        ActionGroupRunner.RunGroup(top, deps);
+        Assert.True(deps.Budget.Exhausted);
+        Assert.Equal(1, warned);
+        Assert.Equal(RunBudget.MaxRunSteps, calls);   // 每次迭代恰好一步预算，用尽即止
     }
 }

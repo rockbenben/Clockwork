@@ -5,6 +5,16 @@ namespace Clockwork.Engine;
 
 public enum MsgResult { Yes, No, Ok }
 
+// 一次 RunGroup 的结局。原来只有 bool（false=重入），但「被否中止」必须与「跑完了」分开：
+// 父组的引用步骤要按 Repeat 跑 N 轮，若看不出子组是被否中止的，就会把同一个确认框重弹 N 次。
+// 与 MsgResult 同放（两条执行路径 ActionGroupRunner / LaunchSequence 都在 Clockwork.Engine 下）。
+public enum GroupRunResult
+{
+    Completed,   // 跑到底（含被急停/预算截停——那两者已各有自己的反馈通道）
+    Aborted,     // message 步骤答「否/关闭」：本组剩余步骤与后续轮次全停，并向上传染
+    Skipped,     // 组 id 已在 _running 里（环引用或同组已在跑）：这次没跑，是否上报由调用方决定
+}
+
 // 动作组执行的依赖 seam（活交互经此注入，便于测编排流程）。
 public sealed class GroupDeps
 {
@@ -14,27 +24,31 @@ public sealed class GroupDeps
     public Func<LaunchStep, MsgResult> ShowMessage { get; init; } = _ => MsgResult.Ok;  // message 步骤弹窗
     public Action<LaunchStep> RunOnYes { get; init; } = _ => { };          // message 点是→onYes
     public Action<string> Speak { get; init; } = _ => { };                 // message 播报
-    public Action<LaunchStep> RunGroupStep { get; init; } = _ => { };       // 组内嵌套「group」步骤：跑引用的组
+    // 组内嵌套「group」步骤：跑引用的组。返回结局而非 void——中止/跳过都要能让上层的引用轮次收手。
+    public Func<LaunchStep, GroupRunResult> RunGroupStep { get; init; } = _ => GroupRunResult.Completed;
     public Action<LaunchStep, Exception> OnStepError { get; init; } = (_, _) => { };    // 某步抛异常：记录后继续（不中止整组）
     public RunBudget Budget { get; init; } = new();                        // 单次顶层运行共享的步数预算（嵌套引用经同一 deps 传递）
 }
 
 // 顺序执行动作组，整组按 group.Repeat 跑若干轮（轮间睡 RepeatDelayMs，可急停）。
 // message 步骤弹确认闸门（否/关闭→中止整组）；其余步骤循环 repeat；步骤时间条件同顶层清单遵守。
-// 按组 id 进程内互斥防重入（单进程用运行集即可）；重入（含环引用）返回 false，是否上报由调用方决定。
+// 按组 id 进程内互斥防重入（单进程用运行集即可）；重入（含环引用）返回 Skipped，是否上报由调用方决定。
 public static class ActionGroupRunner
 {
     private static readonly ConcurrentDictionary<string, byte> _running = new();
 
-    public static bool RunGroup(ActionGroup group, GroupDeps deps)
+    public static GroupRunResult RunGroup(ActionGroup group, GroupDeps deps)
     {
         var gid = group.Id ?? "";
-        if (!_running.TryAdd(gid, 0)) return false;   // 已在跑：忽略本次触发（避免双开/按键交错/环引用空转）
+        if (!_running.TryAdd(gid, 0)) return GroupRunResult.Skipped;   // 已在跑：忽略本次触发（避免双开/按键交错/环引用空转）
         try
         {
             var now = DateTime.Now;   // 取一次，小时/分钟同源，避免跨分钟边界不一致
             var (hour, iso) = StepCondition.ResolveSentinels(deps.Hour, deps.IsoDay, now);
             bool stopped = false;
+            // 「被否中止」与 stopped 分开记：stopped 也被急停/预算/睡眠打断占用，混在一起就分不出
+            // 该向上传染的那一种。用户在子组里答过一次「否」，祖先各层的剩余轮次都必须一起收。
+            bool aborted = false;
             int rounds = StepHelpers.ClampRepeat(group.Repeat);
             for (int round = 1; round <= rounds && !stopped; round++)
             {
@@ -50,18 +64,28 @@ public static class ActionGroupRunner
                         if (step.Speak) deps.Speak(step.Message);
                         var res = deps.ShowMessage(step);
                         if (res == MsgResult.Yes) deps.RunOnYes(step);
-                        else if (res == MsgResult.No) { stopped = true; break; }   // 否/关闭 → 中止整组剩余步骤（含后续轮次）
+                        else if (res == MsgResult.No) { stopped = true; aborted = true; break; }   // 否/关闭 → 中止整组剩余步骤（含后续轮次），并让上层一并收手
                         if (step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
                     }
                     else if (step.Kind == "group")
                     {
                         // 组内嵌套动作组：跑引用的组。嵌套调用共享同一 deps → 同一份预算；
-                        // 自身不占预算（其内部每步会占），环重入由 RunGroupStep 包装层经 OnStepError 上报。
+                        // 环重入由 RunGroupStep 包装层经 OnStepError 上报。
+                        // 每次引用迭代自身也占一步预算：否则叶子组只含 group 步骤时，999^depth 的展开
+                        // 一步都不计费，5000 步保险丝对纯引用链完全失效（文档承诺的「至多 5000 步」要真成立）。
                         int rep = StepHelpers.StepRepeat(step);
                         for (int i = 1; i <= rep && !stopped; i++)
                         {
-                            try { deps.RunGroupStep(step); }
+                            if (!deps.Budget.TryConsume()) { stopped = true; break; }
+                            var sub = GroupRunResult.Completed;
+                            try { sub = deps.RunGroupStep(step); }
                             catch (Exception ex) { deps.OnStepError(step, ex); }
+                            // 子组被「否」中止：本轮剩余步骤与后续轮次全停，并把中止继续往上传
+                            // ——否则 rep 次迭代会把同一个确认框重弹 rep 次（循环子序列的推荐做法正好走这条路）。
+                            if (sub == GroupRunResult.Aborted) { stopped = true; aborted = true; break; }
+                            // 重入注定持续整个循环（同一 id 在同一调用栈上）：再迭代只会重复上报 + 空睡，
+                            // Repeat=999 时就是 999 条日志/气泡和 ~99 秒的零工作睡眠。
+                            if (sub == GroupRunResult.Skipped) break;
                             if (StopSignal.IsRequested || deps.Budget.Exhausted) stopped = true;
                             else if (step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
                         }
@@ -83,7 +107,7 @@ public static class ActionGroupRunner
                 }
                 if (!stopped && round < rounds && group.RepeatDelayMs > 0 && !StopSignal.InterruptibleSleep(group.RepeatDelayMs)) stopped = true;
             }
-            return true;
+            return aborted ? GroupRunResult.Aborted : GroupRunResult.Completed;
         }
         finally { _running.TryRemove(gid, out _); }
     }

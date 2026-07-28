@@ -616,7 +616,10 @@ public partial class App : System.Windows.Application
         Task.Run(() =>
         {
             _runGate.Begin();
-            try { ActionGroupRunner.RunGroup(snap, deps); }
+            // 顶层入口：结局有意丢弃。Aborted 是用户自己在确认框上点的「否」（他已经知道了，再弹一张卡是噪音）；
+            // Skipped 是同组已在跑的单飞去重——热键连按/循环任务撞上上一轮时本就该静默忽略。
+            // 嵌套引用那层不同：那里的 Skipped 意味着配置有环，必须发声（见 RunGroupStep）。
+            try { _ = ActionGroupRunner.RunGroup(snap, deps); }
             catch (Exception ex) { WarnToast(Lf("Mark_Exception", ex.Message)); }
             finally { _runGate.End(); }
         });
@@ -631,17 +634,28 @@ public partial class App : System.Windows.Application
         {
             RunStep = s => StepRunner.InvokeStepAction(s, ConfirmDestructive, selfPaths),
             ShowMessage = ShowGroupMessage,
-            RunOnYes = s => ReminderActions.RunOnYes(s.OnYes, groups, g => { ActionGroupRunner.RunGroup(g.SnapshotForRun(), deps); }, WarnToast),
+            // onYes 组的结局也丢弃：ReminderActions.RunOnYes 是 Action<ActionGroup> 契约（提醒弹窗路径共用），
+            // 且语义上 onYes 是「是」分支的副作用出口——它内部的确认框属于那条子流程，把它的中止回灌成父组中止，
+            // 会变成「点了是反而整组停了」，比现状更难解释。
+            RunOnYes = s => ReminderActions.RunOnYes(s.OnYes, groups, g => { _ = ActionGroupRunner.RunGroup(g.SnapshotForRun(), deps); }, WarnToast),
             Speak = ReminderActions.Speak,
             OnStepError = (s, ex) => LogGroupStepError(s, ex),
             Budget = new RunBudget(() => WarnToast(Strings.Get("Warn_RunBudget"))),
-            // 组内嵌套「动作组」步骤：跑引用组的快照（防运行中被编辑/清理）。重入（环引用/已在运行）返回 false，
+            // 组内嵌套「动作组」步骤：跑引用组的快照（防运行中被编辑/清理）。重入（环引用/已在运行）返回 Skipped，
             // 经 OnStepError 记一笔——夜间静默任务里环导致的空转不该零反馈。
+            // 目标缺失/已禁用同理必须发声：同一份坏配置在启动清单里有「⚠ 找不到动作组」可查，热键/计划任务
+            // 这条（正是无人值守跑的那条）却什么都不说。StepEditorWindow 不校验组下拉，空 GroupId 存得下来，
+            // 所以「找不到」是能走到的路径，不是理论情况。三种都返回 Skipped：目标不存在/被禁/在跑，
+            // 下一次迭代结论完全相同，让上层引用轮次立刻收手（否则 Repeat=999 就是 999 条重复告警）。
             RunGroupStep = s =>
             {
                 var ng = ActionGroupResolver.Resolve(groups, s.GroupId);
-                if (ng != null && ng.Enabled && !ActionGroupRunner.RunGroup(ng.SnapshotForRun(), deps))
+                if (ng == null) { deps.OnStepError(s, new InvalidOperationException("找不到动作组")); return GroupRunResult.Skipped; }
+                if (!ng.Enabled) { deps.OnStepError(s, new InvalidOperationException($"动作组「{ng.Name}」已禁用，跳过")); return GroupRunResult.Skipped; }
+                var res = ActionGroupRunner.RunGroup(ng.SnapshotForRun(), deps);
+                if (res == GroupRunResult.Skipped)
                     deps.OnStepError(s, new InvalidOperationException("动作组重入（环引用或已在运行），已跳过"));
+                return res;
             },
         };
         return deps;
@@ -652,7 +666,10 @@ public partial class App : System.Windows.Application
     {
         var logPath = Path.Combine(CfgDir, "clockwork.error.log");
         try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] 动作组步骤失败（已跳过、整组继续）: {StepDisplay.StepSummary(step)} — {ex.Message}\r\n"); } catch { }
-        ShowToast("Clockwork", Lf("Mark_Exception", StepDisplay.StepSummary(step)), Views.ToastLevel.Warn);
+        // 带合并键（按步骤摘要分桶）：同一步在多轮/多次引用里反复失败时叠加计数而不是堆一摞 12 秒的卡片
+        // （整组 Repeat 仍会让同一步失败很多次）；不同步骤的失败仍各占一张，不会互相盖掉。
+        ShowToast("Clockwork", Lf("Mark_Exception", StepDisplay.StepSummary(step)), Views.ToastLevel.Warn,
+                  key: "groupstep:" + StepDisplay.StepSummary(step));
     }
 
     // 动作组 message 步骤弹窗（confirm=是/否闸门；否则仅确定）。在 UI 线程弹。
@@ -671,7 +688,10 @@ public partial class App : System.Windows.Application
     private void NotifyRunResult(LaunchRunResult r)
     {
         var s = r.Summary;
-        if (s.Stopped) ShowToast("Clockwork", Lf("Tray_LaunchStopped", s.Total), Views.ToastLevel.Warn);
+        // 截停要先判：撞步数上限时 Stopped 也是 true（循环因此提前退出），但告诉用户「已手动停止」是在说
+        // 一件他没做过的事——真相只躺在他得手动打开的日志里。与 WriteLog 的 stopHdr 用同一优先级。
+        if (s.Truncated) ShowToast("Clockwork", Strings.Get("Warn_RunBudget"), Views.ToastLevel.Warn);
+        else if (s.Stopped) ShowToast("Clockwork", Lf("Tray_LaunchStopped", s.Total), Views.ToastLevel.Warn);
         else if (s.Fail > 0) ShowToast("Clockwork", Lf("Tray_LaunchWarn", s.Total, s.Fail), Views.ToastLevel.Warn);
     }
 

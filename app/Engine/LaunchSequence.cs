@@ -91,6 +91,9 @@ public static class LaunchSequence
                         int rep = StepHelpers.StepRepeat(sub);
                         for (int i = 1; i <= rep && !stopped; i++)
                         {
+                            // 引用迭代自身也计一步（与 ActionGroupRunner 同步）：叶子组只含 group/message 步骤时
+                            // 普通步骤一次都不计费，999^depth 的展开能绕过整个预算——而开机路径上用户还没有窗口可按急停。
+                            if (!Consume()) { stopped = true; break; }
                             var hdr = rep > 1 ? $"运行动作组：{ng.Name}（第 {i}/{rep} 次）" : $"运行动作组：{ng.Name}";
                             lines.Add($"[{Ts(now)}] {pad}{hdr}");
                             pathIds.Add(ng.Id);
@@ -124,6 +127,7 @@ public static class LaunchSequence
                     int rep = StepHelpers.StepRepeat(step);
                     for (int gi = 1; gi <= rep && !stopped; gi++)
                     {
+                        if (!Consume()) { stopped = true; break; }   // 顶层引用迭代同样计费，理由同组内
                         var hdr = rep > 1 ? $"运行动作组：{g.Name}（第 {gi}/{rep} 次）" : $"运行动作组：{g.Name}";
                         lines.Add($"[{Ts(now)}] {hdr}");
                         RunGroupInline(g, 1, new HashSet<string> { g.Id });
