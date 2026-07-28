@@ -306,7 +306,6 @@
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>فشل إفراغ سلة المحذوفات: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>أمر نظام غير معروف: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>تشغيل: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>إيقاف التذكيرات مؤقتًا {0} ساعة</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>استئناف التذكيرات (متبقٍ {0} دقيقة)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>إيقاف التذكيرات مؤقتًا</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} ساعة</value></data>

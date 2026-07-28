@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <UseWPF>true</UseWPF>   <!-- 测 HotkeyCapture 需 System.Windows.Input.Key -->
+    <UseWindowsForms>true</UseWindowsForms>   <!-- 测 TrayMenu 子菜单需 System.Windows.Forms.ToolStrip* -->
   </PropertyGroup>
 
   <ItemGroup>

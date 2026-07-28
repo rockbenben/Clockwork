@@ -306,7 +306,6 @@ Günlük: {1}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Geri dönüşüm kutusu boşaltılamadı: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Bilinmeyen sistem komutu: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Çalıştır: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Hatırlatıcıları {0} sa duraklat</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Hatırlatıcıları sürdür ({0} dk kaldı)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Hatırlatıcıları duraklat</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} sa</value></data>

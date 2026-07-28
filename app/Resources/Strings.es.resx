@@ -306,7 +306,6 @@ Registro: {1}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Error al vaciar la papelera: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Comando de sistema desconocido: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Ejecutar: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Pausar recordatorios {0} h</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Reanudar recordatorios (quedan {0} min)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Pausar recordatorios</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} h</value></data>

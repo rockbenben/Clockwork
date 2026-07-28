@@ -306,7 +306,6 @@
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Не удалось очистить корзину: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Неизвестная системная команда: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Запустить: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Приостановить напоминания на {0} ч</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Возобновить напоминания (осталось {0} мин)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Приостановить напоминания</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} ч</value></data>

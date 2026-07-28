@@ -309,7 +309,6 @@
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>清空回收站失败：{0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>未知系统命令：{0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>运行：{0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>暂停提醒 {0} 小时</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>恢复提醒（剩 {0} 分钟）</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>暂停提醒</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} 小时</value></data>

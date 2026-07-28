@@ -53,6 +53,23 @@ internal static class TrayMenu
         return it;
     }
 
+    // 子菜单父项。WinForms 的 DropDown 是独立的 ToolStripDropDownMenu，不会继承父 ContextMenuStrip 的
+    // Renderer/BackColor/Font——不显式设，子菜单就以系统浅色主题绘制，在暗色托盘菜单里是一道刺眼的接缝。
+    // 集中在这里配一次，两个折叠段共用，避免各配一遍日后漂移（同 TrayPalette / TrayGlyph 的思路）。
+    public static ToolStripMenuItem SubMenu(string text, string glyph, ToolStripRenderer renderer, Font font)
+    {
+        var it = new ToolStripMenuItem(Escape(text))
+        {
+            Tag = new TrayMeta { Glyph = glyph },
+            Padding = new Padding(GlyphCol, 7, PadRight, 7),
+        };
+        it.DropDown.Renderer = renderer;
+        it.DropDown.BackColor = TrayPalette.Ink;
+        it.DropDown.Font = font;
+        if (it.DropDown is ToolStripDropDownMenu dd) { dd.ShowImageMargin = false; dd.ShowCheckMargin = false; }
+        return it;
+    }
+
     // 区段小标题：不可选、无悬停。字距在此就地加好——「测宽」与「绘制」用同一串文本，不会因绘制时才加字距、box 却按原文测宽而裁掉尾字。
     public static ToolStripMenuItem Header(string text)
         => new(Escape(Spaced(text))) { Enabled = false, Tag = new TrayMeta { Header = true }, Font = HeaderFont, Padding = new Padding(14, 10, 10, 3) };
@@ -147,5 +164,13 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
         // 同上不加 NoPrefix：与 ToolStrip 测宽一致地按助记符处理，动作组名里的 & 才不会被裁。
         TextRenderer.DrawText(g, e.Text, font, lr, on ? TrayPalette.Paper : TrayPalette.Faint,
             TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+    }
+
+    // 子菜单箭头：基类按系统色绘制，在暗底上突兀。与字形列同一套配色（悬停转黄铜）。
+    protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
+    {
+        bool on = e.Item?.Enabled ?? false;
+        e.ArrowColor = e.Item is { Selected: true } && on ? TrayPalette.Brass : (on ? TrayPalette.Muted : TrayPalette.Faint);
+        base.OnRenderArrow(e);
     }
 }

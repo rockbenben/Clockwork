@@ -307,7 +307,6 @@
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>清空資源回收筒失敗：{0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>未知系統命令：{0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>執行：{0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>暫停提醒 {0} 小時</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>恢復提醒（剩 {0} 分鐘）</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>暫停提醒</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} 小時</value></data>

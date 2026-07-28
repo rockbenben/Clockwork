@@ -64,13 +64,16 @@ public sealed class TrayIcon : IDisposable
             }
         }
 
-        // 提醒区——勿扰：暂停 1/2/4 小时；生效期间追加「恢复提醒（剩 N 分钟）」。
+        // 提醒区——勿扰折成子菜单：1/2/4 小时是低频操作，占 3 行不值当（动作组段则保持扁平，
+        // 「运行：某组」是托盘最高频的动作，不能埋进 hover）。生效期间追加「恢复提醒（剩 N 分钟）」。
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Reminder")));
+        var dnd = TrayMenu.SubMenu(Strings.Get("Tray_DndMenu"), TrayGlyph.Dnd, menu.Renderer, menu.Font);
         foreach (int h in new[] { 1, 2, 4 })
         {
             int hh = h;
-            menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_DndHours", hh), TrayGlyph.Dnd, (s, e) => app.PauseReminders(hh)));
+            dnd.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Tray_Hours", hh), TrayGlyph.Dnd, (s, e) => app.PauseReminders(hh)));
         }
+        menu.Items.Add(dnd);
         if (app.DndRemaining is TimeSpan left)
             menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_DndResume", (int)Math.Ceiling(left.TotalMinutes)), TrayGlyph.Run,
                 (s, e) => app.ResumeReminders()));
@@ -80,13 +83,14 @@ public sealed class TrayIcon : IDisposable
         var recent = app.RecentNotifications;
         if (recent.Count > 0)
         {
-            menu.Items.Add(TrayMenu.Header(Strings.Get("Tray_History")));
+            var hist = TrayMenu.SubMenu(Strings.Get("Tray_History"), TrayGlyph.Log, menu.Renderer, menu.Font);
             foreach (var n in recent)
             {
                 var nn = n;
-                menu.Items.Add(TrayMenu.Item($"{n.At:HH:mm}  {StepHelpers.Ellipsis(OneLine(n.Message), 36)}", TrayGlyph.Log,
+                hist.DropDownItems.Add(TrayMenu.Item($"{n.At:HH:mm}  {StepHelpers.Ellipsis(OneLine(n.Message), 36)}", TrayGlyph.Log,
                     (s, e) => app.ReplayNotification(nn)));
             }
+            menu.Items.Add(hist);
         }
 
         menu.Items.Add(new WinForms.ToolStripSeparator());

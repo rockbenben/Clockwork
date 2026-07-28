@@ -306,7 +306,6 @@ Log: {1}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Gagal mengosongkan keranjang sampah: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Perintah sistem tidak dikenal: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Jalankan: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Jeda pengingat {0} jam</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Lanjutkan pengingat (sisa {0} menit)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Jeda pengingat</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} jam</value></data>

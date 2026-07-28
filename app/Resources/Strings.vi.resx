@@ -306,7 +306,6 @@ Nhật ký: {1}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Dọn thùng rác thất bại: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Lệnh hệ thống không xác định: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Chạy: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Tạm dừng nhắc nhở {0} giờ</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Tiếp tục nhắc nhở (còn {0} phút)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Tạm dừng nhắc nhở</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} giờ</value></data>

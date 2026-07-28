@@ -306,7 +306,6 @@
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>ล้างถังรีไซเคิลไม่สำเร็จ: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>คำสั่งระบบที่ไม่รู้จัก: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>รัน: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>หยุดการแจ้งเตือน {0} ชม.</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>กลับมาแจ้งเตือน (เหลือ {0} นาที)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>หยุดการแจ้งเตือน</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} ชม.</value></data>

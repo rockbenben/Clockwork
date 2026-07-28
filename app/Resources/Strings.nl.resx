@@ -306,7 +306,6 @@ Log: {1}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Prullenbak legen mislukt: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Onbekende systeemopdracht: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Uitvoeren: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Herinneringen {0} u pauzeren</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Herinneringen hervatten (nog {0} min)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Herinneringen pauzeren</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} u</value></data>

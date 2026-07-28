@@ -306,7 +306,6 @@
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>휴지통 비우기 실패: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>알 수 없는 시스템 명령: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>실행: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>알림 {0}시간 일시중지</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>알림 재개(남은 {0}분)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>알림 일시중지</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0}시간</value></data>

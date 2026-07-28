@@ -309,7 +309,6 @@ Log: {1}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Failed to empty recycle bin: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Unknown system command: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Run: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Pause reminders for {0} h</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Resume reminders ({0} min left)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Pause reminders</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} hours</value></data>

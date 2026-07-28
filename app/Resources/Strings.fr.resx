@@ -306,7 +306,6 @@ Journal : {1}</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Échec du vidage de la corbeille : {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Commande système inconnue : {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Exécuter : {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>Suspendre les rappels {0} h</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Reprendre les rappels ({0} min restantes)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Suspendre les rappels</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} h</value></data>

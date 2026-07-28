@@ -306,7 +306,6 @@
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>रीसायकल बिन खाली करने में विफल: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>अज्ञात सिस्टम कमांड: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>चलाएँ: {0}</value></data>
-  <data name="Tray_DndHours" xml:space="preserve"><value>रिमाइंडर {0} घंटे रोकें</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>रिमाइंडर फिर शुरू करें ({0} मिनट शेष)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>रिमाइंडर रोकें</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} घंटे</value></data>
