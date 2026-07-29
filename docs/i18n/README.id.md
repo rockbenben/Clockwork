@@ -100,7 +100,7 @@ Menggabungkan aksi-aksi menjadi satu grup yang dapat digunakan ulang. **Tambah �
 
 Langkah **pesan** adalah gerbang konfirmasi: menjawab **Tidak** membatalkan sisa grup *beserta putaran yang tersisa*, dan menjalar ke luar ke grup yang merujuknya — menolak sekali sudah cukup, bahkan di dalam subgrup yang diulang ×N.
 
-> **Tombol pintas global** — di editor grup, klik kotak tombol pintas dan tekan sebuah pintasan (mis. `Ctrl+Alt+F`) untuk menjalankan grup itu dari mana saja, tanpa perlu menu. Esc membatalkan, Delete mengosongkan. Grup yang dinonaktifkan melepaskan kombinasinya; kombinasi yang dicadangkan sistem (Alt+F4, Ctrl+Shift+Esc…) dan kombinasi yang sudah dipakai oleh grup lain atau tombol pintas panik ditolak dengan sebuah pemberitahuan.
+> **Tombol pintas global** — di editor grup, klik kotak tombol pintas dan tekan sebuah pintasan (mis. `Ctrl+Alt+F`) untuk menjalankan grup itu dari mana saja, tanpa perlu menu. Esc membatalkan, Delete mengosongkan. Grup yang dinonaktifkan melepaskan kombinasinya; kombinasi yang dicadangkan sistem (Alt+F4, Ctrl+Shift+Esc…) dan kombinasi yang sudah dipakai oleh grup lain atau tombol pintas panik ditolak dengan sebuah pemberitahuan. **Tombol pintas ini adalah sakelar:** tekan lagi saat grup masih berjalan untuk membatalkan jalannya itu —— grup lain dan daftar startup tetap berjalan (yang menghentikan semuanya adalah tombol pintas panik). Hanya grup yang punya tombol pintas sendiri bisa dibatalkan dengan cara ini.
 
 ### Pengaturan
 

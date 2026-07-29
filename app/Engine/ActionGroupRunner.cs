@@ -33,14 +33,64 @@ public sealed class GroupDeps
     // 给用户一个不存在的故障去查。
     public Action<LaunchStep, string, bool> OnStepSkipped { get; init; } = (_, _, _) => { };
     public RunBudget Budget { get; init; } = new();                        // 单次顶层运行共享的步数预算（嵌套引用经同一 deps 传递）
+    // 单次顶层运行的取消闸（同 Budget，一次触发一份、经同一 deps 传给整条嵌套链）。动作组热键按第二次
+    // 时置位——它取消的是「这一次运行」，不是全局急停：别的组和开机启动清单不该被一个组的热键带走。
+    public RunCancel Cancel { get; init; } = new();
 }
 
-// 顺序执行动作组，整组按 group.Repeat 跑若干轮（轮间睡 RepeatDelayMs，可急停）。
+// 顺序执行动作组，整组按 group.Repeat 跑若干轮（轮间睡 RepeatDelayMs，可急停/可取消）。
 // message 步骤弹确认闸门（否/关闭→中止整组）；其余步骤循环 repeat；步骤时间条件同顶层清单遵守。
 // 按组 id 进程内互斥防重入（单进程用运行集即可）；重入（含环引用）返回 Skipped，是否上报由调用方决定。
+// 「谁在跑」(_running) 与「按哪个键能取消谁」(_topRuns) 是两张表，别再合并回一张——理由见各自注释。
+// 停止有两条来源，粒度不同：全局急停 StopSignal 停一切；deps.Cancel 只停这一次运行（动作组热键按第二次）。
+// 循环里一律查 deps.Cancel.IsStopped（它已含全局急停），别再直接读 StopSignal——那会让单组取消失效。
 public static class ActionGroupRunner
 {
+    // 「谁在跑」——纯防重入集，引用链上每个组 id 都登记（顶层与嵌套子组一视同仁）。
+    // 同 id 再进即 Skipped，挡住双开 / 按键交错 / 环引用空转。
     private static readonly ConcurrentDictionary<string, byte> _running = new();
+
+    // 「按哪个键能取消哪一次运行」——只登记顶层运行，键是发起它的那个组 id。
+    // 必须与 _running 分开：两件事共用一份表时，链上任一子组的 id 都指向顶层的取消闸，
+    // 于是用户按子组热键（本意「跑一下这个子组」）会把毫不相干的父组整轮掐掉——父组的锁屏/息屏
+    // 尾步全不执行，气泡还只报子组名，根本指不到被杀的那一个。键相同、含义不同，就得是两张表。
+    private static readonly ConcurrentDictionary<string, RunCancel> _topRuns = new();
+
+    // 顶层运行的登记/注销，由派发方（App.RunGroupAsync）在后台任务里成对调用。
+    // 返回 false = 该 id 已有顶层运行占位（并发重复触发），调用方不必注销。
+    public static bool EnterTopLevel(string groupId, RunCancel cancel) => _topRuns.TryAdd(groupId ?? "", cancel);
+
+    // 按「键+值」删除，绝不误删别人后来登记的同 id 运行。
+    public static void ExitTopLevel(string groupId, RunCancel cancel)
+        => _topRuns.TryRemove(new KeyValuePair<string, RunCancel>(groupId ?? "", cancel));
+
+    // 开机清单的内联展开也要占同一个运行集（LaunchSequence 用）：文档承诺「同一组同时只会跑一份」，
+    // 而那条路径以前完全没登记，开机期间按该组热键会再开一份并发副本。
+    public static bool TryEnterRunning(string groupId) => _running.TryAdd(groupId ?? "", 0);
+    public static void ExitRunning(string groupId) => _running.TryRemove(groupId ?? "", out _);
+
+    // 某组此刻是否正在跑（任何来源：顶层、嵌套子组、开机清单展开）。热键据此把「在跑但这个键取消不了」
+    // 与「压根没在跑」分开——前者不能谎报「已启动」，也不该再开一份；后者才该启动。
+    public static bool IsRunning(string groupId) => _running.ContainsKey(groupId ?? "");
+
+    // 请求取消某组当前这次顶层运行。返回 true=确实有一份在跑、已置位；false=没有可取消的顶层运行
+    //（没在跑，或在跑的那份是别人的嵌套子步骤 / 开机清单展开——调用方要能分辨，见 IsRunning）。
+    // 只置位不等待：调用方是 UI 线程（热键钩子），执行线程会在下一个动作边界自查退出。
+    public static bool RequestCancel(string groupId)
+    {
+        if (!_topRuns.TryGetValue(groupId ?? "", out var cancel)) return false;
+        cancel.Request();
+        return true;
+    }
+
+    // 全局急停时把「停」推给每个在途运行的闸。RunCancel 的可中断延时只等自己那一个事件（理由见该处注释），
+    // 所以急停必须主动推过来，否则一个睡在 30 分钟轮间延迟里的组要等这一觉睡完才发现急停。
+    // 只需遍历顶层：嵌套子组与顶层共用同一个闸，推给顶层即全链生效。
+    // 本次推送之后才开跑的运行拿不到推送，但它们的 IsStopped 会读到仍然置位的全局信号，照样停。
+    public static void CancelAll()
+    {
+        foreach (var cancel in _topRuns.Values) cancel.Request();
+    }
 
     public static GroupRunResult RunGroup(ActionGroup group, GroupDeps deps)
     {
@@ -59,7 +109,7 @@ public static class ActionGroupRunner
             {
                 foreach (var step in group.Steps)
                 {
-                    if (stopped || StopSignal.IsRequested || deps.Budget.Exhausted) { stopped = true; break; }
+                    if (stopped || deps.Cancel.IsStopped || deps.Budget.Exhausted) { stopped = true; break; }
                     if (!step.Enabled) continue;
                     if (!StepCondition.IsSatisfied(step, hour, iso, now.Minute)) continue;   // 组内步骤同样遵守时间条件（分钟级）
 
@@ -68,9 +118,12 @@ public static class ActionGroupRunner
                         if (!deps.Budget.TryConsume()) { stopped = true; break; }
                         if (step.Speak) deps.Speak(step.Message);
                         var res = deps.ShowMessage(step);
+                        // 弹窗是模态、要等用户点掉才返回，其间取消/急停完全可能已经按下。此时那个答案作废：
+                        // 用户按取消的意思是「这组别做了」，不是「把 onYes 那一串做完再停」。查在 RunOnYes 之前。
+                        if (deps.Cancel.IsStopped) { stopped = true; break; }
                         if (res == MsgResult.Yes) deps.RunOnYes(step);
                         else if (res == MsgResult.No) { stopped = true; aborted = true; break; }   // 否/关闭 → 中止整组剩余步骤（含后续轮次），并让上层一并收手
-                        if (step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
+                        if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
                     }
                     else if (step.Kind == "group")
                     {
@@ -92,8 +145,8 @@ public static class ActionGroupRunner
                             // 重入注定持续整个循环（同一 id 在同一调用栈上）：再迭代只会重复上报 + 空睡，
                             // Repeat=999 时就是 999 条日志/气泡和 ~99 秒的零工作睡眠。
                             if (sub == GroupRunResult.Skipped) break;
-                            if (StopSignal.IsRequested || deps.Budget.Exhausted) stopped = true;
-                            else if (step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
+                            if (deps.Cancel.IsStopped || deps.Budget.Exhausted) stopped = true;
+                            else if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
                         }
                     }
                     else
@@ -106,12 +159,12 @@ public static class ActionGroupRunner
                             // 若前面某步失败，锁屏/关显示器就不再执行，屏幕开着且无任何提示。每步失败记一笔、整组继续。
                             try { deps.RunStep(step); }
                             catch (Exception ex) { deps.OnStepError(step, ex); }
-                            if (StopSignal.IsRequested) stopped = true;
-                            else if (step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
+                            if (deps.Cancel.IsStopped) stopped = true;
+                            else if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
                         }
                     }
                 }
-                if (!stopped && round < rounds && group.RepeatDelayMs > 0 && !StopSignal.InterruptibleSleep(group.RepeatDelayMs)) stopped = true;
+                if (!stopped && round < rounds && group.RepeatDelayMs > 0 && !deps.Cancel.InterruptibleSleep(group.RepeatDelayMs)) stopped = true;
             }
             return aborted ? GroupRunResult.Aborted : GroupRunResult.Completed;
         }

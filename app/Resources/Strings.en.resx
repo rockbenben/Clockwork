@@ -297,6 +297,9 @@ Log: {1}</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>Action group "{0}" is disabled; skipped</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Action group re-entered (circular reference or already running); skipped</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>Requested cancellation of action group “{0}”.</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>Started action group “{0}”.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>Action group “{0}” is already running (started elsewhere); this key can’t stop it — use the panic hotkey.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Run stopped at the 5000-step limit; remaining steps were skipped (check for oversized repeat counts)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>The action group to run on "Yes" no longer exists; skipped</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>The action group to run on "Yes" is disabled; skipped</value></data>
@@ -355,7 +358,7 @@ Log: {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Pick a date</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Capture key</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Global hotkey</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Click, then press a key combo to run this group anytime; Esc cancels, Delete clears</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Click, then press a key combo to run this group anytime; press it again while it runs to stop it. Esc cancels, Delete clears</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Failed to register hotkey {1} for action group “{0}”: it may already be in use</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>

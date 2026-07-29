@@ -100,7 +100,7 @@ Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt
 
 Ein **Nachrichten**-Schritt ist eine Bestätigungssperre: **Nein** bricht den Rest der Gruppe *samt ihrer verbleibenden Runden* ab und pflanzt sich nach außen zu der Gruppe fort, die sie aufgerufen hat — einmal ablehnen genügt, auch in einer ×N wiederholten Untergruppe.
 
-> **Globales Hotkey** — klicke im Gruppeneditor in das Hotkey-Feld und drücke ein Kürzel (z. B. `Ctrl+Alt+F`), um diese Gruppe von überall auszuführen, ganz ohne Menü. Esc bricht ab, Entf löscht. Deaktivierte Gruppen geben ihre Kombination frei; systemreservierte Kombinationen (Alt+F4, Ctrl+Shift+Esc…) und Kombinationen, die bereits von einer anderen Gruppe oder dem Notfall-Hotkey belegt sind, werden mit einem Hinweis abgelehnt.
+> **Globales Hotkey** — klicke im Gruppeneditor in das Hotkey-Feld und drücke ein Kürzel (z. B. `Ctrl+Alt+F`), um diese Gruppe von überall auszuführen, ganz ohne Menü. Esc bricht ab, Entf löscht. Deaktivierte Gruppen geben ihre Kombination frei; systemreservierte Kombinationen (Alt+F4, Ctrl+Shift+Esc…) und Kombinationen, die bereits von einer anderen Gruppe oder dem Notfall-Hotkey belegt sind, werden mit einem Hinweis abgelehnt. **Die Tastenkombination ist ein Umschalter:** Drücken Sie sie erneut, während die Gruppe noch läuft, um diesen Durchlauf abzubrechen —— andere Gruppen und die Startliste laufen weiter (alles stoppt nur der Notfall-Hotkey). So abbrechen lassen sich nur Gruppen mit zugewiesener Tastenkombination.
 
 ### Einstellungen
 

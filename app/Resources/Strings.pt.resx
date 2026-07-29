@@ -294,6 +294,9 @@ Registro: {1}</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>O grupo de ações "{0}" está desabilitado; ignorado</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Reentrada no grupo de ações (referência circular ou já em execução); ignorado</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>Solicitado o cancelamento do grupo de ações “{0}”.</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>Grupo de ações “{0}” iniciado.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>O grupo de ações “{0}” já está em execução (iniciado em outro lugar); esta tecla não pode pará-lo — use o atalho de parada de emergência.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>A execução parou no limite de 5000 passos; os passos restantes foram ignorados (verifique se há contagens de repetição excessivas)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>O grupo de ações a executar ao clicar em "Sim" não existe mais; ignorado</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>O grupo de ações a executar ao clicar em "Sim" está desabilitado; ignorado</value></data>
@@ -352,7 +355,7 @@ Registro: {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Escolher data</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Capturar tecla</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Atalho global</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Clique e pressione uma combinação de teclas para executar este grupo a qualquer momento; Esc cancela, Delete limpa</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Clique e pressione uma combinação de teclas para executar este grupo a qualquer momento; pressione de novo enquanto ele roda para pará-lo. Esc cancela, Delete limpa</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Não foi possível registrar o atalho {1} do grupo de ações “{0}”: pode já estar em uso</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>O atalho {0} já é usado por “{1}”; escolha outra combinação</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} é uma combinação reservada do sistema (registrá-la sequestraria uma tecla do sistema) e não pode ser usada como atalho</value></data>

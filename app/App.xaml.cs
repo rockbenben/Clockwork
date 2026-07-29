@@ -294,7 +294,7 @@ public partial class App : System.Windows.Application
             return;
         }
         bool ok = false;
-        try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, HotkeyId, p.Modifiers, p.Vk); } catch { }
+        try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, HotkeyId, p.Modifiers | HotKey.MOD_NOREPEAT, p.Vk); } catch { }
         if (!ok)
         {
             if (_stopHotkeyFail != combo) ShowToast("Clockwork", Lf("Hotkey_RegisterFail", combo), Views.ToastLevel.Warn);
@@ -339,7 +339,7 @@ public partial class App : System.Windows.Application
             bool ok = false;
             if (p != null && !reserved)
             {
-                try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, slot, p.Modifiers, p.Vk); } catch { }
+                try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, slot, p.Modifiers | HotKey.MOD_NOREPEAT, p.Vk); } catch { }
             }
             if (!ok)
             {
@@ -374,10 +374,47 @@ public partial class App : System.Windows.Application
         {
             // 按组 Id 现查（注册后组可能已被编辑），禁用兜底跳过——正常情况下禁用组根本不会注册。
             var g = _config.ActionGroups.FirstOrDefault(x => x.Id == gid);
-            if (g is { Enabled: true }) RunGroupAsync(g);
+            if (g is { Enabled: true }) ToggleGroupByHotkey(g);
             handled = true;
         }
         return IntPtr.Zero;
+    }
+
+    // 动作组热键是开关：没在跑→跑；正在跑→取消这一次运行。「按了没反应」是这个键以前最大的毛病——
+    // 组还在跑时再按一次，旧实现被运行集当成重入静默丢弃，屏幕上一点动静都没有，用户只能怀疑热键坏了。
+    //
+    // 取消的边界刻意收窄到「这一次运行」：不动全局急停，启动清单和别的组照跑。要停一切请用急停键
+    // （设置页可改，托盘/主窗按钮同款）——一个组的热键不该有掀桌子的权力。
+    //
+    // 回执必须给，而且两个分支都要给、还要共用同一张卡（同一合并键）：
+    //   · 只给取消发卡 → 启动分支静默，用户分不出「按了启动」和「这键没注册上」；
+    //   · 两个分支各发各的卡 → 取消卡（原来是 Warn，默认挂 12 秒）会在屏上过期说谎：期间再按一次，
+    //     组其实已经重新跑起来了，用户看到的还是「已请求取消」，于是判定 toggle 坏了。
+    // 同键合并后，卡片就地更新成最后一次按键的结果，连按也只有一张。两条都用 Info：这是用户对自己
+    // 的组主动做的开关，不是故障；Warn 的 12 秒时长正是过期卡片能骗人的原因。
+    //
+    // 竞态说明：RunGroupAsync 先派 Task、再由后台线程登记，中间有个空窗。这个窗口不是「几微秒」——
+    // 每个在途运行都占着一个线程池线程阻塞，线程注入延迟在争用时可达约 1 秒，人手连按完全够得着。
+    // 落进空窗的第二次按键会判成「没在跑」而再派一次，那一次随即被运行集判重入跳过（不会跑两遍），
+    // 代价只是这一次按键白按。要根治得把登记提到派发线程上做两段式握手，收益不抵复杂度，暂留。
+    private void ToggleGroupByHotkey(ActionGroup g)
+    {
+        var key = "grouptoggle:" + g.Id;
+        if (ActionGroupRunner.RequestCancel(g.Id))
+        {
+            ShowToast("Clockwork", Lf("Toast_GroupCancelled", g.Name), Views.ToastLevel.Info, key: key);
+            return;
+        }
+        // 在跑、但这一次运行不是热键管得着的那种（它是别的组的嵌套步骤，或开机清单内联展开的）：
+        // 既不能取消，也绝不能再开一份并发副本。照单飞的老规矩不跑，但必须说清楚——
+        // 这里要是直接调 RunGroupAsync，气泡会报「已启动」，而实际那一次随即被判重入丢弃，纯属骗人。
+        if (ActionGroupRunner.IsRunning(g.Id))
+        {
+            ShowToast("Clockwork", Lf("Toast_GroupBusy", g.Name), Views.ToastLevel.Info, key: key);
+            return;
+        }
+        RunGroupAsync(g);
+        ShowToast("Clockwork", Lf("Toast_GroupStarted", g.Name), Views.ToastLevel.Info, key: key);
     }
 
     // —— 提醒计时器 ——
@@ -522,6 +559,9 @@ public partial class App : System.Windows.Application
     public void RequestStop()
     {
         StopSignal.Request();
+        // 再把「停」推给每个在途动作组的取消闸：它们的可中断延时只等自己那一个事件，不去等全局信号的
+        // 内核句柄（那会引入两份状态、可能永久分歧）。不推的话，睡在轮间延迟里的组要睡满才发现急停。
+        ActionGroupRunner.CancelAll();
         ShowToast("Clockwork", Strings.Get("Hotkey_Stopped"), Views.ToastLevel.Warn);
         // 不在这儿动急停按钮：它只由「有没有东西在跑」决定，而那个变化由运行闸(RunGate)统一广播。
         // 按下急停到真正停下之间最多几百毫秒，中间态没有观察价值，回执由上面这条气泡负责。
@@ -617,12 +657,19 @@ public partial class App : System.Windows.Application
         Task.Run(() =>
         {
             _runGate.Begin();
+            // 只有这一层登记为「顶层运行」——即热键能取消的那一次。嵌套子组与它共用同一个闸但不登记，
+            // 否则按子组热键会把整条链（含毫不相干的父组）一起掐掉。
+            bool owned = ActionGroupRunner.EnterTopLevel(snap.Id, deps.Cancel);
             // 顶层入口：结局有意丢弃。Aborted 是用户自己在确认框上点的「否」（他已经知道了，再弹一张卡是噪音）；
             // Skipped 是同组已在跑的单飞去重——热键连按/循环任务撞上上一轮时本就该静默忽略。
             // 嵌套引用那层不同：那里的 Skipped 意味着配置有环，必须发声（见 RunGroupStep）。
             try { _ = ActionGroupRunner.RunGroup(snap, deps); }
             catch (Exception ex) { WarnToast(Lf("Mark_Exception", ex.Message)); }
-            finally { _runGate.End(); }
+            finally
+            {
+                if (owned) ActionGroupRunner.ExitTopLevel(snap.Id, deps.Cancel);
+                _runGate.End();
+            }
         });
     }
 
@@ -633,7 +680,9 @@ public partial class App : System.Windows.Application
         GroupDeps deps = null!;
         deps = new GroupDeps
         {
-            RunStep = s => StepRunner.InvokeStepAction(s, ConfirmDestructive, selfPaths),
+            // 把本次运行的取消闸一路传进步骤执行层：等窗口 / 置前重试 / 置前延时都可能挂几秒到几十秒，
+            // 只查全局急停的话，用户取消了动作组，这些步骤过一会儿照样把窗口拽到前台、把按键打进去。
+            RunStep = s => StepRunner.InvokeStepAction(s, ConfirmDestructive, selfPaths, deps.Cancel),
             ShowMessage = ShowGroupMessage,
             // onYes 组的结局也丢弃：ReminderActions.RunOnYes 是 Action<ActionGroup> 契约（提醒弹窗路径共用），
             // 且语义上 onYes 是「是」分支的副作用出口——它内部的确认框属于那条子流程，把它的中止回灌成父组中止，

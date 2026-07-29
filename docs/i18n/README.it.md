@@ -98,7 +98,7 @@ Raggruppa azioni in un gruppo riutilizzabile. **Aggiungi ▾** ne avvia uno da u
 
 Un passaggio **messaggio** è una barriera di conferma: rispondere **No** interrompe il resto del gruppo *e i suoi giri rimanenti*, e si propaga verso l'esterno al gruppo che lo ha richiamato — rifiutare una volta basta, anche dentro un sottogruppo ripetuto ×N.
 
-> **Scorciatoia globale** — nell'editor del gruppo, clicca sulla casella della scorciatoia e premi una combinazione (es. `Ctrl+Alt+F`) per eseguire quel gruppo da qualsiasi punto, senza menu. Esc annulla, Canc cancella. I gruppi disabilitati rilasciano la loro combinazione; le combinazioni riservate dal sistema (Alt+F4, Ctrl+Shift+Esc…) e le combinazioni già occupate da un altro gruppo o dalla scorciatoia di emergenza vengono rifiutate con un avviso.
+> **Scorciatoia globale** — nell'editor del gruppo, clicca sulla casella della scorciatoia e premi una combinazione (es. `Ctrl+Alt+F`) per eseguire quel gruppo da qualsiasi punto, senza menu. Esc annulla, Canc cancella. I gruppi disabilitati rilasciano la loro combinazione; le combinazioni riservate dal sistema (Alt+F4, Ctrl+Shift+Esc…) e le combinazioni già occupate da un altro gruppo o dalla scorciatoia di emergenza vengono rifiutate con un avviso. **La scorciatoia è un interruttore:** premila di nuovo mentre il gruppo è ancora in esecuzione per annullare quell'esecuzione —— gli altri gruppi e l'elenco di avvio continuano (è la scorciatoia di emergenza a fermare tutto). Solo i gruppi con una scorciatoia assegnata possono essere annullati così.
 
 ### Impostazioni
 

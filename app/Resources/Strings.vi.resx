@@ -294,6 +294,9 @@ Nhật ký: {1}</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>Nhóm hành động "{0}" đã bị tắt; đã bỏ qua</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Vào lại nhóm hành động (tham chiếu vòng lặp hoặc đang chạy); đã bỏ qua</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>Đã yêu cầu hủy nhóm hành động “{0}”.</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>Đã bắt đầu nhóm hành động “{0}”.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>Nhóm hành động “{0}” đang chạy (được khởi động từ nơi khác); phím này không dừng được nó — hãy dùng phím tắt dừng khẩn cấp.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Quá trình chạy đã dừng tại giới hạn 5000 bước; các bước còn lại đã bị bỏ qua (kiểm tra xem có số lần lặp lại quá lớn không)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Nhóm hành động chạy khi bấm "Có" không còn tồn tại; đã bỏ qua</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Nhóm hành động chạy khi bấm "Có" đã bị tắt; đã bỏ qua</value></data>
@@ -352,7 +355,7 @@ Nhật ký: {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Chọn ngày</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Bắt phím</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Phím tắt toàn cục</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Nhấp rồi nhấn tổ hợp phím để chạy nhóm này bất cứ lúc nào; Esc hủy, Delete xóa</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Nhấp rồi nhấn tổ hợp phím để chạy nhóm này bất cứ lúc nào; nhấn lại khi đang chạy để dừng. Esc hủy, Delete xóa</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Không thể đăng ký phím tắt {1} cho nhóm hành động “{0}”: có thể đã bị chiếm dụng</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value></data>

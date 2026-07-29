@@ -100,7 +100,7 @@ Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đ�
 
 Bước **thông báo** là một cổng xác nhận: trả lời **Không** sẽ hủy phần còn lại của nhóm *cùng các lượt còn lại*, và lan ra ngoài tới nhóm đã tham chiếu nó — từ chối một lần là đủ, kể cả khi nó là nhóm con đang được lặp ×N.
 
-> **Phím tắt toàn cục** — trong trình chỉnh sửa nhóm, nhấp vào ô phím tắt rồi nhấn một tổ hợp (ví dụ `Ctrl+Alt+F`) để chạy nhóm đó từ bất cứ đâu, không cần menu. Esc hủy, Delete xóa. Các nhóm bị tắt sẽ nhả tổ hợp của chúng; các tổ hợp dành riêng cho hệ thống (Alt+F4, Ctrl+Shift+Esc…) và các tổ hợp đã bị một nhóm khác hoặc phím tắt khẩn chiếm dụng sẽ bị từ chối kèm thông báo.
+> **Phím tắt toàn cục** — trong trình chỉnh sửa nhóm, nhấp vào ô phím tắt rồi nhấn một tổ hợp (ví dụ `Ctrl+Alt+F`) để chạy nhóm đó từ bất cứ đâu, không cần menu. Esc hủy, Delete xóa. Các nhóm bị tắt sẽ nhả tổ hợp của chúng; các tổ hợp dành riêng cho hệ thống (Alt+F4, Ctrl+Shift+Esc…) và các tổ hợp đã bị một nhóm khác hoặc phím tắt khẩn chiếm dụng sẽ bị từ chối kèm thông báo. **Phím tắt là một công tắc bật/tắt:** nhấn lại khi nhóm vẫn đang chạy để hủy lần chạy đó —— các nhóm khác và danh sách khởi động vẫn tiếp tục (thứ dừng tất cả là phím tắt khẩn). Chỉ những nhóm có gán phím tắt mới hủy được theo cách này.
 
 ### Cài đặt
 

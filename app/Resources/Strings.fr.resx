@@ -294,6 +294,9 @@ Journal : {1}</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>Le groupe d'actions « {0} » est désactivé ; ignoré</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Groupe d'actions réentré (référence circulaire ou déjà en cours d'exécution) ; ignoré</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>Annulation du groupe d'actions « {0} » demandée.</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>Groupe d'actions « {0} » démarré.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>Le groupe d'actions « {0} » est déjà en cours (démarré ailleurs) ; cette touche ne peut pas l'arrêter — utilisez le raccourci d'arrêt d'urgence.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>L'exécution s'est arrêtée à la limite de 5000 étapes ; les étapes restantes ont été ignorées (vérifiez si des nombres de répétitions sont excessifs)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Le groupe d'actions à exécuter sur « Oui » n'existe plus ; ignoré</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Le groupe d'actions à exécuter sur « Oui » est désactivé ; ignoré</value></data>
@@ -352,7 +355,7 @@ Journal : {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Choisir une date</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Capturer une touche</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Raccourci global</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Cliquez puis appuyez sur une combinaison de touches pour exécuter ce groupe à tout moment ; Échap annule, Suppr efface</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Cliquez puis appuyez sur une combinaison de touches pour exécuter ce groupe à tout moment ; appuyez de nouveau pendant l'exécution pour l'arrêter. Échap annule, Suppr efface</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Impossible d'enregistrer le raccourci {1} du groupe d'actions « {0} » : il est peut-être déjà utilisé</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par « {1} » ; choisissez une autre combinaison</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} est une combinaison réservée au système (l'enregistrer détournerait une touche système) et ne peut pas servir de raccourci</value></data>

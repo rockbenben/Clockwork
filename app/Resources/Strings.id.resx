@@ -294,6 +294,9 @@ Log: {1}</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>Grup aksi "{0}" dinonaktifkan; dilewati</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Grup aksi dimasuki ulang (referensi melingkar atau sudah berjalan); dilewati</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>Permintaan membatalkan grup aksi “{0}” telah dikirim.</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>Grup aksi “{0}” dimulai.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>Grup aksi “{0}” sedang berjalan (dimulai dari tempat lain); tombol ini tidak bisa menghentikannya — gunakan tombol pintas henti darurat.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Proses berhenti pada batas 5000 langkah; langkah yang tersisa dilewati (periksa apakah ada jumlah pengulangan yang terlalu besar)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Grup aksi yang dijalankan saat "Ya" sudah tidak ada; dilewati</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Grup aksi yang dijalankan saat "Ya" dinonaktifkan; dilewati</value></data>
@@ -352,7 +355,7 @@ Log: {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Pilih tanggal</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Tangkap tombol</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Tombol pintas global</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klik lalu tekan kombinasi tombol untuk menjalankan grup ini kapan saja; Esc membatalkan, Delete menghapus</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klik lalu tekan kombinasi tombol untuk menjalankan grup ini kapan saja; tekan lagi saat berjalan untuk menghentikannya. Esc membatalkan, Delete menghapus</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Gagal mendaftarkan tombol pintas {1} untuk grup aksi “{0}”: mungkin sudah dipakai</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tombol pintas {0} sudah dipakai oleh “{1}”; pilih kombinasi lain</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} adalah kombinasi yang dicadangkan sistem (mendaftarkannya akan membajak tombol sistem) dan tidak bisa dipakai sebagai tombol pintas</value></data>

@@ -98,7 +98,7 @@ Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de
 
 Un paso de **mensaje** es una puerta de confirmación: responder **No** aborta el resto del grupo *y sus rondas restantes*, y se propaga hacia fuera al grupo que lo referenció — rechazar una vez basta, incluso dentro de un subgrupo repetido ×N.
 
-> **Atajo global** — en el editor de grupos, haz clic en el cuadro del atajo y pulsa un atajo (p. ej. `Ctrl+Alt+F`) para ejecutar ese grupo desde cualquier parte, sin necesidad de menús. Esc cancela, Supr lo borra. Los grupos deshabilitados liberan su combinación; las combinaciones reservadas por el sistema (Alt+F4, Ctrl+Shift+Esc…) y las combinaciones ya ocupadas por otro grupo o por el atajo de pánico se rechazan con un aviso.
+> **Atajo global** — en el editor de grupos, haz clic en el cuadro del atajo y pulsa un atajo (p. ej. `Ctrl+Alt+F`) para ejecutar ese grupo desde cualquier parte, sin necesidad de menús. Esc cancela, Supr lo borra. Los grupos deshabilitados liberan su combinación; las combinaciones reservadas por el sistema (Alt+F4, Ctrl+Shift+Esc…) y las combinaciones ya ocupadas por otro grupo o por el atajo de pánico se rechazan con un aviso. **El atajo es un interruptor:** púlsalo de nuevo mientras el grupo sigue en marcha para cancelar esa ejecución —— los demás grupos y la lista de inicio continúan (el atajo de pánico es el que detiene todo). Solo los grupos con un atajo asignado pueden cancelarse así.
 
 ### Ajustes
 

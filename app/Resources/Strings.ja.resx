@@ -295,6 +295,9 @@
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>アクショングループ「{0}」は無効のため、スキップしました</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>アクショングループへの再入（循環参照または実行中）のため、スキップしました</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>アクショングループ「{0}」の取り消しを要求しました。</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>アクショングループ「{0}」を開始しました。</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>アクショングループ「{0}」は実行中です（別の経路で開始）。このキーでは停止できません。緊急停止キーをお使いください。</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>実行は5000ステップの上限に達したため停止し、残りのステップはスキップされました（繰り返し回数が大きすぎないか確認してください）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「はい」で実行するアクショングループが存在しないため、スキップしました</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「はい」で実行するアクショングループが無効のため、スキップしました</value></data>
@@ -353,7 +356,7 @@
   <data name="Date_Pick" xml:space="preserve"><value>日付を選択</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>キーをキャプチャ</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>グローバルホットキー</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>クリックしてキーの組み合わせを押すと、いつでもこのグループを実行できます。Esc でキャンセル、Delete でクリア</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>クリックしてキーの組み合わせを押すと、いつでもこのグループを実行できます。実行中にもう一度押すと中止します。Esc でキャンセル、Delete でクリア</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>アクショングループ「{0}」のホットキー {1} を登録できませんでした：既に使用されている可能性があります</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ホットキー {0} は「{1}」で既に使用されています。別の組み合わせを選んでください</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} はシステム予約の組み合わせです（登録するとシステムキーを奪ってしまうため）ホットキーには使えません</value></data>

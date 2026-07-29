@@ -294,6 +294,9 @@
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات "{0}" معطّلة؛ تم التخطي</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>إعادة دخول مجموعة الإجراءات (إشارة دائرية أو قيد التشغيل بالفعل)؛ تم التخطي</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}، {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>تم طلب إلغاء مجموعة الإجراءات «{0}».</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>تم بدء مجموعة الإجراءات «{0}».</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>مجموعة الإجراءات «{0}» قيد التشغيل بالفعل (بدأت من مكان آخر)؛ هذا المفتاح لا يوقفها — استخدم مفتاح الإيقاف الطارئ.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>توقّف التشغيل عند حد 5000 خطوة؛ تم تخطي الخطوات المتبقية (تحقّق من وجود عدد تكرار كبير جدًا)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" لم تعد موجودة؛ تم التخطي</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" معطّلة؛ تم التخطي</value></data>
@@ -352,7 +355,7 @@
   <data name="Date_Pick" xml:space="preserve"><value>اختيار تاريخ</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>التقاط مفتاح</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>اختصار عام</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>انقر ثم اضغط مجموعة مفاتيح لتشغيل هذه المجموعة في أي وقت؛ Esc للإلغاء وDelete للمسح</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>انقر ثم اضغط مجموعة مفاتيح لتشغيل هذه المجموعة في أي وقت؛ واضغطها مرة أخرى أثناء التشغيل لإيقافها؛ Esc للإلغاء وDelete للمسح</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>تعذّر تسجيل الاختصار {1} لمجموعة الإجراءات «{0}»: قد يكون مستخدمًا بالفعل</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>الاختصار {0} مستخدم بالفعل بواسطة «{1}»؛ اختر تركيبة أخرى</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} تركيبة محجوزة للنظام (تسجيلها سيخطف مفتاح نظام) ولا يمكن استخدامها كاختصار</value></data>

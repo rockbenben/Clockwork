@@ -69,9 +69,30 @@ public static class LaunchSequence
         // 递归展开动作组：整组 g.Repeat 轮（轮间睡 RepeatDelayMs）；组内 group 步骤继续下钻。
         // pathIds=当前引用链上的组 id：同链再现即环（手改 json 造出，编辑器 DFS 拦不到的），告警跳过；
         // 同级引用同一组两次不在同链上，照常各跑。深度由访问集自然封顶（每组每链至多一次）。
-        void RunGroupInline(ActionGroup g, int depth, HashSet<string> pathIds)
+        // 返回 false = 这一次没跑（该组已被别的来源占着）。调用方据此立刻收掉剩余的引用轮次：
+        // 结论在整个循环里不会变，再迭代只是重复记日志 + 空烧预算，而预算是与整张清单共享的
+        // 5000 步保险丝——Repeat=999 的引用能烧掉它五分之一，把清单后面真正要跑的步骤挤没。
+        // （同 ActionGroupRunner 收到 Skipped 就 break 的理由。）
+        bool RunGroupInline(ActionGroup g, int depth, HashSet<string> pathIds)
         {
             string pad = new string(' ', 4 * depth);
+            // 占住与 ActionGroupRunner 共用的运行集。文档承诺「同一组同时只会跑一份」，而开机清单这条
+            // 路径以前完全没登记：开机跑清单期间按该组热键，会再开一份并发副本（关窗口/发按键/锁屏各来两轮）。
+            // 登记后那次按键被识别成「在跑但取消不了」，给提示而不重复执行。
+            if (!ActionGroupRunner.TryEnterRunning(g.Id))
+            {
+                // 记一笔失败：这一步没执行，清单没做到它承诺的事，用户该在回执里看到「N 步失败/警告」。
+                lines.Add($"[{Ts(now)}] {pad}动作组「{g.Name}」已在运行（由别处触发），本次跳过");
+                fail++; total++;
+                return false;
+            }
+            try { RunGroupRounds(g, depth, pathIds, pad); }
+            finally { ActionGroupRunner.ExitRunning(g.Id); }
+            return true;
+        }
+
+        void RunGroupRounds(ActionGroup g, int depth, HashSet<string> pathIds, string pad)
+        {
             int rounds = StepHelpers.ClampRepeat(g.Repeat);
             for (int round = 1; round <= rounds && !stopped; round++)
             {
@@ -97,8 +118,9 @@ public static class LaunchSequence
                             var hdr = rep > 1 ? $"运行动作组：{ng.Name}（第 {i}/{rep} 次）" : $"运行动作组：{ng.Name}";
                             lines.Add($"[{Ts(now)}] {pad}{hdr}");
                             pathIds.Add(ng.Id);
-                            RunGroupInline(ng, depth + 1, pathIds);
+                            bool ranSub = RunGroupInline(ng, depth + 1, pathIds);
                             pathIds.Remove(ng.Id);
+                            if (!ranSub) break;   // 被别处占着：结论不会变，收掉剩余轮次（见 RunGroupInline）
                             if (StopSignal.IsRequested) stopped = true;
                             else if (i < rep && sub.DelayMs > 0 && !StopSignal.InterruptibleSleep(sub.DelayMs)) stopped = true;
                         }
@@ -130,7 +152,7 @@ public static class LaunchSequence
                         if (!Consume()) { stopped = true; break; }   // 顶层引用迭代同样计费，理由同组内
                         var hdr = rep > 1 ? $"运行动作组：{g.Name}（第 {gi}/{rep} 次）" : $"运行动作组：{g.Name}";
                         lines.Add($"[{Ts(now)}] {hdr}");
-                        RunGroupInline(g, 1, new HashSet<string> { g.Id });
+                        if (!RunGroupInline(g, 1, new HashSet<string> { g.Id })) break;   // 同上：收掉剩余轮次
                         if (!stopped && gi < rep && step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
                     }
                 }

@@ -297,6 +297,9 @@
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>动作组「{0}」已禁用，跳过</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>动作组重入（环引用或已在运行），已跳过</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}，{1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>已请求取消动作组「{0}」。</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>已启动动作组「{0}」。</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>动作组「{0}」正在运行中（由别处触发），这个键停不了它，请用急停键。</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>单次运行已达 5000 步上限，剩余步骤未执行（检查是否有过大的循环次数）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「点是后」要运行的动作组不存在，已跳过</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「点是后」要运行的动作组已禁用，已跳过</value></data>
@@ -355,7 +358,7 @@
   <data name="Date_Pick" xml:space="preserve"><value>选择日期</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>捕获按键</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>全局热键</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>点击后按下组合键，随时一键运行本组；Esc 取消，Delete 清除</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>点击后按下组合键，随时一键运行本组；运行中再按一次即停下。Esc 取消，Delete 清除</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>动作组「{0}」的热键 {1} 注册失败：可能已被其他程序或热键占用</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>热键 {0} 已被「{1}」使用，请换一个组合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系统保留组合（注册会劫走系统按键），不能用作热键</value></data>

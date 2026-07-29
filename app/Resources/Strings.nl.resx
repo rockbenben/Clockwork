@@ -294,6 +294,9 @@ Log: {1}</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>Actiegroep "{0}" is uitgeschakeld; overgeslagen</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Actiegroep opnieuw betreden (circulaire verwijzing of al actief); overgeslagen</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>Verzoek om actiegroep “{0}” te annuleren verzonden.</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>Actiegroep “{0}” gestart.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>Actiegroep “{0}” loopt al (elders gestart); deze toets kan hem niet stoppen — gebruik de noodstop-sneltoets.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>De uitvoering is gestopt bij de limiet van 5000 stappen; de resterende stappen zijn overgeslagen (controleer op te grote herhalingsaantallen)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>De actiegroep die bij "Ja" moet draaien bestaat niet meer; overgeslagen</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>De actiegroep die bij "Ja" moet draaien is uitgeschakeld; overgeslagen</value></data>
@@ -352,7 +355,7 @@ Log: {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Datum kiezen</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Toets vastleggen</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Globale sneltoets</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klik en druk op een toetsencombinatie om deze groep altijd uit te voeren; Esc annuleert, Delete wist</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klik en druk op een toetsencombinatie om deze groep altijd uit te voeren; druk opnieuw terwijl hij loopt om te stoppen. Esc annuleert, Delete wist</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Sneltoets {1} voor actiegroep “{0}” kon niet worden geregistreerd: mogelijk al in gebruik</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Sneltoets {0} is al in gebruik door “{1}”; kies een andere combinatie</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is een door het systeem gereserveerde combinatie (registreren zou een systeemtoets kapen) en kan niet als sneltoets worden gebruikt</value></data>

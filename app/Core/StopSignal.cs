@@ -12,6 +12,10 @@ public static class StopSignal
     public static void Clear() => _evt.Reset();
     public static bool IsRequested => _evt.IsSet;
 
+    // 有意不暴露底层 WaitHandle：一旦有人等内核句柄、另一些人读 IsSet，Set/Reset 的非原子性就能留下
+    // 「句柄置位、IsSet 为假」的永久分歧（见 RunCancel.InterruptibleSleep 的说明）。本信号只有
+    // IsRequested 一个读法。要让在途运行的长睡眠立刻醒，走 App.RequestStop → ActionGroupRunner.CancelAll 推送。
+
     // 可中断延时：等 ms 毫秒；期间置位立即返回 false（被停），睡满返回 true。
     // ms<=0：仅查当前是否已停。ms>int.MaxValue 夹到上限（Wait 上限 ~24.8 天）。
     public static bool InterruptibleSleep(long ms)

@@ -295,6 +295,9 @@
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>動作組「{0}」已停用，已略過</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>動作組重入（環引用或已在執行），已略過</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}，{1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>已要求取消動作組「{0}」。</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>已啟動動作組「{0}」。</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>動作組「{0}」正在執行中（由別處觸發），這個鍵停不了它，請用急停鍵。</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>單次執行已達 5000 步上限，剩餘步驟未執行（請檢查是否有過大的循環次數）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「點是後」要執行的動作組不存在，已略過</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「點是後」要執行的動作組已停用，已略過</value></data>
@@ -353,7 +356,7 @@
   <data name="Date_Pick" xml:space="preserve"><value>選擇日期</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>擷取按鍵</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>全域快速鍵</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>點擊後按下組合鍵，隨時一鍵執行本組；Esc 取消，Delete 清除</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>點擊後按下組合鍵，隨時一鍵執行本組；執行中再按一次即停下。Esc 取消，Delete 清除</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>動作組「{0}」的快速鍵 {1} 註冊失敗：可能已被其他程式或快速鍵佔用</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>快速鍵 {0} 已被「{1}」使用，請換一個組合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系統保留組合（註冊會劫走系統按鍵），不能用作快速鍵</value></data>

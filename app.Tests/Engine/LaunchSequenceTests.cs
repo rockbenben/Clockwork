@@ -172,4 +172,31 @@ public class LaunchSequenceTests
         Assert.Contains(r.LogLines, l => l.Contains("5000"));
         Assert.DoesNotContain(r.LogLines, l => l.Contains("已手动停止"));   // 截停 ≠ 手动急停
     }
+
+    // 开机清单展开的组现在要占「同一组只跑一份」的运行集。被别处占着时必须一次就收手：
+    // 不收的话 Repeat=999 会空转 999 轮，每轮记一行日志、烧一格预算——预算是与整张清单共享的
+    // 5000 步保险丝，够把清单后面真正要跑的步骤整段挤没（不报错，只是静默没执行）。
+    [Fact]
+    public void Group_busy_elsewhere_is_reported_once_and_stops_the_reference_loop()
+    {
+        var g = new ActionGroup { Id = "busy1", Name = "占用中", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute" } } };
+        var c = new RootConfig
+        {
+            LaunchSteps = new()
+            {
+                new LaunchStep { Kind = "group", GroupId = "busy1", Repeat = 999, DelayMs = 0 },
+                new LaunchStep { Kind = "app", Label = "清单尾步", DelayMs = 0 },
+            },
+            ActionGroups = new() { g },
+        };
+        Assert.True(ActionGroupRunner.TryEnterRunning("busy1"));   // 模拟别处（提醒的静默组等）正跑着它
+        LaunchRunResult r;
+        try { r = LaunchSequence.Run(c, false, 10, 3, Ok, Now); }
+        finally { ActionGroupRunner.ExitRunning("busy1"); }
+
+        Assert.Single(r.LogLines, l => l.Contains("已在运行"));         // 只报一次，不是 999 次
+        Assert.Equal(1, r.Summary.Fail);                                // 这一步没执行，如实计入失败
+        Assert.False(r.Summary.Truncated);                              // 预算没被空转烧穿
+        Assert.Contains(r.LogLines, l => l.Contains("清单尾步"));       // 清单后面的步骤照常跑
+    }
 }

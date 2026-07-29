@@ -98,7 +98,7 @@ Regroupe des actions dans un groupe réutilisable. **Ajouter ▾** en démarre u
 
 Une étape **message** est une porte de confirmation : répondre **Non** interrompt le reste du groupe *et ses tours restants*, et se propage vers l'extérieur au groupe qui l'a référencé — refuser une fois suffit, même dans un sous-groupe bouclé ×N.
 
-> **Raccourci global** — dans l'éditeur de groupe, cliquez sur la case du raccourci et appuyez sur un raccourci (p. ex. `Ctrl+Alt+F`) pour exécuter ce groupe depuis n'importe où, sans menu. Échap annule, Suppr efface. Les groupes désactivés libèrent leur combinaison ; les combinaisons réservées par le système (Alt+F4, Ctrl+Shift+Esc…) et les combinaisons déjà prises par un autre groupe ou par le raccourci panique sont refusées avec un avis.
+> **Raccourci global** — dans l'éditeur de groupe, cliquez sur la case du raccourci et appuyez sur un raccourci (p. ex. `Ctrl+Alt+F`) pour exécuter ce groupe depuis n'importe où, sans menu. Échap annule, Suppr efface. Les groupes désactivés libèrent leur combinaison ; les combinaisons réservées par le système (Alt+F4, Ctrl+Shift+Esc…) et les combinaisons déjà prises par un autre groupe ou par le raccourci panique sont refusées avec un avis. **Le raccourci est une bascule :** appuyez de nouveau pendant que le groupe tourne encore pour annuler cette exécution —— les autres groupes et la liste de démarrage continuent (seul le raccourci panique tout arrête). Seuls les groupes ayant un raccourci attribué peuvent être annulés ainsi.
 
 ### Paramètres
 

@@ -100,7 +100,7 @@ Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis
 
 Een **bericht**-stap is een bevestigingspoort: met **Nee** antwoorden breekt de rest van de groep af *inclusief de resterende rondes*, en plant zich naar buiten voort naar de groep die ernaar verwees — één keer weigeren is genoeg, ook in een subgroep die ×N wordt herhaald.
 
-> **Globale sneltoets** — klik in de groepseditor op het sneltoetsvak en druk op een sneltoets (bijv. `Ctrl+Alt+F`) om die groep overal vandaan uit te voeren, zonder menu. Esc annuleert, Delete wist. Uitgeschakelde groepen geven hun combinatie vrij; systeemgereserveerde combinaties (Alt+F4, Ctrl+Shift+Esc…) en combinaties die al door een andere groep of de paniek-sneltoets in gebruik zijn, worden met een melding geweigerd.
+> **Globale sneltoets** — klik in de groepseditor op het sneltoetsvak en druk op een sneltoets (bijv. `Ctrl+Alt+F`) om die groep overal vandaan uit te voeren, zonder menu. Esc annuleert, Delete wist. Uitgeschakelde groepen geven hun combinatie vrij; systeemgereserveerde combinaties (Alt+F4, Ctrl+Shift+Esc…) en combinaties die al door een andere groep of de paniek-sneltoets in gebruik zijn, worden met een melding geweigerd. **De sneltoets is een schakelaar:** druk er nogmaals op terwijl de groep nog loopt om die uitvoering te annuleren —— andere groepen en de opstartlijst gaan verder (de paniek-sneltoets stopt alles). Alleen groepen met een toegewezen sneltoets kunnen zo worden geannuleerd.
 
 ### Instellingen
 

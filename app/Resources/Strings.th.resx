@@ -294,6 +294,9 @@
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>กลุ่มการทำงาน "{0}" ถูกปิดใช้งาน ข้ามไป</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>เข้าซ้ำในกลุ่มการทำงาน (การอ้างอิงแบบวนซ้ำหรือกำลังทำงานอยู่แล้ว) ข้ามไป</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>ขอให้ยกเลิกกลุ่มการทำงาน “{0}” แล้ว</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>เริ่มกลุ่มการทำงาน “{0}” แล้ว</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>กลุ่มการทำงาน “{0}” กำลังทำงานอยู่ (ถูกเรียกจากที่อื่น) ปุ่มนี้หยุดมันไม่ได้ กรุณาใช้ปุ่มลัดหยุดฉุกเฉิน</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>การทำงานหยุดที่ขีดจำกัด 5000 ขั้นตอน ขั้นตอนที่เหลือถูกข้าม (ตรวจสอบว่ามีจำนวนการทำซ้ำมากเกินไปหรือไม่)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ไม่มีอยู่แล้ว ข้ามไป</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ถูกปิดใช้งาน ข้ามไป</value></data>
@@ -352,7 +355,7 @@
   <data name="Date_Pick" xml:space="preserve"><value>เลือกวันที่</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>จับปุ่มกด</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>ปุ่มลัดส่วนกลาง</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัดเพื่อเรียกใช้กลุ่มนี้ได้ทุกเมื่อ; Esc ยกเลิก, Delete ล้าง</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัดเพื่อเรียกใช้กลุ่มนี้ได้ทุกเมื่อ; กดซ้ำขณะกำลังทำงานเพื่อหยุด; Esc ยกเลิก, Delete ล้าง</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>ลงทะเบียนปุ่มลัด {1} ของกลุ่มการทำงาน “{0}” ไม่สำเร็จ: อาจถูกใช้งานอยู่แล้ว</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย “{1}” แล้ว โปรดเลือกชุดอื่น</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} เป็นชุดปุ่มที่ระบบสงวนไว้ (การลงทะเบียนจะยึดปุ่มระบบ) ใช้เป็นปุ่มลัดไม่ได้</value></data>

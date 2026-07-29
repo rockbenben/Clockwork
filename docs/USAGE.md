@@ -68,6 +68,9 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 
 > The stop button **only exists while something is actually running** — that is the point: its presence tells you something is running, and its disappearance tells you the stop went through. Hover it for the current panic hotkey.
 
+> **To stop just one action group**, press **that group's own hotkey** a second time (see "Action groups → the hotkey is a toggle"). The panic hotkey is the master switch: it stops the startup list and every running group at once.
+> This only works for groups that have a hotkey bound. A group started as a scheduled task's silent group, as an On-Yes action, or as a nested reference has no per-run cancel of its own unless you also give it a hotkey — for those the panic hotkey is the only way out. If you want an unattended long-running group to be stoppable, bind it a hotkey of its own.
+
 > **Advanced:** to "wait until the network / desktop is ready" instead of a fixed delay, set `startupWaitForReady` to `true` in `clockwork.settings.json` (default `false`; proceeds as soon as ready, capped at 90 s).
 
 ## Scheduled tasks
@@ -102,10 +105,15 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 
 - **Add ▾** starts a group from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot / Sitting too long) — tweak the process names and save.
 - The list shows each group's **step summary** and **hotkey** columns (an empty group's summary reads **(empty)**).
-- A group runs **only one copy at a time** (repeat triggers are skipped).
+- A group runs **only one copy at a time** (repeat triggers are skipped — except its hotkey, see "the hotkey is a toggle" below).
 - Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**. You can also select a row on the Action groups tab and hit **Run** to fire it once by hand.
 - **Show in tray menu** (in the group editor; **off by default for new groups**): once you have a few groups the tray menu turns into a long strip, and most groups are triggered by a hotkey, a reminder or another group anyway — they don't need a row. A hidden group still works everywhere else: hotkeys, reminders, references and the **Run** button on the Action groups tab are all unaffected; it just isn't listed in the tray. Groups that existed before this option was added keep showing, so nothing disappears on upgrade.
 - **Global hotkey:** in the group editor, click the hotkey box and press a combo (e.g. `Ctrl+Alt+F`) to run the group from any app — no menu needed. Esc cancels, Delete clears. Changes apply live (no restart). A **disabled** group releases its combo so another group can use it. Refused with a notice: **system-reserved** combos (Alt+F4, Alt+Tab, Ctrl+Shift+Esc…), a combo already bound to **another enabled group** or the **panic hotkey**, or one **already taken by another app** (use a different combo).
+- **The hotkey is a toggle — press it again to cancel.** Pressing the same hotkey while the group is still running cancels **that run**: the remaining steps and rounds are dropped and a tray toast confirms it. The cancel is scoped to that one run — **the startup list and other groups keep going** (use the panic hotkey to stop everything). What that means in practice:
+  - Most groups finish in a few hundred milliseconds, so a second press then simply **runs it again** — cancelling only matters for groups that are still running (ones with delays or repeat rounds).
+  - Delays between rounds and between steps are **interrupted on the spot**; you don't wait out the current sleep.
+  - If the group is sitting on a **message** confirmation box, the box still needs dismissing, but the answer is discarded — clicking **Yes** no longer fires its On-Yes branch, and the group stops there.
+  - If group A references group B and you press **B's** hotkey while B runs, **the whole run is cancelled** (A stops too) — stopping only B and letting A carry on would leave you with a half-finished state that is harder to clean up than not cancelling at all.
 - A **message** step can act as a confirmation gate — answering **No** aborts the rest of the group (e.g. "Did you log today's tasks?" before wrap-up).
 - **Duplicate** clones the selected group as "… (copy)" — a quick base for a variant. The copy gets **no hotkey** (two groups can't share one), so assign a new one if you want it.
 - Deleting a group that is **referenced** (by a scheduled task's On-Yes / silent group, or an action-group step) tells you how many references there are and clears them along with it, so nothing is left pointing at a group that no longer exists.

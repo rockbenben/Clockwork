@@ -98,7 +98,7 @@ Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir d
 
 Uma etapa de **mensagem** é uma barreira de confirmação: responder **Não** aborta o restante do grupo *e as rodadas que faltam*, e se propaga para fora até o grupo que a referenciou — recusar uma vez basta, mesmo dentro de um subgrupo repetido ×N.
 
-> **Tecla global** — no editor de grupos, clique na caixa da tecla e pressione um atalho (ex.: `Ctrl+Alt+F`) para executar esse grupo de qualquer lugar, sem menu. Esc cancela, Delete limpa. Grupos desativados liberam sua combinação; combinações reservadas pelo sistema (Alt+F4, Ctrl+Shift+Esc…) e combinações já ocupadas por outro grupo ou pela tecla de pânico são recusadas com um aviso.
+> **Tecla global** — no editor de grupos, clique na caixa da tecla e pressione um atalho (ex.: `Ctrl+Alt+F`) para executar esse grupo de qualquer lugar, sem menu. Esc cancela, Delete limpa. Grupos desativados liberam sua combinação; combinações reservadas pelo sistema (Alt+F4, Ctrl+Shift+Esc…) e combinações já ocupadas por outro grupo ou pela tecla de pânico são recusadas com um aviso. **O atalho é um alternador:** pressione-o de novo enquanto o grupo ainda roda para cancelar essa execução —— os outros grupos e a lista de inicialização continuam (a tecla de pânico é a que para tudo). Somente grupos com um atalho atribuído podem ser cancelados assim.
 
 ### Configurações
 

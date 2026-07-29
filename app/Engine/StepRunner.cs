@@ -50,7 +50,10 @@ public static class StepRunner
         => AggregateRepeat(StepHelpers.StepRepeat(s), _ => RunStepMark(s, confirmDestructive, selfPaths), s.DelayMs);
 
     // 活：单步派发。
-    public static ActionResult InvokeStepAction(LaunchStep s, Func<string, bool> confirmDestructive, IReadOnlyList<string> selfPaths)
+    // cancel：本次动作组运行的取消闸；null=没有 per-run 闸（开机清单 / 单步「运行这一步」），只认全局急停。
+    // 必须一路传到 WindowManager：等窗口、置前重试、置前延时都可能挂住好几秒，只查全局急停的话，
+    // 用户按热键取消动作组之后，这些步骤照样会把窗口拽到前台并把按键打进去。
+    public static ActionResult InvokeStepAction(LaunchStep s, Func<string, bool> confirmDestructive, IReadOnlyList<string> selfPaths, RunCancel? cancel = null)
     {
         switch (s.Kind)
         {
@@ -67,21 +70,21 @@ public static class StepRunner
                 }
             case "window":
                 {
-                    int n = WindowManager.WindowAction(s.Process, s.Action, s.SendKey, s.WaitForWindowSeconds, s.PostWindowDelaySeconds);
+                    int n = WindowManager.WindowAction(s.Process, s.Action, s.SendKey, s.WaitForWindowSeconds, s.PostWindowDelaySeconds, cancel);
                     if (s.Action == "sendkey")
                     {
-                        // 键注入前台后无法证实接收 → 成功记「~ 未校验」；n=0（窗口没出现/抢不到前台）才告警；急停打断也返 0，静默。
+                        // 键注入前台后无法证实接收 → 成功记「~ 未校验」；n=0（窗口没出现/抢不到前台）才告警；急停/取消打断也返 0，静默。
                         if (n > 0) return ActionResult.Unver();
-                        if (!StopSignal.IsRequested) return ActionResult.Warn(Strings.Lf("Warn_SendKeyFail", s.Process));
+                        if (!RunCancel.Stopped(cancel)) return ActionResult.Warn(Strings.Lf("Warn_SendKeyFail", s.Process));
                         return ActionResult.Empty;
                     }
-                    // close 幂等：目标态就是「不在运行」，没开=已达成，记 ✓ 不告警。其余动作 0 仍告警；急停返 0 静默。
-                    if (n <= 0 && s.Action != "close" && !StopSignal.IsRequested)
+                    // close 幂等：目标态就是「不在运行」，没开=已达成，记 ✓ 不告警。其余动作 0 仍告警；急停/取消返 0 静默。
+                    if (n <= 0 && s.Action != "close" && !RunCancel.Stopped(cancel))
                         return ActionResult.Warn(Strings.Lf("Warn_WindowNotFound", s.Process, s.Action));
                     return ActionResult.Empty;
                 }
             case "system": SystemCommands.Invoke(s.Command, confirmDestructive); return ActionResult.Empty;
-            case "text": return WindowManager.SendText(s.Text, s.Process);
+            case "text": return WindowManager.SendText(s.Text, s.Process, cancel);
             case "delay": return ActionResult.Empty;   // 纯延时：动作由步尾统一 delayMs 完成
             case "message": return ActionResult.Empty;  // 消息在启动/非交互路径静默跳过（交互「运行这一步」由 App.RunStepAsync 弹窗）；不报未知类型
             default: return ActionResult.Warn(Strings.Lf("Warn_UnknownKind", s.Kind));

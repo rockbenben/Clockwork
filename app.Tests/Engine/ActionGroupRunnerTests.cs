@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using Clockwork.Engine;
 using Clockwork.Core;
@@ -305,5 +306,259 @@ public class ActionGroupRunnerTests
         Assert.True(deps.Budget.Exhausted);
         Assert.Equal(1, warned);
         Assert.Equal(RunBudget.MaxRunSteps, calls);   // 每次迭代恰好一步预算，用尽即止
+    }
+
+    // —— 单组取消（动作组热键的第二次按键）——
+    // 语义边界：取消只停「这一次运行」，不碰全局急停、不碰别的组；跑完即腾位，下一次触发是全新的一次。
+    //
+    // 「谁在跑」(_running) 与「按哪个键能取消谁」(_topRuns) 是两张表：只有顶层运行进后者，
+    // 所以测试必须像 App.RunGroupAsync 那样显式登记顶层，直接调 RunGroup 得到的是嵌套子组的处境。
+    private static GroupRunResult RunTopLevel(ActionGroup g, GroupDeps deps)
+    {
+        bool owned = ActionGroupRunner.EnterTopLevel(g.Id, deps.Cancel);
+        try { return ActionGroupRunner.RunGroup(g, deps); }
+        finally { if (owned) ActionGroupRunner.ExitTopLevel(g.Id, deps.Cancel); }
+    }
+
+    [Fact]
+    public void RequestCancel_returns_false_when_nothing_is_running()
+        => Assert.False(ActionGroupRunner.RequestCancel("no-such-group"));
+
+    // 开机清单内联展开会占住同一个运行集：此时任何来源再触发同一组都该判重入跳过，
+    // 而不是并发跑第二份（关窗口/发按键/锁屏各来两轮）。
+    [Fact]
+    public void A_group_held_by_the_startup_list_is_not_run_again()
+    {
+        Assert.True(ActionGroupRunner.TryEnterRunning("boot1"));
+        try
+        {
+            Assert.True(ActionGroupRunner.IsRunning("boot1"));
+            var ran = new List<string>();
+            var g = new ActionGroup { Id = "boot1", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } } };
+            var res = ActionGroupRunner.RunGroup(g, new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => ran.Add(s.Label) });
+            Assert.Equal(GroupRunResult.Skipped, res);
+            Assert.Empty(ran);
+            Assert.False(ActionGroupRunner.RequestCancel("boot1"));   // 在跑，但不是热键管得着的那一种
+        }
+        finally { ActionGroupRunner.ExitRunning("boot1"); }
+        Assert.False(ActionGroupRunner.IsRunning("boot1"));
+    }
+
+    [Fact]
+    public void Cancel_stops_remaining_steps_and_leaves_global_stop_clear()
+    {
+        var ran = new List<string>();
+        var g = new ActionGroup
+        {
+            Id = "gc1",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "1", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "2", DelayMs = 0 },
+            }
+        };
+        bool accepted = false;
+        var deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s => { ran.Add(s.Label); if (s.Label == "1") accepted = ActionGroupRunner.RequestCancel("gc1"); },
+        };
+        RunTopLevel(g, deps);
+        Assert.True(accepted);                        // 有一份在跑 → 取消被受理（热键据此判「这次按键是取消不是启动」）
+        Assert.Equal(new[] { "1" }, ran.ToArray());   // 第 2 步不再跑
+        Assert.False(StopSignal.IsRequested);         // 只停这一次：全局急停没被顺手拉下（启动清单/别的组不受影响）
+    }
+
+    [Fact]
+    public void Cancelling_a_nested_child_id_does_not_touch_the_parent_run()
+    {
+        // 按子组热键的本意是「跑一下这个子组」，不是「掐掉正拿它当步骤用的那个父组」。
+        // 曾经运行集与取消表是同一张表，链上任一子组 id 都指向顶层的闸——于是这一按会把父组整轮杀掉
+        // （父组的锁屏/息屏尾步全不执行），气泡还只报子组名，根本指不到真正被杀的那一个。
+        // 现在子组只进「谁在跑」，不进「按哪个键能取消谁」：这一按取消不到任何东西，父组照常跑完。
+        var ran = new List<string>();
+        bool cancelAccepted = true;
+        bool childSeenRunning = false;
+        var child = new ActionGroup { Id = "child2", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "c1", DelayMs = 0 } } };
+        GroupDeps deps = null!;
+        deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s =>
+            {
+                ran.Add(s.Label);
+                if (s.Label != "c1") return;
+                cancelAccepted = ActionGroupRunner.RequestCancel("child2");
+                childSeenRunning = ActionGroupRunner.IsRunning("child2");
+            },
+            RunGroupStep = _ => ActionGroupRunner.RunGroup(child, deps),
+        };
+        var parent = new ActionGroup
+        {
+            Id = "parent3",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "group", GroupId = "child2", Label = "ref", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+            }
+        };
+        RunTopLevel(parent, deps);
+        Assert.False(cancelAccepted);                          // 子组不是「可被热键取消的顶层运行」
+        Assert.True(childSeenRunning);                         // 但它确实在跑——热键据此提示「在跑但这个键停不了」
+        Assert.Equal(new[] { "c1", "after" }, ran.ToArray());  // 父组的尾步照常执行，没被误杀
+    }
+
+    [Fact]
+    public void Cancelling_the_top_level_id_still_stops_the_whole_chain()
+    {
+        // 反向：取消顶层运行，嵌套子组与父组共用同一个闸，整条链一起收手。
+        var ran = new List<string>();
+        var child = new ActionGroup { Id = "child3", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "c1", DelayMs = 0 } } };
+        GroupDeps deps = null!;
+        deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s => { ran.Add(s.Label); if (s.Label == "c1") Assert.True(ActionGroupRunner.RequestCancel("parent4")); },
+            RunGroupStep = _ => ActionGroupRunner.RunGroup(child, deps),
+        };
+        var parent = new ActionGroup
+        {
+            Id = "parent4",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "group", GroupId = "child3", Label = "ref", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+            }
+        };
+        RunTopLevel(parent, deps);
+        Assert.Equal(new[] { "c1" }, ran.ToArray());   // 父组尾步不再跑
+    }
+
+    [Fact]
+    public void Cancel_while_a_message_is_up_drops_the_answer_and_stops()
+    {
+        // 组卡在模态确认框上时按下取消：热键只能置位，弹窗要等用户点掉才返回。等它返回后，
+        // 那个「是」不能再触发 onYes——按取消的意思是「这组别做了」，不是「把这一步做完再停」。
+        var ran = new List<string>();
+        var yes = new List<string>();
+        var g = new ActionGroup
+        {
+            Id = "gc4",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "message", Message = "q", Label = "m", Confirm = true, DelayMs = 0 },
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+            }
+        };
+        var deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s => ran.Add(s.Label),
+            ShowMessage = _ => { ActionGroupRunner.RequestCancel("gc4"); return MsgResult.Yes; },
+            RunOnYes = s => yes.Add(s.Label),
+        };
+        RunTopLevel(g, deps);
+        Assert.Empty(yes);
+        Assert.Empty(ran);
+    }
+
+    [Fact]
+    public async Task Cancel_during_the_round_delay_wakes_the_run_up()
+    {
+        // 轮间延迟可以是几十分钟。只在进入睡眠前查一次取消，等于「按了取消要等这一觉睡完」——
+        // 用户看到的和没取消没有区别。必须与取消信号一起等。
+        var ran = new List<string>();
+        var g = new ActionGroup
+        {
+            Id = "gc5", Repeat = 3, RepeatDelayMs = 10_000,
+            Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } }
+        };
+        var deps = new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => ran.Add(s.Label) };
+        // 不用固定 sleep 赌「这时候运行已登记」：CI 上一次抢占就会让 RequestCancel 落空、返回值又被丢弃，
+        // 于是三轮跑满、20 秒后以「集合有 3 个元素」失败——真的丢取消和调度抖动看不出区别。
+        // 改成轮询到受理为止，并把受理与否单独断言，失败信息直接指向原因。
+        bool accepted = false;
+        var t = Task.Run(() =>
+        {
+            var w = Stopwatch.StartNew();
+            while (!(accepted = ActionGroupRunner.RequestCancel("gc5")) && w.ElapsedMilliseconds < 5000) Thread.Sleep(10);
+        });
+        var sw = Stopwatch.StartNew();
+        RunTopLevel(g, deps);
+        await t;
+        Assert.True(accepted, "取消请求始终没被受理——本例的时序前提没成立，不是取消逻辑的问题");
+        Assert.Single(ran);   // 第 1 轮跑完，睡到一半被取消 → 第 2 轮不再开
+        Assert.True(sw.ElapsedMilliseconds < 5000, $"轮间延迟没被取消打断，耗时 {sw.ElapsedMilliseconds}ms");
+    }
+
+    [Fact]
+    public void A_cancelled_run_does_not_poison_the_next_one()
+    {
+        // 取消闸是「一次运行一份」。若做成组上的持久标志，取消过一次之后热键再按会当场自杀，
+        // 而且没有任何反馈——那正是这次改动要根治的那种「按了没反应」。
+        var g = new ActionGroup { Id = "gc6", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } } };
+        var first = new List<string>();
+        RunTopLevel(g, new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s => { first.Add(s.Label); ActionGroupRunner.RequestCancel("gc6"); },
+        });
+        var second = new List<string>();
+        RunTopLevel(g, new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => second.Add(s.Label) });
+        Assert.Single(first);
+        Assert.Single(second);
+        Assert.False(ActionGroupRunner.RequestCancel("gc6"));   // 跑完即腾位：不再有可取消的运行
+    }
+
+    // 急停必须能立刻叫醒睡在轮间/步间延迟里的在途组。RunCancel 只等自己那一个事件（不去等全局信号的
+    // 内核句柄——那会引入两份可能永久分歧的状态），所以这条通路靠 CancelAll 主动推送。
+    // 若哪天有人把 App.RequestStop 里的 CancelAll 删掉，急停对长睡眠的组就要等睡满才生效，本例会挂。
+    [Fact]
+    public async Task CancelAll_wakes_every_in_flight_run()
+    {
+        var ran = new List<string>();
+        var g = new ActionGroup
+        {
+            Id = "gc8", Repeat = 3, RepeatDelayMs = 10_000,
+            Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } }
+        };
+        // 同上：等「第一步真的跑过」这个确定信号，而不是赌固定 150ms——推送模型下若在登记前就 CancelAll，
+        // 这一次推送会整个落空（全局信号本身不再叫醒睡眠），测试要睡满 20 秒才失败。
+        using var started = new ManualResetEventSlim(false);
+        var deps = new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => { ran.Add(s.Label); started.Set(); } };
+        var t = Task.Run(() => { started.Wait(5000); StopSignal.Request(); ActionGroupRunner.CancelAll(); });
+        var sw = Stopwatch.StartNew();
+        try { RunTopLevel(g, deps); }
+        finally { await t; StopSignal.Clear(); }
+        Assert.Single(ran);
+        Assert.True(sw.ElapsedMilliseconds < 5000, $"急停没叫醒轮间延迟，耗时 {sw.ElapsedMilliseconds}ms");
+    }
+
+    [Fact]
+    public void CancelAll_on_an_empty_registry_is_a_noop()
+        => ActionGroupRunner.CancelAll();   // 没有在途运行时不得抛（急停在空闲时也会调）
+
+    [Fact]
+    public void Global_stop_still_stops_a_group_run()
+    {
+        // 回归闸：per-run 取消不能把全局急停架空——急停仍是停掉一切的总闸。
+        var ran = new List<string>();
+        var g = new ActionGroup
+        {
+            Id = "gc7",
+            Steps = new()
+            {
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "1", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", Action = "mute", Label = "2", DelayMs = 0 },
+            }
+        };
+        var deps = new GroupDeps
+        {
+            Hour = 10, IsoDay = 3,
+            RunStep = s => { ran.Add(s.Label); if (s.Label == "1") StopSignal.Request(); },
+        };
+        try { ActionGroupRunner.RunGroup(g, deps); }
+        finally { StopSignal.Clear(); }
+        Assert.Equal(new[] { "1" }, ran.ToArray());
     }
 }

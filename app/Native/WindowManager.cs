@@ -60,7 +60,8 @@ public static class WindowManager
     }
 
     // 轮询等待某窗口出现：probe 真即走；最多等 timeoutSeconds 秒（0=只探一次）。探针/睡眠可注入便于测试。
-    public static WaitResult WaitAppWindow(int timeoutSeconds, int pollMs = 500, Func<bool>? probe = null, Action<int>? sleeper = null)
+    // cancel：本次运行的取消闸（动作组传入；开机清单等无闸路径传 null=只认全局急停）。
+    public static WaitResult WaitAppWindow(int timeoutSeconds, int pollMs = 500, Func<bool>? probe = null, Action<int>? sleeper = null, RunCancel? cancel = null)
     {
         probe ??= () => false;
         sleeper ??= ms => Thread.Sleep(ms);
@@ -74,7 +75,7 @@ public static class WindowManager
             try { present = probe(); } catch { present = false; }
             if (present) break;                       // 窗口出现即走
             if (waited >= maxWaitMs) break;           // 封顶：放弃
-            if (StopSignal.IsRequested) break;        // 急停：不再干等
+            if (RunCancel.Stopped(cancel)) break;     // 急停 或 本次运行被取消：不再干等
             sleeper(pollMs);
             waited += pollMs;
         }
@@ -82,12 +83,14 @@ public static class WindowManager
     }
 
     // 活：置前台+复核+发键，逐次重试至 timeoutSec。带不到前台就不发（绝不误发到别处）。
-    public static bool WindowLogin(string process, string sendKey = "{ENTER}", int timeoutSec = 8, bool literal = false)
+    // cancel：本次运行的取消闸。这里必须认它——用户按热键取消动作组后，若本方法还在重试，
+    // 几秒后仍会把目标窗口拽到前台并把按键/文本打进去，取消就成了一句空话。
+    public static bool WindowLogin(string process, string sendKey = "{ENTER}", int timeoutSec = 8, bool literal = false, RunCancel? cancel = null)
     {
         var deadline = DateTime.Now.AddSeconds(timeoutSec);
         while (DateTime.Now < deadline)
         {
-            if (StopSignal.IsRequested) return false;   // 急停：等窗口/重试期间收到即弃发
+            if (RunCancel.Stopped(cancel)) return false;   // 急停 或 本次运行被取消：等窗口/重试期间收到即弃发
             bool got = InjectionLock.Enter();
             try
             {
@@ -103,22 +106,23 @@ public static class WindowManager
                 }
             }
             finally { InjectionLock.Exit(got); }
-            Thread.Sleep(500);
+            // 重试间隔走可中断延时（原来是死睡 500ms）：取消/急停当场醒，不用等这一觉睡完。
+            if (!RunCancel.Sleep(cancel, 500)) return false;
         }
         return false;
     }
 
     // 活：逐字输入字面文本。process 空=发给当前焦点窗口；填了则先带到前台、复核在前台再输入。
-    public static ActionResult SendText(string text, string process = "")
+    public static ActionResult SendText(string text, string process = "", RunCancel? cancel = null)
     {
         if (string.IsNullOrEmpty(text)) return ActionResult.Empty;
         var seq = KeyCombo.ToSendKeysLiteral(text);
         if (string.IsNullOrEmpty(seq)) return ActionResult.Empty;
         if (!string.IsNullOrEmpty(process))
         {
-            if (WindowLogin(process, text, 8, literal: true)) return ActionResult.Unver();
-            // 急停返回 false 时不误报「未能带到最前」——那是用户停的。
-            if (!StopSignal.IsRequested) return ActionResult.Warn(Strings.Lf("Warn_TextSendFail", process));
+            if (WindowLogin(process, text, 8, literal: true, cancel)) return ActionResult.Unver();
+            // 急停/取消返回 false 时不误报「未能带到最前」——那是用户停的。
+            if (!RunCancel.Stopped(cancel)) return ActionResult.Warn(Strings.Lf("Warn_TextSendFail", process));
             return ActionResult.Empty;
         }
         bool got = InjectionLock.Enter();
@@ -128,20 +132,20 @@ public static class WindowManager
 
     // 活：统一的窗口动作——先激活/定位目标窗口，再执行操作。返回「操作了几个窗口」（sendkey：1=已发送 0=没发），
     // 由引擎按 op 解读三态。
-    public static int WindowAction(string process, string op, string sendKey = "{ENTER}", int waitForWindowSeconds = 0, int postWindowDelaySeconds = 0)
+    public static int WindowAction(string process, string op, string sendKey = "{ENTER}", int waitForWindowSeconds = 0, int postWindowDelaySeconds = 0, RunCancel? cancel = null)
     {
         if (op == "sendkey")
         {
             int to = waitForWindowSeconds > 0 ? waitForWindowSeconds : 8;
-            return WindowLogin(process, sendKey, to) ? 1 : 0;
+            return WindowLogin(process, sendKey, to, cancel: cancel) ? 1 : 0;
         }
         if (op is "close" or "minimize" or "maximize" or "activate")
         {
             // 等窗口出现（N=0 只探一次=早退语义）。activate 也要等：慢启动窗口没出来就 activate=空跑。
-            var w = WaitAppWindow(waitForWindowSeconds, 500, () => Handles(process).Length > 0);
+            var w = WaitAppWindow(waitForWindowSeconds, 500, () => Handles(process).Length > 0, cancel: cancel);
             if (!w.Present) return 0;
-            // 窗口已在 → 出现后延迟（登录/主窗切换就绪）再动手；急停打断延迟则不再动手。
-            if (postWindowDelaySeconds > 0 && !StopSignal.InterruptibleSleep(postWindowDelaySeconds * 1000L)) return 0;
+            // 窗口已在 → 出现后延迟（登录/主窗切换就绪）再动手；急停或取消打断延迟则不再动手。
+            if (postWindowDelaySeconds > 0 && !RunCancel.Sleep(cancel, postWindowDelaySeconds * 1000L)) return 0;
         }
         bool got = InjectionLock.Enter();
         try

@@ -100,7 +100,7 @@ Eylemleri yeniden kullanılabilir bir grupta toplayın. **Ekle ▾**, bir **yerl
 
 Bir **mesaj** adımı onay kapısıdır: **Hayır** yanıtı grubun geri kalanını *ve kalan turlarını* iptal eder, ayrıca ona başvuran gruba doğru dışa yayılır — ×N döngüye alınmış bir alt grubun içinde bile bir kez reddetmek yeterlidir.
 
-> **Genel kısayol** — grup düzenleyicide kısayol kutusuna tıklayın ve bir kısayola (ör. `Ctrl+Alt+F`) basarak o grubu menüye gerek kalmadan her yerden çalıştırın. Esc iptal eder, Delete temizler. Devre dışı gruplar kombinasyonlarını serbest bırakır; sistemce ayrılmış kombinasyonlar (Alt+F4, Ctrl+Shift+Esc…) ve başka bir grup ya da panik kısayolu tarafından zaten kullanılan kombinasyonlar bir bildirimle reddedilir.
+> **Genel kısayol** — grup düzenleyicide kısayol kutusuna tıklayın ve bir kısayola (ör. `Ctrl+Alt+F`) basarak o grubu menüye gerek kalmadan her yerden çalıştırın. Esc iptal eder, Delete temizler. Devre dışı gruplar kombinasyonlarını serbest bırakır; sistemce ayrılmış kombinasyonlar (Alt+F4, Ctrl+Shift+Esc…) ve başka bir grup ya da panik kısayolu tarafından zaten kullanılan kombinasyonlar bir bildirimle reddedilir. **Kısayol bir açma/kapama anahtarıdır:** grup hâlâ çalışırken tekrar basmak o çalıştırmayı iptal eder —— diğer gruplar ve başlangıç listesi çalışmaya devam eder (her şeyi durduran panik kısayoludur). Bu şekilde yalnızca kısayol atanmış gruplar iptal edilebilir.
 
 ### Ayarlar
 

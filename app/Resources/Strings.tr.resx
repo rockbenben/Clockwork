@@ -294,6 +294,9 @@ Günlük: {1}</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>"{0}" eylem grubu devre dışı; atlandı</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Eylem grubuna yeniden girildi (döngüsel referans veya zaten çalışıyor); atlandı</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>“{0}” eylem grubunun iptali istendi.</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>“{0}” eylem grubu başlatıldı.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>“{0}” eylem grubu zaten çalışıyor (başka bir yerden başlatıldı); bu tuş onu durduramaz — acil durdurma kısayolunu kullanın.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Çalıştırma 5000 adım sınırında durdu; kalan adımlar atlandı (aşırı büyük tekrar sayıları olup olmadığını kontrol edin)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu artık yok; atlandı</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu devre dışı; atlandı</value></data>
@@ -352,7 +355,7 @@ Günlük: {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Tarih seç</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Tuş yakala</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Genel kısayol tuşu</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Tıklayıp bir tuş kombinasyonuna basın; bu grubu istediğiniz an çalıştırır. Esc iptal eder, Delete temizler</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Tıklayıp bir tuş kombinasyonuna basın; bu grubu istediğiniz an çalıştırır. Çalışırken tekrar basmak durdurur. Esc iptal eder, Delete temizler</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>“{0}” eylem grubunun {1} kısayolu kaydedilemedi: başka bir yerde kullanılıyor olabilir</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>{0} kısayolu zaten “{1}” tarafından kullanılıyor; başka bir kombinasyon seçin</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} sistem için ayrılmış bir kombinasyondur (kaydedilmesi bir sistem tuşunu ele geçirir) ve kısayol olarak kullanılamaz</value></data>

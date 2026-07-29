@@ -103,7 +103,7 @@ Bundle actions into a reusable group. **Add ▾** starts one from a **built-in t
 
 A **message** step is a confirmation gate: answering **No** aborts the rest of the group *and its remaining rounds*, and propagates outward to whichever group referenced it — decline once and you are done, even inside a sub-group looped ×N.
 
-> **Global hotkey** — in the group editor, click the hotkey box and press a shortcut (e.g. `Ctrl+Alt+F`) to run that group from anywhere, no menu needed. Esc cancels, Delete clears. Disabled groups release their combo; system-reserved combos (Alt+F4, Ctrl+Shift+Esc…) and combos already taken by another group or the panic hotkey are refused with a notice.
+> **Global hotkey** — in the group editor, click the hotkey box and press a shortcut (e.g. `Ctrl+Alt+F`) to run that group from anywhere, no menu needed. Esc cancels, Delete clears. Disabled groups release their combo; system-reserved combos (Alt+F4, Ctrl+Shift+Esc…) and combos already taken by another group or the panic hotkey are refused with a notice. **The hotkey is a toggle:** press it again while the group is still running to cancel that run — other groups and the startup list keep going (the panic hotkey is the one that stops everything). Only groups with a hotkey bound can be cancelled this way.
 
 ### Settings
 
