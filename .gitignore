@@ -1,13 +1,17 @@
 # 本机运行时生成的个人配置（含个人路径，不入库）。示例见 clockwork.settings.example.json
 clockwork.settings.json
 
+# 发布输出：release.yml 用的就是 `dotnet publish -o publish`，本地照着跑会在仓库根留一份 75MB 的 exe
+publish/
+
 # 临时 / 系统 / 工具
 *.log
 Thumbs.db
 desktop.ini
 .claude/
 .vs/
-.temp/   # 兜底 TEMP：仅当系统 %TEMP% 全部不可写时，才在应用目录下创建（极少见）
+# 兜底 TEMP：仅当系统 %TEMP% 全部不可写时，才在应用目录下创建（极少见）
+.temp/
 
 # SDD 内部工作目录（planning/specs，本地生成、不入库）；docs/ 其余用于真实文档
 docs/superpowers/
