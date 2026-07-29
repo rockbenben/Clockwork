@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Clockwork.Core;
 using Xunit;
 
@@ -68,5 +70,36 @@ public class RunGateTests
         Assert.False(StopSignal.IsRequested);
         gate.End();
         StopSignal.Clear();
+    }
+
+    // 并发 Begin 不得漏出「陈旧急停」。计数与 0→1 的 Clear 若不在同一临界区，输掉 0→1 竞争的那一路
+    // 会在 Clear 之前就返回并开跑，第一步撞上尚未清掉的旧急停 → 整组零步退出、还报 Completed，
+    // 用户看到的是「到点了那个组什么都没做，也没有任何提示」。改成 Interlocked 单独用即当场复现。
+    [Fact]
+    public async Task Concurrent_begin_never_leaks_a_stale_stop()
+    {
+        int leaked = 0;
+        for (int round = 0; round < 3000 && leaked == 0; round++)
+        {
+            var gate = new RunGate();
+            StopSignal.Request();          // 上一次急停留下的置位（没有任何东西会清它，只等下一路 0→1）
+            using var start = new ManualResetEventSlim(false);
+            int observed = 0;
+            var tasks = new Task[8];
+            for (int i = 0; i < tasks.Length; i++)
+                tasks[i] = Task.Run(() =>
+                {
+                    start.Wait();
+                    gate.Begin();
+                    // Begin 返回 = 这一路马上要执行步骤了，此刻绝不该还看得到急停置位
+                    if (StopSignal.IsRequested) Interlocked.Increment(ref observed);
+                    gate.End();
+                });
+            start.Set();
+            await Task.WhenAll(tasks);
+            leaked = observed;
+        }
+        StopSignal.Clear();
+        Assert.True(leaked == 0, $"有 {leaked} 路运行在 Begin 返回后仍看到陈旧急停");
     }
 }
