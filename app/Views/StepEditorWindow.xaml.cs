@@ -27,6 +27,7 @@ public partial class StepEditorWindow : Window
         FillCombo(SysCmdCombo, StepDisplay.SystemCommandMap().Select(kv => (kv.Value, kv.Key)).ToArray(), step.Command);
         FillCombo(OnYesTypeCombo, new[] { (Strings.Get("Ed_OnYes_None"), "none"), (Strings.Get("Ed_OnYes_Run"), "run"), (Strings.Get("Ed_OnYes_Url"), "url") }, step.OnYes.Type == "sound" ? "run" : step.OnYes.Type);
         FillCombo(GroupCombo, new[] { (Strings.Get("Ed_Group_None"), "") }.Concat(_groups.Select(g => (g.Name, g.Id))).ToArray(), step.GroupId);
+        FillCombo(PresentCombo, new[] { (Strings.Get("Present_Dialog"), ""), (Strings.Get("Present_Card"), "card") }, step.Present == "card" ? "card" : "");
         FillCombo(WinStyleCombo, new[]
         {
             (Strings.Get("WinStyle_Default"), ""), (Strings.Get("WinStyle_Minimized"), "minimized"),
@@ -38,6 +39,7 @@ public partial class StepEditorWindow : Window
         UpdateVolRow();
         UpdateWinRows();
         UpdateOnYes();
+        UpdateMessageRows();
 
         // 「组合键」是单个组合（keys 步骤经 SendKeyCombo 单发），与热键同性质，改「点击即录键」——去掉多余的捕捉按钮。
         // 值就在框里、确定时读取，故 set 空。（「发送键」是 SendKeys 序列，可含 {TAB}{ENTER}/字面文本，必须能打字，
@@ -69,6 +71,18 @@ public partial class StepEditorWindow : Window
         Vis(OnYesTargetBox, target); Vis(OnYesBrowseBtn, target);
     }
 
+    private void Present_Changed(object sender, SelectionChangedEventArgs e) => UpdateMessageRows();
+
+    // 卡片只有「点击即关」一种交互，挂不了动作：选卡片时藏掉「是/否确认」与「点是后」，
+    // 露出「自动关闭(秒)」。与本编辑器既有立场一致——没有可填的东西就别显示（见 UpdateOnYes）。
+    private void UpdateMessageRows()
+    {
+        bool card = ComboVal(PresentCombo) == "card";
+        Vis(MsgCardRow, card);
+        Vis(ConfirmChk, !card);
+        Vis(MsgOnYesRow, !card);
+    }
+
     private void LoadStep(LaunchStep s)
     {
         LabelBox.Text = s.Label;
@@ -79,6 +93,7 @@ public partial class StepEditorWindow : Window
         ProcessBox.Text = s.Process; SendKeyBox.Text = s.SendKey; WaitWinBox.Text = s.WaitForWindowSeconds.ToString(); PostDelayBox.Text = s.PostWindowDelaySeconds.ToString();
         TextBox2.Text = s.Text; TextProcessBox.Text = s.Process;
         MessageBox2.Text = s.Message; SpeakChk.IsChecked = s.Speak; ConfirmChk.IsChecked = s.Confirm; OnYesTargetBox.Text = s.OnYes.Target;
+        PopupSecondsBox.Text = s.PopupSeconds.ToString();
         DelayBox.Text = s.DelayMs.ToString();
         RepeatBox.Text = StepHelpers.StepRepeat(s).ToString();
         NoteBox.Text = s.Note;
@@ -155,7 +170,14 @@ public partial class StepEditorWindow : Window
             case "system": r.Command = ComboVal(SysCmdCombo); r.Label = StepDisplay.SystemCommandLabel(r.Command); break;
             case "text": r.Text = TextBox2.Text; r.Process = StepHelpers.ToProcessName(TextProcessBox.Text); break;
             case "group": r.GroupId = ComboVal(GroupCombo); r.Label = _groups.FirstOrDefault(g => g.Id == r.GroupId)?.Name ?? r.Label; break;
-            case "message": r.Message = MessageBox2.Text; r.Speak = SpeakChk.IsChecked == true; r.Confirm = ConfirmChk.IsChecked == true; r.OnYes = new OnYes { Type = ComboVal(OnYesTypeCombo), Target = OnYesTargetBox.Text }; break;
+            case "message":
+                r.Message = MessageBox2.Text; r.Speak = SpeakChk.IsChecked == true;
+                r.Present = ComboVal(PresentCombo);
+                r.PopupSeconds = ParseOr(PopupSecondsBox.Text, 5, min: 0, max: 86400);
+                // 卡片形态清掉确认/动作：留着会在 json 里躺一份点不到的配置，改回对话框时又悄悄复活。
+                if (r.Present == "card") { r.Confirm = false; r.OnYes = new OnYes(); }
+                else { r.Confirm = ConfirmChk.IsChecked == true; r.OnYes = new OnYes { Type = ComboVal(OnYesTypeCombo), Target = OnYesTargetBox.Text }; }
+                break;
         }
 
         Result = r;

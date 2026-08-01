@@ -107,6 +107,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>グループ実行：{0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(未指定)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>入力 {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>カード通知：{0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value>（{0}前のみ）</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value>（{0}）</value></data>
 
@@ -163,6 +164,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>読み上げ</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>はい/いいえ確認（はい=続行、いいえ=グループ中止）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>はいの後</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>表示方法</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>ダイアログ（要操作）</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>カード（中断しない）</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>アクショングループ</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>実行後待機(ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>繰り返し回数</value></data>

@@ -106,6 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>รันกลุ่ม: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(ไม่ได้ระบุ)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>พิมพ์ {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>การ์ด: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (เฉพาะก่อน {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
@@ -162,6 +163,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>อ่านออกเสียง</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>ยืนยัน ใช่/ไม่ (ใช่ = ทำต่อ, ไม่ = ยกเลิกกลุ่ม)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>หลัง «ใช่»</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>แสดงเป็น</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>กล่องโต้ตอบ (ต้องกดปิด)</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>การ์ด (ไม่ขัดจังหวะ)</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>หน่วงหลังจากนั้น (ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>จำนวนรอบ</value></data>

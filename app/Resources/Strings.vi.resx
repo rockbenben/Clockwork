@@ -106,6 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Chạy nhóm: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(chưa chỉ định)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Nhập {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>Thẻ: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (chỉ trước {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
@@ -162,6 +163,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>Đọc thành tiếng</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Xác nhận Có/Không (Có = tiếp tục, Không = hủy nhóm)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Sau «Có»</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>Hiển thị dạng</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>Hộp thoại (chặn)</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>Thẻ (không chặn)</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>Nhóm hành động</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>Trễ sau (ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>Số lần lặp</value></data>

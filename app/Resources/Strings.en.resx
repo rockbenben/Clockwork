@@ -109,6 +109,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Run group: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(none)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Type {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>Card: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (before {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
@@ -165,6 +166,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>Speak</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Yes/No confirm (Yes = continue, No = abort group)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>On Yes</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>Show as</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>Dialog (blocks)</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>Card (non-blocking)</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>Action group</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>Post-delay (ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>Repeat</value></data>

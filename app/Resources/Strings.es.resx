@@ -106,6 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Ejecutar grupo: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(sin especificar)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Escribir {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>Tarjeta: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (antes de las {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
@@ -162,6 +163,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>Leer en voz alta</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Confirmar Sí/No (Sí = continuar, No = cancelar grupo)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Tras «Sí»</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>Mostrar como</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>Diálogo (bloquea)</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>Tarjeta (sin bloquear)</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>Grupo de acciones</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>Retardo posterior (ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>Repeticiones</value></data>

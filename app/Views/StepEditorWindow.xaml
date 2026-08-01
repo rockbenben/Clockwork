@@ -68,9 +68,11 @@
 
                 <StackPanel x:Name="PanMessage">
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Message}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MessageBox2" Width="380" Height="80" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Present}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="PresentCombo" Width="200" Height="28" SelectionChanged="Present_Changed"/></StackPanel>
                     <CheckBox x:Name="SpeakChk" Content="{loc:Loc Ed_Speak}" Margin="118,3,0,3"/>
+                    <StackPanel x:Name="MsgCardRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_AutoDismiss}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="PopupSecondsBox" Width="90" Height="28"/></StackPanel>
                     <CheckBox x:Name="ConfirmChk" Content="{loc:Loc Ed_Confirm}" Margin="118,3,0,3"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_OnYes}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="OnYesTypeCombo" Width="140" Height="28" SelectionChanged="OnYesType_Changed"/><TextBox x:Name="OnYesTargetBox" Width="150" Height="28" Margin="8,0,0,0"/><Button x:Name="OnYesBrowseBtn" Content="{loc:Loc Btn_Browse}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="BrowseOnYes_Click"/></StackPanel>
+                    <StackPanel x:Name="MsgOnYesRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_OnYes}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="OnYesTypeCombo" Width="140" Height="28" SelectionChanged="OnYesType_Changed"/><TextBox x:Name="OnYesTargetBox" Width="150" Height="28" Margin="8,0,0,0"/><Button x:Name="OnYesBrowseBtn" Content="{loc:Loc Btn_Browse}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="BrowseOnYes_Click"/></StackPanel>
                 </StackPanel>
 
                 <StackPanel x:Name="PanGroup">

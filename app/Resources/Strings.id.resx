@@ -106,6 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Jalankan grup: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(tak ditentukan)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Ketik {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>Kartu: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (hanya sebelum {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
@@ -162,6 +163,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>Baca suara</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Konfirmasi Ya/Tidak (Ya = lanjut, Tidak = batalkan grup)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Setelah «Ya»</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>Tampilkan sebagai</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>Dialog (memblokir)</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>Kartu (tanpa blokir)</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>Grup aksi</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>Jeda setelah (ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>Pengulangan</value></data>

@@ -109,6 +109,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>运行动作组：{0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(未指定)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>输入 {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>卡片提示：{0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value>（仅{0}前）</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value>（{0}）</value></data>
 
@@ -165,6 +166,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>语音播报</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否确认（是=继续，否=中止本组）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>点是后</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>呈现方式</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>对话框（需点掉）</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>卡片（不打断）</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>动作组</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>执行后延时(ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>重复次数</value></data>

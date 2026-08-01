@@ -64,7 +64,9 @@ public static class StepDisplay
             "system" => SystemCommandLabel(s.Command),
             "group" => Strings.Lf("Sum_RunGroup", !string.IsNullOrEmpty(s.Label) ? s.Label : (!string.IsNullOrEmpty(s.GroupId) ? s.GroupId : Strings.Get("Sum_Group_None"))),
             "delay" => s.DelayMs % 1000 == 0 ? Strings.Lf("Sum_Delay_Sec", s.DelayMs / 1000) : Strings.Lf("Sum_Delay_Ms", s.DelayMs),
-            "message" => NoNewline(s.Message),
+            "message" => StepHelpers.MessageFormOf(s) == MessageForm.Card
+                ? Strings.Lf("Sum_MsgCard", NoNewline(s.Message))
+                : NoNewline(s.Message),
             "text" => Strings.Lf("Sum_Text", StepHelpers.Ellipsis(NoNewline(s.Text))),
             _ => s.Kind,
         };

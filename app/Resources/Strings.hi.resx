@@ -106,6 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>समूह चलाएँ: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(निर्दिष्ट नहीं)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>टाइप करें {0}</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>कार्ड: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (केवल {0} से पहले)</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
@@ -162,6 +163,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>वाचन</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>हाँ/नहीं पुष्टि (हाँ = जारी, नहीं = समूह रद्द)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«हाँ» के बाद</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>इस रूप में दिखाएँ</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>संवाद (रोकता है)</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>कार्ड (बिना रुकावट)</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>क्रिया समूह</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>बाद में देरी (ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>दोहराव</value></data>

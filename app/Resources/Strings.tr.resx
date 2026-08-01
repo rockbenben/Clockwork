@@ -106,6 +106,7 @@
   <data name="Sum_RunGroup" xml:space="preserve"><value>Grubu çalıştır: {0}</value></data>
   <data name="Sum_Group_None" xml:space="preserve"><value>(belirtilmedi)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>{0} yaz</value></data>
+  <data name="Sum_MsgCard" xml:space="preserve"><value>Kart: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (yalnızca {0}'dan önce)</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
 
@@ -162,6 +163,9 @@
   <data name="Ed_Speak" xml:space="preserve"><value>Sesli oku</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Evet/Hayır onayla (Evet = devam, Hayır = grubu iptal)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«Evet»ten sonra</value></data>
+  <data name="Ed_Present" xml:space="preserve"><value>Gösterim</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>İletişim kutusu (bekletir)</value></data>
+  <data name="Present_Card" xml:space="preserve"><value>Kart (beklemesiz)</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>Eylem grubu</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>Sonraki gecikme (ms)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>Tekrar sayısı</value></data>

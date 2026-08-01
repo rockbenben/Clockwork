@@ -18,4 +18,10 @@ public class StepDisplayTests
     [Fact] public void Summary_before8_suffix() => Assert.Equal("静音（仅08:00前）", StepDisplay.StepSummary(new LaunchStep { Kind = "volume", Action = "mute", OnlyBefore8 = true }));
     [Fact] public void Summary_before_custom_time() => Assert.Equal("静音（仅08:30前）", StepDisplay.StepSummary(new LaunchStep { Kind = "volume", Action = "mute", OnlyBefore8 = true, BeforeHour = 8, BeforeMinute = 30 }));
     [Fact] public void ListSummary_appends_note() => Assert.Equal("静音（备注）", StepDisplay.StepListSummary(new LaunchStep { Kind = "volume", Action = "mute", Note = "备注" }));
+
+    [Fact] public void Summary_message_modal_is_plain_text()
+        => Assert.Equal("喝水", StepDisplay.StepSummary(new LaunchStep { Kind = "message", Message = "喝水" }));
+
+    [Fact] public void Summary_message_card_is_prefixed()
+        => Assert.Equal("卡片提示：喝水", StepDisplay.StepSummary(new LaunchStep { Kind = "message", Message = "喝水", Present = "card" }));
 }
