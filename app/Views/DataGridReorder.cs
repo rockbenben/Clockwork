@@ -5,6 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;   // Visual3D：FindParent 里 `d is Visual or Visual3D` 用到
+using Clockwork.Core;   // DropIndexCalc：落点算术摘成纯函数放这（单测覆盖）
 // 项目开了 UseWindowsForms（托盘图标绘制要用），SDK 因此隐式 global using 了 System.Drawing /
 // System.Windows.Forms——它们的 Point/Pen/Color/ButtonBase/DragDropEffects 和 WinForms 的
 // DataGrid 与这里要用的 WPF 同名类型撞车，裸写会 CS0104 二义。用别名钉死到 WPF 版本，
@@ -60,6 +61,15 @@ internal static class DataGridReorder
 
         grid.DragOver += (_, e) =>
         {
+            // 两个表都设了 AllowDrop=True，DragOver/Drop 因此会收到任何拖拽负载——包括从资源管理器拖来的
+            // 文件。外来负载必须在这里主动拒绝（Effects=None），不能只是「什么都不做」：不拒绝就落到下面
+            // 报 Move，Explorer 收到 DROPEFFECT_MOVE 会真的去移动/删除源文件，而这次 Drop 其实什么也没接住。
+            if (!e.Data.GetDataPresent(typeof(int)))
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+                return;
+            }
             e.Effects = DragDropEffects.Move;
             e.Handled = true;
             int to = TargetIndex(grid, e.GetPosition(grid), out bool below);
@@ -77,21 +87,21 @@ internal static class DataGridReorder
         grid.Drop += (_, e) =>
         {
             ClearAdorner();
-            if (e.Data.GetData(typeof(int)) is not int src) return;
+            // 同上：非本控件负载必须报 None，不能悄悄吞掉——否则外来拖拽在 DragOver 就已经骗 Explorer
+            // 说「我接住了、去移吧」，这里再默默 return 就是双重说谎（回执 Move，实际什么都没发生）。
+            if (e.Data.GetData(typeof(int)) is not int src) { e.Effects = DragDropEffects.None; e.Handled = true; return; }
             int to = TargetIndex(grid, e.GetPosition(grid), out bool below);
             if (to < 0) return;
-            // 落在目标行下半 → 插到它之后。源在目标之前时，移除源会让后面整体前移一位，落点要相应减一。
-            if (below) to++;
-            if (src < to) to--;
-            if (to < 0) to = 0;
-            int count = grid.Items.Count;
-            if (to >= count) to = count - 1;
+            to = DropIndexCalc.DropIndex(src, to, below, grid.Items.Count);
             if (src != to) onMove(src, to);
             e.Handled = true;
         };
     }
 
-    // 命中的行号与「是否落在该行下半」。没命中任何行（拖到列表空白处）→ 末行、下半。
+    // 命中的行号与「是否落在该行下半」。没命中任何行有两种截然不同的情形，必须分开判：
+    //   · 落在列表下方空白（拖过最后一行）→ 末行、下半——拖到底。
+    //   · 落在表头或首行上方空白（拖过第一行顶部/松早了）→ 首行、上半——拖到顶。
+    // 原先两种都按第一种处理：网上越拖越远反而把行摔到最底，跟用户的手完全反着来。
     private static int TargetIndex(DataGrid grid, Point p, out bool below)
     {
         below = false;
@@ -99,6 +109,12 @@ internal static class DataGridReorder
         var row = hit == null ? null : FindParent<DataGridRow>(hit);
         if (row == null)
         {
+            var first = RowAt(grid, 0);
+            if (first != null && grid.TranslatePoint(p, first).Y < 0)
+            {
+                below = false;
+                return 0;
+            }
             below = true;
             return grid.Items.Count - 1;
         }
