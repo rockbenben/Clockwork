@@ -218,7 +218,11 @@ public partial class App : System.Windows.Application
             try
             {
                 var result = LaunchSequence.Run(cfg, boot, -1, 0,
-                    s => StepRunner.RunStepMark(s, ConfirmDestructive, selfPaths),
+                    // 卡片形态的 message 在这里截下：InvokeStepAction 对 message 一律静默返回 ✓
+                    // （模态形态在启动路径本就该静默），只有这一层知道该弹卡片。顶层与组展开共用本 lambda。
+                    s => s.Kind == "message" && StepHelpers.MessageFormOf(s) == MessageForm.Card
+                         ? ShowStepCard(s)
+                         : StepRunner.RunStepMark(s, ConfirmDestructive, selfPaths),
                     () => DateTime.Now);
                 LaunchSequence.WriteLog(Path.Combine(cfgDir, "clockwork.run.log"), result, DateTime.Now);
                 if (!boot) Dispatcher.Invoke(() => NotifyRunResult(result));
@@ -740,13 +744,35 @@ public partial class App : System.Windows.Application
                   key: "groupskip:" + StepDisplay.StepSummary(step));
     }
 
-    // 动作组 message 步骤弹窗（confirm=是/否闸门；否则仅确定）。在 UI 线程弹。
+    // 卡片形态 message 的投递（启动清单路径专用）。返回 ✓——卡片弹出即算完成，没有可失败的部分。
+    // 这条路径必须自己播报：ActionGroupRunner 的 message 分支会先调 deps.Speak，而启动清单
+    // （LaunchSequence 的顶层与组展开）不经过那个分支，只调注入的 stepMark。
+    private StepMark ShowStepCard(LaunchStep s)
+    {
+        if (s.Speak) ReminderActions.Speak(s.Message);
+        ShowToast("Clockwork", s.Message, Views.ToastLevel.Info,
+                  s.PopupSeconds > 0 ? s.PopupSeconds * 1000 : 0, key: StepCardKey(s));
+        return new StepMark("✓", 0, 0);
+    }
+
+    // 卡片合并键：同一句话在整组重复轮次里合成一张 ×N，而不是叠一摞。
+    private static string StepCardKey(LaunchStep s) => "stepmsg:" + (s.Message ?? "");
+
+    // 动作组 message 步骤的呈现。三种形态见 StepHelpers.MessageFormOf。
+    // 卡片：弹完立即返回 Ok（不拦路），调用方（ActionGroupRunner）照常扣预算、查取消、跑下一步。
+    // 播报不在这里做——ActionGroupRunner 的 message 分支和 RunStepAsync 都已在调用前处理。
     private MsgResult ShowGroupMessage(LaunchStep step)
     {
-        bool confirm = step.Confirm || (step.OnYes != null && step.OnYes.Type != "none");
+        var form = StepHelpers.MessageFormOf(step);
+        if (form == MessageForm.Card)
+        {
+            ShowToast("Clockwork", step.Message, Views.ToastLevel.Info,
+                      step.PopupSeconds > 0 ? step.PopupSeconds * 1000 : 0, key: StepCardKey(step));
+            return MsgResult.Ok;
+        }
         return Dispatcher.Invoke(() =>
         {
-            if (confirm)
+            if (form == MessageForm.Confirm)
                 return Views.BrandDialog.Confirm(_main, "Clockwork", step.Message) ? MsgResult.Yes : MsgResult.No;
             Views.BrandDialog.Info(_main, "Clockwork", step.Message);
             return MsgResult.Ok;
