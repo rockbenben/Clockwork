@@ -128,6 +128,12 @@ public partial class GroupEditorWindow : Window
     // 时间条件照常生效：周末试跑「仅工作日」的步骤会被跳过，这是真实语义，不为试跑放宽。
     private RunCancel? _tryRun;
 
+    // 「运行这一步」命中 group 类型步骤时，跑的是已保存的目标组（见下）——这本质上也是一次
+    // RunGroupAsync，同样要在关窗时收掉，不能让它变成孤儿。故意不复用 _tryRun：那个字段驱动的是
+    // 「运行整组」按钮的文字/开关状态（Run ⇄ Stop），这里只是单步操作的副作用，不该让那颗按钮
+    // 也跟着变成「停止」——两个闸各管各的运行，OnClosed 里一起收。
+    private RunCancel? _stepGroupRun;
+
     private void SRunStep_Click(object sender, RoutedEventArgs e)
     {
         int i = Sel;
@@ -137,7 +143,7 @@ public partial class GroupEditorWindow : Window
         {
             // 引用步骤跑的是「已保存」的那份目标组——本编辑器里的未保存改动不属于它。
             var g = ActionGroupResolver.Resolve(_groups, s.GroupId);
-            if (g != null) App.Instance?.RunGroupAsync(g, this);
+            if (g != null) _stepGroupRun = App.Instance?.RunGroupAsync(g, this, () => _stepGroupRun = null);
             return;
         }
         App.Instance?.RunStepAsync(s, this);
@@ -169,9 +175,12 @@ public partial class GroupEditorWindow : Window
     }
 
     // 关窗即停：这次试跑归本编辑器所有，不能在窗口没了之后还在偷偷跑（用户以为「取消」了一切）。
+    // 两个闸都要收——「运行整组」的 _tryRun 与「运行这一步」命中嵌套组时的 _stepGroupRun 是各自独立
+    // 的运行，用户关窗时没有办法区分是哪一个还在跑，也不该被要求分清楚。
     protected override void OnClosed(EventArgs e)
     {
         _tryRun?.Request();
+        _stepGroupRun?.Request();
         base.OnClosed(e);
     }
 
