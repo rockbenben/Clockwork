@@ -107,7 +107,10 @@ public partial class StepEditorWindow : Window
         Vis(PanApp, kind == "app"); Vis(PanKeys, kind == "keys"); Vis(PanVolume, kind == "volume");
         Vis(PanWindow, kind == "window"); Vis(PanSystem, kind == "system"); Vis(PanText, kind == "text");
         Vis(PanMessage, kind == "message"); Vis(PanGroup, kind == "group");
-        Vis(RepeatRow, kind != "message");   // 消息步骤不循环
+        Vis(RepeatRow, kind != "message" && kind != "comment");   // 消息/注释步骤不循环
+        // 注释只是分段标签，永不执行：延时 / 用途说明 / 星期 / 仅 N 点前对它全无意义，整块藏掉。
+        bool comment = kind == "comment";
+        Vis(DelayRow, !comment); Vis(NoteRow, !comment); Vis(CondBlock, !comment);
     }
 
     private void KindCombo_Changed(object sender, SelectionChangedEventArgs e) => ShowPanelForKind(ComboVal(KindCombo));

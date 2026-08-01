@@ -627,6 +627,7 @@ public partial class App : System.Windows.Application
 
     public void RunStepAsync(LaunchStep step)
     {
+        if (step.Kind == "comment") return;   // 注释永不执行：点「运行这一步」什么都不该发生
         // 消息步骤：在 UI 线程弹窗（是/否闸门 + 可选朗读/onYes），不走后台执行——否则会被当作未知类型告警。
         if (step.Kind == "message")
         {

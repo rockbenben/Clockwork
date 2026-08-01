@@ -70,7 +70,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"
+                                            ElementStyle="{StaticResource SummaryCol}"/>
                         <DataGridTextColumn Header="{loc:Loc Col_Delay}" Binding="{Binding DelayText}" Width="Auto" MinWidth="72"
                                             IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
                     </DataGrid.Columns>

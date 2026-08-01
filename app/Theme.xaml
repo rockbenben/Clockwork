@@ -706,5 +706,14 @@
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
+    <!-- 摘要列：注释步骤只是分段标签，灰体斜体读作「换了一段」——启动清单与动作组步骤列表共用。 -->
+    <Style x:Key="SummaryCol" TargetType="TextBlock">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Step.Kind}" Value="comment">
+                <Setter Property="FontStyle" Value="Italic"/>
+                <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 
 </ResourceDictionary>
