@@ -44,6 +44,7 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ Вниз</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Выполнить этот шаг</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Выполнить группу</value></data>
+  <data name="Btn_StopRun" xml:space="preserve"><value>■ Стоп</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ Предпросмотр</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>Задержка запуска (с)</value></data>

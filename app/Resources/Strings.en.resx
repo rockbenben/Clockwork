@@ -46,6 +46,7 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ Down</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Run This Step</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Run Group</value></data>
+  <data name="Btn_StopRun" xml:space="preserve"><value>■ Stop</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ Preview</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplicate</value></data>
 

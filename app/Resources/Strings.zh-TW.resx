@@ -44,6 +44,7 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ 下移</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ 執行這一步</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ 執行整組</value></data>
+  <data name="Btn_StopRun" xml:space="preserve"><value>■ 停止</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ 預覽這條</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>複製</value></data>
 

@@ -124,6 +124,57 @@ public partial class GroupEditorWindow : Window
         if (i >= 0 && i < _rows.Count - 1) { _rows.Move(i, i + 1); Steps.SelectedIndex = i + 1; }
     }
 
+    // —— 试跑：跑的是编辑中（未保存）的内容，所见即所得 ——
+    // 时间条件照常生效：周末试跑「仅工作日」的步骤会被跳过，这是真实语义，不为试跑放宽。
+    private RunCancel? _tryRun;
+
+    private void SRunStep_Click(object sender, RoutedEventArgs e)
+    {
+        int i = Sel;
+        if (i < 0 || i >= _rows.Count) return;
+        var s = _rows[i].Step;
+        if (s.Kind == "group")
+        {
+            // 引用步骤跑的是「已保存」的那份目标组——本编辑器里的未保存改动不属于它。
+            var g = ActionGroupResolver.Resolve(_groups, s.GroupId);
+            if (g != null) App.Instance?.RunGroupAsync(g, this);
+            return;
+        }
+        App.Instance?.RunStepAsync(s, this);
+    }
+
+    private void SRunGroup_Click(object sender, RoutedEventArgs e)
+    {
+        // 已在试跑 → 本次点击是「停止」。
+        if (_tryRun != null) { _tryRun.Request(); return; }
+        var app = App.Instance;
+        if (app == null) return;
+        // 保留真实 Id：运行集（ActionGroupRunner._running）据此挡住「已被热键触发中又来试跑」与自引用，
+        // 行为正确且零新代码。名称留空也无妨——试跑不落盘。
+        var temp = new ActionGroup
+        {
+            Id = _original.Id,
+            Name = NameBox.Text.Trim(),
+            Enabled = true,
+            Repeat = StepHelpers.ClampRepeat(ParseOr(GroupRepeatBox.Text, 1)),
+            RepeatDelayMs = ParseOr(GroupRepeatDelayBox.Text, 0, min: 0),
+            Steps = _rows.Select(r => r.Step).ToList(),
+        };
+        SRunGroup.Content = Strings.Get("Btn_StopRun");
+        _tryRun = app.RunGroupAsync(temp, this, () =>
+        {
+            _tryRun = null;
+            SRunGroup.Content = Strings.Get("Btn_RunGroup");
+        });
+    }
+
+    // 关窗即停：这次试跑归本编辑器所有，不能在窗口没了之后还在偷偷跑（用户以为「取消」了一切）。
+    protected override void OnClosed(EventArgs e)
+    {
+        _tryRun?.Request();
+        base.OnClosed(e);
+    }
+
     private void Ok_Click(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(NameBox.Text)) { BrandDialog.Warn(this, "Clockwork", Strings.Get("Val_GroupName")); return; }
