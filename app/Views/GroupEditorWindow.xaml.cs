@@ -44,6 +44,14 @@ public partial class GroupEditorWindow : Window
             () => _hotkey, combo => _hotkey = combo);
         foreach (var s in group.Steps) _rows.Add(new StepRowVm(Clone(s), () => { }));
         Steps.ItemsSource = _rows;
+        DataGridReorder.Attach(Steps, (from, to) =>
+        {
+            if (from < 0 || from >= _rows.Count || to < 0 || to >= _rows.Count || from == to) return;
+            var r = _rows[from];
+            _rows.RemoveAt(from);
+            _rows.Insert(to, r);
+            Steps.SelectedIndex = to;
+        });
     }
 
     private string _hotkey = "";

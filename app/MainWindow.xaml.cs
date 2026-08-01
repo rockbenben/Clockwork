@@ -45,6 +45,7 @@ public partial class MainWindow : Window
         _launch = new LaunchListVm(config, save);
         GridLaunch.ItemsSource = _launch.Rows;
         GridLaunch.SelectionChanged += (s, e) => _launch.SelectedIndex = GridLaunch.SelectedIndex;
+        Views.DataGridReorder.Attach(GridLaunch, (from, to) => { _launch.MoveTo(from, to); SyncSelection(); });
 
         _reminders = new ReminderListVm(config, save, migrateReminderState);
         GridRemind.ItemsSource = _reminders.Rows;

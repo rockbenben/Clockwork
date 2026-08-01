@@ -52,7 +52,7 @@
                         <!-- 三个列表页禁点表头排序：清单顺序即执行/显示顺序，排序只改视图不改模型，
                              会让 SelectedIndex(视图序)与 Models(配置序)错位——删除/上移/复制会操作错行并落盘。 -->
                         <DataGrid x:Name="GridLaunch" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
-                                  CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridLaunch_DoubleClick">
+                                  CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridLaunch_DoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="24" CanUserResize="False" CellTemplate="{StaticResource RailCell}" CellStyle="{StaticResource RailCellStyle}"/>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
