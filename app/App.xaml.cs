@@ -222,7 +222,7 @@ public partial class App : System.Windows.Application
                     // （模态形态在启动路径本就该静默），只有这一层知道该弹卡片。顶层与组展开共用本 lambda。
                     s => s.Kind == "message" && StepHelpers.MessageFormOf(s) == MessageForm.Card
                          ? ShowStepCard(s)
-                         : StepRunner.RunStepMark(s, ConfirmDestructive, selfPaths),
+                         : StepRunner.RunStepMark(s, a => ConfirmDestructive(a), selfPaths),
                     () => DateTime.Now);
                 LaunchSequence.WriteLog(Path.Combine(cfgDir, "clockwork.run.log"), result, DateTime.Now);
                 if (!boot) Dispatcher.Invoke(() => NotifyRunResult(result));
@@ -533,7 +533,7 @@ public partial class App : System.Windows.Application
         int timeoutSecs = psecs > 0 ? psecs : ReminderEngine.UnattendedPopupSeconds;
         int? autoSnooze = r.RepeatMinutes > 0 ? null : ReminderEngine.UnattendedSnoozeMinutes;
         var (act, snooze) = Views.ReminderPopupWindow.Show(_main, r.Message, confirm, timeoutSecs, autoSnooze);
-        if (act == "yes") ReminderActions.RunOnYes(r.OnYes, _config.ActionGroups, RunGroupAsync, WarnToast);
+        if (act == "yes") ReminderActions.RunOnYes(r.OnYes, _config.ActionGroups, g => RunGroupAsync(g), WarnToast);
         if (act == "snooze") return ("", snooze);
         return (act, null);
     }
@@ -625,15 +625,15 @@ public partial class App : System.Windows.Application
     // 单步「运行这一步」：后台跑（含循环 repeat），完成弹托盘气泡回执。
     private int _stepRunning;
 
-    public void RunStepAsync(LaunchStep step)
+    public void RunStepAsync(LaunchStep step, Window? owner = null)
     {
         if (step.Kind == "comment") return;   // 注释永不执行：点「运行这一步」什么都不该发生
         // 消息步骤：在 UI 线程弹窗（是/否闸门 + 可选朗读/onYes），不走后台执行——否则会被当作未知类型告警。
         if (step.Kind == "message")
         {
             if (step.Speak) ReminderActions.Speak(step.Message);
-            if (ShowGroupMessage(step) == MsgResult.Yes)
-                ReminderActions.RunOnYes(step.OnYes, _config.ActionGroups, RunGroupAsync, WarnToast);
+            if (ShowGroupMessage(step, owner) == MsgResult.Yes)
+                ReminderActions.RunOnYes(step.OnYes, _config.ActionGroups, g => RunGroupAsync(g), WarnToast);
             return;
         }
         // 单飞守卫（旧版同款）：气泡回执要几秒才出，急着连点「运行」会把同一步跑两遍——上一次没完就忽略。
@@ -644,41 +644,40 @@ public partial class App : System.Windows.Application
             _runGate.Begin();
             try
             {
-                var mark = StepRunner.RunStepMarkRepeat(step, ConfirmDestructive, selfPaths);
+                var mark = StepRunner.RunStepMarkRepeat(step, a => ConfirmDestructive(a, owner), selfPaths);
                 ShowToast(Strings.Get("Run_Title"), StepDisplay.StepSummary(step) + "  " + mark.Mark, mark.Fail > 0 ? Views.ToastLevel.Warn : Views.ToastLevel.Info);
             }
             finally { _runGate.End(); Interlocked.Exchange(ref _stepRunning, 0); }
         });
     }
 
-    // 「运行整组」/提醒静默组/onYes 组：后台跑动作组。
-    // 跑快照而非活对象：后台 foreach 组步骤时，UI 线程可能正在编辑/删除组（删除守卫的联动清理会就地改
-    // 其他组的 Steps），枚举活列表会抛「集合已修改」；且 Task.Run 无 catch 时整组静默中止。
-    public void RunGroupAsync(ActionGroup group)
+    // 「运行整组」/提醒静默组/onYes 组/组编辑器试跑：后台跑动作组。返回本次运行的取消闸——
+    // 组编辑器据此把「试跑」按钮就地变「停止」，并在关窗时收掉这次运行（不留孤儿）。
+    // onDone：跑完（或被取消/异常）后在 UI 线程回调一次，用于把按钮翻回去。
+    public RunCancel RunGroupAsync(ActionGroup group, Window? owner = null, Action? onDone = null)
     {
-        // 快照与 deps 都在调用线程（UI）上先建好：后台再碰活的 _config.ActionGroups 会与 UI 增删组竞态。
         var snap = group.SnapshotForRun();
-        var deps = BuildGroupDeps();
+        var deps = BuildGroupDeps(owner);
         Task.Run(() =>
         {
             _runGate.Begin();
-            // 只有这一层登记为「顶层运行」——即热键能取消的那一次。嵌套子组与它共用同一个闸但不登记，
-            // 否则按子组热键会把整条链（含毫不相干的父组）一起掐掉。
             bool owned = ActionGroupRunner.EnterTopLevel(snap.Id, deps.Cancel);
-            // 顶层入口：结局有意丢弃。Aborted 是用户自己在确认框上点的「否」（他已经知道了，再弹一张卡是噪音）；
-            // Skipped 是同组已在跑的单飞去重——热键连按/循环任务撞上上一轮时本就该静默忽略。
-            // 嵌套引用那层不同：那里的 Skipped 意味着配置有环，必须发声（见 RunGroupStep）。
             try { _ = ActionGroupRunner.RunGroup(snap, deps); }
             catch (Exception ex) { WarnToast(Lf("Mark_Exception", ex.Message)); }
             finally
             {
                 if (owned) ActionGroupRunner.ExitTopLevel(snap.Id, deps.Cancel);
                 _runGate.End();
+                // 回调整体兜住：调度器正在关闭时 Invoke 会抛，逃出去会变成 Task 里的未观察异常。
+                if (onDone != null) { try { Dispatcher.Invoke(onDone); } catch { } }
             }
         });
+        return deps.Cancel;
     }
 
-    private GroupDeps BuildGroupDeps()
+    // owner：本次运行的弹窗归属窗口（null=主窗口）。嵌套子组与 onYes 组共用同一份 deps，
+    // 故 owner 自动传遍整条引用链，不必在每一层再传一次。
+    private GroupDeps BuildGroupDeps(Window? owner = null)
     {
         var selfPaths = new[] { _exePath };
         var groups = _config.ActionGroups.ToList();   // 组列表快照（UI 线程取）：后台 Resolve 不再枚举 UI 正在增删的活列表
@@ -687,8 +686,8 @@ public partial class App : System.Windows.Application
         {
             // 把本次运行的取消闸一路传进步骤执行层：等窗口 / 置前重试 / 置前延时都可能挂几秒到几十秒，
             // 只查全局急停的话，用户取消了动作组，这些步骤过一会儿照样把窗口拽到前台、把按键打进去。
-            RunStep = s => StepRunner.InvokeStepAction(s, ConfirmDestructive, selfPaths, deps.Cancel),
-            ShowMessage = ShowGroupMessage,
+            RunStep = s => StepRunner.InvokeStepAction(s, a => ConfirmDestructive(a, owner), selfPaths, deps.Cancel),
+            ShowMessage = s => ShowGroupMessage(s, owner),
             // onYes 组的结局也丢弃：ReminderActions.RunOnYes 是 Action<ActionGroup> 契约（提醒弹窗路径共用），
             // 且语义上 onYes 是「是」分支的副作用出口——它内部的确认框属于那条子流程，把它的中止回灌成父组中止，
             // 会变成「点了是反而整组停了」，比现状更难解释。
@@ -762,7 +761,7 @@ public partial class App : System.Windows.Application
     // 动作组 message 步骤的呈现。三种形态见 StepHelpers.MessageFormOf。
     // 卡片：弹完立即返回 Ok（不拦路），调用方（ActionGroupRunner）照常扣预算、查取消、跑下一步。
     // 播报不在这里做——ActionGroupRunner 的 message 分支和 RunStepAsync 都已在调用前处理。
-    private MsgResult ShowGroupMessage(LaunchStep step)
+    private MsgResult ShowGroupMessage(LaunchStep step, Window? owner = null)
     {
         var form = StepHelpers.MessageFormOf(step);
         if (form == MessageForm.Card)
@@ -773,9 +772,10 @@ public partial class App : System.Windows.Application
         }
         return Dispatcher.Invoke(() =>
         {
+            var win = owner ?? _main;
             if (form == MessageForm.Confirm)
-                return Views.BrandDialog.Confirm(_main, "Clockwork", step.Message) ? MsgResult.Yes : MsgResult.No;
-            Views.BrandDialog.Info(_main, "Clockwork", step.Message);
+                return Views.BrandDialog.Confirm(win, "Clockwork", step.Message) ? MsgResult.Yes : MsgResult.No;
+            Views.BrandDialog.Info(win, "Clockwork", step.Message);
             return MsgResult.Ok;
         });
     }
@@ -840,10 +840,11 @@ public partial class App : System.Windows.Application
 
     private static string Lf(string key, params object[] args) => Strings.Lf(key, args);
 
-    // 破坏性系统命令确认（在 UI 线程弹框）。破坏性 → clay 警示轨。
-    private bool ConfirmDestructive(string action)
+    // 破坏性系统命令（重启/关机/注销）的确认框。owner 决定它弹在谁前面——组编辑器试跑时必须是编辑器，
+    // 否则确认框藏在模态编辑器后面，用户看着「卡住了」而实际是有个框在等他。
+    private bool ConfirmDestructive(string action, Window? owner = null)
         => Dispatcher.Invoke(() => Views.BrandDialog.Confirm(
-            _main, Strings.Get("Confirm_Title"), Lf("Confirm_Destructive", action), Views.ToastLevel.Warn));
+            owner ?? _main, Strings.Get("Confirm_Title"), Lf("Confirm_Destructive", action), Views.ToastLevel.Warn));
 
     // 配置存盘（原子写）。ViewModel 增删改移时回调。持续写失败（OneDrive/杀软锁死超过重试）不再静默吞——
     // 界面看着已保存、重启全回退是静默数据丢失，至少弹个警告让用户知道改动只在内存里。
