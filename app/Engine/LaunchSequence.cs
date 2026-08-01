@@ -102,7 +102,9 @@ public static class LaunchSequence
                     if (stopped) break;
                     if (!sub.Enabled) continue;
                     if (!StepCondition.IsSatisfied(sub, hour, isoDay, nowDt.Minute)) continue;   // 组内步骤同样遵守时间条件
-                    if (sub.Kind == "message") continue;                                        // 启动展开跳过 message（启动静默，不弹确认）
+                    // 启动路径只跳过模态 message（开机时没人在座，弹是/否框会把整条清单挂住）。
+                    // 卡片形态不拦路，照常执行——「早晨例程已就绪」这类提示正是它的主场。
+                    if (sub.Kind == "message" && StepHelpers.MessageFormOf(sub) != MessageForm.Card) continue;
                     if (sub.Kind == "group")
                     {
                         var ng = ActionGroupResolver.Resolve(config.ActionGroups, sub.GroupId);

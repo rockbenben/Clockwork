@@ -199,4 +199,43 @@ public class LaunchSequenceTests
         Assert.False(r.Summary.Truncated);                              // 预算没被空转烧穿
         Assert.Contains(r.LogLines, l => l.Contains("清单尾步"));       // 清单后面的步骤照常跑
     }
+
+    [Fact]
+    public void Group_expansion_still_skips_modal_message()
+    {
+        var g = new ActionGroup { Id = "gm", Name = "组", Steps = new()
+        {
+            new LaunchStep { Kind = "message", Message = "要继续吗", Confirm = true },
+            new LaunchStep { Kind = "volume", Action = "mute" },
+        } };
+        var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "gm" } }, ActionGroups = new() { g } };
+        var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
+        Assert.Equal(1, r.Summary.Total);   // 模态 message 仍跳过，只有 volume 计数
+    }
+
+    [Fact]
+    public void Group_expansion_runs_card_message()
+    {
+        var g = new ActionGroup { Id = "gc", Name = "组", Steps = new()
+        {
+            new LaunchStep { Kind = "message", Message = "早安", Present = "card" },
+            new LaunchStep { Kind = "volume", Action = "mute" },
+        } };
+        var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "gc" } }, ActionGroups = new() { g } };
+        var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
+        Assert.Equal(2, r.Summary.Total);   // 卡片不拦路，照常执行并计数
+    }
+
+    [Fact]
+    public void Card_message_in_group_consumes_budget()
+    {
+        var g = new ActionGroup { Id = "gb", Name = "组", Steps = new()
+        {
+            new LaunchStep { Kind = "message", Message = "x", Present = "card" },
+        } };
+        var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "gb" } }, ActionGroups = new() { g } };
+        var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
+        Assert.False(r.Summary.Truncated);
+        Assert.Equal(1, r.Summary.Total);
+    }
 }
