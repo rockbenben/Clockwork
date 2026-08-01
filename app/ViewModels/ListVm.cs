@@ -100,17 +100,21 @@ public abstract class ListVm<TModel, TRow> : ListVmBase where TModel : class whe
     // 克隆后的调整钩子：Reminder/Group 均须换新 id，Group 另加名称后缀并清热键。
     protected virtual void OnDuplicating(TModel clone) { }
 
-    // 上/下移：三个列表页共用。
-    public void MoveUp() => Move(-1);
-    public void MoveDown() => Move(1);
+    // 上/下移：三个列表页共用。相邻交换是 MoveTo 的特例，统一走它，避免两套重排逻辑漂移。
+    public void MoveUp() => MoveTo(SelectedIndex, SelectedIndex - 1);
+    public void MoveDown() => MoveTo(SelectedIndex, SelectedIndex + 1);
 
-    private void Move(int dir)
+    // 把第 from 项移到第 to 位（拖拽排序与上/下移共用）。越界或原地不动都是 noop，且不存盘——
+    // 拖拽会在「按下又放回原处」时高频触发，每次都写盘等于把配置文件当草稿纸。
+    // 用移除+插入而非交换：跨多位拖动时交换会打乱中间项的相对顺序（拖 0→2 应得 b,c,a，交换会得 c,b,a）。
+    public void MoveTo(int from, int to)
     {
-        int i = SelectedIndex, j = i + dir;
-        if (i < 0 || i >= Rows.Count || j < 0 || j >= Rows.Count) return;
-        (Models[i], Models[j]) = (Models[j], Models[i]);
-        Rows.Move(i, j);
-        SelectedIndex = j;
+        if (from < 0 || from >= Rows.Count || to < 0 || to >= Rows.Count || from == to) return;
+        var m = Models[from];
+        Models.RemoveAt(from);
+        Models.Insert(to, m);
+        Rows.Move(from, to);
+        SelectedIndex = to;
         Save();
     }
 

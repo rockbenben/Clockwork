@@ -81,4 +81,53 @@ public class LaunchListVmTests
         Assert.False(cfg.LaunchSteps[0].Enabled);
         Assert.Equal(1, saves[0]);
     }
+
+    [Fact]
+    public void MoveTo_forward_reorders()
+    {
+        var (vm, cfg, saves) = Make("a", "b", "c", "d");
+        vm.MoveTo(0, 2);
+        Assert.Equal(new[] { "b", "c", "a", "d" }, cfg.LaunchSteps.Select(s => s.Label).ToArray());
+        Assert.Equal("a", vm.Rows[2].Summary);
+        Assert.Equal(2, vm.SelectedIndex);
+        Assert.Equal(1, saves[0]);
+    }
+
+    [Fact]
+    public void MoveTo_backward_reorders()
+    {
+        var (vm, cfg, _) = Make("a", "b", "c", "d");
+        vm.MoveTo(3, 1);
+        Assert.Equal(new[] { "a", "d", "b", "c" }, cfg.LaunchSteps.Select(s => s.Label).ToArray());
+        Assert.Equal(1, vm.SelectedIndex);
+    }
+
+    [Fact]
+    public void MoveTo_same_index_is_noop()
+    {
+        var (vm, cfg, saves) = Make("a", "b");
+        vm.MoveTo(1, 1);
+        Assert.Equal(new[] { "a", "b" }, cfg.LaunchSteps.Select(s => s.Label).ToArray());
+        Assert.Equal(0, saves[0]);
+    }
+
+    [Fact]
+    public void MoveTo_out_of_range_is_noop()
+    {
+        var (vm, cfg, saves) = Make("a", "b");
+        vm.MoveTo(-1, 1);
+        vm.MoveTo(0, 5);
+        Assert.Equal(new[] { "a", "b" }, cfg.LaunchSteps.Select(s => s.Label).ToArray());
+        Assert.Equal(0, saves[0]);
+    }
+
+    [Fact]
+    public void MoveUp_still_works_after_refactor()
+    {
+        var (vm, cfg, _) = Make("a", "b", "c");
+        vm.SelectedIndex = 2;
+        vm.MoveUp();
+        Assert.Equal(new[] { "a", "c", "b" }, cfg.LaunchSteps.Select(s => s.Label).ToArray());
+        Assert.Equal(1, vm.SelectedIndex);
+    }
 }
