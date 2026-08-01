@@ -2,6 +2,9 @@ using System.Text.RegularExpressions;
 
 namespace Clockwork.Core;
 
+// message 步骤的三种呈现形态。Card 不拦路（右下角卡片），Info/Confirm 都是模态窗。
+public enum MessageForm { Card, Info, Confirm }
+
 // Core 小工具纯函数（重复次数夹取 / 步骤重复 / 时间阈值 / 插入位 / 省略号 / 进程名）。多处共用同一口径，避免魔数散落。
 public static class StepHelpers
 {
@@ -41,4 +44,13 @@ public static class StepHelpers
         var n = Regex.Replace((value ?? "").Trim(), @".*[\\/]", "");
         return Regex.Replace(n, @"(?i)\.exe$", "");
     }
+
+    // message 步骤呈现形态判定。三条路径（动作组运行 / 单步运行 / 开机清单）共用同一口径，别在各调用点重写。
+    // Present="card" 优先：手改 json 同时配了 Confirm/OnYes 时卡片赢、后两者忽略——卡片只有「点击即关」
+    // 一种交互（NotificationToast.xaml.cs:42），挂不了动作，让 Confirm 赢会造出一个永远点不到的是/否。
+    // Present 为空或无法识别 → 沿用旧推导，盘上老配置行为逐字不变。
+    public static MessageForm MessageFormOf(LaunchStep s)
+        => s.Present == "card" ? MessageForm.Card
+         : (s.Confirm || (s.OnYes != null && s.OnYes.Type != "none")) ? MessageForm.Confirm
+         : MessageForm.Info;
 }

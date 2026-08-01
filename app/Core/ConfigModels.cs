@@ -55,6 +55,12 @@ public sealed class LaunchStep
     public string Message { get; set; } = "";
     public bool Speak { get; set; }
     public bool Confirm { get; set; }
+    // message 步骤的呈现方式：""=沿用旧推导（Confirm/OnYes 决定弹是否框还是确定框），"card"=右下角卡片、不拦路。
+    // 空是刻意的默认：盘上老步骤没有这个字段，读回即空 → 行为与加本字段之前逐字一致。
+    public string Present { get; set; } = "";
+    // 卡片形态的自动关闭秒数（0=常驻到点击），与提醒的 PopupTimeoutSeconds 同语义。
+    // 默认 5 而非 0：动作组里的进度提示常驻会堆满右下角，而提醒那边 0=常驻是因为它是「必须被看到」的投递。
+    public int PopupSeconds { get; set; } = 5;
     public OnYes OnYes { get; set; } = new();
     // text 步骤：往焦点窗口输入的字面文本
     public string Text { get; set; } = "";

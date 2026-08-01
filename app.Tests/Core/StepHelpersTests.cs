@@ -88,4 +88,35 @@ public class StepHelpersTests
     [InlineData(999999, 600)]
     public void ClampStartupDelay_bounds(int input, int expected)
         => Assert.Equal(expected, StepHelpers.ClampStartupDelay(input));
+
+    // —— MessageFormOf：Present="card" 压过一切；空值沿用旧推导（老配置行为不变） ——
+    [Fact] public void MsgForm_default_is_info()
+        => Assert.Equal(MessageForm.Info, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", Message = "hi" }));
+
+    [Fact] public void MsgForm_confirm_flag_gives_confirm()
+        => Assert.Equal(MessageForm.Confirm, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", Confirm = true }));
+
+    [Fact] public void MsgForm_onYes_gives_confirm()
+        => Assert.Equal(MessageForm.Confirm, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", OnYes = new OnYes { Type = "run", Target = "x.exe" } }));
+
+    [Fact] public void MsgForm_onYes_none_stays_info()
+        => Assert.Equal(MessageForm.Info, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", OnYes = new OnYes { Type = "none" } }));
+
+    [Fact] public void MsgForm_null_onYes_stays_info()
+        => Assert.Equal(MessageForm.Info, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", OnYes = null! }));
+
+    [Fact] public void MsgForm_card_wins_over_confirm()
+        => Assert.Equal(MessageForm.Card, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", Present = "card", Confirm = true }));
+
+    [Fact] public void MsgForm_card_wins_over_onYes()
+        => Assert.Equal(MessageForm.Card, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", Present = "card", OnYes = new OnYes { Type = "url", Target = "https://x" } }));
+
+    [Fact] public void MsgForm_unknown_present_falls_back_to_legacy()
+        => Assert.Equal(MessageForm.Info, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", Present = "bogus" }));
+
+    [Fact] public void New_step_defaults_popup_seconds_to_5()
+        => Assert.Equal(5, new LaunchStep().PopupSeconds);
+
+    [Fact] public void New_step_defaults_present_to_empty()
+        => Assert.Equal("", new LaunchStep().Present);
 }
