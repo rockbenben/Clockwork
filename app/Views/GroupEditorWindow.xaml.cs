@@ -132,7 +132,14 @@ public partial class GroupEditorWindow : Window
     // RunGroupAsync，同样要在关窗时收掉，不能让它变成孤儿。故意不复用 _tryRun：那个字段驱动的是
     // 「运行整组」按钮的文字/开关状态（Run ⇄ Stop），这里只是单步操作的副作用，不该让那颗按钮
     // 也跟着变成「停止」——两个闸各管各的运行，OnClosed 里一起收。
-    private RunCancel? _stepGroupRun;
+    //
+    // 用列表而不是单个字段：两个引用步骤指向不同的组时，先后点「运行这一步」是两次都该跑的合法操作
+    //（同一个组的重复触发另有 ActionGroupRunner._running 挡着，不必在这里再拦一道）。单字段会被后一次
+    // 覆盖，且先跑完的那次回调会无条件清空字段，把仍在跑的后一次的句柄一起抹掉——关窗就收不掉它，
+    // 正是本字段要防的孤儿运行。每次运行只摘掉自己那一个闸，互不干扰。
+    // 三处读写（点击、onDone、OnClosed）都在 UI 线程上——onDone 由 RunGroupAsync 经 Dispatcher 派发
+    //——故不加锁。
+    private readonly List<RunCancel> _stepGroupRuns = new();
 
     private void SRunStep_Click(object sender, RoutedEventArgs e)
     {
@@ -143,7 +150,13 @@ public partial class GroupEditorWindow : Window
         {
             // 引用步骤跑的是「已保存」的那份目标组——本编辑器里的未保存改动不属于它。
             var g = ActionGroupResolver.Resolve(_groups, s.GroupId);
-            if (g != null) _stepGroupRun = App.Instance?.RunGroupAsync(g, this, () => _stepGroupRun = null);
+            var app = App.Instance;
+            if (g == null || app == null) return;
+            // 闭包捕获的是局部变量本身：onDone 经 Dispatcher 派发，UI 线程要等本方法返回才轮得到它，
+            // 所以回调真正执行时 cancel 早已赋值、也已入列（与 _tryRun 的赋值竞态同一条理由）。
+            RunCancel? cancel = null;
+            cancel = app.RunGroupAsync(g, this, () => { if (cancel != null) _stepGroupRuns.Remove(cancel); });
+            _stepGroupRuns.Add(cancel);
             return;
         }
         App.Instance?.RunStepAsync(s, this);
@@ -175,12 +188,14 @@ public partial class GroupEditorWindow : Window
     }
 
     // 关窗即停：这次试跑归本编辑器所有，不能在窗口没了之后还在偷偷跑（用户以为「取消」了一切）。
-    // 两个闸都要收——「运行整组」的 _tryRun 与「运行这一步」命中嵌套组时的 _stepGroupRun 是各自独立
-    // 的运行，用户关窗时没有办法区分是哪一个还在跑，也不该被要求分清楚。
+    // 所有闸都要收——「运行整组」的 _tryRun 与「运行这一步」命中嵌套组时的每一次运行是各自独立的，
+    // 用户关窗时没有办法区分是哪一个还在跑，也不该被要求分清楚。
+    // 遍历副本：Request 只置位、不会同步回调（onDone 经 Dispatcher 派发，本方法返回后才可能跑），
+    // 复制是廉价的保险——免得日后有人把回调改成同步就地摘元素，把这里变成 InvalidOperationException。
     protected override void OnClosed(EventArgs e)
     {
         _tryRun?.Request();
-        _stepGroupRun?.Request();
+        foreach (var c in _stepGroupRuns.ToList()) c.Request();
         base.OnClosed(e);
     }
 
