@@ -69,6 +69,7 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 - **Window action** — by process name (**Pick…**, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys; slow apps can **wait up to N seconds for the window to appear**.
 - **System command** — show desktop / lock / turn off monitor / empty recycle bin / clear clipboard / open Settings / Task Manager / screenshot / sleep / hibernate / sign out / restart / shut down (the last three confirm first).
 - **Delay** — just wait N seconds before the next step.
+- **Comment** — a labelled divider. Never runs, costs nothing, and shows up in the run log so a long list reads in sections.
 - **Action group** — run a defined action group; its repeat count says how many times *this reference* fires (the group can also repeat internally — see **Action groups** below).
 
 > **Startup delay** (Settings tab, boot only): wait a fixed number of seconds after login so the "login storm" (disk/CPU contention from every autostart) passes before the list runs; a manual re-run is not affected. Raise it (0–600 s) if things start too early.
@@ -103,6 +104,8 @@ Bundle actions into a reusable group. **Add ▾** starts one from a **built-in t
 
 A **message** step is a confirmation gate: answering **No** aborts the rest of the group *and its remaining rounds*, and propagates outward to whichever group referenced it — decline once and you are done, even inside a sub-group looped ×N.
 
+A message step can also be shown as a **card** instead of a dialog: it slides into the corner, auto-closes after the seconds you set (0 = stays until clicked), and the group carries straight on. Cards are the only message form that also fires from the **startup list** — a dialog at boot would block the whole list, a card would not.
+
 > **Global hotkey** — in the group editor, click the hotkey box and press a shortcut (e.g. `Ctrl+Alt+F`) to run that group from anywhere, no menu needed. Esc cancels, Delete clears. Disabled groups release their combo; system-reserved combos (Alt+F4, Ctrl+Shift+Esc…) and combos already taken by another group or the panic hotkey are refused with a notice. **The hotkey is a toggle:** press it again while the group is still running to cancel that run — other groups and the startup list keep going (the panic hotkey is the one that stops everything). Only groups with a hotkey bound can be cancelled this way.
 
 ### Settings
@@ -114,6 +117,8 @@ A **message** step is a confirmation gate: answering **No** aborts the rest of t
 ## Tips
 
 - **Double-click a row to edit** it. When filling paths / processes / shortcuts / dates you don't have to type by hand: **Browse…**, **Pick…** (searchable process picker), **Capture**, and **Pick date**.
+- **Drag a row to reorder it** in the startup list and in the group editor's step list (the up/down buttons still work).
+- **Try it before you save** — the group editor has **▶ Run this step** and **▶ Run whole group**, both running what's currently on screen. The run button turns into **■ Stop** while it's going, and closing the editor stops it.
 - **Duplicate** (Scheduled tasks / Action groups tabs) clones the selected row right below it — quicker than rebuilding a near-identical one; a duplicated group is named "… (copy)".
 - **Deleting always asks first**, everywhere — list rows, steps inside the group editor, and system startup items.
 - Double-clicking `Clockwork.exe` only opens settings — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.

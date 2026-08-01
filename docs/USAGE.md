@@ -41,7 +41,7 @@ The most common need, "open my everyday apps at login":
 
 ## Startup list
 
-- An **ordered list of steps** run top-to-bottom at login. Add/remove, move up/down; **double-click a row to edit** it.
+- An **ordered list of steps** run top-to-bottom at login. Add/remove; **drag a row to reorder it**, or use the up/down buttons; **double-click a row to edit** it.
 - Each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times, waiting the post-step delay between each), and conditions (**only on certain weekdays / only before N o'clock**).
 - Selecting a step and clicking **Run** runs *just that step* immediately (ignoring its enabled state and time conditions — pure test); a tray toast reports the result.
 
@@ -56,6 +56,7 @@ The most common need, "open my everyday apps at login":
 | **Window action** | By process name (**Pick…**, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys. Slow apps can **wait up to N seconds for the window to appear** — acts the moment it shows, instead of a blind fixed delay. |
 | **System command** | Show desktop / lock (needs password to return) / turn off monitor (wakes on mouse move) / empty recycle bin / clear clipboard / open Windows Settings / open Task Manager / screenshot / sleep / hibernate / sign out / restart / shut down (the last three confirm first). |
 | **Delay** | Just wait N seconds before the next step; at the top of the list it delays the whole run. |
+| **Comment** | A labelled divider — pure text. Never runs and costs no execution budget, but is echoed into the run log so a long list reads in sections. Its editor shows only the name box (no delay, repeat, weekday, or before-N-o'clock fields). Rendered muted and italic in both the startup list and the group editor's step list. |
 | **Action group** | Run a defined action group; set a repeat count to loop the whole group. |
 
 ### Startup delay
@@ -115,8 +116,19 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
   - If the group is sitting on a **message** confirmation box, the box still needs dismissing, but the answer is discarded — clicking **Yes** no longer fires its On-Yes branch, and the group stops there.
   - If group A references group B and you press **B's** hotkey while B runs, **the whole run is cancelled** (A stops too) — stopping only B and letting A carry on would leave you with a half-finished state that is harder to clean up than not cancelling at all.
 - A **message** step can act as a confirmation gate — answering **No** aborts the rest of the group (e.g. "Did you log today's tasks?" before wrap-up).
+- **Presentation:** a message step shows as either **Dialog (blocks)** — the default, same as above — or **Card (non-blocking)**: it slides into the corner and **auto-closes** after the seconds you set (**0 = stays until clicked**), and the group carries straight on without waiting for an answer. Switching to card hides and clears the confirm (Yes/No) and On-Yes fields, since a card's only interaction is click-to-dismiss. Cards are also the only message form that fires from the **startup list** — a dialog at boot would block the whole list, so dialog-form message steps are silently skipped there.
+- Inside the group editor, **drag a step to reorder it** (the up/down buttons still work).
 - **Duplicate** clones the selected group as "… (copy)" — a quick base for a variant. The copy gets **no hotkey** (two groups can't share one), so assign a new one if you want it.
 - Deleting a group that is **referenced** (by a scheduled task's On-Yes / silent group, or an action-group step) tells you how many references there are and clears them along with it, so nothing is left pointing at a group that no longer exists.
+
+### Try it before you save
+
+The group editor has two run buttons that act on **whatever is currently in the editor**, not the last-saved version — so you can test a step you just tweaked without saving first.
+
+- **▶ Run This Step** runs just the selected row. If that row is itself an action-group step, it resolves and runs the referenced group as currently saved, not any unsaved edits made to that sub-group elsewhere.
+- **▶ Run Group** runs every step top to bottom, exactly like a real trigger — including delays, repeat counts, and weekday / before-N-o'clock conditions, so a weekday-only step really is skipped on the wrong day.
+
+While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; closing the group editor also stops the run. Confirmation dialogs (e.g. from a message step) pop up in front of the editor window instead of behind it.
 
 ## Loops
 
