@@ -181,6 +181,15 @@ public partial class StepEditorWindow : Window
                 if (r.Present == "card") { r.Confirm = false; r.OnYes = new OnYes(); }
                 else { r.Confirm = ConfirmChk.IsChecked == true; r.OnYes = new OnYes { Type = ComboVal(OnYesTypeCombo), Target = OnYesTargetBox.Text }; }
                 break;
+            case "comment":
+                // 同上一条原则：隐藏的控件不能只是「看不见」，值也得清零。DelayRow/NoteRow/CondBlock/RepeatRow
+                // 在 ShowPanelForKind 里对 comment 全藏了，但 r 的初始化器已经把 DelayBox/RepeatBox/Days/
+                // OnlyBeforeChk/NoteBox 的旧值原样塞了进去——把一条带星期条件的旧步骤改成注释后，这些趴在
+                // 结果里但编辑不到的字段会继续起作用：LaunchPlan.Build 拿 Days/OnlyBefore8 判满不满足，
+                // 纯展示的分段标签就在不满足的那天从启动日志里静默消失；StepSummary 也会照旧给它挂上
+                // 不该有的 ×N / 星期后缀。一律清零，不留旧值。
+                r.DelayMs = 0; r.Repeat = 0; r.Days = new(); r.OnlyBefore8 = false; r.Note = "";
+                break;
         }
 
         Result = r;
