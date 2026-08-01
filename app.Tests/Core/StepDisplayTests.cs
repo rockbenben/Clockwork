@@ -24,4 +24,9 @@ public class StepDisplayTests
 
     [Fact] public void Summary_message_card_is_prefixed()
         => Assert.Equal("卡片提示：喝水", StepDisplay.StepSummary(new LaunchStep { Kind = "message", Message = "喝水", Present = "card" }));
+
+    [Fact] public void KindLabel_comment() => Assert.Equal("注释", StepDisplay.StepKindLabel("comment"));
+    [Fact] public void Summary_comment_is_label()
+        => Assert.Equal("=== 早晨 ===", StepDisplay.StepSummary(new LaunchStep { Kind = "comment", Label = "=== 早晨 ===" }));
+    [Fact] public void StepKinds_contains_comment() => Assert.Contains("comment", StepDisplay.StepKinds);
 }

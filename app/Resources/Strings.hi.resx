@@ -76,6 +76,7 @@
   <data name="Kind_message" xml:space="preserve"><value>संदेश</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>देरी</value></data>
   <data name="Kind_text" xml:space="preserve"><value>पाठ भेजें</value></data>
+  <data name="Kind_comment" xml:space="preserve"><value>टिप्पणी</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>डेस्कटॉप दिखाएँ</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>स्क्रीन लॉक करें (लौटने पर पासवर्ड)</value></data>

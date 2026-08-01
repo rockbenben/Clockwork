@@ -76,6 +76,7 @@
   <data name="Kind_message" xml:space="preserve"><value>ข้อความ</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>หน่วงเวลา</value></data>
   <data name="Kind_text" xml:space="preserve"><value>ส่งข้อความ</value></data>
+  <data name="Kind_comment" xml:space="preserve"><value>หมายเหตุ</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>แสดงเดสก์ท็อป</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>ล็อกหน้าจอ (ใส่รหัสเมื่อกลับมา)</value></data>

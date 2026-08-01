@@ -79,6 +79,7 @@
   <data name="Kind_message" xml:space="preserve"><value>消息</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>延时</value></data>
   <data name="Kind_text" xml:space="preserve"><value>发送文本</value></data>
+  <data name="Kind_comment" xml:space="preserve"><value>注释</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>显示桌面</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>锁屏（回来需输密码）</value></data>

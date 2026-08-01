@@ -76,6 +76,7 @@
   <data name="Kind_message" xml:space="preserve"><value>Thông báo</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Độ trễ</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Gửi văn bản</value></data>
+  <data name="Kind_comment" xml:space="preserve"><value>Ghi chú</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>Hiện màn hình nền</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>Khóa màn hình (nhập mật khẩu khi trở lại)</value></data>

@@ -561,4 +561,34 @@ public class ActionGroupRunnerTests
         finally { StopSignal.Clear(); }
         Assert.Equal(new[] { "1" }, ran.ToArray());
     }
+
+    [Fact]
+    public void Comment_step_never_runs()
+    {
+        var ran = new List<string>();
+        var g = new ActionGroup { Id = "gcm", Steps = new()
+        {
+            new LaunchStep { Kind = "comment", Label = "=== 第一段 ===" },
+            new LaunchStep { Kind = "volume", Action = "mute", Label = "real" },
+        } };
+        ActionGroupRunner.RunGroup(g, Deps(ran));
+        Assert.Equal(new[] { "real" }, ran.ToArray());
+    }
+
+    [Fact]
+    public void Comment_step_consumes_no_budget()
+    {
+        var ran = new List<string>();
+        var budget = new RunBudget();
+        var g = new ActionGroup { Id = "gcb", Steps = new()
+        {
+            new LaunchStep { Kind = "comment", Label = "note" },
+            new LaunchStep { Kind = "comment", Label = "note2" },
+            new LaunchStep { Kind = "volume", Action = "mute", Label = "real" },
+        } };
+        var deps = new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => ran.Add(s.Label), Budget = budget };
+        ActionGroupRunner.RunGroup(g, deps);
+        Assert.Equal(new[] { "real" }, ran.ToArray());
+        Assert.False(budget.Exhausted);
+    }
 }

@@ -76,6 +76,7 @@
   <data name="Kind_message" xml:space="preserve"><value>Nachricht</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Verzögerung</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Text senden</value></data>
+  <data name="Kind_comment" xml:space="preserve"><value>Kommentar</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>Desktop anzeigen</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>Bildschirm sperren (Passwort bei Rückkehr)</value></data>
