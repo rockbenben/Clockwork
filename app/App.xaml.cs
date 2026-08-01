@@ -632,8 +632,10 @@ public partial class App : System.Windows.Application
         if (step.Kind == "message")
         {
             if (step.Speak) ReminderActions.Speak(step.Message);
+            // owner 必须继续往下传：On-Yes 组若不传，闸门弹在编辑器前面、组本身抛到主窗口后面，
+            // z-order 又变回这整个功能要修的那个老毛病（编辑器看着关掉了，其实主窗后面藏着一个提问框）。
             if (ShowGroupMessage(step, owner) == MsgResult.Yes)
-                ReminderActions.RunOnYes(step.OnYes, _config.ActionGroups, g => RunGroupAsync(g), WarnToast);
+                ReminderActions.RunOnYes(step.OnYes, _config.ActionGroups, g => RunGroupAsync(g, owner), WarnToast);
             return;
         }
         // 单飞守卫（旧版同款）：气泡回执要几秒才出，急着连点「运行」会把同一步跑两遍——上一次没完就忽略。
@@ -654,15 +656,40 @@ public partial class App : System.Windows.Application
     // 「运行整组」/提醒静默组/onYes 组/组编辑器试跑：后台跑动作组。返回本次运行的取消闸——
     // 组编辑器据此把「试跑」按钮就地变「停止」，并在关窗时收掉这次运行（不留孤儿）。
     // onDone：跑完（或被取消/异常）后在 UI 线程回调一次，用于把按钮翻回去。
+    //
+    // 竞态窗口：本方法把 Task 派下去就返回，EnterTopLevel 的登记要等后台线程真正跑到那一行才发生——
+    // 派发与登记之间有个空窗，不是「几微秒」那种可以忽略的窗口（ToggleGroupByHotkey 的连按去重正是
+    // 撞在这个窗口上，那边有更完整的说明）。落进空窗期间查「是否已顶层在跑」，看到的还是登记前的状态。
     public RunCancel RunGroupAsync(ActionGroup group, Window? owner = null, Action? onDone = null)
     {
+        // 快照与 deps 都在调用线程（UI）上先建好，不把活对象带进后台：
+        //   · SnapshotForRun 复制步骤列表——后台 foreach 组步骤时，UI 线程若在改同一个组（删除守卫的
+        //     联动清理会就地改其他组的 Steps），背景枚举撞见活列表被改写会抛「集合已修改」。这条注释
+        //     曾经只是给「万一手快」的历史兜底；组编辑器上线试跑（本方法的 owner/onDone 参数正是为它加的）
+        //     之后，它是第一个能在运行进行中还继续编辑同一份步骤列表的调用方——背景枚举撞见活列表被
+        //     UI 线程改写从「理论风险」变成「必然发生」，这份注释因此从历史说明升级成不可删的强制约束。
+        //   · BuildGroupDeps 同理在 UI 线程取 _config.ActionGroups 的快照，道理一样（见其内部注释）。
         var snap = group.SnapshotForRun();
         var deps = BuildGroupDeps(owner);
         Task.Run(() =>
         {
-            _runGate.Begin();
-            bool owned = ActionGroupRunner.EnterTopLevel(snap.Id, deps.Cancel);
-            try { _ = ActionGroupRunner.RunGroup(snap, deps); }
+            // _runGate.Begin() 放进 try：它（含广播 ActiveChanged 的订阅方）与 EnterTopLevel 理论上都
+            // 可能抛。若抛在 try 外，finally 不会跑，_runGate.End() 和 onDone 都会被跳过——编辑器的
+            // 「试跑」按钮永远卡在「停止」，主窗口的急停按钮也永远显示着。挪进来后无论哪一步出岔子，
+            // 配对的收尾都保证会跑。owned 先置 false：EnterTopLevel 没跑到或抛出时，finally 不会误调
+            // ExitTopLevel 去清一个从未登记过的顶层运行。
+            bool owned = false;
+            try
+            {
+                _runGate.Begin();
+                // 只有这一层登记为「顶层运行」——即热键/试跑停止按钮能取消的那一次。嵌套子组与它共用
+                // 同一个闸但不登记，否则子组的热键/引用会把整条链（含毫不相干的父组）一起掐掉。
+                owned = ActionGroupRunner.EnterTopLevel(snap.Id, deps.Cancel);
+                // 顶层入口：结局有意丢弃。Aborted 是用户自己在确认框上点的「否」（他已经知道了，再弹一张
+                // 卡是噪音）；Skipped 是同组已在跑的单飞去重——热键连按/循环任务撞上上一轮时本就该静默忽略。
+                // 嵌套引用那层不同：那里的 Skipped 意味着配置有环，必须发声（见 RunGroupStep）。
+                _ = ActionGroupRunner.RunGroup(snap, deps);
+            }
             catch (Exception ex) { WarnToast(Lf("Mark_Exception", ex.Message)); }
             finally
             {
