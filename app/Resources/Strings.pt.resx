@@ -44,6 +44,8 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ Descer</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Executar este passo</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Executar grupo</value></data>
+  <data name="Btn_TryStep" xml:space="preserve"><value>▶ Testar este passo</value></data>
+  <data name="Btn_TryGroup" xml:space="preserve"><value>▶ Testar o grupo</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ Parar</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ Prévia</value></data>
 

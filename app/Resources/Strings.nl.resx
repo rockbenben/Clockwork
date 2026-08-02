@@ -44,6 +44,8 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ Omlaag</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Deze stap uitvoeren</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Groep uitvoeren</value></data>
+  <data name="Btn_TryStep" xml:space="preserve"><value>▶ Stap testen</value></data>
+  <data name="Btn_TryGroup" xml:space="preserve"><value>▶ Groep testen</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ Stoppen</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ Voorbeeld</value></data>
 

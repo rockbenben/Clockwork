@@ -91,8 +91,8 @@
                 <!-- 两个试跑按钮保持纵向、各占一行。试过并排两列（照抄上移/下移的写法）：中文标签就已经
                      折成「▶ 运行 / 这一步」两行，德语俄语只会更长——折行后单个按钮反而比纵向两行更高，
                      可读性和这一列其余单行按钮的节奏也全乱了。这里的约束不是竖向空间，是标签长度。 -->
-                <Button x:Name="SRunStep" Content="{loc:Loc Btn_RunStep}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="SRunStep_Click"/>
-                <Button x:Name="SRunGroup" Content="{loc:Loc Btn_RunGroup}" Style="{StaticResource RunButton}" Margin="0,4,0,2" Click="SRunGroup_Click"/>
+                <Button x:Name="SRunStep" Content="{loc:Loc Btn_TryStep}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="SRunStep_Click"/>
+                <Button x:Name="SRunGroup" Content="{loc:Loc Btn_TryGroup}" Style="{StaticResource RunButton}" Margin="0,4,0,2" Click="SRunGroup_Click"/>
             </StackPanel>
         </Grid>
 

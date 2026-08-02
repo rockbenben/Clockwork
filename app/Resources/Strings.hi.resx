@@ -44,6 +44,8 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ नीचे</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ यह चरण चलाएँ</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ समूह चलाएँ</value></data>
+  <data name="Btn_TryStep" xml:space="preserve"><value>▶ यह चरण आज़माएँ</value></data>
+  <data name="Btn_TryGroup" xml:space="preserve"><value>▶ पूरा समूह आज़माएँ</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ रोकें</value></data>
   <data name="Btn_Preview" xml:space="preserve"><value>▶ पूर्वावलोकन</value></data>
 
