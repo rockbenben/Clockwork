@@ -87,7 +87,6 @@ public static class StepRunner
             case "text": return WindowManager.SendText(s.Text, s.Process, cancel);
             case "delay": return ActionResult.Empty;   // 纯延时：动作由步尾统一 delayMs 完成
             case "message": return ActionResult.Empty;  // 消息在启动/非交互路径静默跳过（交互「运行这一步」由 App.RunStepAsync 弹窗）；不报未知类型
-            case "comment": return ActionResult.Empty;   // 注释永不执行；兜底防走到 default 报「未知类型」
             default: return ActionResult.Warn(Strings.Lf("Warn_UnknownKind", s.Kind));
         }
     }

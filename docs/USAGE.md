@@ -56,7 +56,6 @@ The most common need, "open my everyday apps at login":
 | **Window action** | By process name (**Pick…**, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys. Slow apps can **wait up to N seconds for the window to appear** — acts the moment it shows, instead of a blind fixed delay. |
 | **System command** | Show desktop / lock (needs password to return) / turn off monitor (wakes on mouse move) / empty recycle bin / clear clipboard / open Windows Settings / open Task Manager / screenshot / sleep / hibernate / sign out / restart / shut down (the last three confirm first). |
 | **Delay** | Just wait N seconds before the next step; at the top of the list it delays the whole run. |
-| **Comment** | A labelled divider — pure text. Never runs and costs no execution budget, but is echoed into the run log so a long list reads in sections. Its editor shows only the name box (no delay, repeat, weekday, or before-N-o'clock fields). Rendered muted and italic in both the startup list and the group editor's step list. |
 | **Action group** | Run a defined action group; set a repeat count to loop the whole group. |
 
 ### Startup delay

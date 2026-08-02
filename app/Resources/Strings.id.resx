@@ -79,7 +79,6 @@
   <data name="Kind_message" xml:space="preserve"><value>Pesan</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Jeda</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Kirim teks</value></data>
-  <data name="Kind_comment" xml:space="preserve"><value>Komentar</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>Tampilkan desktop</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>Kunci layar (kata sandi saat kembali)</value></data>

@@ -15,7 +15,7 @@ public static class StepDisplay
 
     // 步骤类型 id 的规范顺序（启动清单「新增▾」菜单 + 步骤编辑器共用；标签一律经 StepKindLabel 本地化）。
     public static readonly string[] StepKinds =
-        { "app", "keys", "text", "volume", "window", "system", "group", "delay", "message", "comment" };
+        { "app", "keys", "text", "volume", "window", "system", "group", "delay", "message" };
 
     // 已知键则取译文，否则原样返回（未知 kind/command）。
     private static string OrRaw(string key, string raw)
@@ -68,7 +68,6 @@ public static class StepDisplay
                 ? Strings.Lf("Sum_MsgCard", NoNewline(s.Message))
                 : NoNewline(s.Message),
             "text" => Strings.Lf("Sum_Text", StepHelpers.Ellipsis(NoNewline(s.Text))),
-            "comment" => s.Label,
             _ => s.Kind,
         };
         var result = baseText;

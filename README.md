@@ -69,7 +69,6 @@ An **ordered list of steps** run top-to-bottom at login. Click **Add ▾** to pi
 - **Window action** — by process name (**Pick…**, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys; slow apps can **wait up to N seconds for the window to appear**.
 - **System command** — show desktop / lock / turn off monitor / empty recycle bin / clear clipboard / open Settings / Task Manager / screenshot / sleep / hibernate / sign out / restart / shut down (the last three confirm first).
 - **Delay** — just wait N seconds before the next step.
-- **Comment** — a labelled divider. Never runs, costs nothing, and shows up in the run log so a long list reads in sections.
 - **Action group** — run a defined action group; its repeat count says how many times *this reference* fires (the group can also repeat internally — see **Action groups** below).
 
 > **Startup delay** (Settings tab, boot only): wait a fixed number of seconds after login so the "login storm" (disk/CPU contention from every autostart) passes before the list runs; a manual re-run is not affected. Raise it (0–600 s) if things start too early.

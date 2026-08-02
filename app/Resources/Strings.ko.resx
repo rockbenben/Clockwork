@@ -79,7 +79,6 @@
   <data name="Kind_message" xml:space="preserve"><value>메시지</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>지연</value></data>
   <data name="Kind_text" xml:space="preserve"><value>텍스트 전송</value></data>
-  <data name="Kind_comment" xml:space="preserve"><value>주석</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>바탕 화면 표시</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>화면 잠금(복귀 시 암호 필요)</value></data>

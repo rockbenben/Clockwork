@@ -101,7 +101,6 @@ public static class LaunchSequence
                     if (!stopped && StopSignal.IsRequested) stopped = true;
                     if (stopped) break;
                     if (!sub.Enabled) continue;
-                    if (sub.Kind == "comment") { lines.Add($"[{Ts(now)}] {pad}— {StepDisplay.StepSummary(sub)}"); continue; }
                     if (!StepCondition.IsSatisfied(sub, hour, isoDay, nowDt.Minute)) continue;   // 组内步骤同样遵守时间条件
                     // 启动路径只跳过模态 message（开机时没人在座，弹是/否框会把整条清单挂住）。
                     // 卡片形态不拦路，照常执行——「早晨例程已就绪」这类提示正是它的主场。
@@ -141,9 +140,6 @@ public static class LaunchSequence
         {
             if (!stopped && StopSignal.IsRequested) stopped = true;
             if (stopped) break;
-
-            // 注释：不执行、不计步、不扣预算，但回显进日志——长清单的运行日志正好靠它分段。
-            if (step.Kind == "comment") { lines.Add($"[{Ts(now)}] — {StepDisplay.StepSummary(step)}"); continue; }
 
             if (step.Kind == "group")
             {

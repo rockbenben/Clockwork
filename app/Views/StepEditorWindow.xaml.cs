@@ -107,10 +107,7 @@ public partial class StepEditorWindow : Window
         Vis(PanApp, kind == "app"); Vis(PanKeys, kind == "keys"); Vis(PanVolume, kind == "volume");
         Vis(PanWindow, kind == "window"); Vis(PanSystem, kind == "system"); Vis(PanText, kind == "text");
         Vis(PanMessage, kind == "message"); Vis(PanGroup, kind == "group");
-        Vis(RepeatRow, kind != "message" && kind != "comment");   // 消息/注释步骤不循环
-        // 注释只是分段标签，永不执行：延时 / 用途说明 / 星期 / 仅 N 点前对它全无意义，整块藏掉。
-        bool comment = kind == "comment";
-        Vis(DelayRow, !comment); Vis(NoteRow, !comment); Vis(CondBlock, !comment);
+        Vis(RepeatRow, kind != "message");   // 消息步骤不循环
     }
 
     private void KindCombo_Changed(object sender, SelectionChangedEventArgs e) => ShowPanelForKind(ComboVal(KindCombo));
@@ -180,15 +177,6 @@ public partial class StepEditorWindow : Window
                 // 卡片形态清掉确认/动作：留着会在 json 里躺一份点不到的配置，改回对话框时又悄悄复活。
                 if (r.Present == "card") { r.Confirm = false; r.OnYes = new OnYes(); }
                 else { r.Confirm = ConfirmChk.IsChecked == true; r.OnYes = new OnYes { Type = ComboVal(OnYesTypeCombo), Target = OnYesTargetBox.Text }; }
-                break;
-            case "comment":
-                // 同上一条原则：隐藏的控件不能只是「看不见」，值也得清零。DelayRow/NoteRow/CondBlock/RepeatRow
-                // 在 ShowPanelForKind 里对 comment 全藏了，但 r 的初始化器已经把 DelayBox/RepeatBox/Days/
-                // OnlyBeforeChk/NoteBox 的旧值原样塞了进去——把一条带星期条件的旧步骤改成注释后，这些趴在
-                // 结果里但编辑不到的字段会继续起作用：LaunchPlan.Build 拿 Days/OnlyBefore8 判满不满足，
-                // 纯展示的分段标签就在不满足的那天从启动日志里静默消失；StepSummary 也会照旧给它挂上
-                // 不该有的 ×N / 星期后缀。一律清零，不留旧值。
-                r.DelayMs = 0; r.Repeat = 0; r.Days = new(); r.OnlyBefore8 = false; r.Note = "";
                 break;
         }
 

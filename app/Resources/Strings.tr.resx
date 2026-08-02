@@ -79,7 +79,6 @@
   <data name="Kind_message" xml:space="preserve"><value>Bildirim</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Gecikme</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Metin gönder</value></data>
-  <data name="Kind_comment" xml:space="preserve"><value>Yorum</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>Masaüstünü göster</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>Ekranı kilitle (dönüşte parola gerekir)</value></data>

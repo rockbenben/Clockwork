@@ -239,31 +239,4 @@ public class LaunchSequenceTests
         Assert.Equal(1, r.Summary.Total);
     }
 
-    [Fact]
-    public void Comment_logged_but_not_counted_at_top_level()
-    {
-        var c = new RootConfig { LaunchSteps = new()
-        {
-            new LaunchStep { Kind = "comment", Label = "=== 早晨 ===" },
-            new LaunchStep { Kind = "app", Label = "a" },
-        } };
-        var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
-        Assert.Equal(1, r.Summary.Total);                                  // 注释不计步
-        Assert.Equal(0, r.Summary.Fail);
-        Assert.Equal(2, r.LogLines.Count);                                 // 但回显进日志
-        Assert.Contains("=== 早晨 ===", r.LogLines[0]);
-    }
-
-    [Fact]
-    public void Comment_skipped_inside_group_expansion()
-    {
-        var g = new ActionGroup { Id = "gcx", Name = "组", Steps = new()
-        {
-            new LaunchStep { Kind = "comment", Label = "分段" },
-            new LaunchStep { Kind = "volume", Action = "mute" },
-        } };
-        var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "gcx" } }, ActionGroups = new() { g } };
-        var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
-        Assert.Equal(1, r.Summary.Total);
-    }
 }

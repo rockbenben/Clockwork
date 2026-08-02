@@ -111,7 +111,6 @@ public static class ActionGroupRunner
                 {
                     if (stopped || deps.Cancel.IsStopped || deps.Budget.Exhausted) { stopped = true; break; }
                     if (!step.Enabled) continue;
-                    if (step.Kind == "comment") continue;   // 注释只是分段标签，不执行也不占预算（查在 TryConsume 之前）
                     if (!StepCondition.IsSatisfied(step, hour, iso, now.Minute)) continue;   // 组内步骤同样遵守时间条件（分钟级）
 
                     if (step.Kind == "message")

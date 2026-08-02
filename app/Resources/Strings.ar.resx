@@ -79,7 +79,6 @@
   <data name="Kind_message" xml:space="preserve"><value>رسالة</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>تأخير</value></data>
   <data name="Kind_text" xml:space="preserve"><value>إرسال نص</value></data>
-  <data name="Kind_comment" xml:space="preserve"><value>تعليق</value></data>
 
   <data name="Sys_showDesktop" xml:space="preserve"><value>إظهار سطح المكتب</value></data>
   <data name="Sys_lockScreen" xml:space="preserve"><value>قفل الشاشة (كلمة مرور عند العودة)</value></data>

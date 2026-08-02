@@ -79,25 +79,23 @@
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Group}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="GroupCombo" Width="240" Height="28"/></StackPanel>
                 </StackPanel>
 
-                <StackPanel x:Name="DelayRow" Orientation="Horizontal" Margin="0,8,0,3"><TextBlock Text="{loc:Loc Ed_DelayMs}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="DelayBox" Width="120" Height="28"/></StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,3"><TextBlock Text="{loc:Loc Ed_DelayMs}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="DelayBox" Width="120" Height="28"/></StackPanel>
                 <StackPanel x:Name="RepeatRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Repeat}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="RepeatBox" Width="120" Height="28"/></StackPanel>
-                <StackPanel x:Name="NoteRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Note}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="NoteBox" Width="380" Height="28"/></StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Note}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="NoteBox" Width="380" Height="28"/></StackPanel>
 
                 <!-- 分隔线：以下是「什么时候才执行」的条件块，整块贴左缘、不进上面的标签列。
                      没有这条线时，它只是「唯一一处对不齐的控件」；有了线，左缘对齐就读作换了一段。 -->
-                <StackPanel x:Name="CondBlock">
-                    <Border Height="1" Background="{StaticResource BrushLine}" Margin="0,16,0,0"/>
-                    <TextBlock Text="{loc:Loc Ed_DaysHeader}" Margin="0,12,0,6" FontSize="12" Foreground="{StaticResource BrushMuted}"/>
-                    <StackPanel x:Name="DaysPanel" Orientation="Horizontal" Margin="0,0,0,4">
-                        <CheckBox x:Name="Day1" Content="{loc:Loc Day_1}" Margin="0,0,10,0"/><CheckBox x:Name="Day2" Content="{loc:Loc Day_2}" Margin="0,0,10,0"/>
-                        <CheckBox x:Name="Day3" Content="{loc:Loc Day_3}" Margin="0,0,10,0"/><CheckBox x:Name="Day4" Content="{loc:Loc Day_4}" Margin="0,0,10,0"/>
-                        <CheckBox x:Name="Day5" Content="{loc:Loc Day_5}" Margin="0,0,10,0"/><CheckBox x:Name="Day6" Content="{loc:Loc Day_6}" Margin="0,0,10,0"/><CheckBox x:Name="Day7" Content="{loc:Loc Day_7}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3">
-                        <CheckBox x:Name="OnlyBeforeChk" Content="{loc:Loc Ed_OnlyBefore}" VerticalAlignment="Center"/>
-                        <TextBox x:Name="BeforeTimeBox" Width="60" Height="26" Margin="6,0" ToolTip="{loc:Loc Ed_BeforeTimeHint}"/>
-                        <TextBlock Text="{loc:Loc Ed_HourBefore}" VerticalAlignment="Center"/>
-                    </StackPanel>
+                <Border Height="1" Background="{StaticResource BrushLine}" Margin="0,16,0,0"/>
+                <TextBlock Text="{loc:Loc Ed_DaysHeader}" Margin="0,12,0,6" FontSize="12" Foreground="{StaticResource BrushMuted}"/>
+                <StackPanel x:Name="DaysPanel" Orientation="Horizontal" Margin="0,0,0,4">
+                    <CheckBox x:Name="Day1" Content="{loc:Loc Day_1}" Margin="0,0,10,0"/><CheckBox x:Name="Day2" Content="{loc:Loc Day_2}" Margin="0,0,10,0"/>
+                    <CheckBox x:Name="Day3" Content="{loc:Loc Day_3}" Margin="0,0,10,0"/><CheckBox x:Name="Day4" Content="{loc:Loc Day_4}" Margin="0,0,10,0"/>
+                    <CheckBox x:Name="Day5" Content="{loc:Loc Day_5}" Margin="0,0,10,0"/><CheckBox x:Name="Day6" Content="{loc:Loc Day_6}" Margin="0,0,10,0"/><CheckBox x:Name="Day7" Content="{loc:Loc Day_7}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,3">
+                    <CheckBox x:Name="OnlyBeforeChk" Content="{loc:Loc Ed_OnlyBefore}" VerticalAlignment="Center"/>
+                    <TextBox x:Name="BeforeTimeBox" Width="60" Height="26" Margin="6,0" ToolTip="{loc:Loc Ed_BeforeTimeHint}"/>
+                    <TextBlock Text="{loc:Loc Ed_HourBefore}" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
