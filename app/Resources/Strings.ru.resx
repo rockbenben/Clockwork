@@ -45,7 +45,7 @@
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Выполнить этот шаг</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Выполнить группу</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ Стоп</value></data>
-  <data name="Btn_RunReminder" xml:space="preserve"><value>▶ Выполнить эту задачу</value></data>
+  <data name="Btn_Run" xml:space="preserve"><value>▶ Выполнить</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>Задержка запуска (с)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Запускать свёрнутым в трей</value></data>

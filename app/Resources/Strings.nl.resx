@@ -45,7 +45,7 @@
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Deze stap uitvoeren</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Groep uitvoeren</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ Stoppen</value></data>
-  <data name="Btn_RunReminder" xml:space="preserve"><value>▶ Deze taak uitvoeren</value></data>
+  <data name="Btn_Run" xml:space="preserve"><value>▶ Uitvoeren</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>Opstartvertraging (s)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Geminimaliseerd naar systeemvak starten</value></data>

@@ -45,7 +45,7 @@
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Jalankan langkah ini</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Jalankan grup</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ Hentikan</value></data>
-  <data name="Btn_RunReminder" xml:space="preserve"><value>▶ Jalankan tugas ini</value></data>
+  <data name="Btn_Run" xml:space="preserve"><value>▶ Jalankan</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>Jeda startup (dtk)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Mulai terminimalkan ke baki</value></data>
