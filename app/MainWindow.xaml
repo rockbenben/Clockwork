@@ -107,7 +107,7 @@
                         <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                         <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <DataGrid x:Name="GridRemind" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
-                                  CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridRemind_DoubleClick">
+                                  CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridRemind_DoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>
@@ -153,7 +153,7 @@
                         <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                         <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <DataGrid x:Name="GridGroup" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
-                                  CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridGroup_DoubleClick">
+                                  CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridGroup_DoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>

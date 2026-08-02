@@ -50,10 +50,12 @@ public partial class MainWindow : Window
         _reminders = new ReminderListVm(config, save, migrateReminderState);
         GridRemind.ItemsSource = _reminders.Rows;
         GridRemind.SelectionChanged += (s, e) => _reminders.SelectedIndex = GridRemind.SelectedIndex;
+        Views.DataGridReorder.Attach(GridRemind, (from, to) => { _reminders.MoveTo(from, to); SyncSel(GridRemind, _reminders); });
 
         _groups = new GroupListVm(config, save);
         GridGroup.ItemsSource = _groups.Rows;
         GridGroup.SelectionChanged += (s, e) => _groups.SelectedIndex = GridGroup.SelectedIndex;
+        Views.DataGridReorder.Attach(GridGroup, (from, to) => { _groups.MoveTo(from, to); SyncSel(GridGroup, _groups); });
 
         _system = new SystemStartupVm(SystemStartupReader.SetItemEnabled, ReportSystemMsg, PromptRelaunchAdmin);
         GridSystem.ItemsSource = _system.Rows;
