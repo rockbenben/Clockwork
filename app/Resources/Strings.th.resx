@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>งานตามกำหนดเวลา</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
   <data name="Tab_System" xml:space="preserve"><value>การเริ่มต้นของระบบ</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>ทำงานจากบนลงล่างเมื่อเริ่มต้น · แต่ละขั้นรองรับการหน่วงหลังจากนั้น จำนวนรอบ และเงื่อนไข (วันในสัปดาห์ / ก่อน N นาฬิกา)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>ทำงานจากบนลงล่างเมื่อเริ่มระบบ · ลากแถวเพื่อจัดลำดับใหม่</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>แสดงป๊อปอัปเตือนหรือรันกลุ่มการทำงานแบบเงียบตามกำหนดเวลา · รองรับการรันซ้ำและรันครั้งเดียว · เมื่อกด «ใช่» สามารถเรียกโปรแกรม / เปิด URL / รันกลุ่มการทำงานได้</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่มแล้วสั่งด้วยแตะเดียวจากถาด / รายการเริ่มต้น / การเตือน</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(ว่าง)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>แก้ไขกลุ่มการทำงาน</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>กลุ่มกำหนดเฉพาะการทำงาน; สั่งได้จากรายการเริ่มต้นหรือการเตือน</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>กลุ่มจะไม่ทำงานเอง — สั่งจากเมนูถาดระบบ คีย์ลัดส่วนกลาง ขั้นตอน "กลุ่มการกระทำ" ในรายการเริ่มต้น หรืองานตามเวลา</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>โปรดกรอกชื่อกลุ่ม</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>แก้ไขงานตามกำหนดเวลา</value></data>

@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Geplande taken</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Actiegroepen</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Systeemopstart</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Draait van boven naar beneden bij opstart · elke stap ondersteunt vertraging erna, aantal herhalingen en voorwaarden (weekdag / vóór N uur)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Loopt bij het opstarten van boven naar beneden · sleep een rij om te herordenen</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Toont een melding of voert stil een actiegroep uit op het geplande tijdstip · ondersteunt herhaalde uitvoering en eenmalige uitvoering · bij «Ja» kan een programma starten / een URL openen / een actiegroep uitvoeren</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundel een reeks acties in een groep en start met één tik vanuit systeemvak / opstartlijst / herinnering</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(leeg)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Actiegroep bewerken</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Een groep definieert alleen acties; wordt geactiveerd vanuit Opstartlijst of Herinneringen.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Een groep start nooit vanzelf — start hem via het systeemvakmenu, een globale sneltoets, een Actiegroep-stap in de opstartlijst of een geplande taak.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Voer een groepsnaam in.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Geplande taak bewerken</value></data>

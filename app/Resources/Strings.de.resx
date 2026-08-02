@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Geplante Aufgaben</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Aktionsgruppen</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Systemautostart</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Läuft beim Start von oben nach unten · jeder Schritt unterstützt Verzögerung danach, Wiederholungen und Bedingungen (Wochentag / vor N Uhr)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Läuft beim Start von oben nach unten · Zeile ziehen zum Umsortieren</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Zeigt zur Zeit ein Popup oder führt eine Aktionsgruppe still aus · unterstützt wiederkehrende Läufe und Einmalausführung · bei „Ja“ Programm starten / URL öffnen / Aktionsgruppe ausführen</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bündeln Sie mehrere Aktionen zu einer Gruppe und lösen Sie sie per Klick aus (Infobereich / Startliste / Erinnerungen)</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(leer)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Aktionsgruppe bearbeiten</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Eine Gruppe definiert nur Aktionen; lösen Sie sie über die Startliste oder Erinnerungen aus.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Eine Gruppe läuft nie von selbst — lösen Sie sie über das Tray-Menü, ein globales Tastenkürzel, einen Aktionsgruppen-Schritt in der Startliste oder eine geplante Aufgabe aus.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Bitte einen Gruppennamen eingeben.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Geplante Aufgabe bearbeiten</value></data>

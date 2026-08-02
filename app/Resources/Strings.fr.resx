@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tâches planifiées</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Groupes d'actions</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Démarrage système</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>S'exécute de haut en bas au démarrage · chaque étape gère un délai après, un nombre de répétitions et des conditions jour de semaine / avant N h</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>S'exécute de haut en bas au démarrage · faites glisser une ligne pour réordonner</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Affiche une alerte ou exécute un groupe d'actions en silence à l'heure prévue · prend en charge l'exécution périodique et l'exécution unique · sur « Oui » peut lancer un programme, ouvrir une URL ou exécuter un groupe d'actions</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Regroupez une série d'actions et déclenchez-les en un clic depuis la zone de notification / la liste de démarrage / les rappels</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(vide)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Modifier le groupe d'actions</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Un groupe ne définit que des actions ; déclenchez-le depuis la Liste de démarrage ou les Rappels.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Un groupe ne se lance jamais tout seul : déclenchez-le depuis le menu de la zone de notification, un raccourci global, une étape Groupe d'actions de la liste de démarrage ou une tâche planifiée.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Veuillez saisir un nom de groupe.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Modifier la tâche planifiée</value></data>

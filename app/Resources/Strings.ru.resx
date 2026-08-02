@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Задачи по расписанию</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Группы действий</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Автозагрузка системы</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Выполняется сверху вниз при запуске · каждый шаг поддерживает задержку после, повторы и условия (день недели / до N часов)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Выполняется сверху вниз при запуске · перетащите строку, чтобы изменить порядок</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Показывает окно или тихо запускает группу действий по расписанию · поддерживает периодический и однократный запуск · при «Да» можно запустить программу, открыть URL или группу действий</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Объедините ряд действий в группу и запускайте одним кликом из трея / списка запуска / напоминаний</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(пусто)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Изменить группу действий</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Группа только определяет действия; запускайте её из Списка запуска или Напоминаний.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Группа никогда не запускается сама — запустите её из меню в трее, глобальной горячей клавишей, шагом «Группа действий» в списке запуска или запланированной задачей.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Введите имя группы.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Изменить задачу по расписанию</value></data>

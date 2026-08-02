@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>शेड्यूल किए गए कार्य</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>क्रिया समूह</value></data>
   <data name="Tab_System" xml:space="preserve"><value>सिस्टम स्टार्टअप</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>स्टार्टअप पर ऊपर से नीचे चलता है · हर चरण में बाद में देरी, दोहराव और शर्तें (सप्ताह का दिन / N बजे से पहले) समर्थित</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>शुरू होने पर ऊपर से नीचे क्रम में चलता है · क्रम बदलने के लिए पंक्ति खींचें</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>समय पर पॉपअप दिखाए या क्रिया समूह को चुपचाप चलाए · दोहराव और एक बार चलाना दोनों समर्थित · «हाँ» पर प्रोग्राम चलाएँ / URL खोलें / क्रिया समूह चलाएँ</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>क्रियाओं की शृंखला को समूह में बाँधें और ट्रे / स्टार्टअप सूची / रिमाइंडर से एक टैप में चलाएँ</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(खाली)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>क्रिया समूह संपादित करें</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>समूह केवल क्रियाएँ परिभाषित करता है; इसे स्टार्टअप सूची या रिमाइंडर से चलाएँ।</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>समूह अपने आप कभी नहीं चलता — इसे ट्रे मेनू, ग्लोबल शॉर्टकट, स्टार्टअप सूची के "क्रिया समूह" चरण, या शेड्यूल किए गए कार्य से चलाएँ।</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>कृपया समूह का नाम भरें।</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>शेड्यूल किया गया कार्य संपादित करें</value></data>

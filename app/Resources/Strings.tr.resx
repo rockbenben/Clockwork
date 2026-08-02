@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Zamanlanmış görevler</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Eylem grupları</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Sistem başlangıcı</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Başlangıçta yukarıdan aşağıya çalışır · her adım sonraki gecikme, tekrar sayısı ve koşulları destekler (hafta günü / N saatten önce)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Başlangıçta yukarıdan aşağıya çalışır · sırayı değiştirmek için satırı sürükleyin</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Zamanı geldiğinde açılır pencere gösterir veya eylem grubunu sessizce çalıştırır · yinelenen çalıştırmayı ve tek seferlik çalıştırmayı destekler · «Evet» ile program çalıştırabilir, URL açabilir veya eylem grubu çalıştırabilir</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bir dizi eylemi grupta topla ve tepsiden / başlangıç listesinden / hatırlatmadan tek dokunuşla tetikle</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(boş)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Eylem grubunu düzenle</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Grup yalnızca eylemleri tanımlar; Başlangıç listesinden veya Hatırlatmalardan tetiklenir.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Bir grup asla kendi kendine çalışmaz — tepsi menüsünden, genel kısayoldan, başlangıç listesindeki Eylem grubu adımından veya zamanlanmış görevden çalıştırın.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Lütfen bir grup adı girin.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Zamanlanmış görevi düzenle</value></data>

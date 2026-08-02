@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Attività pianificate</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Gruppi di azioni</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Avvio di sistema</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Viene eseguito dall'alto in basso all'avvio · ogni passo supporta ritardo successivo, ripetizioni e condizioni (giorno della settimana / prima delle N)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Si esegue dall'alto in basso all'avvio · trascina una riga per riordinare</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Mostra un avviso o esegue un gruppo di azioni in silenzio all'orario previsto · supporta esecuzioni ripetute e singole · con «Sì» può avviare un programma, aprire un URL o eseguire un gruppo di azioni</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Raggruppa una serie di azioni e attivale con un tocco dalla barra delle applicazioni / elenco di avvio / promemoria</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(vuoto)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Modifica gruppo di azioni</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Un gruppo definisce solo azioni; attivalo dall'Elenco di avvio o dai Promemoria.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Un gruppo non parte mai da solo: avvialo dal menu nella barra delle applicazioni, con una scorciatoia globale, da un passo Gruppo di azioni nella lista di avvio o da un'attività pianificata.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Inserisci un nome per il gruppo.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Modifica attività pianificata</value></data>

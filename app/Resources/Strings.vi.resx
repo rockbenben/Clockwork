@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tác vụ theo lịch</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Nhóm hành động</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Khởi động hệ thống</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Chạy từ trên xuống khi khởi động · mỗi bước hỗ trợ độ trễ sau, số lần lặp và điều kiện (thứ trong tuần / trước N giờ)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Chạy từ trên xuống dưới khi khởi động · kéo hàng để sắp xếp lại</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Hiện cửa sổ nhắc hoặc âm thầm chạy nhóm hành động theo lịch · hỗ trợ chạy lặp lại và chạy một lần · khi «Có» có thể chạy chương trình / mở URL / chạy nhóm hành động</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Gộp một loạt hành động thành nhóm và kích hoạt một chạm từ khay / danh sách khởi động / nhắc nhở</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(trống)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Sửa nhóm hành động</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Nhóm chỉ định nghĩa hành động; kích hoạt từ Danh sách khởi động hoặc Nhắc nhở.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Nhóm không bao giờ tự chạy — kích hoạt từ menu khay hệ thống, phím tắt toàn cục, bước Nhóm hành động trong danh sách khởi động, hoặc tác vụ hẹn giờ.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Vui lòng nhập tên nhóm.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Sửa tác vụ theo lịch</value></data>

@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>المهام المجدولة</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>مجموعات الإجراءات</value></data>
   <data name="Tab_System" xml:space="preserve"><value>بدء تشغيل النظام</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>تُنفَّذ من الأعلى للأسفل عند البدء · كل خطوة تدعم تأخيرًا بعدها وعدد تكرارات وشروط (يوم الأسبوع / قبل الساعة N)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>تُنفَّذ من الأعلى للأسفل عند البدء · اسحب صفًا لإعادة الترتيب</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>منبثقة عند الوقت أو تشغيل مجموعة إجراءات بصمت · يدعم التشغيل الدوري / لمرة واحدة · عند «نعم» يمكن تشغيل برنامج أو فتح رابط أو تشغيل مجموعة إجراءات</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>اجمع سلسلة من الإجراءات في مجموعة وشغّلها بلمسة من علبة النظام / قائمة البدء / التذكيرات</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(فارغ)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>تعديل مجموعة الإجراءات</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>المجموعة تُعرّف الإجراءات فقط؛ شغّلها من قائمة البدء أو التذكيرات.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>المجموعة لا تعمل من تلقاء نفسها — شغّلها من قائمة شريط المهام أو اختصار عام أو خطوة «مجموعة إجراءات» في قائمة البدء أو مهمة مجدولة.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>يرجى إدخال اسم المجموعة.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>تعديل المهمة المجدولة</value></data>

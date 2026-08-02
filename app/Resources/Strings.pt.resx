@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tarefas agendadas</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Grupos de ações</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Inicialização do sistema</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Executa de cima para baixo na inicialização · cada passo aceita atraso posterior, repetições e condições (dia da semana / antes das N h)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Executa de cima para baixo ao iniciar · arraste uma linha para reordenar</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Exibe um aviso ou executa um grupo de ações em silêncio no horário agendado · suporta execução recorrente e execução única · em «Sim» pode executar um programa, abrir uma URL ou executar um grupo de ações</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Agrupe uma série de ações e acione com um toque pela bandeja / lista de inicialização / lembretes</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(vazio)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Editar grupo de ações</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Um grupo só define ações; acione-o pela Lista de inicialização ou pelos Lembretes.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Um grupo nunca é executado sozinho: acione-o pelo menu da bandeja, um atalho global, um passo de grupo de ações na lista de inicialização ou uma tarefa agendada.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Digite um nome de grupo.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Editar tarefa agendada</value></data>

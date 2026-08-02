@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tugas terjadwal</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Grup aksi</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Startup sistem</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Berjalan dari atas ke bawah saat startup · setiap langkah mendukung jeda setelahnya, pengulangan, dan syarat (hari / sebelum jam N)</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Berjalan dari atas ke bawah saat startup · seret baris untuk mengurutkan ulang</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Tampilkan popup atau jalankan grup aksi secara senyap sesuai jadwal · mendukung jalankan berulang dan sekali jalan · pada «Ya» dapat menjalankan program / membuka URL / menjalankan grup aksi</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Gabungkan sederet aksi menjadi grup dan picu sekali ketuk dari baki / daftar startup / pengingat</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(kosong)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Edit grup aksi</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Grup hanya mendefinisikan aksi; picu dari Daftar startup atau Pengingat.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Grup tidak pernah berjalan sendiri — jalankan dari menu baki, pintasan global, langkah Grup tindakan di daftar startup, atau tugas terjadwal.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Silakan isi nama grup.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Edit tugas terjadwal</value></data>

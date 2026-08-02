@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>예약 작업</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>동작 그룹</value></data>
   <data name="Tab_System" xml:space="preserve"><value>시스템 시작 프로그램</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>시작 시 위에서 아래로 순서대로 실행 · 각 단계에 「실행 후 지연」「반복 횟수」「특정 요일 / N시 이전만」 설정 가능</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>시작할 때 위에서 아래로 순서대로 실행 · 행을 끌어 순서 변경</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>정시에 팝업을 띄우거나 동작 그룹을 조용히 실행 · 반복 실행 / 일회성 지원 ·「예」를 누르면 프로그램 실행 / URL 열기 / 동작 그룹 실행 가능</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>여러 동작을 그룹으로 묶어 트레이 / 시작 목록 / 알림에서 원터치로 실행</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(비어 있음)</value></data>
@@ -198,7 +198,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>동작 그룹 편집</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>그룹은 동작만 정의합니다. 실행은 「시작 목록」 또는 「알림」에서 이 그룹을 참조하세요.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>그룹은 스스로 실행되지 않습니다. 트레이 메뉴, 전역 단축키, 시작 목록의 '동작 그룹' 단계 또는 예약 작업에서 실행하세요.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>그룹 이름을 입력하세요.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>예약 작업 편집</value></data>

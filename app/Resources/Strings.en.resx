@@ -12,7 +12,7 @@
   <data name="Tab_Group" xml:space="preserve"><value>Action Groups</value></data>
   <data name="Tab_System" xml:space="preserve"><value>System Startup</value></data>
 
-  <data name="Launch_Hint" xml:space="preserve"><value>Runs top-to-bottom at startup · each step supports post-delay, repeat count, and weekday / before-N-hour conditions</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Runs top-to-bottom at startup · drag a row to reorder</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Pop a reminder or silently run an action group on schedule · supports interval runs and run-once · "Yes" can launch apps, open URLs, or run action groups</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundle a series of actions into a group, triggered from the tray / startup list / reminders</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(empty)</value></data>
@@ -201,7 +201,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Edit Action Group</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>A group only defines actions; trigger it from the Startup List or Reminders.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>A group never runs on its own — trigger it from the tray menu, a global hotkey, an Action group step in the startup list, or a scheduled task.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Please enter a group name.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Edit scheduled task</value></data>

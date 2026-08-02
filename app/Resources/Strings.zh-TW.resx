@@ -10,7 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>定時任務</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>動作組</value></data>
   <data name="Tab_System" xml:space="preserve"><value>系統開機項目</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>開機時由上到下依序執行 · 每步可設「執行後延遲」「重複次數」與「僅某些星期 / 僅 N 點前」</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>開機時從上到下依序執行 · 拖曳列可調整順序</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>到點彈窗提醒或靜默執行動作組 · 支援循環執行 / 僅一次 · 按「是」後可執行程式 / 開網頁 / 跑動作組</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>把一串動作打包成組，可在系統匣 / 開機清單 / 提醒裡一鍵觸發</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
@@ -167,10 +167,10 @@
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否確認（是=繼續，否=中止本組）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>按是後</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈現方式</value></data>
-  <data name="Present_Dialog" xml:space="preserve"><value>對話框（需點掉）</value></data>
+  <data name="Present_Dialog" xml:space="preserve"><value>對話框（等你回應）</value></data>
   <data name="Present_Card" xml:space="preserve"><value>卡片（不打斷）</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>動作組</value></data>
-  <data name="Ed_DelayMs" xml:space="preserve"><value>執行後延遲(ms)</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>執行後延遲(毫秒)</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>重複次數</value></data>
   <data name="Ed_Note" xml:space="preserve"><value>用途說明</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>僅這些星期執行（都不勾=每天）</value></data>
@@ -199,7 +199,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>編輯動作組</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>動作組只定義動作；觸發請在「開機清單」或「提醒」裡引用本組。</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>動作組不會自己執行。可從系統匣選單、全域快速鍵、啟動清單裡的「動作組」步驟或定時任務觸發。</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>請填寫動作組名稱。</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>編輯定時任務</value></data>
@@ -368,7 +368,7 @@
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系統保留組合（註冊會劫走系統按鍵），不能用作快速鍵</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>整組重複次數</value></data>
   <data name="Ed_GroupShowInTray" xml:space="preserve"><value>在系統匣選單顯示</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>每輪間隔(ms)</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>每輪間隔(毫秒)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>動作組存在環引用（{0}），請先解開引用鏈再儲存</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>匯出設定</value></data>
