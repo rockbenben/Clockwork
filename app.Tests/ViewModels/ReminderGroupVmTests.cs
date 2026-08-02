@@ -44,7 +44,9 @@ public class ReminderGroupVmTests
         var cfg = new RootConfig { Reminders = new() { new Reminder { Trigger = "startup", StartupHourMode = "before", StartupHour = 8, RecurType = "everyNDays", IntervalDays = 2 } } };
         var vm = new ReminderListVm(cfg, () => { });
         Assert.Equal("登录时·8点前", vm.Rows[0].TimeLabel);
-        Assert.Equal("每2天", vm.Rows[0].PeriodLabel);
+        // 登录时触发不走 recurType 判定（见 ReminderDisplay.PeriodLabel）：即使配了 everyNDays，
+        // 本列的真实答案仍是「每次登录」，不是「每2天」——那会陈述一件不成立的事。
+        Assert.Equal("每次登录", vm.Rows[0].PeriodLabel);
     }
 
     [Fact]

@@ -7,11 +7,13 @@ namespace Clockwork.ViewModels;
 public sealed class ReminderRowVm : ObservableObject, IRowVm
 {
     private readonly Action _onChanged;
+    private readonly IReadOnlyList<ActionGroup> _groups;   // 静默任务解析组名用（见 Text）
 
-    public ReminderRowVm(Reminder reminder, Action onChanged)
+    public ReminderRowVm(Reminder reminder, Action onChanged, IReadOnlyList<ActionGroup> groups)
     {
         Reminder = reminder;
         _onChanged = onChanged;
+        _groups = groups;
     }
 
     public Reminder Reminder { get; }
@@ -30,7 +32,7 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
 
     public string TimeLabel => ReminderDisplay.TimeLabel(Reminder);
     public string PeriodLabel => ReminderDisplay.PeriodLabel(Reminder);
-    public string Text => ReminderDisplay.TextSummary(Reminder);
+    public string Text => ReminderDisplay.TextSummary(Reminder, _groups);
 
     public void Refresh()
     {
@@ -50,7 +52,7 @@ public sealed class ReminderListVm : ListVm<Reminder, ReminderRowVm>
     private readonly Action<string, Reminder>? _migrateState;
 
     public ReminderListVm(RootConfig config, Action save, Action<string, Reminder>? migrateState = null)
-        : base(config, config.Reminders, r => new ReminderRowVm(r, save), save)
+        : base(config, config.Reminders, r => new ReminderRowVm(r, save, config.ActionGroups), save)
         => _migrateState = migrateState;
 
     // 编辑后必须换新 id：运行态(是否今天已触发/稍后延迟)按 id 做键，沿用旧 id 会让改了时间的提醒

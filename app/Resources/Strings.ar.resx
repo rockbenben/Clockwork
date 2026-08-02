@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>يسري عند التشغيل التالي؛ فارغ = معطّل. «إيقاف» من قائمة العلبة يعمل دائمًا.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>ستُطبَّق اللغة عند تشغيل Clockwork في المرة القادمة.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>البدء التلقائي: جارٍ التحقق…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>البدء التلقائي: مفعّل (انقر للتعطيل)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>البدء التلقائي: معطّل (انقر للتفعيل)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>التشغيل عند تسجيل الدخول</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>إظهار النافذة</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>إعادة تشغيل قائمة البدء</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>كل {0} أيام</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>يوم {0} من كل شهر</value></data>
   <data name="Period_Once" xml:space="preserve"><value>مرة واحدة {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>عند كل تسجيل دخول</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>كل {0} دقيقة</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>حتى {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>عند تسجيل الدخول</value></data>
@@ -256,7 +255,7 @@
 
 السجل: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · تشغيل</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>تذكير Clockwork</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>مهمة مجدولة</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>أُوقفت قائمة البدء: نُفّذت {0} خطوة، وتُخطّي الباقي</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>اكتملت قائمة البدء: {0} خطوة، {1} بها تحذيرات (العلبة → آخر سجل)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>مفتاح الإيقاف «{0}» غير معروف؛ غيّره في النافذة الرئيسية. «إيقاف» من العلبة لا يزال متاحًا.</value></data>

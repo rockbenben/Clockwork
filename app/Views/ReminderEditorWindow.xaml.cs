@@ -62,7 +62,10 @@ public partial class ReminderEditorWindow : Window
     private void Action_Changed(object sender, RoutedEventArgs e) => UpdateAction();
 
     // 动作二选一：选哪边就只显示哪边的控件——填了不生效的假控件不出现（与「点是后」死控件同一条思路）。
-    // MsgBox 两边都留：它是列表「文本」列与静默组告警文案的来源，静默任务也需要名字。
+    // MsgBox 是唯一的例外，两边都留：静默任务虽然不弹窗，这段文本仍是它**唯一的名字**——
+    // 引用的动作组被删/被禁用时，Warn_SilentGroupMissing/Disabled 拿它当标识（App.xaml.cs 的静默分支），
+    // 藏掉它就会让新建的静默任务留空，那条告警于是变成「提醒「」引用的动作组不存在」，
+    // 而它恰恰在后台例程悄悄停摆时才出现——正是最需要认出是哪一条的时刻。
     private void UpdateAction()
     {
         bool silent = ActSilent.IsChecked == true;
@@ -77,6 +80,9 @@ public partial class ReminderEditorWindow : Window
     {
         bool time = ComboVal(TrigCombo) == "time";
         Vis(TimeRow, time); Vis(GraceRow, time); Vis(CatchUpRow, time); Vis(StartupRow, !time);
+        // 周期整块只对「按时间」触发有意义：登录时触发不看 recurType/days，留着等于让人配一个不起作用的东西。
+        Vis(PeriodRow, time);
+        if (!time) { Vis(DaysRow, false); Vis(IntervalRow, false); Vis(MonthlyRow, false); Vis(OnceRow, false); }
     }
     private void UpdateSMode()
     {
@@ -85,6 +91,14 @@ public partial class ReminderEditorWindow : Window
     }
     private void UpdateRecur()
     {
+        // 登录时触发下周期整块已被 UpdateTrig 隐藏；这里按 recurType 分的显隐对它没有意义，
+        // 四个 Row 全保持隐藏后直接返回，避免两处显隐逻辑打架（谁后跑谁说了算）。LoopRow 不在此列——
+        // 循环运行（每 N 分钟）不属于「周期」，登录时触发下依旧有效（见 TimeLabel 的循环后缀）。
+        if (ComboVal(TrigCombo) != "time")
+        {
+            Vis(DaysRow, false); Vis(IntervalRow, false); Vis(MonthlyRow, false); Vis(OnceRow, false);
+            return;
+        }
         var r = ComboVal(RecurCombo);
         Vis(DaysRow, r == "daily"); Vis(IntervalRow, r == "everyNDays"); Vis(MonthlyRow, r == "monthly");
         Vis(OnceRow, r == "once");

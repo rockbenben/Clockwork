@@ -196,30 +196,39 @@ public partial class MainWindow : Window
 
     private void UpdateAutostartLabel()
     {
+        AutostartChk.IsEnabled = false;
         Task.Run(() => Autostart.IsRegistered()).ContinueWith(t =>
         {
             bool reg = t.IsCompletedSuccessfully && t.Result;
-            AutostartBtn.Content = Strings.Get(reg ? "Autostart_On" : "Autostart_Off");
-            AutostartBtn.Tag = reg;
+            AutostartChk.IsChecked = reg;
+            AutostartChk.Tag = reg;          // 失败回弹用：记住"界面当前认为的真实状态"
+            AutostartChk.IsEnabled = true;
         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
+    // 复选框的 Click 只在用户交互时触发（程序设 IsChecked 不会触发），所以这里不会因 UpdateAutostartLabel
+    // 回写 IsChecked 而递归。点击发生时 IsChecked 已被 WPF 翻到「用户想要的新状态」，currentlyReg（旧 Tag）
+    // 才是操作前的真实状态，用来决定该注册还是注销。
     private void Autostart_Click(object sender, RoutedEventArgs e)
     {
-        bool currentlyReg = AutostartBtn.Tag as bool? ?? false;
+        bool currentlyReg = AutostartChk.Tag as bool? ?? false;
         var exe = Environment.ProcessPath ?? "";
-        AutostartBtn.IsEnabled = false;
+        AutostartChk.IsEnabled = false;
         Task.Run(() => currentlyReg ? Autostart.Unregister() : Autostart.Register(exe)).ContinueWith(t =>
         {
             var res = t.IsCompletedSuccessfully ? t.Result : "Error";
             if (res == "NeedsAdmin")   // 无管理员权限：直接以管理员身份重开自己完成（注销），不再只弹提示。
             {
                 ElevateAutostart(exe, register: !currentlyReg);
-                return;   // 标签由 ElevateAutostart 在子进程结束后刷新
+                return;   // 状态由 ElevateAutostart 在子进程结束后经 UpdateAutostartLabel 刷新
             }
-            AutostartBtn.IsEnabled = true;
-            if (res != "Ok") Views.BrandDialog.Warn(this, "Clockwork", Lf("Autostart_Fail", res));
-            UpdateAutostartLabel();
+            AutostartChk.IsEnabled = true;
+            if (res != "Ok")
+            {
+                AutostartChk.IsChecked = currentlyReg;   // 没成功就别让勾选状态撒谎
+                Views.BrandDialog.Warn(this, "Clockwork", Lf("Autostart_Fail", res));
+            }
+            else AutostartChk.Tag = !currentlyReg;
         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
@@ -247,7 +256,7 @@ public partial class MainWindow : Window
             catch { return -1; }
         }).ContinueWith(t =>
         {
-            AutostartBtn.IsEnabled = true;
+            AutostartChk.IsEnabled = true;
             int code = t.IsCompletedSuccessfully ? t.Result : -1;
             // -2 = 用户取消 UAC：静默不报错。其余非 0 = 提权子进程执行失败。
             if (code != 0 && code != -2)

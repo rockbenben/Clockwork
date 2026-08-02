@@ -57,9 +57,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Takes effect on next launch; empty = disabled. Tray right-click "Stop" always works.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>Language will take effect the next time Clockwork starts.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Autostart: checking…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Autostart: ON (click to disable)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Autostart: OFF (click to enable)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Start at login</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Show Window</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Rerun Startup List</value></data>
@@ -127,6 +125,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Every {0} days</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Day {0} monthly</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Once {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>Every login</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>every {0} min</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>until {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>At logon</value></data>
@@ -259,7 +258,7 @@
 
 Log: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Run</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork Reminder</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Scheduled task</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Startup list stopped: {0} steps done, the rest skipped</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Startup list done: {0} steps, {1} with warnings (tray → view last startup log)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Stop hotkey "{0}" not recognized; change it in the main window. Tray "Stop" still works.</value></data>

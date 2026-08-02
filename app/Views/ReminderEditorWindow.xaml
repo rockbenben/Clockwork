@@ -22,7 +22,7 @@
                     <StackPanel Orientation="Horizontal" Margin="100,4,0,0"><TextBlock Text="{loc:Loc Ed_OnlyBoot}" VerticalAlignment="Center"/><TextBox x:Name="SWithinBox" Width="50" Height="26" Margin="6,0"/><TextBlock Text="{loc:Loc Ed_WithinHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" VerticalAlignment="Center"/></StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Period}" Width="90" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="RecurCombo" Width="160" Height="28" SelectionChanged="Recur_Changed"/></StackPanel>
+                <StackPanel x:Name="PeriodRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Period}" Width="90" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="RecurCombo" Width="160" Height="28" SelectionChanged="Recur_Changed"/></StackPanel>
 
                 <StackPanel x:Name="DaysRow" Orientation="Horizontal" Margin="100,3,0,3">
                     <CheckBox x:Name="Day1" Content="{loc:Loc Day_1}" Margin="0,0,10,0"/><CheckBox x:Name="Day2" Content="{loc:Loc Day_2}" Margin="0,0,10,0"/><CheckBox x:Name="Day3" Content="{loc:Loc Day_3}" Margin="0,0,10,0"/>
@@ -38,7 +38,6 @@
                     <RadioButton x:Name="ActSilent" Content="{loc:Loc Ed_ActSilent}" GroupName="RemAction" Margin="18,0,0,0" VerticalAlignment="Center" Checked="Action_Changed"/></StackPanel>
                 <StackPanel x:Name="SilentRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SilentGroup}" Width="90" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SilentCombo" Width="240" Height="28"/></StackPanel>
 
-                <!-- MsgBox 两种动作都可见：它同时是列表「文本」列与静默组告警文案的来源，藏掉会让静默任务在列表里成为无名行。 -->
                 <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="90" TextWrapping="Wrap" TextAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MsgBox" Width="420" Height="72" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
                 <CheckBox x:Name="SpeakChk" Content="{loc:Loc Ed_Speak}" Margin="100,3,0,3"/>
 

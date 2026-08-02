@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Wirkt beim nächsten Start; leer = deaktiviert. „Stoppen“ im Infobereichsmenü funktioniert immer.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>Die Sprache wird beim nächsten Start von Clockwork wirksam.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Autostart: wird geprüft…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Autostart: EIN (Klick zum Deaktivieren)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Autostart: AUS (Klick zum Aktivieren)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Beim Anmelden starten</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Fenster anzeigen</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Startliste erneut ausführen</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Alle {0} Tage</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Am {0}. jeden Monats</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Einmalig {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>Bei jeder Anmeldung</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>alle {0} Min.</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>bis {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>Bei Anmeldung</value></data>
@@ -256,7 +255,7 @@
 
 Protokoll: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Ausführen</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork-Erinnerung</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Geplante Aufgabe</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Startliste gestoppt: {0} Schritte erledigt, Rest übersprungen</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Startliste fertig: {0} Schritte, {1} mit Warnungen (Infobereich → letztes Protokoll)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Stopp-Taste „{0}“ nicht erkannt; im Hauptfenster ändern. „Stoppen“ im Infobereich funktioniert weiter.</value></data>

@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Prend effet au prochain lancement ; vide = désactivée. « Arrêter » (clic droit sur l'icône) fonctionne toujours.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>La langue prendra effet au prochain démarrage de Clockwork.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Démarrage auto : vérification…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Démarrage auto : ACTIVÉ (cliquer pour désactiver)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Démarrage auto : DÉSACTIVÉ (cliquer pour activer)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Lancer à la connexion</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Afficher la fenêtre</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Relancer la liste de démarrage</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Tous les {0} jours</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Le {0} de chaque mois</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Une fois {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>À chaque connexion</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>toutes les {0} min</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>jusqu'à {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>À l'ouverture de session</value></data>
@@ -256,7 +255,7 @@
 
 Journal : {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Exécution</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Rappel Clockwork</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Tâche planifiée</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Liste de démarrage arrêtée : {0} étapes faites, le reste ignoré</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Liste de démarrage terminée : {0} étapes, {1} avec avertissements (icône → voir le dernier journal)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Touche d'arrêt « {0} » non reconnue ; changez-la dans la fenêtre principale. « Arrêter » (icône) reste disponible.</value></data>

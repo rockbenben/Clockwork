@@ -300,7 +300,7 @@
                                 <!-- 开机自启 -->
                                 <Grid Margin="0,14,0,2">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Button Grid.Column="1" x:Name="AutostartBtn" Content="{loc:Loc Autostart_Checking}" HorizontalAlignment="Left" Click="Autostart_Click"/>
+                                    <CheckBox Grid.Column="1" x:Name="AutostartChk" Content="{loc:Loc Autostart_Label}" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Autostart_Click"/>
                                 </Grid>
 
                                 <!-- 配置导入/导出。走同一个 112px 标签列：原来这行直接贴在面板左内边距上，

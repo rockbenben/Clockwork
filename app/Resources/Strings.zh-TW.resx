@@ -55,9 +55,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>變更後下次啟動生效；空白=停用。系統匣右鍵「停止」隨時可用。</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>語言將於下次啟動 Clockwork 時生效。</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>開機自動啟動：檢查中…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>開機自動啟動：已開（點擊關閉）</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>開機自動啟動：已關（點擊開啟）</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>開機自啟</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>顯示主視窗</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>重新執行開機清單</value></data>
@@ -125,6 +123,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>每{0}天</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>每月{0}號</value></data>
   <data name="Period_Once" xml:space="preserve"><value>僅一次 {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>每次登入</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>每 {0} 分鐘</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>至 {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>登入時</value></data>
@@ -257,7 +256,7 @@
 
 日誌：{1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · 執行</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork 提醒</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>定時任務</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>開機清單已手動停止：已執行 {0} 步，其餘未執行</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>開機清單執行完成：{0} 步，{1} 步有警告（右鍵系統匣→檢視上次開機日誌）</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>緊急停止快捷鍵「{0}」無法辨識，請在主視窗改一個；系統匣右鍵「停止」仍可用。</value></data>

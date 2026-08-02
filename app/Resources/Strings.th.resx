@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>มีผลเมื่อเริ่มครั้งถัดไป; ว่าง = ปิด «หยุด» จากเมนูถาดใช้ได้เสมอ</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>ภาษาจะมีผลเมื่อเริ่ม Clockwork ครั้งถัดไป</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>เริ่มอัตโนมัติ: กำลังตรวจสอบ…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>เริ่มอัตโนมัติ: เปิด (คลิกเพื่อปิด)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>เริ่มอัตโนมัติ: ปิด (คลิกเพื่อเปิด)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>เริ่มเมื่อเข้าสู่ระบบ</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>แสดงหน้าต่าง</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>รันรายการเริ่มต้นอีกครั้ง</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>ทุก {0} วัน</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>วันที่ {0} ของทุกเดือน</value></data>
   <data name="Period_Once" xml:space="preserve"><value>ครั้งเดียว {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>ทุกครั้งที่เข้าสู่ระบบ</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>ทุก {0} นาที</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>จนถึง {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>เมื่อเข้าสู่ระบบ</value></data>
@@ -256,7 +255,7 @@
 
 บันทึก: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · เรียกใช้</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>การเตือน Clockwork</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>งานตามกำหนดเวลา</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>หยุดรายการเริ่มต้นแล้ว: ทำ {0} ขั้น ที่เหลือข้าม</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>รายการเริ่มต้นเสร็จ: {0} ขั้น, {1} มีคำเตือน (ถาด → ดูบันทึกล่าสุด)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>ปุ่มหยุด «{0}» ไม่รู้จัก; เปลี่ยนในหน้าต่างหลัก «หยุด» ที่ถาดยังใช้ได้</value></data>

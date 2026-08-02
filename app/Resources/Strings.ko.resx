@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>변경 시 다음 시작부터 적용; 비우면 사용 안 함. 트레이 우클릭 「정지」는 항상 사용 가능.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>언어는 다음에 Clockwork를 시작할 때 적용됩니다.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>자동 시작: 확인 중…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>자동 시작: 켜짐(클릭하여 끄기)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>자동 시작: 꺼짐(클릭하여 켜기)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>로그인 시 시작</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>메인 창 표시</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>시작 목록 다시 실행</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>{0}일마다</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>매월 {0}일</value></data>
   <data name="Period_Once" xml:space="preserve"><value>한 번만 {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>로그인할 때마다</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>{0}분마다</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>{0}까지</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>로그온 시</value></data>
@@ -256,7 +255,7 @@
 
 로그: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · 실행</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork 알림</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>예약 작업</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>시작 목록 수동 정지: {0}단계 실행, 나머지 건너뜀</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>시작 목록 완료: {0}단계, {1}단계 경고(트레이 우클릭→지난 로그 보기)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>긴급 정지 단축키 「{0}」을(를) 인식할 수 없습니다. 메인 창에서 변경하세요. 트레이 우클릭 「정지」는 사용 가능합니다.</value></data>

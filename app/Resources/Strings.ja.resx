@@ -55,9 +55,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>変更は次回起動時に反映；空欄=無効。トレイ右クリック「停止」は常に使用可。</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>言語は次回の Clockwork 起動時に反映されます。</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>自動起動：確認中…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>自動起動：オン（クリックで無効）</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>自動起動：オフ（クリックで有効）</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>自動起動</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>メイン画面を表示</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>起動リストを再実行</value></data>
@@ -125,6 +123,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>{0}日ごと</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>毎月{0}日</value></data>
   <data name="Period_Once" xml:space="preserve"><value>1回のみ {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>ログインごと</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>{0}分ごと</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>{0}まで</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>ログオン時</value></data>
@@ -257,7 +256,7 @@
 
 ログ：{1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · 実行</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork 通知</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>定時タスク</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>起動リストを手動停止：{0} ステップ実行、残りは未実行</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>起動リスト完了：{0} ステップ、{1} 件の警告（トレイ右クリック→前回のログ）</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>緊急停止キー「{0}」を認識できません。メイン画面で変更してください。トレイ右クリック「停止」は使用可能です。</value></data>

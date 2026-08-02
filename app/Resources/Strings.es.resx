@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Surte efecto en el próximo inicio; vacío = desactivada. «Detener» del menú de la bandeja siempre funciona.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>El idioma se aplicará la próxima vez que inicies Clockwork.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Inicio automático: comprobando…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Inicio automático: ACTIVADO (clic para desactivar)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Inicio automático: DESACTIVADO (clic para activar)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Iniciar al iniciar sesión</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Mostrar ventana</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Reejecutar lista de inicio</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Cada {0} días</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>El día {0} de cada mes</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Una vez {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>En cada inicio de sesión</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>cada {0} min</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>hasta {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>Al iniciar sesión</value></data>
@@ -256,7 +255,7 @@
 
 Registro: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Ejecutar</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Recordatorio de Clockwork</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Tarea programada</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Lista de inicio detenida: {0} pasos hechos, el resto omitidos</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Lista de inicio completada: {0} pasos, {1} con advertencias (bandeja → ver último registro)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Tecla de parada «{0}» no reconocida; cámbiala en la ventana principal. «Detener» de la bandeja sigue disponible.</value></data>

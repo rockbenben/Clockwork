@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Ha effetto al prossimo avvio; vuoto = disattivato. «Arresta» dal menu della barra funziona sempre.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>La lingua avrà effetto al prossimo avvio di Clockwork.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Avvio automatico: verifica…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Avvio automatico: ATTIVO (clic per disattivare)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Avvio automatico: DISATTIVO (clic per attivare)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Avvia all'accesso</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Mostra finestra</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Riesegui elenco di avvio</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Ogni {0} giorni</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Il {0} di ogni mese</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Una volta {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>A ogni accesso</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>ogni {0} min</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>fino alle {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>All'accesso</value></data>
@@ -256,7 +255,7 @@
 
 Registro: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Esecuzione</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Promemoria Clockwork</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Attività pianificata</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Elenco di avvio interrotto: {0} passi eseguiti, il resto saltato</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Elenco di avvio completato: {0} passi, {1} con avvisi (barra → ultimo registro)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Tasto di arresto «{0}» non riconosciuto; cambialo nella finestra principale. «Arresta» dalla barra resta disponibile.</value></data>

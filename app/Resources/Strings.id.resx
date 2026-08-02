@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Berlaku saat mulai berikutnya; kosong = nonaktif. «Hentikan» dari menu baki selalu berfungsi.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>Bahasa berlaku saat Clockwork dimulai berikutnya.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Mulai otomatis: memeriksa…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Mulai otomatis: AKTIF (klik untuk nonaktif)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Mulai otomatis: NONAKTIF (klik untuk aktif)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Jalankan saat masuk</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Tampilkan jendela</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Jalankan ulang daftar startup</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Setiap {0} hari</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Tanggal {0} tiap bulan</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Sekali {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>Setiap masuk</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>setiap {0} menit</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>hingga {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>Saat masuk</value></data>
@@ -256,7 +255,7 @@
 
 Log: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Jalankan</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Pengingat Clockwork</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Tugas terjadwal</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Daftar startup dihentikan: {0} langkah selesai, sisanya dilewati</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Daftar startup selesai: {0} langkah, {1} dengan peringatan (baki → lihat log terakhir)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Tombol berhenti «{0}» tak dikenali; ubah di jendela utama. «Hentikan» dari baki tetap tersedia.</value></data>

@@ -28,13 +28,30 @@ public static class ReminderDisplay
         return baseLabel;
     }
 
-    public static string PeriodLabel(Reminder r) => r.RecurType switch
+    public static string PeriodLabel(Reminder r)
     {
-        "everyNDays" => Strings.Lf("Period_EveryNDays", r.IntervalDays),
-        "monthly" => Strings.Lf("Period_Monthly", r.MonthlyDay),
-        "once" => Strings.Lf("Period_Once", r.OnceDate ?? "").Trim(),   // 无日期=今天：只显示「仅一次」
-        _ => StepDisplay.DaysLabel(r.Days),
-    };
+        // 登录时触发不走周期判定（recurType/days 对它无效），照兜底分支返回「每天」是在陈述一件
+        // 不成立的事。本列回答的是「多久一次」，对它的真实答案就是「每次登录」——具体限制
+        // （仅 N 点前 / 开机 N 分钟内）已由 TimeLabel 那一列说清。
+        if (r.Trigger == "startup") return Strings.Get("Period_EachLogin");
+        return r.RecurType switch
+        {
+            "everyNDays" => Strings.Lf("Period_EveryNDays", r.IntervalDays),
+            "monthly" => Strings.Lf("Period_Monthly", r.MonthlyDay),
+            "once" => Strings.Lf("Period_Once", r.OnceDate ?? "").Trim(),   // 无日期=今天：只显示「仅一次」
+            _ => StepDisplay.DaysLabel(r.Days),
+        };
+    }
 
-    public static string TextSummary(Reminder r) => StepHelpers.Ellipsis(Regex.Replace(r.Message ?? "", @"\r?\n", " "));
+    // 静默任务没有消息文本，照旧只显示 Message 会让整行空白——而「跑哪个组」正是这一行唯一
+    // 值得说的事。groups 为 null 时维持旧行为（供不关心动作组的调用点使用）。
+    public static string TextSummary(Reminder r, IReadOnlyList<ActionGroup>? groups = null)
+    {
+        if (!string.IsNullOrWhiteSpace(r.SilentGroupId))
+        {
+            var g = groups == null ? null : ActionGroupResolver.Resolve(groups, r.SilentGroupId);
+            return Strings.Lf("Sum_RunGroup", g?.Name is { Length: > 0 } n ? n : Strings.Get("Sum_Group_None"));
+        }
+        return StepHelpers.Ellipsis(Regex.Replace(r.Message ?? "", @"\r?\n", " "));
+    }
 }

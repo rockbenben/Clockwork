@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Действует при следующем запуске; пусто = отключено. «Остановить» в меню трея работает всегда.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>Язык вступит в силу при следующем запуске Clockwork.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Автозапуск: проверка…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Автозапуск: ВКЛ (нажмите, чтобы выключить)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Автозапуск: ВЫКЛ (нажмите, чтобы включить)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Запускать при входе</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Показать окно</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Повторить список запуска</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Каждые {0} дн.</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>{0}-го числа каждого месяца</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Один раз {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>При каждом входе</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>каждые {0} мин</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>до {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>При входе</value></data>
@@ -256,7 +255,7 @@
 
 Журнал: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Выполнение</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Напоминание Clockwork</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Задача по расписанию</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Список запуска остановлен: выполнено шагов — {0}, остальные пропущены</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Список запуска завершён: {0} шагов, {1} с предупреждениями (трей → последний журнал)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Клавиша остановки «{0}» не распознана; измените её в главном окне. «Остановить» в трее по-прежнему доступно.</value></data>

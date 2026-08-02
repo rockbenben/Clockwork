@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Sonraki başlangıçta geçerli olur; boş = kapalı. Tepsi menüsündeki «Durdur» her zaman kullanılabilir.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>Dil, Clockwork'ün sonraki başlangıcında geçerli olur.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Otomatik başlat: denetleniyor…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Otomatik başlat: AÇIK (kapatmak için tıklayın)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Otomatik başlat: KAPALI (açmak için tıklayın)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Oturum açılışında başlat</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Pencereyi göster</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Başlangıç listesini yeniden çalıştır</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Her {0} günde</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Her ayın {0}. günü</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Yalnızca bir kez {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>Her oturum açışta</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>her {0} dakikada bir</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>{0}'e kadar</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>Oturum açıldığında</value></data>
@@ -256,7 +255,7 @@
 
 Günlük: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Çalıştır</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork Hatırlatması</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Zamanlanmış görev</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Başlangıç listesi durduruldu: {0} adım tamamlandı, kalanı atlandı</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Başlangıç listesi tamamlandı: {0} adım, {1} uyarılı (tepsi → son günlüğe bak)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Durdurma tuşu «{0}» tanınmadı; ana pencereden değiştirin. Tepsideki «Durdur» hâlâ çalışır.</value></data>

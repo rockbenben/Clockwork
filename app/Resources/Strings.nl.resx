@@ -54,9 +54,7 @@
   <data name="Settings_HotkeyTip" xml:space="preserve"><value>Werkt bij de volgende start; leeg = uit. «Stoppen» in het systeemvakmenu werkt altijd.</value></data>
   <data name="Settings_LangRestart" xml:space="preserve"><value>De taal wordt van kracht bij de volgende start van Clockwork.</value></data>
 
-  <data name="Autostart_Checking" xml:space="preserve"><value>Automatisch starten: controleren…</value></data>
-  <data name="Autostart_On" xml:space="preserve"><value>Automatisch starten: AAN (klik om uit te schakelen)</value></data>
-  <data name="Autostart_Off" xml:space="preserve"><value>Automatisch starten: UIT (klik om in te schakelen)</value></data>
+  <data name="Autostart_Label" xml:space="preserve"><value>Bij aanmelden starten</value></data>
 
   <data name="Tray_Show" xml:space="preserve"><value>Venster tonen</value></data>
   <data name="Tray_Rerun" xml:space="preserve"><value>Opstartlijst opnieuw uitvoeren</value></data>
@@ -124,6 +122,7 @@
   <data name="Period_EveryNDays" xml:space="preserve"><value>Elke {0} dagen</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Op de {0}e van elke maand</value></data>
   <data name="Period_Once" xml:space="preserve"><value>Eenmalig {0}</value></data>
+  <data name="Period_EachLogin" xml:space="preserve"><value>Bij elke aanmelding</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>elke {0} min</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>tot {0}</value></data>
   <data name="Time_Startup" xml:space="preserve"><value>Bij aanmelden</value></data>
@@ -256,7 +255,7 @@
 
 Log: {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Uitvoeren</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Clockwork-herinnering</value></data>
+  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Geplande taak</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Opstartlijst gestopt: {0} stappen gedaan, rest overgeslagen</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Opstartlijst voltooid: {0} stappen, {1} met waarschuwing (systeemvak → laatste log bekijken)</value></data>
   <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Stoptoets «{0}» niet herkend; wijzig in het hoofdvenster. «Stoppen» in het systeemvak werkt nog.</value></data>
