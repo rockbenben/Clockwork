@@ -44,10 +44,8 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ Descendre</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Exécuter cette étape</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Exécuter le groupe</value></data>
-  <data name="Btn_TryStep" xml:space="preserve"><value>▶ Tester cette étape</value></data>
-  <data name="Btn_TryGroup" xml:space="preserve"><value>▶ Tester le groupe</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ Arrêter</value></data>
-  <data name="Btn_Preview" xml:space="preserve"><value>▶ Aperçu</value></data>
+  <data name="Btn_RunReminder" xml:space="preserve"><value>▶ Exécuter cette tâche</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>Délai de démarrage (s)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Démarrer réduit dans la zone de notification</value></data>

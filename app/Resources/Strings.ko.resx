@@ -44,10 +44,8 @@
   <data name="Btn_Down" xml:space="preserve"><value>↓ 아래로</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ 이 단계 실행</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ 그룹 실행</value></data>
-  <data name="Btn_TryStep" xml:space="preserve"><value>▶ 이 단계 시험 실행</value></data>
-  <data name="Btn_TryGroup" xml:space="preserve"><value>▶ 그룹 시험 실행</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ 중지</value></data>
-  <data name="Btn_Preview" xml:space="preserve"><value>▶ 미리보기</value></data>
+  <data name="Btn_RunReminder" xml:space="preserve"><value>▶ 이 작업 실행</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>시작 지연(초)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>시작 시 트레이로 최소화</value></data>

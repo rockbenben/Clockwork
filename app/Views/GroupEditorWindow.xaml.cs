@@ -183,7 +183,7 @@ public partial class GroupEditorWindow : Window
         _tryRun = app.RunGroupAsync(temp, this, () =>
         {
             _tryRun = null;
-            SRunGroup.Content = Strings.Get("Btn_TryGroup");
+            SRunGroup.Content = Strings.Get("Btn_RunGroup");
         });
     }
 
