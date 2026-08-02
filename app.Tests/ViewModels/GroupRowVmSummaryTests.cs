@@ -53,4 +53,37 @@ public class GroupRowVmSummaryTests
         Assert.Equal("Ctrl+Alt+F", Row(new ActionGroup { Hotkey = "Ctrl+Alt+F" }).HotkeyLabel);
         Assert.Equal("", Row(new ActionGroup { Hotkey = "" }).HotkeyLabel);
     }
+
+    // 注释是分段标签不是动作：出现在摘要里会挤掉一个真正的动作位，还让省略号提前出现。
+    [Fact]
+    public void Summary_skips_comment_steps()
+    {
+        var g = Group(
+            new LaunchStep { Kind = "comment", Label = "=== 分段 ===" },
+            new LaunchStep { Kind = "volume", Action = "mute" });
+        Assert.Equal(StepDisplay.StepSummary(g.Steps[1]), Row(g).Summary);
+    }
+
+    // 省略号按动作数判，不按步骤数：3 个动作 + 2 条注释仍是「刚好放得下」。
+    [Fact]
+    public void Ellipsis_counts_actions_not_comments()
+    {
+        var g = Group(
+            new LaunchStep { Kind = "comment", Label = "c1" },
+            new LaunchStep { Kind = "volume", Action = "mute" },
+            new LaunchStep { Kind = "volume", Action = "unmute" },
+            new LaunchStep { Kind = "comment", Label = "c2" },
+            new LaunchStep { Kind = "keys", Combo = "Win+D" });
+        var s = Row(g).Summary;
+        Assert.DoesNotContain("…", s);
+        Assert.DoesNotContain("c1", s);
+    }
+
+    // 只剩注释的组：它确实什么都不做，本列该照实说「（空）」而不是留白。
+    [Fact]
+    public void Comments_only_group_reads_as_empty()
+    {
+        var g = Group(new LaunchStep { Kind = "comment", Label = "只有注释" });
+        Assert.Equal(Strings.Get("Group_Empty"), Row(g).Summary);
+    }
 }

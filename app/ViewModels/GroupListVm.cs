@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using Clockwork.Core;
 using Clockwork.I18n;
 
@@ -31,9 +32,13 @@ public sealed class GroupRowVm : ObservableObject, IRowVm
     {
         get
         {
-            if (Group.Steps.Count == 0) return Strings.Get("Group_Empty");
-            var head = string.Join(" · ", Group.Steps.Take(3).Select(StepDisplay.StepSummary));
-            return Group.Steps.Count > 3 ? head + " …" : head;
+            // 注释只是分段标签、不是动作：算进摘要会挤掉一个真正的动作位，还让省略号提前出现。
+            // 判空也按「动作数」而非「步骤数」——一个只剩注释的组确实什么都不做，而本列回答的正是
+            //「这个组会做什么」，此时「（空）」是准确回答，也省掉一个分支。注释文字在编辑器里照样看得到。
+            var acts = Group.Steps.Where(s => s.Kind != "comment").ToList();
+            if (acts.Count == 0) return Strings.Get("Group_Empty");
+            var head = string.Join(" · ", acts.Take(3).Select(StepDisplay.StepSummary));
+            return acts.Count > 3 ? head + " …" : head;
         }
     }
 

@@ -88,8 +88,11 @@
                     <Button Grid.Column="0" Content="{loc:Loc Btn_Up}" Padding="0,5" Margin="0,0,3,0" Click="SUp_Click"/>
                     <Button Grid.Column="1" Content="{loc:Loc Btn_Down}" Padding="0,5" Margin="3,0,0,0" Click="SDown_Click"/>
                 </Grid>
-                <Button x:Name="SRunStep" Content="{loc:Loc Btn_RunStep}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="SRunStep_Click"/>
-                <Button x:Name="SRunGroup" Content="{loc:Loc Btn_RunGroup}" Style="{StaticResource RunButton}" Margin="0,4,0,2" Click="SRunGroup_Click"/>
+                <Grid Margin="0,10,0,2">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" x:Name="SRunStep" Content="{loc:Loc Btn_RunStep}" Style="{StaticResource RunButton}" Padding="0,5" Margin="0,0,3,0" Click="SRunStep_Click"/>
+                    <Button Grid.Column="1" x:Name="SRunGroup" Content="{loc:Loc Btn_RunGroup}" Style="{StaticResource RunButton}" Padding="0,5" Margin="3,0,0,0" Click="SRunGroup_Click"/>
+                </Grid>
             </StackPanel>
         </Grid>
 

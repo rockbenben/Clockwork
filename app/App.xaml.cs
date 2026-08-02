@@ -801,7 +801,7 @@ public partial class App : System.Windows.Application
         {
             var win = owner ?? _main;
             if (form == MessageForm.Confirm)
-                return Views.BrandDialog.Confirm(win, "Clockwork", step.Message) ? MsgResult.Yes : MsgResult.No;
+                return Views.BrandDialog.Confirm(win, Strings.Get("Confirm_Title"), step.Message) ? MsgResult.Yes : MsgResult.No;
             Views.BrandDialog.Info(win, "Clockwork", step.Message);
             return MsgResult.Ok;
         });
