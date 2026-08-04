@@ -8,17 +8,19 @@
 
 Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıcılar · tek dokunuşla koca bir rutini çalıştırın
 
+**[⬇ Windows için indir](https://github.com/rockbenben/Clockwork/releases/latest)** — taşınabilir, kurulum gerektirmez
+
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
 </div>
 
 <div align="center">
 
-[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · **Türkçe** · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](../../README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · **Türkçe** · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Bir Windows tepsi aracı: başlangıç başlatıcısı · hatırlatıcılar · sistem başlangıç öğeleri · eylem grupları
-
-[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
 
 ![Clockwork](../../assets/social-card.png)
 
@@ -31,7 +33,7 @@ Bilgisayar başında gününüze başlarken karşılaşılan rutin işleri üstl
 
 Kurulum yok, tek klasörde tamamen taşınabilir, her şey fareyle yapılandırılabilir; koyu arayüz, yüksek DPI uyumlu.
 
-> 📖 **Tam kılavuz:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
+> 📖 **Tam kılavuz:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Gereksinimler
 
@@ -55,62 +57,21 @@ Kurulum yok, tek klasörde tamamen taşınabilir, her şey fareyle yapılandır�
 
 ## Beş sekme
 
-### Başlangıç listesi
+Beş sekme; her alan tek tek [tam kılavuzda](../USAGE.md) anlatılıyor.
 
-Oturum açınca yukarıdan aşağıya çalıştırılan **sıralı bir adımlar listesi**. Bir tür seçmek için **Ekle ▾**'ye tıklayın; serbestçe ekleyin/kaldırın/yeniden sıralayın; her adım etkinleştirilip/devre dışı bırakılabilir, ona bir **adım sonrası gecikme**, bir **tekrar sayısı** (N kez döngüye al) ve koşullar (**yalnızca belirli hafta günlerinde / yalnızca saat N'den önce**) verilebilir. Adım türleri:
+- **Başlangıç listesi** — adımlar oturum açarken yukarıdan aşağıya çalışır. Türler: program başlat · tuş gönder · metin gönder · ses · pencere işlemi · sistem komutu · eylem grubu · gecikme · mesaj. Her adımda adım sonrası gecikme, tekrar sayısı ve koşullar (yalnızca belirli günler / yalnızca saat N'den önce) vardır; programlarda ayrıca yönetici hakları, pencere stili, çalışıyorsa-öne-getir ve yedek yollar bulunur.
+- **Zamanlanmış görevler** — bir saat (ya da "oturum açışta") × bir yineleme (haftanın günü / N günde bir / aylık / bir kez) × tek bir eylem: hatırlatma (ertele düğmeli Evet/Hayır penceresi ya da köşede bir kart, istenirse sesli okunur) veya sessizce çalışan bir eylem grubu. Ayrıca aralıklı çalıştırma, ısrarlı tekrar, kaçan tetiklemeyi telafi ve tepsiden rahatsız etme.
+- **Sistem başlangıç öğeleri** — bilgisayarda kendiliğinden başlayan her şey (kayıt defteri Run anahtarları, Başlangıç klasörleri, zamanlanmış görevler): kapatma (devre dışı, silinmiş değil), kendi başlangıç listene devralma veya tamamen silme.
+- **Eylem grupları** — yeniden kullanılabilir bir eylem demeti; tepsiden, **genel kısayoldan** (tekrar basınca o çalışma iptal olur), başlangıç listesindeki bir adımdan veya zamanlanmış bir görevden tetiklenir. Grup bütün olarak tekrarlanabilir ve başka gruplara başvurabilir (döngüsel başvurular kaydederken reddedilir); bir **mesaj** adımı Evet / Hayır ile gerisini durdurur.
+- **Ayarlar** — başlangıç gecikmesi (0–600 sn, yalnızca açılışta), tepsiye küçültülmüş başlat, oturum açışta başlat, acil durdurma kısayolu, arayüz dili (18 dil), yapılandırmayı dışa / içe aktar.
 
-- **Program başlat** — hedef (dosya seçmek için **Gözat…**) / bağımsız değişkenler / çalışma dizini (boş bırak = hedefin klasörü) / yönetici. Hedef bir `.exe`, belge, kısayol veya URL olabilir; bir `.ps1` PowerShell üzerinden çalışır. Gelişmiş: **pencere stili** (simge durumunda / tam ekran / gizli), **zaten çalışıyorsa etkinleştir** (yeniden başlatmak yerine öne getir; işlem adı **Seç…** ile), **yedek yollar** (her satıra bir tam yol; var olan ilki kullanılır — kurulum yolları makineler arasında farklıysa işe yarar).
-- **Tuş gönder** — örneğin Win+D, Alt+K, Ctrl+Enter, F5 (bir kısayolu basarak kaydetmek için **Yakala**).
-- **Metin gönder** — odaktaki pencereye (ya da **Seç…** ile seçilen bir **hedef işleme**) bir dize yazar.
-- **Ses** — sessize al / sesi aç / düzey ayarla.
-- **Pencere eylemi** — işlem adına göre (**Seç…**, aranabilir): kapat / simge durumuna küçült / tam ekran yap / öne getir / öne-getir-ve-tuş-gönder; yavaş uygulamalar için **pencere görünene dek N saniyeye kadar bekle**.
-- **Sistem komutu** — masaüstünü göster / kilitle / monitörü kapat / geri dönüşüm kutusunu boşalt / panoyu temizle / Ayarlar'ı aç / Görev Yöneticisi / ekran görüntüsü / uyku / hazırda beklet / oturumu kapat / yeniden başlat / kapat (son üçü önce onay ister).
-- **Gecikme** — sonraki adımdan önce yalnızca N saniye bekle.
-- **Eylem grubu** — tanımlı bir eylem grubunu çalıştırır; tekrar sayısı *bu başvurunun* kaç kez tetiklendiğini söyler (grubun kendisi de içeriden tekrarlanabilir — aşağıdaki **Eylem grupları**'na bakın).
-
-> **Başlangıç gecikmesi** (Ayarlar sekmesi, yalnızca açılışta): oturum açtıktan sonra sabit bir saniye sayısı bekleyerek "oturum açma fırtınası" (her otomatik başlangıçtan gelen disk/CPU çekişmesi) geçene dek liste çalışmasın; elle yeniden çalıştırma bundan etkilenmez. Her şey çok erken başlıyorsa artırın (0–600 sn).
-
-> **İstediğiniz an durdurun** — pencerenin sekme çubuğunun sağ ucundaki **durdurma düğmesi** (yalnızca bir şey çalışırken görünür), tepsi → **Çalışan eylemleri durdur** ya da genel **panik kısayolu** (Ayarlar sekmesinde ayarlanır; varsayılan `Ctrl+Alt+Q`). Çalışmakta olan, geçerli eylemden sonra durur; uzun beklemeler (başlangıç gecikmesi, bir pencereyi bekleme) hemen kesilir.
-
-### Zamanlanmış görevler
-
-Bir **saat** ayarlayın (ya da **oturum açınca**'ya geçin), bir **yineleme** (hafta günleri / her-N-günde / aylık / **belirli bir tarihte yalnızca bir kez**) seçin ve bir **eylem** belirleyin: **hatırlatıcı göster** ya da **eylem grubunu sessizce çalıştır**. Ekranda yalnızca seçtiğiniz eylemin alanları kalır; böylece hiçbir işe yaramayan bir kutuyu asla doldurmazsınız.
-
-**Evet'te** eylemi olan (program çalıştır / dosya aç / URL / eylem grubu çalıştır) hatırlatıcılar, **Ertele** düğmeli (varsayılan 10 dk, ▾ menüsü 5–60 dk) bir **Evet / Hayır** iletişim kutusu açar; geri kalanı köşeye bir **hatırlatma kartı** olarak kayar (yapılandırılan saniyeden sonra otomatik kapanır, **0 = siz kapatana dek kalır**). Metin sesli okutulabilir.
-
-**Aralıklı çalıştırmalar** tek bir görevi gün boyu süren bir programa dönüştürür: *HH:mm'ye kadar her N dakikada* (boş = gün sonu). Onaylar onaylamaz duran **ısrarlı hatırlatma**'nın aksine, aralıklı çalıştırma yanıtınızdan sonra da sürer — sessiz bir grubu yoklama aracı olarak kullanılabilir kılan tam olarak budur. Aralıklar gece yarısını aşmaz; yarın görevin kendi saatinden yeniden başlar. İlerleme kaydedilir, dolayısıyla uygulamayı öğlen yeniden başlatmak günün kalan turlarını korur.
-
-**Yalnızca bir kez**, tarihinde tetiklenir ve ardından **kendi işaretini kaldırır**, listede kalmaya devam eder — tarihi değiştirip yeniden işaretleyerek tekrar kullanabilirsiniz. Kapanmadan önce ısrarın veya ertelemenin bitmesini bekler, böylece süren bir teslimi asla yarıda kesmez.
-
-Yanıtsız kalan bir iletişim kutusu ne kuyruğu tıkar ne de kaybolur: en fazla bir dakika sonra otomatik olarak **10 dakikalık ertelemeye** dönüşür ve daha sonra geri gelir. Bu durum, elle yapılan erteleme gibi diske yazılır — yeniden başlatmalardan sağ çıkar ve **kaçırıldıysa telafi et** açıksa gece yarısını aşan bir uykudan sonra bile ertesi gün bir kez daha tetiklenir. Aynı hatırlatıcının tekrarlanan tetiklemeleri tek bir kartı paylaşır (**×N** işaretli); kapatılan veya süresi dolan kartlar tepsideki **Son bildirimler** menüsünden yeniden gösterilebilir.
-
-Gelişmiş: **otomatik kapanma**, **ısrarlı tekrar** (bir son teslim tarihine dek her N dakikada yeniden açılır), **tetik sonrası gecikme + rastgele sapma**, **tolerans** (kısa bir kapanma/uyku nedeniyle kaçan bir tetiklemeyi yakalar), **kaçırıldıysa telafi et** (hazırda bekleme/kapanma onu atladıysa bir kez daha tetikler) ve her-N-günde için bir **çıpa tarihi** (**Tarih seç**). "Bugün tetiklendi" ve "şu ana dek ertelendi" yeniden başlatmalardan sağ çıkar (`clockwork.state.json`), böylece bir erteleme yeniden başlatma boyunca taşınır ve hiçbir şey iki kez tetiklenmez.
-
-Odaklanmanız ya da bir toplantıya girmeniz mi gerekiyor? Tepsi **Hatırlatıcıları 1 / 2 / 4 saat duraklat** (Rahatsız Etmeyin) seçeneği sunar: her şey (sessiz gruplar dahil) bastırılır ve süre dolunca otomatik olarak devam eder.
-
-### Sistem başlangıç öğeleri
-
-**Otomatik başlayan her şeyi** listeler (kayıt defteri Run anahtarları, Başlangıç klasörleri, zamanlanmış görevler). Bir öğeyi kapatmak için **Etkinleştir**'in işaretini kaldırın — **silinmez, devre dışı bırakılır; geri yüklemek için yeniden işaretleyin** (hemen etkili olur). **Yönetici gerektirir** olarak işaretli öğeler yükseltilmiş olarak yeniden başlatmayı ister. Sistem / ilke / tek seferlik öğeler (Grup İlkesi Run, RunOnce, Winlogon, Active Setup) dokunulamaz ve **varsayılan olarak gizlidir** — bunları görmek için **Sistem / salt okunur öğeleri göster**'i işaretleyin (soluk gösterilir). Bir satıra sağ tıklayarak **Başlangıç listesine al** (öğeyi Clockwork'e devreder; yalnızca kayıt defteri Run anahtarları ve Başlangıç klasörü öğeleri) ya da **Sistemden sil** (kaydı kalıcı olarak kaldırır — önce sorar ve geri alınamaz; geri alınabilir seçenek işareti kaldırmaktır) seçeneğine ulaşabilirsiniz. Üstteki bir **filtre** ad / komuta göre arar; kısaltılmış bir komutu tam okumak için üzerine gelin.
-
-### Eylem grupları
-
-Eylemleri yeniden kullanılabilir bir grupta toplayın. **Ekle ▾**, bir **yerleşik şablondan** (Odak / Toplantı / Kapanış / Uyku vakti / Uzaklaşma / Ekran görüntüsü / Uzun oturma molası) başlatır — işlem adlarını ayarlayıp kaydedin. Bir grup **yalnızca eylemleri tanımlar**; onu dört şekilde tetikleyin: tepsiden (**Çalıştır: <grup>**), bir **genel kısayolla**, başlangıç listesinde bir **eylem grubu adımı** olarak (açılışta) ya da zamanlanmış bir görevden (**Evet'te / sessiz grup**). Bir grubun aynı anda yalnızca tek bir kopyası çalışır.
-
-**Döngüler.** Bir grup **bütün olarak yinelenebilir** (tekrar sayısı + turlar arası bekleme, grup düzenleyicide ayarlanır). Bir dizinin yalnızca *bir kısmını* döngüye almak için o adımları ayrı bir gruba koyun ve tekrar sayısını kendiniz belirlediğiniz bir **eylem grubu** adımıyla ona başvurun — gruplar gruplara başvurabilir ve kaydederken döngüsel başvurular zincir açıkça yazılarak reddedilir (`A → B → A`). Üç tekrar ayarı çarpılır: adım başına × başvuru başına × tüm grup. Tek bir çalıştırma **5000 adım** sigortasıyla sınırlıdır; böylece aşırı büyük bir birleşim sonsuza dek koşmak yerine durur.
-
-Bir **mesaj** adımı onay kapısıdır: **Hayır** yanıtı grubun geri kalanını *ve kalan turlarını* iptal eder, ayrıca ona başvuran gruba doğru dışa yayılır — ×N döngüye alınmış bir alt grubun içinde bile bir kez reddetmek yeterlidir.
-
-> **Genel kısayol** — grup düzenleyicide kısayol kutusuna tıklayın ve bir kısayola (ör. `Ctrl+Alt+F`) basarak o grubu menüye gerek kalmadan her yerden çalıştırın. Esc iptal eder, Delete temizler. Devre dışı gruplar kombinasyonlarını serbest bırakır; sistemce ayrılmış kombinasyonlar (Alt+F4, Ctrl+Shift+Esc…) ve başka bir grup ya da panik kısayolu tarafından zaten kullanılan kombinasyonlar bir bildirimle reddedilir. **Kısayol bir açma/kapama anahtarıdır:** grup hâlâ çalışırken tekrar basmak o çalıştırmayı iptal eder —— diğer gruplar ve başlangıç listesi çalışmaya devam eder (her şeyi durduran panik kısayoludur). Bu şekilde yalnızca kısayol atanmış gruplar iptal edilebilir.
-
-### Ayarlar
-
-**Başlangıç gecikmesi** (0–600 sn, yalnızca açılışta), **tepsiye küçültülmüş başlat**, **panik kısayolu** (kutuya tıklayıp kısayolunuza basın; Esc iptal eder, Delete temizler; varsayılan `Ctrl+Alt+Q`) ve **arayüz dili** (Basitleştirilmiş Çince, İngilizce, 日本語 ve 15 tane daha — toplam 18; değiştirmek uygulamak için uygulamayı yeniden başlatır).
-
-**Yapılandırmayı dışa aktar / Yapılandırmayı içe aktar** — tüm kurulumunuzu başka bir bilgisayara taşıyın ya da bir yedek tutun. Dışa aktarma, `clockwork.settings.json` dosyasının bir kopyasını istediğiniz yere yazar; içe aktarma **her şeyin** (başlangıç listesi / zamanlanmış görevler / eylem grupları / ayarlar) yerine geçer, bu yüzden önce onay ister, geçerli yapılandırmayı `clockwork.settings.json.bak` olarak yedekler ve uygulamak için uygulamayı yeniden başlatır.
+> **İstediğin an durdur** — sekme çubuğunun sağ ucundaki **durdurma düğmesi** (yalnızca bir şey çalışırken görünür), tepsi → **Çalışan eylemleri durdur** ya da genel **acil durdurma kısayolu** (varsayılan `Ctrl+Alt+Q`). Uzun beklemeler (başlangıç gecikmesi, pencere bekleme) anında kesilir.
 
 ## İpuçları
 
 - **Bir satırı düzenlemek için çift tıklayın.** Yolları / işlemleri / kısayolları / tarihleri doldururken elle yazmanız gerekmez: **Gözat…**, **Seç…** (aranabilir işlem seçici), **Yakala** ve **Tarih seç**.
+- **Sırayı değiştirmek için satırı sürükleyin** — üç listenin hepsinde (başlangıç listesi, zamanlanmış görevler, eylem grupları) ve grup düzenleyicinin adım listesinde geçerlidir; yukarı/aşağı düğmeleri de çalışmaya devam eder.
+- **Kaydetmeden önce deneyin** — grup düzenleyicide **▶ Bu adımı çalıştır** ve **▶ Grubu çalıştır** düğmeleri vardır; ikisi de o an ekranda olanı çalıştırır. Çalışırken düğme **■ Durdur**'a dönüşür ve düzenleyiciyi kapatmak da çalışmayı durdurur.
 - **Çoğalt** (Zamanlanmış görevler / Eylem grupları sekmeleri), seçili satırın bir kopyasını hemen altına ekler — neredeyse aynı olan bir kaydı sıfırdan kurmaktan hızlıdır; çoğaltılan bir grup "… (kopya)" olarak adlandırılır.
 - **Silme her yerde önce onay ister** — liste satırları, grup düzenleyicideki adımlar ve sistem başlangıç öğeleri.
 - `Clockwork.exe`'ye çift tıklamak yalnızca ayarları açar — başlangıç listesini hemen **çalıştırmaz**; bunun için tepsinin **Başlangıç listesini yeniden çalıştır**'ını kullanın.
@@ -135,4 +96,6 @@ C#/.NET WPF; kaynak `app/` içinde (.NET 10 SDK gerekir). Katmanlar: `Core/` saf
 
 ## 365 Açık Kaynak Planı hakkında
 
-[365 Açık Kaynak Planı](https://github.com/rockbenben/365opensource) kapsamındaki **#020** numaralı proje — bir kişi + yapay zeka, bir yılda 300'den fazla açık kaynak proje. [Fikrinizi paylaşın →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
+[365 Açık Kaynak Planı](https://github.com/rockbenben/365opensource) kapsamındaki **#020** numaralı proje — bir kişi + yapay zeka, bir yılda 300'den fazla açık kaynak proje.
+
+[Fikrinizi paylaşın →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

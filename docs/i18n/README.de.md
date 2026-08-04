@@ -8,17 +8,19 @@
 
 Apps beim Anmelden automatisch starten · zeitgesteuerte Erinnerungen · eine ganze Routine per Fingertipp ausführen
 
+**[⬇ Für Windows herunterladen](https://github.com/rockbenben/Clockwork/releases/latest)** — portabel, ohne Installation
+
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
 </div>
 
 <div align="center">
 
-[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · **Deutsch** · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](../../README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · **Deutsch** · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Ein Windows-Tray-Tool: Autostart-Launcher · Erinnerungen · System-Autostart-Einträge · Aktionsgruppen
-
-[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
 
 ![Clockwork](../../assets/social-card.png)
 
@@ -31,7 +33,7 @@ Ein kleines Windows-Tray-Tool, das sich um die Routineteile deines Tagesstarts a
 
 Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Maus konfigurierbar; dunkle Oberfläche, High-DPI-tauglich.
 
-> 📖 **Vollständige Anleitung:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
+> 📖 **Vollständige Anleitung:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Voraussetzungen
 
@@ -55,62 +57,21 @@ Keine Installation, vollständig portabel in einem einzigen Ordner, alles per Ma
 
 ## Die fünf Tabs
 
-### Startliste
+Fünf Tabs; jedes Feld wird im [vollständigen Handbuch](../USAGE.md) einzeln erklärt.
 
-Eine **geordnete Liste von Schritten**, die beim Anmelden von oben nach unten ausgeführt wird. Klicke auf **Hinzufügen ▾**, um einen Typ zu wählen; frei hinzufügen / entfernen / umsortieren; jeder Schritt lässt sich aktivieren/deaktivieren, mit einer **Verzögerung nach dem Schritt**, einer **Wiederholungszahl** (N-mal wiederholen) und Bedingungen (**nur an bestimmten Wochentagen / nur vor einer bestimmten Uhrzeit**) versehen. Schritttypen:
+- **Startliste** — Schritte laufen beim Anmelden von oben nach unten. Typen: Programm starten · Tasten senden · Text senden · Lautstärke · Fensteraktion · Systembefehl · Aktionsgruppe · Verzögerung · Nachricht. Jeder Schritt hat eine Verzögerung danach, eine Wiederholungszahl und Bedingungen (nur an bestimmten Wochentagen / nur vor N Uhr); Programme zusätzlich Adminrechte, Fensterstil, Aktivieren-falls-läuft und Fallback-Pfade.
+- **Geplante Aufgaben** — eine Uhrzeit (oder „beim Anmelden") × eine Wiederholung (Wochentag / alle N Tage / monatlich / einmalig) × eine Aktion: eine Erinnerung (Ja/Nein-Dialog mit Schlummern oder eine Karte in der Ecke, auf Wunsch vorgelesen) oder eine still ausgeführte Aktionsgruppe. Dazu Intervallläufe, wiederholtes Nachhaken, Nachholen verpasster Auslösungen und Nicht-stören aus dem Tray.
+- **System-Autostart-Einträge** — alles, was auf deinem PC automatisch startet (Registry-Run-Schlüssel, Autostart-Ordner, geplante Aufgaben): abschalten (deaktiviert, nicht gelöscht), in die eigene Startliste übernehmen oder endgültig löschen.
+- **Aktionsgruppen** — ein wiederverwendbares Bündel von Aktionen, ausgelöst aus dem Tray, per **globalem Hotkey** (erneut drücken bricht den Lauf ab), als Schritt in der Startliste oder aus einer geplanten Aufgabe. Eine Gruppe kann sich als Ganzes wiederholen und andere Gruppen referenzieren (Ringverweise werden beim Speichern abgelehnt); ein **Nachrichten**-Schritt hält den Rest mit Ja / Nein auf.
+- **Einstellungen** — Startverzögerung (0–600 s, nur beim Start), minimiert in den Tray starten, beim Anmelden starten, Notfall-Hotkey, UI-Sprache (18 Stück), Konfiguration exportieren / importieren.
 
-- **Programm starten** — Ziel (**Durchsuchen…**, um eine Datei zu wählen) / Argumente / Arbeitsverzeichnis (leer lassen = Ordner des Ziels) / Administrator. Das Ziel kann eine `.exe`, ein Dokument, eine Verknüpfung oder eine URL sein; eine `.ps1` läuft über PowerShell. Erweitert: **Fensterstil** (minimiert / maximiert / ausgeblendet), **aktivieren, falls bereits läuft** (nach vorn holen statt neu zu starten; Prozessname über **Auswählen…**), **Ausweichpfade** (ein vollständiger Pfad pro Zeile; der erste vorhandene wird verwendet — praktisch, wenn sich Installationspfade zwischen Rechnern unterscheiden).
-- **Tasten senden** — z. B. Win+D, Alt+K, Ctrl+Enter, F5 (**Aufzeichnen**, um ein Tastenkürzel durch Drücken festzuhalten).
-- **Text senden** — tippt eine Zeichenfolge in das fokussierte Fenster (oder einen über **Auswählen…** gewählten **Zielprozess**).
-- **Lautstärke** — stummschalten / Stummschaltung aufheben / Pegel einstellen.
-- **Fensteraktion** — nach Prozessname (**Auswählen…**, durchsuchbar): schließen / minimieren / maximieren / nach vorn holen / nach vorn holen und Tasten senden; langsame Apps können **bis zu N Sekunden warten, bis das Fenster erscheint**.
-- **Systembefehl** — Desktop anzeigen / sperren / Monitor ausschalten / Papierkorb leeren / Zwischenablage löschen / Einstellungen öffnen / Task-Manager / Screenshot / Energie sparen / Ruhezustand / abmelden / neu starten / herunterfahren (die letzten drei fragen zuerst nach).
-- **Verzögerung** — einfach N Sekunden warten, bevor der nächste Schritt kommt.
-- **Aktionsgruppe** — führt eine definierte Aktionsgruppe aus; ihre Wiederholungszahl sagt, wie oft *dieser Verweis* feuert (die Gruppe kann sich zusätzlich intern wiederholen — siehe **Aktionsgruppen** unten).
-
-> **Startverzögerung** (Tab „Einstellungen“, nur beim Start): wartet nach dem Anmelden eine feste Anzahl Sekunden, damit der „Anmeldesturm“ (Datenträger-/CPU-Konkurrenz durch alle Autostarts) vorbei ist, bevor die Liste läuft; ein manueller Neustart der Liste ist davon nicht betroffen. Erhöhe sie (0–600 s), wenn Dinge zu früh starten.
-
-> **Jederzeit stoppen** — die **Stopp-Schaltfläche** rechts in der Registerleiste des Fensters (erscheint nur, während etwas läuft), Tray → **Laufende Aktionen stoppen**, oder das globale **Notfall-Hotkey** (auf dem Tab „Einstellungen“ festgelegt; Standard `Ctrl+Alt+Q`). Was gerade läuft, stoppt nach der aktuellen Aktion; lange Wartezeiten (Startverzögerung, Warten auf ein Fenster) werden sofort unterbrochen.
-
-### Geplante Aufgaben
-
-Lege eine **Zeit** fest (oder wechsle zu **beim Anmelden**), eine **Wiederholung** (Wochentage / alle N Tage / monatlich / **einmalig an einem Datum**) und wähle eine **Aktion**: **Erinnerung anzeigen** oder **Aktionsgruppe still ausführen**. Nur die Felder der gewählten Aktion bleiben sichtbar — du füllst also nie ein Feld aus, das nichts tut.
-
-Erinnerungen mit einer **Bei-Ja-Aktion** (Programm ausführen / Datei öffnen / URL / Aktionsgruppe ausführen) blenden ein **Ja / Nein**-Dialogfeld mit einer **Schlummern**-Schaltfläche ein (Standard 10 Min., ▾-Menü 5–60 Min.); die übrigen gleiten als **Erinnerungskarte** in die Ecke (schließt nach den konfigurierten Sekunden automatisch, **0 = bleibt, bis du sie schließt**). Der Text kann vorgelesen werden.
-
-**Intervall-Läufe** machen aus einer Aufgabe einen Ganztagsplan: *alle N Minuten bis HH:mm* (leer = Tagesende). Anders als das **Nachfassen**, das beim Bestätigen aufhört, läuft ein Intervall nach deiner Antwort weiter — genau das macht eine stille Gruppe als Poller brauchbar. Intervalle bleiben innerhalb des Tages; morgen beginnt frisch bei der eigenen Zeit der Aufgabe. Der Fortschritt wird gespeichert: ein Neustart um die Mittagszeit behält die restlichen Runden des Tages.
-
-**Einmalig** feuert an seinem Datum und **entfernt danach selbst den Haken**, bleibt aber in der Liste — Datum ändern, Haken neu setzen, weiterverwenden. Es wartet, bis Nachfassen oder Schlummern beendet sind, und schneidet so keine laufende Zustellung ab.
-
-Ein unbeantworteter Dialog blockiert weder die Warteschlange noch geht er verloren: Nach höchstens einer Minute wird er automatisch zu **„10 Minuten schlummern“** und kommt später wieder. Dieser Zustand wird wie jedes Schlummern auf die Festplatte geschrieben — er überlebt Neustarts, und mit aktiviertem **„nachholen, wenn verpasst“** feuert er selbst nach einer Nacht über Mitternacht am nächsten Tag noch einmal. Wiederholte Auslösungen einer Erinnerung teilen sich eine einzige Karte (markiert **×N**); weggeklickte oder automatisch geschlossene Karten lassen sich über das Tray-Menü **„Zuletzt“** erneut anzeigen.
-
-Erweitert: **automatisch schließen**, **wiederholtes Nörgeln** (alle N Minuten bis zu einem Stichtag erneut einblenden), **Verzögerung nach Auslösung + zufälliger Jitter**, **Kulanz** (eine durch kurzes Herunterfahren/Ruhezustand verpasste Auslösung nachholen), **nachholen, wenn verpasst** (einmal erneut auslösen, nachdem Ruhezustand/Herunterfahren es übersprungen hat) und ein **Ankerdatum** für alle N Tage (**Datum auswählen**). „Heute ausgelöst“ und „geschlummert bis“ überleben Neustarts (`clockwork.state.json`), sodass ein Schlummern über einen Neustart hinweg erhalten bleibt und nichts doppelt auslöst.
-
-Musst du dich konzentrieren oder in ein Meeting? Der Tray bietet **Erinnerungen für 1 / 2 / 4 Stunden pausieren** (Nicht stören): alles (auch stille Gruppen) wird unterdrückt und nach Ablauf der Zeit automatisch fortgesetzt.
-
-### System-Autostart-Einträge
-
-Listet **alles auf, das automatisch startet** (Registry-Run-Schlüssel, Autostart-Ordner, geplante Aufgaben). Entferne das Häkchen bei **Aktiviert**, um einen Eintrag abzuschalten — **deaktiviert, nicht gelöscht; erneut anhaken zum Wiederherstellen** (wirkt sofort). Als **benötigt Administrator** markierte Einträge fordern zum erhöhten Neustart auf. System- / Richtlinien- / einmalige Einträge (Gruppenrichtlinien-Run, RunOnce, Winlogon, Active Setup) lassen sich nicht anfassen und sind **standardmäßig ausgeblendet** — setze ein Häkchen bei **System- / schreibgeschützte Einträge anzeigen**, um sie zu sehen (ausgegraut). Ein Rechtsklick auf eine Zeile bietet **In Startliste übernehmen** (übergibt den Eintrag an Clockwork; nur Registry-Run-Schlüssel und Autostart-Ordner-Einträge) oder **Aus dem System löschen** (entfernt den Eintrag endgültig — fragt vorher nach und lässt sich nicht rückgängig machen; das Häkchen zu entfernen ist die umkehrbare Variante). Ein **Filter** oben durchsucht nach Name / Befehl; fahre über einen abgeschnittenen Befehl, um ihn vollständig zu lesen.
-
-### Aktionsgruppen
-
-Bündle Aktionen zu einer wiederverwendbaren Gruppe. **Hinzufügen ▾** beginnt eine aus einer **integrierten Vorlage** (Fokus / Meeting / Feierabend / Schlafenszeit / Kurz weg / Screenshot / Sitzpause) — passe die Prozessnamen an und speichere. Eine Gruppe **definiert nur Aktionen**; löse sie auf vier Wegen aus: aus dem Tray (**Ausführen: <Gruppe>**), einem **globalen Hotkey**, als **Aktionsgruppen-Schritt** in der Startliste (beim Start) oder aus einer geplanten Aufgabe (**Bei-Ja / stille Gruppe**). Eine Gruppe läuft immer nur in einer Kopie zugleich.
-
-**Schleifen.** Eine Gruppe kann sich **als Ganzes wiederholen** (Wiederholungszahl + Pause zwischen den Runden, im Gruppeneditor). Um nur *einen Teil* einer Abfolge zu wiederholen, lege diese Schritte in eine eigene Gruppe und verweise mit einem **Aktionsgruppen**-Schritt darauf, dessen Wiederholungszahl du setzt — Gruppen dürfen auf Gruppen verweisen, und beim Speichern werden Ringverweise mit der ausgeschriebenen Kette abgelehnt (`A → B → A`). Die drei Wiederholungsregler multiplizieren sich: pro Schritt × pro Verweis × ganze Gruppe. Ein einzelner Lauf ist bei **5000 Schritten** abgesichert, damit eine überdimensionierte Kombination stoppt statt endlos zu laufen.
-
-Ein **Nachrichten**-Schritt ist eine Bestätigungssperre: **Nein** bricht den Rest der Gruppe *samt ihrer verbleibenden Runden* ab und pflanzt sich nach außen zu der Gruppe fort, die sie aufgerufen hat — einmal ablehnen genügt, auch in einer ×N wiederholten Untergruppe.
-
-> **Globales Hotkey** — klicke im Gruppeneditor in das Hotkey-Feld und drücke ein Kürzel (z. B. `Ctrl+Alt+F`), um diese Gruppe von überall auszuführen, ganz ohne Menü. Esc bricht ab, Entf löscht. Deaktivierte Gruppen geben ihre Kombination frei; systemreservierte Kombinationen (Alt+F4, Ctrl+Shift+Esc…) und Kombinationen, die bereits von einer anderen Gruppe oder dem Notfall-Hotkey belegt sind, werden mit einem Hinweis abgelehnt. **Die Tastenkombination ist ein Umschalter:** Drücken Sie sie erneut, während die Gruppe noch läuft, um diesen Durchlauf abzubrechen —— andere Gruppen und die Startliste laufen weiter (alles stoppt nur der Notfall-Hotkey). So abbrechen lassen sich nur Gruppen mit zugewiesener Tastenkombination.
-
-### Einstellungen
-
-**Startverzögerung** (0–600 s, nur beim Start), **minimiert in den Tray starten**, **Notfall-Hotkey** (klicke in das Feld und drücke dein Kürzel; Esc bricht ab, Entf löscht; Standard `Ctrl+Alt+Q`) und **UI-Sprache** (vereinfachtes Chinesisch, English, 日本語 und 15 weitere — 18 insgesamt; ein Wechsel startet die App zur Übernahme neu).
-
-**Konfiguration exportieren / Konfiguration importieren** — verschiebe deine gesamte Einrichtung auf einen anderen PC oder bewahre ein Backup auf. Der Export schreibt eine Kopie von `clockwork.settings.json` an einen beliebigen Ort; der Import ersetzt **alles** (Startliste / Geplante Aufgaben / Aktionsgruppen / Einstellungen), fragt daher zuerst nach, sichert die aktuelle Konfiguration nach `clockwork.settings.json.bak` und startet die App zur Übernahme neu.
+> **Jederzeit stoppen** — die **Stopp-Schaltfläche** rechts in der Registerleiste (erscheint nur, während etwas läuft), Tray → **Laufende Aktionen stoppen** oder der globale **Notfall-Hotkey** (Standard `Ctrl+Alt+Q`). Lange Wartezeiten (Startverzögerung, Warten auf ein Fenster) werden sofort unterbrochen.
 
 ## Tipps
 
 - **Doppelklicke eine Zeile zum Bearbeiten**. Beim Ausfüllen von Pfaden / Prozessen / Kürzeln / Daten musst du nicht von Hand tippen: **Durchsuchen…**, **Auswählen…** (durchsuchbarer Prozess-Picker), **Aufzeichnen** und **Datum auswählen**.
+- **Ziehe eine Zeile, um sie umzusortieren** — in allen drei Listen (Startliste, Geplante Aufgaben, Aktionsgruppen) und in der Schrittliste des Gruppeneditors; die Hoch-/Runter-Schaltflächen funktionieren weiterhin.
+- **Teste es vor dem Speichern** — der Gruppeneditor hat **▶ Diesen Schritt ausführen** und **▶ Gruppe ausführen**; beide führen aus, was gerade im Editor steht. Während des Laufs wird die Schaltfläche zu **■ Stopp**, und das Schließen des Editors stoppt ihn ebenfalls.
 - **Duplizieren** (Tabs „Geplante Aufgaben“ / „Aktionsgruppen“) klont die ausgewählte Zeile direkt darunter — schneller, als eine fast identische neu aufzubauen; eine duplizierte Gruppe heißt „… (Kopie)“.
 - **Löschen fragt immer zuerst nach**, überall — Listenzeilen, Schritte im Gruppeneditor und System-Autostart-Einträge.
 - Ein Doppelklick auf `Clockwork.exe` öffnet nur die Einstellungen — er führt die Startliste **nicht** sofort aus; nutze dafür **Startliste erneut ausführen** im Tray.
@@ -135,4 +96,6 @@ C#/.NET WPF; Quelltext in `app/` (benötigt das .NET-10-SDK). Schichten: `Core/`
 
 ## Über den 365 Open Source Plan
 
-Projekt **#020** des [365 Open Source Plan](https://github.com/rockbenben/365opensource) — eine Person + KI, über 300 Open-Source-Projekte in einem Jahr. [Reiche deine Idee ein →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
+Projekt **#020** des [365 Open Source Plan](https://github.com/rockbenben/365opensource) — eine Person + KI, über 300 Open-Source-Projekte in einem Jahr.
+
+[Reiche deine Idee ein →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

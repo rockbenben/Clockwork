@@ -8,17 +8,19 @@
 
 Start je apps automatisch bij het aanmelden · herinneringen op tijd · met één tik een hele routine uitvoeren
 
+**[⬇ Downloaden voor Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portable, geen installatie
+
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
 </div>
 
 <div align="center">
 
-[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Nederlands** · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](../../README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Nederlands** · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Een Windows-systeemvaktool: opstartlanceerder · herinneringen · opstartitems van het systeem · actiegroepen
-
-[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
 
 ![Clockwork](../../assets/social-card.png)
 
@@ -31,7 +33,7 @@ Een kleine Windows-systeemvaktool die de routineklusjes afhandelt waarmee je je 
 
 Geen installatie, volledig draagbaar in één map, alles met de muis in te stellen; donkere interface, geschikt voor hoge resolutie (high-DPI).
 
-> 📖 **Volledige handleiding:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
+> 📖 **Volledige handleiding:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Vereisten
 
@@ -55,62 +57,21 @@ Geen installatie, volledig draagbaar in één map, alles met de muis in te stell
 
 ## De vijf tabbladen
 
-### Opstartlijst
+Vijf tabbladen; elk veld wordt stuk voor stuk uitgelegd in de [volledige handleiding](../USAGE.md).
 
-Een **geordende lijst met stappen** die bij het aanmelden van boven naar beneden worden uitgevoerd. Klik op **Toevoegen ▾** om een type te kiezen; vrij toevoegen, verwijderen en herordenen; elke stap kan worden in-/uitgeschakeld, een **vertraging na de stap**, een **aantal herhalingen** (N keer herhalen) en voorwaarden (**alleen op bepaalde weekdagen / alleen vóór N uur**) krijgen. Staptypen:
+- **Opstartlijst** — stappen lopen bij het aanmelden van boven naar beneden. Typen: programma starten · toetsen sturen · tekst sturen · volume · vensteractie · systeemopdracht · actiegroep · wachttijd · bericht. Elke stap heeft een wachttijd erna, een aantal herhalingen en voorwaarden (alleen op bepaalde weekdagen / alleen vóór N uur); programma's daarnaast beheerdersrechten, vensterstijl, activeren-als-actief en alternatieve paden.
+- **Geplande taken** — een tijd (of "bij aanmelden") × een herhaling (weekdag / elke N dagen / maandelijks / eenmalig) × één actie: een herinnering (Ja/Nee-venster met uitstel, of een kaart in de hoek, desgewenst voorgelezen) of een stil uitgevoerde actiegroep. Plus intervalruns, herhaald aandringen, inhalen van een gemiste trigger en Niet storen vanuit het systeemvak.
+- **Systeem-opstartitems** — alles wat op je pc automatisch start (Run-sleutels in het register, Opstartmappen, geplande taken): uitzetten (uitgeschakeld, niet verwijderd), overnemen in je eigen opstartlijst of definitief verwijderen.
+- **Actiegroepen** — een herbruikbare bundel acties, gestart vanuit het systeemvak, een **globale sneltoets** (nogmaals drukken annuleert die run), een stap in de opstartlijst of een geplande taak. Een groep kan zichzelf in zijn geheel herhalen en naar andere groepen verwijzen (kringverwijzingen worden bij opslaan geweigerd); een **bericht**-stap houdt de rest tegen met Ja / Nee.
+- **Instellingen** — opstartvertraging (0–600 s, alleen bij opstarten), geminimaliseerd in het systeemvak starten, starten bij aanmelden, noodstop-sneltoets, UI-taal (18 stuks), configuratie exporteren / importeren.
 
-- **Programma starten** — doel (**Bladeren…** om een bestand te kiezen) / argumenten / werkmap (leeg laten = map van het doel) / beheerder. Het doel kan een `.exe`, document, snelkoppeling of URL zijn; een `.ps1` draait via PowerShell. Geavanceerd: **vensterstijl** (geminimaliseerd / gemaximaliseerd / verborgen), **activeren indien al actief** (haal het naar de voorgrond in plaats van het opnieuw te starten; procesnaam via **Kiezen…**), **terugvalpaden** (één volledig pad per regel; het eerste bestaande wordt gebruikt — handig wanneer installatiepaden per machine verschillen).
-- **Toetsen versturen** — bijv. Win+D, Alt+K, Ctrl+Enter, F5 (**Vastleggen** om een sneltoets op te nemen door hem in te drukken).
-- **Tekst versturen** — typt een tekenreeks in het actieve venster (of in een gekozen **doelproces** via **Kiezen…**).
-- **Volume** — dempen / dempen opheffen / niveau instellen.
-- **Vensteractie** — op procesnaam (**Kiezen…**, doorzoekbaar): sluiten / minimaliseren / maximaliseren / naar-voorgrond / naar-voorgrond-en-toetsen-versturen; trage apps kunnen **tot N seconden wachten tot het venster verschijnt**.
-- **Systeemopdracht** — bureaublad weergeven / vergrendelen / monitor uitzetten / prullenbak legen / klembord wissen / Instellingen openen / Taakbeheer / schermafbeelding / slaapstand / sluimerstand / afmelden / opnieuw opstarten / afsluiten (de laatste drie vragen eerst om bevestiging).
-- **Vertraging** — wacht gewoon N seconden vóór de volgende stap.
-- **Actiegroep** — voert een gedefinieerde actiegroep uit; het aantal herhalingen zegt hoe vaak *deze verwijzing* afgaat (de groep kan zich ook intern herhalen — zie **Actiegroepen** hieronder).
-
-> **Opstartvertraging** (tabblad Instellingen, alleen bij opstarten): wacht een vast aantal seconden na het aanmelden zodat de «opstartstorm» (schijf-/CPU-belasting van alles dat automatisch opstart) voorbij is voordat de lijst wordt uitgevoerd; een handmatige herstart wordt niet beïnvloed. Verhoog het (0–600 s) als dingen te vroeg starten.
-
-> **Stop op elk moment** — de **stopknop** rechts in de tabbladbalk van het venster (alleen zichtbaar terwijl er iets draait), systeemvak → **Actieve acties stoppen**, of de globale **paniek-sneltoets** (ingesteld op het tabblad Instellingen; standaard `Ctrl+Alt+Q`). Wat er draait stopt na de huidige actie; lange wachttijden (opstartvertraging, wachten op een venster) worden onmiddellijk onderbroken.
-
-### Geplande taken
-
-Stel een **tijd** in (of schakel over naar **bij het aanmelden**), een **herhaling** (weekdagen / om-de-N-dagen / maandelijks / **eenmalig op een datum**) en kies één **actie**: **een herinnering tonen** of **een actiegroep stil uitvoeren**. Alleen de velden van de gekozen actie blijven staan, zodat je nooit een vakje invult dat niets doet.
-
-Herinneringen met een **Bij-Ja**-actie (programma starten / bestand openen / URL / actiegroep uitvoeren) tonen een **Ja / Nee**-dialoogvenster met een knop **Uitstellen** (standaard 10 min, ▾-menu 5–60 min); de rest schuift als een **herinneringskaart** in de hoek naar binnen (sluit vanzelf na het ingestelde aantal seconden, **0 = blijft staan tot je hem sluit**). De tekst kan worden voorgelezen.
-
-**Intervalruns** maken van één taak een dagschema: *elke N minuten tot HH:mm* (leeg = einde van de dag). Anders dan **blijven porren**, dat stopt zodra je bevestigt, gaat een interval na je antwoord verder — precies daardoor is een stille groep bruikbaar als poller. Intervallen blijven binnen de dag; morgen begint opnieuw op de eigen tijd van de taak. De voortgang wordt bewaard: de app om twaalf uur herstarten houdt de resterende rondes van die dag.
-
-**Eenmalig** gaat af op zijn datum en **vinkt zichzelf daarna uit**, maar blijft in de lijst — verander de datum en vink opnieuw aan om hem te hergebruiken. Hij wacht tot porren of uitstellen klaar is voordat hij uitgaat, en kapt dus nooit een lopende bezorging af.
-
-Een onbeantwoord dialoogvenster blokkeert niets en raakt niet zoek: na hooguit een minuut wordt het een **automatisch uitstel van 10 minuten** en komt het later terug. Die toestand wordt net als elk uitstel naar schijf geschreven — hij overleeft herstarts, en met **inhalen indien gemist** aan vuurt hij zelfs na een nacht over middernacht de volgende dag nog één keer. Herhaalde meldingen van één herinnering delen één kaart (gemarkeerd **×N**), en gesloten of verlopen kaarten zijn opnieuw te tonen via het traymenu **Recent**.
-
-Geavanceerd: **automatisch sluiten**, **herhaald aandringen** (verschijnt om de N minuten opnieuw tot een deadline), **vertraging na trigger + willekeurige spreiding**, **respijt** (haalt een trigger in die door een korte afsluiting/slaapstand is gemist), **inhalen indien gemist** (vuurt eenmaal opnieuw als sluimerstand/afsluiting hem heeft overgeslagen) en een **ankerdatum** voor om-de-N-dagen (**Datum kiezen**). «Vandaag gevuurd» en «uitgesteld tot» overleven herstarts (`clockwork.state.json`), zodat een uitstel een herstart overbrugt en niets dubbel vuurt.
-
-Moet je je concentreren of een vergadering bijwonen? Het systeemvak biedt **Herinneringen pauzeren gedurende 1 / 2 / 4 uur** (Niet storen): alles (inclusief stille groepen) wordt onderdrukt en hervat automatisch wanneer de tijd om is.
-
-### Opstartitems van het systeem
-
-Toont **alles dat automatisch opstart** (Run-sleutels in het register, Opstartmappen, geplande taken). Vink **Inschakelen** uit om een item uit te schakelen — **uitgeschakeld, niet verwijderd; opnieuw aanvinken om te herstellen** (heeft direct effect). Items die als **vereist beheerder** zijn gemarkeerd, vragen om verhoogd opnieuw te starten. Systeem- / beleids- / eenmalige items (Groepsbeleid-Run, RunOnce, Winlogon, Active Setup) kun je niet aanraken en zijn **standaard verborgen** — vink **Systeem- / alleen-lezen-items weergeven** aan om ze te bekijken (grijs weergegeven). Klik met de rechtermuisknop op een rij voor **Overnemen naar startlijst** (draagt het item over aan Clockwork; alleen Run-sleutels in het register en items in de Opstartmap) of **Uit het systeem verwijderen** (verwijdert de vermelding definitief — vraagt eerst om bevestiging en kan niet ongedaan worden gemaakt; uitvinken is de omkeerbare optie). Een **filter** bovenaan zoekt op naam / opdracht; beweeg de muis over een afgekapte opdracht om hem volledig te lezen.
-
-### Actiegroepen
-
-Bundel acties in een herbruikbare groep. **Toevoegen ▾** start er een op basis van een **ingebouwd sjabloon** (Focus / Vergadering / Afronden / Bedtijd / Even weg / Schermafbeelding / Zitpauze) — pas de procesnamen aan en sla op. Een groep **definieert alleen acties**; trigger hem op vier manieren: vanuit het systeemvak (**Uitvoeren: <groep>**), een **globale sneltoets**, als een **actiegroep-stap** in de opstartlijst (bij het opstarten) of vanuit een geplande taak (**Bij-Ja / stille groep**). Een groep draait telkens maar één kopie tegelijk.
-
-**Lussen.** Een groep kan zich **in zijn geheel herhalen** (aantal herhalingen + pauze tussen rondes, in de groepseditor). Wil je maar *een deel* van een reeks herhalen, zet die stappen dan in hun eigen groep en verwijs ernaar met een **actiegroep**-stap waarvan jij het aantal herhalingen instelt — groepen mogen naar groepen verwijzen, en bij opslaan worden kringverwijzingen geweigerd met de keten erbij (`A → B → A`). De drie herhaalknoppen vermenigvuldigen: per stap × per verwijzing × hele groep. Eén run heeft een zekering van **5000 stappen**, zodat een te grote combinatie stopt in plaats van eindeloos door te draaien.
-
-Een **bericht**-stap is een bevestigingspoort: met **Nee** antwoorden breekt de rest van de groep af *inclusief de resterende rondes*, en plant zich naar buiten voort naar de groep die ernaar verwees — één keer weigeren is genoeg, ook in een subgroep die ×N wordt herhaald.
-
-> **Globale sneltoets** — klik in de groepseditor op het sneltoetsvak en druk op een sneltoets (bijv. `Ctrl+Alt+F`) om die groep overal vandaan uit te voeren, zonder menu. Esc annuleert, Delete wist. Uitgeschakelde groepen geven hun combinatie vrij; systeemgereserveerde combinaties (Alt+F4, Ctrl+Shift+Esc…) en combinaties die al door een andere groep of de paniek-sneltoets in gebruik zijn, worden met een melding geweigerd. **De sneltoets is een schakelaar:** druk er nogmaals op terwijl de groep nog loopt om die uitvoering te annuleren —— andere groepen en de opstartlijst gaan verder (de paniek-sneltoets stopt alles). Alleen groepen met een toegewezen sneltoets kunnen zo worden geannuleerd.
-
-### Instellingen
-
-**Opstartvertraging** (0–600 s, alleen bij opstarten), **geminimaliseerd naar het systeemvak starten**, **paniek-sneltoets** (klik op het vak en druk je sneltoets in; Esc annuleert, Delete wist; standaard `Ctrl+Alt+Q`) en **UI-taal** (Vereenvoudigd Chinees, Engels, 日本語 en 15 meer — 18 in totaal; wisselen herstart de app om het toe te passen).
-
-**Configuratie exporteren / Configuratie importeren** — verhuis je hele opzet naar een andere pc of houd een back-up. Exporteren schrijft een kopie van `clockwork.settings.json` waar je maar wilt; importeren vervangt **alles** (opstartlijst / geplande taken / actiegroepen / instellingen), dus het vraagt eerst om bevestiging, maakt van de huidige configuratie een back-up in `clockwork.settings.json.bak` en herstart de app om het toe te passen.
+> **Stop wanneer je wilt** — de **stopknop** rechts in de tabbalk (alleen zichtbaar terwijl er iets loopt), systeemvak → **Lopende acties stoppen**, of de globale **noodstop-sneltoets** (standaard `Ctrl+Alt+Q`). Lange wachttijden (opstartvertraging, wachten op een venster) worden meteen afgebroken.
 
 ## Tips
 
 - **Dubbelklik op een rij om die te bewerken**. Bij het invullen van paden / processen / sneltoetsen / datums hoef je niet met de hand te typen: **Bladeren…**, **Kiezen…** (doorzoekbare proceskiezer), **Vastleggen** en **Datum kiezen**.
+- **Sleep een rij om de volgorde te wijzigen** — in alle drie de lijsten (opstartlijst, geplande taken, actiegroepen) en in de stappenlijst van de groepseditor; de omhoog/omlaag-knoppen werken nog steeds.
+- **Test het vóór het opslaan** — de groepseditor heeft **▶ Deze stap uitvoeren** en **▶ Groep uitvoeren**, beide voeren uit wat er nu op het scherm staat. Tijdens het uitvoeren verandert de knop in **■ Stoppen**, en het sluiten van de editor stopt het ook.
 - **Dupliceren** (tabbladen Geplande taken / Actiegroepen) kloont de geselecteerde rij er direct onder — sneller dan een bijna identieke opnieuw opbouwen; een gedupliceerde groep krijgt de naam «… (kopie)».
 - **Verwijderen vraagt altijd eerst om bevestiging**, overal — rijen in lijsten, stappen in de groepseditor en opstartitems van het systeem.
 - Dubbelklikken op `Clockwork.exe` opent alleen de instellingen — het voert **niet** meteen de opstartlijst uit; gebruik daarvoor **Opstartlijst opnieuw uitvoeren** in het systeemvak.
@@ -135,4 +96,6 @@ C#/.NET WPF; broncode in `app/` (vereist de .NET 10-SDK). Lagen: `Core/` pure lo
 
 ## Over het 365 Open-Source Plan
 
-Project **#020** van het [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — één persoon + AI, 300+ opensourceprojecten in een jaar. [Een verzoek indienen →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
+Project **#020** van het [365 Open-Source Plan](https://github.com/rockbenben/365opensource) — één persoon + AI, 300+ opensourceprojecten in een jaar.
+
+[Een verzoek indienen →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

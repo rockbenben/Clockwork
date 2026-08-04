@@ -1,6 +1,6 @@
 # Clockwork — User Guide
 
-**English** · [中文](USAGE.zh-CN.md) · [← Back to README](../README.md)
+**English** · [中文](USAGE.zh.md) · [← Back to README](../README.md)
 
 Put the repetitive parts of your PC on autopilot: auto-launch your apps at login · timed reminders · one tap to run a whole routine.
 
@@ -17,7 +17,7 @@ A small Windows tray tool that manages four everyday things (plus a Settings tab
 
 1. Unzip `Clockwork-<version>.zip` into any folder (portable — put it wherever); inside is a single `Clockwork.exe`.
 2. Double-click **`Clockwork.exe`** to open the settings window.
-3. To run it every boot: on the **Settings** tab, click **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
+3. To run it every boot: on the **Settings** tab, tick **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
 
 It sits quietly in the tray. The window's close button only hides it to the tray; quit for real via the tray's right-click **Exit**. Tick **Start minimized to tray** on the Settings tab and opening it manually goes straight to the tray too.
 
@@ -41,7 +41,7 @@ The most common need, "open my everyday apps at login":
 
 ## Startup list
 
-- An **ordered list of steps** run top-to-bottom at login. Add/remove; **drag a row to reorder it**, or use the up/down buttons; **double-click a row to edit** it.
+- An **ordered list of steps** run top-to-bottom at login. Add/remove; **drag a row to reorder it**, or use the up/down buttons; **double-click a row to edit** it. (Dragging works the same way on the Scheduled tasks and Action groups lists.)
 - Each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times, waiting the post-step delay between each), and conditions (**only on certain weekdays / only before N o'clock**).
 - Selecting a step and clicking **Run** runs *just that step* immediately (ignoring its enabled state and time conditions — pure test); a tray toast reports the result.
 
@@ -87,7 +87,8 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 - **Advanced:** auto-close · repeat-nagging (re-pop every N minutes until a deadline) · post-trigger delay + random jitter · grace (catch a fire missed by a brief shutdown/sleep) · **catch up if missed** (re-fire once after hibernation/shutdown skipped it) · an **anchor date** for every-N-days (**Pick date**).
 - **State persistence:** "fired today" and "snoozed until" are saved to `clockwork.state.json`, surviving restarts — a snooze carries across a restart and the same reminder never double-fires in a day. Interval progress is persisted the same way, so restarting mid-day keeps the day's remaining rounds.
 - **Do-Not-Disturb:** tray → **Pause reminders ▸** → 1 / 2 / 4 hours. Everything (including silent groups) is suppressed and auto-resumes when the time is up; you can also **Resume** early. Anything missed follows the normal grace / catch-up rules.
-- **Silent action group:** run a group on time with **no popup**. Selecting a task and clicking **Run** previews it once — note that for a silent task, Run **actually executes** the group.
+- **Silent action group:** run a group on time with **no popup**. Selecting a task and clicking **Run** runs it once — note that for a silent task, Run **actually executes** the group.
+- **What the list columns say:** a task triggered **at login** shows **Every login** in the period column (it never consults a weekday/monthly recurrence, so the editor hides that block too), and a **silent** task shows the group it runs in the text column instead of an empty cell.
 - **Duplicate** clones the selected task right below it (same text and settings, its own schedule state) — handy for "same task, second time of day": duplicate, then just change the time.
 
 ## System startup items
@@ -141,6 +142,7 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
 
 ## Settings
 
+- **Start at login** — a checkbox: ticking it registers a scheduled task with admin rights (so boot brings no UAC prompts), unticking removes it. If the change needs elevation, Clockwork relaunches itself to do it; if it fails, the box springs back rather than claiming a state that isn't real.
 - **Startup delay** (0–600 s, boot only).
 - **Start minimized to tray** (opening manually goes straight to the tray).
 - **Panic hotkey** — click the box and press your shortcut; Esc cancels, Delete clears; default `Ctrl+Alt+Q`.

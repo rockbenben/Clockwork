@@ -8,15 +8,19 @@
 
 Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios programados · un toque para ejecutar toda una rutina
 
+**[⬇ Descargar para Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portable, sin instalador
+
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
 </div>
 
 <div align="center">
 
-[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · **Español** · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](../../README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · **Español** · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> Plan de Código Abierto 365 #020 · Una herramienta de bandeja para Windows: lanzador de inicio · recordatorios · elementos de inicio del sistema · grupos de acciones
+> Una herramienta de bandeja para Windows: lanzador de inicio · recordatorios · elementos de inicio del sistema · grupos de acciones
 
 ![Clockwork](../../assets/social-card.png)
 
@@ -29,7 +33,7 @@ Una pequeña herramienta de bandeja para Windows que se encarga de las partes ru
 
 Sin instalación, totalmente portátil en una sola carpeta, todo configurable con el ratón; interfaz oscura, compatible con alta resolución (high-DPI).
 
-> 📖 **Guía completa:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
+> 📖 **Guía completa:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Requisitos
 
@@ -53,62 +57,21 @@ Sin instalación, totalmente portátil en una sola carpeta, todo configurable co
 
 ## Las cinco pestañas
 
-### Lista de inicio
+Cinco pestañas; cada campo se explica una por una en la [guía completa](../USAGE.md).
 
-Una **lista ordenada de pasos** que se ejecutan de arriba abajo al iniciar sesión. Haz clic en **Añadir ▾** para elegir un tipo; añade, quita y reordena libremente; cada paso se puede habilitar/deshabilitar, asignarle un **retardo posterior al paso**, un **número de repeticiones** (repetirlo N veces) y condiciones (**solo en ciertos días de la semana / solo antes de las N en punto**). Tipos de paso:
+- **Lista de inicio** — los pasos se ejecutan de arriba abajo al iniciar sesión. Tipos: ejecutar programa · enviar teclas · enviar texto · volumen · acción de ventana · comando del sistema · grupo de acciones · espera · mensaje. Cada paso admite una espera posterior, un número de repeticiones y condiciones (solo ciertos días / solo antes de las N); los programas además admin, estilo de ventana, activar-si-ya-se-ejecuta y rutas alternativas.
+- **Tareas programadas** — una hora (o «al iniciar sesión») × una recurrencia (día de la semana / cada N días / mensual / una vez) × una acción: un recordatorio (diálogo Sí/No con posponer, o una tarjeta en la esquina, con lectura en voz alta opcional) o un grupo de acciones ejecutado en silencio. Además ejecuciones por intervalos, insistencia repetida, recuperación de disparos perdidos y No molestar desde la bandeja.
+- **Elementos de inicio del sistema** — todo lo que arranca solo en tu PC (claves Run del registro, carpetas de Inicio, tareas programadas): desactivarlo (deshabilitado, no borrado), traspasarlo a tu propia lista de inicio o eliminarlo definitivamente.
+- **Grupos de acciones** — un paquete reutilizable de acciones, disparado desde la bandeja, un **atajo global** (púlsalo otra vez para cancelar esa ejecución), un paso de la lista de inicio o una tarea programada. Un grupo puede repetirse por completo y referenciar otros grupos (las referencias circulares se rechazan al guardar); un paso de **mensaje** corta el resto con Sí / No.
+- **Ajustes** — retardo de inicio (0–600 s, solo en el arranque), iniciar minimizado en la bandeja, iniciar al arrancar sesión, atajo de pánico, idioma de la interfaz (18), exportar / importar configuración.
 
-- **Ejecutar programa** — destino (**Examinar…** para elegir un archivo) / argumentos / directorio de trabajo (déjalo en blanco = carpeta del destino) / administrador. El destino puede ser un `.exe`, un documento, un acceso directo o una URL; un `.ps1` se ejecuta mediante PowerShell. Avanzado: **estilo de ventana** (minimizada / maximizada / oculta), **activar si ya se está ejecutando** (traerla al frente en vez de relanzarla; nombre del proceso mediante **Elegir…**), **rutas de reserva** (una ruta completa por línea; se usa la primera que exista — útil cuando las rutas de instalación difieren entre equipos).
-- **Enviar teclas** — p. ej. Win+D, Alt+K, Ctrl+Enter, F5 (**Capturar** para registrar un atajo pulsándolo).
-- **Enviar texto** — escribe una cadena en la ventana enfocada (o en un **proceso de destino** elegido mediante **Elegir…**).
-- **Volumen** — silenciar / quitar silencio / fijar el nivel.
-- **Acción de ventana** — por nombre de proceso (**Elegir…**, con búsqueda): cerrar / minimizar / maximizar / traer-al-frente / traer-al-frente-y-enviar-teclas; las aplicaciones lentas pueden **esperar hasta N segundos a que aparezca la ventana**.
-- **Comando del sistema** — mostrar el escritorio / bloquear / apagar el monitor / vaciar la papelera de reciclaje / borrar el portapapeles / abrir Configuración / Administrador de tareas / captura de pantalla / suspender / hibernar / cerrar sesión / reiniciar / apagar (los tres últimos piden confirmación primero).
-- **Retardo** — simplemente espera N segundos antes del siguiente paso.
-- **Grupo de acciones** — ejecuta un grupo de acciones definido; su número de repeticiones indica cuántas veces se dispara *esta referencia* (el grupo también puede repetirse internamente — véase **Grupos de acciones** más abajo).
-
-> **Retardo de inicio** (pestaña Ajustes, solo en el arranque): espera un número fijo de segundos tras iniciar sesión para que pase la «tormenta de inicio» (contención de disco/CPU de todos los programas que arrancan automáticamente) antes de que se ejecute la lista; una re-ejecución manual no se ve afectada. Súbelo (0–600 s) si las cosas arrancan demasiado pronto.
-
-> **Detén cuando quieras** — el **botón de parada** en el extremo derecho de la barra de pestañas de la ventana (solo aparece mientras algo se está ejecutando), bandeja → **Detener acciones en ejecución**, o el **atajo de pánico** global (se configura en la pestaña Ajustes; por defecto `Ctrl+Alt+Q`). Lo que se esté ejecutando se detiene tras la acción actual; las esperas largas (retardo de inicio, esperar a una ventana) se interrumpen de inmediato.
-
-### Tareas programadas
-
-Fija una **hora** (o cambia a **al iniciar sesión**), una **periodicidad** (días de la semana / cada-N-días / mensual / **una sola vez en una fecha dada**) y elige una **acción**: **mostrar un recordatorio** o **ejecutar un grupo de acciones en silencio**. Solo permanecen en pantalla los campos de la acción elegida, así que nunca rellenas una casilla que no hace nada.
-
-Los recordatorios con una acción **Al-pulsar-Sí** (ejecutar programa / abrir archivo / URL / ejecutar grupo de acciones) muestran un diálogo **Sí / No** con un botón **Posponer** (por defecto 10 min, menú ▾ de 5–60 min); el resto se deslizan como una **tarjeta de recordatorio** en la esquina (se cierra sola tras los segundos configurados, **0 = permanece hasta que la descartes**). El texto puede leerse en voz alta.
-
-**Las ejecuciones por intervalo** convierten una tarea en una agenda para todo el día: *cada N minutos hasta HH:mm* (en blanco = fin del día). A diferencia de la **insistencia**, que se detiene en cuanto confirmas, un intervalo sigue después de que respondas — eso es justo lo que hace utilizable un grupo silencioso como sondeo. Los intervalos no cruzan la medianoche; mañana empieza de nuevo desde la hora propia de la tarea. El progreso se guarda: reiniciar la aplicación a mediodía conserva las rondas que quedan del día.
-
-**Una sola vez** se dispara en su fecha y luego **se desmarca solo**, quedándose en la lista — cambia la fecha y vuelve a marcarlo para reutilizarlo. Espera a que termine cualquier insistencia o posposición antes de apagarse, así que nunca corta una entrega a medias.
-
-Un diálogo sin respuesta ni bloquea la cola ni se pierde: tras un minuto como máximo se convierte en una **posposición automática de 10 minutos** y vuelve más tarde. Ese estado se guarda en disco como cualquier posposición — sobrevive a los reinicios y, con **recuperar si se perdió** activado, vuelve a dispararse una vez al día siguiente aunque la noche haya cruzado la medianoche. Los disparos repetidos de un mismo recordatorio comparten una sola tarjeta (marcada **×N**), y las tarjetas cerradas o expiradas pueden volver a mostrarse desde el menú **Recientes** de la bandeja.
-
-Avanzado: **cierre automático**, **insistencia repetida** (vuelve a saltar cada N minutos hasta un plazo límite), **retardo posterior al disparo + variación aleatoria**, **margen de gracia** (recupera un disparo perdido por un breve apagado/suspensión), **recuperar si se perdió** (vuelve a dispararse una vez si la hibernación/apagado lo saltó) y una **fecha de anclaje** para cada-N-días (**Elegir fecha**). «Disparado hoy» y «pospuesto hasta» sobreviven a los reinicios (`clockwork.state.json`), así que una posposición se conserva tras un reinicio y nada se dispara dos veces.
-
-¿Necesitas concentrarte o atender una reunión? La bandeja ofrece **Pausar recordatorios durante 1 / 2 / 4 horas** (No molestar): todo (incluidos los grupos silenciosos) se suprime y se reanuda automáticamente cuando se acaba el tiempo.
-
-### Elementos de inicio del sistema
-
-Lista **todo lo que se inicia automáticamente** (claves Run del registro, carpetas de Inicio, tareas programadas). Desmarca **Habilitar** para desactivar un elemento — **desactivado, no eliminado; vuelve a marcarlo para restaurarlo** (surte efecto de inmediato). Los elementos marcados como **requiere administrador** piden relanzar con permisos elevados. Los elementos de sistema / directiva / de una sola vez (Run de directiva de grupo, RunOnce, Winlogon, Active Setup) no se pueden tocar y están **ocultos por defecto** — marca **Mostrar elementos de sistema / de solo lectura** para verlos (atenuados). Haz clic derecho en una fila para **Asumir en la lista de inicio** (entrega el elemento a Clockwork; solo claves Run del registro y elementos de la carpeta de Inicio) o **Eliminar del sistema** (borra la entrada para siempre — pide confirmación primero y no se puede deshacer; desmarcarla es la opción reversible). Un **filtro** en la parte superior busca por nombre / comando; pasa el cursor sobre un comando truncado para leerlo completo.
-
-### Grupos de acciones
-
-Agrupa acciones en un grupo reutilizable. **Añadir ▾** inicia uno a partir de una **plantilla integrada** (Concentración / Reunión / Cierre / Antes de dormir / Ausentarse / Captura de pantalla / Pausa por estar sentado) — ajusta los nombres de los procesos y guarda. Un grupo **solo define acciones**; actívalo de cuatro maneras: desde la bandeja (**Ejecutar: <grupo>**), un **atajo global**, como un **paso de grupo de acciones** en la lista de inicio (en el arranque) o desde una tarea programada (**Al-pulsar-Sí / grupo silencioso**). Un grupo ejecuta solo una copia a la vez.
-
-**Bucles.** Un grupo puede **repetirse por completo** (número de repeticiones + espera entre rondas, en el editor de grupos). Para repetir solo *una parte* de una secuencia, pon esos pasos en su propio grupo y referéncialo con un paso de **grupo de acciones** cuyo número de repeticiones fijes — los grupos pueden referenciar grupos, y al guardar se rechazan las referencias circulares mostrando la cadena (`A → B → A`). Los tres mandos de repetición se multiplican: por paso × por referencia × grupo entero. Una ejecución tiene un fusible de **5000 pasos**, de modo que una combinación desmedida se detiene en vez de correr sin fin.
-
-Un paso de **mensaje** es una puerta de confirmación: responder **No** aborta el resto del grupo *y sus rondas restantes*, y se propaga hacia fuera al grupo que lo referenció — rechazar una vez basta, incluso dentro de un subgrupo repetido ×N.
-
-> **Atajo global** — en el editor de grupos, haz clic en el cuadro del atajo y pulsa un atajo (p. ej. `Ctrl+Alt+F`) para ejecutar ese grupo desde cualquier parte, sin necesidad de menús. Esc cancela, Supr lo borra. Los grupos deshabilitados liberan su combinación; las combinaciones reservadas por el sistema (Alt+F4, Ctrl+Shift+Esc…) y las combinaciones ya ocupadas por otro grupo o por el atajo de pánico se rechazan con un aviso. **El atajo es un interruptor:** púlsalo de nuevo mientras el grupo sigue en marcha para cancelar esa ejecución —— los demás grupos y la lista de inicio continúan (el atajo de pánico es el que detiene todo). Solo los grupos con un atajo asignado pueden cancelarse así.
-
-### Ajustes
-
-**Retardo de inicio** (0–600 s, solo en el arranque), **iniciar minimizado en la bandeja**, **atajo de pánico** (haz clic en el cuadro y pulsa tu atajo; Esc cancela, Supr lo borra; por defecto `Ctrl+Alt+Q`) e **idioma de la interfaz** (chino simplificado, inglés, 日本語 y 15 más — 18 en total; cambiarlo reinicia la aplicación para aplicarlo).
-
-**Exportar configuración / Importar configuración** — lleva toda tu configuración a otro PC o guarda una copia de seguridad. Exportar escribe una copia de `clockwork.settings.json` donde quieras; importar reemplaza **todo** (lista de inicio / tareas programadas / grupos de acciones / ajustes), así que pide confirmación primero, hace una copia de seguridad de la configuración actual en `clockwork.settings.json.bak` y reinicia la aplicación para aplicarla.
+> **Detenlo cuando quieras** — el **botón de detención** al final de la barra de pestañas (solo aparece mientras algo se ejecuta), bandeja → **Detener acciones en ejecución** o el **atajo de pánico** global (por defecto `Ctrl+Alt+Q`). Las esperas largas (retardo de inicio, esperar una ventana) se interrumpen de inmediato.
 
 ## Consejos
 
 - **Haz doble clic en una fila para editarla**. Al rellenar rutas / procesos / atajos / fechas no tienes que escribir a mano: **Examinar…**, **Elegir…** (selector de procesos con búsqueda), **Capturar** y **Elegir fecha**.
+- **Arrastra una fila para reordenarla** — en las tres listas (lista de inicio, tareas programadas, grupos de acciones) y en la lista de pasos del editor de grupos; los botones de subir/bajar siguen funcionando.
+- **Pruébalo antes de guardar** — el editor de grupos tiene **▶ Ejecutar este paso** y **▶ Ejecutar grupo**, y ambos ejecutan lo que hay ahora en pantalla. Durante la ejecución el botón se convierte en **■ Detener**, y cerrar el editor también la detiene.
 - **Duplicar** (pestañas Tareas programadas / Grupos de acciones) clona la fila seleccionada justo debajo de ella — más rápido que rehacer una casi idéntica; un grupo duplicado se llama «… (copia)».
 - **Eliminar siempre pide confirmación**, en todas partes — filas de las listas, pasos dentro del editor de grupos y elementos de inicio del sistema.
 - Hacer doble clic en `Clockwork.exe` solo abre los ajustes — **no** ejecuta de inmediato la lista de inicio; para eso usa **Re-ejecutar lista de inicio** de la bandeja.
@@ -133,4 +96,6 @@ C#/.NET WPF; código fuente en `app/` (necesita el SDK de .NET 10). Capas: `Core
 
 ## Sobre el Plan 365 de código abierto
 
-Proyecto **#020** del [Plan 365 de código abierto](https://github.com/rockbenben/365opensource) — una persona + IA, más de 300 proyectos de código abierto en un año. [Envía tu idea →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
+Proyecto **#020** del [Plan 365 de código abierto](https://github.com/rockbenben/365opensource) — una persona + IA, más de 300 proyectos de código abierto en un año.
+
+[Envía tu idea →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

@@ -8,17 +8,19 @@
 
 Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một cú nhấp chạy cả chuỗi thao tác
 
+**[⬇ Tải về cho Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — di động, không cần cài đặt
+
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
 </div>
 
 <div align="center">
 
-[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · **Tiếng Việt** · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](../../README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · **Tiếng Việt** · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
 > Công cụ khay hệ thống cho Windows: trình khởi động · nhắc nhở · mục khởi động hệ thống · nhóm thao tác
-
-[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
 
 ![Clockwork](../../assets/social-card.png)
 
@@ -31,7 +33,7 @@ Một công cụ nhỏ nằm ở khay hệ thống Windows, lo giúp bạn nhữ
 
 Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ cấu hình bằng chuột; giao diện tối, tương thích DPI cao.
 
-> 📖 **Hướng dẫn đầy đủ:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
+> 📖 **Hướng dẫn đầy đủ:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Yêu cầu
 
@@ -55,62 +57,21 @@ Không cần cài đặt, một thư mục di động hoàn toàn, mọi thứ c
 
 ## Năm tab
 
-### Danh sách khởi động
+Năm thẻ; từng trường được giải thích trong [hướng dẫn đầy đủ](../USAGE.md).
 
-Một **danh sách các bước có thứ tự**, chạy từ trên xuống khi đăng nhập. Nhấp **Thêm ▾** để chọn loại; thêm/xóa/sắp xếp tự do; mỗi bước có thể bật/tắt, đặt **độ trễ sau bước**, một **số lần lặp** (lặp N lần), và điều kiện (**chỉ vào một số ngày trong tuần / chỉ trước N giờ**). Các loại bước:
+- **Danh sách khởi động** — các bước chạy từ trên xuống khi đăng nhập. Loại: chạy chương trình · gửi phím · gửi văn bản · âm lượng · thao tác cửa sổ · lệnh hệ thống · nhóm hành động · chờ · thông báo. Mỗi bước có độ trễ sau bước, số lần lặp và điều kiện (chỉ một số thứ trong tuần / chỉ trước N giờ); chương trình còn có quyền quản trị, kiểu cửa sổ, kích hoạt-nếu-đang-chạy và đường dẫn dự phòng.
+- **Tác vụ theo lịch** — một mốc giờ (hoặc "khi đăng nhập") × một chu kỳ (thứ trong tuần / mỗi N ngày / hằng tháng / một lần) × một hành động: lời nhắc (hộp thoại Có/Không kèm hoãn, hoặc thẻ ở góc màn hình, có thể đọc thành tiếng) hoặc một nhóm hành động chạy im lặng. Ngoài ra còn chạy theo khoảng, nhắc lại nhiều lần, bù lần kích hoạt bị lỡ và Không làm phiền từ khay hệ thống.
+- **Mục khởi động hệ thống** — mọi thứ tự khởi động trên máy (khóa Run trong registry, thư mục Startup, tác vụ đã lên lịch): tắt đi (vô hiệu hóa chứ không xóa), tiếp quản vào danh sách khởi động của bạn, hoặc xóa hẳn.
+- **Nhóm hành động** — một gói hành động dùng lại được, kích hoạt từ khay hệ thống, một **phím tắt toàn cục** (bấm lần nữa để hủy lần chạy đó), một bước trong danh sách khởi động, hoặc một tác vụ theo lịch. Nhóm có thể lặp cả nhóm và tham chiếu nhóm khác (tham chiếu vòng bị từ chối khi lưu); bước **thông báo** chặn phần còn lại bằng Có / Không.
+- **Cài đặt** — độ trễ khởi động (0–600 giây, chỉ khi khởi động máy), khởi động thu nhỏ vào khay, chạy khi đăng nhập, phím dừng khẩn, ngôn ngữ giao diện (18), xuất / nhập cấu hình.
 
-- **Khởi chạy chương trình** — đích (**Duyệt…** để chọn tệp) / tham số / thư mục làm việc (để trống = thư mục chứa đích) / admin. Đích có thể là `.exe`, tài liệu, lối tắt hoặc URL; `.ps1` chạy qua PowerShell. Nâng cao: **kiểu cửa sổ** (thu nhỏ / phóng to / ẩn), **kích hoạt nếu đang chạy** (đưa ra trước thay vì mở lại; tên tiến trình qua **Chọn…**), **đường dẫn dự phòng** (mỗi dòng một đường dẫn đầy đủ; dùng đường dẫn đầu tiên tồn tại — tiện khi đường dẫn cài đặt khác nhau giữa các máy).
-- **Gửi phím** — ví dụ Win+D, Alt+K, Ctrl+Enter, F5 (**Bắt phím** để ghi lại tổ hợp bằng cách nhấn nó).
-- **Gửi văn bản** — gõ một chuỗi vào cửa sổ đang có tiêu điểm (hoặc một **tiến trình đích** đã chọn qua **Chọn…**).
-- **Âm lượng** — tắt tiếng / bật tiếng / đặt mức.
-- **Thao tác cửa sổ** — theo tên tiến trình (**Chọn…**, có tìm kiếm): đóng / thu nhỏ / phóng to / đưa ra trước / đưa ra trước rồi gửi phím; ứng dụng khởi động chậm có thể **chờ cửa sổ xuất hiện tối đa N giây**.
-- **Lệnh hệ thống** — hiện màn hình nền / khóa / tắt màn hình / dọn thùng rác / xóa clipboard / mở Cài đặt / Task Manager / chụp màn hình / ngủ / ngủ đông / đăng xuất / khởi động lại / tắt máy (ba mục cuối hỏi xác nhận trước).
-- **Độ trễ** — chỉ chờ N giây trước bước tiếp theo.
-- **Nhóm thao tác** — chạy một nhóm thao tác đã định nghĩa; số lần lặp của nó cho biết *tham chiếu này* kích hoạt bao nhiêu lần (bản thân nhóm cũng có thể tự lặp — xem **Nhóm thao tác** bên dưới).
-
-> **Độ trễ khởi động** (tab Cài đặt, chỉ khi khởi động máy): chờ một số giây cố định sau khi đăng nhập để "cơn bão đăng nhập" (tranh chấp đĩa/CPU do mọi thứ tự khởi động) đi qua trước khi danh sách chạy; chạy lại thủ công thì không bị ảnh hưởng. Tăng lên (0–600 giây) nếu mọi thứ khởi động quá sớm.
-
-> **Dừng bất cứ lúc nào** — **nút dừng** ở đầu bên phải thanh tab của cửa sổ (chỉ hiện khi có thứ gì đó đang chạy), khay → **Dừng các thao tác đang chạy**, hoặc **phím tắt khẩn** toàn cục (đặt ở tab Cài đặt; mặc định `Ctrl+Alt+Q`). Bất cứ thứ gì đang chạy sẽ dừng sau thao tác hiện tại; các khoảng chờ dài (độ trễ khởi động, chờ cửa sổ) bị ngắt ngay lập tức.
-
-### Tác vụ theo lịch
-
-Đặt một **thời điểm** (hoặc chuyển sang **khi đăng nhập**), một **chu kỳ** (ngày trong tuần / mỗi N ngày / hằng tháng / **chỉ một lần vào một ngày chỉ định**), rồi chọn một **thao tác**: **bật lời nhắc** hoặc **chạy nhóm thao tác im lặng**. Chỉ những ô của thao tác đã chọn còn hiển thị, nên bạn không bao giờ điền vào một ô không có tác dụng.
-
-Lời nhắc có thao tác **Khi-Có** (chạy chương trình / mở tệp / URL / chạy nhóm thao tác) sẽ bật hộp thoại **Có / Không** kèm nút **Hoãn** (mặc định 10 phút, menu ▾ 5–60 phút); những lời nhắc còn lại trượt vào góc dưới dạng **thẻ nhắc** (tự đóng sau số giây đã đặt, **0 = ở lại đến khi bạn bỏ qua**). Nội dung có thể được đọc to.
-
-**Chạy theo khoảng** biến một tác vụ thành lịch cho cả ngày: *mỗi N phút cho đến HH:mm* (để trống = hết ngày). Khác với **nhắc lại khi chưa xác nhận** — vốn dừng ngay khi bạn xác nhận — chạy theo khoảng vẫn tiếp tục sau khi bạn trả lời; chính điều đó khiến một nhóm im lặng dùng được như một vòng thăm dò. Khoảng không vượt qua nửa đêm; ngày mai bắt đầu lại từ giờ của chính tác vụ. Tiến độ được lưu, nên khởi động lại ứng dụng vào giữa trưa vẫn giữ các lượt còn lại của ngày.
-
-**Chỉ một lần** kích hoạt vào ngày của nó rồi **tự bỏ dấu chọn**, vẫn nằm trong danh sách — đổi ngày và tích lại là dùng tiếp. Nó đợi phần nhắc lại hoặc hoãn kết thúc rồi mới tự tắt, nên không bao giờ cắt ngang một lần gửi đang dở.
-
-Hộp thoại không được trả lời sẽ không chặn hàng đợi và cũng không bị mất: sau tối đa một phút, nó tự chuyển thành **hoãn 10 phút** và quay lại sau. Trạng thái này được ghi xuống đĩa như mọi lần hoãn — sống sót qua khởi động lại, và nếu bật **bù nếu bị lỡ** thì dù ngủ qua nửa đêm nó vẫn bật lại một lần vào hôm sau. Các lần bật lặp lại của cùng một nhắc nhở dùng chung một thẻ (đánh dấu **×N**), và thẻ đã đóng hoặc tự tắt có thể hiện lại từ menu **Gần đây** trên khay hệ thống.
-
-Nâng cao: **tự đóng**, **nhắc lặp lại** (bật lại mỗi N phút cho đến một hạn), **độ trễ sau kích hoạt + dao động ngẫu nhiên**, **thời gian ân hạn** (bắt lại một lần bị lỡ do tắt máy/ngủ ngắn), **bù nếu bị lỡ** (bật lại một lần sau khi ngủ đông/tắt máy làm lỡ), và một **ngày mốc** cho chu kỳ mỗi N ngày (**Chọn ngày**). Trạng thái "đã bật hôm nay" và "hoãn đến" tồn tại qua các lần khởi động lại (`clockwork.state.json`), nên một lần hoãn vẫn giữ qua lần khởi động lại và không có gì bật hai lần.
-
-Cần tập trung hay họp? Khay cung cấp **Tạm dừng nhắc nhở 1 / 2 / 4 giờ** (Không làm phiền): mọi thứ (kể cả nhóm im lặng) bị chặn và tự nối lại khi hết giờ.
-
-### Mục khởi động hệ thống
-
-Liệt kê **mọi thứ tự khởi động** (khóa Run trong registry, thư mục Startup, tác vụ theo lịch). Bỏ chọn **Bật** để tắt một mục — **bị vô hiệu hóa, không bị xóa; chọn lại để khôi phục** (có hiệu lực ngay). Mục được đánh dấu **cần admin** sẽ hỏi khởi động lại với quyền nâng cao. Các mục hệ thống / chính sách / một lần (Group-Policy Run, RunOnce, Winlogon, Active Setup) không thể can thiệp và **bị ẩn theo mặc định** — tích **Hiện mục hệ thống / chỉ đọc** để xem (mờ đi). Nhấp chuột phải vào một dòng để chọn **Đưa vào danh sách khởi động** (giao mục đó cho Clockwork; chỉ khóa Run trong registry và mục thư mục Startup) hoặc **Xóa khỏi hệ thống** (gỡ hẳn mục đó — hỏi xác nhận trước, và không thể hoàn tác; bỏ chọn mới là cách có thể đảo ngược). Ô **lọc** ở trên tìm theo tên / lệnh; di chuột lên một lệnh bị cắt để đọc đầy đủ.
-
-### Nhóm thao tác
-
-Gói các thao tác thành một nhóm tái sử dụng. **Thêm ▾** bắt đầu một nhóm từ một **mẫu dựng sẵn** (Tập trung / Họp / Kết thúc / Trước khi ngủ / Rời đi một lát / Chụp màn hình / Nhắc ngồi lâu) — chỉnh tên tiến trình rồi lưu. Một nhóm **chỉ định nghĩa thao tác**; kích hoạt theo bốn cách: từ khay (**Chạy: <nhóm>**), một **phím tắt toàn cục**, như một **bước nhóm thao tác** trong danh sách khởi động (khi khởi động máy), hoặc từ một tác vụ theo lịch (**Khi-Có / nhóm im lặng**). Một nhóm chỉ chạy một bản tại một thời điểm.
-
-**Vòng lặp.** Một nhóm có thể **lặp toàn bộ** (số lần lặp + khoảng nghỉ giữa các lượt, đặt trong trình sửa nhóm). Nếu chỉ muốn lặp *một đoạn*, hãy tách đoạn bước đó thành nhóm riêng rồi tham chiếu bằng một bước **nhóm thao tác** với số lần lặp do bạn đặt — nhóm có thể tham chiếu nhóm, và khi lưu, tham chiếu vòng sẽ bị từ chối kèm chuỗi tham chiếu (`A → B → A`). Ba núm lặp nhân với nhau: theo bước × theo tham chiếu × toàn nhóm. Mỗi lần chạy có cầu chì **5000 bước**, nên một tổ hợp quá lớn sẽ dừng thay vì chạy mãi.
-
-Bước **thông báo** là một cổng xác nhận: trả lời **Không** sẽ hủy phần còn lại của nhóm *cùng các lượt còn lại*, và lan ra ngoài tới nhóm đã tham chiếu nó — từ chối một lần là đủ, kể cả khi nó là nhóm con đang được lặp ×N.
-
-> **Phím tắt toàn cục** — trong trình chỉnh sửa nhóm, nhấp vào ô phím tắt rồi nhấn một tổ hợp (ví dụ `Ctrl+Alt+F`) để chạy nhóm đó từ bất cứ đâu, không cần menu. Esc hủy, Delete xóa. Các nhóm bị tắt sẽ nhả tổ hợp của chúng; các tổ hợp dành riêng cho hệ thống (Alt+F4, Ctrl+Shift+Esc…) và các tổ hợp đã bị một nhóm khác hoặc phím tắt khẩn chiếm dụng sẽ bị từ chối kèm thông báo. **Phím tắt là một công tắc bật/tắt:** nhấn lại khi nhóm vẫn đang chạy để hủy lần chạy đó —— các nhóm khác và danh sách khởi động vẫn tiếp tục (thứ dừng tất cả là phím tắt khẩn). Chỉ những nhóm có gán phím tắt mới hủy được theo cách này.
-
-### Cài đặt
-
-**Độ trễ khởi động** (0–600 giây, chỉ khi khởi động máy), **thu nhỏ vào khay khi khởi động**, **phím tắt khẩn** (nhấp vào ô rồi nhấn tổ hợp của bạn; Esc hủy, Delete xóa; mặc định `Ctrl+Alt+Q`), và **ngôn ngữ giao diện** (Tiếng Trung giản thể, English, 日本語 và 15 ngôn ngữ nữa — tổng 18; đổi ngôn ngữ sẽ khởi động lại ứng dụng để áp dụng).
-
-**Xuất cấu hình / Nhập cấu hình** — chuyển toàn bộ thiết lập của bạn sang máy khác hoặc giữ một bản sao lưu. Xuất là lưu một bản `clockwork.settings.json` ra bất cứ đâu bạn muốn; nhập sẽ thay thế **toàn bộ** (danh sách khởi động / tác vụ theo lịch / nhóm thao tác / cài đặt), nên nó hỏi xác nhận trước, sao lưu cấu hình hiện tại thành `clockwork.settings.json.bak`, rồi khởi động lại ứng dụng để áp dụng.
+> **Dừng bất cứ lúc nào** — **nút dừng** ở cuối thanh thẻ (chỉ hiện khi có thứ gì đang chạy), khay hệ thống → **Dừng các hành động đang chạy**, hoặc **phím dừng khẩn** toàn cục (mặc định `Ctrl+Alt+Q`). Các khoảng chờ dài (độ trễ khởi động, chờ cửa sổ) bị ngắt ngay lập tức.
 
 ## Mẹo
 
 - **Nhấp đúp một dòng để chỉnh sửa** nó. Khi điền đường dẫn / tiến trình / lối tắt / ngày, bạn không phải gõ tay: **Duyệt…**, **Chọn…** (trình chọn tiến trình có tìm kiếm), **Bắt phím**, và **Chọn ngày**.
+- **Kéo một dòng để đổi thứ tự** — trong cả ba danh sách (danh sách khởi động, tác vụ theo lịch, nhóm hành động) và trong danh sách bước của trình chỉnh sửa nhóm; các nút lên/xuống vẫn dùng được.
+- **Thử trước khi lưu** — trình chỉnh sửa nhóm có **▶ Chạy bước này** và **▶ Chạy nhóm**, cả hai đều chạy đúng những gì đang có trên màn hình. Khi đang chạy, nút đổi thành **■ Dừng**, và đóng trình chỉnh sửa cũng dừng nó.
 - **Nhân bản** (tab Tác vụ theo lịch / Nhóm thao tác) tạo một bản sao của dòng đang chọn ngay bên dưới nó — nhanh hơn là dựng lại một mục gần giống; nhóm được nhân bản sẽ có tên "… (bản sao)".
 - **Xóa luôn hỏi xác nhận trước**, ở mọi nơi — các dòng trong danh sách, các bước trong trình chỉnh sửa nhóm, và cả mục khởi động hệ thống.
 - Nhấp đúp `Clockwork.exe` chỉ mở cài đặt — **không** chạy ngay danh sách khởi động; dùng **Chạy lại danh sách khởi động** ở khay cho việc đó.
@@ -135,4 +96,6 @@ C#/.NET WPF; mã nguồn ở `app/` (cần .NET 10 SDK). Các lớp: `Core/` log
 
 ## Giới thiệu về 365 Open Source Plan
 
-Dự án **#020** của [365 Open Source Plan](https://github.com/rockbenben/365opensource) — một người + AI, hơn 300 dự án mã nguồn mở trong một năm. [Gửi ý tưởng của bạn →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
+Dự án **#020** của [365 Open Source Plan](https://github.com/rockbenben/365opensource) — một người + AI, hơn 300 dự án mã nguồn mở trong một năm.
+
+[Gửi ý tưởng của bạn →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

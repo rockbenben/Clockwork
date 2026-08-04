@@ -8,15 +8,19 @@
 
 Lancez vos applications automatiquement à l'ouverture de session · rappels programmés · une seule pression pour exécuter toute une routine
 
+**[⬇ Télécharger pour Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portable, sans installation
+
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
 </div>
 
 <div align="center">
 
-[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · **Français** · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](../../README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · **Français** · [Italiano](README.it.md) · [Nederlands](README.nl.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> Plan Open Source 365 #020 · Un outil de barre d'état système pour Windows : lanceur au démarrage · rappels · éléments de démarrage du système · groupes d'actions
+> Un outil de barre d'état système pour Windows : lanceur au démarrage · rappels · éléments de démarrage du système · groupes d'actions
 
 ![Clockwork](../../assets/social-card.png)
 
@@ -29,7 +33,7 @@ Un petit outil de barre d'état système pour Windows qui prend en charge les t�
 
 Sans installation, entièrement portable dans un dossier unique, tout se configure à la souris ; interface sombre, compatible haute résolution (high-DPI).
 
-> 📖 **Guide complet :** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
+> 📖 **Guide complet :** [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Prérequis
 
@@ -53,62 +57,21 @@ Sans installation, entièrement portable dans un dossier unique, tout se configu
 
 ## Les cinq onglets
 
-### Liste de démarrage
+Cinq onglets ; chaque champ est détaillé dans le [guide complet](../USAGE.md).
 
-Une **liste ordonnée d'étapes** exécutées de haut en bas à l'ouverture de session. Cliquez sur **Ajouter ▾** pour choisir un type ; ajoutez, supprimez et réorganisez librement ; chaque étape peut être activée/désactivée, dotée d'un **délai après l'étape**, d'un **nombre de répétitions** (la répéter N fois) et de conditions (**uniquement certains jours de la semaine / uniquement avant N heures**). Types d'étape :
+- **Liste de démarrage** — les étapes s'exécutent de haut en bas à l'ouverture de session. Types : lancer un programme · envoyer des touches · envoyer du texte · volume · action de fenêtre · commande système · groupe d'actions · délai · message. Chaque étape accepte un délai après exécution, un nombre de répétitions et des conditions (certains jours seulement / seulement avant N heures) ; les programmes ont en plus les droits admin, le style de fenêtre, activer-si-déjà-lancé et les chemins de secours.
+- **Tâches planifiées** — une heure (ou « à l'ouverture de session ») × une récurrence (jour de la semaine / tous les N jours / mensuel / une seule fois) × une action : un rappel (boîte Oui/Non avec report, ou une carte dans le coin, lecture à voix haute possible) ou un groupe d'actions exécuté en silence. S'y ajoutent les exécutions par intervalle, les relances répétées, le rattrapage d'un déclenchement manqué et le mode Ne pas déranger depuis la zone de notification.
+- **Éléments de démarrage du système** — tout ce qui démarre automatiquement sur votre PC (clés Run du registre, dossiers Démarrage, tâches planifiées) : le désactiver (désactivé, pas supprimé), le reprendre dans votre propre liste de démarrage ou le supprimer définitivement.
+- **Groupes d'actions** — un lot d'actions réutilisable, déclenché depuis la zone de notification, un **raccourci global** (appuyez à nouveau pour annuler cette exécution), une étape de la liste de démarrage ou une tâche planifiée. Un groupe peut se répéter entièrement et référencer d'autres groupes (les références circulaires sont refusées à l'enregistrement) ; une étape **message** bloque la suite avec Oui / Non.
+- **Paramètres** — délai de démarrage (0–600 s, au démarrage uniquement), démarrer réduit dans la zone de notification, lancer à l'ouverture de session, raccourci d'arrêt d'urgence, langue de l'interface (18), exporter / importer la configuration.
 
-- **Lancer un programme** — cible (**Parcourir…** pour choisir un fichier) / arguments / dossier de travail (laissez vide = dossier de la cible) / administrateur. La cible peut être un `.exe`, un document, un raccourci ou une URL ; un `.ps1` s'exécute via PowerShell. Avancé : **style de fenêtre** (réduite / agrandie / masquée), **activer si déjà en cours** (la mettre au premier plan au lieu de la relancer ; nom du processus via **Choisir…**), **chemins de secours** (un chemin complet par ligne ; le premier existant est utilisé — pratique quand les chemins d'installation diffèrent d'une machine à l'autre).
-- **Envoyer des touches** — par ex. Win+D, Alt+K, Ctrl+Enter, F5 (**Capturer** pour enregistrer un raccourci en l'appuyant).
-- **Envoyer du texte** — saisit une chaîne dans la fenêtre active (ou dans un **processus cible** choisi via **Choisir…**).
-- **Volume** — couper / rétablir le son / régler le niveau.
-- **Action de fenêtre** — par nom de processus (**Choisir…**, avec recherche) : fermer / réduire / agrandir / mettre-au-premier-plan / mettre-au-premier-plan-et-envoyer-des-touches ; les applications lentes peuvent **attendre jusqu'à N secondes l'apparition de la fenêtre**.
-- **Commande système** — afficher le bureau / verrouiller / éteindre l'écran / vider la corbeille / effacer le presse-papiers / ouvrir les Paramètres / le Gestionnaire des tâches / capture d'écran / mettre en veille / mettre en veille prolongée / se déconnecter / redémarrer / arrêter (les trois dernières demandent d'abord confirmation).
-- **Délai** — attend simplement N secondes avant l'étape suivante.
-- **Groupe d'actions** — exécute un groupe d'actions défini ; son nombre de répétitions indique combien de fois *cette référence* se déclenche (le groupe peut aussi se répéter en interne — voir **Groupes d'actions** ci-dessous).
-
-> **Délai de démarrage** (onglet Paramètres, au démarrage uniquement) : attend un nombre fixe de secondes après l'ouverture de session pour laisser passer la « tempête de démarrage » (contention disque/CPU de tous les programmes qui se lancent automatiquement) avant l'exécution de la liste ; une réexécution manuelle n'est pas concernée. Augmentez-le (0–600 s) si les choses démarrent trop tôt.
-
-> **Arrêtez à tout moment** — le **bouton d'arrêt** à l'extrémité droite de la barre d'onglets de la fenêtre (visible uniquement pendant une exécution), barre d'état système → **Arrêter les actions en cours**, ou le **raccourci panique** global (défini dans l'onglet Paramètres ; par défaut `Ctrl+Alt+Q`). Ce qui est en cours s'arrête après l'action courante ; les longues attentes (délai de démarrage, attente d'une fenêtre) sont interrompues immédiatement.
-
-### Tâches planifiées
-
-Fixez une **heure** (ou passez à **à l'ouverture de session**), une **récurrence** (jours de la semaine / tous-les-N-jours / mensuel / **une seule fois à une date donnée**), puis choisissez une **action** : **afficher un rappel** ou **exécuter un groupe d'actions en silence**. Seuls les champs de l'action choisie restent affichés : vous ne remplissez jamais une case sans effet.
-
-Les rappels dotés d'une action **Sur-Oui** (lancer un programme / ouvrir un fichier / URL / exécuter un groupe d'actions) affichent une boîte de dialogue **Oui / Non** avec un bouton **Répéter plus tard** (par défaut 10 min, menu ▾ de 5–60 min) ; les autres apparaissent en glissant sous forme de **carte de rappel** dans le coin (se ferme d'elle-même après le nombre de secondes configuré, **0 = reste jusqu'à ce que vous la fermiez**). Le texte peut être lu à voix haute.
-
-**Les exécutions par intervalle** transforment une tâche en programme de la journée : *toutes les N minutes jusqu'à HH:mm* (vide = fin de journée). Contrairement au **rappel insistant**, qui s'arrête dès que vous confirmez, un intervalle continue après votre réponse — c'est précisément ce qui rend un groupe silencieux utilisable comme sonde périodique. Les intervalles restent dans la journée ; demain repart de l'heure propre de la tâche. La progression est enregistrée : redémarrer l'application à midi conserve les tours restants du jour.
-
-**Une seule fois** se déclenche à sa date puis **se décoche tout seul**, en restant dans la liste — changez la date et recochez pour le réutiliser. Il attend la fin d'un rappel insistant ou d'un report avant de s'éteindre, sans jamais couper une remise en cours.
-
-Une boîte de dialogue restée sans réponse ne bloque rien et ne se perd pas : au bout d'une minute au plus, elle se transforme en **report automatique de 10 minutes** et revient plus tard. Cet état est enregistré sur disque comme n'importe quel report — il survit aux redémarrages, et avec **rattrapage si manqué** activé, il se redéclenche une fois le lendemain même après une nuit passée au-delà de minuit. Les déclenchements répétés d'un même rappel partagent une seule carte (marquée **×N**), et les cartes fermées ou expirées peuvent être réaffichées via le menu **Récents** de la zone de notification.
-
-Avancé : **fermeture automatique**, **relance insistante** (réapparaît toutes les N minutes jusqu'à une échéance), **délai après déclenchement + variation aléatoire**, **délai de grâce** (rattrape un déclenchement manqué à cause d'un bref arrêt/veille), **rattrapage si manqué** (se redéclenche une fois si une mise en veille prolongée/un arrêt l'a sauté) et une **date d'ancrage** pour tous-les-N-jours (**Choisir la date**). « Déclenché aujourd'hui » et « reporté jusqu'à » survivent aux redémarrages (`clockwork.state.json`), si bien qu'un report se maintient après un redémarrage et rien ne se déclenche deux fois.
-
-Besoin de vous concentrer ou de participer à une réunion ? La barre d'état système propose **Suspendre les rappels pendant 1 / 2 / 4 heures** (Ne pas déranger) : tout (y compris les groupes silencieux) est supprimé et reprend automatiquement à la fin du délai.
-
-### Éléments de démarrage du système
-
-Répertorie **tout ce qui démarre automatiquement** (clés Run du registre, dossiers Démarrage, tâches planifiées). Décochez **Activer** pour désactiver un élément — **désactivé, pas supprimé ; recochez pour restaurer** (effet immédiat). Les éléments marqués **nécessite l'administrateur** invitent à relancer en mode élevé. Les éléments système / de stratégie / à usage unique (Run de stratégie de groupe, RunOnce, Winlogon, Active Setup) ne peuvent pas être touchés et sont **masqués par défaut** — cochez **Afficher les éléments système / en lecture seule** pour les voir (grisés). Faites un clic droit sur une ligne pour **Reprendre dans la liste de démarrage** (confie l'élément à Clockwork ; uniquement les clés Run du registre et les éléments du dossier Démarrage) ou **Supprimer du système** (retire l'entrée définitivement — demande d'abord confirmation et c'est irréversible ; décocher est l'option réversible). Un **filtre** en haut recherche par nom / commande ; survolez une commande tronquée pour la lire en entier.
-
-### Groupes d'actions
-
-Regroupe des actions dans un groupe réutilisable. **Ajouter ▾** en démarre un à partir d'un **modèle intégré** (Concentration / Réunion / Clôture / Coucher / S'absenter / Capture d'écran / Pause assise) — ajustez les noms de processus et enregistrez. Un groupe **ne fait que définir des actions** ; déclenchez-le de quatre façons : depuis la barre d'état système (**Exécuter : <groupe>**), un **raccourci global**, comme une **étape de groupe d'actions** dans la liste de démarrage (au démarrage) ou depuis une tâche planifiée (**Sur-Oui / groupe silencieux**). Un groupe n'exécute qu'une seule copie à la fois.
-
-**Boucles.** Un groupe peut **se répéter en entier** (nombre de répétitions + délai entre les tours, dans l'éditeur de groupe). Pour ne boucler qu'*une partie* d'une séquence, placez ces étapes dans leur propre groupe et référencez-le par une étape **groupe d'actions** dont vous fixez le nombre de répétitions — les groupes peuvent référencer des groupes, et l'enregistrement refuse les références circulaires en détaillant la chaîne (`A → B → A`). Les trois réglages de répétition se multiplient : par étape × par référence × groupe entier. Une exécution est limitée à **5000 étapes** pour qu'une combinaison démesurée s'arrête au lieu de tourner sans fin.
-
-Une étape **message** est une porte de confirmation : répondre **Non** interrompt le reste du groupe *et ses tours restants*, et se propage vers l'extérieur au groupe qui l'a référencé — refuser une fois suffit, même dans un sous-groupe bouclé ×N.
-
-> **Raccourci global** — dans l'éditeur de groupe, cliquez sur la case du raccourci et appuyez sur un raccourci (p. ex. `Ctrl+Alt+F`) pour exécuter ce groupe depuis n'importe où, sans menu. Échap annule, Suppr efface. Les groupes désactivés libèrent leur combinaison ; les combinaisons réservées par le système (Alt+F4, Ctrl+Shift+Esc…) et les combinaisons déjà prises par un autre groupe ou par le raccourci panique sont refusées avec un avis. **Le raccourci est une bascule :** appuyez de nouveau pendant que le groupe tourne encore pour annuler cette exécution —— les autres groupes et la liste de démarrage continuent (seul le raccourci panique tout arrête). Seuls les groupes ayant un raccourci attribué peuvent être annulés ainsi.
-
-### Paramètres
-
-**Délai de démarrage** (0–600 s, au démarrage uniquement), **démarrer réduit dans la barre d'état système**, **raccourci panique** (cliquez sur la case et appuyez sur votre raccourci ; Échap annule, Suppr efface ; par défaut `Ctrl+Alt+Q`) et **langue de l'interface** (chinois simplifié, anglais, 日本語 et 15 autres — 18 au total ; changer de langue redémarre l'application pour l'appliquer).
-
-**Exporter la configuration / Importer la configuration** — transférez toute votre installation sur un autre PC ou gardez une sauvegarde. L'export écrit une copie de `clockwork.settings.json` où vous voulez ; l'import remplace **tout** (liste de démarrage / tâches planifiées / groupes d'actions / paramètres), il demande donc d'abord confirmation, sauvegarde la configuration actuelle dans `clockwork.settings.json.bak` et redémarre l'application pour l'appliquer.
+> **Arrêtez à tout moment** — le **bouton d'arrêt** à droite de la barre d'onglets (visible uniquement pendant une exécution), zone de notification → **Arrêter les actions en cours**, ou le **raccourci d'arrêt d'urgence** global (par défaut `Ctrl+Alt+Q`). Les longues attentes (délai de démarrage, attente d'une fenêtre) sont interrompues immédiatement.
 
 ## Astuces
 
 - **Double-cliquez sur une ligne pour la modifier**. Pour remplir les chemins / processus / raccourcis / dates, pas besoin de tout taper à la main : **Parcourir…**, **Choisir…** (sélecteur de processus avec recherche), **Capturer** et **Choisir la date**.
+- **Faites glisser une ligne pour la réordonner** — dans les trois listes (liste de démarrage, tâches planifiées, groupes d'actions) et dans la liste des étapes de l'éditeur de groupe ; les boutons haut/bas fonctionnent toujours.
+- **Essayez avant d'enregistrer** — l'éditeur de groupe propose **▶ Exécuter cette étape** et **▶ Exécuter le groupe**, qui exécutent tous deux ce qui est actuellement à l'écran. Pendant l'exécution, le bouton devient **■ Arrêter**, et fermer l'éditeur l'arrête aussi.
 - **Dupliquer** (onglets Tâches planifiées / Groupes d'actions) clone la ligne sélectionnée juste en dessous — plus rapide que de refaire une ligne presque identique ; un groupe dupliqué est nommé « … (copie) ».
 - **La suppression demande toujours confirmation**, partout — lignes des listes, étapes dans l'éditeur de groupe et éléments de démarrage du système.
 - Double-cliquer sur `Clockwork.exe` ouvre seulement les paramètres — cela **n'**exécute **pas** immédiatement la liste de démarrage ; pour cela, utilisez **Réexécuter la liste de démarrage** de la barre d'état système.
@@ -133,4 +96,6 @@ C#/.NET WPF ; source dans `app/` (nécessite le SDK .NET 10). Couches : `Core/` 
 
 ## À propos du 365 Open Source Plan
 
-Projet **#020** du [365 Open Source Plan](https://github.com/rockbenben/365opensource) — une personne + l'IA, plus de 300 projets open source en un an. [Proposez votre idée →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
+Projet **#020** du [365 Open Source Plan](https://github.com/rockbenben/365opensource) — une personne + l'IA, plus de 300 projets open source en un an.
+
+[Proposez votre idée →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)

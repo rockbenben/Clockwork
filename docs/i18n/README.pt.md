@@ -8,15 +8,19 @@
 
 Abra seus apps automaticamente ao entrar · lembretes com hora marcada · um toque para executar uma rotina inteira
 
+**[⬇ Baixar para Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portátil, sem instalador
+
+[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+
 </div>
 
 <div align="center">
 
-[English](../../README.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · **Português** · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
+[English](../../README.md) · [简体中文](../../README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Nederlands](README.nl.md) · **Português** · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [हिन्दी](README.hi.md) · [العربية](README.ar.md)
 
 </div>
 
-> Plano Open-Source 365 #020 · Uma ferramenta de bandeja do Windows: lançador de inicialização · lembretes · itens de inicialização do sistema · grupos de ações
+> Uma ferramenta de bandeja do Windows: lançador de inicialização · lembretes · itens de inicialização do sistema · grupos de ações
 
 ![Clockwork](../../assets/social-card.png)
 
@@ -29,7 +33,7 @@ Uma pequena ferramenta de bandeja do Windows que cuida das partes rotineiras de 
 
 Sem instalação, totalmente portátil em uma única pasta, tudo configurável com o mouse; interface escura, com suporte a alta resolução (high-DPI).
 
-> 📖 **Guia completo:** [English](../USAGE.md) · [中文](../USAGE.zh-CN.md)
+> 📖 **Guia completo:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Requisitos
 
@@ -53,62 +57,21 @@ Sem instalação, totalmente portátil em uma única pasta, tudo configurável c
 
 ## As cinco abas
 
-### Lista de inicialização
+Cinco abas; cada campo é explicado no [guia completo](../USAGE.md).
 
-Uma **lista ordenada de etapas** executadas de cima para baixo ao entrar. Clique em **Adicionar ▾** para escolher um tipo; adicione/remova/reordene à vontade; cada etapa pode ser ativada/desativada, receber um **atraso pós-etapa**, uma **contagem de repetições** (repeti-la N vezes) e condições (**apenas em certos dias da semana / apenas antes das N horas**). Tipos de etapa:
+- **Lista de inicialização** — os passos rodam de cima para baixo no login. Tipos: executar programa · enviar teclas · enviar texto · volume · ação de janela · comando do sistema · grupo de ações · espera · mensagem. Cada passo tem espera posterior, número de repetições e condições (só em certos dias / só antes das N horas); programas ainda têm admin, estilo de janela, ativar-se-já-em-execução e caminhos alternativos.
+- **Tarefas agendadas** — um horário (ou "no login") × uma recorrência (dia da semana / a cada N dias / mensal / uma vez) × uma ação: um lembrete (caixa Sim/Não com adiar, ou um cartão no canto, com leitura em voz alta opcional) ou um grupo de ações executado em silêncio. Além disso, execuções por intervalo, insistência repetida, recuperação de disparo perdido e Não perturbe pela bandeja.
+- **Itens de inicialização do sistema** — tudo o que inicia sozinho no seu PC (chaves Run do registro, pastas de Inicialização, tarefas agendadas): desligar (desativado, não excluído), assumir para a sua própria lista de inicialização ou apagar de vez.
+- **Grupos de ações** — um pacote reutilizável de ações, disparado pela bandeja, por uma **tecla global** (pressione de novo para cancelar aquela execução), por um passo da lista de inicialização ou por uma tarefa agendada. Um grupo pode repetir por inteiro e referenciar outros grupos (referências circulares são rejeitadas ao salvar); um passo de **mensagem** barra o restante com Sim / Não.
+- **Configurações** — atraso de inicialização (0–600 s, só no boot), iniciar minimizado na bandeja, iniciar no login, tecla de pânico, idioma da interface (18), exportar / importar configuração.
 
-- **Executar programa** — alvo (**Procurar…** para escolher um arquivo) / argumentos / diretório de trabalho (deixe em branco = pasta do alvo) / administrador. O alvo pode ser um `.exe`, documento, atalho ou URL; um `.ps1` é executado via PowerShell. Avançado: **estilo de janela** (minimizada / maximizada / oculta), **ativar se já estiver em execução** (traz para frente em vez de reabrir; nome do processo via **Escolher…**), **caminhos alternativos** (um caminho completo por linha; o primeiro que existir é usado — útil quando os caminhos de instalação diferem entre máquinas).
-- **Enviar teclas** — por exemplo, Win+D, Alt+K, Ctrl+Enter, F5 (**Capturar** para registrar um atalho pressionando-o).
-- **Enviar texto** — digita uma cadeia de caracteres na janela em foco (ou em um **processo alvo** escolhido via **Escolher…**).
-- **Volume** — silenciar / dessilenciar / definir o nível.
-- **Ação de janela** — por nome de processo (**Escolher…**, com busca): fechar / minimizar / maximizar / trazer-para-frente / trazer-para-frente-e-enviar-teclas; apps lentos podem **esperar até N segundos até a janela aparecer**.
-- **Comando de sistema** — mostrar a área de trabalho / bloquear / desligar o monitor / esvaziar a lixeira / limpar a área de transferência / abrir as Configurações / o Gerenciador de Tarefas / captura de tela / suspender / hibernar / sair da conta / reiniciar / desligar (os três últimos pedem confirmação antes).
-- **Atraso** — apenas espera N segundos antes da próxima etapa.
-- **Grupo de ações** — executa um grupo de ações definido; seu número de repetições diz quantas vezes *esta referência* dispara (o grupo também pode se repetir internamente — veja **Grupos de ações** abaixo).
-
-> **Atraso de inicialização** (aba Configurações, apenas no boot): espera um número fixo de segundos após o login para que a "tempestade de login" (disputa de disco/CPU de todo autostart) passe antes de a lista rodar; uma reexecução manual não é afetada. Aumente-o (0–600 s) se as coisas começarem cedo demais.
-
-> **Pare a qualquer momento** — o **botão de parada** na extremidade direita da barra de abas da janela (só aparece enquanto algo está em execução), bandeja → **Parar ações em execução**, ou a **tecla de pânico** global (definida na aba Configurações; padrão `Ctrl+Alt+Q`). O que estiver em execução para após a ação atual; esperas longas (atraso de inicialização, aguardar uma janela) são interrompidas imediatamente.
-
-### Tarefas agendadas
-
-Defina uma **hora** (ou mude para **ao fazer login**), uma **periodicidade** (dias da semana / a-cada-N-dias / mensal / **uma única vez em uma data**) e escolha uma **ação**: **exibir um lembrete** ou **executar um grupo de ações em silêncio**. Só os campos da ação escolhida permanecem na tela, então você nunca preenche uma caixa que não faz nada.
-
-Lembretes com uma ação **Ao-Sim** (executar programa / abrir arquivo / URL / executar grupo de ações) abrem um diálogo **Sim / Não** com um botão **Adiar** (padrão 10 min, menu ▾ 5–60 min); os demais entram no canto como um **cartão de lembrete** (fecha sozinho após os segundos configurados, **0 = fica até você descartar**). O texto pode ser lido em voz alta.
-
-**Execuções por intervalo** transformam uma tarefa em uma agenda do dia inteiro: *a cada N minutos até HH:mm* (em branco = fim do dia). Diferente da **insistência**, que para no instante em que você confirma, um intervalo continua depois da sua resposta — é isso que torna um grupo silencioso utilizável como sondagem. Intervalos não cruzam a meia-noite; amanhã recomeça a partir da hora da própria tarefa. O progresso é gravado: reiniciar o app ao meio-dia mantém as rodadas restantes do dia.
-
-**Uma única vez** dispara na sua data e depois **se desmarca**, permanecendo na lista — troque a data e marque de novo para reutilizar. Ela espera a insistência ou o adiamento terminarem antes de se desligar, então nunca corta uma entrega no meio.
-
-Um diálogo sem resposta não bloqueia a fila nem se perde: depois de no máximo um minuto ele vira um **adiamento automático de 10 minutos** e volta mais tarde. Esse estado é gravado em disco como qualquer adiamento — sobrevive a reinicializações e, com **recuperar se perdido** ativado, dispara mais uma vez no dia seguinte mesmo que a noite tenha cruzado a meia-noite. Disparos repetidos de um mesmo lembrete compartilham um único cartão (marcado **×N**), e cartões fechados ou expirados podem ser reexibidos pelo menu **Recentes** da bandeja.
-
-Avançado: **fechamento automático**, **insistência repetida** (reaparece a cada N minutos até um prazo), **atraso pós-disparo + variação aleatória**, **tolerância** (recupera um disparo perdido por um breve desligamento/suspensão), **recuperar se perdido** (dispara uma vez mais depois que a hibernação/o desligamento o pulou) e uma **data-âncora** para a cada N dias (**Escolher data**). "Disparado hoje" e "adiado até" sobrevivem a reinicializações (`clockwork.state.json`), então um adiamento persiste após reiniciar e nada dispara em duplicidade.
-
-Precisa se concentrar ou entrar em uma reunião? A bandeja oferece **Pausar lembretes por 1 / 2 / 4 horas** (Não Perturbe): tudo (inclusive grupos silenciosos) é suprimido e retomado automaticamente quando o tempo acaba.
-
-### Itens de inicialização do sistema
-
-Lista **tudo que inicia automaticamente** (chaves Run do registro, pastas de Inicialização, tarefas agendadas). Desmarque **Ativar** para desligar um item — **desativado, não excluído; marque de novo para restaurar** (efeito imediato). Itens marcados como **precisa de administrador** pedem para reiniciar com elevação. Itens de sistema / política / de uso único (Run de Política de Grupo, RunOnce, Winlogon, Active Setup) não podem ser mexidos e ficam **ocultos por padrão** — marque **Mostrar itens de sistema / somente leitura** para vê-los (esmaecidos). Clique com o botão direito em uma linha para **Assumir na lista de inicialização** (entrega o item ao Clockwork; apenas chaves Run do registro e itens da pasta de Inicialização) ou **Excluir do sistema** (remove a entrada de vez — pede confirmação antes e não pode ser desfeito; desmarcar é a opção reversível). Um **filtro** no topo busca por nome / comando; passe o mouse sobre um comando truncado para lê-lo por inteiro.
-
-### Grupos de ações
-
-Agrupe ações em um grupo reutilizável. **Adicionar ▾** inicia um a partir de um **modelo pronto** (Foco / Reunião / Encerramento / Hora de dormir / Ausência / Captura de tela / Pausa de quem senta muito) — ajuste os nomes dos processos e salve. Um grupo **apenas define ações**; dispare-o de quatro formas: pela bandeja (**Executar: <grupo>**), uma **tecla global**, como uma **etapa de grupo de ações** na lista de inicialização (no boot) ou por uma tarefa agendada (**Ao-Sim / grupo silencioso**). Um grupo executa apenas uma cópia por vez.
-
-**Laços.** Um grupo pode **repetir por inteiro** (número de repetições + espera entre rodadas, no editor de grupos). Para repetir só *parte* de uma sequência, coloque essas etapas em um grupo próprio e referencie-o com uma etapa de **grupo de ações** cujo número de repetições você define — grupos podem referenciar grupos, e ao salvar as referências circulares são recusadas com a cadeia detalhada (`A → B → A`). Os três controles de repetição se multiplicam: por etapa × por referência × grupo inteiro. Uma execução tem um fusível de **5000 etapas**, para que uma combinação exagerada pare em vez de rodar sem fim.
-
-Uma etapa de **mensagem** é uma barreira de confirmação: responder **Não** aborta o restante do grupo *e as rodadas que faltam*, e se propaga para fora até o grupo que a referenciou — recusar uma vez basta, mesmo dentro de um subgrupo repetido ×N.
-
-> **Tecla global** — no editor de grupos, clique na caixa da tecla e pressione um atalho (ex.: `Ctrl+Alt+F`) para executar esse grupo de qualquer lugar, sem menu. Esc cancela, Delete limpa. Grupos desativados liberam sua combinação; combinações reservadas pelo sistema (Alt+F4, Ctrl+Shift+Esc…) e combinações já ocupadas por outro grupo ou pela tecla de pânico são recusadas com um aviso. **O atalho é um alternador:** pressione-o de novo enquanto o grupo ainda roda para cancelar essa execução —— os outros grupos e a lista de inicialização continuam (a tecla de pânico é a que para tudo). Somente grupos com um atalho atribuído podem ser cancelados assim.
-
-### Configurações
-
-**Atraso de inicialização** (0–600 s, apenas no boot), **iniciar minimizado na bandeja**, **tecla de pânico** (clique na caixa e pressione seu atalho; Esc cancela, Delete limpa; padrão `Ctrl+Alt+Q`) e **idioma da interface** (chinês simplificado, inglês, 日本語 e mais 15 — 18 no total; a troca reinicia o app para aplicar).
-
-**Exportar configuração / Importar configuração** — leve toda a sua configuração para outro PC ou mantenha um backup. Exportar grava uma cópia do `clockwork.settings.json` onde você quiser; importar substitui **tudo** (lista de inicialização / tarefas agendadas / grupos de ações / configurações), então pede confirmação antes, faz backup da configuração atual em `clockwork.settings.json.bak` e reinicia o app para aplicar.
+> **Pare quando quiser** — o **botão de parada** à direita da barra de abas (só aparece enquanto algo está rodando), bandeja → **Parar ações em execução**, ou a **tecla de pânico** global (padrão `Ctrl+Alt+Q`). Esperas longas (atraso de inicialização, esperar uma janela) são interrompidas na hora.
 
 ## Dicas
 
 - **Dê um duplo clique em uma linha para editá-la.** Ao preencher caminhos / processos / atalhos / datas você não precisa digitar manualmente: **Procurar…**, **Escolher…** (seletor de processos com busca), **Capturar** e **Escolher data**.
+- **Arraste uma linha para reordená-la** — nas três listas (lista de inicialização, tarefas agendadas, grupos de ações) e na lista de etapas do editor de grupos; os botões de subir/descer continuam funcionando.
+- **Teste antes de salvar** — o editor de grupos tem **▶ Executar este passo** e **▶ Executar grupo**, ambos executando o que está na tela no momento. Durante a execução o botão vira **■ Parar**, e fechar o editor também a interrompe.
 - **Duplicar** (abas Tarefas agendadas / Grupos de ações) clona a linha selecionada logo abaixo dela — mais rápido que refazer uma quase idêntica; um grupo duplicado recebe o nome "… (cópia)".
 - **Excluir sempre pede confirmação**, em todo lugar — linhas das listas, etapas dentro do editor de grupos e itens de inicialização do sistema.
 - Dar um duplo clique em `Clockwork.exe` só abre as configurações — **não** executa imediatamente a lista de inicialização; para isso use **Reexecutar lista de inicialização** na bandeja.
@@ -133,4 +96,6 @@ C#/.NET WPF; código-fonte em `app/` (requer o SDK do .NET 10). Camadas: `Core/`
 
 ## Sobre o Plano 365 Open Source
 
-Projeto **#020** do [Plano 365 Open Source](https://github.com/rockbenben/365opensource) — uma pessoa + IA, mais de 300 projetos open-source em um ano. [Envie sua ideia →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
+Projeto **#020** do [Plano 365 Open Source](https://github.com/rockbenben/365opensource) — uma pessoa + IA, mais de 300 projetos open-source em um ano.
+
+[Envie sua ideia →](https://365.aishort.top/) · [Discord](https://discord.gg/PZTQfJ4GjX) · [Telegram](https://t.me/aishort_top)
