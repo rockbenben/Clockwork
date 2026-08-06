@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>منبثقة عند الوقت أو تشغيل مجموعة إجراءات بصمت · يدعم التشغيل الدوري / لمرة واحدة · عند «نعم» يمكن تشغيل برنامج أو فتح رابط أو تشغيل مجموعة إجراءات</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>اجمع سلسلة من الإجراءات في مجموعة وشغّلها بلمسة من علبة النظام / قائمة البدء / التذكيرات</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(فارغ)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>كل عناصر البدء التلقائي في هذا الجهاز — أوقف ما لا تحتاجه بلمسة. تعطيل فقط دون حذف؛ قابل للتراجع في أي وقت.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>التحديد/إلغاؤه يسري فورًا (تعطيل لا حذف؛ قابل للتراجع). العناصر «تتطلب مسؤولًا» تحتاج صلاحيات المسؤول. عناصر النظام / السياسة / المرة الواحدة للقراءة فقط مخفية افتراضيًا.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>تصفية</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>إظهار عناصر النظام / للقراءة فقط</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>البدء مصغّرًا في علبة النظام</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>مفتاح الإيقاف</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>اللغة</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>يسري عند التشغيل التالي؛ فارغ = معطّل. «إيقاف» من قائمة العلبة يعمل دائمًا.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>ستُطبَّق اللغة عند تشغيل Clockwork في المرة القادمة.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>يُعاد تشغيل Clockwork فورًا لتطبيق اللغة الجديدة.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>التشغيل عند تسجيل الدخول</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>لا</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>موافق</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>تأجيل 10 دقائق</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>خيارات تأجيل أخرى</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>تشغيل تطبيق</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>إرسال مفاتيح</value></data>
@@ -263,12 +262,12 @@
   <data name="Hotkey_Stopped" xml:space="preserve"><value>تم طلب إيقاف الإجراءات الجارية.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>يتطلب تبديل «{0}» صلاحيات المسؤول؛ أعد فتح Clockwork كمسؤول.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>فشل تبديل «{0}»: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>يتطلب تسجيل/إزالة البدء التلقائي صلاحيات المسؤول؛ أعد فتح Clockwork كمسؤول.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>فشلت العملية: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="Settings_General" xml:space="preserve"><value>عام</value></data>
   <data name="Settings_About" xml:space="preserve"><value>حول</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>التحقق من التحديثات</value></data>
+  <data name="About_Series" xml:space="preserve"><value>خطة 365 مفتوحة المصدر · ‏#020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>جارٍ التحقق…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>أنت على أحدث إصدار ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>يتوفر إصدار جديد {0}. الانتقال إلى التنزيل؟</value></data>
@@ -368,6 +367,7 @@
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>التأخير بين الجولات (مث)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>توجد حلقة إشارة دائرية للمجموعة ({0})، يرجى فك سلسلة الإشارات قبل الحفظ</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>تكرار</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>المحدد</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>تصدير الإعدادات</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>استيراد الإعدادات</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>تم تصدير الإعدادات إلى: {0}</value></data>

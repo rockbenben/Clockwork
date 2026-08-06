@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>समय पर पॉपअप दिखाए या क्रिया समूह को चुपचाप चलाए · दोहराव और एक बार चलाना दोनों समर्थित · «हाँ» पर प्रोग्राम चलाएँ / URL खोलें / क्रिया समूह चलाएँ</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>क्रियाओं की शृंखला को समूह में बाँधें और ट्रे / स्टार्टअप सूची / रिमाइंडर से एक टैप में चलाएँ</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(खाली)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>इस PC की सभी ऑटो-स्टार्ट प्रविष्टियाँ — अनावश्यक को एक टैप में बंद करें। केवल अक्षम, कभी नहीं हटाया; कभी भी पूर्ववत।</value></data>
   <data name="System_Footer" xml:space="preserve"><value>चेक/अनचेक तुरंत लागू (अक्षम, हटाना नहीं; पूर्ववत)। «एडमिन आवश्यक» वाले आइटम को व्यवस्थापक अधिकार चाहिए। सिस्टम / नीति / एक-बार केवल-पठन आइटम डिफ़ॉल्ट रूप से छिपे हैं।</value></data>
   <data name="System_Filter" xml:space="preserve"><value>फ़िल्टर</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>सिस्टम / केवल-पठन आइटम दिखाएँ</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>प्रारंभ में ट्रे में छोटा करें</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>रोक कुंजी</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>भाषा</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>अगले प्रारंभ पर लागू; खाली = अक्षम। ट्रे मेनू का «रोकें» हमेशा काम करता है।</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>भाषा अगली बार Clockwork शुरू होने पर लागू होगी।</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>नई भाषा लागू करने के लिए Clockwork तुरंत पुनः आरंभ होता है।</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>लॉगिन पर शुरू करें</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>नहीं</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>ठीक है</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>10 मिनट बाद</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>और स्नूज़ विकल्प</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>ऐप चलाएँ</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>कुंजियाँ भेजें</value></data>
@@ -263,12 +262,12 @@
   <data name="Hotkey_Stopped" xml:space="preserve"><value>चल रही क्रियाओं को रोकने का अनुरोध किया गया।</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» को टॉगल करने के लिए व्यवस्थापक अधिकार चाहिए; Clockwork को व्यवस्थापक के रूप में फिर खोलें।</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>«{0}» टॉगल विफल: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>ऑटो-स्टार्ट रजिस्टर/हटाने के लिए व्यवस्थापक अधिकार चाहिए; Clockwork को व्यवस्थापक के रूप में फिर खोलें।</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>ऑपरेशन विफल: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>सेटिंग्स</value></data>
   <data name="Settings_General" xml:space="preserve"><value>सामान्य</value></data>
   <data name="Settings_About" xml:space="preserve"><value>परिचय</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>अपडेट जांचें</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 ओपन सोर्स प्लान · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>जाँच रहे हैं…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>आप नवीनतम संस्करण पर हैं ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>नया संस्करण {0} उपलब्ध है। डाउनलोड पर जाएँ?</value></data>
@@ -368,6 +367,7 @@
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>राउंड के बीच विलंब (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>समूह संदर्भ चक्रीय है ({0}), सहेजने से पहले संदर्भ श्रृंखला तोड़ें</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>प्रतिलिपि</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>चयनित</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन निर्यात करें</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन आयात करें</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>कॉन्फ़िगरेशन यहाँ निर्यात किया गया: {0}</value></data>

@@ -245,6 +245,18 @@
         </Style.Triggers>
     </Style>
 
+    <!-- 对话框页脚按钮：五个对话框(步骤/提醒/动作组编辑器、品牌对话框、提醒弹窗)原来各写各的尺寸——
+         80×32 / 88×34 / 72×34 三套并存，同一套「确定 取消」在不同窗口里高矮胖瘦都不一样。
+         一处定义，各处引用；主次只差样式，尺寸恒等（长译文靠 MinWidth 之上自然撑开）。 -->
+    <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="MinWidth" Value="88"/>
+        <Setter Property="Height" Value="34"/>
+    </Style>
+    <Style x:Key="DialogPrimaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="MinWidth" Value="88"/>
+        <Setter Property="Height" Value="34"/>
+    </Style>
+
     <!-- ============ TextBox ============ -->
     <Style TargetType="TextBox">
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
@@ -313,6 +325,182 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- ============ RadioButton (brass dot) ============ -->
+    <!-- 没有这份样式时，两颗单选钮会退回 WPF 自带的浅色模板：未选中＝一颗实心白点、选中＝白圈套暗心，
+         在暗底上恰好读反——真机比对过，「静默运行动作组」看着比「弹窗提醒」更像被选中的那个。
+         与 CheckBox 同一套语汇（黄铜填充 + 刻字深棕），只把方框换成圆点。 -->
+    <Style TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <Grid Width="18" Height="18" VerticalAlignment="Center">
+                            <Ellipse x:Name="ring" Stroke="{StaticResource BrushFaint}" StrokeThickness="2" Fill="Transparent"/>
+                            <Ellipse x:Name="dot" Width="8" Height="8" Fill="{StaticResource BrushBrass}" Visibility="Collapsed"/>
+                        </Grid>
+                        <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="dot" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushBrass}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushBrass}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ ListBox（进程选择器）============ -->
+    <!-- 同上：不给样式就是 WPF 自带的白底列表，而全局 TextBlock 样式又把文字定成 paper 米白——
+         白底米白字，进程列表实测几乎读不出来。 -->
+    <Style TargetType="ListBox">
+        <Setter Property="Background" Value="{StaticResource BrushInk}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
+                        <ScrollViewer Padding="{TemplateBinding Padding}"><ItemsPresenter/></ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="bd" Background="Transparent" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/></Trigger>
+                        <Trigger Property="IsSelected" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrassTint}"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ Calendar（选日期）============ -->
+    <!-- 只改颜色、不重写日历模板：自带模板的日期网格已经好用，缺的只是暗色配色。
+         CalendarItem 的边框底色写死在自带模板里，故这里连它一起接管（仅换 Border 的底/描边）。 -->
+    <Style x:Key="CalDayBtn" TargetType="CalendarDayButton">
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="MinHeight" Value="28"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CalendarDayButton">
+                    <Border x:Name="bd" Background="Transparent" CornerRadius="5" Margin="1">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- 非本月的日子退到 faint：网格边缘的补位，不该跟本月同样响 -->
+                        <Trigger Property="IsInactive" Value="True"><Setter Property="Foreground" Value="{StaticResource BrushFaint}"/></Trigger>
+                        <Trigger Property="IsToday" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/><Setter TargetName="bd" Property="BorderThickness" Value="1"/></Trigger>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/></Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrass}"/>
+                            <Setter Property="Foreground" Value="#231708"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- 月/年层的格子（点标题切到「选月份」「选年份」时用），与日格同一套配色 -->
+    <Style x:Key="CalMonthBtn" TargetType="CalendarButton" BasedOn="{StaticResource CalDayBtn}"/>
+    <!-- CalendarItem 必须重写模板：系统自带模板里嵌着一圈写死的 2px 纯白内描边
+         （Aero2 里 BorderBrush="#FFFFFFFF"），配色改不掉它——暗色对话框中央因此永远框着一个白盒子。
+         月/年视图的切换不用管：CalendarItem 自己按 PART_MonthView / PART_YearView 这两个名字
+         找到网格并直接改 Visibility，模板只负责按名字把两个空 Grid 摆好、行列数给对。 -->
+    <Style x:Key="CalItem" TargetType="CalendarItem">
+        <Setter Property="Background" Value="{StaticResource BrushSlate}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CalendarItem">
+                    <!-- 日名行（一 二 三…）：自带模板给的是浅色主题下的灰，暗底上几乎看不见。
+                         走列名同款——等宽小字 + faint，和 DataGrid 表头一个口径。
+                         必须放在模板资源里：FrameworkElement.Resources 不是依赖属性，
+                         写成 <Setter Property="Resources"> 会在运行时抛 XamlParseException。 -->
+                    <ControlTemplate.Resources>
+                        <DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}">
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" Margin="0,2,0,8"
+                                       FontFamily="{StaticResource FontMono}" FontSize="11"
+                                       Foreground="{StaticResource BrushFaint}"/>
+                        </DataTemplate>
+                    </ControlTemplate.Resources>
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{StaticResource BrushLine}"
+                            BorderThickness="1" CornerRadius="8" Padding="8">
+                        <Grid>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <Button x:Name="PART_PreviousButton" Grid.Column="0" Content="‹" Width="30" Height="28" Padding="0"/>
+                                <Button x:Name="PART_HeaderButton" Grid.Column="1" Height="28" Margin="6,0"
+                                        FontFamily="{StaticResource FontDisplay}" FontSize="14"/>
+                                <Button x:Name="PART_NextButton" Grid.Column="2" Content="›" Width="30" Height="28" Padding="0"/>
+                            </Grid>
+                            <Grid Grid.Row="1" Margin="0,8,0,0">
+                                <Grid x:Name="PART_MonthView" Visibility="Visible">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="*"/><RowDefinition Height="*"/><RowDefinition Height="*"/><RowDefinition Height="*"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                                </Grid>
+                                <Grid x:Name="PART_YearView" Visibility="Hidden">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="*"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- 三个子样式必须显式挂上：隐式样式在 Calendar 的自带模板里接不上（模板是把
+         CalendarItemStyle / CalendarDayButtonStyle 直接绑到子元素的 Style 上的），
+         不挂就只有 Foreground 靠继承生效，选中日期仍是系统默认的浅蓝。 -->
+    <Style TargetType="Calendar">
+        <Setter Property="Background" Value="{StaticResource BrushSlate}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CalendarItemStyle" Value="{StaticResource CalItem}"/>
+        <Setter Property="CalendarDayButtonStyle" Value="{StaticResource CalDayBtn}"/>
+        <Setter Property="CalendarButtonStyle" Value="{StaticResource CalMonthBtn}"/>
     </Style>
 
     <!-- ============ ComboBox ============ -->
@@ -472,6 +660,38 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- 勾选列的表头：单元格里的复选框是居中的，表头却默认左对齐——一列两条基准线，
+         列一窄（启用 52px / 语音 56px）就明显歪。这两列专用居中表头。 -->
+    <Style x:Key="CenterHeader" TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="0,8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridColumnHeader">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1" Padding="{TemplateBinding Padding}">
+                        <TextBlock Text="{TemplateBinding Content}" TextWrapping="Wrap" TextAlignment="Center"
+                                   Foreground="{TemplateBinding Foreground}" FontFamily="{TemplateBinding FontFamily}"
+                                   FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 文本列单元格：列宽有限、内容常被截断（步骤摘要 / 提醒文本 / 组名 / 系统项路径）。
+         默认 DataGridTextColumn 是硬裁——半个字被切掉，看不出还有下文，也没法读全。
+         省略号收尾 + 始终挂 tooltip=本单元格全文，hover 即可看全，不丢信息。
+         原来只有「系统启动项」页享受这个待遇（那时叫 SysCell），其余三个列表页照样硬裁。 -->
+    <Style x:Key="CellEllipsis" TargetType="TextBlock">
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+        <Style.Triggers>
+            <!-- 空单元格不挂提示：热键列多数行是空的，挂上等于 hover 就弹一个空框 -->
+            <Trigger Property="Text" Value=""><Setter Property="ToolTip" Value="{x:Null}"/></Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="DataGridRow">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
@@ -695,6 +915,10 @@
     <!-- 类型徽标底 + 延时等宽读数：启动清单与动作组步骤列表共用（从 MainWindow 移来，两处一致口径）。 -->
     <Style x:Key="KindChipCell" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource BrushSteel}"/>
+        <!-- 描边不是装饰：行悬停色也是 steel，与徽标底同色——没有这道边时，鼠标一划过，
+             类型徽标就整块融进行背景，只剩一行悬空的字。 -->
+        <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="6"/>
         <Setter Property="Padding" Value="9,3"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -705,6 +929,15 @@
         <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!-- 等宽读数的省略号版（命令行 / 热键列）：见上方 CellEllipsis 的说明，字体走 DelayCol。
+         定义必须排在 DelayCol 之后——StaticResource 只认字典里已经出现过的键。 -->
+    <Style x:Key="CellEllipsisMono" TargetType="TextBlock" BasedOn="{StaticResource DelayCol}">
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+        <Style.Triggers>
+            <Trigger Property="Text" Value=""><Setter Property="ToolTip" Value="{x:Null}"/></Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

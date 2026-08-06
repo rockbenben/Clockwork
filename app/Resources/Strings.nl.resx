@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Toont een melding of voert stil een actiegroep uit op het geplande tijdstip · ondersteunt herhaalde uitvoering en eenmalige uitvoering · bij «Ja» kan een programma starten / een URL openen / een actiegroep uitvoeren</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundel een reeks acties in een groep en start met één tik vanuit systeemvak / opstartlijst / herinnering</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(leeg)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>Alle automatische opstartitems van je pc — schakel overbodige met één tik uit. Alleen uitschakelen, niet verwijderen; altijd terug te draaien.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Aan-/uitvinken werkt direct (uitschakelen, niet verwijderen; omkeerbaar). Items «admin vereist» hebben beheerdersrechten nodig. Systeem- / beleid- / eenmalige alleen-lezen items zijn standaard verborgen.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Systeem- / alleen-lezen items tonen</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Geminimaliseerd naar systeemvak starten</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>Stoptoets</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Taal</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Werkt bij de volgende start; leeg = uit. «Stoppen» in het systeemvakmenu werkt altijd.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>De taal wordt van kracht bij de volgende start van Clockwork.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork start meteen opnieuw op om de nieuwe taal toe te passen.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>Bij aanmelden starten</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>Nee</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>10 min uitstellen</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>Meer uitstelopties</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>App openen</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>Toetsen sturen</value></data>
@@ -263,12 +262,12 @@ Log: {1}</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Verzoek om lopende acties te stoppen verzonden.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» vereist beheerdersrechten om te wijzigen; open Clockwork opnieuw als beheerder.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>«{0}» wijzigen mislukt: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Automatisch starten registreren/verwijderen vereist beheerdersrechten; open Clockwork opnieuw als beheerder.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Bewerking mislukt: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Instellingen</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Algemeen</value></data>
   <data name="Settings_About" xml:space="preserve"><value>Over</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Controleren op updates</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Controleren…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Je hebt de nieuwste versie ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Nieuwe versie {0} beschikbaar. Naar download gaan?</value></data>
@@ -368,6 +367,7 @@ Log: {1}</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>vertraging tussen rondes (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Circulaire groepsverwijzing ({0}) — verbreek de verwijzingsketen voor het opslaan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Dupliceren</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>Selectie</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Configuratie exporteren</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Configuratie importeren</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>Configuratie geëxporteerd naar: {0}</value></data>

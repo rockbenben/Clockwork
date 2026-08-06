@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Muestra un aviso o ejecuta un grupo de acciones en silencio según el horario · admite ejecuciones repetidas y de una sola vez · con «Sí» puede iniciar programas, abrir URLs o ejecutar grupos de acciones</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Agrupa una serie de acciones y actívalas con un toque desde la bandeja / lista de inicio / recordatorios</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(vacío)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>Todas las entradas de inicio automático del PC: desactiva lo que no necesites. Solo se deshabilita, nunca se elimina; reversible en cualquier momento.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Marcar/desmarcar surte efecto de inmediato (se deshabilita, no se elimina; reversible). Los elementos «requiere admin» necesitan permisos de administrador. Los elementos de sistema / directiva / de una sola vez y de solo lectura están ocultos por defecto.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filtro</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Mostrar elementos de sistema / solo lectura</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Iniciar minimizado en la bandeja</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>Tecla de parada</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Idioma</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Surte efecto en el próximo inicio; vacío = desactivada. «Detener» del menú de la bandeja siempre funciona.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>El idioma se aplicará la próxima vez que inicies Clockwork.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork se reinicia de inmediato para aplicar el nuevo idioma.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>Iniciar al iniciar sesión</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>No</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>Aceptar</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>Posponer 10 min</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>Más opciones de posponer</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>Abrir app</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>Enviar teclas</value></data>
@@ -263,12 +262,12 @@ Registro: {1}</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Se solicitó detener las acciones en curso.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» necesita permisos de administrador para cambiarse; vuelve a abrir Clockwork como administrador.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>No se pudo cambiar «{0}»: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Registrar o quitar el inicio automático necesita permisos de administrador; vuelve a abrir Clockwork como administrador.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Operación fallida: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Ajustes</value></data>
   <data name="Settings_General" xml:space="preserve"><value>General</value></data>
   <data name="Settings_About" xml:space="preserve"><value>Acerca de</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Buscar actualizaciones</value></data>
+  <data name="About_Series" xml:space="preserve"><value>Plan 365 de código abierto · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Comprobando…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Ya tienes la última versión ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Nueva versión {0} disponible. ¿Ir a la descarga?</value></data>
@@ -368,6 +367,7 @@ Registro: {1}</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>retraso entre rondas (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Referencia circular de grupo ({0}); rompa la cadena de referencias antes de guardar</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplicar</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>Selección</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Exportar configuración</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Importar configuración</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>Configuración exportada a: {0}</value></data>

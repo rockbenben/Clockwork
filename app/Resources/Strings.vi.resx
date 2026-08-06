@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Hiện cửa sổ nhắc hoặc âm thầm chạy nhóm hành động theo lịch · hỗ trợ chạy lặp lại và chạy một lần · khi «Có» có thể chạy chương trình / mở URL / chạy nhóm hành động</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Gộp một loạt hành động thành nhóm và kích hoạt một chạm từ khay / danh sách khởi động / nhắc nhở</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(trống)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>Mọi mục khởi động tự động của PC — tắt thứ không cần một chạm. Chỉ vô hiệu, không xóa; hoàn tác bất cứ lúc nào.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Chọn/bỏ chọn có hiệu lực ngay (vô hiệu, không xóa; hoàn tác được). Mục «cần admin» cần quyền quản trị. Mục hệ thống / chính sách / một lần chỉ đọc được ẩn theo mặc định.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Lọc</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Hiện mục hệ thống / chỉ đọc</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Khởi động thu nhỏ vào khay</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>Phím dừng</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Ngôn ngữ</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Có hiệu lực ở lần khởi động sau; trống = tắt. «Dừng» trong menu khay luôn dùng được.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>Ngôn ngữ sẽ có hiệu lực lần khởi động Clockwork tiếp theo.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork sẽ khởi động lại ngay để áp dụng ngôn ngữ mới.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>Khởi động cùng hệ thống</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>Không</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>Hoãn 10 phút</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>Tùy chọn hoãn khác</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>Mở ứng dụng</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>Gửi phím</value></data>
@@ -263,12 +262,12 @@ Nhật ký: {1}</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Đã yêu cầu dừng các hành động đang chạy.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» cần quyền quản trị để chuyển; mở lại Clockwork với quyền quản trị.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>Chuyển «{0}» thất bại: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Đăng ký/gỡ khởi động cùng máy cần quyền quản trị; mở lại Clockwork với quyền quản trị.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Thao tác thất bại: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Cài đặt</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Chung</value></data>
   <data name="Settings_About" xml:space="preserve"><value>Giới thiệu</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Kiểm tra cập nhật</value></data>
+  <data name="About_Series" xml:space="preserve"><value>Kế hoạch 365 nguồn mở · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Đang kiểm tra…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Bạn đang dùng phiên bản mới nhất ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Đã có phiên bản mới {0}. Tới trang tải về?</value></data>
@@ -368,6 +367,7 @@ Nhật ký: {1}</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>độ trễ giữa các vòng (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Có tham chiếu nhóm vòng lặp ({0}), hãy phá vỡ chuỗi tham chiếu trước khi lưu</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Nhân bản</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>Đã chọn</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Xuất cấu hình</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Nhập cấu hình</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>Đã xuất cấu hình đến: {0}</value></data>

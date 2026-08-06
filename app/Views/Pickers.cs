@@ -50,6 +50,10 @@ public static class Pickers
         var buttons = OkCancelRow(dlg, out var ok);
         DockPanel.SetDock(buttons, Dock.Bottom);
         var list = new ListBox { Margin = new Thickness(0, 8, 0, 8) };
+        // 两个控件都没有可见标签（搜索框只有 placeholder 式的 tooltip），读屏软件读到的就是「编辑，空白」——
+        // 补上朗读名，名字直接借用它们各自的用途文案。
+        System.Windows.Automation.AutomationProperties.SetName(search, Strings.Get("Picker_Search"));
+        System.Windows.Automation.AutomationProperties.SetName(list, Strings.Get("Picker_Process"));
 
         void Fill()
         {
@@ -143,8 +147,9 @@ public static class Pickers
 
     private static StackPanel OkCancelRow(Window dlg, out Button ok)
     {
-        var okBtn = new Button { Content = Strings.Get("Ed_Ok"), MinWidth = 80, Height = 30, Margin = new Thickness(0, 0, 10, 0), Style = (Style)System.Windows.Application.Current.Resources["PrimaryButton"] };
-        var cancel = new Button { Content = Strings.Get("Ed_Cancel"), MinWidth = 70, Height = 30, IsCancel = true };
+        // 尺寸走 DialogButton / DialogPrimaryButton（Theme.xaml 一处定义），与三个编辑器的页脚同高同宽
+        var okBtn = new Button { Content = Strings.Get("Ed_Ok"), Margin = new Thickness(0, 0, 10, 0), Style = (Style)System.Windows.Application.Current.Resources["DialogPrimaryButton"] };
+        var cancel = new Button { Content = Strings.Get("Ed_Cancel"), IsCancel = true, Style = (Style)System.Windows.Application.Current.Resources["DialogButton"] };
         ok = okBtn;
         return new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Children = { okBtn, cancel } };
     }

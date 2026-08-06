@@ -51,7 +51,7 @@ public class ReminderDisplayTests
     public void Text_silent_task_with_missing_group_says_none()
     {
         var r = new Reminder { SilentGroupId = "gone", Message = "" };
-        Assert.Equal("运行动作组：(未指定)", ReminderDisplay.TextSummary(r, new List<ActionGroup>()));
+        Assert.Equal("运行动作组：（未指定）", ReminderDisplay.TextSummary(r, new List<ActionGroup>()));
     }
 
     [Fact]

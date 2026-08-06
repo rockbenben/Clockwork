@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Zeigt zur Zeit ein Popup oder führt eine Aktionsgruppe still aus · unterstützt wiederkehrende Läufe und Einmalausführung · bei „Ja“ Programm starten / URL öffnen / Aktionsgruppe ausführen</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bündeln Sie mehrere Aktionen zu einer Gruppe und lösen Sie sie per Klick aus (Infobereich / Startliste / Erinnerungen)</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(leer)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>Alle Autostart-Einträge dieses PCs — Unnötiges per Klick abschalten. Nur deaktivieren, nie löschen; jederzeit umkehrbar.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Ändern wirkt sofort (deaktivieren, nicht löschen; umkehrbar). Einträge mit „Admin nötig“ erfordern Administratorrechte. System- / Richtlinien- / einmalige schreibgeschützte Einträge sind standardmäßig ausgeblendet.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>System- / schreibgeschützte Einträge anzeigen</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Minimiert im Infobereich starten</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>Stopp-Taste</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Sprache</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Wirkt beim nächsten Start; leer = deaktiviert. „Stoppen“ im Infobereichsmenü funktioniert immer.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>Die Sprache wird beim nächsten Start von Clockwork wirksam.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork startet sofort neu, um die neue Sprache anzuwenden.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>Beim Anmelden starten</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>Nein</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>10 Min später</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>Weitere Erinnerungszeiten</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>App starten</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>Tasten senden</value></data>
@@ -263,12 +262,12 @@ Protokoll: {1}</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Stopp der laufenden Aktionen angefordert.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>„{0}“ benötigt Administratorrechte zum Umschalten; Clockwork als Administrator neu öffnen.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>Umschalten von „{0}“ fehlgeschlagen: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Autostart registrieren/entfernen benötigt Administratorrechte; Clockwork als Administrator neu öffnen.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Vorgang fehlgeschlagen: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Einstellungen</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Allgemein</value></data>
   <data name="Settings_About" xml:space="preserve"><value>Über</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Nach Updates suchen</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Suche…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Sie haben die neueste Version ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Neue Version {0} verfügbar. Zum Download?</value></data>
@@ -368,6 +367,7 @@ Protokoll: {1}</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>Verzögerung zwischen den Runden (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Zirkuläre Gruppenreferenz ({0}) — Referenzkette vor dem Speichern auflösen</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplizieren</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>Auswahl</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Konfiguration exportieren</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Konfiguration importieren</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>Konfiguration exportiert nach: {0}</value></data>

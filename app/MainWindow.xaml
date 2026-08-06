@@ -9,19 +9,8 @@
         Title="Clockwork" Height="660" Width="1040" MinHeight="520" MinWidth="820"
         Background="{StaticResource BrushInk}"
         Icon="/logo.ico" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <!-- 系统启动项单元格：列宽有限、内容常被截断（长路径 / 范围「所有用户（需管理员）」等）。
-             省略号收尾 + 始终挂 tooltip=本单元格全文，hover 即可看全，不丢信息。 -->
-        <Style x:Key="SysCell" TargetType="TextBlock">
-            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-        </Style>
-        <Style x:Key="SysCmdCell" TargetType="TextBlock" BasedOn="{StaticResource DelayCol}">
-            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-            <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-        </Style>
-    </Window.Resources>
+    <!-- 单元格省略号样式（原来叫 SysCell / SysCmdCell、只在本页用）已升到 Theme.xaml 的
+         CellEllipsis / CellEllipsisMono：四个列表页的文本列共用同一口径，不再只有系统启动项一页享受。 -->
     <Grid>
         <!-- StripTabControl：只比 TabControl 多一件事——把标签条右端 Tag 里的控件补进无障碍树（见该类注释）。
              隐式样式按精确类型匹配，子类不会自动套用，故显式引用 TabControl 的那份。 -->
@@ -55,7 +44,7 @@
                                   CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridLaunch_DoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="24" CanUserResize="False" CellTemplate="{StaticResource RailCell}" CellStyle="{StaticResource RailCellStyle}"/>
-                                <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
+                                <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52" HeaderStyle="{StaticResource CenterHeader}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -72,24 +61,32 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CellEllipsis}"/>
                                 <DataGridTextColumn Header="{loc:Loc Col_Delay}" Binding="{Binding DelayText}" Width="80" IsReadOnly="True"
                                                     ElementStyle="{StaticResource DelayCol}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         </Border>
                         <StackPanel Grid.Row="0" Grid.Column="1" Margin="14,0,0,0">
-                            <TextBlock Text="{loc:Loc Tab_Launch}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
+                            <!-- 小标题说的是这一列按钮作用于什么，而不是重复一遍标签页名（原来印的就是页名，
+                                 在页名正下方三十几像素处，什么也没多说）。 -->
+                            <TextBlock Text="{loc:Loc Side_SelectedRow}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
                             <Button x:Name="LAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="LAdd_Click"/>
-                            <Button x:Name="LEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="LEdit_Click"/>
-                            <Button x:Name="LDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="LDel_Click"/>
-                            <Grid Margin="0,10,0,0">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Button x:Name="LUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="LUp_Click"/>
-                                <Button x:Name="LDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="LDown_Click"/>
-                            </Grid>
-                            <Button x:Name="LCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="LCopy_Click"/>
-                            <Button x:Name="LRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="LRun_Click"/>
+                            <!-- 除「新增」外全部作用于选中行：没选中时整块置灰。
+                                 原来它们一直可点，点了却因 SelectedStep==null 静默返回——按下去什么都不发生，
+                                 与「坏了」无法区分（同一条道理已经在系统启动项的右键菜单上认过一次）。 -->
+                            <StackPanel x:Name="LaunchRowOps" IsEnabled="False">
+                                <Button x:Name="LEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="LEdit_Click"/>
+                                <Button x:Name="LDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="LDel_Click"/>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Button x:Name="LUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="LUp_Click"/>
+                                    <Button x:Name="LDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="LDown_Click"/>
+                                </Grid>
+                                <Button x:Name="LCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="LCopy_Click"/>
+                                <Button x:Name="LRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="LRun_Click"/>
+                            </StackPanel>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -108,15 +105,17 @@
                         <DataGrid x:Name="GridRemind" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridRemind_DoubleClick">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
+                                <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52" HeaderStyle="{StaticResource CenterHeader}">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>
                                         <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate></DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="{loc:Loc Col_Time}" Binding="{Binding TimeLabel}" Width="Auto" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
-                                <DataGridTextColumn Header="{loc:Loc Col_Period}" Binding="{Binding PeriodLabel}" Width="Auto" MinWidth="120" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="{loc:Loc Col_Text}" Binding="{Binding Text}" Width="*" IsReadOnly="True"/>
-                                <DataGridTemplateColumn Header="{loc:Loc Col_Speak}" Width="56">
+                                <DataGridTextColumn Header="{loc:Loc Col_Period}" Binding="{Binding PeriodLabel}" Width="Auto" MinWidth="120" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CellEllipsis}"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Text}" Binding="{Binding Text}" Width="*" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CellEllipsis}"/>
+                                <DataGridTemplateColumn Header="{loc:Loc Col_Speak}" Width="56" HeaderStyle="{StaticResource CenterHeader}">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>
                                         <CheckBox IsChecked="{Binding Speak, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate></DataGridTemplateColumn.CellTemplate>
@@ -125,17 +124,19 @@
                         </DataGrid>
                         </Border>
                         <StackPanel Grid.Row="0" Grid.Column="1" Margin="14,0,0,0">
-                            <TextBlock Text="{loc:Loc Tab_Reminder}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
+                            <TextBlock Text="{loc:Loc Side_SelectedRow}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
                             <Button x:Name="RAdd" Content="{loc:Loc Btn_Add}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="RAdd_Click"/>
-                            <Button x:Name="REdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="REdit_Click"/>
-                            <Button x:Name="RDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="RDel_Click"/>
-                            <Grid Margin="0,10,0,0">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Button x:Name="RUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="RUp_Click"/>
-                                <Button x:Name="RDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="RDown_Click"/>
-                            </Grid>
-                            <Button x:Name="RCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="RCopy_Click"/>
-                            <Button x:Name="RPreview" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="RPreview_Click"/>
+                            <StackPanel x:Name="ReminderRowOps" IsEnabled="False">
+                                <Button x:Name="REdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="REdit_Click"/>
+                                <Button x:Name="RDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="RDel_Click"/>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Button x:Name="RUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="RUp_Click"/>
+                                    <Button x:Name="RDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="RDown_Click"/>
+                                </Grid>
+                                <Button x:Name="RCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="RCopy_Click"/>
+                                <Button x:Name="RPreview" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="RPreview_Click"/>
+                            </StackPanel>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -154,29 +155,34 @@
                         <DataGrid x:Name="GridGroup" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridGroup_DoubleClick">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
+                                <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52" HeaderStyle="{StaticResource CenterHeader}">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>
                                         <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate></DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="Auto" MinWidth="160" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="{loc:Loc Col_Hotkey}" Binding="{Binding HotkeyLabel}" Width="Auto" MinWidth="110" IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="Auto" MinWidth="160" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CellEllipsis}"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CellEllipsis}"/>
+                                <DataGridTextColumn Header="{loc:Loc Col_Hotkey}" Binding="{Binding HotkeyLabel}" Width="Auto" MinWidth="110" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CellEllipsisMono}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         </Border>
                         <StackPanel Grid.Row="0" Grid.Column="1" Margin="14,0,0,0">
-                            <TextBlock Text="{loc:Loc Tab_Group}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
+                            <TextBlock Text="{loc:Loc Side_SelectedRow}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
                             <Button x:Name="GAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}" Margin="0,3" Click="GAdd_Click"/>
-                            <Button x:Name="GEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="GEdit_Click"/>
-                            <Button x:Name="GDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="GDel_Click"/>
-                            <Grid Margin="0,10,0,0">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Button x:Name="GUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="GUp_Click"/>
-                                <Button x:Name="GDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="GDown_Click"/>
-                            </Grid>
-                            <Button x:Name="GCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="GCopy_Click"/>
-                            <Button x:Name="GRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="GRun_Click"/>
+                            <StackPanel x:Name="GroupRowOps" IsEnabled="False">
+                                <Button x:Name="GEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="GEdit_Click"/>
+                                <Button x:Name="GDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="GDel_Click"/>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Button x:Name="GUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="GUp_Click"/>
+                                    <Button x:Name="GDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="GDown_Click"/>
+                                </Grid>
+                                <Button x:Name="GCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="GCopy_Click"/>
+                                <Button x:Name="GRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="GRun_Click"/>
+                            </StackPanel>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -190,10 +196,13 @@
             <TabItem x:Name="TabSystem" Header="{loc:Loc Tab_System}">
                 <Grid Margin="2,10,2,2">
                     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
+                    <!-- 右内边距 1px 对齐下方列表面板的右缘：面板带 1px 描边，不减这一格，
+                         「显示系统/只读项」会比列表右缘再往外探出一点，成了整页唯一一处出栏的控件。 -->
+                    <Grid Grid.Row="0" Margin="0,0,1,0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <TextBlock Text="{loc:Loc System_Filter}" Style="{StaticResource Hint}" VerticalAlignment="Center" FontSize="13" Margin="2,0,10,0"/>
-                            <TextBox x:Name="SSearch" Width="320" Height="30" VerticalContentAlignment="Center" TextChanged="SSearch_TextChanged"/>
+                            <TextBox x:Name="SSearch" Width="320" Height="30" VerticalContentAlignment="Center" TextChanged="SSearch_TextChanged"
+                                     AutomationProperties.Name="{loc:Loc System_Filter}"/>
                         </StackPanel>
                         <CheckBox x:Name="ShowReadOnly" Content="{loc:Loc System_ShowReadOnly}" HorizontalAlignment="Right" VerticalAlignment="Center"
                                   FontSize="12.5" Checked="ShowReadOnly_Changed" Unchecked="ShowReadOnly_Changed"/>
@@ -209,26 +218,30 @@
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52">
+                            <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52" HeaderStyle="{StaticResource CenterHeader}">
                                 <DataGridTemplateColumn.CellTemplate><DataTemplate>
                                     <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </DataTemplate></DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="170" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
+                            <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="170" IsReadOnly="True" ElementStyle="{StaticResource CellEllipsis}"/>
                             <DataGridTextColumn Header="{loc:Loc Col_Command}" Binding="{Binding Command}" Width="*" IsReadOnly="True"
-                                                ElementStyle="{StaticResource SysCmdCell}"/>
-                            <DataGridTextColumn Header="{loc:Loc Col_Source}" Binding="{Binding SourceLabel}" Width="Auto" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
-                            <DataGridTextColumn Header="{loc:Loc Col_Scope}" Binding="{Binding ScopeLabel}" Width="Auto" MinWidth="172" IsReadOnly="True" ElementStyle="{StaticResource SysCell}"/>
+                                                ElementStyle="{StaticResource CellEllipsisMono}"/>
+                            <DataGridTextColumn Header="{loc:Loc Col_Source}" Binding="{Binding SourceLabel}" Width="Auto" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource CellEllipsis}"/>
+                            <DataGridTextColumn Header="{loc:Loc Col_Scope}" Binding="{Binding ScopeLabel}" Width="Auto" MinWidth="172" IsReadOnly="True" ElementStyle="{StaticResource CellEllipsis}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     </Border>
                     <TextBlock x:Name="SysLoading" Grid.Row="1" Text="{loc:Loc System_Scanning}" Style="{StaticResource Hint}" FontSize="13"
                                HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0">
-                        <Button x:Name="SRefresh" Content="{loc:Loc System_Refresh}" Click="SRefresh_Click"/>
-                        <TextBlock Text="{loc:Loc System_Footer}" Style="{StaticResource Hint}"
-                                   VerticalAlignment="Center" Margin="14,0,0,0" TextWrapping="Wrap" MaxWidth="1000"/>
-                    </StackPanel>
+                    <!-- 必须是 Grid（Auto|*），不能是横向 StackPanel：StackPanel 给子元素的可用宽度是无限的，
+                         TextWrapping 永远不触发，说明文字直接顶出窗口右缘被裁掉。原来靠 MaxWidth="1000" 兜，
+                         而窗口最窄时可用宽度只有 ~640——英语/德语/俄语的这句话实测就是在半个词处被切断。 -->
+                    <Grid Grid.Row="2" Margin="0,12,1,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" x:Name="SRefresh" Content="{loc:Loc System_Refresh}" VerticalAlignment="Center" Click="SRefresh_Click"/>
+                        <TextBlock Grid.Column="1" Text="{loc:Loc System_Footer}" Style="{StaticResource Hint}"
+                                   VerticalAlignment="Center" Margin="14,0,0,0" TextWrapping="Wrap"/>
+                    </Grid>
                 </Grid>
             </TabItem>
 
@@ -241,9 +254,13 @@
                         <!-- 氛围擒纵轮：黄铜线描、右下溢出，把稀疏处填成品牌纹理而非空地。
                              用描边而非填充——实心剪影在 6% 透明度下只剩一团发灰的色块，认不出是什么，
                              等于噪点；细线条能保住黄铜的色相，读作这台仪器的机构图。内圈也从「挖空」
-                             变成画出来的一道轴圈，更像图纸。 -->
-                        <Path Stroke="{StaticResource BrushBrass}" StrokeThickness="1" Opacity="0.28" Stretch="Uniform" Width="480" Height="480"
-                              HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-80,-110" IsHitTestVisible="False"
+                             变成画出来的一道轴圈，更像图纸。
+                             位置/浓度按最窄窗口定，不按最宽：轮子尺寸写死 480，而「关于」栏在 MinWidth 下
+                             只剩 ~430px——原来的 0.28 + (-80,-110) 在那个宽度下整只轮子压在版名、版本号和
+                             GitHub 按钮上，齿尖穿过每一行字。压到 0.16 并再往角外推，任何宽度下都只露出
+                             一段轮缘：留的是纹理，不是一张挡在文字前的图。 -->
+                        <Path Stroke="{StaticResource BrushBrass}" StrokeThickness="1" Opacity="0.16" Stretch="Uniform" Width="480" Height="480"
+                              HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-170,-190" IsHitTestVisible="False"
                               Data="F0 M128,36 L128,24 L156.43,40.5 L160.14,29.09 L182.08,53.57 L189.13,43.86 L202.43,73.92 L212.14,66.87 L215.5,99.57 L226.91,95.86 L220,128 L232,128 L215.5,156.43 L226.91,160.14 L202.43,182.08 L212.14,189.13 L182.08,202.43 L189.13,212.14 L156.43,215.5 L160.14,226.91 L128,220 L128,232 L99.57,215.5 L95.86,226.91 L73.92,202.43 L66.87,212.14 L53.57,182.08 L43.86,189.13 L40.5,156.43 L29.09,160.14 L36,128 L24,128 L40.5,99.57 L29.09,95.86 L53.57,73.92 L43.86,66.87 L73.92,53.57 L66.87,43.86 L99.57,40.5 L95.86,29.09 Z M192,128 A64,64 0 1 0 64,128 A64,64 0 1 0 192,128Z"/>
 
                         <Grid>
@@ -264,7 +281,8 @@
                                 <Grid Margin="0,5">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StartupDelay}" Style="{StaticResource FieldLabel}"/>
-                                    <TextBox Grid.Column="1" x:Name="StartupDelayBox" Width="80" Height="30" HorizontalAlignment="Left" VerticalContentAlignment="Center" LostFocus="Settings_Changed"/>
+                                    <TextBox Grid.Column="1" x:Name="StartupDelayBox" Width="80" Height="30" HorizontalAlignment="Left" VerticalContentAlignment="Center" LostFocus="Settings_Changed"
+                                             AutomationProperties.Name="{loc:Loc Settings_StartupDelay}"/>
                                 </Grid>
 
                                 <!-- 启动时最小化 -->
@@ -281,8 +299,11 @@
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StopHotkey}" Style="{StaticResource FieldLabel}"
                                                VerticalAlignment="Top" Margin="0,7,14,0"/>
                                     <StackPanel Grid.Column="1">
-                                        <TextBox x:Name="HotkeyBox" Width="190" Height="32" HorizontalAlignment="Left" Style="{StaticResource HotkeyCapture}"/>
-                                        <TextBlock Text="{loc:Loc Settings_HotkeyCaptureTip}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap" MaxWidth="380"/>
+                                        <TextBox x:Name="HotkeyBox" Width="190" Height="32" HorizontalAlignment="Left" Style="{StaticResource HotkeyCapture}"
+                                                 AutomationProperties.Name="{loc:Loc Settings_StopHotkey}"/>
+                                        <!-- 说明文字不再设 MaxWidth：380 是凭空定的，中文在这个宽度上把
+                                             「始终可用。」折成孤零零一行「用。」。交给栏宽自己决定换行点。 -->
+                                        <TextBlock Text="{loc:Loc Settings_HotkeyCaptureTip}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap"/>
                                     </StackPanel>
                                 </Grid>
 
@@ -292,8 +313,9 @@
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_Language}" Style="{StaticResource FieldLabel}"
                                                VerticalAlignment="Top" Margin="0,6,14,0"/>
                                     <StackPanel Grid.Column="1">
-                                        <ComboBox x:Name="LangCombo" Width="170" Height="30" HorizontalAlignment="Left" SelectionChanged="Lang_Changed"/>
-                                        <TextBlock Text="{loc:Loc Settings_LangRestart}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap" MaxWidth="380"/>
+                                        <ComboBox x:Name="LangCombo" Width="170" Height="30" HorizontalAlignment="Left" SelectionChanged="Lang_Changed"
+                                                  AutomationProperties.Name="{loc:Loc Settings_Language}"/>
+                                        <TextBlock Text="{loc:Loc Settings_LangRestart}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap"/>
                                     </StackPanel>
                                 </Grid>
 
@@ -323,21 +345,26 @@
                                     <Border Width="3" Height="16" Background="{StaticResource BrushBrass}" CornerRadius="1.5" VerticalAlignment="Center"/>
                                     <TextBlock Text="{loc:Loc Settings_About}" FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,20,0,16">
-                                    <Image Source="/logo-256.png" Width="60" Height="60" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                    <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                <!-- 外层必须是 Grid（Auto|*）：横向 StackPanel 给子元素无限可用宽度，
+                                     副标题的 TextWrapping 永远不生效——窗口收窄时它不换行，直接被面板右缘裁掉
+                                     （英语实测被切成「Startup · Reminders · One-tap Actio」）。 -->
+                                <Grid Margin="0,20,0,16">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" Source="/logo-256.png" Width="60" Height="60" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="Clockwork" FontFamily="{StaticResource FontDisplay}" FontSize="25" FontWeight="SemiBold"/>
                                             <TextBlock x:Name="VersionText" Foreground="{StaticResource BrushMuted}" FontFamily="{StaticResource FontMono}" FontSize="13" VerticalAlignment="Bottom" Margin="10,0,0,4"/>
                                         </StackPanel>
                                         <TextBlock Text="{loc:Loc App_Subtitle}" Foreground="{StaticResource BrushMuted}" FontSize="13" Margin="0,4,0,0" TextWrapping="Wrap"/>
                                     </StackPanel>
-                                </StackPanel>
+                                </Grid>
                                 <StackPanel Orientation="Horizontal" Margin="0,4,0,18">
                                     <Button Content="GitHub" Click="GitHub_Click" Margin="0,0,10,0"/>
                                     <Button x:Name="CheckUpdateBtn" Content="{loc:Loc About_CheckUpdate}" Style="{StaticResource RunButton}" Click="CheckUpdate_Click"/>
                                 </StackPanel>
-                                <TextBlock Text="365 开源计划 · #020" Style="{StaticResource Hint}" FontFamily="{StaticResource FontMono}"/>
+                                <!-- 这一行原来是写死的中文，18 种语言的界面里都印着「365 开源计划」 -->
+                                <TextBlock Text="{loc:Loc About_Series}" Style="{StaticResource Hint}" FontFamily="{StaticResource FontMono}" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Grid>
                     </Grid>

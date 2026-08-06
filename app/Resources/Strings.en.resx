@@ -16,7 +16,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Pop a reminder or silently run an action group on schedule · supports interval runs and run-once · "Yes" can launch apps, open URLs, or run action groups</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundle a series of actions into a group, triggered from the tray / startup list / reminders</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(empty)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>Every autostart entry on this PC — turn off what you don't need. Disable only, never delete; reversible anytime.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Checking / unchecking takes effect immediately (disable, not delete; reversible). Items marked "needs admin" require administrator rights. System / policy / one-time read-only items are hidden by default.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Show system / read-only items</value></data>
@@ -49,13 +48,13 @@
   <data name="Btn_StopRun" xml:space="preserve"><value>■ Stop</value></data>
   <data name="Btn_Run" xml:space="preserve"><value>▶ Run</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplicate</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>Selected</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>Startup delay (s)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Start minimized to tray</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>Stop hotkey</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Takes effect on next launch; empty = disabled. Tray right-click "Stop" always works.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>Language will take effect the next time Clockwork starts.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork restarts right away to apply a new language.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>Start at login</value></data>
 
@@ -68,6 +67,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>No</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>Snooze 10 min</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>More snooze options</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>Launch App</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>Send Keys</value></data>
@@ -266,12 +266,12 @@ Log: {1}</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Requested stop of running actions.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>"{0}" needs administrator rights to toggle; reopen Clockwork as administrator.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>"{0}" toggle failed: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Registering / removing autostart needs administrator rights; reopen Clockwork as administrator.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Operation failed: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Settings</value></data>
   <data name="Settings_General" xml:space="preserve"><value>General</value></data>
   <data name="Settings_About" xml:space="preserve"><value>About</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Check for updates</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Checking…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>You're on the latest version ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>New version {0} available. Go to download?</value></data>
@@ -362,7 +362,7 @@ Log: {1}</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Pick a date</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Capture key</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>Global hotkey</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Click, then press a key combo to run this group anytime; press it again while it runs to stop it. Esc cancels, Delete clears</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Click, then press a key combo to run this group anytime; press it again while it runs to stop it. Esc cancels, Del clears it.</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Failed to register hotkey {1} for action group “{0}”: it may already be in use</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>

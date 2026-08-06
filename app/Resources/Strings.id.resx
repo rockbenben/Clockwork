@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Tampilkan popup atau jalankan grup aksi secara senyap sesuai jadwal · mendukung jalankan berulang dan sekali jalan · pada «Ya» dapat menjalankan program / membuka URL / menjalankan grup aksi</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Gabungkan sederet aksi menjadi grup dan picu sekali ketuk dari baki / daftar startup / pengingat</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(kosong)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>Semua entri startup otomatis PC ini — matikan yang tak perlu sekali ketuk. Hanya nonaktif, tak pernah dihapus; bisa dikembalikan kapan saja.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Centang/hapus berlaku segera (menonaktifkan, bukan menghapus; bisa dikembalikan). Item «perlu admin» butuh hak administrator. Item sistem / kebijakan / sekali pakai read-only disembunyikan secara default.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Tampilkan item sistem / read-only</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Mulai terminimalkan ke baki</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>Tombol berhenti</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Bahasa</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Berlaku saat mulai berikutnya; kosong = nonaktif. «Hentikan» dari menu baki selalu berfungsi.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>Bahasa berlaku saat Clockwork dimulai berikutnya.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork langsung dimulai ulang untuk menerapkan bahasa baru.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>Jalankan saat masuk</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>Tidak</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>Tunda 10 mnt</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>Opsi tunda lainnya</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>Buka aplikasi</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>Kirim tombol</value></data>
@@ -263,12 +262,12 @@ Log: {1}</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Permintaan menghentikan aksi berjalan telah dikirim.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» butuh hak administrator untuk diubah; buka ulang Clockwork sebagai administrator.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>Gagal mengubah «{0}»: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Mendaftarkan/menghapus mulai otomatis butuh hak administrator; buka ulang Clockwork sebagai administrator.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Operasi gagal: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Pengaturan</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Umum</value></data>
   <data name="Settings_About" xml:space="preserve"><value>Tentang</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Periksa pembaruan</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Memeriksa…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Anda menggunakan versi terbaru ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Versi baru {0} tersedia. Buka halaman unduh?</value></data>
@@ -368,6 +367,7 @@ Log: {1}</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>jeda antar putaran (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Referensi grup melingkar ({0}) — putuskan rantai referensi sebelum menyimpan</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Duplikat</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>Terpilih</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Ekspor konfigurasi</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Impor konfigurasi</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>Konfigurasi diekspor ke: {0}</value></data>

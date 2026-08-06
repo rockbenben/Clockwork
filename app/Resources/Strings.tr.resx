@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Zamanı geldiğinde açılır pencere gösterir veya eylem grubunu sessizce çalıştırır · yinelenen çalıştırmayı ve tek seferlik çalıştırmayı destekler · «Evet» ile program çalıştırabilir, URL açabilir veya eylem grubu çalıştırabilir</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bir dizi eylemi grupta topla ve tepsiden / başlangıç listesinden / hatırlatmadan tek dokunuşla tetikle</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(boş)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>Bilgisayarınızın tüm otomatik başlangıç öğeleri — gereksizleri tek dokunuşla kapatın. Yalnızca devre dışı bırakır, silmez; istediğiniz zaman geri alın.</value></data>
   <data name="System_Footer" xml:space="preserve"><value>İşaretleme/kaldırma anında geçerlidir (devre dışı bırakır, silmez; geri alınabilir). «Yönetici gerekir» öğeleri yönetici hakkı ister. Sistem / ilke / tek seferlik salt okunur öğeler varsayılan olarak gizlidir.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filtre</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Sistem / salt okunur öğeleri göster</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>Tepsiye küçültülmüş başlat</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>Durdurma tuşu</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Dil</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>Sonraki başlangıçta geçerli olur; boş = kapalı. Tepsi menüsündeki «Durdur» her zaman kullanılabilir.</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>Dil, Clockwork'ün sonraki başlangıcında geçerli olur.</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Yeni dili uygulamak için Clockwork hemen yeniden başlar.</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>Oturum açılışında başlat</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>Hayır</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>Tamam</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>10 dk ertele</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>Diğer erteleme süreleri</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>Uygulama aç</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>Tuş gönder</value></data>
@@ -263,12 +262,12 @@ Günlük: {1}</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Çalışan eylemlerin durdurulması istendi.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» değiştirmek için yönetici hakkı gerekir; Clockwork'ü yönetici olarak yeniden açın.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>«{0}» değiştirilemedi: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>Otomatik başlatmayı kaydetmek/kaldırmak için yönetici hakkı gerekir; Clockwork'ü yönetici olarak yeniden açın.</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>İşlem başarısız: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Ayarlar</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Genel</value></data>
   <data name="Settings_About" xml:space="preserve"><value>Hakkında</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Güncellemeleri denetle</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 Açık Kaynak Planı · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Denetleniyor…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>En son sürümü kullanıyorsunuz ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Yeni sürüm {0} mevcut. İndirmeye gidilsin mi?</value></data>
@@ -368,6 +367,7 @@ Günlük: {1}</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>turlar arası gecikme (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Döngüsel grup referansı ({0}) — kaydetmeden önce referans zincirini kırın</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>Çoğalt</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>Seçili</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Yapılandırmayı dışa aktar</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>Yapılandırmayı içe aktar</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>Yapılandırma şuraya aktarıldı: {0}</value></data>

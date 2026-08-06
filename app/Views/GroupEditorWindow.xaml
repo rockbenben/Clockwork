@@ -20,21 +20,25 @@
             <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Col_Name}" Style="{StaticResource FieldLabel}"/>
-            <TextBox   Grid.Row="0" Grid.Column="1" x:Name="NameBox" Height="30" Margin="0,0,0,8"/>
+            <TextBox   Grid.Row="0" Grid.Column="1" x:Name="NameBox" AutomationProperties.Name="{loc:Loc Col_Name}" Height="30" Margin="0,0,0,8"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="{loc:Loc Ed_GroupHotkey}" Style="{StaticResource FieldLabel}"/>
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                <TextBox x:Name="HotkeyBox" Width="170" Height="30" Style="{StaticResource HotkeyCapture}"/>
-                <TextBlock Text="{loc:Loc Ed_GroupHotkeyHint}" Style="{StaticResource Hint}" VerticalAlignment="Center"
-                           Margin="12,0,0,0" TextWrapping="Wrap" MaxWidth="340"/>
-            </StackPanel>
+            <!-- Grid（Auto|*）而非横向 StackPanel：StackPanel 给子元素无限可用宽度，说明文字只能靠
+                 写死的 MaxWidth 换行——340 是凭空定的，实测把「即停下。」断成「即停 / 下。」，
+                 而右边还空着两百多像素。交给列宽决定，窗口宽窄都在正确的位置断。 -->
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" x:Name="HotkeyBox" AutomationProperties.Name="{loc:Loc Ed_GroupHotkey}" Width="170" Height="30" Style="{StaticResource HotkeyCapture}"/>
+                <TextBlock Grid.Column="1" Text="{loc:Loc Ed_GroupHotkeyHint}" Style="{StaticResource Hint}" VerticalAlignment="Center"
+                           Margin="12,0,0,0" TextWrapping="Wrap"/>
+            </Grid>
 
             <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Ed_GroupRepeat}" Style="{StaticResource FieldLabel}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,8,0,0">
-                <TextBox x:Name="GroupRepeatBox" Width="60" Height="28"/>
+                <TextBox x:Name="GroupRepeatBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeat}" Width="60" Height="28"/>
                 <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,0"/>
                 <!-- 单位并入 Ed_GroupRepeatDelay 文案（各语言自带 ms 缩写，同 Ed_DelayMs）：写死的 "ms" 阿拉伯语/俄语用户会看到一截拉丁字母 -->
-                <TextBox x:Name="GroupRepeatDelayBox" Width="80" Height="28"/>
+                <TextBox x:Name="GroupRepeatDelayBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeatDelay}" Width="80" Height="28"/>
                 <!-- 托盘显示开关与「整组重复」同排：都是"这个组怎么被用"的属性，不占额外一行 -->
                 <CheckBox x:Name="ShowInTrayChk" Content="{loc:Loc Ed_GroupShowInTray}" VerticalAlignment="Center" Margin="24,0,0,0"/>
             </StackPanel>
@@ -47,8 +51,10 @@
         <Grid Grid.Row="2" Margin="0,16,0,6">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="{loc:Loc Col_Steps}" Style="{StaticResource GroupLabel}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+            <!-- 宽度/左边距必须与下方按钮列（Width=104, Margin=14,0,0,0）逐字相同：这颗「新增」就摞在
+                 「编辑 / 删除 / 复制」正上方，宽度由内容决定时两边各差几像素，一列按钮的左右缘就都对不齐。 -->
             <Button Grid.Column="1" x:Name="SAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}"
-                    Height="30" Padding="16,0" Click="SAdd_Click"/>
+                    Width="104" Height="30" Padding="4,0" Margin="14,0,0,0" Click="SAdd_Click"/>
         </Grid>
 
         <!-- ===== 步骤序列：黄铜轨 · 类型徽标 · 摘要 · 延时（与启动清单同一套仪表化列表）===== -->
@@ -70,7 +76,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"
+                                            ElementStyle="{StaticResource CellEllipsis}"/>
                         <DataGridTextColumn Header="{loc:Loc Col_Delay}" Binding="{Binding DelayText}" Width="Auto" MinWidth="72"
                                             IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
                     </DataGrid.Columns>
@@ -97,8 +104,8 @@
 
         <!-- ===== 确定 / 取消 ===== -->
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-            <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource PrimaryButton}" MinWidth="88" Height="34" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
-            <Button Content="{loc:Loc Ed_Cancel}" MinWidth="76" Height="34" Click="Cancel_Click" IsCancel="True"/>
+            <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource DialogPrimaryButton}" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
+            <Button Content="{loc:Loc Ed_Cancel}" Style="{StaticResource DialogButton}" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>

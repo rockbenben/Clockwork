@@ -47,6 +47,9 @@ public sealed class SystemStartupRowVm : ObservableObject
     public string Command => Item.Command;
     public string SourceLabel => StartupLabels.TypeLabel(Item.Type) + (string.IsNullOrEmpty(Item.ReadOnlyNote) ? "" : "·" + Strings.Get(Item.ReadOnlyNote));
     public string ScopeLabel => StartupLabels.ScopeLabel(Item.Scope, Item.NeedsAdmin);
+
+    // 读屏软件念的就是这一串（见 StepRowVm.ToString 的说明）。名字＋来源＝一行里最能定位它的两个字段。
+    public override string ToString() => Name + " · " + SourceLabel;
 }
 
 // 系统启动项页 ViewModel：异步扫描后 SetItems；搜索 + 隐藏只读项 前端过滤。

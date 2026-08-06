@@ -100,7 +100,7 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 - **Right-click a row** for two actions:
   - **Take over into launch list** — hands the item to Clockwork (disables the original + adds it to your list). Registry Run keys and Startup-folder items only; scheduled tasks aren't supported yet (you'll get a notice).
   - **Delete from system** — removes the entry for good (registry value / Startup-folder shortcut / scheduled task). It asks first and **cannot be undone** — if you only want to stop it running at boot, uncheck **Enable** instead. If the item was taken over earlier and a step still points at its shortcut file, the confirmation says so, because deleting the shortcut breaks that step.
-- A top **filter** searches by name / command; hover a truncated command to read it in full.
+- A top **filter** searches by name / command.
 
 ## Action groups
 
@@ -109,7 +109,7 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 - A group runs **only one copy at a time** (repeat triggers are skipped — except its hotkey, see "the hotkey is a toggle" below).
 - Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**. You can also select a row on the Action groups tab and hit **Run** to fire it once by hand.
 - **Show in tray menu** (in the group editor; **off by default for new groups**): once you have a few groups the tray menu turns into a long strip, and most groups are triggered by a hotkey, a reminder or another group anyway — they don't need a row. A hidden group still works everywhere else: hotkeys, reminders, references and the **Run** button on the Action groups tab are all unaffected; it just isn't listed in the tray. Groups that existed before this option was added keep showing, so nothing disappears on upgrade.
-- **Global hotkey:** in the group editor, click the hotkey box and press a combo (e.g. `Ctrl+Alt+F`) to run the group from any app — no menu needed. Esc cancels, Delete clears. Changes apply live (no restart). A **disabled** group releases its combo so another group can use it. Refused with a notice: **system-reserved** combos (Alt+F4, Alt+Tab, Ctrl+Shift+Esc…), a combo already bound to **another enabled group** or the **panic hotkey**, or one **already taken by another app** (use a different combo).
+- **Global hotkey:** in the group editor, click the hotkey box and press a combo (e.g. `Ctrl+Alt+F`) to run the group from any app — no menu needed. Esc cancels, Del clears. Changes apply live (no restart). A **disabled** group releases its combo so another group can use it. Refused with a notice: **system-reserved** combos (Alt+F4, Alt+Tab, Ctrl+Shift+Esc…), a combo already bound to **another enabled group** or the **panic hotkey**, or one **already taken by another app** (use a different combo).
 - **The hotkey is a toggle — press it again to cancel.** Pressing the same hotkey while the group is still running cancels **that run**: the remaining steps and rounds are dropped and a tray toast confirms it. The cancel is scoped to that one run — **the startup list and other groups keep going** (use the panic hotkey to stop everything). What that means in practice:
   - Most groups finish in a few hundred milliseconds, so a second press then simply **runs it again** — cancelling only matters for groups that are still running (ones with delays or repeat rounds).
   - Delays between rounds and between steps are **interrupted on the spot**; you don't wait out the current sleep.
@@ -145,7 +145,7 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
 - **Start at login** — a checkbox: ticking it registers a scheduled task with admin rights (so boot brings no UAC prompts), unticking removes it. If the change needs elevation, Clockwork relaunches itself to do it; if it fails, the box springs back rather than claiming a state that isn't real.
 - **Startup delay** (0–600 s, boot only).
 - **Start minimized to tray** (opening manually goes straight to the tray).
-- **Panic hotkey** — click the box and press your shortcut; Esc cancels, Delete clears; default `Ctrl+Alt+Q`.
+- **Panic hotkey** — click the box and press your shortcut; Esc cancels, Del clears; default `Ctrl+Alt+Q`.
 - **UI language** — Simplified Chinese, English, 日本語 and 15 more (18 total); switching restarts the app to apply.
 - **Export Config** — saves a copy of `clockwork.settings.json` wherever you choose (default name `clockwork.settings.backup.json`). Use it to back up before a big change, or to move your setup to another PC.
 - **Import Config** — replaces **all** current config (startup list / scheduled tasks / action groups / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Task state (`clockwork.state.json`) is not touched.
@@ -153,6 +153,8 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
 ## Tips
 
 - Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.
+- **The side buttons follow the selection** — with no row selected, **Edit / Delete / Up / Down / Duplicate / Run** are greyed out, since they only ever act on the selected row. **Add** always works.
+- **Nothing is cut off silently** — in all four lists, a cell too wide for its column ends in "…"; hover it to read the whole thing.
 - **Deleting always asks for confirmation** — list rows, steps inside the group editor, and system startup items alike. The dialog names what you're about to delete, so you can catch a wrong selection before it's gone.
 - Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Task state is `clockwork.state.json` (also local; safe to delete — at most a task fires once more today). Prefer the Settings tab's **Export / Import Config** for backups and moving between PCs.
 - **Where those files live:** next to `Clockwork.exe` when that folder is writable (the normal portable case). If it isn't — e.g. you put the exe under `C:\Program Files` — both files fall back to `%APPDATA%\Clockwork\` automatically. Export always copies whichever one is actually in use, so you never have to hunt for it.

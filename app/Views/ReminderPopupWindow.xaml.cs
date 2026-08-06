@@ -42,6 +42,9 @@ public partial class ReminderPopupWindow : Window
         NoBtn.Content = Strings.Get("Reminder_Popup_No");
         OkBtn.Content = Strings.Get("Reminder_Popup_Ok");
         SnoozeBtn.Content = Strings.Get("Reminder_Popup_Snooze");
+        // ▾ 只有一个字形，读屏软件念不出用途——名字/提示都借「稍后」这一串，指明它是那颗按钮的更多选项。
+        SnoozeMoreBtn.ToolTip = Strings.Get("Reminder_Popup_SnoozeMore");
+        System.Windows.Automation.AutomationProperties.SetName(SnoozeMoreBtn, Strings.Get("Reminder_Popup_SnoozeMore"));
         MsgText.Text = message;
         // 有动作 → 是/否；否则 → 确定。
         YesBtn.Visibility = NoBtn.Visibility = confirm ? Visibility.Visible : Visibility.Collapsed;

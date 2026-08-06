@@ -26,6 +26,10 @@ public sealed class StepRowVm : ObservableObject, IRowVm
     public string Summary => StepDisplay.StepListSummary(Step);
     public string DelayText => Step.DelayMs <= 0 ? "" : (Step.DelayMs % 1000 == 0 ? $"{Step.DelayMs / 1000}s" : $"{Step.DelayMs}ms");
 
+    // DataGrid 行在无障碍树里的名字取自本对象的 ToString()。不重写的话，读屏软件把每一行都念成
+    // 「Clockwork.ViewModels.StepRowVm」——整张表对读屏用户等于一片空白。四个列表页各自重写一次。
+    public override string ToString() => KindLabel + " " + Summary;
+
     // 编辑后刷新显示（步骤字段被就地改动，通知 UI 重读）。
     public void Refresh()
     {

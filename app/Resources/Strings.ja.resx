@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>時刻にポップアップ通知するか、アクショングループを静かに実行 · 定期実行 / 一回限りに対応 ·「はい」でプログラム実行 / URL を開く / アクショングループ実行が可能</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>一連の操作をグループ化し、トレイ / 起動リスト / 通知からワンタップで実行</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>この PC のすべての自動起動を、不要なものはワンタップでオフ — 無効化のみで削除せず、いつでも復元可</value></data>
   <data name="System_Footer" xml:space="preserve"><value>チェックの切り替えは即時反映（削除ではなく無効化、復元可）。「要管理者」の項目は管理者権限が必要。システム / ポリシー / 一回限りの読み取り専用項目は既定で非表示。</value></data>
   <data name="System_Filter" xml:space="preserve"><value>フィルター</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>システム / 読み取り専用を表示</value></data>
@@ -47,13 +46,13 @@
   <data name="Btn_StopRun" xml:space="preserve"><value>■ 停止</value></data>
   <data name="Btn_Run" xml:space="preserve"><value>▶ 実行</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>複製</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>選択中</value></data>
 
   <data name="Settings_StartupDelay" xml:space="preserve"><value>起動待機(秒)</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>起動時にトレイへ最小化</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>緊急停止キー</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>言語</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>変更は次回起動時に反映；空欄=無効。トレイ右クリック「停止」は常に使用可。</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>言語は次回の Clockwork 起動時に反映されます。</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>言語を切り替えると Clockwork がすぐに再起動します。</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>自動起動</value></data>
 
@@ -66,6 +65,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>いいえ</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>10 分後に再通知</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>他の再通知時間</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>アプリ起動</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>キー送信</value></data>
@@ -264,12 +264,12 @@
   <data name="Hotkey_Stopped" xml:space="preserve"><value>実行中の操作の停止を要求しました。</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>「{0}」の切り替えには管理者権限が必要です。管理者として Clockwork を開き直してください。</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>「{0}」の切り替えに失敗：{1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>自動起動の登録/解除には管理者権限が必要です。管理者として Clockwork を開き直してください。</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>操作に失敗：{0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>設定</value></data>
   <data name="Settings_General" xml:space="preserve"><value>一般</value></data>
   <data name="Settings_About" xml:space="preserve"><value>バージョン情報</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>更新を確認</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 オープンソース計画 · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>確認中…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>最新バージョンです（{0}）</value></data>
   <data name="Update_Available" xml:space="preserve"><value>新しいバージョン {0} があります。ダウンロードページを開きますか？</value></data>

@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>แสดงป๊อปอัปเตือนหรือรันกลุ่มการทำงานแบบเงียบตามกำหนดเวลา · รองรับการรันซ้ำและรันครั้งเดียว · เมื่อกด «ใช่» สามารถเรียกโปรแกรม / เปิด URL / รันกลุ่มการทำงานได้</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่มแล้วสั่งด้วยแตะเดียวจากถาด / รายการเริ่มต้น / การเตือน</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(ว่าง)</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>รายการเริ่มต้นอัตโนมัติทั้งหมดของเครื่อง — ปิดสิ่งที่ไม่ต้องการด้วยแตะเดียว ปิดใช้งานเท่านั้น ไม่ลบ ย้อนกลับได้ทุกเมื่อ</value></data>
   <data name="System_Footer" xml:space="preserve"><value>ติ๊ก/เอาออกมีผลทันที (ปิดใช้งาน ไม่ใช่ลบ ย้อนกลับได้) รายการ «ต้องใช้แอดมิน» ต้องการสิทธิ์ผู้ดูแล รายการระบบ / นโยบาย / ครั้งเดียวแบบอ่านอย่างเดียวถูกซ่อนโดยค่าเริ่มต้น</value></data>
   <data name="System_Filter" xml:space="preserve"><value>ตัวกรอง</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>แสดงรายการระบบ / อ่านอย่างเดียว</value></data>
@@ -51,8 +50,7 @@
   <data name="Settings_StartMinimized" xml:space="preserve"><value>เริ่มแบบย่อลงถาด</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>ปุ่มหยุด</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>ภาษา</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>มีผลเมื่อเริ่มครั้งถัดไป; ว่าง = ปิด «หยุด» จากเมนูถาดใช้ได้เสมอ</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>ภาษาจะมีผลเมื่อเริ่ม Clockwork ครั้งถัดไป</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork จะรีสตาร์ททันทีเพื่อใช้ภาษาใหม่</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>เริ่มเมื่อเข้าสู่ระบบ</value></data>
 
@@ -65,6 +63,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>ไม่</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>ตกลง</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>เลื่อน 10 นาที</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>ตัวเลือกเลื่อนอื่น ๆ</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>เปิดแอป</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>ส่งปุ่ม</value></data>
@@ -263,12 +262,12 @@
   <data name="Hotkey_Stopped" xml:space="preserve"><value>ขอให้หยุดการทำงานที่กำลังรันแล้ว</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» ต้องใช้สิทธิ์ผู้ดูแลเพื่อสลับ; เปิด Clockwork ในฐานะผู้ดูแลอีกครั้ง</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>สลับ «{0}» ไม่สำเร็จ: {1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>การลงทะเบียน/ลบเริ่มอัตโนมัติต้องใช้สิทธิ์ผู้ดูแล; เปิด Clockwork ในฐานะผู้ดูแลอีกครั้ง</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>การดำเนินการล้มเหลว: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>การตั้งค่า</value></data>
   <data name="Settings_General" xml:space="preserve"><value>ทั่วไป</value></data>
   <data name="Settings_About" xml:space="preserve"><value>เกี่ยวกับ</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>ตรวจหาการอัปเดต</value></data>
+  <data name="About_Series" xml:space="preserve"><value>แผน 365 โอเพนซอร์ส · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>กำลังตรวจสอบ…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>คุณใช้เวอร์ชันล่าสุดแล้ว ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>มีเวอร์ชันใหม่ {0} ไปที่หน้าดาวน์โหลดไหม?</value></data>
@@ -368,6 +367,7 @@
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>หน่วงเวลาระหว่างรอบ (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>มีการอ้างอิงกลุ่มแบบวนซ้ำ ({0}) โปรดตัดห่วงโซ่การอ้างอิงก่อนบันทึก</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>ทำสำเนา</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>ที่เลือก</value></data>
   <data name="Btn_ExportConfig" xml:space="preserve"><value>ส่งออกการตั้งค่า</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>นำเข้าการตั้งค่า</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>ส่งออกการตั้งค่าไปยัง: {0}</value></data>

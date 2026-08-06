@@ -34,6 +34,9 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
     public string PeriodLabel => ReminderDisplay.PeriodLabel(Reminder);
     public string Text => ReminderDisplay.TextSummary(Reminder, _groups);
 
+    // 读屏软件念的就是这一串（见 StepRowVm.ToString 的说明）。时间＋正文＝一行里最能定位它的两个字段。
+    public override string ToString() => TimeLabel + " " + Text;
+
     public void Refresh()
     {
         OnPropertyChanged(nameof(Enabled));

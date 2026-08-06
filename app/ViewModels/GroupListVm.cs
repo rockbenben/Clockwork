@@ -42,6 +42,9 @@ public sealed class GroupRowVm : ObservableObject, IRowVm
     // 一列占位符号比空白更吵。
     public string HotkeyLabel => Group.Hotkey ?? "";
 
+    // 读屏软件念的就是这一串（见 StepRowVm.ToString 的说明）。
+    public override string ToString() => Name + " · " + Summary;
+
     public void Refresh()
     {
         OnPropertyChanged(nameof(Enabled));

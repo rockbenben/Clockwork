@@ -40,10 +40,12 @@
 
                 <!-- 操作按钮 -->
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="YesBtn" Style="{StaticResource PrimaryButton}" MinWidth="72" Height="34" Margin="0,0,8,0" Click="Yes_Click"/>
-                    <Button x:Name="NoBtn" MinWidth="72" Height="34" Margin="0,0,8,0" Click="No_Click"/>
-                    <Button x:Name="OkBtn" Style="{StaticResource PrimaryButton}" MinWidth="72" Height="34" Margin="0,0,8,0" Click="Ok_Click"/>
+                    <Button x:Name="YesBtn" Style="{StaticResource PrimaryButton}" MinWidth="88" Height="34" Margin="0,0,8,0" Click="Yes_Click"/>
+                    <Button x:Name="NoBtn" MinWidth="88" Height="34" Margin="0,0,8,0" Click="No_Click"/>
+                    <Button x:Name="OkBtn" Style="{StaticResource PrimaryButton}" MinWidth="88" Height="34" Margin="0,0,8,0" Click="Ok_Click"/>
                     <Button x:Name="SnoozeBtn" MinWidth="104" Height="34" Margin="0,0,4,0" Click="Snooze_Click"/>
+                    <!-- 只有一个字形的按钮：读屏软件念「▾」等于什么都没念，名字在 code-behind 里随
+                         「稍后」菜单一起给（同急停按钮的做法）。 -->
                     <Button x:Name="SnoozeMoreBtn" Content="▾" Width="30" Height="34" Click="SnoozeMore_Click"/>
                 </StackPanel>
             </Grid>

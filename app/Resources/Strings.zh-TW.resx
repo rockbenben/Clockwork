@@ -14,7 +14,6 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>到點彈窗提醒或靜默執行動作組 · 支援循環執行 / 僅一次 · 按「是」後可執行程式 / 開網頁 / 跑動作組</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>把一串動作打包成組，可在系統匣 / 開機清單 / 提醒裡一鍵觸發</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
-  <data name="System_Hint" xml:space="preserve"><value>電腦裡所有開機自動啟動，一鍵關掉不需要的 — 只停用、不刪除，隨時還原</value></data>
   <data name="System_Footer" xml:space="preserve"><value>勾選 / 取消即時生效（非刪除，可還原）；標「需管理員」的項目需管理員身分。系統 / 原則 / 一次性等唯讀項目預設隱藏。</value></data>
   <data name="System_Filter" xml:space="preserve"><value>篩選</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>顯示系統 / 唯讀項目</value></data>
@@ -47,13 +46,13 @@
   <data name="Btn_StopRun" xml:space="preserve"><value>■ 停止</value></data>
   <data name="Btn_Run" xml:space="preserve"><value>▶ 執行</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>複製</value></data>
+  <data name="Side_SelectedRow" xml:space="preserve"><value>選取項</value></data>
 
-  <data name="Settings_StartupDelay" xml:space="preserve"><value>開機延遲(秒)</value></data>
+  <data name="Settings_StartupDelay" xml:space="preserve"><value>開機延遲（秒）</value></data>
   <data name="Settings_StartMinimized" xml:space="preserve"><value>啟動時最小化到系統匣</value></data>
   <data name="Settings_StopHotkey" xml:space="preserve"><value>緊急停止鍵</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>語言</value></data>
-  <data name="Settings_HotkeyTip" xml:space="preserve"><value>變更後下次啟動生效；空白=停用。系統匣右鍵「停止」隨時可用。</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>語言將於下次啟動 Clockwork 時生效。</value></data>
+  <data name="Settings_LangRestart" xml:space="preserve"><value>切換語言會立即重新啟動 Clockwork。</value></data>
 
   <data name="Autostart_Label" xml:space="preserve"><value>開機自啟</value></data>
 
@@ -66,6 +65,7 @@
   <data name="Reminder_Popup_No" xml:space="preserve"><value>否</value></data>
   <data name="Reminder_Popup_Ok" xml:space="preserve"><value>確定</value></data>
   <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>稍後 10 分鐘</value></data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>其他稍後時長</value></data>
 
   <data name="Kind_app" xml:space="preserve"><value>啟動程式</value></data>
   <data name="Kind_keys" xml:space="preserve"><value>傳送按鍵</value></data>
@@ -104,7 +104,7 @@
   <data name="Sum_Delay_Sec" xml:space="preserve"><value>延遲 {0} 秒</value></data>
   <data name="Sum_Delay_Ms" xml:space="preserve"><value>延遲 {0} 毫秒</value></data>
   <data name="Sum_RunGroup" xml:space="preserve"><value>執行動作組：{0}</value></data>
-  <data name="Sum_Group_None" xml:space="preserve"><value>(未指定)</value></data>
+  <data name="Sum_Group_None" xml:space="preserve"><value>（未指定）</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>輸入 {0}</value></data>
   <data name="Sum_MsgCard" xml:space="preserve"><value>卡片提示：{0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value>（僅{0}前）</value></data>
@@ -153,8 +153,8 @@
   <data name="Ed_Level" xml:space="preserve"><value>音量(0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>處理程序名稱</value></data>
   <data name="Ed_SendKey" xml:space="preserve"><value>傳送按鍵</value></data>
-  <data name="Ed_WaitWin" xml:space="preserve"><value>等視窗(秒)</value></data>
-  <data name="Ed_PostDelay" xml:space="preserve"><value>出現後等(秒)</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>等視窗（秒）</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>出現後等（秒）</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>處理程序名稱不含 .exe（如 Weixin / msedge）。帶到最前 / 傳送按鍵需搶占前景，開機自動啟動時可能無效。</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>命令</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>文字</value></data>
@@ -168,7 +168,7 @@
   <data name="Present_Dialog" xml:space="preserve"><value>對話框（等你回應）</value></data>
   <data name="Present_Card" xml:space="preserve"><value>卡片（不打斷）</value></data>
   <data name="Ed_Group" xml:space="preserve"><value>動作組</value></data>
-  <data name="Ed_DelayMs" xml:space="preserve"><value>執行後延遲(毫秒)</value></data>
+  <data name="Ed_DelayMs" xml:space="preserve"><value>執行後延遲（毫秒）</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>重複次數</value></data>
   <data name="Ed_Note" xml:space="preserve"><value>用途說明</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>僅這些星期執行（都不勾=每天）</value></data>
@@ -219,25 +219,25 @@
   <data name="Ed_Rec_Once" xml:space="preserve"><value>僅一次</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>每幾天</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>天；起算日</value></data>
-  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd；留空=今天)</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>（yyyy-MM-dd；留空=今天）</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>每月幾號</value></data>
   <data name="Ed_OnceDate" xml:space="preserve"><value>日期</value></data>
   <data name="Ed_ActPopup" xml:space="preserve"><value>彈窗提醒</value></data>
   <data name="Ed_ActSilent" xml:space="preserve"><value>靜默執行動作組</value></data>
   <data name="Ed_SilentGroup" xml:space="preserve"><value>執行動作組</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>執行動作組</value></data>
-  <data name="Ed_AutoDismiss" xml:space="preserve"><value>自動關閉(秒)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>沒人按就自動關（0=不關；重複提醒預設60）</value></data>
+  <data name="Ed_AutoDismiss" xml:space="preserve"><value>自動關閉（秒）</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>沒人按就自動關（0=不關；重複提醒預設 60）</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>未確認時催促</value></data>
-  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分鐘一次(0=不重複)，直到</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm，留空=不限)</value></data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分鐘一次（0=不重複），直到</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>（HH:mm，留空=不限）</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>循環執行</value></data>
-  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>分鐘一次(0=不循環)，直到</value></data>
-  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm，留空=當天結束)</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>分鐘一次（0=不循環），直到</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>（HH:mm，留空=當天結束）</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>觸發後延遲</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>秒，再隨機加 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>秒</value></data>
-  <data name="Ed_Grace" xml:space="preserve"><value>寬限(分鐘)</value></data>
+  <data name="Ed_Grace" xml:space="preserve"><value>寬限（分鐘）</value></data>
   <data name="Ed_GraceHint" xml:space="preserve"><value>內錯過時點仍補彈</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>時間格式應為 HH:mm</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>「重複直到」格式應為 HH:mm（或留空）</value></data>
@@ -264,17 +264,17 @@
   <data name="Hotkey_Stopped" xml:space="preserve"><value>已要求停止執行中的動作。</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>「{0}」需要管理員權限才能開關，請以管理員身分重新開啟 Clockwork。</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>「{0}」開關失敗：{1}</value></data>
-  <data name="Autostart_NeedsAdmin" xml:space="preserve"><value>註冊/取消開機自動啟動需要管理員權限，請以管理員身分重新開啟 Clockwork。</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>操作失敗：{0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>設定</value></data>
   <data name="Settings_General" xml:space="preserve"><value>一般</value></data>
   <data name="Settings_About" xml:space="preserve"><value>關於</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>檢查更新</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 開源計劃 · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>檢查中…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>已是最新版（{0}）</value></data>
   <data name="Update_Available" xml:space="preserve"><value>發現新版 {0}，前往下載？</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>檢查更新失敗：{0}</value></data>
-  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>點擊後按下快捷鍵；Esc 取消、Del 清空停用。工作列右鍵「停止」始終可用。</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>點擊後按下快捷鍵；Esc 取消，Del 清空停用。工作列右鍵「停止」始終可用。</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>按下快捷鍵…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>接管到啟動清單</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>從系統中刪除</value></data>
@@ -360,13 +360,13 @@
   <data name="Date_Pick" xml:space="preserve"><value>選擇日期</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>擷取按鍵</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>全域快速鍵</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>點擊後按下組合鍵，隨時一鍵執行本組；執行中再按一次即停下。Esc 取消，Delete 清除</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>點擊後按下組合鍵，隨時一鍵執行本組；執行中再按一次即停下。Esc 取消，Del 清空。</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>動作組「{0}」的快速鍵 {1} 註冊失敗：可能已被其他程式或快速鍵佔用</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>快速鍵 {0} 已被「{1}」使用，請換一個組合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系統保留組合（註冊會劫走系統按鍵），不能用作快速鍵</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>整組重複次數</value></data>
   <data name="Ed_GroupShowInTray" xml:space="preserve"><value>在系統匣選單顯示</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>每輪間隔(毫秒)</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>每輪間隔（毫秒）</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>動作組存在環引用（{0}），請先解開引用鏈再儲存</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>匯出設定</value></data>
