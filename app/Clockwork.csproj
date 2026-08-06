@@ -17,9 +17,11 @@
     <InvariantGlobalization>false</InvariantGlobalization>
 
     <ApplicationIcon>..\assets\logo.ico</ApplicationIcon>
-    <!-- 与发布 tag 保持同步。正式发版由 CI 用 -p:Version=<tag 去 v> 覆盖，此处的值供本地构建用——
-         留旧值会让自建版本号永远落后、「检查更新」恒提示有新版。 -->
-    <Version>2.5.0</Version>
+    <!-- 版本号不用手动维护：本地构建从最近的 git tag 取（见文件末尾的 VersionFromGitTag），
+         正式发版由 CI 用 -p:Version=<tag 去 v> 覆盖。下面这个值只是两者都不适用时的兜底
+         ——比如从源码 zip 构建、目录里没有 .git。 -->
+    <VersionFallback>2.5.0</VersionFallback>
+    <Version>$(VersionFallback)</Version>
     <Product>Clockwork</Product>
     <Company>rockbenben</Company>
     <Authors>rockbenben</Authors>
@@ -32,5 +34,34 @@
     <Resource Include="..\assets\logo.ico" Link="logo.ico" />
     <Resource Include="..\assets\logo-256.png" Link="logo-256.png" />   <!-- 高清 PNG：设置页大图标用，.ico 缩放会糊 -->
   </ItemGroup>
+
+  <!--
+    让自建版本号自己跟上，不依赖任何人记得改。
+
+    「关于」里的版本戳和 UpdateChecker 都读程序集版本，字面量一旦落后，自建的 exe 就会
+    报旧号码并永远提示「有新版」。这里改取最近可达的 tag——也就是当前工作树所基于的那次
+    发布——正是让检查更新与事实一致的值。
+
+    Condition 是承重件，不是保险：target 内部的 PropertyGroup 会覆盖命令行传入的全局属性
+    （已实测），少了这道判断，CI 的 -p:Version=<tag> 会被顶掉，打 v2.6.0 的 tag 反而发出
+    标着上一版号码的 exe。Version 只有在没人从外部传值时才等于 VersionFallback。
+    git describe 失败（无 git、无 tag、源码 zip）就保留兜底值；版本号是门面，不该让构建失败。
+
+    IgnoreExitCode 而非 ContinueOnError：后者只是把失败降级成警告，仍会留下
+    warning MSB3073。而「没有 tag」是 CI 的常态而非异常——actions/checkout 默认浅克隆不带
+    tag，ci.yml 又不传 -p:Version，于是每次跑测试都稳定刷两条警告（wpftmp 工程各算一次）。
+    退出码照样经 _GitTagExit 判断，逻辑不变，只是不再把常态当异常报。
+  -->
+  <Target Name="VersionFromGitTag" BeforeTargets="GetAssemblyVersion"
+          Condition="'$(Version)' == '$(VersionFallback)'">
+    <Exec Command="git describe --tags --abbrev=0" ConsoleToMSBuild="true"
+          IgnoreExitCode="true" StandardOutputImportance="low" StandardErrorImportance="low">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_GitTag"/>
+      <Output TaskParameter="ExitCode" PropertyName="_GitTagExit"/>
+    </Exec>
+    <PropertyGroup Condition="'$(_GitTagExit)' == '0' AND $([System.Text.RegularExpressions.Regex]::IsMatch($(_GitTag), '^v?[0-9]+\.[0-9]+\.[0-9]+$'))">
+      <Version>$(_GitTag.TrimStart('v'))</Version>
+    </PropertyGroup>
+  </Target>
 
 </Project>
