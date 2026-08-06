@@ -10,8 +10,7 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 
 **[⬇ Download for Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portable, no installer
 
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a>
-<a href="https://github.com/rockbenben/365opensource"><img src="https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb" alt="365 Open Source Plan #020"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a> <a href="https://github.com/rockbenben/365opensource"><img src="https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb" alt="365 Open Source Plan #020"></a>
 
 </div>
 

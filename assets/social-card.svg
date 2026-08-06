@@ -49,5 +49,5 @@
   <!-- footer -->
   <line x1="70" y1="582" x2="1130" y2="582" stroke="#2E3947" stroke-opacity="0.7"/>
   <text x="70" y="612" font-family="Consolas, monospace" font-size="16" fill="#8B95A3" letter-spacing="1">365 开源计划 · #020</text>
-  <text x="1130" y="612" font-family="Microsoft YaHei, sans-serif" font-size="18" fill="#C9CFD7" text-anchor="end">启动清单 · 定时提醒 · 系统启动项 · 动作组</text>
+  <text x="1130" y="612" font-family="Microsoft YaHei, sans-serif" font-size="18" fill="#C9CFD7" text-anchor="end">启动清单 · 定时任务 · 系统启动项 · 动作组</text>
 </svg>

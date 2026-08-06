@@ -10,7 +10,7 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 
 **[⬇ Descargar para Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portable, sin instalador
 
-[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](../../LICENSE) [![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
 
 </div>
 
@@ -20,79 +20,49 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 
 </div>
 
-> Una herramienta de bandeja para Windows: lanzador de inicio · recordatorios · elementos de inicio del sistema · grupos de acciones
+![La lista de inicio de Clockwork — una secuencia ordenada de pasos de inicio de sesión, cada uno con su tipo, retardo y condiciones](../../assets/screenshot.png)
 
-![Clockwork](../../assets/social-card.png)
+## Qué hace
 
-Una pequeña herramienta de bandeja para Windows que se encarga de las partes rutinarias de empezar tu día frente al ordenador:
+- 🚀 **Lista de inicio** — abre en orden tus aplicaciones de cada día al iniciar sesión, con retardo, condición de día y estilo de ventana por paso; cierra, enfoca o silencia cosas por el camino.
+- ⏰ **Tareas programadas** — un recordatorio a su hora, leído en voz alta si quieres, o un grupo de acciones ejecutado en silencio. Pulsar **Sí** puede ejecutar un programa, abrir un archivo o una URL, o disparar un grupo.
+- 🧹 **Elementos de inicio del sistema** — todo lo que se inicia solo en tu PC, en una lista: desactiva lo que no necesites (desactivado, no eliminado) o traspásalo a tu propia lista de inicio.
+- 🎛️ **Grupos de acciones** — agrupa una rutina (Concentración / Reunión / Cierre / Antes de dormir…) y actívala desde la bandeja, un **atajo global**, la lista de inicio o una tarea programada. Incluye plantillas.
 
-- 🚀 **Lista de inicio** — abre automáticamente tus aplicaciones de cada día al iniciar sesión, en orden (permisos de administrador por paso, retardos, solo-en-ciertos-días-de-la-semana / solo-antes-de-las-N-en-punto, estilo de ventana, activar-si-ya-se-está-ejecutando, rutas de reserva), y realiza algunas tareas por el camino (cerrar o enfocar ventanas, enviar pulsaciones de teclas / texto, ajustar el volumen…).
-- ⏰ **Tareas programadas** — muestra un recordatorio a su hora; léelo en voz alta; repítelo por día de la semana / cada-N-días / mensualmente; o actívalo «al iniciar sesión». Al pulsar **Sí** se puede ejecutar un programa, abrir un archivo (p. ej. música) o una URL, o ejecutar un grupo de acciones. También admite ejecuciones por intervalos y la programación de una sola vez.
-- 🧹 **Elementos de inicio del sistema** — lista **todo lo que se inicia automáticamente en tu PC** y desactiva lo que no necesites (desactivado, no eliminado — vuelve a activarlo cuando quieras). Con un clic «asumes el control» de un elemento y lo pasas a tu propia lista de inicio.
-- 🎛️ **Grupos de acciones** — agrupa una serie de acciones en un grupo reutilizable (Concentración / Reunión / Cierre / Antes de dormir…) y actívalo con un clic desde la bandeja, un **atajo global**, la lista de inicio o un recordatorio. Incluye plantillas integradas.
-
-Sin instalación, totalmente portátil en una sola carpeta, todo configurable con el ratón; interfaz oscura, compatible con alta resolución (high-DPI).
-
-> 📖 **Guía completa:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
+> **Detenlo cuando quieras** — el botón de detención al final de la barra de pestañas (solo aparece mientras algo se ejecuta), bandeja → **Detener acciones en ejecución**, o el atajo de pánico global (por defecto `Ctrl+Alt+Q`). Las esperas largas se cortan, no se aguantan.
 
 ## Requisitos
 
-- Windows 10 / 11 (x64)
-- Nada que instalar: un único archivo autónomo `Clockwork.exe` con el entorno de ejecución de .NET incluido.
+| Aspecto | Detalle |
+| --- | --- |
+| **Sistema** | Windows 10 / 11, x64 |
+| **Instalación** | Ninguna. Un solo `Clockwork.exe` con el entorno de ejecución de .NET dentro — ponlo en cualquier carpeta |
+| **Administrador** | Solo para «Iniciar al arrancar sesión» y para los pasos que marques **ejecutar como administrador** |
+| **Tu configuración** | `clockwork.settings.json` junto al exe (o `%APPDATA%\Clockwork\` si esa carpeta es de solo lectura) — nada sale del equipo |
+| **Interfaz** | 18 idiomas, siguiendo el idioma de Windows en el primer arranque |
+
+**Límites.** Sin instalador no hay actualización automática — descarga el zip nuevo y reemplaza el exe. Los lanzadores en sandbox bloquean enviar-teclas, acciones de ventana, activar-si-ya-se-ejecuta y volumen (recibirás un aviso claro; el simple «ejecutar programa» sigue funcionando). El remapeo de teclas y la expansión de texto quedan fuera del alcance — ese es el trabajo de AutoHotkey.
 
 ## Primeros pasos
 
-1. Descarga el último `Clockwork-<versión>.zip` desde [Releases](https://github.com/rockbenben/Clockwork/releases) y descomprímelo — dentro hay un único `Clockwork.exe`; colócalo en cualquier carpeta (portátil — ponlo donde quieras). Para compilarlo tú mismo, consulta **Para desarrolladores** más abajo.
-2. Haz doble clic en **`Clockwork.exe`** para abrir la ventana de configuración.
-   - En la **primera ejecución** carga unos cuantos **ejemplos** en la lista de inicio y en los recordatorios para que los adaptes a los tuyos — todos vienen sin marcar, así que no se ejecuta nada hasta que tú lo marques. La pestaña **Grupos de acciones** también arranca con dos grupos listos para usar (Ausente un momento / Fin de jornada) — esos sí vienen *marcados*, porque un grupo nunca se dispara por sí solo; solo se ejecuta cuando tú lo activas. Tu configuración vive en `clockwork.settings.json` junto al exe — solo local, nunca se sube al repositorio.
-3. Para ejecutarlo en cada arranque: en la pestaña **Ajustes**, haz clic en **Iniciar al arrancar sesión** (registra una tarea programada con permisos de administrador, así no hay una avalancha de avisos de UAC al arrancar).
+1. Descarga el último `Clockwork-<versión>.zip` desde [Releases](https://github.com/rockbenben/Clockwork/releases), descomprímelo y coloca el único `Clockwork.exe` en cualquier carpeta.
+2. Haz doble clic para abrir la ventana de configuración. Los ejemplos que carga vienen todos **sin marcar** — no se ejecuta nada hasta que tú lo marques.
+3. Para ejecutarlo en cada arranque: en la pestaña **Ajustes**, marca **Iniciar al arrancar sesión** (registra una tarea programada con permisos de administrador, así no hay una avalancha de avisos de UAC al arrancar).
 
-> Se queda tranquilo en la bandeja. Haz doble clic en el icono de la bandeja para abrir la ventana; el botón de cerrar de la ventana solo la oculta en la bandeja. Para salir de verdad, usa **Salir** en el clic derecho de la bandeja.
+Después se queda en la bandeja: doble clic en el icono para abrir la ventana, y el botón de cerrar solo vuelve a ocultarla. Para salir de verdad, usa **Salir** en el clic derecho de la bandeja.
 
-> **La primera vez saldrá una advertencia: es normal.** El exe no está firmado, así que SmartScreen muestra «Windows protegió su PC» — haz clic en **Más información → Ejecutar de todas formas**. Algún antivirus también puede alertar: escribir claves Run del registro y tareas programadas es justo lo que hace un gestor de arranque… y también lo que hace el malware; desde fuera no se distinguen. Si prefieres no aceptarlo por confianza, compílalo tú mismo siguiendo **Para desarrolladores** más abajo: mismo resultado, binario propio.
+> [!IMPORTANT]
+> **El exe no está firmado**, así que SmartScreen muestra «Windows protegió su PC» en el primer arranque — haz clic en **Más información → Ejecutar de todas formas**. Algún antivirus también puede alertar: escribir claves Run del registro y tareas programadas es justo lo que hace un gestor de arranque… y también lo que hace el malware; desde fuera no se distinguen. Si prefieres no aceptarlo por confianza, [compílalo tú mismo](../../CONTRIBUTING.md) — mismo resultado, binario propio.
 
-## Captura de pantalla
-
-![Captura de pantalla](../../assets/screenshot.png)
-
-## Las cinco pestañas
-
-Cinco pestañas; cada campo se explica una por una en la [guía completa](../USAGE.md).
-
-- **Lista de inicio** — los pasos se ejecutan de arriba abajo al iniciar sesión. Tipos: ejecutar programa · enviar teclas · enviar texto · volumen · acción de ventana · comando del sistema · grupo de acciones · espera · mensaje. Cada paso admite una espera posterior, un número de repeticiones y condiciones (solo ciertos días / solo antes de las N); los programas además admin, estilo de ventana, activar-si-ya-se-ejecuta y rutas alternativas.
-- **Tareas programadas** — una hora (o «al iniciar sesión») × una recurrencia (día de la semana / cada N días / mensual / una vez) × una acción: un recordatorio (diálogo Sí/No con posponer, o una tarjeta en la esquina, con lectura en voz alta opcional) o un grupo de acciones ejecutado en silencio. Además ejecuciones por intervalos, insistencia repetida, recuperación de disparos perdidos y No molestar desde la bandeja.
-- **Elementos de inicio del sistema** — todo lo que arranca solo en tu PC (claves Run del registro, carpetas de Inicio, tareas programadas): desactivarlo (deshabilitado, no borrado), traspasarlo a tu propia lista de inicio o eliminarlo definitivamente.
-- **Grupos de acciones** — un paquete reutilizable de acciones, disparado desde la bandeja, un **atajo global** (púlsalo otra vez para cancelar esa ejecución), un paso de la lista de inicio o una tarea programada. Un grupo puede repetirse por completo y referenciar otros grupos (las referencias circulares se rechazan al guardar); un paso de **mensaje** corta el resto con Sí / No.
-- **Ajustes** — retardo de inicio (0–600 s, solo en el arranque), iniciar minimizado en la bandeja, iniciar al arrancar sesión, atajo de pánico, idioma de la interfaz (18), exportar / importar configuración.
-
-> **Detenlo cuando quieras** — el **botón de detención** al final de la barra de pestañas (solo aparece mientras algo se ejecuta), bandeja → **Detener acciones en ejecución** o el **atajo de pánico** global (por defecto `Ctrl+Alt+Q`). Las esperas largas (retardo de inicio, esperar una ventana) se interrumpen de inmediato.
+**Guía completa** — cada campo, cada caso límite: [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Consejos
 
-- **Haz doble clic en una fila para editarla**. Al rellenar rutas / procesos / atajos / fechas no tienes que escribir a mano: **Examinar…**, **Elegir…** (selector de procesos con búsqueda), **Capturar** y **Elegir fecha**.
-- **Arrastra una fila para reordenarla** — en las tres listas (lista de inicio, tareas programadas, grupos de acciones) y en la lista de pasos del editor de grupos; los botones de subir/bajar siguen funcionando.
-- **Pruébalo antes de guardar** — el editor de grupos tiene **▶ Ejecutar este paso** y **▶ Ejecutar grupo**, y ambos ejecutan lo que hay ahora en pantalla. Durante la ejecución el botón se convierte en **■ Detener**, y cerrar el editor también la detiene.
-- **Duplicar** (pestañas Tareas programadas / Grupos de acciones) clona la fila seleccionada justo debajo de ella — más rápido que rehacer una casi idéntica; un grupo duplicado se llama «… (copia)».
-- **Eliminar siempre pide confirmación**, en todas partes — filas de las listas, pasos dentro del editor de grupos y elementos de inicio del sistema.
-- Hacer doble clic en `Clockwork.exe` solo abre los ajustes — **no** ejecuta de inmediato la lista de inicio; para eso usa **Re-ejecutar lista de inicio** de la bandeja.
-- **Láncalo con normalidad** (doble clic / bandeja / tarea programada). Algunos lanzadores de sandbox / privilegios reducidos bloquean las llamadas de bajo nivel, por lo que enviar-teclas / acciones de ventana / activar-si-ya-se-está-ejecutando / enviar-texto-a-proceso / volumen podrían no funcionar (recibirás un aviso claro; el simple «ejecutar programa» no se ve afectado).
-- Tu configuración es `clockwork.settings.json` (solo local). Bórrala para restablecer al ejemplo. El estado de las tareas es `clockwork.state.json` (también local; se puede borrar sin problema).
-- Añadir un paso `.ahk` requiere tener AutoHotkey instalado. Los atajos globales / la expansión de texto quedan fuera del alcance — esa es la fortaleza de AutoHotkey.
-
-## Para desarrolladores
-
-C#/.NET WPF; código fuente en `app/` (necesita el SDK de .NET 10). Capas: `Core/` lógica pura · `Native/` interoperabilidad Win32 · `Engine/` ejecución · `ViewModels/` + `Views/` interfaz · `I18n/` + `Resources/` localización (neutral = fuente en chino, un satélite `Strings.<code>.resx` por idioma).
-
-- Ejecutar las pruebas (xUnit):
-  ```powershell
-  dotnet test app.Tests/Clockwork.Tests.csproj
-  ```
-- Compilar el exe autónomo de un solo archivo (single-file / self-contained / compresión se configuran en el csproj):
-  ```powershell
-  dotnet publish app/Clockwork.csproj -c Release -r win-x64
-  ```
-  Salida: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / releases** (GitHub Actions): las compilaciones de push / PR construyen y ejecutan todas las pruebas en un runner de Windows; al subir una etiqueta `v*` (p. ej. `v2.0.0`) se compila, se sella la versión del archivo a partir de la etiqueta, se crea un Release de GitHub y se adjunta `Clockwork-<tag>.zip` (que contiene `Clockwork.exe`).
+- **Haz doble clic en una fila para editarla**. Rutas, procesos, atajos y fechas se rellenan por ti: **Examinar…**, **Elegir…** (selector de procesos con búsqueda), **Capturar**, **Elegir fecha**.
+- **Arrastra una fila para reordenarla** — en las tres listas y en la lista de pasos del editor de grupos; los botones de subir/bajar siguen funcionando.
+- **Pruébalo antes de guardar** — **▶ Ejecutar este paso** y **▶ Ejecutar grupo** del editor de grupos ejecutan lo que hay ahora en pantalla, y el botón se convierte en **■ Detener** mientras dura.
+- **Duplicar** clona la tarea o el grupo seleccionado justo debajo — más rápido que rehacer uno casi idéntico. **Eliminar siempre pide confirmación**, en todas partes.
+- Hacer doble clic en `Clockwork.exe` solo abre la ventana; **no** vuelve a ejecutar la lista de inicio. Para eso usa **Re-ejecutar lista de inicio** de la bandeja.
 
 ## Sobre el Plan 365 de código abierto
 

@@ -10,8 +10,7 @@
 
 **[⬇ 下载 Windows 版](https://github.com/rockbenben/Clockwork/releases/latest)** —— 绿色免安装，解压即用
 
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a>
-<a href="https://github.com/rockbenben/365opensource"><img src="https://img.shields.io/badge/365%20%E5%BC%80%E6%BA%90%E8%AE%A1%E5%88%92-%23020-1f6feb" alt="365 开源计划 #020"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a> <a href="https://github.com/rockbenben/365opensource"><img src="https://img.shields.io/badge/365%20%E5%BC%80%E6%BA%90%E8%AE%A1%E5%88%92-%23020-1f6feb" alt="365 开源计划 #020"></a>
 
 </div>
 
@@ -21,7 +20,7 @@
 
 </div>
 
-![Clockwork 的启动清单：一串有序的开机步骤，每步各有类型、延时与条件](assets/screenshot.png)
+![Clockwork 的启动清单：一串有序的开机步骤，每步各有类型、延时与条件](assets/screenshot.zh.png)
 
 ## 它能做什么
 

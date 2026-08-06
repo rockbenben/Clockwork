@@ -10,7 +10,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 
 **[⬇ Unduh untuk Windows](https://github.com/rockbenben/Clockwork/releases/latest)** — portabel, tanpa penginstal
 
-[![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](../../LICENSE) [![365 Open Source Plan #020](https://img.shields.io/badge/365%20Open%20Source%20Plan-%23020-1f6feb)](https://github.com/rockbenben/365opensource)
 
 </div>
 
@@ -20,79 +20,49 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 
 </div>
 
-> Alat tray Windows: peluncur startup · pengingat · item startup sistem · grup aksi
+![Daftar startup Clockwork — rangkaian langkah login yang berurutan, masing-masing dengan jenis, penundaan, dan syaratnya sendiri](../../assets/screenshot.png)
 
-![Clockwork](../../assets/social-card.png)
+## Apa yang bisa dilakukannya
 
-Alat tray Windows kecil yang mengurus bagian-bagian rutin saat memulai hari Anda di depan komputer:
+- 🚀 **Daftar startup** — membuka aplikasi sehari-hari Anda secara berurutan saat login, dengan penundaan, syarat hari, dan gaya jendela per langkah; sekalian menutup, memfokuskan, atau membisukan sesuatu di sepanjang jalan.
+- ⏰ **Tugas terjadwal** — pengingat tepat waktu, dibacakan bila Anda mau, atau grup aksi yang berjalan diam-diam. Mengklik **Ya** dapat menjalankan program, membuka berkas atau URL, atau memicu sebuah grup.
+- 🧹 **Item startup sistem** — semua yang berjalan otomatis di PC Anda dalam satu daftar: matikan yang tidak diperlukan (dinonaktifkan, bukan dihapus) atau ambil alih ke daftar startup Anda sendiri.
+- 🎛️ **Grup aksi** — bungkus satu rutinitas (Fokus / Rapat / Beres-beres / Menjelang tidur…) dan picu dari tray, sebuah **tombol pintas global**, daftar startup, atau tugas terjadwal. Templat disertakan.
 
-- 🚀 **Daftar startup** — otomatis membuka aplikasi sehari-hari Anda saat login, secara berurutan (hak admin per-langkah, penundaan, hanya-pada-hari-tertentu / hanya-sebelum-pukul-N, gaya jendela, aktifkan-jika-sedang-berjalan, jalur cadangan), dan mengerjakan beberapa tugas kecil di sepanjang jalan (menutup atau memfokuskan jendela, mengirim penekanan tombol / teks, mengatur volume…).
-- ⏰ **Tugas terjadwal** — memunculkan pengingat tepat waktu; membacakannya dengan lantang; mengulang menurut hari dalam seminggu / setiap-N-hari / bulanan; atau memicu "saat login". Mengklik **Ya** dapat menjalankan program, membuka berkas (mis. musik) atau sebuah URL, atau menjalankan grup aksi. Juga mendukung eksekusi berkala (interval) dan penjadwalan sekali saja.
-- 🧹 **Item startup sistem** — mendaftar **semua yang berjalan otomatis di PC Anda** dan mematikan yang tidak Anda perlukan (dinonaktifkan, bukan dihapus — kembalikan kapan saja). Satu klik "mengambil alih" sebuah item ke daftar startup Anda sendiri.
-- 🎛️ **Grup aksi** — menggabungkan serangkaian aksi menjadi satu grup yang dapat digunakan ulang (Fokus / Rapat / Beres-beres / Menjelang tidur…) dan memicunya dengan satu klik dari tray, sebuah **tombol pintas global**, daftar startup, atau sebuah pengingat. Templat bawaan disertakan.
-
-Tanpa instalasi, sepenuhnya portabel dalam satu folder, semuanya dapat dikonfigurasi dengan mouse; antarmuka gelap, sadar high-DPI.
-
-> 📖 **Panduan lengkap:** [English](../USAGE.md) · [中文](../USAGE.zh.md)
+> **Hentikan kapan saja** — tombol hentikan di ujung kanan bilah tab (hanya muncul saat ada yang berjalan), baki → **Hentikan aksi yang berjalan**, atau tombol pintas darurat global (bawaan `Ctrl+Alt+Q`). Penantian panjang dipotong, bukan ditunggui.
 
 ## Persyaratan
 
-- Windows 10 / 11 (x64)
-- Tidak ada yang perlu diinstal: satu berkas `Clockwork.exe` yang mandiri (self-contained) dengan runtime .NET tergabung di dalamnya.
+| Aspek | Detail |
+| --- | --- |
+| **Sistem** | Windows 10 / 11, x64 |
+| **Instalasi** | Tidak ada. Satu `Clockwork.exe` dengan runtime .NET di dalamnya — letakkan di folder mana pun |
+| **Hak admin** | Hanya untuk «Mulai saat login» dan langkah yang Anda tandai **jalankan sebagai admin** |
+| **Pengaturan Anda** | `clockwork.settings.json` di samping exe (atau `%APPDATA%\Clockwork\` bila folder itu hanya-baca) — tidak ada yang meninggalkan mesin |
+| **Antarmuka** | 18 bahasa, mengikuti bahasa tampilan Windows pada jalankan pertama |
+
+**Batasan.** Tanpa penginstal berarti tanpa pembaruan otomatis — unduh zip baru dan ganti exe-nya. Peluncur sandbox memblokir kirim-tombol, aksi jendela, aktifkan-jika-berjalan, dan volume (Anda akan mendapat pemberitahuan yang jelas; «luncurkan program» biasa tetap berfungsi). Pemetaan ulang tombol dan ekspansi teks di luar cakupan — itu pekerjaan AutoHotkey.
 
 ## Memulai
 
-1. Unduh `Clockwork-<versi>.zip` terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases) lalu ekstrak — di dalamnya ada satu `Clockwork.exe`; letakkan di folder mana pun (portabel — taruh di mana saja). Untuk membangunnya sendiri, lihat **Untuk pengembang** di bawah.
-2. Klik dua kali **`Clockwork.exe`** untuk membuka jendela pengaturan.
-   - Pada **jalankan pertama** ia memuat beberapa **contoh** di daftar startup dan pengingat agar Anda dapat menyesuaikannya dengan milik Anda sendiri — semuanya tidak dicentang di awal, jadi tidak ada yang berjalan sampai Anda mencentangnya. Tab **Grup aksi** juga dimulai dengan dua grup siap-pakai (Pergi sebentar / Selesai kerja) — keduanya *sudah tercentang*, karena grup tidak pernah berjalan sendiri; ia hanya berjalan saat Anda memicunya. Pengaturan Anda tersimpan di `clockwork.settings.json` di samping exe — hanya lokal, tidak pernah di-commit.
-3. Agar berjalan setiap boot: pada tab **Pengaturan**, klik **Mulai saat login** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
+1. Unduh `Clockwork-<versi>.zip` terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases), ekstrak, dan letakkan satu-satunya `Clockwork.exe` di folder mana pun.
+2. Klik dua kali untuk membuka jendela pengaturan. Contoh yang dimuat semuanya **tidak dicentang** — tidak ada yang berjalan sampai Anda mencentangnya.
+3. Agar berjalan setiap boot: pada tab **Pengaturan**, centang **Mulai saat login** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
 
-> Ia bertengger diam di tray. Klik dua kali ikon tray untuk membuka jendela; tombol tutup jendela hanya menyembunyikannya ke tray. Untuk benar-benar keluar, klik kanan tray lalu pilih **Keluar**.
+Setelah itu ia bertengger di tray: klik dua kali ikonnya untuk membuka jendela, dan tombol tutup hanya menyembunyikannya lagi. Untuk benar-benar keluar, klik kanan tray lalu pilih **Keluar**.
 
-> **Peringatan saat pertama dijalankan itu wajar.** File exe tidak ditandatangani, jadi SmartScreen menampilkan «Windows protected your PC» — klik **More info → Run anyway**. Antivirus pun bisa ikut memperingatkan: menulis kunci Run di registry dan tugas terjadwal memang persis pekerjaan sebuah pengelola startup — dan juga yang biasa dilakukan malware; dari luar keduanya tak terbedakan. Kalau tak mau menerimanya atas dasar percaya saja, bangun sendiri lewat **Untuk pengembang** di bawah: hasilnya sama, binernya milik Anda.
+> [!IMPORTANT]
+> **File exe tidak ditandatangani**, jadi pada jalankan pertama SmartScreen menampilkan «Windows protected your PC» — klik **More info → Run anyway**. Antivirus pun bisa ikut memperingatkan: menulis kunci Run di registry dan tugas terjadwal memang persis pekerjaan sebuah pengelola startup — dan juga yang biasa dilakukan malware; dari luar keduanya tak terbedakan. Kalau tak mau menerimanya atas dasar percaya saja, [bangun sendiri](../../CONTRIBUTING.md) — hasilnya sama, binernya milik Anda.
 
-## Tangkapan layar
-
-![Screenshot](../../assets/screenshot.png)
-
-## Lima tab
-
-Lima tab; setiap kolom dijelaskan satu per satu di [panduan lengkap](../USAGE.md).
-
-- **Daftar startup** — langkah dijalankan dari atas ke bawah saat login. Jenis: jalankan program · kirim tombol · kirim teks · volume · aksi jendela · perintah sistem · grup aksi · jeda · pesan. Setiap langkah punya jeda setelahnya, jumlah pengulangan, dan syarat (hanya hari tertentu / hanya sebelum pukul N); program juga punya hak admin, gaya jendela, aktifkan-jika-berjalan, dan jalur cadangan.
-- **Tugas terjadwal** — sebuah waktu (atau "saat login") × pengulangan (hari dalam minggu / tiap N hari / bulanan / sekali) × satu aksi: pengingat (dialog Ya/Tidak dengan tunda, atau kartu di sudut layar, bisa dibacakan) atau grup aksi yang berjalan diam-diam. Ditambah eksekusi berkala, desakan berulang, menyusul pemicu yang terlewat, dan Jangan Ganggu dari baki sistem.
-- **Item startup sistem** — semua yang berjalan otomatis di PC (kunci Run registry, folder Startup, tugas terjadwal): matikan (dinonaktifkan, bukan dihapus), ambil alih ke daftar startup Anda sendiri, atau hapus permanen.
-- **Grup aksi** — paket aksi yang bisa dipakai ulang, dipicu dari baki sistem, **tombol pintas global** (tekan lagi untuk membatalkan jalannya), langkah di daftar startup, atau tugas terjadwal. Grup bisa mengulang seluruhnya dan mereferensikan grup lain (referensi melingkar ditolak saat menyimpan); langkah **pesan** menahan sisanya dengan Ya / Tidak.
-- **Pengaturan** — jeda startup (0–600 detik, hanya saat boot), mulai terminimalkan ke baki, jalankan saat login, tombol pintas darurat, bahasa antarmuka (18), ekspor / impor konfigurasi.
-
-> **Hentikan kapan saja** — **tombol hentikan** di ujung kanan bilah tab (hanya muncul saat ada yang berjalan), baki → **Hentikan aksi yang berjalan**, atau **tombol pintas darurat** global (bawaan `Ctrl+Alt+Q`). Penantian panjang (jeda startup, menunggu jendela) langsung diputus.
+**Panduan lengkap** — setiap kolom, setiap kasus pinggir: [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Tips
 
-- **Klik dua kali sebuah baris untuk menyuntingnya**. Ketika mengisi jalur / proses / pintasan / tanggal Anda tidak perlu mengetik dengan tangan: **Telusuri…**, **Pilih…** (pemilih proses yang dapat dicari), **Rekam**, dan **Pilih tanggal**.
-- **Seret sebuah baris untuk mengurutkannya** — di ketiga daftar (daftar startup, tugas terjadwal, grup aksi) dan di daftar langkah pada editor grup; tombol naik/turun tetap berfungsi.
-- **Coba dulu sebelum menyimpan** — editor grup punya **▶ Jalankan langkah ini** dan **▶ Jalankan grup**, keduanya menjalankan apa yang sedang ada di layar. Selama berjalan tombolnya berubah jadi **■ Hentikan**, dan menutup editor juga menghentikannya.
-- **Duplikat** (tab Tugas terjadwal / Grup aksi) mengkloning baris yang dipilih tepat di bawahnya — lebih cepat daripada menyusun ulang yang nyaris sama; grup hasil duplikasi diberi nama "… (salinan)".
-- **Penghapusan selalu bertanya lebih dulu**, di mana pun — baris daftar, langkah di dalam editor grup, dan item startup sistem.
-- Mengklik dua kali `Clockwork.exe` hanya membuka pengaturan — ia **tidak** langsung menjalankan daftar startup; gunakan **Jalankan ulang daftar startup** di tray untuk itu.
-- **Luncurkan secara normal** (klik dua kali / tray / tugas terjadwal). Beberapa peluncur sandbox / berhak-akses-berkurang memblokir panggilan tingkat rendah, sehingga kirim-tombol / aksi jendela / aktifkan-jika-berjalan / kirim-teks-ke-proses / volume mungkin tidak berfungsi (Anda akan mendapat pemberitahuan yang jelas; "luncurkan program" biasa tidak terpengaruh).
-- Konfigurasi Anda adalah `clockwork.settings.json` (hanya lokal). Hapus untuk mengatur ulang ke contoh. Status tugas adalah `clockwork.state.json` (juga lokal; aman dihapus).
-- Menambah langkah `.ahk` membutuhkan AutoHotkey terinstal. Tombol pintas global / ekspansi teks di luar cakupan — itulah keunggulan AutoHotkey.
-
-## Untuk pengembang
-
-C#/.NET WPF; sumber di `app/` (membutuhkan .NET 10 SDK). Lapisan: `Core/` logika murni · `Native/` interop Win32 · `Engine/` eksekusi · `ViewModels/` + `Views/` UI · `I18n/` + `Resources/` pelokalan (neutral = sumber Tionghoa, satu `Strings.<code>.resx` satelit per bahasa).
-
-- Menjalankan tes (xUnit):
-  ```powershell
-  dotnet test app.Tests/Clockwork.Tests.csproj
-  ```
-- Membangun exe berkas tunggal yang mandiri (single-file / self-contained / kompresi diatur di csproj):
-  ```powershell
-  dotnet publish app/Clockwork.csproj -c Release -r win-x64
-  ```
-  Keluaran: `app/bin/Release/net10.0-windows/win-x64/publish/Clockwork.exe`.
-- **CI / rilis** (GitHub Actions): push / PR membangun dan menjalankan semua tes pada Windows runner; men-push tag `v*` (mis. `v2.0.0`) membangun, mencap versi berkas dari tag, membuat GitHub Release dan melampirkan `Clockwork-<tag>.zip` (berisi `Clockwork.exe`).
+- **Klik dua kali sebuah baris untuk menyuntingnya**. Jalur, proses, pintasan, dan tanggal diisikan untuk Anda: **Telusuri…**, **Pilih…** (pemilih proses yang dapat dicari), **Rekam**, **Pilih tanggal**.
+- **Seret sebuah baris untuk mengurutkannya** — di ketiga daftar dan di daftar langkah pada editor grup; tombol naik/turun tetap berfungsi.
+- **Coba dulu sebelum menyimpan** — **▶ Jalankan langkah ini** dan **▶ Jalankan grup** di editor grup menjalankan apa yang sedang ada di layar, dan tombolnya berubah jadi **■ Hentikan** selama berjalan.
+- **Duplikat** mengkloning tugas atau grup yang dipilih tepat di bawahnya — lebih cepat daripada menyusun ulang yang nyaris sama. **Penghapusan selalu bertanya lebih dulu**, di mana pun.
+- Mengklik dua kali `Clockwork.exe` hanya membuka jendela; ia **tidak** menjalankan ulang daftar startup. Gunakan **Jalankan ulang daftar startup** di tray untuk itu.
 
 ## Tentang 365 Open Source Plan
 
