@@ -17,7 +17,7 @@
 
 ## 怎么开始
 
-1. 把 `Clockwork-<版本号>.zip` 解压到任意文件夹（绿色免安装，放哪都行），里面是单个 `Clockwork.exe`。
+1. 把 `Clockwork-<版本号>-win-x64.zip` 解压到任意文件夹（绿色免安装，放哪都行），里面是单个 `Clockwork.exe`。带 `-needs-dotnet10` 的包是同一个 exe 去掉内置 .NET 运行时——0.5 MB 而不是 67 MB，但要求电脑上已装 [.NET 10 桌面运行时](https://dotnet.microsoft.com/download/dotnet/10.0)；这一版还额外直接挂了个没打包的 `Clockwork.exe`，不想解压就下它。
 2. 双击 **`Clockwork.exe`** 打开设置窗口。
 3. 想每次开机自动运行：到 **「设置」** 页勾选「开机自启」（用管理员权限注册计划任务，开机时不会弹一堆授权框）。
 

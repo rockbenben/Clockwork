@@ -1,5 +1,5 @@
 bin/
 obj/
-# coverlet.collector 每次 dotnet test 都会写一份，纯本地产物
+# MTP 每次 dotnet test 都会往这里写一份，纯本地产物
 # （注释必须独占一行：gitignore 不支持行尾注释，写在模式后面会变成模式的一部分而失效）
 TestResults/

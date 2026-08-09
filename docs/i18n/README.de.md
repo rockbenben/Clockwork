@@ -36,7 +36,7 @@ Apps beim Anmelden automatisch starten · zeitgesteuerte Erinnerungen · eine ga
 | Aspekt | Detail |
 | --- | --- |
 | **System** | Windows 10 / 11, x64 |
-| **Installation** | Keine. Eine `Clockwork.exe` mit eingebauter .NET-Laufzeit — leg sie in einen beliebigen Ordner |
+| **Installation** | Keine. Eine einzelne portable `Clockwork.exe` — leg sie in einen beliebigen Ordner |
 | **Adminrechte** | Nur für „Beim Anmelden starten“ und für Schritte, die du als **als Administrator ausführen** markierst |
 | **Deine Einstellungen** | `clockwork.settings.json` neben der exe (oder `%APPDATA%\Clockwork\`, falls dieser Ordner schreibgeschützt ist) — nichts verlässt den Rechner |
 | **Oberfläche** | 18 Sprachen, beim ersten Start nach deiner Windows-Anzeigesprache |
@@ -45,7 +45,10 @@ Apps beim Anmelden automatisch starten · zeitgesteuerte Erinnerungen · eine ga
 
 ## Erste Schritte
 
-1. Lade die neueste `Clockwork-<Version>.zip` aus den [Releases](https://github.com/rockbenben/Clockwork/releases) herunter, entpacke sie und leg die einzelne `Clockwork.exe` in einen beliebigen Ordner.
+1. Lade die neueste Version aus den [Releases](https://github.com/rockbenben/Clockwork/releases) herunter — zwei Builds, drei Downloads — und leg die einzelne `Clockwork.exe`, die am Ende übrig bleibt, in einen beliebigen Ordner.
+   - **`Clockwork-<Version>-win-x64.zip`** (~67 MB) — .NET-Laufzeit enthalten, läuft auf jedem Windows 10/11 sofort. Nimm die im Zweifel, oder wenn der Rechner offline oder gesperrt ist.
+   - **`Clockwork-<Version>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — braucht die installierte [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0). Einmal auf einem Rechner mit Internet installieren, danach ist jedes Update ein 0,5-MB-Download.
+   - **`Clockwork.exe`** (~1,2 MB) — derselbe Build wie im Zip darüber, nur ohne Zip drumherum: anklicken, starten, oder über die vorhandene Datei kopieren zum Aktualisieren. Fehlt die Laufzeit, bietet Windows den Download an.
 2. Doppelklicke sie, um das Einstellungsfenster zu öffnen. Die geladenen Beispiele sind alle **nicht angehakt** — es läuft nichts, bis du es selbst aktivierst.
 3. Für jeden Start: hake auf dem Tab **Einstellungen** **Beim Anmelden starten** an (registriert eine geplante Aufgabe mit Administratorrechten, sodass beim Start keine Flut von UAC-Abfragen erscheint).
 

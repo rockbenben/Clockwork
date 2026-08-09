@@ -1,8 +1,13 @@
 # 本机运行时生成的个人配置（含个人路径，不入库）。示例见 clockwork.settings.example.json
 clockwork.settings.json
 
-# 发布输出：release.yml 用的就是 `dotnet publish -o publish`，本地照着跑会在仓库根留一份 75MB 的 exe
+# 发布输出现在由 pubxml 的 PublishDir 决定，落在 app/bin/ 下（已被 app/.gitignore 忽略）。
+# 下面两条是历史遗留：早先 CI 用 `dotnet publish -o publish`，照着跑过的机器仓库根还留着这些目录。
 publish/
+publish-needs-dotnet10/
+
+# 测试结果：MTP 跑失败时会在 bin 下写日志；这条留给任何显式传 --results-directory 的本地调用
+TestResults/
 
 # 临时 / 系统 / 工具
 *.log

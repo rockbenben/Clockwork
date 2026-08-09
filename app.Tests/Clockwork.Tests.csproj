@@ -7,6 +7,23 @@
     <IsPackable>false</IsPackable>
     <UseWPF>true</UseWPF>   <!-- 测 HotkeyCapture 需 System.Windows.Input.Key -->
     <UseWindowsForms>true</UseWindowsForms>   <!-- 测 TrayMenu 子菜单需 System.Windows.Forms.ToolStrip* -->
+    <!-- xunit v3 的测试程序集是自执行的，工程必须出 exe。 -->
+    <OutputType>Exe</OutputType>
+    <!--
+      跑在 Microsoft.Testing.Platform 上而不是 VSTest 桥。这才有平台自带的 minimum-expected-tests
+      选项（见 ci.yml 的 Test 步骤怎么传），CI 因此不用再手写一段解析 .trx 的脚本去防「静默 0 测试」。
+
+      MTP 接管之后，Microsoft.NET.Test.Sdk / xunit.runner.visualstudio / coverlet.collector 都是
+      VSTest 那侧的零件，已无事可做，一并移除。
+      代价：IDE 里发现测试需要 MTP 支持（VS 17.14+ / 较新 Rider）。要用 Test Explorer 就把
+      Microsoft.NET.Test.Sdk + xunit.runner.visualstudio 加回来，命令行不受影响。
+    -->
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <!-- xUnit1051：v3 新增的分析器，要求把 TestContext.Current.CancellationToken 传给一切接受
+         CancellationToken 的调用，好让测试更快响应取消。整套跑完 9 秒、CI 上也没人去取消它，
+         为此改 20 处调用点纯属噪音换噪音。真要做长耗时测试再打开。 -->
+    <NoWarn>$(NoWarn);xUnit1051</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,10 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
   </ItemGroup>
 
   <ItemGroup>

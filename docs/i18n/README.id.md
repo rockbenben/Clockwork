@@ -36,7 +36,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 | Aspek | Detail |
 | --- | --- |
 | **Sistem** | Windows 10 / 11, x64 |
-| **Instalasi** | Tidak ada. Satu `Clockwork.exe` dengan runtime .NET di dalamnya — letakkan di folder mana pun |
+| **Instalasi** | Tidak ada. Satu `Clockwork.exe` portabel — letakkan di folder mana pun |
 | **Hak admin** | Hanya untuk «Mulai saat login» dan langkah yang Anda tandai **jalankan sebagai admin** |
 | **Pengaturan Anda** | `clockwork.settings.json` di samping exe (atau `%APPDATA%\Clockwork\` bila folder itu hanya-baca) — tidak ada yang meninggalkan mesin |
 | **Antarmuka** | 18 bahasa, mengikuti bahasa tampilan Windows pada jalankan pertama |
@@ -45,7 +45,10 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 
 ## Memulai
 
-1. Unduh `Clockwork-<versi>.zip` terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases), ekstrak, dan letakkan satu-satunya `Clockwork.exe` di folder mana pun.
+1. Unduh versi terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases) — dua build, tiga unduhan — lalu letakkan satu-satunya `Clockwork.exe` yang tersisa di folder mana pun.
+   - **`Clockwork-<versi>-win-x64.zip`** (~67 MB) — runtime .NET sudah termasuk, langsung jalan di Windows 10/11 mana pun. Pilih ini kalau ragu, atau kalau PC-nya offline atau terkunci.
+   - **`Clockwork-<versi>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — butuh [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) yang sudah terpasang. Pasang sekali di PC yang online, setelah itu tiap pembaruan hanya unduhan 0,5 MB.
+   - **`Clockwork.exe`** (~1,2 MB) — build yang sama dengan zip di atas, hanya tanpa zip: klik dan jalan, atau timpa salinan lama Anda untuk memperbarui. Kalau runtime-nya tidak ada, Windows menawarkan unduhannya.
 2. Klik dua kali untuk membuka jendela pengaturan. Contoh yang dimuat semuanya **tidak dicentang** — tidak ada yang berjalan sampai Anda mencentangnya.
 3. Agar berjalan setiap boot: pada tab **Pengaturan**, centang **Mulai saat login** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
 

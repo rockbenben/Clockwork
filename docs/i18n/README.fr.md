@@ -36,7 +36,7 @@ Lancez vos applications automatiquement à l'ouverture de session · rappels pro
 | Aspect | Détail |
 | --- | --- |
 | **Système** | Windows 10 / 11, x64 |
-| **Installation** | Aucune. Un seul `Clockwork.exe` avec le runtime .NET intégré — déposez-le dans n'importe quel dossier |
+| **Installation** | Aucune. Un seul `Clockwork.exe` portable — déposez-le dans n'importe quel dossier |
 | **Droits admin** | Uniquement pour « Démarrer à l'ouverture de session » et pour les étapes que vous marquez **exécuter en administrateur** |
 | **Vos réglages** | `clockwork.settings.json` à côté de l'exe (ou `%APPDATA%\Clockwork\` si ce dossier est en lecture seule) — rien ne quitte la machine |
 | **Interface** | 18 langues, suivant la langue d'affichage de Windows au premier lancement |
@@ -45,7 +45,10 @@ Lancez vos applications automatiquement à l'ouverture de session · rappels pro
 
 ## Prise en main
 
-1. Téléchargez le dernier `Clockwork-<version>.zip` depuis [Releases](https://github.com/rockbenben/Clockwork/releases), décompressez-le et déposez l'unique `Clockwork.exe` dans n'importe quel dossier.
+1. Téléchargez la dernière version depuis [Releases](https://github.com/rockbenben/Clockwork/releases) — deux builds, trois téléchargements — et déposez l'unique `Clockwork.exe` obtenu dans n'importe quel dossier.
+   - **`Clockwork-<version>-win-x64.zip`** (~67 Mo) — runtime .NET inclus, tourne tel quel sur n'importe quel Windows 10/11. À prendre en cas de doute, ou si le PC est hors ligne ou verrouillé.
+   - **`Clockwork-<version>-win-x64-needs-dotnet10.zip`** (~0,5 Mo) — exige le [runtime de bureau .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) installé. Installez-le une fois sur un PC connecté, ensuite chaque mise à jour ne pèse que 0,5 Mo.
+   - **`Clockwork.exe`** (~1,2 Mo) — le même build que le zip ci-dessus, sans le zip : cliquez, lancez, ou écrasez votre copie existante pour mettre à jour. Si le runtime manque, Windows en propose le téléchargement.
 2. Double-cliquez dessus pour ouvrir la fenêtre des paramètres. Les exemples chargés sont tous **décochés** — rien ne s'exécute tant que vous ne les cochez pas.
 3. Pour le lancer à chaque démarrage : dans l'onglet **Paramètres**, cochez **Démarrer à l'ouverture de session** (enregistre une tâche planifiée avec droits d'administrateur, donc pas de déluge d'invites UAC au démarrage).
 

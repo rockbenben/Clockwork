@@ -15,7 +15,7 @@ A small Windows tray tool that manages four everyday things (plus a Settings tab
 
 ## Getting started
 
-1. Unzip `Clockwork-<version>.zip` into any folder (portable — put it wherever); inside is a single `Clockwork.exe`.
+1. Unzip `Clockwork-<version>-win-x64.zip` into any folder (portable — put it wherever); inside is a single `Clockwork.exe`. The `-needs-dotnet10` package holds the same exe minus the bundled .NET runtime — 0.5 MB instead of 67 MB, but the machine needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed; that build is also attached raw as a plain `Clockwork.exe` if you'd rather skip the unzipping.
 2. Double-click **`Clockwork.exe`** to open the settings window.
 3. To run it every boot: on the **Settings** tab, tick **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
 

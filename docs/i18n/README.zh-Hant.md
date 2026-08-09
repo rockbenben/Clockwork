@@ -36,7 +36,7 @@
 | 項目 | 內容 |
 | --- | --- |
 | **系統** | Windows 10 / 11，x64 |
-| **安裝** | 不需要。一個內含 .NET 執行環境的 `Clockwork.exe`——丟進任何資料夾即可 |
+| **安裝** | 不需要。單一的可攜式 `Clockwork.exe`——丟進任何資料夾即可 |
 | **管理員權限** | 只有「登入時啟動」和你標記為**以系統管理員執行**的步驟才需要 |
 | **你的設定** | exe 旁的 `clockwork.settings.json`（該資料夾唯讀時改用 `%APPDATA%\Clockwork\`）——不會離開這台電腦 |
 | **介面** | 18 種語言，首次執行跟隨 Windows 顯示語言 |
@@ -45,7 +45,10 @@
 
 ## 開始使用
 
-1. 從 [Releases](https://github.com/rockbenben/Clockwork/releases) 下載最新的 `Clockwork-<版本號>.zip`，解壓後把裡面單一的 `Clockwork.exe` 丟進任何資料夾。
+1. 從 [Releases](https://github.com/rockbenben/Clockwork/releases) 下載最新版本——兩種構建、三個下載——最後你手上都是單一的 `Clockwork.exe`，丟進任何資料夾。
+   - **`Clockwork-<版本號>-win-x64.zip`**（約 67 MB）—— 內含 .NET 執行環境，哪台 Windows 10/11 拿到都能直接跑。拿不準、或電腦在內網裝不了東西，就選它。
+   - **`Clockwork-<版本號>-win-x64-needs-dotnet10.zip`**（約 0.5 MB）—— 需要已安裝 [.NET 10 桌面執行環境](https://dotnet.microsoft.com/download/dotnet/10.0)。能連網的電腦裝一次，之後每次更新只下載 0.5 MB。
+   - **`Clockwork.exe`**（約 1.2 MB）—— 就是上面那個不含執行環境的版本，只是沒套 zip：點開即用，也可以直接蓋掉現有的那份完成更新。缺執行環境時 Windows 會自己提示下載。
 2. 雙擊它開啟設定視窗。載入的範例**全都沒有勾選**——你不勾，就什麼都不會執行。
 3. 想每次開機都執行：到 **設定** 分頁勾選 **登入時啟動**（會以系統管理員權限註冊排程工作，開機時不會冒出一堆 UAC 提示）。
 

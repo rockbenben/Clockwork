@@ -36,7 +36,7 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 | Aspecto | Detalle |
 | --- | --- |
 | **Sistema** | Windows 10 / 11, x64 |
-| **Instalación** | Ninguna. Un solo `Clockwork.exe` con el entorno de ejecución de .NET dentro — ponlo en cualquier carpeta |
+| **Instalación** | Ninguna. Un solo `Clockwork.exe` portátil — ponlo en cualquier carpeta |
 | **Administrador** | Solo para «Iniciar al arrancar sesión» y para los pasos que marques **ejecutar como administrador** |
 | **Tu configuración** | `clockwork.settings.json` junto al exe (o `%APPDATA%\Clockwork\` si esa carpeta es de solo lectura) — nada sale del equipo |
 | **Interfaz** | 18 idiomas, siguiendo el idioma de Windows en el primer arranque |
@@ -45,7 +45,10 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 
 ## Primeros pasos
 
-1. Descarga el último `Clockwork-<versión>.zip` desde [Releases](https://github.com/rockbenben/Clockwork/releases), descomprímelo y coloca el único `Clockwork.exe` en cualquier carpeta.
+1. Descarga la última versión desde [Releases](https://github.com/rockbenben/Clockwork/releases) —dos compilaciones, tres descargas— y coloca el único `Clockwork.exe` que te queda en cualquier carpeta.
+   - **`Clockwork-<versión>-win-x64.zip`** (~67 MB) — incluye el entorno de ejecución de .NET; funciona tal cual en cualquier Windows 10/11. Elige este si dudas, o si el PC está sin conexión o restringido.
+   - **`Clockwork-<versión>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — necesita el [entorno de ejecución de escritorio de .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) instalado. Instálalo una vez en un PC con internet y cada actualización posterior será de 0,5 MB.
+   - **`Clockwork.exe`** (~1,2 MB) — la misma compilación del zip anterior, sin zip alrededor: haz clic y ejecútalo, o sobrescribe tu copia actual para actualizar. Si falta el entorno de ejecución, Windows te ofrece la descarga.
 2. Haz doble clic para abrir la ventana de configuración. Los ejemplos que carga vienen todos **sin marcar** — no se ejecuta nada hasta que tú lo marques.
 3. Para ejecutarlo en cada arranque: en la pestaña **Ajustes**, marca **Iniciar al arrancar sesión** (registra una tarea programada con permisos de administrador, así no hay una avalancha de avisos de UAC al arrancar).
 

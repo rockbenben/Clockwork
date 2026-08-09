@@ -36,7 +36,7 @@ Abra seus apps automaticamente ao entrar · lembretes com hora marcada · um toq
 | Aspecto | Detalhe |
 | --- | --- |
 | **Sistema** | Windows 10 / 11, x64 |
-| **Instalação** | Nenhuma. Um único `Clockwork.exe` com o runtime .NET embutido — coloque em qualquer pasta |
+| **Instalação** | Nenhuma. Um único `Clockwork.exe` portátil — coloque em qualquer pasta |
 | **Administrador** | Só para «Iniciar ao entrar» e para as etapas que você marcar como **executar como administrador** |
 | **Suas configurações** | `clockwork.settings.json` ao lado do exe (ou `%APPDATA%\Clockwork\` se essa pasta for somente leitura) — nada sai da máquina |
 | **Interface** | 18 idiomas, seguindo o idioma do Windows no primeiro uso |
@@ -45,7 +45,10 @@ Abra seus apps automaticamente ao entrar · lembretes com hora marcada · um toq
 
 ## Como começar
 
-1. Baixe o `Clockwork-<versão>.zip` mais recente em [Releases](https://github.com/rockbenben/Clockwork/releases), descompacte-o e coloque o único `Clockwork.exe` em qualquer pasta.
+1. Baixe a versão mais recente em [Releases](https://github.com/rockbenben/Clockwork/releases) — duas compilações, três downloads — e coloque o único `Clockwork.exe` que sobra em qualquer pasta.
+   - **`Clockwork-<versão>-win-x64.zip`** (~67 MB) — runtime do .NET incluído, roda como está em qualquer Windows 10/11. Escolha este na dúvida, ou se o PC estiver offline ou restrito.
+   - **`Clockwork-<versão>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — exige o [runtime de desktop do .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) instalado. Instale-o uma vez num PC com internet e cada atualização depois disso tem 0,5 MB.
+   - **`Clockwork.exe`** (~1,2 MB) — a mesma compilação do zip acima, sem zip em volta: clique e execute, ou sobreponha à sua cópia atual para atualizar. Se faltar o runtime, o Windows oferece o download.
 2. Dê um duplo clique para abrir a janela de configurações. Os exemplos carregados vêm todos **desmarcados** — nada é executado até você marcar.
 3. Para executá-lo a cada inicialização: na aba **Configurações**, marque **Iniciar ao entrar** (registra uma tarefa agendada com direitos de administrador, evitando uma enxurrada de avisos do UAC na inicialização).
 

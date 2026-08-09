@@ -9,11 +9,10 @@
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>Clockwork</RootNamespace>
     <AssemblyName>Clockwork</AssemblyName>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- 发布形态（RID / 自包含 / 单文件 / 压缩）放在 Properties\PublishProfiles\*.pubxml，
+         不挂在这里：挂在 csproj 上，日常 dotnet build / dotnet run 也会走 RID 专属 + 单文件 +
+         压缩的路径白白变慢；而且自包含的可执行工程不能被 app.Tests 引用（NETSDK1151），
+         测试工程跑 MTP 后本身就是 exe，会直接构建失败。 -->
     <InvariantGlobalization>false</InvariantGlobalization>
 
     <ApplicationIcon>..\assets\logo.ico</ApplicationIcon>

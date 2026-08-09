@@ -36,7 +36,7 @@
 | 方面 | 说明 |
 | --- | --- |
 | **系统** | Windows 10 / 11，x64 |
-| **安装** | 不用装。单个 `Clockwork.exe` 自带 .NET 运行时，放哪个文件夹都行 |
+| **安装** | 不用装。就一个便携的 `Clockwork.exe`，放哪个文件夹都行 |
 | **管理员** | 只有「开机自启」和你自己勾了**以管理员运行**的步骤才需要 |
 | **你的配置** | 就在 exe 旁边的 `clockwork.settings.json`（该目录不可写时自动落到 `%APPDATA%\Clockwork\`）——不联网、不外传 |
 | **界面** | 18 种语言，首次运行跟随 Windows 显示语言 |
@@ -45,7 +45,10 @@
 
 ## 怎么开始用
 
-1. 到 [Releases](https://github.com/rockbenben/Clockwork/releases) 下载最新的 `Clockwork-<版本号>.zip`，解压出单个 `Clockwork.exe`，放进任意文件夹。
+1. 到 [Releases](https://github.com/rockbenben/Clockwork/releases) 下载最新版本——两种构建、三个下载——最后你手上都是单个 `Clockwork.exe`，放进任意文件夹。
+   - **`Clockwork-<版本号>-win-x64.zip`**（约 67 MB）—— 内含 .NET 运行时，哪台 Windows 10/11 拿到都能直接跑。拿不准、或电脑在内网装不了东西，就选它。
+   - **`Clockwork-<版本号>-win-x64-needs-dotnet10.zip`**（约 0.5 MB）—— 需要已装 [.NET 10 桌面运行时](https://dotnet.microsoft.com/download/dotnet/10.0)。能联网的电脑装一次，之后每次更新只下 0.5 MB。
+   - **`Clockwork.exe`**（约 1.2 MB）—— 就是上面那个不含运行时的版本，只是没套 zip：点开即用，也可以直接盖掉现有的那份完成更新。缺运行时时 Windows 会自己提示下载。
 2. 双击打开设置窗口。首次载入的示例**全都没勾选**——你不勾，什么都不会跑。
 3. 想每次开机自动运行：到**设置**页勾选**开机自启**（以管理员权限注册计划任务，开机不会弹一堆授权框）。
 

@@ -36,7 +36,7 @@
 | 항목 | 내용 |
 | --- | --- |
 | **시스템** | Windows 10 / 11, x64 |
-| **설치** | 필요 없음. .NET 런타임이 들어 있는 `Clockwork.exe` 하나 — 아무 폴더에나 두세요 |
+| **설치** | 필요 없음. 휴대용 `Clockwork.exe` 하나를 아무 폴더에나 두세요 |
 | **관리자 권한** | 「로그인 시 시작」과 **관리자로 실행**을 표시한 단계에만 필요 |
 | **설정 저장 위치** | exe 옆의 `clockwork.settings.json`(쓸 수 없는 폴더라면 `%APPDATA%\Clockwork\`) — 기기 밖으로 나가지 않습니다 |
 | **인터페이스** | 18개 언어, 첫 실행 시 Windows 표시 언어를 따릅니다 |
@@ -45,7 +45,10 @@
 
 ## 시작하기
 
-1. [Releases](https://github.com/rockbenben/Clockwork/releases)에서 최신 `Clockwork-<버전>.zip`을 내려받아 압축을 풀고, 안에 든 단일 `Clockwork.exe`를 아무 폴더에나 두세요.
+1. [Releases](https://github.com/rockbenben/Clockwork/releases)에서 최신 버전을 내려받아(빌드는 두 가지, 내려받는 것은 세 가지) 최종적으로 손에 남는 단일 `Clockwork.exe`를 아무 폴더에나 두세요.
+   - **`Clockwork-<버전>-win-x64.zip`**(약 67 MB) — .NET 런타임 포함. Windows 10/11이면 어느 PC에서나 그대로 실행됩니다. 잘 모르겠을 때, 오프라인이거나 아무것도 설치할 수 없는 PC라면 이것을 받으세요.
+   - **`Clockwork-<버전>-win-x64-needs-dotnet10.zip`**(약 0.5 MB) — [.NET 10 데스크톱 런타임](https://dotnet.microsoft.com/download/dotnet/10.0)이 필요합니다. 인터넷이 되는 PC에 한 번만 설치해 두면, 이후 업데이트는 0.5 MB만 내려받습니다.
+   - **`Clockwork.exe`**(약 1.2 MB) — 바로 위 zip과 같은 빌드를 압축 없이 그대로 올린 것입니다. 눌러서 실행하거나, 쓰던 파일에 덮어써서 업데이트하세요. 런타임이 없으면 Windows가 내려받기를 안내합니다.
 2. 더블클릭해 설정 창을 엽니다. 함께 로드되는 샘플은 모두 **체크가 꺼진** 상태입니다 — 직접 체크하기 전에는 아무것도 실행되지 않습니다.
 3. 부팅할 때마다 실행하려면: **설정** 탭에서 **로그인 시 시작**을 체크하세요(관리자 권한으로 예약 작업을 등록하므로 부팅 시 UAC 프롬프트가 잔뜩 뜨지 않습니다).
 

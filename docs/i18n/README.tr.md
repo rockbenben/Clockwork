@@ -36,7 +36,7 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 | Konu | Ayrıntı |
 | --- | --- |
 | **Sistem** | Windows 10 / 11, x64 |
-| **Kurulum** | Yok. .NET çalışma zamanı gömülü tek bir `Clockwork.exe` — istediğiniz klasöre koyun |
+| **Kurulum** | Yok. Taşınabilir tek bir `Clockwork.exe` — istediğiniz klasöre koyun |
 | **Yönetici hakkı** | Yalnızca «Oturum açınca başlat» ve **yönetici olarak çalıştır** diye işaretlediğiniz adımlar için |
 | **Ayarlarınız** | exe'nin yanındaki `clockwork.settings.json` (o klasör salt okunursa `%APPDATA%\Clockwork\`) — hiçbir şey makineden çıkmaz |
 | **Arayüz** | 18 dil, ilk çalıştırmada Windows görüntü dilinizi izler |
@@ -45,7 +45,10 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 
 ## Başlarken
 
-1. En son `Clockwork-<sürüm>.zip`'i [Releases](https://github.com/rockbenben/Clockwork/releases) sayfasından indirin, arşivden çıkarın ve içindeki tek `Clockwork.exe`'yi herhangi bir klasöre bırakın.
+1. En son sürümü [Releases](https://github.com/rockbenben/Clockwork/releases) sayfasından indirin — iki yapı, üç indirme — ve elinizde kalan tek `Clockwork.exe`'yi herhangi bir klasöre bırakın.
+   - **`Clockwork-<sürüm>-win-x64.zip`** (~67 MB) — .NET çalışma zamanı dahil, her Windows 10/11 makinesinde olduğu gibi çalışır. Kararsızsanız ya da bilgisayar çevrimdışı veya kısıtlıysa bunu alın.
+   - **`Clockwork-<sürüm>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — kurulu bir [.NET 10 Masaüstü Çalışma Zamanı](https://dotnet.microsoft.com/download/dotnet/10.0) gerektirir. İnternete bağlı bir bilgisayarda bir kez kurun, sonraki her güncelleme 0,5 MB'lık bir indirme olsun.
+   - **`Clockwork.exe`** (~1,2 MB) — yukarıdaki zip ile aynı yapı, sadece zip'siz: tıklayıp çalıştırın ya da mevcut kopyanızın üzerine kopyalayıp güncelleyin. Çalışma zamanı yoksa Windows indirmeyi kendisi önerir.
 2. Ayarlar penceresini açmak için çift tıklayın. Yüklenen örneklerin hepsi **işaretsiz** gelir — siz işaretlemeden hiçbir şey çalışmaz.
 3. Her açılışta çalıştırmak için: **Ayarlar** sekmesinde **Oturum açınca başlat**'ı işaretleyin (yönetici haklarıyla bir zamanlanmış görev kaydeder, böylece açılışta yığınla UAC istemi olmaz).
 

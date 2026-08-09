@@ -36,7 +36,7 @@ Avvia le tue app automaticamente all'accesso · promemoria a tempo · un tocco p
 | Aspetto | Dettaglio |
 | --- | --- |
 | **Sistema** | Windows 10 / 11, x64 |
-| **Installazione** | Nessuna. Un unico `Clockwork.exe` con il runtime .NET incorporato — mettilo in una cartella qualsiasi |
+| **Installazione** | Nessuna. Un unico `Clockwork.exe` portatile — mettilo in una cartella qualsiasi |
 | **Amministratore** | Solo per «Avvia all'accesso» e per i passi che marchi **esegui come amministratore** |
 | **Le tue impostazioni** | `clockwork.settings.json` accanto all'exe (o `%APPDATA%\Clockwork\` se quella cartella è di sola lettura) — nulla lascia la macchina |
 | **Interfaccia** | 18 lingue, segue la lingua di Windows al primo avvio |
@@ -45,7 +45,10 @@ Avvia le tue app automaticamente all'accesso · promemoria a tempo · un tocco p
 
 ## Per iniziare
 
-1. Scarica l'ultimo `Clockwork-<versione>.zip` dalle [Releases](https://github.com/rockbenben/Clockwork/releases), decomprimilo e metti l'unico `Clockwork.exe` in una cartella qualsiasi.
+1. Scarica l'ultima versione dalle [Releases](https://github.com/rockbenben/Clockwork/releases) — due build, tre download — e metti l'unico `Clockwork.exe` che ti resta in una cartella qualsiasi.
+   - **`Clockwork-<versione>-win-x64.zip`** (~67 MB) — runtime .NET incluso, gira così com'è su qualsiasi Windows 10/11. Scegli questo nel dubbio, o se il PC è offline o bloccato.
+   - **`Clockwork-<versione>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — richiede il [runtime desktop di .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) installato. Installalo una volta su un PC con internet e ogni aggiornamento successivo è da 0,5 MB.
+   - **`Clockwork.exe`** (~1,2 MB) — la stessa build dello zip qui sopra, senza zip attorno: cliccalo ed è avviato, oppure sovrascrivi la copia esistente per aggiornare. Se manca il runtime, Windows ne propone il download.
 2. Fai doppio clic per aprire la finestra delle impostazioni. Gli esempi che carica sono tutti **deselezionati** — non viene eseguito nulla finché non li spunti tu.
 3. Per eseguirlo a ogni accensione: nella scheda **Impostazioni** spunta **Avvia all'accesso** (registra un'operazione pianificata con diritti di amministratore, così niente valanga di richieste UAC all'avvio).
 

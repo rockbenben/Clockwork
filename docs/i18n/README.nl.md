@@ -36,7 +36,7 @@ Start je apps automatisch bij het aanmelden · herinneringen op tijd · met éé
 | Aspect | Detail |
 | --- | --- |
 | **Systeem** | Windows 10 / 11, x64 |
-| **Installatie** | Geen. Eén `Clockwork.exe` met de .NET-runtime erin — zet hem in een willekeurige map |
+| **Installatie** | Geen. Eén portable `Clockwork.exe` — zet hem in een willekeurige map |
 | **Beheerdersrechten** | Alleen voor «Starten bij aanmelden» en voor stappen die je markeert als **als administrator uitvoeren** |
 | **Jouw instellingen** | `clockwork.settings.json` naast de exe (of `%APPDATA%\Clockwork\` als die map alleen-lezen is) — er verlaat niets de machine |
 | **Interface** | 18 talen, volgt bij de eerste start je Windows-weergavetaal |
@@ -45,7 +45,10 @@ Start je apps automatisch bij het aanmelden · herinneringen op tijd · met éé
 
 ## Aan de slag
 
-1. Download de nieuwste `Clockwork-<versie>.zip` van [Releases](https://github.com/rockbenben/Clockwork/releases), pak hem uit en zet de enkele `Clockwork.exe` in een willekeurige map.
+1. Download de nieuwste versie van [Releases](https://github.com/rockbenben/Clockwork/releases) — twee builds, drie downloads — en zet de enkele `Clockwork.exe` die je overhoudt in een willekeurige map.
+   - **`Clockwork-<versie>-win-x64.zip`** (~67 MB) — .NET-runtime inbegrepen, draait zo op elke Windows 10/11. Neem deze bij twijfel, of als de pc offline of dichtgetimmerd is.
+   - **`Clockwork-<versie>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — vereist een geïnstalleerde [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0). Installeer die één keer op een pc met internet en daarna is elke update een download van 0,5 MB.
+   - **`Clockwork.exe`** (~1,2 MB) — dezelfde build als de zip hierboven, zonder zip eromheen: klikken en draaien, of over je bestaande kopie zetten om bij te werken. Ontbreekt de runtime, dan biedt Windows de download aan.
 2. Dubbelklik erop om het instellingenvenster te openen. De voorbeelden die hij laadt staan allemaal **uit** — er draait niets tot je ze zelf aanvinkt.
 3. Om hem bij elke keer opstarten uit te voeren: vink op het tabblad **Instellingen** **Starten bij aanmelden** aan (registreert een geplande taak met beheerdersrechten, dus geen stortvloed aan UAC-meldingen bij het opstarten).
 

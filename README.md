@@ -36,7 +36,7 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 | Aspect | Detail |
 | --- | --- |
 | **System** | Windows 10 / 11, x64 |
-| **Install** | None. One `Clockwork.exe` with the .NET runtime inside it — put it in any folder |
+| **Install** | None. A single portable `Clockwork.exe` — put it in any folder |
 | **Admin** | Only for "Start at login" and for steps you mark **run as admin** |
 | **Your setup** | `clockwork.settings.json` next to the exe (or `%APPDATA%\Clockwork\` if that folder is read-only) — nothing leaves the machine |
 | **Interface** | 18 languages, following your Windows display language on first run |
@@ -45,7 +45,10 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 
 ## Getting started
 
-1. Download the latest `Clockwork-<version>.zip` from [Releases](https://github.com/rockbenben/Clockwork/releases), unzip it, and drop the single `Clockwork.exe` into any folder.
+1. Download the latest release from [Releases](https://github.com/rockbenben/Clockwork/releases) — two builds, three downloads — and drop the single `Clockwork.exe` you end up with into any folder.
+   - **`Clockwork-<version>-win-x64.zip`** (~67 MB) — .NET runtime included, runs as-is on any Windows 10/11. Take this if you're unsure, or if the PC is offline or locked down.
+   - **`Clockwork-<version>-win-x64-needs-dotnet10.zip`** (~0.5 MB) — needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed. Install it once on an online PC and every update after that is a 0.5 MB download.
+   - **`Clockwork.exe`** (~1.2 MB) — the same build as the zip above, with no zip around it: click, run, or drop it over your existing copy to update. Windows offers the runtime download if it is missing.
 2. Double-click it to open the settings window. The samples it loads all start **unticked** — nothing runs until you tick it.
 3. To run it every boot: on the **Settings** tab, tick **Start at login** (registers a scheduled task with admin rights, so boot brings no wall of UAC prompts).
 

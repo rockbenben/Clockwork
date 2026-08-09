@@ -1,16 +1,20 @@
 name: CI
 
-# 每次 push 到 main 或提 PR：在 Windows runner 上构建 + 跑测试。
-# WPF/WinForms 只能在 Windows 上构建，故固定用 windows-latest。
+# 每次 push 到 main 或提 PR：在 Windows runner 上构建 + 跑测试（WPF/WinForms 只能在 Windows 上构建）。
+# push 一个 v* 标签（如 v1.2.0）：同一次运行里先跑完测试，再发布自包含 / 框架依赖两个单文件 exe，
+# 用标签号覆盖版本，各打一个带版本号的 zip，创建 GitHub Release 并附上两个 zip 与框架依赖版的裸 exe。
+# 两种构建、三个资产：裸 exe 不是第三种构建，只是小包的另一种打包。
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
 
 jobs:
-  build-test:
+  test:
     runs-on: windows-latest
+    timeout-minutes: 15          # 卡住就快点红，别一路挂到 6 小时上限
     steps:
       # checkout@v7 / setup-dotnet@v6：底层 Node 24（LTS），消除旧版 Node 20 弃用警告。
       - uses: actions/checkout@v7
@@ -27,5 +31,74 @@ jobs:
       - name: Build
         run: dotnet build app.Tests/Clockwork.Tests.csproj --no-restore -c Release
 
+      # minimum-expected-tests 是 Microsoft.Testing.Platform 自带的守卫，防「静默 0 测试」：
+      # 适配器没加载好时，一个用例不跑却退出 0，绿灯骗人。它取代了原先那段手写解析 .trx 的脚本；
+      # 让 xunit.v3 跑在 MTP 上的两个属性见测试工程的 csproj。实测双向：传 1 通过，传 99999 退出 1。
       - name: Test
-        run: dotnet test app.Tests/Clockwork.Tests.csproj --no-build -c Release --verbosity normal
+        run: dotnet test app.Tests/Clockwork.Tests.csproj --no-build -c Release -- --minimum-expected-tests 1
+
+  # 一个文件两个 job：needs 让红的树发不出 Release，且不额外花一次测试——同一次运行已经跑过了。
+  # 拆成 ci.yml + release.yml 就丢了这点，needs 不能跨 workflow 文件。
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: windows-latest
+    timeout-minutes: 20          # 卡住就快点红，别一路挂到 6 小时上限
+    permissions:
+      contents: write            # 创建 Release 需要写权限；只给这个 job，PR 触发时它根本不跑
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      # 标签 v1.2.0 → 版本 1.2.0（去掉前缀 v），注入 exe 让文件版本与标签一致。
+      - name: Derive version from tag
+        id: ver
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      # 两种发布形态都在 app/Properties/PublishProfiles/*.pubxml 里，不挂在 csproj 上——挂上去
+      # 日常 build/run 也会走 RID 专属 + 单文件 + 压缩，且自包含工程不能被 app.Tests 引用。
+      # 框架依赖版需机器上已装 .NET 10 桌面运行时（缺运行时时 apphost 会自己弹下载提示）。
+      - name: Publish single-file exe (self-contained)
+        run: dotnet publish app/Clockwork.csproj -c Release -p:PublishProfile=win-x64 -p:Version=${{ steps.ver.outputs.version }}
+
+      - name: Publish single-file exe (framework-dependent)
+        run: dotnet publish app/Clockwork.csproj -c Release -p:PublishProfile=win-x64-needs-dotnet10 -p:Version=${{ steps.ver.outputs.version }}
+
+      # 两个 zip——版本形态写在 zip 名里，所以解压出来的永远是干净的 Clockwork.exe，
+      # 不会让绿色安装永远顶着一个带版本号的文件名。
+      - name: Package
+        shell: pwsh
+        run: |
+          Compress-Archive -Path app/bin/Release/publish/Clockwork.exe -DestinationPath "Clockwork-${{ github.ref_name }}-win-x64.zip"
+          Compress-Archive -Path app/bin/Release/publish-needs-dotnet10/Clockwork.exe -DestinationPath "Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip"
+
+      # 选包这件事发生在下载页，不是 README，所以说明得跟着 Release 走；GitHub 会把自动 changelog
+      # 接在这段 body 后面。体积按 Windows 的算法（MiB）。
+      # 用 softprops 而不是自带 gh：和 QuickText 同一套，且它对已存在的 release 是覆盖更新——
+      # 上传中途失败重跑一次就好，gh release create 会直接撞「release already exists」。
+      # 第三个资产是框架依赖版的裸 exe，直接从 publish 目录上传，因而保持干净的原名：点开即用，
+      # 也能直接盖掉已有的 Clockwork.exe 完成更新。只有小包这么发——72 MB 的裸 exe 正是浏览器和
+      # SmartScreen 最敌视的东西，而不带版本号的名字只能给其中一个。
+      - name: Release
+        # 刻意钉大版本标签：v3 会随补丁漂移，修复因此不用任何人动手就能拿到。
+        # 出了 v4 这种破坏性升级，Dependabot 会提 PR 说一声。
+        uses: softprops/action-gh-release@v3
+        with:
+          # 逐个写死而不用通配：名字和上面 Package 步骤生成的一一对应，既不会看起来像漏了谁，
+          # 也不会因为通配重叠把同一个文件传两遍。
+          files: |
+            Clockwork-${{ github.ref_name }}-win-x64.zip
+            Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip
+            app/bin/Release/publish-needs-dotnet10/Clockwork.exe
+          body: |
+            **Which package? / 下载哪个？**
+
+            - `Clockwork-${{ github.ref_name }}-win-x64.zip` (~67 MB) — .NET runtime included; unzip and run on any Windows 10/11. Take this if you're unsure. / 内含 .NET 运行时，解压即用；拿不准、或电脑装不了东西就选它。
+            - `Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip` (~0.5 MB) — same app without the bundled runtime; needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed. / 同一个程序，只是不带运行时；需要电脑上已装 [.NET 10 桌面运行时](https://dotnet.microsoft.com/download/dotnet/10.0)。
+            - `Clockwork.exe` (~1.2 MB) — the same build as the zip above, unzipped: click, run, or drop it over your existing Clockwork.exe to update. Windows will offer the runtime download if it is missing. / 就是上面那个不含运行时的版本，只是没打包：点开即用，也可直接覆盖现有的 Clockwork.exe 完成更新。缺运行时时 Windows 会自己提示下载。
+          generate_release_notes: true

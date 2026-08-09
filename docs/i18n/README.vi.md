@@ -36,7 +36,7 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 | Hạng mục | Chi tiết |
 | --- | --- |
 | **Hệ thống** | Windows 10 / 11, x64 |
-| **Cài đặt** | Không cần. Một tệp `Clockwork.exe` đã đóng gói sẵn .NET runtime — để vào thư mục bất kỳ |
+| **Cài đặt** | Không cần. Một tệp `Clockwork.exe` di động duy nhất — để vào thư mục bất kỳ |
 | **Quyền admin** | Chỉ cần cho «Khởi động cùng đăng nhập» và các bước bạn đánh dấu **chạy với quyền admin** |
 | **Cấu hình của bạn** | `clockwork.settings.json` cạnh tệp exe (hoặc `%APPDATA%\Clockwork\` nếu thư mục đó chỉ đọc) — không có gì rời khỏi máy |
 | **Giao diện** | 18 ngôn ngữ, lần chạy đầu đi theo ngôn ngữ hiển thị của Windows |
@@ -45,7 +45,10 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 
 ## Bắt đầu
 
-1. Tải `Clockwork-<phiên bản>.zip` mới nhất từ [Releases](https://github.com/rockbenben/Clockwork/releases), giải nén và đặt tệp `Clockwork.exe` duy nhất vào thư mục bất kỳ.
+1. Tải bản mới nhất từ [Releases](https://github.com/rockbenben/Clockwork/releases) — hai bản dựng, ba lượt tải — rồi đặt tệp `Clockwork.exe` duy nhất bạn có vào thư mục bất kỳ.
+   - **`Clockwork-<phiên bản>-win-x64.zip`** (~67 MB) — đã kèm .NET runtime, chạy được ngay trên mọi máy Windows 10/11. Phân vân, hoặc máy offline hay bị khóa không cài được gì, thì chọn gói này.
+   - **`Clockwork-<phiên bản>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — cần đã cài [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0). Cài một lần trên máy có mạng, về sau mỗi bản cập nhật chỉ tải 0,5 MB.
+   - **`Clockwork.exe`** (~1,2 MB) — cùng bản dựng với gói zip ngay trên, chỉ là không bọc zip: bấm vào chạy luôn, hoặc ghi đè lên bản đang dùng để cập nhật. Thiếu runtime thì Windows sẽ tự mời bạn tải.
 2. Nhấp đúp để mở cửa sổ cài đặt. Các mẫu được nạp đều **chưa được tick** — không có gì chạy cho tới khi bạn tự tick.
 3. Để chạy mỗi lần khởi động máy: ở tab **Cài đặt**, tick **Khởi động cùng đăng nhập** (đăng ký một tác vụ theo lịch với quyền admin, để không phải chịu một loạt hộp thoại UAC khi khởi động).
 
