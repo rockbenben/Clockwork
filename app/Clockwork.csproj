@@ -27,7 +27,7 @@
     <!-- 版本号不用手动维护：本地构建从最近的 git tag 取（见文件末尾的 VersionFromGitTag），
          正式发版由 CI 用 -p:Version=<tag 去 v> 覆盖。下面这个值只是两者都不适用时的兜底
          ——比如从源码 zip 构建、目录里没有 .git。 -->
-    <VersionFallback>2.5.0</VersionFallback>
+    <VersionFallback>2.6.0</VersionFallback>
     <Version>$(VersionFallback)</Version>
     <Product>Clockwork</Product>
     <Company>rockbenben</Company>
