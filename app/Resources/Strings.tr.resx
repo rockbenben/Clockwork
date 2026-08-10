@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Zamanlanmış görevler</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Eylem grupları</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Sistem başlangıcı</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Başlangıçta yukarıdan aşağıya çalışır · sırayı değiştirmek için satırı sürükleyin</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Zamanı geldiğinde açılır pencere gösterir veya eylem grubunu sessizce çalıştırır · yinelenen çalıştırmayı ve tek seferlik çalıştırmayı destekler · «Evet» ile program çalıştırabilir, URL açabilir veya eylem grubu çalıştırabilir</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>Bir dizi eylemi grupta topla ve tepsiden / başlangıç listesinden / hatırlatmadan tek dokunuşla tetikle</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Oturum açılınca bir kez, yukarıdan aşağı çalışır · satırları sürükleyip sıralayın. Zamana veya olaya göre → Zamanlanmış görevler; istediğiniz an tek dokunuşla → Eylem grupları.</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Belirli saatte, oturum açılınca veya kilit açma / güç gibi olaylarda tetiklenir — hatırlatma ya da sessiz grup. Sadece açılışta uygulama açmak → Başlangıç listesi; istediğiniz an → Eylem grupları.</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Bir dizi eylemi gruplayın, kısayol / tepsiden istediğiniz an çalıştırın; Başlangıç listesi ve Zamanlanmış görevler de gruba başvurabilir. Yalnızca açılışta çalışacak şeyleri doğrudan Başlangıç listesine yazmak daha kolaydır.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(boş)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>İşaretleme/kaldırma anında geçerlidir (devre dışı bırakır, silmez; geri alınabilir). «Yönetici gerekir» öğeleri yönetici hakkı ister. Sistem / ilke / tek seferlik salt okunur öğeler varsayılan olarak gizlidir.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filtre</value></data>
@@ -144,7 +144,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>Bağımsız değişkenler</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>Çalışma klasörü</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>Yönetici olarak çalıştır</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>Hedef tam exe yolu, ad, URL, ms-settings: gibi bir protokol veya belge olabilir.</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>Hedef bir program (tam yol veya yalnızca ad), kısayol, betik, klasör, URL, belge ya da ms-settings: gibi bir protokol olabilir.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Kısayol</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Eylem</value></data>
@@ -323,7 +323,6 @@ Günlük: {1}</value></data>
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>Paydos · Gün sonu</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Yatma vakti</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Kısa mola</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>Ekran görüntüsü ve işaretleme</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Bugünün görevlerinin hepsini kaydettin mi?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Yatma vakti!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Uzun oturma molası · döngü</value></data>
@@ -378,4 +377,77 @@ Günlük: {1}</value></data>
   <data name="Config_ExportFail" xml:space="preserve"><value>Dışa aktarma başarısız: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (kopya)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>Otomatik olarak yeniden başlatılamadı. Lütfen Clockwork'ü elle yeniden açın. ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>Mikrofonu sustur</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>Mikrofon sesini aç</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>Panoya metin koy</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>Ekran parlaklığı</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>Bildirimleri kapat</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>Bildirimleri aç</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>Ekran: yalnızca bilgisayar ekranı</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>Ekran: yinele</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>Ekran: genişlet</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>Ekran: yalnızca ikinci ekran</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} başarısız: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>Pano metni</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>Parlaklık (0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>Yalnızca sistem tarafından denetlenen ekranlarda (dizüstü panelleri) çalışır; harici monitörler desteklenmez.</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>Yalnızca şundan sonra</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Biçim S:dd, örn. 18:30; yalnızca saat (örn. 18) de olur; varsayılan 18:00.</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>Sınır yok</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>İşlem koşulu</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>O işlem çalışıyor</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>O işlem çalışmıyor</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>Güç koşulu</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Yalnızca prize takılıyken</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Yalnızca pildeyken</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>Yol mevcut</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>Doldurulursa adım yalnızca o dosya / klasör varken çalışır; boş = sınır yok.</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> (yalnızca {0}'dan sonra)</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} çalışıyor)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} çalışmıyor)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (prizde)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (pilde)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} mevcut)</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>Boştayken</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>Kilit açıldığında</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>Kilitlendiğinde</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>Uykudan uyanınca</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>Prize takıldığında</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>Prizden çıkarıldığında</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>Pil azaldığında</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>Boşta dakika</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>Klavye ve fare kullanılmadan bu kadar dakika geçince bir kez çalışır; geri döndüğünüzde sayaç sıfırlanır.</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>Pil şunun altında (%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>Pilde çalışırken şarj bu değerin altına düşünce bir kez çalışır; şarj olunca ya da prize takılınca yeniden kurulur.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>Olay gerçekleştiği anda çalışır. Aşağıdaki günler hangi günlerde geçerli olduğunu sınırlamaya devam eder; tolerans ve kaçırılanı telafi olaylar için geçerli olmadığından gizlidir.</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>Her seferinde</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>{0} dk boşta</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>Pil &lt; %{0}</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>Başlat menüsünden seç…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>Başlat menüsünden uygulama seç</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>Uygulama adı ara</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Ctrl / Shift ile birden fazla seçebilirsiniz; her biri listeye adım olarak eklenir, varsayılan olarak işaretsizdir.</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>Başlat menüsünde hiçbir program kısayolu bulunamadı.</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>Normale dön</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>Başlangıç</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>Yedekleme</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 sn ve yalnızca oturum açılışında başlatma açıkken geçerli: oturum açtıktan sonra bu kadar bekleyip listeyi çalıştırır, böylece açılış yoğunluğunu atlar. Elle yeniden çalıştırma etkilenmez.</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>Sistem hazır olana kadar bekle (masaüstü / ağ)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>İkisi de hazır olur olmaz devam eder, en fazla 90 sn bekler; yukarıdaki sabit gecikme bunun üstüne eklenir. Liste programlarınız için çok erken çalışıyorsa açın.</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>Aç</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>Programları kontrol et</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>Sistem ve ses</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>Akış</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Açılışta uygulamaları sırayla ve gecikmeyle açmak Başlangıç listesinde daha kolaydır; “açılıştan sonraki N dakika içinde” veya “yalnızca sabah” gibi koşullar ise tam buraya göredir.</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Henüz eylem grubu yok — önce “Eylem grupları” sekmesinde bir şablondan oluşturun, sonra burada başvurun.</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>Koşullar ve tekrar: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>her zaman çalışır</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>Gelişmiş: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>bir kez tetiklenir</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>onaylanana dek her {0} dk yineler</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>onaylanana dek her {0} dk yineler, en geç {1}</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>gün sonuna dek her {0} dk çalışır (onay durdurmaz)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>{1} olana dek her {0} dk çalışır (onay durdurmaz)</value></data>
 </root>

@@ -21,6 +21,12 @@ public static class StepHelpers
     public static int BeforeMinutesOfDay(LaunchStep s) => BeforeHour(s) * 60 + BeforeMinute(s);
     public static string BeforeTimeLabel(LaunchStep s) => $"{BeforeHour(s):D2}:{BeforeMinute(s):D2}";
 
+    // 「仅 N 后」阈值：与上面「仅 N 前」同一套夹取口径，越界回退 18:00（模型默认）。
+    public static int AfterHour(LaunchStep s) => (s.AfterHour < 0 || s.AfterHour > 23) ? 18 : s.AfterHour;
+    public static int AfterMinute(LaunchStep s) => (s.AfterMinute < 0 || s.AfterMinute > 59) ? 0 : s.AfterMinute;
+    public static int AfterMinutesOfDay(LaunchStep s) => AfterHour(s) * 60 + AfterMinute(s);
+    public static string AfterTimeLabel(LaunchStep s) => $"{AfterHour(s):D2}:{AfterMinute(s):D2}";
+
     // 开机延迟秒数夹取：0..600（10 分钟）。设置页与开机消费侧共用同一口径，避免魔数分家、UI 收了值而开机静默只等一半。
     public static int ClampStartupDelay(int seconds) => Math.Clamp(seconds, 0, 600);
 

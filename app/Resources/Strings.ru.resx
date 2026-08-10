@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Задачи по расписанию</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Группы действий</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Автозагрузка системы</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Выполняется сверху вниз при запуске · перетащите строку, чтобы изменить порядок</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Показывает окно или тихо запускает группу действий по расписанию · поддерживает периодический и однократный запуск · при «Да» можно запустить программу, открыть URL или группу действий</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>Объедините ряд действий в группу и запускайте одним кликом из трея / списка запуска / напоминаний</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Выполняется один раз при входе, сверху вниз · строки можно перетаскивать. По расписанию или событию → Задачи по расписанию; в любой момент одним нажатием → Группы действий.</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Срабатывает по времени, при входе или по событиям (разблокировка, питание) — напоминание или тихая группа. Просто открыть программы при входе → Список запуска; вручную одним нажатием → Группы действий.</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Соберите набор действий в группу и запускайте её в любой момент хоткеем / из трея; Список запуска и Задачи по расписанию могут ссылаться на неё. То, что нужно только при входе, проще записать прямо в Список запуска.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(пусто)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Установка/снятие флажка действует сразу (отключение, не удаление; обратимо). Элементы «нужен админ» требуют прав администратора. Системные / политики / однократные элементы только для чтения по умолчанию скрыты.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Фильтр</value></data>
@@ -144,7 +144,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>Аргументы</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>Рабочая папка</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>Запуск от имени администратора</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>Целью может быть полный путь к exe, имя, URL, протокол вроде ms-settings: или документ.</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>Целью может быть программа (полный путь или просто имя), ярлык, скрипт, папка, URL, документ или протокол вроде ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Сочетание клавиш</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план. Комбинации, занятые самой Windows (Win+D, Win+6…), перехватить нельзя — дважды щёлкните поле и введите вручную.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Действие</value></data>
@@ -323,7 +323,6 @@
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>Завершение дня</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Перед сном</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Отойти ненадолго</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>Скриншот и аннотация</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Все сегодняшние задачи записаны?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Пора спать!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Перерыв от сидения · циклом</value></data>
@@ -378,4 +377,77 @@
   <data name="Config_ExportFail" xml:space="preserve"><value>Не удалось экспортировать: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (копия)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>Не удалось перезапустить автоматически. Откройте Clockwork вручную. ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>Выключить микрофон</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>Включить микрофон</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>Задать текст в буфере обмена</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>Яркость экрана</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>Отключить уведомления</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>Включить уведомления</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>Экран: только экран ПК</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>Экран: повторяющийся</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>Экран: расширить</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>Экран: только второй экран</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>Не удалось выполнить «{0}»: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>Текст буфера обмена</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>Яркость (0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>Работает только на дисплеях, управляемых системой (экраны ноутбуков); внешние мониторы не поддерживаются.</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>Только после</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Формат Ч:мм, например 18:30; можно указать только час (например 18); по умолчанию 18:00.</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>Без ограничений</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>Условие по процессу</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>Процесс запущен</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>Процесс не запущен</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>Условие по питанию</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Только от сети</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Только от батареи</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>Путь существует</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>Если задано, шаг выполняется, только когда этот файл или папка существует; пусто — без ограничений.</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> (только после {0})</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} запущен)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} не запущен)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (от сети)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (от батареи)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} существует)</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>При простое</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>При разблокировке</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>При блокировке</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>При выходе из сна</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>При подключении к сети</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>При отключении от сети</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>При низком заряде</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>Минут простоя</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>Срабатывает один раз после стольких минут без клавиатуры и мыши; отсчёт начинается заново, когда вы вернётесь.</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>Заряд ниже (%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>Срабатывает один раз при работе от батареи, когда заряд опускается ниже этого значения; снова взводится после зарядки или подключения к сети.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>Срабатывает в момент события. Дни недели ниже по-прежнему ограничивают, в какие дни это учитывается; льготный период и наверстывание к событиям неприменимы и скрыты.</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>Каждый раз</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>Простой {0} мин</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>Заряд &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>Выбрать из меню «Пуск»…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>Выбор программ из меню «Пуск»</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>Поиск по имени программы</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Выберите несколько с Ctrl / Shift; каждая добавится в список как шаг, по умолчанию без галочки.</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>В меню «Пуск» не найдено ярлыков программ.</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>Вернуть как было</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>Запуск</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>Резервная копия</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 с и только при включённом автозапуске: ждёт столько после входа, прежде чем выполнить список, обходя пик загрузки. На ручной перезапуск не влияет.</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>Ждать готовности системы (рабочий стол / сеть)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Продолжает, как только оба готовы, ожидая не более 90 с; затем добавляется фиксированная задержка выше. Включите, если список запускается слишком рано для ваших программ.</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>Открыть</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>Управление программами</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>Система и звук</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>Поток</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Открывать программы при входе с порядком и задержками удобнее в Списке запуска; условия вроде «только в первые N минут после загрузки» или «только утром» — как раз для этого места.</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Групп действий пока нет — сначала создайте одну из шаблона на вкладке «Группы действий», затем сошлитесь на неё здесь.</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>Условия и повтор: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>выполняется всегда</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>Дополнительно: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>срабатывает один раз</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>напоминает каждые {0} мин, пока не подтвердят</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>напоминает каждые {0} мин, пока не подтвердят, не позже {1}</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>выполняется каждые {0} мин до конца дня (подтверждение не останавливает)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>выполняется каждые {0} мин до {1} (подтверждение не останавливает)</value></data>
 </root>

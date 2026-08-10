@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Attività pianificate</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Gruppi di azioni</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Avvio di sistema</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Si esegue dall'alto in basso all'avvio · trascina una riga per riordinare</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Mostra un avviso o esegue un gruppo di azioni in silenzio all'orario previsto · supporta esecuzioni ripetute e singole · con «Sì» può avviare un programma, aprire un URL o eseguire un gruppo di azioni</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>Raggruppa una serie di azioni e attivale con un tocco dalla barra delle applicazioni / elenco di avvio / promemoria</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Viene eseguito una volta all'accesso, dall'alto in basso · trascina le righe per riordinare. A orario o su evento → Attività pianificate; su richiesta con un clic → Gruppi di azioni.</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Scatta a un orario, all'accesso o su eventi come sblocco / alimentazione: promemoria o gruppo silenzioso. Solo aprire app all'accesso → Elenco di avvio; su richiesta → Gruppi di azioni.</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Raggruppa una routine e lanciala quando vuoi con scorciatoia / tray; anche l'Elenco di avvio e le Attività pianificate possono richiamarla. Ciò che gira solo all'accesso è più semplice come passi dell'Elenco di avvio.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(vuoto)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Selezionare/deselezionare ha effetto immediato (disabilita, non elimina; reversibile). Le voci «richiede admin» necessitano di diritti di amministratore. Le voci di sistema / criterio / una tantum in sola lettura sono nascoste per impostazione predefinita.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filtro</value></data>
@@ -144,7 +144,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>Argomenti</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>Cartella di lavoro</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>Esegui come amministratore</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>La destinazione può essere un percorso exe completo, un nome, un URL, un protocollo come ms-settings: o un documento.</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>La destinazione può essere un programma (percorso completo o solo il nome), un collegamento, uno script, una cartella, un URL, un documento o un protocollo come ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Scorciatoia</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Azione</value></data>
@@ -323,7 +323,6 @@ Registro: {1}</value></data>
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>Fine giornata</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Prima di dormire</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Mi allontano un attimo</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>Screenshot e annotazione</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Hai registrato tutte le attività di oggi?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>È ora di dormire!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Pausa dalla sedia · in ciclo</value></data>
@@ -378,4 +377,77 @@ Registro: {1}</value></data>
   <data name="Config_ExportFail" xml:space="preserve"><value>Esportazione non riuscita: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (copia)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>Impossibile riavviare automaticamente. Riapri Clockwork manualmente. ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>Disattiva microfono</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>Riattiva microfono</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>Imposta testo negli appunti</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>Luminosità schermo</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>Disattiva le notifiche</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>Attiva le notifiche</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>Schermo: solo schermo del PC</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>Schermo: duplica</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>Schermo: estendi</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>Schermo: solo secondo schermo</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} non riuscito: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>Testo appunti</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>Luminosità (0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>Funziona solo su schermi controllati dal sistema (pannelli dei portatili); i monitor esterni non sono supportati.</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>Solo dopo le</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Formato H:mm, es. 18:30; va bene anche solo l'ora (es. 18); predefinito 18:00.</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>Nessun limite</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>Condizione processo</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>Quel processo è in esecuzione</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>Quel processo non è in esecuzione</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>Condizione alimentazione</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Solo con alimentatore</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Solo a batteria</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>Il percorso esiste</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>Se compilato, il passo viene eseguito solo se quel file / cartella esiste; vuoto = nessun limite.</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> (solo dopo le {0})</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} in esecuzione)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} non in esecuzione)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (con alimentatore)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (a batteria)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} esiste)</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>Quando è inattivo</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>Allo sblocco</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>Al blocco</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>Al risveglio dalla sospensione</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>Quando si collega l'alimentatore</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>Quando si scollega l'alimentatore</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>Con batteria scarica</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>Minuti di inattività</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>Si attiva una volta dopo questi minuti senza tastiera né mouse; il conteggio riparte quando torni.</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>Batteria sotto (%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>Si attiva una volta a batteria quando la carica scende sotto questo valore; si riarma dopo la ricarica o il collegamento.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>Viene eseguito nel momento in cui l'evento accade. I giorni della settimana qui sotto limitano ancora i giorni validi; tolleranza e recupero non valgono per gli eventi e sono nascosti.</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>Ogni volta</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>Inattivo {0} min</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>Batteria &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>Scegli dal menu Start…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>Scegli app dal menu Start</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>Cerca nome app</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Selezionane più d'una con Ctrl / Maiusc; ognuna viene aggiunta all'elenco come passo, non spuntata per impostazione predefinita.</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>Nessun collegamento a programmi trovato nel menu Start.</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>Torna alla normalità</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>Avvio</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>Backup</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s e solo con l'avvio all'accesso attivo: attende questo tempo dopo l'accesso prima di eseguire l'elenco, evitando la ressa iniziale. Le esecuzioni manuali non sono influenzate.</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>Attendi che il sistema sia pronto (desktop / rete)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Prosegue appena entrambi sono pronti, con un'attesa massima di 90 s; il ritardo fisso qui sopra si somma. Attivalo se l'elenco parte troppo presto per i tuoi programmi.</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>Aprire</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>Controllare programmi</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>Sistema e audio</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>Flusso</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Per aprire app all'accesso con ordine e ritardi è più comodo l'Elenco di avvio; condizioni come «solo entro N minuti dall'avvio» o «solo al mattino» sono esattamente per questo posto.</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Nessun gruppo di azioni ancora: creane uno da un modello nella scheda «Gruppi di azioni», poi richiamalo qui.</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>Condizioni e ripetizione: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>sempre eseguito</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>Avanzate: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>scatta una volta</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>insiste ogni {0} min finché non confermi</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>insiste ogni {0} min finché non confermi, al più tardi fino alle {1}</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>gira ogni {0} min fino a fine giornata (confermare non lo ferma)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>gira ogni {0} min fino alle {1} (confermare non lo ferma)</value></data>
 </root>

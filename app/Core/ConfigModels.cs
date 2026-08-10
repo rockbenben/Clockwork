@@ -42,8 +42,21 @@ public sealed class LaunchStep
     public bool OnlyBefore8 { get; set; }
     public int BeforeHour { get; set; } = 8;
     public int BeforeMinute { get; set; }   // 「仅 N 前」的分钟位：阈值=BeforeHour:BeforeMinute，支持任意时刻（不再只整点）
+    // 「仅 N 点后」：与「仅 N 点前」对称，两者是 AND（同时开 = 交集，如 09:00 后且 18:00 前 = 上班时段）。
+    // 有意不做「或」：18:00 后或 08:00 前这种跨午夜窗口写成两条步骤更好懂，不值得让一个复选框带两种语义。
+    public bool OnlyAfter { get; set; }
+    public int AfterHour { get; set; } = 18;
+    public int AfterMinute { get; set; }
     // 仅在这些星期(ISO 1..7)开机启动；空=每天
     public List<int> Days { get; set; } = new();
+    // 环境条件（都是「空=不限」）。星期/时刻只看钟表，这三条看的是机器此刻的状态：
+    //   IfProcess + IfProcessMode —— 该进程在跑 / 没跑（进程名，裸名即可）
+    //   IfPower                   —— "ac"=仅接电源、"battery"=仅用电池
+    //   IfPathExists              —— 该文件 / 文件夹存在时才执行（U 盘挂上了没、报告导出了没）
+    public string IfProcess { get; set; } = "";
+    public string IfProcessMode { get; set; } = "";   // ""=不限 | running | notRunning
+    public string IfPower { get; set; } = "";         // ""=不限 | ac | battery
+    public string IfPathExists { get; set; } = "";
     // window
     public string Process { get; set; } = "";
     public string SendKey { get; set; } = "{ENTER}";
@@ -104,6 +117,12 @@ public sealed class Reminder
     public string IntervalUntil { get; set; } = "";
     // 周期=once 时的目标日期（yyyy-MM-dd，空=今天）。触发完成后由 App 自动取消勾选（条目保留）。
     public string OnceDate { get; set; } = "";
+    // 事件触发（Trigger ∈ EventTrigger.All）专用参数：
+    //   idle       —— 连续无键鼠操作满 IdleMinutes 分钟触发一次，人回来即复位（一次离开只触发一次）
+    //   lowBattery —— 电量跌到 BatteryPercent 以下触发一次，充回阈值以上才复位
+    // 其余事件（解锁/锁屏/唤醒/插拔电源）没有参数，两个字段留默认即可。
+    public int IdleMinutes { get; set; } = 10;
+    public int BatteryPercent { get; set; } = 20;
 }
 
 public sealed class ActionGroup

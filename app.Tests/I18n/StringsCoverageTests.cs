@@ -61,8 +61,9 @@ public class StringsCoverageTests
     // 允许为空/纯空白的「词序后缀 / 分隔符」键——空值在这些键上是有意义的翻译结果，不是漏译：
     //   Days_Sep      星期之间的分隔符：中日韩写「周一周二」不加分隔（空），英文写「Mon Tue」用空格。
     //   Ed_HourBefore 中文语序的后缀「仅 [8:00] 前执行」；英文语序把话说在时间框之前，后缀自然为空。
+    //   Ed_HourAfter  同上，「仅 [18:00] 后执行」那一半。
     // 新增此类键时要往这里加一行并写清理由；漏加会让下面的用例失败，不会静默放过。
-    private static readonly HashSet<string> AffixKeys = new(StringComparer.Ordinal) { "Days_Sep", "Ed_HourBefore" };
+    private static readonly HashSet<string> AffixKeys = new(StringComparer.Ordinal) { "Days_Sep", "Ed_HourBefore", "Ed_HourAfter" };
 
     // 除词序后缀/分隔符外，译文不得为空白：空值同样会让界面出现空标签，而「键是否存在」检查发现不了。
     [Theory]

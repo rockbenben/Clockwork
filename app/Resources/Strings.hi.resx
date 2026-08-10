@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>शेड्यूल किए गए कार्य</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>क्रिया समूह</value></data>
   <data name="Tab_System" xml:space="preserve"><value>सिस्टम स्टार्टअप</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>शुरू होने पर ऊपर से नीचे क्रम में चलता है · क्रम बदलने के लिए पंक्ति खींचें</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>समय पर पॉपअप दिखाए या क्रिया समूह को चुपचाप चलाए · दोहराव और एक बार चलाना दोनों समर्थित · «हाँ» पर प्रोग्राम चलाएँ / URL खोलें / क्रिया समूह चलाएँ</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>क्रियाओं की शृंखला को समूह में बाँधें और ट्रे / स्टार्टअप सूची / रिमाइंडर से एक टैप में चलाएँ</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>लॉगिन पर एक बार, ऊपर से नीचे चलता है · पंक्तियाँ खींचकर क्रम बदलें। समय / घटना पर चलाना है → शेड्यूल किए गए कार्य; कभी भी एक क्लिक से → क्रिया समूह।</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>समय पर, लॉगिन पर, या अनलॉक / पावर जैसी घटनाओं पर चलता है — रिमाइंडर या मौन समूह। लॉगिन पर सिर्फ़ ऐप खोलने हैं → स्टार्टअप सूची; कभी भी एक क्लिक से → क्रिया समूह।</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>क्रियाओं की शृंखला को समूह बनाएं, हॉटकी / ट्रे से कभी भी चलाएं; स्टार्टअप सूची और शेड्यूल किए गए कार्य भी इसका संदर्भ ले सकते हैं। जो सिर्फ़ लॉगिन पर चलना है, उसे सीधे स्टार्टअप सूची में लिखना आसान है।</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(खाली)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>चेक/अनचेक तुरंत लागू (अक्षम, हटाना नहीं; पूर्ववत)। «एडमिन आवश्यक» वाले आइटम को व्यवस्थापक अधिकार चाहिए। सिस्टम / नीति / एक-बार केवल-पठन आइटम डिफ़ॉल्ट रूप से छिपे हैं।</value></data>
   <data name="System_Filter" xml:space="preserve"><value>फ़िल्टर</value></data>
@@ -144,7 +144,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>तर्क</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>कार्य निर्देशिका</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>व्यवस्थापक के रूप में चलाएँ</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>लक्ष्य पूर्ण exe पथ, नाम, URL, ms-settings: जैसा प्रोटोकॉल या दस्तावेज़ हो सकता है।</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>लक्ष्य में प्रोग्राम (पूरा पथ या केवल नाम), शॉर्टकट, स्क्रिप्ट, फ़ोल्डर, URL, दस्तावेज़, या ms-settings: जैसा प्रोटोकॉल दिया जा सकता है।</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>शॉर्टकट</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>जैसे: Win+D / Alt+K / Ctrl+Enter / F5. फोकस वाली विंडो को भेजा जाता है; पहले लक्ष्य को सामने लाएँ। Windows द्वारा आरक्षित संयोजन (Win+D, Win+6…) कैप्चर नहीं हो सकते — बॉक्स पर डबल-क्लिक करके टाइप करें।</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>क्रिया</value></data>
@@ -323,7 +323,6 @@
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>काम समाप्त</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>सोने से पहले</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>थोड़ी देर के लिए दूर</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>स्क्रीनशॉट और एनोटेशन</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>क्या आज के सभी कार्य दर्ज कर लिए?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>सोने का समय!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>लंबे समय बैठने की याद · दोहराव</value></data>
@@ -378,4 +377,77 @@
   <data name="Config_ExportFail" xml:space="preserve"><value>निर्यात विफल: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (प्रतिलिपि)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>स्वचालित रूप से पुनरारंभ नहीं हो सका। कृपया Clockwork को मैन्युअल रूप से फिर से खोलें। ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>माइक्रोफ़ोन म्यूट करें</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>माइक्रोफ़ोन अनम्यूट करें</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>क्लिपबोर्ड टेक्स्ट सेट करें</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>स्क्रीन की चमक</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>सूचनाएँ बंद करें</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>सूचनाएँ चालू करें</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>डिस्प्ले: केवल पीसी स्क्रीन</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>डिस्प्ले: डुप्लिकेट</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>डिस्प्ले: विस्तारित</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>डिस्प्ले: केवल दूसरी स्क्रीन</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} विफल: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>क्लिपबोर्ड टेक्स्ट</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>चमक (0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>केवल सिस्टम-नियंत्रित डिस्प्ले (लैपटॉप पैनल) पर काम करता है; बाहरी मॉनिटर समर्थित नहीं हैं।</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>केवल बाद</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>प्रारूप घं:मि, जैसे 18:30; केवल घंटा (जैसे 18) भी चलेगा; डिफ़ॉल्ट 18:00।</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>कोई सीमा नहीं</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>प्रक्रिया शर्त</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>वह प्रक्रिया चल रही है</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>वह प्रक्रिया नहीं चल रही</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>पावर शर्त</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>केवल बिजली से जुड़े होने पर</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>केवल बैटरी पर</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>पथ मौजूद है</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>भरने पर यह चरण तभी चलेगा जब वह फ़ाइल / फ़ोल्डर मौजूद हो; खाली = कोई सीमा नहीं।</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> (केवल {0} के बाद)</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} चल रहा है)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} नहीं चल रहा)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (बिजली पर)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (बैटरी पर)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} मौजूद)</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>निष्क्रिय होने पर</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>अनलॉक करने पर</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>लॉक करने पर</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>स्लीप से जागने पर</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>बिजली से जोड़ने पर</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>बिजली हटाने पर</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>बैटरी कम होने पर</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>निष्क्रिय मिनट</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>इतने मिनट तक कीबोर्ड या माउस न चलने पर एक बार चलता है; लौटने पर गिनती फिर से शुरू होती है।</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>बैटरी इससे कम (%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>बैटरी पर चलते समय चार्ज इससे नीचे गिरने पर एक बार चलता है; चार्ज करने या प्लग लगाने पर फिर से सक्रिय हो जाता है।</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>घटना होते ही चलता है। नीचे के सप्ताह-दिन अब भी यह सीमित करते हैं कि किन दिनों गिना जाए; छूट और छूटे हुए की भरपाई घटनाओं पर लागू नहीं, इसलिए छिपी हैं।</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>हर बार</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>निष्क्रिय {0} मिनट</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>बैटरी &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>स्टार्ट मेन्यू से चुनें…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>स्टार्ट मेन्यू से ऐप चुनें</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>ऐप का नाम खोजें</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Ctrl / Shift से कई चुनें; हर एक सूची में चरण के रूप में जुड़ता है, डिफ़ॉल्ट रूप से बिना टिक के।</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>स्टार्ट मेन्यू में कोई प्रोग्राम शॉर्टकट नहीं मिला।</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>सामान्य पर लौटें</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>स्टार्टअप</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>बैकअप</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 सेकंड, और केवल तब जब लॉगऑन पर शुरू चालू हो: लॉगऑन के बाद इतनी देर रुककर सूची चलाता है, ताकि शुरुआती भीड़ टल जाए। मैन्युअल रन पर असर नहीं पड़ता।</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>सिस्टम तैयार होने तक प्रतीक्षा करें (डेस्कटॉप / नेटवर्क)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>दोनों तैयार होते ही आगे बढ़ता है, अधिकतम 90 सेकंड प्रतीक्षा करता है; उसके ऊपर ऊपर वाली निश्चित देरी जुड़ती है। जब सूची आपके प्रोग्राम के लिए बहुत जल्दी चले, तब इसे चालू करें।</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>खोलें</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>प्रोग्राम नियंत्रित करें</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>सिस्टम और ध्वनि</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>प्रवाह</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>लॉगिन पर क्रम और देरी के साथ ऐप खोलना स्टार्टअप सूची में आसान है; “बूट के N मिनट के भीतर ही” या “सिर्फ़ सुबह” जैसी शर्तें ठीक यहीं के लिए हैं।</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>अभी कोई क्रिया समूह नहीं है — पहले “क्रिया समूह” टैब में टेम्पलेट से एक बनाएं, फिर यहाँ संदर्भ दें।</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>शर्तें और दोहराव: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>हमेशा चलता है</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>उन्नत: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>एक बार चलता है</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>पुष्टि होने तक हर {0} मिनट में फिर याद दिलाता है</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>पुष्टि होने तक हर {0} मिनट में याद दिलाता है, अधिकतम {1} तक</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>दिन खत्म होने तक हर {0} मिनट में चलता है (पुष्टि से नहीं रुकता)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>{1} तक हर {0} मिनट में चलता है (पुष्टि से नहीं रुकता)</value></data>
 </root>

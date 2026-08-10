@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tác vụ theo lịch</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Nhóm hành động</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Khởi động hệ thống</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Chạy từ trên xuống dưới khi khởi động · kéo hàng để sắp xếp lại</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Hiện cửa sổ nhắc hoặc âm thầm chạy nhóm hành động theo lịch · hỗ trợ chạy lặp lại và chạy một lần · khi «Có» có thể chạy chương trình / mở URL / chạy nhóm hành động</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>Gộp một loạt hành động thành nhóm và kích hoạt một chạm từ khay / danh sách khởi động / nhắc nhở</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Chạy một lần khi đăng nhập, từ trên xuống · kéo dòng để đổi thứ tự. Muốn chạy theo giờ / sự kiện → Tác vụ theo lịch; muốn chạy bất cứ lúc nào → Nhóm hành động.</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Kích hoạt đúng giờ, khi đăng nhập hoặc theo sự kiện như mở khóa / cắm sạc — nhắc nhở hoặc chạy nhóm im lặng. Chỉ mở ứng dụng lúc đăng nhập → Danh sách khởi động; chạy thủ công → Nhóm hành động.</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Gói một chuỗi thao tác thành nhóm, kích hoạt bất cứ lúc nào bằng phím tắt / khay hệ thống; Danh sách khởi động và Tác vụ theo lịch cũng tham chiếu được. Việc chỉ chạy lúc đăng nhập thì viết thẳng vào Danh sách khởi động sẽ gọn hơn.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(trống)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Chọn/bỏ chọn có hiệu lực ngay (vô hiệu, không xóa; hoàn tác được). Mục «cần admin» cần quyền quản trị. Mục hệ thống / chính sách / một lần chỉ đọc được ẩn theo mặc định.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Lọc</value></data>
@@ -144,7 +144,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>Đối số</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>Thư mục làm việc</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>Chạy với quyền quản trị</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>Đích có thể là đường dẫn exe đầy đủ, tên, URL, giao thức như ms-settings: hoặc tài liệu.</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>Mục tiêu có thể là chương trình (đường dẫn đầy đủ hoặc chỉ tên), lối tắt, tập lệnh, thư mục, URL, tài liệu hoặc giao thức như ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Phím tắt</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Hành động</value></data>
@@ -323,7 +323,6 @@ Nhật ký: {1}</value></data>
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>Kết thúc ngày làm</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Trước khi ngủ</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Rời đi một lát</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>Chụp màn hình &amp; chú thích</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Đã ghi lại hết công việc hôm nay chưa?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Đến giờ đi ngủ!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Nhắc ngồi lâu · lặp</value></data>
@@ -378,4 +377,77 @@ Nhật ký: {1}</value></data>
   <data name="Config_ExportFail" xml:space="preserve"><value>Xuất thất bại: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (bản sao)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>Không thể tự khởi động lại. Vui lòng mở lại Clockwork thủ công. ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>Tắt tiếng micro</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>Bật tiếng micro</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>Đặt nội dung clipboard</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>Độ sáng màn hình</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>Tắt thông báo</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>Bật thông báo</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>Màn hình: chỉ màn hình PC</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>Màn hình: nhân bản</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>Màn hình: mở rộng</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>Màn hình: chỉ màn hình phụ</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} thất bại: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>Nội dung clipboard</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>Độ sáng (0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>Chỉ hoạt động với màn hình do hệ thống điều khiển (màn hình laptop); màn hình ngoài không được hỗ trợ.</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>Chỉ sau</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Định dạng H:mm, ví dụ 18:30; chỉ nhập giờ (ví dụ 18) cũng được; mặc định 18:00.</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>Không giới hạn</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>Điều kiện tiến trình</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>Tiến trình đang chạy</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>Tiến trình không chạy</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>Điều kiện nguồn điện</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Chỉ khi cắm sạc</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Chỉ khi dùng pin</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>Đường dẫn tồn tại</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>Nếu điền, bước chỉ chạy khi tệp / thư mục đó tồn tại; để trống = không giới hạn.</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> (chỉ sau {0})</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} đang chạy)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} không chạy)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (cắm sạc)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (dùng pin)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} tồn tại)</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>Khi không dùng máy</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>Khi mở khóa</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>Khi khóa máy</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>Khi thức khỏi chế độ ngủ</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>Khi cắm sạc</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>Khi rút sạc</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>Khi pin yếu</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>Số phút rảnh</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>Kích hoạt một lần sau bấy nhiêu phút không dùng bàn phím hay chuột; bộ đếm bắt đầu lại khi bạn quay lại.</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>Pin dưới (%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>Kích hoạt một lần khi dùng pin và mức pin tụt xuống dưới ngưỡng này; sẽ sẵn sàng lại sau khi sạc lên hoặc cắm điện.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>Chạy ngay khi sự kiện xảy ra. Các ô thứ bên dưới vẫn giới hạn những ngày có hiệu lực; thời gian ân hạn và bù lỡ không áp dụng cho sự kiện nên đã ẩn.</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>Mỗi lần xảy ra</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>Rảnh {0} phút</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>Pin &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>Chọn từ menu Start…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>Chọn ứng dụng từ menu Start</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>Tìm tên ứng dụng</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Chọn nhiều bằng Ctrl / Shift; mỗi mục được thêm vào danh sách như một bước, mặc định chưa tích chọn.</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>Không tìm thấy lối tắt chương trình nào trong menu Start.</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>Trở lại bình thường</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>Khởi động</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>Sao lưu</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 giây và chỉ khi bật khởi động cùng đăng nhập: chờ bấy nhiêu sau khi đăng nhập rồi mới chạy danh sách, để tránh lúc máy đang bận. Chạy lại thủ công không bị ảnh hưởng.</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>Đợi hệ thống sẵn sàng (màn hình nền / mạng)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Đi tiếp ngay khi cả hai sẵn sàng, chờ tối đa 90 giây; độ trễ cố định ở trên được cộng thêm. Bật khi danh sách chạy quá sớm so với phần mềm của bạn.</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>Mở</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>Điều khiển ứng dụng</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>Hệ thống &amp; âm thanh</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>Luồng</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Mở ứng dụng lúc đăng nhập với thứ tự và độ trễ thì Danh sách khởi động tiện hơn; còn điều kiện như “chỉ trong N phút sau khi khởi động”, “chỉ buổi sáng” thì đúng là chỗ này.</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Chưa có nhóm hành động nào — hãy tạo một nhóm từ mẫu ở thẻ “Nhóm hành động” trước, rồi quay lại đây tham chiếu.</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>Điều kiện &amp; lặp lại: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>luôn chạy</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>Nâng cao: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>kích hoạt một lần</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>nhắc lại mỗi {0} phút đến khi xác nhận</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>nhắc lại mỗi {0} phút đến khi xác nhận, muộn nhất đến {1}</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>chạy mỗi {0} phút đến hết ngày (xác nhận không dừng)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>chạy mỗi {0} phút đến {1} (xác nhận không dừng)</value></data>
 </root>

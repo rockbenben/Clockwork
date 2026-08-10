@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>定時タスク</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>アクショングループ</value></data>
   <data name="Tab_System" xml:space="preserve"><value>システム起動項目</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>起動時に上から順に実行 · 行をドラッグして並べ替え</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>時刻にポップアップ通知するか、アクショングループを静かに実行 · 定期実行 / 一回限りに対応 ·「はい」でプログラム実行 / URL を開く / アクショングループ実行が可能</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>一連の操作をグループ化し、トレイ / 起動リスト / 通知からワンタップで実行</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>ログイン時に一度だけ、上から順に実行 · 行はドラッグで並べ替え。時間やイベントで実行するなら → 定時タスク、いつでもワンタップなら → アクショングループ。</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>時刻・ログイン・ロック解除や電源などのイベントで、リマインダーを出すかグループをサイレント実行。ログイン時にアプリを開くだけなら → 起動リスト、手動ワンタップなら → アクショングループ。</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>一連の動作をグループにまとめ、ホットキー / トレイからいつでも実行。起動リストや定時タスクからも参照できます。ログイン時に一度だけなら、直接起動リストに書くほうが簡単です。</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
   <data name="System_Footer" xml:space="preserve"><value>チェックの切り替えは即時反映（削除ではなく無効化、復元可）。「要管理者」の項目は管理者権限が必要。システム / ポリシー / 一回限りの読み取り専用項目は既定で非表示。</value></data>
   <data name="System_Filter" xml:space="preserve"><value>フィルター</value></data>
@@ -146,7 +146,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>引数</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>作業ディレクトリ</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>管理者として実行</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>ターゲットは exe のフルパス / 実行名 / URL / ms-settings: などのプロトコル / ドキュメントが指定可能。</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>対象にはプログラム（フルパスまたは名前のみ）/ ショートカット / スクリプト / フォルダー / URL / ドキュメント / ms-settings: などのプロトコルを指定できます。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>ショートカット</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。フォーカス中のウィンドウへ送信されます。対象を最前面にしてください。 Win+D / Win+6 など Windows が占有する組み合わせはキャプチャできません。ダブルクリックで手入力できます。</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>アクション</value></data>
@@ -325,7 +325,6 @@
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>終業・退勤</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>就寝前</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>少し離席</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>スクリーンショット注釈</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今日のタスクは全部記録しましたか？</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>寝る時間です！</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>座りすぎ通知 · 繰り返し</value></data>
@@ -379,4 +378,77 @@
   <data name="Config_ExportFail" xml:space="preserve"><value>エクスポートに失敗しました：{0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value>（コピー）</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>自動的に再起動できませんでした。Clockwork を手動で開き直してください。（{0}）</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>マイクをミュート</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>マイクのミュート解除</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>クリップボードに文字を設定</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>画面の明るさ</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>通知をオフにする</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>通知をオンにする</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>ディスプレイ：PC 画面のみ</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>ディスプレイ：複製</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>ディスプレイ：拡張</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>ディスプレイ：セカンド スクリーンのみ</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} に失敗しました：{1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}：{1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>クリップボードの文字</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>明るさ(0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>システムが制御するディスプレイ（ノート PC の内蔵画面など）のみ有効。外付けモニターには効きません。</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>のみ</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value>以降に実行</value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>形式は 時:分（例 18:30）。時だけ（例 18）でも可、既定は 18:00。</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>制限なし</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>プロセス条件</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>そのプロセスが実行中</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>そのプロセスが実行中でない</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>電源条件</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>電源接続中のみ</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>バッテリー駆動中のみ</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>パスが存在</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>入力すると、そのファイル / フォルダーが存在するときだけ実行します。空欄なら制限なし。</value></data>
+  <data name="Sum_After" xml:space="preserve"><value>（{0}以降のみ）</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value>（{0} 実行中）</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value>（{0} 未実行）</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value>（電源接続時）</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value>（バッテリー駆動時）</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value>（{0} が存在）</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>操作がないとき</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>ロック解除時</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>ロック時</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>スリープ復帰時</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>電源に接続したとき</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>電源を外したとき</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>バッテリー残量が少ないとき</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>無操作の分数</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>キーボードもマウスも触らない状態がこの分数続くと 1 回だけ実行します。操作を再開すると計測はリセットされます。</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>バッテリー残量 (%) 未満</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>バッテリー駆動中に残量がこの値を下回ると 1 回だけ実行します。充電するか電源に接続すると再び有効になります。</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>イベントが起きた瞬間に実行します。下の曜日で有効な日を絞れます。猶予 / 取りこぼし補完はイベントには意味がないため非表示です。</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>発生のたび</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>無操作 {0} 分</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>バッテリー &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>スタート メニューから選ぶ…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>スタート メニューからアプリを選択</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>アプリ名を検索</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Ctrl / Shift で複数選択できます。選んだ分だけ手順として追加され、既定ではチェックが外れています。</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>スタート メニューにアプリのショートカットが見つかりませんでした。</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>通常に戻す</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>起動</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>設定のバックアップ</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0〜600 秒。「ログオン時に起動」がオンのときだけ有効です。ログオン後この時間だけ待ってからリストを実行し、ログオン直後の混雑を避けます。手動の再実行には影響しません。</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>システムの準備が整うまで待つ（デスクトップ / ネットワーク）</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>両方そろい次第すぐ進みます（最大 90 秒）。そのうえで上の固定待機時間が加算されます。起動が早すぎてアプリが立ち上がらないときにオンにしてください。</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>開く</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>アプリを操作</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>システムとサウンド</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>フロー</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>ログイン時に順序や遅延つきでアプリを開くなら起動リストのほうが向いています。「起動後 N 分以内のみ」「午前のみ」のような条件付きなら、ここが適切です。</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>アクショングループがまだありません。先に「アクショングループ」タブでテンプレートから作成し、ここで参照してください。</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>条件と繰り返し：{0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>常に実行</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>詳細：{0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>一度だけ実行</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>確認するまで {0} 分ごとに再通知</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>確認するまで {0} 分ごとに再通知（{1} まで）</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>{0} 分ごとに実行、当日末まで（確認しても止まりません）</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>{0} 分ごとに実行、{1} まで（確認しても止まりません）</value></data>
 </root>

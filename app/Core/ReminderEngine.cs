@@ -82,7 +82,10 @@ public static class ReminderEngine
             // 不在开机时突然弹一条几天前的。「错过必补」例外——挂着的稍后（含无人应答的自动稍后）
             // 就是一次没送达的投递，睡眠/关机跨了天不该把它无声吞掉；该开关正是用户对「错过怎么办」
             // 的表态，补发一次。（App 启动时的陈旧稍后清理对这类提醒同样放行，两处口径一致。）
-            if (snooze.Date < now.Date) { st.SnoozeUntil = null; if (r.CatchUpIfMissed) return new("fire", null); }
+            // 事件触发除外：编辑器为了往返保真会把隐藏的「错过必补」原样存回（把时间型改成事件型时它还在），
+            // 而事件的语义是「没发生就是没发生」——凭一个残留勾选把昨晚的稍后在今早（比如满电插电时）诈尸成
+            // 「电量偏低」提醒，是在补一个从未发生的事件。
+            if (snooze.Date < now.Date) { st.SnoozeUntil = null; if (r.CatchUpIfMissed && !ReminderEvent.IsEvent(r.Trigger)) return new("fire", null); }
             else if (now >= snooze) { st.SnoozeUntil = null; return new("fire", null); }
             else return new("none", null);
         }
@@ -125,6 +128,16 @@ public static class ReminderEngine
             }
             return new("none", null);
         }
+
+        // 事件触发（空闲/解锁/锁屏/唤醒/插拔电源/低电量）到这里为止：首发不由计时器判定，而是在事件发生的
+        // 当下由 App 经 ReminderEvent.ShouldFire 直接触发。再往下会被当成 time 型——r.Time 默认 "09:00"，
+        // 于是一条「解锁时」提醒每天早上九点还会自己弹一次。
+        //
+        // 位置是刻意选在 PendingFireAt 之后、而不是方法开头：上面四块（稍后 / 催促 / 循环 / 已武装的延迟）
+        // 对事件型同样成立，它们是「已经响过 / 已经排上」之后的续接。挡在开头的话，事件型任务上点一次
+        // 「稍后 10 分钟」就等于把它扔了；挡在 pending 之前的话，「解锁后延迟 5 分钟」这类武装好的触发
+        // 永远不会到点——App.FireEventNow 对带延迟的事件正是设 PendingFireAt、交给计时器来引爆的。
+        if (ReminderEvent.IsEvent(r.Trigger)) return new("none", null);
 
         // 周期过滤。走到这里 pending/repeat/snooze 都已在上面处理并返回，无需再清。
         if (!IsRecurrenceDueToday(r, now)) return new("none", null);
@@ -221,8 +234,10 @@ public static class ReminderEngine
     // 「仅一次」触发完成后是否应自动取消勾选：已实际弹过（LastFiredDate 非空）且催促/稍后链都已结束。
     // 立刻停用是错的——Decide 开头就 if(!Enabled) return none，会把已武装的催促链和用户刚点的「稍后」一起掐死。
     // 引擎不改 Reminder（保持纯函数边界）：判定在此，停用动作（Enabled=false + 存盘 + 刷新列表）归 App。
+    // 事件触发不参与：编辑器为往返保真会把隐藏的周期原样存回，事件提醒身上残留的 "once" 只是历史配置，
+    // 若按它把「解锁时」提醒响一次就自动取消勾选，等于替用户悄悄关掉一条还想要的提醒。
     public static bool ShouldDisableAfterOnce(Reminder r, ReminderState st)
-        => r.RecurType == "once" && r.Enabled && !string.IsNullOrEmpty(st.LastFiredDate)
+        => r.RecurType == "once" && !ReminderEvent.IsEvent(r.Trigger) && r.Enabled && !string.IsNullOrEmpty(st.LastFiredDate)
            && st.NextRepeatAt == null && st.SnoozeUntil == null && st.NextIntervalAt == null;
 }
 

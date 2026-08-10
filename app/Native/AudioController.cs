@@ -34,15 +34,21 @@ internal class MMDeviceEnumerator { }
 
 public static class AudioController
 {
+    // dataFlow：0=eRender（扬声器/耳机，默认）、1=eCapture（麦克风）。麦克风走的是同一套 Core Audio 接口，
+    // 只有这一个参数不同——「一键静音麦克风」因此不需要任何新的 COM 管线。
+    public const int Render = 0, Capture = 1;
+
     // 无可用输出设备（RDP 未重定向 / 无声卡 / 输出全禁用）时 GetDefaultAudioEndpoint 返回 E_NOTFOUND、dev 为 null——
     // 必须查 HRESULT 并判空，否则解引用 null 抛 NRE、音量步骤崩了还会中止整个动作组。
-    // 返回默认输出端点；中间 COM 对象（枚举器、设备）在此就地释放，只把端点交出去。
-    private static IAudioEndpointVolume? Endpoint()
+    // 返回默认端点；中间 COM 对象（枚举器、设备）在此就地释放，只把端点交出去。
+    private static IAudioEndpointVolume? Endpoint(int dataFlow = Render)
     {
         var en = (IMMDeviceEnumerator)new MMDeviceEnumerator();
         try
         {
-            if (en.GetDefaultAudioEndpoint(0, 1, out IMMDevice dev) < 0 || dev == null) return null;   // eRender, eMultimedia
+            // role=1(eMultimedia)：麦克风端点用 eCommunications(2) 也能拿到，但会话里被会议软件切换过默认设备时
+            // 两者可能指向不同硬件；统一取 eMultimedia，和音量那边同一口径，用户看到的「默认设备」就是这一个。
+            if (en.GetDefaultAudioEndpoint(dataFlow, 1, out IMMDevice dev) < 0 || dev == null) return null;
             try
             {
                 Guid iid = typeof(IAudioEndpointVolume).GUID;
@@ -68,9 +74,9 @@ public static class AudioController
         finally { Marshal.FinalReleaseComObject(ep); }
     }
 
-    public static void SetMute(bool mute)
+    public static void SetMute(bool mute, int dataFlow = Render)
     {
-        var ep = Endpoint();
+        var ep = Endpoint(dataFlow);
         if (ep == null) return;
         try
         {
@@ -91,4 +97,8 @@ public static class AudioController
 
     // 静音开关。
     public static void Mute(bool mute) => SetMute(mute);
+
+    // 麦克风静音开关。会议软件自带的静音只管它自己那一路，这个关的是系统默认录音设备本身——
+    // 「所有软件都别想收到我的声音」是它和应用内静音的区别。没有麦克风时静默跳过（同 Endpoint 的判空）。
+    public static void MuteMic(bool mute) => SetMute(mute, Capture);
 }

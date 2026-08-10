@@ -12,9 +12,9 @@
   <data name="Tab_Group" xml:space="preserve"><value>动作组</value></data>
   <data name="Tab_System" xml:space="preserve"><value>系统启动项</value></data>
 
-  <data name="Launch_Hint" xml:space="preserve"><value>开机时从上到下依次执行 · 拖动行可调整顺序</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>到点弹窗提醒或静默运行动作组 · 支持循环运行 / 仅一次 · 点「是」后可运行程序 / 开网页 / 跑动作组</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>把一串动作打包成组，托盘 / 开机清单 / 提醒里一键触发</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>只在登录时跑一次，从上到下依次执行 · 拖动行可调顺序。要按时间 / 事件触发 → 「定时任务」；要随时一键触发 → 「动作组」。</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>到点、登录或解锁 / 插拔电源等事件时，弹提醒或静默跑动作组。只想开机开软件 → 「我的启动清单」；想随手一键触发 → 「动作组」。</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>把一串动作打包成组，热键 / 托盘随时一键触发，也可被启动清单和定时任务引用。只在开机跑一次的，直接写进「我的启动清单」更省事。</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
   <data name="System_Footer" xml:space="preserve"><value>勾选 / 取消即时生效（非删除，可恢复）；标「需管理员」的项需管理员身份。系统 / 策略 / 一次性等只读项默认隐藏。</value></data>
   <data name="System_Filter" xml:space="preserve"><value>过滤</value></data>
@@ -148,7 +148,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>参数</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>工作目录</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>以管理员运行</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>目标可填 exe 全路径 / 裸程序名 / 网址 / ms-settings: 等协议 / 文档。</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>目标可填：程序（全路径或裸名）/ 快捷方式 / 脚本 / 文件夹 / 网址 / 文档 / ms-settings: 等协议。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>组合键</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。发给当前焦点窗口，请先确保目标在最前。 Win+D、Win+6 等被 Windows 占用的组合捕捉不到，双击本框可手动输入。</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>动作</value></data>
@@ -327,7 +327,6 @@
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>收工·下班</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>睡前</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>离开一下</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>截图标注</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今天的任务都记录好了吗？</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>该睡觉了！</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>久坐提醒 · 循环</value></data>
@@ -381,4 +380,77 @@
   <data name="Config_ExportFail" xml:space="preserve"><value>导出失败：{0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value>（副本）</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>无法自动重启，请手动重新打开 Clockwork。（{0}）</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>麦克风静音</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>麦克风取消静音</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>设置剪贴板文本</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>屏幕亮度</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>关闭通知（免打扰）</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>打开通知</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>显示器：仅电脑屏幕</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>显示器：复制</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>显示器：扩展</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>显示器：仅第二屏幕</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} 失败：{1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}：{1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>剪贴板文本</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>亮度(0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>仅笔记本内屏等系统可调的显示器有效，外接显示器无效</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>仅</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value>后执行</value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>格式 时:分，如 18:30；只填小时（如 18）也可，默认 18:00</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>不限</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>进程条件</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>该进程在运行</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>该进程没运行</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>电源条件</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>仅接电源时</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>仅用电池时</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>路径存在</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>填了则仅当该文件 / 文件夹存在时才执行；留空 = 不限</value></data>
+  <data name="Sum_After" xml:space="preserve"><value>（仅{0}后）</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value>（{0} 在运行）</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value>（{0} 没运行）</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value>（接电源）</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value>（用电池）</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value>（存在 {0}）</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>空闲时</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>解锁时</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>锁屏时</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>睡眠唤醒时</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>接上电源时</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>拔掉电源时</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>电量偏低时</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>空闲分钟</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>连续没有键鼠操作满这么多分钟触发一次；人回来后重新计时</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>电量低于(%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>用电池且跌破这个百分比时触发一次；充回去或插上电源才会再次触发</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>事件发生时立即触发。可用下面的星期限制生效日；「宽限 / 错过必补」对事件无意义，已隐藏。</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>每次发生</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>空闲 {0} 分钟</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>电量 &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>从开始菜单选择…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>从开始菜单选择程序</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>搜索程序名</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>可多选（按住 Ctrl / Shift）；确定后逐条加入清单，默认不勾选</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>没有在开始菜单里找到任何程序快捷方式。</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>恢复常态</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>开机与启动</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>配置备份</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0–600 秒，仅开机自启时生效：登录后先等这么久再跑清单，避开登录风暴。手动重跑不受影响。</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>等系统就绪再跑（桌面 / 网络）</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>就绪即走，最多等 90 秒，然后再叠加上面的固定延迟。开机太早、软件起不来时打开它。</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>打开</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>控制程序</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>系统与声音</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>流程</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>开机开软件、要顺序和延迟 → 「我的启动清单」更顺手；要「仅开机 N 分钟内」「仅上午」这类门控 → 留在这里是对的。</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>还没有动作组：先到「动作组」页从模板建一个，再回这里引用。</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>条件与重复：{0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>总是执行</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>进阶：{0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>到点触发一次</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>没确认就每 {0} 分钟再提醒</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>没确认就每 {0} 分钟再提醒，最多到 {1}</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>每 {0} 分钟跑一轮直到当天结束（确认也不停）</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>每 {0} 分钟跑一轮直到 {1}（确认也不停）</value></data>
 </root>

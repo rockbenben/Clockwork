@@ -66,6 +66,8 @@ public static class StepRunner
                     case "unmute": AudioController.Mute(false); return ActionResult.Empty;
                     // 设为音量=想听到声音：系统若静音，只改百分比等于没调 → 先解静音再设。
                     case "set": AudioController.Mute(false); AudioController.SetVolumePercent(s.Level); return ActionResult.Empty;
+                    case "micMute": AudioController.MuteMic(true); return ActionResult.Empty;
+                    case "micUnmute": AudioController.MuteMic(false); return ActionResult.Empty;
                     default: return ActionResult.Warn(Strings.Lf("Warn_UnknownVolume", s.Action));
                 }
             case "window":
@@ -83,7 +85,7 @@ public static class StepRunner
                         return ActionResult.Warn(Strings.Lf("Warn_WindowNotFound", s.Process, s.Action));
                     return ActionResult.Empty;
                 }
-            case "system": SystemCommands.Invoke(s.Command, confirmDestructive); return ActionResult.Empty;
+            case "system": SystemCommands.Invoke(s.Command, confirmDestructive, s.Text, s.Level); return ActionResult.Empty;
             case "text": return WindowManager.SendText(s.Text, s.Process, cancel);
             case "delay": return ActionResult.Empty;   // 纯延时：动作由步尾统一 delayMs 完成
             case "message": return ActionResult.Empty;  // 消息在启动/非交互路径静默跳过（交互「运行这一步」由 App.RunStepAsync 弹窗）；不报未知类型

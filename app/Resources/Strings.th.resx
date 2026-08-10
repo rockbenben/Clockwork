@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>งานตามกำหนดเวลา</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
   <data name="Tab_System" xml:space="preserve"><value>การเริ่มต้นของระบบ</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>ทำงานจากบนลงล่างเมื่อเริ่มระบบ · ลากแถวเพื่อจัดลำดับใหม่</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>แสดงป๊อปอัปเตือนหรือรันกลุ่มการทำงานแบบเงียบตามกำหนดเวลา · รองรับการรันซ้ำและรันครั้งเดียว · เมื่อกด «ใช่» สามารถเรียกโปรแกรม / เปิด URL / รันกลุ่มการทำงานได้</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่มแล้วสั่งด้วยแตะเดียวจากถาด / รายการเริ่มต้น / การเตือน</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>ทำงานครั้งเดียวตอนเข้าสู่ระบบ จากบนลงล่าง · ลากแถวเพื่อจัดลำดับ อยากให้ทำตามเวลา / เหตุการณ์ → งานตามกำหนดเวลา อยากสั่งเองทุกเมื่อ → กลุ่มการทำงาน</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>ทำงานตามเวลา ตอนเข้าสู่ระบบ หรือเหตุการณ์อย่างปลดล็อก / เสียบไฟ — เด้งเตือนหรือรันกลุ่มแบบเงียบ แค่อยากเปิดแอปตอนเข้าระบบ → รายการเริ่มต้น อยากสั่งเอง → กลุ่มการทำงาน</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่ม สั่งได้ทุกเมื่อด้วยฮ็อตคีย์ / เทรย์ รายการเริ่มต้นและงานตามกำหนดเวลาก็อ้างอิงได้ ถ้าจะรันแค่ตอนเปิดเครื่อง เขียนลงรายการเริ่มต้นตรง ๆ ง่ายกว่า</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(ว่าง)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>ติ๊ก/เอาออกมีผลทันที (ปิดใช้งาน ไม่ใช่ลบ ย้อนกลับได้) รายการ «ต้องใช้แอดมิน» ต้องการสิทธิ์ผู้ดูแล รายการระบบ / นโยบาย / ครั้งเดียวแบบอ่านอย่างเดียวถูกซ่อนโดยค่าเริ่มต้น</value></data>
   <data name="System_Filter" xml:space="preserve"><value>ตัวกรอง</value></data>
@@ -144,7 +144,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>อาร์กิวเมนต์</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>โฟลเดอร์ทำงาน</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>เรียกใช้ในฐานะผู้ดูแล</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>เป้าหมายเป็นพาธ exe เต็ม ชื่อ URL โปรโตคอลอย่าง ms-settings: หรือเอกสารก็ได้</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>เป้าหมายใส่ได้ทั้งโปรแกรม (พาธเต็มหรือแค่ชื่อ) ทางลัด สคริปต์ โฟลเดอร์ URL เอกสาร หรือโปรโตคอลอย่าง ms-settings:</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>ทางลัด</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>การกระทำ</value></data>
@@ -323,7 +323,6 @@
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>เลิกงาน</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>ก่อนนอน</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>ออกไปสักครู่</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>จับภาพหน้าจอและใส่คำอธิบาย</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>บันทึกงานของวันนี้ครบหรือยัง?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>ได้เวลานอนแล้ว!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>เตือนนั่งนาน · วนซ้ำ</value></data>
@@ -378,4 +377,77 @@
   <data name="Config_ExportFail" xml:space="preserve"><value>ส่งออกล้มเหลว: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (สำเนา)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>ไม่สามารถรีสตาร์ทอัตโนมัติได้ โปรดเปิด Clockwork ใหม่ด้วยตนเอง ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>ปิดเสียงไมโครโฟน</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>เปิดเสียงไมโครโฟน</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>ตั้งข้อความในคลิปบอร์ด</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>ความสว่างหน้าจอ</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>ปิดการแจ้งเตือน</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>เปิดการแจ้งเตือน</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>จอแสดงผล: หน้าจอพีซีเท่านั้น</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>จอแสดงผล: ทำสำเนา</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>จอแสดงผล: ขยาย</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>จอแสดงผล: หน้าจอที่สองเท่านั้น</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} ล้มเหลว: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>ข้อความคลิปบอร์ด</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>ความสว่าง (0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>ใช้ได้เฉพาะจอที่ระบบควบคุม (จอในตัวของโน้ตบุ๊ก) จอภายนอกไม่รองรับ</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>เฉพาะหลัง</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>รูปแบบ ชม:นาที เช่น 18:30 ใส่แค่ชั่วโมง (เช่น 18) ก็ได้ ค่าเริ่มต้น 18:00</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>ไม่จำกัด</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>เงื่อนไขโปรเซส</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>โปรเซสนั้นกำลังทำงาน</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>โปรเซสนั้นไม่ได้ทำงาน</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>เงื่อนไขแหล่งจ่ายไฟ</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>เฉพาะเมื่อเสียบไฟ</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>เฉพาะเมื่อใช้แบตเตอรี่</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>มีพาธอยู่</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>ถ้ากรอกไว้ ขั้นตอนจะทำงานเฉพาะเมื่อมีไฟล์ / โฟลเดอร์นั้นอยู่ เว้นว่าง = ไม่จำกัด</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> (เฉพาะหลัง {0})</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} กำลังทำงาน)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} ไม่ได้ทำงาน)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (เสียบไฟ)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (ใช้แบตเตอรี่)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> (มี {0})</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>เมื่อไม่มีการใช้งาน</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>เมื่อปลดล็อก</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>เมื่อล็อกหน้าจอ</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>เมื่อตื่นจากสลีป</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>เมื่อเสียบไฟ</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>เมื่อถอดสายไฟ</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>เมื่อแบตเตอรี่ต่ำ</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>นาทีที่ว่าง</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>ทำงานหนึ่งครั้งเมื่อไม่มีการใช้คีย์บอร์ดหรือเมาส์นานเท่านี้นาที และจะเริ่มนับใหม่เมื่อคุณกลับมา</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>แบตเตอรี่ต่ำกว่า (%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>ทำงานหนึ่งครั้งเมื่อใช้แบตเตอรี่และระดับลดต่ำกว่านี้ จะพร้อมทำงานอีกครั้งเมื่อชาร์จกลับขึ้นมาหรือเสียบไฟ</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>ทำงานทันทีที่เหตุการณ์เกิดขึ้น ช่องวันด้านล่างยังใช้จำกัดวันที่มีผลได้ ส่วนช่วงผ่อนผันและการชดเชยที่พลาดไม่เกี่ยวกับเหตุการณ์จึงถูกซ่อนไว้</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>ทุกครั้งที่เกิด</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>ว่าง {0} นาที</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>แบตเตอรี่ &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>เลือกจากเมนู Start…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>เลือกแอปจากเมนู Start</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>ค้นหาชื่อแอป</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>เลือกหลายรายการด้วย Ctrl / Shift แต่ละรายการจะถูกเพิ่มเป็นขั้นตอนในรายการ โดยยังไม่ติ๊กไว้</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>ไม่พบทางลัดของโปรแกรมในเมนู Start</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>กลับสู่ปกติ</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>การเริ่มต้น</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>สำรองข้อมูล</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 วินาที และมีผลเฉพาะเมื่อเปิด "เริ่มเมื่อเข้าสู่ระบบ": จะรอเท่านี้หลังเข้าสู่ระบบก่อนรันรายการ เพื่อเลี่ยงช่วงที่เครื่องกำลังยุ่ง การรันซ้ำด้วยตนเองไม่ได้รับผลกระทบ</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>รอจนระบบพร้อม (เดสก์ท็อป / เครือข่าย)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>ไปต่อทันทีที่ทั้งสองพร้อม รอไม่เกิน 90 วินาที แล้วจึงบวกหน่วงเวลาคงที่ด้านบนเพิ่ม เปิดไว้เมื่อรายการทำงานเร็วเกินไปจนโปรแกรมยังไม่ขึ้น</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>ควบคุมโปรแกรม</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>ระบบและเสียง</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>โฟลว์</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>ถ้าจะเปิดแอปตอนเข้าระบบพร้อมลำดับและหน่วงเวลา รายการเริ่มต้นสะดวกกว่า แต่เงื่อนไขอย่าง “เฉพาะภายใน N นาทีหลังเปิดเครื่อง” หรือ “เฉพาะตอนเช้า” คือหน้าที่ของตรงนี้</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>ยังไม่มีกลุ่มการทำงาน — สร้างจากเทมเพลตในแท็บ “กลุ่มการทำงาน” ก่อน แล้วค่อยกลับมาอ้างอิงที่นี่</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>เงื่อนไขและการทำซ้ำ: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>ทำงานเสมอ</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>ขั้นสูง: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>ทำงานครั้งเดียว</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>เตือนซ้ำทุก {0} นาทีจนกว่าจะยืนยัน</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>เตือนซ้ำทุก {0} นาทีจนกว่าจะยืนยัน อย่างช้าสุดถึง {1}</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>รันทุก {0} นาทีจนหมดวัน (ยืนยันแล้วก็ไม่หยุด)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>รันทุก {0} นาทีจนถึง {1} (ยืนยันแล้วก็ไม่หยุด)</value></data>
 </root>

@@ -10,9 +10,9 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>예약 작업</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>동작 그룹</value></data>
   <data name="Tab_System" xml:space="preserve"><value>시스템 시작 프로그램</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>시작할 때 위에서 아래로 순서대로 실행 · 행을 끌어 순서 변경</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>정시에 팝업을 띄우거나 동작 그룹을 조용히 실행 · 반복 실행 / 일회성 지원 ·「예」를 누르면 프로그램 실행 / URL 열기 / 동작 그룹 실행 가능</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>여러 동작을 그룹으로 묶어 트레이 / 시작 목록 / 알림에서 원터치로 실행</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>로그인할 때 한 번, 위에서 아래로 실행 · 행을 끌어 순서 변경. 시간·이벤트로 실행하려면 → 예약 작업, 언제든 한 번에 실행하려면 → 동작 그룹.</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>정해진 시각, 로그인, 잠금 해제·전원 등 이벤트에 알림을 띄우거나 그룹을 조용히 실행합니다. 로그인 때 앱만 열려면 → 시작 목록, 원할 때 한 번에 실행하려면 → 동작 그룹.</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>여러 동작을 그룹으로 묶어 단축키 / 트레이에서 언제든 실행하세요. 시작 목록과 예약 작업에서도 참조할 수 있습니다. 로그인 때 한 번만 실행할 거라면 시작 목록에 바로 적는 편이 간단합니다.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(비어 있음)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>체크/해제는 즉시 적용(삭제가 아닌 비활성화, 복원 가능). 「관리자 필요」 항목은 관리자 권한이 필요합니다. 시스템 / 정책 / 일회성 읽기 전용 항목은 기본 숨김입니다.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>필터</value></data>
@@ -144,7 +144,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>인수</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>작업 디렉터리</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>관리자 권한으로 실행</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>대상은 exe 전체 경로 / 실행 이름 / URL / ms-settings: 등 프로토콜 / 문서를 지정할 수 있습니다.</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>대상에는 프로그램(전체 경로 또는 이름만), 바로 가기, 스크립트, 폴더, URL, 문서, ms-settings: 같은 프로토콜을 넣을 수 있습니다.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>단축키</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>예: Win+D / Alt+K / Ctrl+Enter / F5. 포커스된 창으로 전송되므로 대상을 먼저 앞으로 가져오세요. Win+D, Win+6 처럼 Windows가 선점한 조합은 캡처되지 않습니다. 상자를 두 번 클릭하면 직접 입력할 수 있습니다.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>동작</value></data>
@@ -323,7 +323,6 @@
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>마무리·퇴근</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>취침 전</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>잠깐 자리 비움</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>스크린샷 주석</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>오늘 할 일을 모두 기록했나요?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>잘 시간입니다!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>오래 앉기 알림 · 반복</value></data>
@@ -378,4 +377,77 @@
   <data name="Config_ExportFail" xml:space="preserve"><value>내보내기 실패: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (사본)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>자동으로 다시 시작할 수 없습니다. Clockwork를 수동으로 다시 여세요. ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>마이크 음소거</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>마이크 음소거 해제</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>클립보드 텍스트 설정</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>화면 밝기</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>알림 끄기</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>알림 켜기</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>디스플레이: PC 화면만</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>디스플레이: 복제</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>디스플레이: 확장</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>디스플레이: 두 번째 화면만</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} 실패: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>클립보드 텍스트</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>밝기(0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>시스템이 제어하는 디스플레이(노트북 내장 화면 등)에서만 동작합니다. 외장 모니터는 지원되지 않습니다.</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>단</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value>이후 실행</value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>형식 시:분, 예: 18:30. 시만(예: 18) 입력해도 됩니다. 기본값 18:00.</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>제한 없음</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>프로세스 조건</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>해당 프로세스 실행 중</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>해당 프로세스 실행 중 아님</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>전원 조건</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>전원 연결 시에만</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>배터리 사용 시에만</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>경로 존재</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>입력하면 해당 파일 / 폴더가 있을 때만 실행합니다. 비워 두면 제한 없음.</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> ({0} 이후만)</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} 실행 중)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} 실행 중 아님)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (전원 연결)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (배터리)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} 존재)</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>유휴 상태일 때</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>잠금 해제 시</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>화면 잠금 시</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>절전 모드에서 깨어날 때</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>전원을 연결할 때</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>전원을 분리할 때</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>배터리 부족 시</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>유휴 분</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>키보드·마우스 조작이 이만큼의 시간 동안 없으면 한 번 실행합니다. 다시 조작하면 시간이 초기화됩니다.</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>배터리 미만(%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>배터리로 동작 중 잔량이 이 값 아래로 떨어지면 한 번 실행합니다. 다시 충전하거나 전원을 연결하면 재무장됩니다.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>이벤트가 발생하는 즉시 실행합니다. 아래 요일로 적용 날짜를 제한할 수 있습니다. 유예 / 놓친 항목 보충은 이벤트에 해당하지 않아 숨겨집니다.</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>발생할 때마다</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>유휴 {0}분</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>배터리 &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>시작 메뉴에서 선택…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>시작 메뉴에서 앱 선택</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>앱 이름 검색</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Ctrl / Shift 로 여러 개를 고를 수 있습니다. 고른 만큼 단계로 추가되며 기본적으로 체크 해제 상태입니다.</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>시작 메뉴에서 프로그램 바로 가기를 찾지 못했습니다.</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>평소대로 되돌리기</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>시작</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>설정 백업</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0~600초이며 '로그온 시 시작'이 켜져 있을 때만 적용됩니다. 로그온 후 이만큼 기다렸다가 목록을 실행해 로그온 직후의 혼잡을 피합니다. 수동 재실행에는 영향이 없습니다.</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>시스템이 준비될 때까지 대기(바탕 화면 / 네트워크)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>둘 다 준비되면 바로 진행하며 최대 90초까지 기다립니다. 그 뒤에 위의 고정 지연이 더해집니다. 너무 일찍 실행돼 프로그램이 뜨지 않을 때 켜세요.</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>열기</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>앱 제어</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>시스템·소리</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>흐름</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>순서·지연을 두고 로그인 때 앱을 열려면 시작 목록이 더 편합니다. “부팅 후 N분 이내만” “오전만” 같은 조건이 필요하면 여기가 맞습니다.</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>아직 동작 그룹이 없습니다. 먼저 '동작 그룹' 탭에서 템플릿으로 하나 만든 뒤 여기서 참조하세요.</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>조건·반복: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>항상 실행</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>고급: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>한 번만 실행</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>확인할 때까지 {0}분마다 다시 알림</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>확인할 때까지 {0}분마다 다시 알림({1}까지)</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>{0}분마다 실행, 그날이 끝날 때까지(확인해도 멈추지 않음)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>{0}분마다 실행, {1}까지(확인해도 멈추지 않음)</value></data>
 </root>

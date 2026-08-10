@@ -12,9 +12,9 @@
   <data name="Tab_Group" xml:space="preserve"><value>Action Groups</value></data>
   <data name="Tab_System" xml:space="preserve"><value>System Startup</value></data>
 
-  <data name="Launch_Hint" xml:space="preserve"><value>Runs top-to-bottom at startup · drag a row to reorder</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Pop a reminder or silently run an action group on schedule · supports interval runs and run-once · "Yes" can launch apps, open URLs, or run action groups</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>Bundle a series of actions into a group, triggered from the tray / startup list / reminders</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Runs once at login, top to bottom · drag rows to reorder. On a schedule or an event → Scheduled tasks; on demand with one tap → Action Groups.</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Fires at a time, at login, or on events like unlock / power — a reminder, or a group run silently. Just opening apps at login → Startup List; on demand with one tap → Action Groups.</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Bundle a routine and fire it any time via hotkey / tray; the Startup List and Scheduled tasks can reference it too. Something that only runs at login is simpler as plain Startup List steps.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(empty)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Checking / unchecking takes effect immediately (disable, not delete; reversible). Items marked "needs admin" require administrator rights. System / policy / one-time read-only items are hidden by default.</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
@@ -148,7 +148,7 @@
   <data name="Ed_Args" xml:space="preserve"><value>Arguments</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>Working dir</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>Run as administrator</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>Target can be a full exe path, bare name, URL, ms-settings: protocol, or a document.</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>Target can be a program (full path or bare name), shortcut, script, folder, URL, document, or a protocol like ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Hotkey</value></data>
   <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first. Combos Windows itself owns (Win+D, Win+6…) can't be captured — double-click this box to type one.</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Action</value></data>
@@ -327,7 +327,6 @@ Log: {1}</value></data>
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>Wrap up · End of day</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Bedtime</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Stepping away</value></data>
-  <data name="Tpl_Screenshot" xml:space="preserve"><value>Screenshot &amp; annotate</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Did you log all of today's tasks?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Time for bed!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Sitting too long · looped</value></data>
@@ -381,4 +380,77 @@ Log: {1}</value></data>
   <data name="Config_ExportFail" xml:space="preserve"><value>Export failed: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (copy)</value></data>
   <data name="Relaunch_Fail" xml:space="preserve"><value>Couldn't restart automatically. Please reopen Clockwork manually. ({0})</value></data>
+  <data name="Vol_micMute" xml:space="preserve"><value>Mute microphone</value></data>
+  <data name="Vol_micUnmute" xml:space="preserve"><value>Unmute microphone</value></data>
+  <data name="Sys_setClipboard" xml:space="preserve"><value>Set clipboard text</value></data>
+  <data name="Sys_brightness" xml:space="preserve"><value>Screen brightness</value></data>
+  <data name="Sys_notificationsOff" xml:space="preserve"><value>Turn notifications off</value></data>
+  <data name="Sys_notificationsOn" xml:space="preserve"><value>Turn notifications on</value></data>
+  <data name="Sys_displayInternal" xml:space="preserve"><value>Display: PC screen only</value></data>
+  <data name="Sys_displayClone" xml:space="preserve"><value>Display: Duplicate</value></data>
+  <data name="Sys_displayExtend" xml:space="preserve"><value>Display: Extend</value></data>
+  <data name="Sys_displayExternal" xml:space="preserve"><value>Display: Second screen only</value></data>
+  <data name="Err_SysCommand" xml:space="preserve"><value>{0} failed: {1}</value></data>
+  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Ed_ClipText" xml:space="preserve"><value>Clipboard text</value></data>
+  <data name="Ed_Brightness" xml:space="preserve"><value>Brightness (0-100)</value></data>
+  <data name="Ed_BrightnessHint" xml:space="preserve"><value>Only works on system-controlled displays (laptop panels); external monitors are not supported.</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>Only after</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Format H:mm, e.g. 18:30; entering just the hour (e.g. 18) also works; default 18:00.</value></data>
+  <data name="Ed_Cond_Any" xml:space="preserve"><value>No limit</value></data>
+  <data name="Ed_IfProcess" xml:space="preserve"><value>Process condition</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>That process is running</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>That process is not running</value></data>
+  <data name="Ed_IfPower" xml:space="preserve"><value>Power condition</value></data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Only on AC power</value></data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Only on battery</value></data>
+  <data name="Ed_IfPath" xml:space="preserve"><value>Path exists</value></data>
+  <data name="Ed_IfPathHint" xml:space="preserve"><value>If filled in, the step runs only when that file / folder exists; leave empty for no limit.</value></data>
+  <data name="Sum_After" xml:space="preserve"><value> (after {0})</value></data>
+  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} running)</value></data>
+  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} not running)</value></data>
+  <data name="Sum_IfAc" xml:space="preserve"><value> (on AC)</value></data>
+  <data name="Sum_IfBattery" xml:space="preserve"><value> (on battery)</value></data>
+  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} exists)</value></data>
+  <data name="Ed_Trig_Idle" xml:space="preserve"><value>When idle</value></data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>On unlock</value></data>
+  <data name="Ed_Trig_Lock" xml:space="preserve"><value>On lock</value></data>
+  <data name="Ed_Trig_Resume" xml:space="preserve"><value>On wake from sleep</value></data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>When plugged in</value></data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>When unplugged</value></data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>On low battery</value></data>
+  <data name="Ed_IdleMinutes" xml:space="preserve"><value>Idle minutes</value></data>
+  <data name="Ed_IdleHint" xml:space="preserve"><value>Fires once after this many minutes with no keyboard or mouse activity; the count restarts when you come back.</value></data>
+  <data name="Ed_BatteryPercent" xml:space="preserve"><value>Battery below (%)</value></data>
+  <data name="Ed_BatteryHint" xml:space="preserve"><value>Fires once when running on battery and the charge drops below this; it re-arms after charging back up or plugging in.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>Runs the moment the event happens. The weekday boxes below still limit which days it counts; grace and catch-up don't apply to events and are hidden.</value></data>
+  <data name="Period_OnEvent" xml:space="preserve"><value>Every time</value></data>
+  <data name="Time_Idle" xml:space="preserve"><value>Idle {0} min</value></data>
+  <data name="Time_LowBattery" xml:space="preserve"><value>Battery &lt; {0}%</value></data>
+  <data name="Menu_FromStartMenu" xml:space="preserve"><value>Pick from Start menu…</value></data>
+  <data name="Picker_StartMenu" xml:space="preserve"><value>Pick apps from the Start menu</value></data>
+  <data name="Picker_SearchApp" xml:space="preserve"><value>Search app name</value></data>
+  <data name="Picker_MultiHint" xml:space="preserve"><value>Select several with Ctrl / Shift; each one is added to the list as a step, unticked by default.</value></data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>No program shortcuts were found in the Start menu.</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>Back to normal</value></data>
+  <data name="Settings_Boot" xml:space="preserve"><value>Startup</value></data>
+  <data name="Settings_Backup" xml:space="preserve"><value>Backup</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s, and only when Start at login is on: waits this long after logon before running the list, so it misses the logon storm. Manual re-runs are unaffected.</value></data>
+  <data name="Settings_WaitReady" xml:space="preserve"><value>Wait until the system is ready (desktop / network)</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Goes as soon as both are ready, waiting at most 90 s, then the fixed delay above is added on top. Turn this on when the list runs too early for your apps.</value></data>
+  <data name="Menu_SecOpen" xml:space="preserve"><value>Open</value></data>
+  <data name="Menu_SecControl" xml:space="preserve"><value>Control apps</value></data>
+  <data name="Menu_SecSystem" xml:space="preserve"><value>System &amp; sound</value></data>
+  <data name="Menu_SecFlow" xml:space="preserve"><value>Flow</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Opening apps at login with ordering and delays is easier on the Startup List; gates like “only within N minutes of boot” or “mornings only” are exactly what this place is for.</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>No Action Groups yet — create one from a template on the Action Groups tab first, then reference it here.</value></data>
+  <data name="Ed_CondHeader" xml:space="preserve"><value>Conditions &amp; repeat: {0}</value></data>
+  <data name="Ed_CondAlways" xml:space="preserve"><value>always runs</value></data>
+  <data name="Ed_AdvHeader" xml:space="preserve"><value>Advanced: {0}</value></data>
+  <data name="Adv_Once" xml:space="preserve"><value>fires once</value></data>
+  <data name="Adv_Nag" xml:space="preserve"><value>nags every {0} min until confirmed</value></data>
+  <data name="Adv_NagUntil" xml:space="preserve"><value>nags every {0} min until confirmed, at most until {1}</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>runs every {0} min until end of day (confirming doesn't stop it)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>runs every {0} min until {1} (confirming doesn't stop it)</value></data>
 </root>
