@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity version="1.0.0.0" name="Clockwork.app"/>
+
+  <!-- asInvoker：本程序平时不需要管理员。要提权的两件事（注册开机自启的计划任务、接管/删除系统启动项）
+       各自以 runas 重开一个一次性子进程去办，见 Autostart / RelaunchElevated——把整个应用标成
+       requireAdministrator 会让每次开机都弹 UAC，正是那套设计在避免的。 -->
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
+    <security>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows 10 / Windows 11 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+    </application>
+  </compatibility>
+
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware>
+      <!-- Per-monitor v2 DPI 感知。没有它，进程只是 system-DPI-aware：整个虚拟桌面共用一个缩放，
+           笔记本 200% + 外接 100% 这类混合 DPI 下窗口会被系统位图拉伸，字糊、边框虚。
+           WPF 自己会处理 WM_DPICHANGED 重新排版，不需要额外代码。
+           两个键都写：只认旧键的老系统仍能拿到 per-monitor（true/pm）。
+           唯一与屏幕坐标有关的代码是通知卡片（NotificationToast 用 SystemParameters.WorkArea），
+           而它固定贴主屏右下角——主屏那一块的口径在两种感知模式下一致，不受影响。 -->
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware>
+      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">permonitorv2,permonitor</dpiAwareness>
+    </windowsSettings>
+  </application>
+</assembly>

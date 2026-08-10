@@ -37,6 +37,19 @@ jobs:
       - name: Test
         run: dotnet test app.Tests/Clockwork.Tests.csproj --no-build -c Release -- --minimum-expected-tests 1
 
+      # XAML 是懒加载的：某扇窗写错，不打开它就不报错，能一路带到发版。--smoke（app/DevChecks.cs）
+      # 构造并布局每一个窗口、断言真的量出了尺寸，然后退出。成败以 marker 文件为准，退出码只在
+      # 明确非零时才判失败——Start-Process 读 GUI 进程 ExitCode 有已知读空坑（拿到 $null）。
+      - name: Smoke (open every window)
+        shell: pwsh
+        run: |
+          $marker = Join-Path ([System.IO.Path]::GetTempPath()) 'clockwork-smoke.txt'
+          Remove-Item $marker -ErrorAction SilentlyContinue
+          $p = Start-Process app/bin/Release/net10.0-windows/Clockwork.exe -ArgumentList '--smoke' -PassThru -Wait
+          $ok = (Test-Path $marker) -and ((Get-Content $marker -Raw).Trim() -eq 'OK')
+          if (-not $ok) { if (Test-Path $marker) { Get-Content $marker } else { 'no marker written' }; exit 1 }
+          if ($p.ExitCode -and $p.ExitCode -ne 0) { exit 1 }
+
   # 一个文件两个 job：needs 让红的树发不出 Release，且不额外花一次测试——同一次运行已经跑过了。
   # 拆成 ci.yml + release.yml 就丢了这点，needs 不能跨 workflow 文件。
   release:
@@ -46,6 +59,8 @@ jobs:
     timeout-minutes: 20          # 卡住就快点红，别一路挂到 6 小时上限
     permissions:
       contents: write            # 创建 Release 需要写权限；只给这个 job，PR 触发时它根本不跑
+      id-token: write            # attest 那步用：换取 OIDC 令牌去签署构建来源证明
+      attestations: write        # 同上：把证明写回 GitHub 侧
     steps:
       - uses: actions/checkout@v7
 
@@ -77,12 +92,33 @@ jobs:
           Compress-Archive -Path app/bin/Release/publish/Clockwork.exe -DestinationPath "Clockwork-${{ github.ref_name }}-win-x64.zip"
           Compress-Archive -Path app/bin/Release/publish-needs-dotnet10/Clockwork.exe -DestinationPath "Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip"
 
+      # 每一个发出去的可下载物都要有一行（两个 zip + 裸 exe），不能只签其中一个形态——两种包
+      # 是给两拨人的，漏了哪个，那拨人手里就是个没法验的文件。校验值随构建生成、跟资产同版，
+      # 绝不写进 README（文档里的数字会腐烂）。
+      - name: SHA256 sums
+        shell: pwsh
+        run: |
+          Get-FileHash *.zip, app/bin/Release/publish-needs-dotnet10/Clockwork.exe -Algorithm SHA256 |
+            ForEach-Object { "{0}  {1}" -f $_.Hash.ToLower(), (Split-Path $_.Path -Leaf) } |
+            Set-Content SHA256SUMS.txt
+          Get-Content SHA256SUMS.txt
+
+      # 来源证明，比 SHA256SUMS 强一档：sums 和资产同在 release 页，能替换资产的攻击者同样能替换 sums；
+      # 证明存在 GitHub 侧，用户用 `gh attestation verify <文件> -R <owner>/<repo>` 验的是
+      # 「这个文件确实由本仓库这条 workflow 构建」，而不只是「文件没被改过」。官方 action，无第三方依赖。
+      - uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: |
+            Clockwork-${{ github.ref_name }}-win-x64.zip
+            Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip
+            app/bin/Release/publish-needs-dotnet10/Clockwork.exe
+
       # 选包这件事发生在下载页，不是 README，所以说明得跟着 Release 走；GitHub 会把自动 changelog
       # 接在这段 body 后面。体积按 Windows 的算法（MiB）。
       # 用 softprops 而不是自带 gh：和 QuickText 同一套，且它对已存在的 release 是覆盖更新——
       # 上传中途失败重跑一次就好，gh release create 会直接撞「release already exists」。
       # 第三个资产是框架依赖版的裸 exe，直接从 publish 目录上传，因而保持干净的原名：点开即用，
-      # 也能直接盖掉已有的 Clockwork.exe 完成更新。只有小包这么发——72 MB 的裸 exe 正是浏览器和
+      # 也能直接盖掉已有的 Clockwork.exe 完成更新。只有小包这么发——自带运行时的那个裸 exe 正是浏览器和
       # SmartScreen 最敌视的东西，而不带版本号的名字只能给其中一个。
       - name: Release
         # 刻意钉大版本标签：v3 会随补丁漂移，修复因此不用任何人动手就能拿到。
@@ -95,10 +131,11 @@ jobs:
             Clockwork-${{ github.ref_name }}-win-x64.zip
             Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip
             app/bin/Release/publish-needs-dotnet10/Clockwork.exe
+            SHA256SUMS.txt
           body: |
             **Which package? / 下载哪个？**
 
-            - `Clockwork-${{ github.ref_name }}-win-x64.zip` (~67 MB) — .NET runtime included; unzip and run on any Windows 10/11. Take this if you're unsure. / 内含 .NET 运行时，解压即用；拿不准、或电脑装不了东西就选它。
-            - `Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip` (~0.5 MB) — same app without the bundled runtime; needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed. / 同一个程序，只是不带运行时；需要电脑上已装 [.NET 10 桌面运行时](https://dotnet.microsoft.com/download/dotnet/10.0)。
-            - `Clockwork.exe` (~1.2 MB) — the same build as the zip above, unzipped: click, run, or drop it over your existing Clockwork.exe to update. Windows will offer the runtime download if it is missing. / 就是上面那个不含运行时的版本，只是没打包：点开即用，也可直接覆盖现有的 Clockwork.exe 完成更新。缺运行时时 Windows 会自己提示下载。
+            - `Clockwork-${{ github.ref_name }}-win-x64.zip` — .NET runtime included; unzip and run on any Windows 10/11. Take this if you're unsure. / 内含 .NET 运行时，解压即用；拿不准、或电脑装不了东西就选它。
+            - `Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip` — same app without the bundled runtime; needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed. / 同一个程序，只是不带运行时；需要电脑上已装 [.NET 10 桌面运行时](https://dotnet.microsoft.com/download/dotnet/10.0)。
+            - `Clockwork.exe` — the same build as the zip above, unzipped: click, run, or drop it over your existing Clockwork.exe to update. Windows will offer the runtime download if it is missing. / 就是上面那个不含运行时的版本，只是没打包：点开即用，也可直接覆盖现有的 Clockwork.exe 完成更新。缺运行时时 Windows 会自己提示下载。
           generate_release_notes: true

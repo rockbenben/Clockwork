@@ -18,7 +18,10 @@
             <Grid Margin="26,22,24,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <!-- 正文行是 * 不是 Auto：SizeToContent 下两者量出来一样高，差别只在窗口被
+                         FitToWorkArea 封顶的那一刻——* 行把挤压吃进自己的 ScrollViewer，按钮行保住；
+                         Auto 行会把按钮挤出窗外。 -->
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -34,9 +37,12 @@
                 </StackPanel>
 
                 <!-- 提醒正文：全app最大的正文号——这是要隔着半个房间看清的一句话 -->
-                <TextBlock Grid.Row="1" x:Name="MsgText" TextWrapping="Wrap" FontSize="17"
-                           Foreground="{StaticResource BrushPaper}" LineStackingStrategy="BlockLineHeight"
-                           LineHeight="26" Margin="0,0,0,22"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,22"
+                              Focusable="False">
+                    <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="17"
+                               Foreground="{StaticResource BrushPaper}" LineStackingStrategy="BlockLineHeight"
+                               LineHeight="26"/>
+                </ScrollViewer>
 
                 <!-- 操作按钮 -->
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">

@@ -18,6 +18,7 @@ public partial class BrandDialog : Window
     public BrandDialog(string? title, string message, bool confirm, ToastLevel level)
     {
         InitializeComponent();
+        WindowSizing.FitToWorkArea(this);   // 崩溃提示的载体：消息长度不可控，小屏上也不能把是/否挤下屏
         var t = string.IsNullOrEmpty(title) ? "Clockwork" : title!;
         Title = t;   // 无可见标题栏，仅用于 alt-tab/辅助功能
         Eyebrow.Text = t;

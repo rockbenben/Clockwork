@@ -31,6 +31,7 @@ public partial class NotificationToast : Window
     public NotificationToast(string title, string message, ToastLevel level, int durationMs, string? key = null, DateTime? at = null)
     {
         InitializeComponent();
+        WindowSizing.FitToWorkArea(this);   // 长文本封进工作区（超出部分裁掉——瞬态卡片，全文在弹窗/日志里）
         _level = level;
         TitleText.Text = title ?? "";
         TitleText.Visibility = string.IsNullOrEmpty(title) ? Visibility.Collapsed : Visibility.Visible;

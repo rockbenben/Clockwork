@@ -22,15 +22,19 @@
             <Grid Margin="26,22,24,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <!-- * + ScrollViewer 而非 Auto：本框还是崩溃提示的载体，异常消息长度不可控。
+                         窗口被 FitToWorkArea 封顶时长文本自己滚，是/否按钮不下屏。 -->
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,14">
                     <TextBlock x:Name="Eyebrow" FontFamily="{StaticResource FontMono}" FontSize="12"
                                Foreground="{StaticResource BrushMuted}" VerticalAlignment="Center"/>
                 </StackPanel>
-                <TextBlock Grid.Row="1" x:Name="MsgText" TextWrapping="Wrap" FontSize="15" Foreground="{StaticResource BrushPaper}"
-                           LineStackingStrategy="BlockLineHeight" LineHeight="23" Margin="0,0,0,22"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,22" Focusable="False">
+                    <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="15" Foreground="{StaticResource BrushPaper}"
+                               LineStackingStrategy="BlockLineHeight" LineHeight="23"/>
+                </ScrollViewer>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button x:Name="YesBtn" Style="{StaticResource PrimaryButton}" MinWidth="88" Height="34" Margin="0,0,8,0" Click="Yes_Click"/>
                     <Button x:Name="NoBtn" MinWidth="88" Height="34" Margin="0,0,8,0" Click="No_Click"/>

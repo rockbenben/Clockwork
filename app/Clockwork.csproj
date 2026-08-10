@@ -16,6 +16,14 @@
     <InvariantGlobalization>false</InvariantGlobalization>
 
     <ApplicationIcon>..\assets\logo.ico</ApplicationIcon>
+    <!-- Per-monitor v2 DPI 感知 + 长路径（理由写在 app.manifest 里）。没有清单时进程只是
+         system-DPI-aware，混合 DPI 多屏下窗口会被系统拉伸。 -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- WFO0003 是 WinForms 分析器的意见：它要求改用 ApplicationHighDpiMode 属性而不是清单。
+         那条建议只对「WinForms 应用」成立——它作用于 WinForms 自己生成的 Main 里的
+         Application.SetHighDpiMode。本程序是 WPF 应用（Main 由 WPF 生成），WinForms 只是被托盘图标
+         和剪贴板顺带引进来的；对 WPF 来说清单就是声明 DPI 感知的正规且唯一的途径。 -->
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
     <!-- 版本号不用手动维护：本地构建从最近的 git tag 取（见文件末尾的 VersionFromGitTag），
          正式发版由 CI 用 -p:Version=<tag 去 v> 覆盖。下面这个值只是两者都不适用时的兜底
          ——比如从源码 zip 构建、目录里没有 .git。 -->

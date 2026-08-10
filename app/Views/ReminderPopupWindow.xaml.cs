@@ -29,6 +29,7 @@ public partial class ReminderPopupWindow : Window
     public ReminderPopupWindow(string message, bool confirm, int autoDismissSeconds, int? timeoutSnoozeMinutes = null)
     {
         InitializeComponent();
+        WindowSizing.FitToWorkArea(this);   // 提醒文本长度由用户定：不封顶，小屏上按钮行就在屏幕外
         _confirm = confirm;
         Title = Strings.Get("Tray_ReminderTitle");   // 无可见标题栏，仅用于 alt-tab/辅助功能
         Eyebrow.Text = Strings.Get("Tray_ReminderTitle");

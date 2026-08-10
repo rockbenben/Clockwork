@@ -42,47 +42,156 @@ public partial class App : System.Windows.Application
     private readonly Random _rng = new();
     private DispatcherTimer? _reminderTimer;
 
+    /// <summary>接管等待的「分片」长度：每等这么久醒一次，看看是该继续等还是该退（见 ClaimSingleInstance
+    /// 的循环）。它同时是「双击 exe 而老实例活得好好的」这条常态路径的总耗时——第一片等完、查到同伴进程
+    /// 还活着就立即退。原来是单次 1200 毫秒的死等，每次双击都白转 1.2 秒的忙碌光标。</summary>
+    private static readonly TimeSpan HandoffTakeoverWait = TimeSpan.FromMilliseconds(250);
+
+    /// <summary>接管尝试的总上限。两类进程会等到这么久：被 <see cref="RelaunchForLanguage"/> /
+    /// <see cref="RelaunchElevated"/> 派出来顶替老实例的（接管是它唯一的目的），以及双击后发现同伴进程
+    /// 已消失的（没人会替它显示窗口，退出等于一个实例都不剩）。接管失败的后果不对称——等长一点的代价
+    /// 只是一个看不见的进程多活几秒，而放弃得太早的代价是托盘应用凭空消失、用户只会以为程序崩了。</summary>
+    private static readonly TimeSpan RelaunchTakeoverWait = TimeSpan.FromSeconds(3);
+
+    // 启动只做编排，每一步的细节和理由都在各自的方法里。
+    //
+    // 顺序是承重的，不是书写习惯，有四处硬约束：
+    //   · 提权子任务必须最先判——它不建窗口/托盘/计时器，也不该参与单实例；
+    //   · 单实例判定要早于任何进程级副作用，否则一个马上要退出的多余进程会先去改共享状态；
+    //   · AUMID 声明必须早于第一个 UI 对象（微软的要求），否则任务栏分组认不出是同一个应用；
+    //   · UI 文化与 RTL 元数据必须早于建第一个窗口，XAML 的本地化在加载时就解析完了。
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        // 一次性提权子任务：由非提权主实例在 schtasks 拒绝时以管理员身份重开自己触发。
-        // 仅执行自启注册/注销后立即退出——不建窗口/托盘/计时器，也不参与单实例，避免与运行中的主实例冲突。
-        bool regTask = e.Args.Contains("--register-autostart");
-        if (regTask || e.Args.Contains("--unregister-autostart"))
-        {
-            string res;
-            try { res = regTask ? Autostart.Register(Environment.ProcessPath ?? "") : Autostart.Unregister(); }
-            catch { res = "Error"; }
-            Environment.ExitCode = res == "Ok" ? 0 : 2;   // 主实例据退出码刷新/报错
-            Shutdown();
-            return;
-        }
+        if (RunAutostartSubcommand(e.Args)) return;   // 一次性提权子任务：办完即退
 
         ShutdownMode = ShutdownMode.OnExplicitShutdown;   // 关窗=隐到托盘；退出仅经托盘
-
         DispatcherUnhandledException += (s, ex) => { ShowCrash(ex.Exception); ex.Handled = true; };
         AppDomain.CurrentDomain.UnhandledException += (s, ex) => ShowCrash(ex.ExceptionObject as Exception);
+        // 第三个入口：没 await 的 Task 吞掉的异常，在 GC 回收该 Task 时才冒出来（终结器线程、非致命）。
+        // 只记日志不弹窗——冒出来的时机和出错的时机隔着一次 GC，弹窗没有上下文可指；SetObserved 防止
+        // 宿主策略把它升级成进程退出。
+        TaskScheduler.UnobservedTaskException += (s, ex) => { ex.SetObserved(); LogError(ex.Exception); };
 
-        // 单实例（best-effort）：已运行则置信号让旧实例显示窗口，自己退出。同步对象创建/打开失败
-        // （另有提权实例持有 Global 命名对象、ACL 受限等）绝不因此崩溃——按「本实例照常运行」放行。
+        // 开发期自查（--smoke / --shots，见 DevChecks.cs）：在单实例之前——托盘里正在用的实例照常工作。
+        if (e.Args.Contains("--smoke") || e.Args.Contains("--shots")) { RunDevCheck(e.Args); return; }
+
+        if (!ClaimSingleInstance(e.Args)) return;     // 已有实例在跑：叫醒它，自己退出
+
+        ResolveSelfPaths();
+        DeclareAppUserModelId();
+        LoadConfig();
+        LoadReminderState();
+        ApplyUiCulture();
+
+        BuildShell();          // 主窗口 + 托盘
+        StartEngines();        // 提醒计时器 / 系统事件 / 全局热键 / 跨实例显示信号
+        ShowInitialWindow(e.Args);
+
+        // 放在最后、且不等它：注册表 + 图标解压是给「通知弹出时系统去读」用的，最快也要等到第一条提醒，
+        // 而它此前堵在读配置和显示窗口之前。整体 try/catch 兜住——注册表被策略锁死之类的场景不该拖累启动，
+        // 后果只是通知里没有应用图标。
+        Task.Run(() => { try { RegisterAumidBranding(); } catch { } });
+    }
+
+    // 一次性提权子任务：由非提权主实例在 schtasks 拒绝时以管理员身份重开自己触发。
+    // 仅执行自启注册/注销后立即退出——不建窗口/托盘/计时器，也不参与单实例，避免与运行中的主实例冲突。
+    // 返回 true = 本次启动到此为止。
+    private bool RunAutostartSubcommand(string[] args)
+    {
+        bool regTask = args.Contains("--register-autostart");
+        if (!regTask && !args.Contains("--unregister-autostart")) return false;
+        string res;
+        try { res = regTask ? Autostart.Register(Environment.ProcessPath ?? "") : Autostart.Unregister(); }
+        catch { res = "Error"; }
+        Environment.ExitCode = res == "Ok" ? 0 : 2;   // 主实例据退出码刷新/报错
+        Shutdown();
+        return true;
+    }
+
+    // 单实例（best-effort）：已运行则置信号让旧实例显示窗口，自己退出。同步对象创建/打开失败
+    // （另有提权实例持有同名命名对象、ACL 受限等）绝不因此崩溃——按「本实例照常运行」放行。
+    // 返回 false = 本进程该退出。
+    private bool ClaimSingleInstance(string[] args)
+    {
         try
         {
-            _mutex = new Mutex(true, @"Global\rockbenben.clockwork.mutex", out bool createdNew);
-            _showEvent = new EventWaitHandle(false, EventResetMode.AutoReset, @"Global\rockbenben.clockwork.show");
-            if (!createdNew)
-            {
-                bool got = false;
-                try { got = _mutex.WaitOne(1200); } catch (AbandonedMutexException) { got = true; }   // 旧实例正退出则接管
-                if (!got) { _showEvent.Set(); Shutdown(); return; }
-            }
-        }
-        catch { _mutex = null; _showEvent = null; }
+            // Local\ = 每登录会话一实例（曾是 Global\ 整机一实例）：快速切换用户时，第二个会话双击 exe
+            // 本该开出自己的实例——Global 下信号会去唤醒第一个会话里的窗口，第二个用户什么都看不见。
+            // 托盘应用是每用户的（配置、自启注册表全在 HKCU），单实例的边界理应跟配置一致。
+            // 同会话内的提权重开不受影响：管理员进程和普通进程共享同一个会话的 Local 命名空间。
+            _mutex = new Mutex(true, @"Local\rockbenben.clockwork.mutex", out bool createdNew);
+            _showEvent = new EventWaitHandle(false, EventResetMode.AutoReset, @"Local\rockbenben.clockwork.show");
+            if (createdNew) return true;
 
+            // 先发信号、再争互斥体。顺序反过来（原来的写法）会让每一次「已在托盘时双击 exe」都白等满
+            // 这段超时才去叫醒老实例——而常态恰恰是老实例活得好好的，等待必然超时。
+            // 先 Set 之后老实例并行去显示窗口，我们这边照旧等自己的接管窗口，两件事重叠。
+            // 万一真抢到了互斥体（老实例确实在退出），这次多发的信号也无害：AutoReset 事件没人在等
+            // 就自己落地；即便被本实例随后注册的等待接住，结果也只是把窗口显出来——而用户正是双击了 exe。
+            _showEvent.Set();
+            // 分片等 + 查同伴进程，两个方向都严格变好：
+            //   · 双击 exe（常态）：第一片等完发现另一个 Clockwork 进程活着 → 它去显示窗口，我们立即退，
+            //     总耗时仍是一片（250ms），不比原来慢；
+            //   · 托盘退出后立刻双击 / 覆盖 exe 后立刻启动（竞态）：同伴进程已消失（或很快消失），
+            //     此时退出等于一个实例都不剩——继续分片重试直到拿下互斥体，上限 3 秒。
+            //     原来单次 250ms 就放弃，正是这个竞态的输法。
+            // --show（切语言/提权重开派来的）从不因「同伴还活着」提前退：接管一个正在退出的实例
+            // 是它唯一的目的，同伴活着恰是预期状态。
+            bool relaunch = args.Contains("--show");
+            var deadline = DateTime.UtcNow + RelaunchTakeoverWait;
+            bool got = false;
+            while (true)
+            {
+                try { got = _mutex.WaitOne(HandoffTakeoverWait); } catch (AbandonedMutexException) { got = true; }
+                if (got || DateTime.UtcNow >= deadline) break;
+                if (!relaunch && AnotherInstanceAlive()) break;
+            }
+            if (got) return true;   // 老实例确实在退出/已退出，本进程顶上
+            Shutdown();
+            return false;
+        }
+        catch { _mutex = null; _showEvent = null; return true; }
+    }
+
+    // 是否还有别的 Clockwork 进程在跑（按进程名，排除自己；只看本会话——互斥体是 Local\ 的，
+    // 别的用户会话里的实例与本会话互不相干，把它算成同伴会在竞态分支里错误地提前放弃接管）。
+    // 查不了（权限受限等）按「活着」处理：宁可这次双击白按一下，也别冒双实例或全灭的险。
+    private static bool AnotherInstanceAlive()
+    {
+        try
+        {
+            using var self = Process.GetCurrentProcess();
+            var peers = Process.GetProcessesByName(self.ProcessName);
+            bool alive = false;
+            foreach (var p in peers)
+            {
+                try { alive |= p.Id != self.Id && p.SessionId == self.SessionId; } catch { alive = true; }
+                p.Dispose();
+            }
+            return alive;
+        }
+        catch { return true; }
+    }
+
+    private void ResolveSelfPaths()
+    {
         _exePath = Environment.ProcessPath ?? "";
         _exeDir = Path.GetDirectoryName(_exePath) ?? AppContext.BaseDirectory;
-        RegisterAumid();
+    }
 
+    // AUMID 拆成两半：声明必须留在启动路径上（微软的要求是「在进程创建任何 UI 对象之前」，
+    // 晚了任务栏分组/固定就认不出是同一个应用），而它只是一次 P/Invoke，没有 I/O。
+    // 品牌信息的落盘（注册表 + 把内嵌图标解到 %LOCALAPPDATA%）挪到后台去（见 RegisterAumidBranding）——
+    // 那是通知弹出时才用得上的东西，却堵在读配置和显示窗口前面，是启动路径上白付的一笔文件与注册表 I/O。
+    private void DeclareAppUserModelId()
+    {
+        try { Native.Shell.SetCurrentProcessExplicitAppUserModelID(Aumid); } catch { }
+    }
+
+    private void LoadConfig()
+    {
         _cfgPath = ConfigPath.Resolve(_exeDir);
         EnsureConfigFile();
         _config = ConfigStore.Read(_cfgPath, out var normalized);
@@ -95,37 +204,52 @@ public partial class App : System.Windows.Application
         // 读入时若发生了重启后有影响的规范化（剔 null / 补生或重发 id / 补语言），立即写回——
         // 尤其去重重发的提醒 id：不落盘则每次启动都换新 id，运行态接不上、被去重那条每次重启都重弹。
         if (normalized) { try { ConfigStore.Write(_config, _cfgPath); } catch { } }
-        // 提醒运行态落盘路径 + 载入上次的耐久态（上次触发日期/稍后到点）。重启后不再重复弹当天已弹过的。
+    }
+
+    // 提醒运行态落盘路径 + 载入上次的耐久态（上次触发日期/稍后到点）。重启后不再重复弹当天已弹过的。
+    private void LoadReminderState()
+    {
         _statePath = Path.Combine(CfgDir, "clockwork.state.json");
         foreach (var kv in ReminderStateStore.Load(_statePath)) _reminderStates[kv.Key] = kv.Value;
         // 载入时顺手清掉过期(早于今天)的稍后，别让陈旧记录长期留在盘里（Decide 也有运行期兜底）。
         // 「错过必补」且启用的提醒例外：保留陈旧稍后交给 Decide 补发一次（跨天未应答不无声吞掉），
         // 与 Decide 的过期分支同一口径。禁用的照清——Decide 对禁用项直接 none，留着只会烂在盘里。
+        // 事件型也照清（与 Decide 的事件守卫同口径）：残留的「错过必补」不该让昨晚的稍后在今早诈尸。
         bool cleaned = false;
         foreach (var kv in _reminderStates)
             if (kv.Value.SnoozeUntil is DateTime su && su.Date < DateTime.Now.Date)
             {
                 var owner = _config.Reminders.FirstOrDefault(x => x.Id == kv.Key);
-                if (owner is { Enabled: true, CatchUpIfMissed: true }) continue;
+                if (owner is { Enabled: true, CatchUpIfMissed: true } && !ReminderEvent.IsEvent(owner.Trigger)) continue;
                 kv.Value.SnoozeUntil = null; cleaned = true;
             }
         if (cleaned) ReminderStateStore.Save(_statePath, _reminderStates);
         _startupReminderIds = new HashSet<string>(_config.Reminders.Select(x => x.Id));
+    }
+
+    private void ApplyUiCulture()
+    {
         Strings.ApplyCulture(_config.Settings.Language);   // 建任何窗口前设 UI 文化
         if (Strings.IsRightToLeft)                          // 阿拉伯语等：全窗口默认从右向左（须在建任何窗口前覆盖元数据）
             FrameworkElement.FlowDirectionProperty.OverrideMetadata(
                 typeof(Window), new FrameworkPropertyMetadata(System.Windows.FlowDirection.RightToLeft));
+    }
 
+    private void BuildShell()
+    {
         // 运行闸的变化搬到 UI 线程再广播：Begin/End 都在后台运行线程上调，订阅方（急停按钮）要动控件。
         _runGate.ActiveChanged += () => Dispatcher.BeginInvoke(() => RunStateChanged?.Invoke());
-
         _main = new MainWindow(_config, SaveConfig, MigrateReminderState);
         _tray = new TrayIcon(this);
+    }
 
+    private void StartEngines()
+    {
         // 提醒计时器：记录启动时刻与开机分钟数（供「登录时」提醒门控），按 tickSeconds 轮询。
         _startTime = DateTime.Now;
         _uptimeAtLaunch = SystemInfo.UptimeMinutes();
         StartReminderTimer();
+        WireSystemEvents();
         RegisterStopHotkey();
 
         // 跨实例「显示窗口」信号：事件驱动等待（原每秒轮询）。AutoReset 事件被 Set 才回调，常态零唤醒；
@@ -133,24 +257,55 @@ public partial class App : System.Windows.Application
         if (_showEvent != null)
             _showWait = ThreadPool.RegisterWaitForSingleObject(_showEvent,
                 (_, _) => Dispatcher.BeginInvoke(ShowMain), null, Timeout.Infinite, executeOnlyOnce: false);
+    }
 
-        bool boot = e.Args.Contains("--boot");
-        bool forceShow = e.Args.Contains("--show");   // 语言切换重启后：强制显示窗口，忽略「启动时最小化」
-        if (boot)
+    private void ShowInitialWindow(string[] args)
+    {
+        bool forceShow = args.Contains("--show");   // 语言切换重启后：强制显示窗口，忽略「启动时最小化」
+        if (args.Contains("--boot"))
         {
-            _main.ShowInTaskbar = false;   // 自启：不显窗、只入托盘
+            _main!.ShowInTaskbar = false;   // 自启：不显窗、只入托盘
             var bt = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(800) };
             bt.Tick += (s, _) => { bt.Stop(); RunLaunchAsync(true); };
             bt.Start();
         }
         else if (_config.Settings.StartMinimized && !forceShow)
         {
-            _main.ShowInTaskbar = false;
+            _main!.ShowInTaskbar = false;
         }
         else
         {
-            _main.Show();
+            _main!.Show();
         }
+
+        // 这次不显示 ≠ 不会被显示。开机自启之后，当天第一次双击托盘要现场把整棵可视树建出来
+        // （5 个 Tab、4 个 DataGrid、943 行 Theme.xaml 的模板），实测 141 毫秒；跑过一次之后只要 15 毫秒。
+        // 那 141 毫秒以前是「白着」——看着像窗口已经开了；cloak 之后变成「空着」，反而更像卡住。
+        // 所以别让它发生：趁没人看的时候把布局先跑一遍。
+        // ApplicationIdle 是关键——等 UI 线程真的闲下来才做，绝不去和开机清单抢登录那几秒。
+        if (!_main.IsVisible) Dispatcher.BeginInvoke(WarmMainWindow, DispatcherPriority.ApplicationIdle);
+    }
+
+    // 把窗口的布局先跑一遍，不显示它。贵的是模板展开与 DataGrid 行实例化，这两件都发生在
+    // Measure/Arrange 里，Show() 只是在此之上再加一次合成——所以不 Show 也能把大头付掉。
+    // 失败无所谓：最坏就是回到「第一次打开慢一点」，不该牵连任何别的东西。
+    private void WarmMainWindow()
+    {
+        if (_main == null || _main.IsVisible) return;
+        try
+        {
+            // 显式限定到 WPF：UseWindowsForms 的全局 using 让 Size/Point 与 System.Drawing 的同名类型撞车。
+            var size = new System.Windows.Size(_main.Width, _main.Height);
+            _main.Measure(size);
+            _main.Arrange(new Rect(new System.Windows.Point(), size));
+            _main.UpdateLayout();
+            // 试过再往前付一步——用 RenderTargetBitmap 离屏渲一遍，想把光栅化也提前。实测无效
+            //（83ms vs 79ms，噪声之内），只换来一次几 MB 的分配，故删掉。
+            // 剩下那 ~65ms 不在内容上，而在窗口呈现本身（HwndTarget 建面、DWM 首次合成握手），
+            // 不 Show 就付不掉。要再压只剩「cloak 着 Show 一次再 Hide」那条路，代价是登录时抢焦点
+            // 和一次真实的显示循环——为 65ms 不值。
+        }
+        catch { }
     }
 
     public void ShowMain()
@@ -165,6 +320,7 @@ public partial class App : System.Windows.Application
     public void ExitApp()
     {
         _reminderTimer?.Stop();
+        UnwireSystemEvents();
         if (_main != null) _main.AllowClose = true;
         _tray?.Dispose();
         try { _mutex?.ReleaseMutex(); } catch { }
@@ -436,7 +592,10 @@ public partial class App : System.Windows.Application
         // 弹窗 ShowDialog 是 UI 线程的嵌套消息循环，其间 DispatcherTimer 仍在走。无守卫会重入本方法、
         // 在已有模态弹窗上再叠一个。首个 tick 处理完（含所有到点提醒依次弹完）前，后续 tick 直接跳过。
         if (_reminderTickBusy) return;
-        if (DndRemaining != null) return;   // 勿扰生效：本 tick 整体跳过（含静默组），到期自动恢复
+        // 勿扰生效：本 tick 不触发任何东西（含静默组），到期自动恢复。但基线要照常刷——
+        // 不刷的话，勿扰期间拔的电源会在勿扰结束后的第一个 tick 被当成「刚拔」补弹一次，
+        // 与订阅类事件（锁屏/解锁/唤醒，勿扰期间直接不算）行为相反。勿扰的语义只有一条：期间发生的事件不算数。
+        if (DndRemaining != null) { PollEnvironmentTriggers(DateTime.Now, fire: false); return; }
         _reminderTickBusy = true;
         try
         {
@@ -448,7 +607,12 @@ public partial class App : System.Windows.Application
                 var live = new HashSet<string>(_config.Reminders.Select(x => x.Id));
                 foreach (var dead in _reminderStates.Keys.Where(k => !live.Contains(k)).ToList())
                 { _reminderStates.Remove(dead); durableChanged = true; }
+                // 两个「本轮已触发」集合同样按 id 记事，一并跟着清，别让删掉的提醒在集合里长住。
+                _idleFired.RemoveWhere(k => !live.Contains(k));
+                _lowBatteryFired.RemoveWhere(k => !live.Contains(k));
             }
+            // 空闲 / 电源两类事件没有系统通知可订，只能轮询——正好搭这班车。
+            durableChanged |= PollEnvironmentTriggers(now);
             foreach (var r in _config.Reminders.ToList())
             {
                 if (!_reminderStates.TryGetValue(r.Id, out var st)) { st = new ReminderState(); _reminderStates[r.Id] = st; }
@@ -456,13 +620,9 @@ public partial class App : System.Windows.Application
                 var d = ReminderEngine.Decide(r, now, _startTime, st, _uptimeAtLaunch, _startupReminderIds.Contains(r.Id));
                 if (d.Action == "arm" && d.Base is DateTime b)
                 {
-                    // 到点后延迟：固定 + 随机（错峰）。'arm' 交这里算 pendingFireAt。
-                    // 随机上界 +1 处防 int.MaxValue 溢出（否则 _rng.Next 抛异常、每 tick 崩溃循环）；long 累加避免 int 溢出。
+                    // 到点后延迟：'arm' 交 ArmAt 算 pendingFireAt（与事件触发共用同一份口径）。
                     // 固定延时不设上限（用户可能有意配多天错峰）。
-                    int rd = r.RandomDelaySeconds;
-                    long rand = rd > 0 ? _rng.Next(0, rd == int.MaxValue ? rd : rd + 1) : 0;
-                    long extra = (long)r.DelaySeconds + rand;
-                    st.PendingFireAt = b.AddSeconds(extra);
+                    ArmAt(r, st, b);
                 }
                 else if (d.Action == "fire")
                 {
@@ -470,27 +630,208 @@ public partial class App : System.Windows.Application
                     // 稍后/重复型触发不预存——它们清掉的 SnoozeUntil/NextRepeatAt 若在弹窗时被杀，宁可从盘上旧值恢复重弹也别丢。
                     // durable：此处的意义就是「先写成盘再弹窗」，不能走失败转后台的快路径（后台没落地就被杀等于没存）。
                     if (st.LastFiredDate != firedBefore) ReminderStateStore.Save(_statePath, _reminderStates, durable: true);
-                    var (action, snooze) = FireReminder(r);
-                    // 排下一步（稍后/重复）必须用弹窗返回后的时刻，不能用 tick 开头的 now——弹窗是模态的，
-                    // 自动关闭设得长（如 30 分钟）时 now 已陈旧半小时，「稍后 10 分钟」会算出一个已经过去的
-                    // SnoozeUntil，下个 tick 立即重弹、再挂 30 分钟，成了永久模态循环；重复催促同理会背靠背连弹。
-                    var after = DateTime.Now;
-                    if (snooze is int m) ReminderEngine.Snooze(st, after, m);
-                    else ReminderEngine.UpdateAfterFire(r, after, action, st);
-                    // 「仅一次」触发完成（催促/稍后链都结束）→ 自动取消勾选：条目保留（想再用改个日期重新勾上），
-                    // 用完即焚会让误设时间没得救。时机必须在链结束后——立刻停用会被 Decide 的 !Enabled 早退掐死在途链。
-                    if (ReminderEngine.ShouldDisableAfterOnce(r, st))
-                    {
-                        r.Enabled = false;
-                        SaveConfig();
-                        _main?.RefreshReminderRows();
-                    }
+                    FireAndAdvance(r, st);
                     durableChanged = true;   // 稍后/重复又改了状态 → 循环末再存一次
                 }
             }
+            // 模态弹窗挂着时攒下的会话/电源事件（FireReminderEvent 忙时排队）在这儿兜底补发——
+            // 事件自己的出口通常先清掉队列，这里保证最晚一个 tick 内一定补上。
+            durableChanged |= DrainPendingEvents();
             if (durableChanged) ReminderStateStore.Save(_statePath, _reminderStates);
         }
         finally { _reminderTickBusy = false; }
+    }
+
+    // 触发一条提醒并推进它的运行态。计时器与事件触发共用同一份——事件那条路要是不推进状态，
+    // 「稍后」和「没确认就催」在事件型任务上会静默失效（SnoozeUntil 落了盘却没人来看）。
+    private void FireAndAdvance(Reminder r, ReminderState st)
+    {
+        var (action, snooze) = FireReminder(r);
+        // 排下一步（稍后/重复）必须用弹窗返回后的时刻，不能用触发前的 now——弹窗是模态的，
+        // 自动关闭设得长（如 30 分钟）时 now 已陈旧半小时，「稍后 10 分钟」会算出一个已经过去的
+        // SnoozeUntil，下个 tick 立即重弹、再挂 30 分钟，成了永久模态循环；重复催促同理会背靠背连弹。
+        var after = DateTime.Now;
+        if (snooze is int m) ReminderEngine.Snooze(st, after, m);
+        else ReminderEngine.UpdateAfterFire(r, after, action, st);
+        // 「仅一次」触发完成（催促/稍后链都结束）→ 自动取消勾选：条目保留（想再用改个日期重新勾上），
+        // 用完即焚会让误设时间没得救。时机必须在链结束后——立刻停用会被 Decide 的 !Enabled 早退掐死在途链。
+        if (ReminderEngine.ShouldDisableAfterOnce(r, st))
+        {
+            r.Enabled = false;
+            SaveConfig();
+            _main?.RefreshReminderRows();
+        }
+    }
+
+    // —— 事件触发（空闲 / 锁屏 / 解锁 / 唤醒 / 插拔电源 / 低电量）——
+    // 会话与电源事件由 Windows 广播，订阅即得；空闲与电量没有通知可订，搭提醒计时器轮询。
+    private readonly HashSet<string> _idleFired = new();         // 本轮离开已触发过的提醒 id（人回来即清）
+    private readonly HashSet<string> _lowBatteryFired = new();   // 本轮低电量已触发过的（充回阈值以上即清）
+    private bool? _lastOnAc;                                     // 上次读到的电源状态；null=还没读过（首轮只记基线）
+    private string _lastEvent = "";
+    private DateTime _lastEventAt = DateTime.MinValue;
+
+    private void WireSystemEvents()
+    {
+        // 订阅这两个是纯白拿：Windows 本来就在广播，不订就只能靠轮询猜锁屏和唤醒。
+        // 回调在 SystemEvents 自己的线程上来，FireReminderEvent 内部会切回 UI 线程。
+        try
+        {
+            SystemEvents.SessionSwitch += OnSessionSwitch;
+            SystemEvents.PowerModeChanged += OnPowerModeChanged;
+        }
+        catch { }   // 无交互式桌面等边角场景下会抛；事件触发失效即可，不该拖垮启动
+    }
+
+    private void UnwireSystemEvents()
+    {
+        try
+        {
+            SystemEvents.SessionSwitch -= OnSessionSwitch;
+            SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+        }
+        catch { }
+    }
+
+    // 只认 SessionLock/SessionUnlock 这两个字面意义上的「锁屏 / 解锁」。
+    // 切换用户、远程连断（Console*/Remote*）刻意不并进来：那是另一件事，混进来会让「解锁时」在没人解锁时也跑。
+    private void OnSessionSwitch(object? sender, SessionSwitchEventArgs e)
+    {
+        if (e.Reason == SessionSwitchReason.SessionLock) FireReminderEvent("lock");
+        else if (e.Reason == SessionSwitchReason.SessionUnlock) FireReminderEvent("unlock");
+    }
+
+    private void OnPowerModeChanged(object? sender, PowerModeChangedEventArgs e)
+    {
+        if (e.Mode == PowerModes.Resume) FireReminderEvent("resume");
+    }
+
+    // 忙时（模态提醒窗挂着）到达的会话/电源事件排在这儿，忙段一结束就补发。
+    // 时间型提醒天然有下个 tick 重试；事件没有——丢一次就永远丢了。「锁屏提醒的弹窗还挂着，
+    // 解锁提醒就被吞掉」正是这个功能的招牌场景（解锁打卡）被自己人挡掉。
+    private readonly List<string> _pendingEvents = new();
+
+    // OS 事件入口：切到 UI 线程 → 勿扰闸 → 去抖 → 忙则排队，闲则触发并顺带清队。
+    private void FireReminderEvent(string ev)
+    {
+        if (!Dispatcher.CheckAccess()) { try { Dispatcher.BeginInvoke(() => FireReminderEvent(ev)); } catch { } return; }
+        if (DndRemaining != null) return;    // 勿扰期间事件不触发（与计时器一个待遇），也不排队——没发生就是没发生
+        var now = DateTime.Now;
+        // 去抖：同一次锁屏/唤醒 Windows 可能连发两三条（唤醒尤其明显，Resume 常与 StatusChange 挨着来）。
+        // 3 秒内的同名事件当成同一次；不同事件互不影响（锁屏紧接着唤醒是真的发生了两件事）。
+        // 去抖放在排队之前：连发的重复通知该在门口拦掉，而不是在队里叠三份。
+        if (_lastEvent == ev && (now - _lastEventAt).TotalSeconds < 3) return;
+        _lastEvent = ev; _lastEventAt = now;
+
+        // 忙 = 有模态提醒窗在挂（它的嵌套消息循环里本回调照样进来）。排队等补发，别丢弃——
+        // 队内按事件名去重，同名挤在队里补发一次就够。
+        if (_reminderTickBusy) { if (!_pendingEvents.Contains(ev)) _pendingEvents.Add(ev); return; }
+
+        _reminderTickBusy = true;
+        try
+        {
+            bool changed = FireEventNow(ev, now);
+            changed |= DrainPendingEvents();   // 触发期间又攒下的（弹窗挂着时来的事件）当场补掉
+            if (changed) ReminderStateStore.Save(_statePath, _reminderStates);
+        }
+        finally { _reminderTickBusy = false; }
+    }
+
+    // 补发忙时攒下的事件。调用方必须已持有 _reminderTickBusy；返回是否动过运行态。
+    // 勿扰开始后剩下的先留在队里（不触发也不丢），勿扰结束后的第一个出口再补——
+    // 它们发生在勿扰之前，按「忙时只是延后」的口径处理，和勿扰期间发生的事件（直接不算）不同。
+    private bool DrainPendingEvents()
+    {
+        bool changed = false;
+        while (_pendingEvents.Count > 0 && DndRemaining == null)
+        {
+            var ev = _pendingEvents[0];
+            _pendingEvents.RemoveAt(0);
+            changed |= FireEventNow(ev, DateTime.Now);
+        }
+        return changed;
+    }
+
+    // 挑出该响应本事件的提醒，逐条触发并推进状态。返回是否动过运行态（调用方负责落盘）。
+    // 重入闸与勿扰由调用方把关——轮询那条路已经在计时器的闸里了，不能在这儿再上一次。
+    // 配了「触发延迟」的不当场响，而是武装 PendingFireAt 交给计时器引爆（Decide 的事件门开在 pending
+    // 之后正是为此）——否则编辑器收下了延迟、运行时却当场弹，等于静默吞掉一项用户设置。
+    private bool FireEventNow(string ev, DateTime now)
+    {
+        bool changed = false;
+        foreach (var r in _config.Reminders.ToList())
+        {
+            if (!ReminderEvent.ShouldFire(r, ev, now)) continue;
+            FireOrArm(r);
+            changed = true;
+        }
+        return changed;
+    }
+
+    // 事件到点的统一出口：配了「触发延迟」的武装 PendingFireAt 交计时器引爆，其余当场响。
+    // 订阅类（FireEventNow）与轮询类（空闲/低电量）都走这儿——只改其一的话，
+    // 「空闲 10 分钟后再等 5 分钟」这类配置会在轮询路径被静默吞掉，和评审 #5 同一个坑再挖一遍。
+    private void FireOrArm(Reminder r)
+    {
+        var st = StateOf(r);
+        if (r.DelaySeconds > 0 || r.RandomDelaySeconds > 0) ArmAt(r, st, DateTime.Now);
+        else FireAndAdvance(r, st);
+    }
+
+    // 到点后延迟：固定 + 随机（错峰），算出 PendingFireAt。计时器 arm 分支与事件触发共用——
+    // 随机上界 +1 处防 int.MaxValue 溢出（否则 _rng.Next 抛异常）；long 累加避免 int 溢出。
+    private void ArmAt(Reminder r, ReminderState st, DateTime baseTime)
+    {
+        int rd = r.RandomDelaySeconds;
+        long rand = rd > 0 ? _rng.Next(0, rd == int.MaxValue ? rd : rd + 1) : 0;
+        st.PendingFireAt = baseTime.AddSeconds((long)r.DelaySeconds + rand);
+    }
+
+    private ReminderState StateOf(Reminder r)
+    {
+        if (!_reminderStates.TryGetValue(r.Id, out var st)) { st = new ReminderState(); _reminderStates[r.Id] = st; }
+        return st;
+    }
+
+    // 轮询空闲时长与电源状态。计时器默认 30 秒一轮，对这两件事绰绰有余——
+    // 「空闲 10 分钟」晚半分钟触发没人在意，而为它单开一个高频计时器纯属浪费。
+    // 由 ReminderTick 在重入闸内调用，返回是否动过运行态。
+    // fire=false（勿扰期间）：只维护基线（电源在线态、空闲/低电量的「本轮已触发」复位），一律不触发——
+    // 勿扰的语义是「期间发生的事件不算数」，基线不跟着走的话，勿扰里拔的电源会在勿扰结束后被误判成「刚拔」。
+    private bool PollEnvironmentTriggers(DateTime now, bool fire = true)
+    {
+        bool changed = false;
+        int idle = Native.IdleTime.Minutes();
+        if (idle < 1) _idleFired.Clear();   // 人回来了：整体复位，下次离开重新算一轮
+        var (onAc, pct) = Native.PowerStatus.Read();
+        // 首轮只记基线不触发：否则程序一启动就会把「现在接着电源」当成一次刚插上。
+        if (fire && _lastOnAc is bool was && was != onAc) changed |= FireEventNow(onAc ? "acPlugged" : "acUnplugged", now);
+        _lastOnAc = onAc;
+
+        foreach (var r in _config.Reminders.ToList())
+        {
+            if (r.Trigger == "idle")
+            {
+                if (!fire) continue;   // 勿扰中不触发也不置位：空闲跨过勿扰结束仍在持续的，结束后照常响
+                if (!ReminderEvent.ShouldFire(r, "idle", now)) continue;
+                if (!ReminderEvent.IdleDue(r, idle, _idleFired.Contains(r.Id))) continue;
+                _idleFired.Add(r.Id);
+                FireOrArm(r);
+                changed = true;
+            }
+            else if (r.Trigger == "lowBattery")
+            {
+                // 复位判定不看 Enabled/星期/勿扰：电量涨回去了就是涨回去了，跟这条现在该不该响无关。
+                if (ReminderEvent.LowBatteryReset(r, pct, onAc)) { _lowBatteryFired.Remove(r.Id); continue; }
+                if (!fire) continue;
+                if (!ReminderEvent.ShouldFire(r, "lowBattery", now)) continue;
+                if (!ReminderEvent.LowBatteryDue(r, pct, onAc, _lowBatteryFired.Contains(r.Id))) continue;
+                _lowBatteryFired.Add(r.Id);
+                FireOrArm(r);
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     // 触发一条提醒：静默组 / 语音 / 通知 / 弹窗（是-否-稍后）。返回 (result, snoozeMinutes)。
@@ -920,7 +1261,10 @@ public partial class App : System.Windows.Application
         ReminderStateStore.Save(_statePath, _reminderStates);
     }
 
-    private void RegisterAumid()
+    // AUMID 的品牌信息落盘（注册表项 + 图标文件）。只在通知弹出时才被系统读到，与启动无关，
+    // 故整个搬到后台线程、由 OnStartup 末尾 fire-and-forget 调用（见那里的注释）。
+    // 进程内的 AUMID 声明不在这儿——它必须在建 UI 之前同步做完，留在 OnStartup 里。
+    private void RegisterAumidBranding()
     {
         try
         {
@@ -932,7 +1276,6 @@ public partial class App : System.Windows.Application
             if (ico != null) key?.SetValue("IconUri", ico);
         }
         catch { }
-        try { Native.Shell.SetCurrentProcessExplicitAppUserModelID(Aumid); } catch { }
     }
 
     // 把内嵌 logo.ico 解压到 LocalAppData 的稳定路径并返回；已存在(非空)则直接复用，不重复写。
@@ -965,10 +1308,17 @@ public partial class App : System.Windows.Application
         catch { }
     }
 
-    private void ShowCrash(Exception? ex)
+    // 追加错误日志，返回日志路径。任何线程可调（UnobservedTaskException 在终结器线程上进来）。
+    private string LogError(Exception? ex)
     {
         var logPath = Path.Combine(CfgDir, "clockwork.error.log");
         try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {ex}\r\n\r\n"); } catch { }
+        return logPath;
+    }
+
+    private void ShowCrash(Exception? ex)
+    {
+        var logPath = LogError(ex);
         // 崩溃兜底：先试品牌对话框；若它自身(依赖主题/资源)也失败，退回最稳的原生 MessageBox。
         var body = Lf("Crash_Body", ex?.Message ?? "", logPath);
         var title = Strings.Get("Crash_Title");
