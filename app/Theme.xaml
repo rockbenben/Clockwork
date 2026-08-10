@@ -124,6 +124,69 @@
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
+    <!-- ============ Expander（编辑器的折叠区） ============
+         标题不是「高级选项」这类死文案，而是调用方填入的一句行为描述（见步骤/提醒编辑器的
+         UpdateCondHeader / UpdateAdvHeader）：收起时那一行字就是当前配置的完整摘要。
+         标题用 Grid 而非横向 StackPanel 排——条件一多标题会很长，StackPanel 给的宽度无限、
+         永不换行、超出被裁（pitfalls 里那张容器语义表的第一行），Grid 的 * 列才能让它换行。 -->
+    <Style TargetType="Expander">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Expander">
+                    <StackPanel>
+                        <ToggleButton IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Background="Transparent" Cursor="Hand">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border Background="Transparent" Padding="0,5">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <!-- 标题顶格、箭头挂行尾（Win11 展开卡的布局）：表单标签已全部左对齐在 0 轨，
+                                                 标题若前置箭头就会被顶出半个字宽，成为全表单唯一不在轨上的一行。
+                                                 试过反过来给箭头留定宽槽位、把折叠区内自由行也缩进对齐箭头槽——
+                                                 那是在右对齐标签的锯齿左缘上打补丁，两条轨永远差一口气；左对齐后一条轨就够了。 -->
+                                            <TextBlock Grid.Column="0" Text="{Binding Header, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                       TextWrapping="Wrap" FontSize="12.5" Foreground="{StaticResource BrushMuted}"/>
+                                            <TextBlock x:Name="Chevron" Grid.Column="1" Text="▸" FontSize="11" Margin="8,1,2,0"
+                                                       VerticalAlignment="Top" Foreground="{StaticResource BrushBrass}"/>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter TargetName="Chevron" Property="Text" Value="▾"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Chevron" Property="Foreground" Value="{StaticResource BrushBrassDeep}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <ContentPresenter x:Name="Body" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="Body" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 表单类滚动区：内容与滚动条之间留一条呼吸缝。
+         滚动条是上面那条 10px 细条，而默认模板会把内容一直铺到它跟前。定宽控件还好（右边总能剩点），
+         真正贴住的是那些换行的说明文字——它们只有左边距、没有宽度，会一路铺满可用宽度，
+         于是每一行都正好顶在滚动条上，读起来像被挤住了。
+         Padding 加在 ScrollViewer 上正好只撑开这条缝：默认模板把它落到内容承载器的 Margin 上，
+         而滚动条在另一个网格列里，不受影响。底部也留一点——提醒编辑器允许横向滚动，
+         横条冒出来时会同样贴住最后一行。 -->
+    <Style x:Key="FormScroll" TargetType="ScrollViewer">
+        <Setter Property="Padding" Value="0,0,12,6"/>
+    </Style>
     <Style x:Key="GroupLabel" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontMono}"/>
@@ -214,6 +277,20 @@
     <!-- 破坏性按钮：只把文字换成 clay，保留和同列其它按钮一样的钢底＋描边。
          原来还抽掉了底色和描边——在一竖排包着框的按钮里，「删除」变成一条悬空的文字，
          把列的节奏戳了个洞。降调一次就够（不给黄铜），不必降两次。 -->
+    <!-- 打开选择器的那类按钮（浏览… / 选择… / 选日期）只画一个「…」，不带文字。
+         带文字的版本在别的语言里会把整行撑破：中文「浏览…」三个字，德语是 Durchsuchen…、俄语 Обзор…。
+         而这些按钮都排在一行的最右端，那一行又是水平 StackPanel——它给子元素的可用宽度是无限，
+         所以超出的部分不会换行也不会压缩，而是被上层的 ScrollViewer 直接裁掉：按钮显示不全、点不着。
+         换成「…」之后整行全部定宽，与语言无关，从根上不会再溢出。
+         「…」是 Windows 上「点开会弹个选择框」的通用记号；文案没有丢，挪到了 ToolTip 与朗读名上，
+         鼠标停一下能看到，读屏软件照样念得出来。
+         BasedOn 是承重的：具名样式不会自动继承隐式 Button 样式，漏了这一句按钮会掉光配色和模板。 -->
+    <Style x:Key="PickerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Content" Value="…"/>
+        <Setter Property="Width" Value="34"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
     <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Foreground" Value="{StaticResource BrushClay}"/>
     </Style>
@@ -867,7 +944,9 @@
         <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="13.5"/>
-        <Setter Property="TextAlignment" Value="Right"/>
+        <!-- 左对齐（曾是 Right）：右对齐标签配上长短悬殊的中文标签，表单左缘是一条锯齿，
+             子标题放哪都跟它对不齐；Win11 设置页同款的左对齐标签 + 固定输入列才是这套布局的正解。 -->
+        <Setter Property="TextAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,0,14,0"/>
     </Style>

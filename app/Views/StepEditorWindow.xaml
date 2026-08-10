@@ -5,7 +5,9 @@
         Title="{loc:Loc Ed_Title_Step}" Width="560" SizeToContent="Height" MaxHeight="780" WindowStartupLocation="CenterOwner"
         Background="{StaticResource BrushInk}"
         ShowInTaskbar="False" MinWidth="480" MinHeight="340">
-    <Grid Margin="16">
+    <!-- 右边距 6 不是 16：滚动条贴的是这层 Grid 的右缘，边距给大了它就悬在内容区里「靠左」，
+         还把最宽的行(118+10+380=508)挤进滚动条底下。内容与滚动条的间隙由 FormScroll 的内缩负责。 -->
+    <Grid Margin="16,16,6,16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -13,80 +15,89 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBlock Text="{loc:Loc Ed_Type}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/>
+            <TextBlock Text="{loc:Loc Ed_Type}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/>
             <ComboBox x:Name="KindCombo" AutomationProperties.Name="{loc:Loc Ed_Type}" Width="200" Height="28" SelectionChanged="KindCombo_Changed"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Style="{StaticResource FormScroll}">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,3">
-                    <TextBlock Text="{loc:Loc Ed_Label}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{loc:Loc Ed_Label}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/>
                     <TextBox x:Name="LabelBox" AutomationProperties.Name="{loc:Loc Ed_Label}" Width="380" Height="28"/>
                 </StackPanel>
 
                 <StackPanel x:Name="PanApp">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Target}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="TargetBox" AutomationProperties.Name="{loc:Loc Ed_Target}" Width="300" Height="28"/><Button Content="{loc:Loc Btn_Browse}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="BrowseTarget_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Target}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="TargetBox" AutomationProperties.Name="{loc:Loc Ed_Target}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseTarget_Click"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_AppHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Args}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ArgsBox" AutomationProperties.Name="{loc:Loc Ed_Args}" Width="380" Height="28"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WorkDir}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WorkDirBox" AutomationProperties.Name="{loc:Loc Ed_WorkDir}" Width="300" Height="28"/><Button Content="{loc:Loc Btn_Browse}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="BrowseWorkDir_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Args}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ArgsBox" AutomationProperties.Name="{loc:Loc Ed_Args}" Width="380" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WorkDir}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WorkDirBox" AutomationProperties.Name="{loc:Loc Ed_WorkDir}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseWorkDir_Click"/></StackPanel>
                     <CheckBox x:Name="ElevatedChk" Content="{loc:Loc Ed_Elevated}" Margin="118,3,0,3"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WindowStyle}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="WinStyleCombo" AutomationProperties.Name="{loc:Loc Ed_WindowStyle}" Width="180" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WindowStyle}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="WinStyleCombo" AutomationProperties.Name="{loc:Loc Ed_WindowStyle}" Width="180" Height="28"/></StackPanel>
                     <CheckBox x:Name="ActivateChk" Content="{loc:Loc Ed_ActivateIfRunning}" Margin="118,3,0,3"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_ActivateProcess}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ActivateProcBox" AutomationProperties.Name="{loc:Loc Ed_ActivateProcess}" Width="300" Height="28"/><Button Content="{loc:Loc Btn_Pick}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="PickActivateProc_Click"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_AltTargets}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="AltTargetsBox" AutomationProperties.Name="{loc:Loc Ed_AltTargets}" Width="380" Height="52" AcceptsReturn="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_ActivateProcess}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ActivateProcBox" AutomationProperties.Name="{loc:Loc Ed_ActivateProcess}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Pick}" AutomationProperties.Name="{loc:Loc Btn_Pick}" Margin="8,0,0,0" Click="PickActivateProc_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_AltTargets}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="AltTargetsBox" AutomationProperties.Name="{loc:Loc Ed_AltTargets}" Width="380" Height="52" AcceptsReturn="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_AltTargetsHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
                 <StackPanel x:Name="PanKeys">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Combo}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ComboBox2" AutomationProperties.Name="{loc:Loc Ed_Combo}" Width="300" Height="28" Style="{StaticResource HotkeyCapture}"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Combo}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ComboBox2" AutomationProperties.Name="{loc:Loc Ed_Combo}" Width="300" Height="28" Style="{StaticResource HotkeyCapture}"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_KeysHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
                 <StackPanel x:Name="PanVolume">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Action}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="VolActionCombo" AutomationProperties.Name="{loc:Loc Ed_Action}" Width="160" Height="28" SelectionChanged="VolAction_Changed"/></StackPanel>
-                    <StackPanel x:Name="VolLevelRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Level}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="LevelBox" AutomationProperties.Name="{loc:Loc Ed_Level}" Width="90" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Action}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="VolActionCombo" AutomationProperties.Name="{loc:Loc Ed_Action}" Width="160" Height="28" SelectionChanged="VolAction_Changed"/></StackPanel>
+                    <StackPanel x:Name="VolLevelRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Level}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="LevelBox" AutomationProperties.Name="{loc:Loc Ed_Level}" Width="90" Height="28"/></StackPanel>
                 </StackPanel>
 
                 <StackPanel x:Name="PanWindow">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Action}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="WinActionCombo" AutomationProperties.Name="{loc:Loc Ed_Action}" Width="190" Height="28" SelectionChanged="WinAction_Changed"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Process}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ProcessBox" AutomationProperties.Name="{loc:Loc Ed_Process}" Width="240" Height="28"/><Button Content="{loc:Loc Btn_Pick}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="PickProcess_Click"/></StackPanel>
-                    <StackPanel x:Name="WinSendRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SendKey}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="SendKeyBox" AutomationProperties.Name="{loc:Loc Ed_SendKey}" Width="240" Height="28"/><Button Content="{loc:Loc Btn_Capture}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="CaptureSendKey_Click"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WaitWin}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WaitWinBox" AutomationProperties.Name="{loc:Loc Ed_WaitWin}" Width="90" Height="28"/></StackPanel>
-                    <StackPanel x:Name="WinPostRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_PostDelay}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="PostDelayBox" AutomationProperties.Name="{loc:Loc Ed_PostDelay}" Width="90" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Action}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="WinActionCombo" AutomationProperties.Name="{loc:Loc Ed_Action}" Width="190" Height="28" SelectionChanged="WinAction_Changed"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Process}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ProcessBox" AutomationProperties.Name="{loc:Loc Ed_Process}" Width="240" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Pick}" AutomationProperties.Name="{loc:Loc Btn_Pick}" Margin="8,0,0,0" Click="PickProcess_Click"/></StackPanel>
+                    <StackPanel x:Name="WinSendRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SendKey}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="SendKeyBox" AutomationProperties.Name="{loc:Loc Ed_SendKey}" Width="240" Height="28"/><Button Content="{loc:Loc Btn_Capture}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="CaptureSendKey_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WaitWin}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WaitWinBox" AutomationProperties.Name="{loc:Loc Ed_WaitWin}" Width="90" Height="28"/></StackPanel>
+                    <StackPanel x:Name="WinPostRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_PostDelay}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="PostDelayBox" AutomationProperties.Name="{loc:Loc Ed_PostDelay}" Width="90" Height="28"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_WindowHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
                 <StackPanel x:Name="PanSystem">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Command}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SysCmdCombo" AutomationProperties.Name="{loc:Loc Ed_Command}" Width="240" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Command}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SysCmdCombo" AutomationProperties.Name="{loc:Loc Ed_Command}" Width="240" Height="28" SelectionChanged="SysCmd_Changed"/></StackPanel>
+                    <!-- 只有带参数的命令才露出这两行（剪贴板文本 / 亮度），其余命令一格空框都不出现 -->
+                    <StackPanel x:Name="SysTextRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_ClipText}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="SysTextBox" AutomationProperties.Name="{loc:Loc Ed_ClipText}" Width="380" Height="72" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
+                    <StackPanel x:Name="SysLevelRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Brightness}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="SysLevelBox" AutomationProperties.Name="{loc:Loc Ed_Brightness}" Width="90" Height="28"/><TextBlock Text="{loc:Loc Ed_BrightnessHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" VerticalAlignment="Center" Margin="8,0,0,0"/></StackPanel>
                 </StackPanel>
 
                 <StackPanel x:Name="PanText">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="TextBox2" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="380" Height="90" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_TextProcess}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="TextProcessBox" AutomationProperties.Name="{loc:Loc Ed_TextProcess}" Width="240" Height="28"/><Button Content="{loc:Loc Btn_Pick}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="PickTextProcess_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="TextBox2" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="380" Height="90" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_TextProcess}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="TextProcessBox" AutomationProperties.Name="{loc:Loc Ed_TextProcess}" Width="240" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Pick}" AutomationProperties.Name="{loc:Loc Btn_Pick}" Margin="8,0,0,0" Click="PickTextProcess_Click"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_TextHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
                 <StackPanel x:Name="PanMessage">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Message}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MessageBox2" AutomationProperties.Name="{loc:Loc Ed_Message}" Width="380" Height="80" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Present}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="PresentCombo" AutomationProperties.Name="{loc:Loc Ed_Present}" Width="200" Height="28" SelectionChanged="Present_Changed"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Message}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MessageBox2" AutomationProperties.Name="{loc:Loc Ed_Message}" Width="380" Height="80" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Present}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="PresentCombo" AutomationProperties.Name="{loc:Loc Ed_Present}" Width="200" Height="28" SelectionChanged="Present_Changed"/></StackPanel>
                     <CheckBox x:Name="SpeakChk" Content="{loc:Loc Ed_Speak}" Margin="118,3,0,3"/>
-                    <StackPanel x:Name="MsgCardRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_AutoDismiss}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="PopupSecondsBox" AutomationProperties.Name="{loc:Loc Ed_AutoDismiss}" Width="90" Height="28"/></StackPanel>
+                    <StackPanel x:Name="MsgCardRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_AutoDismiss}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="PopupSecondsBox" AutomationProperties.Name="{loc:Loc Ed_AutoDismiss}" Width="90" Height="28"/></StackPanel>
                     <CheckBox x:Name="ConfirmChk" Content="{loc:Loc Ed_Confirm}" Margin="118,3,0,3"/>
-                    <StackPanel x:Name="MsgOnYesRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_OnYes}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="OnYesTypeCombo" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="140" Height="28" SelectionChanged="OnYesType_Changed"/><TextBox x:Name="OnYesTargetBox" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="150" Height="28" Margin="8,0,0,0"/><Button x:Name="OnYesBrowseBtn" Content="{loc:Loc Btn_Browse}" MinWidth="72" Height="28" Padding="10,0" Margin="8,0,0,0" Click="BrowseOnYes_Click"/></StackPanel>
+                    <StackPanel x:Name="MsgOnYesRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_OnYes}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="OnYesTypeCombo" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="140" Height="28" SelectionChanged="OnYesType_Changed"/><TextBox x:Name="OnYesTargetBox" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="150" Height="28" Margin="8,0,0,0"/><Button x:Name="OnYesBrowseBtn" Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseOnYes_Click"/></StackPanel>
                 </StackPanel>
 
                 <StackPanel x:Name="PanGroup">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Group}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="GroupCombo" AutomationProperties.Name="{loc:Loc Ed_Group}" Width="240" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Group}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="GroupCombo" AutomationProperties.Name="{loc:Loc Ed_Group}" Width="240" Height="28"/></StackPanel>
+                    <!-- 交叉口指路：一个组都没有时，下拉里只有「（无）」，是条死路——告诉人出口在哪，
+                         而不是让他对着空下拉猜。只在真没有组时出现（见构造函数）。 -->
+                    <TextBlock x:Name="NoGroupsHint" Text="{loc:Loc Ed_NoGroupsHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,8,0,3"><TextBlock Text="{loc:Loc Ed_DelayMs}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="DelayBox" AutomationProperties.Name="{loc:Loc Ed_DelayMs}" Width="120" Height="28"/></StackPanel>
-                <StackPanel x:Name="RepeatRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Repeat}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="RepeatBox" AutomationProperties.Name="{loc:Loc Ed_Repeat}" Width="120" Height="28"/></StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Note}" Width="108" TextWrapping="Wrap" TextAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="NoteBox" AutomationProperties.Name="{loc:Loc Ed_Note}" Width="380" Height="28"/></StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,3"><TextBlock Text="{loc:Loc Ed_DelayMs}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="DelayBox" AutomationProperties.Name="{loc:Loc Ed_DelayMs}" Width="120" Height="28"/></StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Note}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="NoteBox" AutomationProperties.Name="{loc:Loc Ed_Note}" Width="380" Height="28"/></StackPanel>
 
-                <!-- 分隔线：以下是「什么时候才执行」的条件块，整块贴左缘、不进上面的标签列。
-                     没有这条线时，它只是「唯一一处对不齐的控件」；有了线，左缘对齐就读作换了一段。 -->
-                <Border Height="1" Background="{StaticResource BrushLine}" Margin="0,16,0,0"/>
-                <TextBlock Text="{loc:Loc Ed_DaysHeader}" Margin="0,12,0,6" FontSize="12" Foreground="{StaticResource BrushMuted}"/>
+                <!-- 条件与重复整块折叠。新用户加一条「打开微信」不必面对六种条件和重复次数——
+                     没配置时默认收起、一行「总是执行」带过；配过的自动展开。折叠条标题由代码实时填
+                     （UpdateCondHeader），用的是列表摘要同一套文案，编辑时看到的与列表里看到的严格一致。
+                     原来的分隔线让位给折叠条本身：黄铜箭头 + 左缘齐平，同样读作「换了一段」。 -->
+                <Expander x:Name="CondExp" Margin="0,14,0,0">
+                <StackPanel Margin="0,4,0,0">
+                <StackPanel x:Name="RepeatRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Repeat}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="RepeatBox" AutomationProperties.Name="{loc:Loc Ed_Repeat}" Width="120" Height="28"/></StackPanel>
+                <TextBlock Text="{loc:Loc Ed_DaysHeader}" Margin="0,8,0,6" FontSize="12" Foreground="{StaticResource BrushMuted}"/>
                 <StackPanel x:Name="DaysPanel" Orientation="Horizontal" Margin="0,0,0,4">
                     <CheckBox x:Name="Day1" Content="{loc:Loc Day_1}" Margin="0,0,10,0"/><CheckBox x:Name="Day2" Content="{loc:Loc Day_2}" Margin="0,0,10,0"/>
                     <CheckBox x:Name="Day3" Content="{loc:Loc Day_3}" Margin="0,0,10,0"/><CheckBox x:Name="Day4" Content="{loc:Loc Day_4}" Margin="0,0,10,0"/>
@@ -98,10 +109,36 @@
                     <TextBox x:Name="BeforeTimeBox" AutomationProperties.Name="{loc:Loc Ed_BeforeTimeHint}" Width="60" Height="26" Margin="6,0" ToolTip="{loc:Loc Ed_BeforeTimeHint}"/>
                     <TextBlock Text="{loc:Loc Ed_HourBefore}" VerticalAlignment="Center"/>
                 </StackPanel>
+                <!-- 「仅 N 后」与上面一行是 AND：两条都勾 = 09:00 后且 18:00 前，正好圈出上班时段 -->
+                <StackPanel Orientation="Horizontal" Margin="0,3">
+                    <CheckBox x:Name="OnlyAfterChk" Content="{loc:Loc Ed_OnlyAfter}" VerticalAlignment="Center"/>
+                    <TextBox x:Name="AfterTimeBox" AutomationProperties.Name="{loc:Loc Ed_AfterTimeHint}" Width="60" Height="26" Margin="6,0" ToolTip="{loc:Loc Ed_AfterTimeHint}"/>
+                    <TextBlock Text="{loc:Loc Ed_HourAfter}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- 环境条件：星期和时刻只看钟表，这三条看机器此刻的状态。留空 / 选「不限」= 不设限。 -->
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,3">
+                    <TextBlock Text="{loc:Loc Ed_IfProcess}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="IfProcModeCombo" AutomationProperties.Name="{loc:Loc Ed_IfProcess}" Width="150" Height="28" SelectionChanged="IfProcMode_Changed"/>
+                    <TextBox x:Name="IfProcBox" AutomationProperties.Name="{loc:Loc Ed_IfProcess}" Width="140" Height="28" Margin="8,0,0,0"/>
+                    <Button x:Name="IfProcPickBtn" Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Pick}" AutomationProperties.Name="{loc:Loc Btn_Pick}" Margin="8,0,0,0" Click="PickIfProcess_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,3">
+                    <TextBlock Text="{loc:Loc Ed_IfPower}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="IfPowerCombo" AutomationProperties.Name="{loc:Loc Ed_IfPower}" Width="150" Height="28"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,3">
+                    <TextBlock Text="{loc:Loc Ed_IfPath}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBox x:Name="IfPathBox" AutomationProperties.Name="{loc:Loc Ed_IfPath}" Width="300" Height="28"/>
+                    <Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseIfPath_Click"/>
+                </StackPanel>
+                <TextBlock Text="{loc:Loc Ed_IfPathHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+                </Expander>
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,10,0">
             <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource DialogPrimaryButton}" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
             <Button Content="{loc:Loc Ed_Cancel}" Style="{StaticResource DialogButton}" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>

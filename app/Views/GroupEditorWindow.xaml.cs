@@ -28,7 +28,8 @@ public partial class GroupEditorWindow : Window
     public GroupEditorWindow(ActionGroup group, IReadOnlyList<ActionGroup> groups, string stopHotkey)
     {
         InitializeComponent();
-        SourceInitialized += (_, _) => Native.DarkTitleBar.Apply(this);
+        Native.DarkWindow.Apply(this);
+        WindowSizing.FitToWorkArea(this);
         _original = group;
         _groups = groups;
         _stopHotkey = stopHotkey;
@@ -64,21 +65,15 @@ public partial class GroupEditorWindow : Window
 
     private void SAdd_Click(object sender, RoutedEventArgs e)
     {
-        var menu = new ContextMenu();
-        foreach (var kind in Kinds)
+        // 与启动清单同一份意图分节菜单（StepMenu），别在两处各排一版。
+        var menu = StepMenu.Build(k =>
         {
-            var k = kind;
-            var mi = new MenuItem { Header = StepDisplay.StepKindLabel(k) };
-            mi.Click += (s, _) =>
-            {
-                var step = StepEditorWindow.Edit(this, null, k, StepGroups);
-                if (step == null) return;
-                int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
-                _rows.Insert(pos, new StepRowVm(step, () => { }));
-                Steps.SelectedIndex = pos;
-            };
-            menu.Items.Add(mi);
-        }
+            var step = StepEditorWindow.Edit(this, null, k, StepGroups);
+            if (step == null) return;
+            int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
+            _rows.Insert(pos, new StepRowVm(step, () => { }));
+            Steps.SelectedIndex = pos;
+        });
         menu.PlacementTarget = SAdd;
         menu.IsOpen = true;
     }

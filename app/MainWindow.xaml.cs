@@ -37,7 +37,8 @@ public partial class MainWindow : Window
     public MainWindow(RootConfig config, Action save, Action<string, Reminder>? migrateReminderState = null)
     {
         InitializeComponent();
-        SourceInitialized += (_, _) => Native.DarkTitleBar.Apply(this);
+        Native.DarkWindow.Apply(this);   // 深色标题栏 + 消除开窗白闪（本方法自己挂 SourceInitialized/ContentRendered）
+        Views.WindowSizing.FitToWorkArea(this);   // 默认高度按屏幕收放，小屏不越界、大屏不浪费
         Title = "Clockwork · " + Strings.Get("App_Subtitle");   // 副标题并入系统标题栏，去掉内容区重复的首栏
         _config = config;
         _save = save;
@@ -65,6 +66,7 @@ public partial class MainWindow : Window
         VersionText.Text = "v" + AppVersion();
         StartupDelayBox.Text = config.Settings.StartupDelaySeconds.ToString();
         StartMinChk.IsChecked = config.Settings.StartMinimized;
+        WaitReadyChk.IsChecked = config.Settings.StartupWaitForReady;
         WireHotkeyBox();   // 急停键「点击即录键」（Attach 内会填入当前值）
         // 急停按钮跟着运行状态走：订阅一次，窗口真正关闭（托盘退出）时摘掉——
         // 平时关窗只是隐到托盘，窗口对象还在，摘早了再打开就不会更新了。
@@ -107,6 +109,7 @@ public partial class MainWindow : Window
             _config.Settings.StartupDelaySeconds = StepHelpers.ClampStartupDelay(d);
         StartupDelayBox.Text = _config.Settings.StartupDelaySeconds.ToString();
         _config.Settings.StartMinimized = StartMinChk.IsChecked == true;
+        _config.Settings.StartupWaitForReady = WaitReadyChk.IsChecked == true;
         _save?.Invoke();
     }
 
@@ -359,21 +362,30 @@ public partial class MainWindow : Window
 
     private void LAdd_Click(object sender, RoutedEventArgs e)
     {
-        // 新增 ▾：弹类型菜单 → 打开对应编辑器 → 插入。
-        var menu = new ContextMenu();
-        foreach (var kind in StepDisplay.StepKinds)
+        // 新增 ▾：按意图分节的类型菜单（见 StepMenu）→ 打开对应编辑器 → 插入。
+        // 「从开始菜单选择…」排「打开」节最前：它是零配置的那条路（勾几下就完事），
+        // 而其余每一项都要先开编辑器再手填目标。最常见的需求应该排在最省事的入口上。
+        var fromMenu = new MenuItem { Header = Strings.Get("Menu_FromStartMenu") };
+        fromMenu.Click += (_, _) => AddFromStartMenu();
+        var menu = Views.StepMenu.Build(k =>
         {
-            var k = kind;
-            var mi = new MenuItem { Header = StepDisplay.StepKindLabel(k) };
-            mi.Click += (s, _) =>
-            {
-                var step = Views.StepEditorWindow.Edit(this, null, k, _config?.ActionGroups ?? new List<ActionGroup>());
-                if (step != null) { _launch?.Add(step); SyncSelection(); }
-            };
-            menu.Items.Add(mi);
-        }
+            var step = Views.StepEditorWindow.Edit(this, null, k, _config?.ActionGroups ?? new List<ActionGroup>());
+            if (step != null) { _launch?.Add(step); SyncSelection(); }
+        }, firstOpenItem: fromMenu);
         menu.PlacementTarget = LAdd;
         menu.IsOpen = true;
+    }
+
+    // 从开始菜单批量加：选中的每一项都建一条「启动程序」步骤，目标就是那个 .lnk。
+    // 新加的步骤默认不勾选——与首启样例同一条立场：工具不该在用户还没看过一眼时就替他动电脑。
+    // 逐条 Add 而不是一次性塞：Add 内部管选中位置与落盘，重写一遍批量版本只会多出一份要维护的插入逻辑。
+    private void AddFromStartMenu()
+    {
+        if (_launch == null) return;
+        if (Views.Pickers.PickStartMenuApps(this) is not List<(string Name, string Path)> picked) return;
+        foreach (var (name, path) in picked)
+            _launch.Add(new LaunchStep { Kind = "app", Label = name, Target = path, Enabled = false });
+        SyncSelection();
     }
 
     private void LEdit_Click(object sender, RoutedEventArgs e)

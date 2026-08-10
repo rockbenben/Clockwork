@@ -17,12 +17,17 @@ public partial class StepEditorWindow : Window
     public StepEditorWindow(LaunchStep step, IReadOnlyList<ActionGroup> groups)
     {
         InitializeComponent();
-        SourceInitialized += (_, _) => Native.DarkTitleBar.Apply(this);
+        Native.DarkWindow.Apply(this);
+        WindowSizing.FitToWorkArea(this);
         _groups = groups;
         _original = step;
 
         FillCombo(KindCombo, StepDisplay.StepKinds.Select(k => (StepDisplay.StepKindLabel(k), k)).ToArray(), step.Kind);
-        FillCombo(VolActionCombo, new[] { (Strings.Get("Vol_mute"), "mute"), (Strings.Get("Vol_unmute"), "unmute"), (Strings.Get("Ed_Vol_Set"), "set") }, string.IsNullOrEmpty(step.Action) ? "mute" : step.Action);
+        FillCombo(VolActionCombo, new[]
+        {
+            (Strings.Get("Vol_mute"), "mute"), (Strings.Get("Vol_unmute"), "unmute"), (Strings.Get("Ed_Vol_Set"), "set"),
+            (Strings.Get("Vol_micMute"), "micMute"), (Strings.Get("Vol_micUnmute"), "micUnmute"),
+        }, string.IsNullOrEmpty(step.Action) ? "mute" : step.Action);
         FillCombo(WinActionCombo, new[] { (Strings.Get("Win_close"), "close"), (Strings.Get("Win_minimize"), "minimize"), (Strings.Get("Win_maximize"), "maximize"), (Strings.Get("Win_activate"), "activate"), (Strings.Get("Win_sendkey"), "sendkey") }, string.IsNullOrEmpty(step.Action) ? "close" : step.Action);
         FillCombo(SysCmdCombo, StepDisplay.SystemCommandMap().Select(kv => (kv.Value, kv.Key)).ToArray(), step.Command);
         FillCombo(OnYesTypeCombo, new[] { (Strings.Get("Ed_OnYes_None"), "none"), (Strings.Get("Ed_OnYes_Run"), "run"), (Strings.Get("Ed_OnYes_Url"), "url") }, step.OnYes.Type == "sound" ? "run" : step.OnYes.Type);
@@ -33,6 +38,14 @@ public partial class StepEditorWindow : Window
             (Strings.Get("WinStyle_Default"), ""), (Strings.Get("WinStyle_Minimized"), "minimized"),
             (Strings.Get("WinStyle_Maximized"), "maximized"), (Strings.Get("WinStyle_Hidden"), "hidden"),
         }, step.WindowStyle);
+        FillCombo(IfProcModeCombo, new[]
+        {
+            (Strings.Get("Ed_Cond_Any"), ""), (Strings.Get("Ed_IfProc_Running"), "running"), (Strings.Get("Ed_IfProc_Not"), "notRunning"),
+        }, step.IfProcessMode);
+        FillCombo(IfPowerCombo, new[]
+        {
+            (Strings.Get("Ed_Cond_Any"), ""), (Strings.Get("Ed_IfPower_Ac"), "ac"), (Strings.Get("Ed_IfPower_Battery"), "battery"),
+        }, step.IfPower);
 
         LoadStep(step);
         ShowPanelForKind(step.Kind);
@@ -40,6 +53,22 @@ public partial class StepEditorWindow : Window
         UpdateWinRows();
         UpdateOnYes();
         UpdateMessageRows();
+        UpdateSysRows();
+        UpdateIfProcRow();
+
+        // 交叉口指路：一个组都没有时「动作组」下拉是死路，指条活路（Ed_NoGroupsHint）。
+        Vis(NoGroupsHint, _groups.Count == 0);
+
+        // 「条件与重复」折叠条：标题实时等于当前配置的摘要修饰段（与列表同一套文案）。
+        // 没配置的默认收起——新用户加一条「打开微信」不必面对六种条件；配过的自动展开，别把已有配置藏没。
+        foreach (var cb in new[] { Day1, Day2, Day3, Day4, Day5, Day6, Day7, OnlyBeforeChk, OnlyAfterChk })
+            cb.Click += (_, _) => UpdateCondHeader();
+        foreach (var tb in new[] { BeforeTimeBox, AfterTimeBox, IfProcBox, IfPathBox, RepeatBox })
+            tb.TextChanged += (_, _) => UpdateCondHeader();
+        IfPowerCombo.SelectionChanged += (_, _) => UpdateCondHeader();
+        // IfProcModeCombo 已有 IfProcMode_Changed，在那里顺带刷新（别挂两个各自为政的处理器）。
+        UpdateCondHeader();
+        CondExp.IsExpanded = StepDisplay.DecorationSummary(ConditionProbe()).Length > 0;
 
         // 「组合键」是单个组合（keys 步骤经 SendKeyCombo 单发），与热键同性质，改「点击即录键」——去掉多余的捕捉按钮。
         // 值就在框里、确定时读取，故 set 空。（「发送键」是 SendKeys 序列，可含 {TAB}{ENTER}/字面文本，必须能打字，
@@ -83,6 +112,51 @@ public partial class StepEditorWindow : Window
         Vis(MsgOnYesRow, !card);
     }
 
+    private void SysCmd_Changed(object sender, SelectionChangedEventArgs e) => UpdateSysRows();
+    private void IfProcMode_Changed(object sender, SelectionChangedEventArgs e) { UpdateIfProcRow(); UpdateCondHeader(); }
+
+    // 从表单当前值收「条件 + 重复」字段——这套映射的唯一出处：折叠条标题实时计算用它，
+    // Ok_Click 保存也从它起步再补其余字段。只有一份，标题与落盘才不可能说两种话。
+    // 「选了不限就清进程名」也在这儿：留着会在 json 里躺一个不生效的条件，
+    // 下次改回「该进程在运行时」又悄悄复活（与 message 步骤切卡片时清掉 Confirm/OnYes 同一条理由）。
+    private LaunchStep ConditionProbe()
+    {
+        ParseBeforeTime(BeforeTimeBox.Text, out int bh, out int bm);
+        ParseBeforeTime(AfterTimeBox.Text, out int ah, out int am, fallbackHour: 18);
+        return new LaunchStep
+        {
+            Repeat = StepHelpers.ClampRepeat(ParseOr(RepeatBox.Text, 0)),
+            Days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7),
+            OnlyBefore8 = OnlyBeforeChk.IsChecked == true, BeforeHour = bh, BeforeMinute = bm,
+            OnlyAfter = OnlyAfterChk.IsChecked == true, AfterHour = ah, AfterMinute = am,
+            IfProcessMode = ComboVal(IfProcModeCombo),
+            IfProcess = ComboVal(IfProcModeCombo) == "" ? "" : StepHelpers.ToProcessName(IfProcBox.Text),
+            IfPower = ComboVal(IfPowerCombo),
+            IfPathExists = IfPathBox.Text.Trim(),
+        };
+    }
+
+    private void UpdateCondHeader()
+    {
+        var deco = StepDisplay.DecorationSummary(ConditionProbe()).TrimStart();
+        CondExp.Header = Strings.Lf("Ed_CondHeader", deco.Length == 0 ? Strings.Get("Ed_CondAlways") : deco);
+    }
+
+    // 只有带参数的系统命令才露出对应的输入行——没有可填的东西就别显示（与 UpdateOnYes 同一条立场）。
+    private void UpdateSysRows()
+    {
+        var cmd = ComboVal(SysCmdCombo);
+        Vis(SysTextRow, StepDisplay.SystemCommandTakesText(cmd));
+        Vis(SysLevelRow, StepDisplay.SystemCommandTakesLevel(cmd));
+    }
+
+    // 选「不限」时进程名框与「选择…」什么也控制不了，一并藏掉。
+    private void UpdateIfProcRow()
+    {
+        bool on = ComboVal(IfProcModeCombo) != "";
+        Vis(IfProcBox, on); Vis(IfProcPickBtn, on);
+    }
+
     private void LoadStep(LaunchStep s)
     {
         LabelBox.Text = s.Label;
@@ -97,9 +171,14 @@ public partial class StepEditorWindow : Window
         DelayBox.Text = s.DelayMs.ToString();
         RepeatBox.Text = StepHelpers.StepRepeat(s).ToString();
         NoteBox.Text = s.Note;
+        SysTextBox.Text = s.Text; SysLevelBox.Text = s.Level.ToString();
         LoadDays(s.Days, Day1, Day2, Day3, Day4, Day5, Day6, Day7);
         OnlyBeforeChk.IsChecked = s.OnlyBefore8;
         BeforeTimeBox.Text = StepHelpers.BeforeTimeLabel(s);   // HH:mm，支持任意时刻
+        OnlyAfterChk.IsChecked = s.OnlyAfter;
+        AfterTimeBox.Text = StepHelpers.AfterTimeLabel(s);
+        IfProcBox.Text = s.IfProcess;
+        IfPathBox.Text = s.IfPathExists;
     }
 
     private void ShowPanelForKind(string kind)
@@ -125,9 +204,6 @@ public partial class StepEditorWindow : Window
     private void Ok_Click(object sender, RoutedEventArgs e)
     {
         var kind = ComboVal(KindCombo);
-        int delay = ParseOr(DelayBox.Text, 0);
-        var days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7);
-        ParseBeforeTime(BeforeTimeBox.Text, out int beforeHour, out int beforeMinute);
         // 发送键编辑期校验：IsValidSendKeys 按 SendKeys 真实语法精确解析，只拦 SendWait 必抛的串
         //（未闭合/空花括号组、未知键名、孤立 } 等），合法转义（{{} {}}）不误伤——
         // 旧的「花括号是否成对」廉价校验因误伤被移除，没有编辑期兜底则畸形串要到每次开机运行时才暴露。
@@ -137,19 +213,15 @@ public partial class StepEditorWindow : Window
             return;
         }
 
-        var r = new LaunchStep
-        {
-            Kind = kind,
-            Label = LabelBox.Text,
-            DelayMs = delay,
-            Repeat = StepHelpers.ClampRepeat(ParseOr(RepeatBox.Text, 0)),
-            Note = NoteBox.Text,
-            Days = days,
-            OnlyBefore8 = OnlyBeforeChk.IsChecked == true,
-            BeforeHour = beforeHour,
-            BeforeMinute = beforeMinute,
-            Enabled = _original.Enabled,   // 保留启用/禁用态：编辑步骤不应把用户关掉的步骤又打开
-        };
+        // 条件与重复从 ConditionProbe 起步——那是这套字段映射的唯一出处（折叠条标题实时用的同一份）。
+        // 曾经这里逐字重抄一遍，评审指出两份手抄迟早漂移：下一个条件字段只加了保存这边，
+        // 标题就会描述一个与落盘不同的步骤，而且不会有任何东西报错。
+        var r = ConditionProbe();
+        r.Kind = kind;
+        r.Label = LabelBox.Text;
+        r.DelayMs = ParseOr(DelayBox.Text, 0);
+        r.Note = NoteBox.Text;
+        r.Enabled = _original.Enabled;   // 保留启用/禁用态：编辑步骤不应把用户关掉的步骤又打开
 
         switch (kind)
         {
@@ -167,7 +239,12 @@ public partial class StepEditorWindow : Window
                 r.Action = ComboVal(WinActionCombo); r.Process = StepHelpers.ToProcessName(ProcessBox.Text);
                 r.SendKey = SendKeyBox.Text; r.WaitForWindowSeconds = ParseOr(WaitWinBox.Text, 0); r.PostWindowDelaySeconds = ParseOr(PostDelayBox.Text, 0);
                 break;
-            case "system": r.Command = ComboVal(SysCmdCombo); r.Label = StepDisplay.SystemCommandLabel(r.Command); break;
+            case "system":
+                r.Command = ComboVal(SysCmdCombo); r.Label = StepDisplay.SystemCommandLabel(r.Command);
+                // 只给用得上参数的命令存参数：否则「锁屏」步骤的 json 里会躺着一段与它无关的剪贴板文本。
+                if (StepDisplay.SystemCommandTakesText(r.Command)) r.Text = SysTextBox.Text;
+                if (StepDisplay.SystemCommandTakesLevel(r.Command)) r.Level = Math.Clamp(ParseOr(SysLevelBox.Text, 50), 0, 100);
+                break;
             case "text": r.Text = TextBox2.Text; r.Process = StepHelpers.ToProcessName(TextProcessBox.Text); break;
             case "group": r.GroupId = ComboVal(GroupCombo); r.Label = _groups.FirstOrDefault(g => g.Id == r.GroupId)?.Name ?? r.Label; break;
             case "message":
@@ -193,6 +270,14 @@ public partial class StepEditorWindow : Window
     private void PickProcess_Click(object sender, RoutedEventArgs e) { if (Pickers.PickProcess(this) is string p) ProcessBox.Text = p; }
     private void PickTextProcess_Click(object sender, RoutedEventArgs e) { if (Pickers.PickProcess(this) is string p) TextProcessBox.Text = p; }
     private void PickActivateProc_Click(object sender, RoutedEventArgs e) { if (Pickers.PickProcess(this) is string p) ActivateProcBox.Text = p; }
+    private void PickIfProcess_Click(object sender, RoutedEventArgs e) { if (Pickers.PickProcess(this) is string p) IfProcBox.Text = p; }
+    // 条件用的路径既可能是文件也可能是文件夹（U 盘盘符、导出目录），两个都能挑：先给文件框，
+    // 用户取消了再给文件夹框——一个按钮覆盖两种，比并排放两个按钮省事。
+    private void BrowseIfPath_Click(object sender, RoutedEventArgs e)
+    {
+        if (Pickers.BrowseFile(this) is string f) { IfPathBox.Text = f; return; }
+        if (Pickers.BrowseFolder(this) is string d) IfPathBox.Text = d;
+    }
     // 打开编辑器，返回编辑后的新步骤（取消→null）。step 为 null=新建指定 kind。
     public static LaunchStep? Edit(Window owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups)
     {

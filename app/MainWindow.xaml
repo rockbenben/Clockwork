@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Clockwork"
         xmlns:loc="clr-namespace:Clockwork.I18n"
         mc:Ignorable="d"
-        Title="Clockwork" Height="660" Width="1040" MinHeight="520" MinWidth="820"
+        Title="Clockwork" Height="720" Width="1040" MinHeight="520" MinWidth="820"
         Background="{StaticResource BrushInk}"
         Icon="/logo.ico" WindowStartupLocation="CenterScreen">
     <!-- 单元格省略号样式（原来叫 SysCell / SysCmdCell、只在本页用）已升到 Theme.xaml 的
@@ -270,26 +270,60 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- ===== 左：常规 ===== -->
-                            <StackPanel Grid.Column="0" Margin="28,26,28,26" VerticalAlignment="Top">
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,22">
+                            <!-- ===== 左：设置 =====
+                                 分三段，顺序照「什么时候会用到它」排：开机那一组从「要不要自启」起头，
+                                 延迟 / 等就绪 / 最小化都是它的下游，全部挨着它；原来「开机延迟」在最上、
+                                 「开机自启」在最下，中间隔着热键和语言，等于把一个开关和它的三个参数拆到两头。 -->
+                            <!-- 左栏必须能滚：分三段之后它比原来高出一截，1080p 上「配置备份」那两个按钮会被挤出
+                                 可视区，而面板本身没有滚动条——看起来就是功能消失了。靠收紧间距去躲这个高度只是
+                                 把悬崖往后挪一格（换一种语言、换个 DPI 又会掉下去），滚动条才是不挑窗口大小的那个答案。 -->
+                            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Style="{StaticResource FormScroll}">
+                            <StackPanel Margin="28,26,28,26" VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
                                     <Border Width="3" Height="16" Background="{StaticResource BrushBrass}" CornerRadius="1.5" VerticalAlignment="Center"/>
-                                    <TextBlock Text="{loc:Loc Settings_General}" FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{loc:Loc Settings_Boot}" FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
 
-                                <!-- 开机延迟 -->
+                                <!-- 开机自启：这一段的总开关，故排在最前 -->
+                                <Grid Margin="0,2,0,5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="1" x:Name="AutostartChk" Content="{loc:Loc Autostart_Label}" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Autostart_Click"/>
+                                </Grid>
+
+                                <!-- 开机延迟。补上「仅开机自启时生效」这句：以前只写在文档里，界面上看不出来，
+                                     手动重跑清单时用户会以为它没生效。 -->
                                 <Grid Margin="0,5">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StartupDelay}" Style="{StaticResource FieldLabel}"/>
-                                    <TextBox Grid.Column="1" x:Name="StartupDelayBox" Width="80" Height="30" HorizontalAlignment="Left" VerticalContentAlignment="Center" LostFocus="Settings_Changed"
-                                             AutomationProperties.Name="{loc:Loc Settings_StartupDelay}"/>
+                                    <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StartupDelay}" Style="{StaticResource FieldLabel}"
+                                               VerticalAlignment="Top" Margin="0,7,14,0"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBox x:Name="StartupDelayBox" Width="80" Height="30" HorizontalAlignment="Left" VerticalContentAlignment="Center" LostFocus="Settings_Changed"
+                                                 AutomationProperties.Name="{loc:Loc Settings_StartupDelay}"/>
+                                        <TextBlock Text="{loc:Loc Settings_StartupDelayTip}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- 等系统就绪再跑：本来只能手改 json 才打得开（startupWaitForReady），
+                                     而它恰恰是「开机延迟该设多少」的更好答案，藏起来没道理。 -->
+                                <Grid Margin="0,8,0,5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="1">
+                                        <CheckBox x:Name="WaitReadyChk" Content="{loc:Loc Settings_WaitReady}" VerticalAlignment="Center" Click="Settings_Changed"/>
+                                        <TextBlock Text="{loc:Loc Settings_WaitReadyTip}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <!-- 启动时最小化 -->
-                                <Grid Margin="0,5">
+                                <Grid Margin="0,5,0,0">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <CheckBox Grid.Column="1" x:Name="StartMinChk" Content="{loc:Loc Settings_StartMinimized}" VerticalAlignment="Center" Click="Settings_Changed"/>
                                 </Grid>
+
+                                <Border Height="1" Background="{StaticResource BrushLine}" Margin="0,20,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,18,0,18">
+                                    <Border Width="3" Height="16" Background="{StaticResource BrushBrass}" CornerRadius="1.5" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{loc:Loc Settings_General}" FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
 
                                 <!-- 急停键（按键捕捉） -->
                                 <Grid Margin="0,5">
@@ -319,15 +353,15 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <!-- 开机自启 -->
-                                <Grid Margin="0,14,0,2">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Column="1" x:Name="AutostartChk" Content="{loc:Loc Autostart_Label}" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Autostart_Click"/>
-                                </Grid>
+                                <Border Height="1" Background="{StaticResource BrushLine}" Margin="0,20,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,18,0,14">
+                                    <Border Width="3" Height="16" Background="{StaticResource BrushBrass}" CornerRadius="1.5" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{loc:Loc Settings_Backup}" FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
 
                                 <!-- 配置导入/导出。走同一个 112px 标签列：原来这行直接贴在面板左内边距上，
                                      是整页唯一一处跳出字段左缘的控件，看着像掉出了栏。 -->
-                                <Grid Margin="0,14,0,2">
+                                <Grid Margin="0,2,0,2">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button x:Name="ExportBtn" Content="{loc:Loc Btn_ExportConfig}" Click="ExportConfig_Click" Margin="0,0,10,0"/>
@@ -335,6 +369,7 @@
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>
+                            </ScrollViewer>
 
                             <!-- 竖分隔 -->
                             <Border Grid.Column="1" Width="1" Background="{StaticResource BrushLine}" Margin="0,26"/>

@@ -28,10 +28,11 @@ internal static class EditorUi
     public static int ParseOr(string? s, int fallback, int min = int.MinValue, int max = int.MaxValue)
         => int.TryParse((s ?? "").Trim(), out var n) && n >= min && n <= max ? n : fallback;
 
-    // 解析「仅 N 前」阈值 "HH:mm"（时 0..23、分 0..59）；只填小时("8")也认，缺分作 0；非法整体回退 08:00。
-    public static void ParseBeforeTime(string? text, out int hour, out int minute)
+    // 解析「仅 N 前 / 仅 N 后」阈值 "HH:mm"（时 0..23、分 0..59）；只填小时("8")也认，缺分作 0；
+    // 非法整体回退 fallbackHour:00（「前」用 8、「后」用 18，与模型默认一致）。
+    public static void ParseBeforeTime(string? text, out int hour, out int minute, int fallbackHour = 8)
     {
-        hour = 8; minute = 0;
+        hour = fallbackHour; minute = 0;
         var parts = (text ?? "").Trim().Split(':');
         if (parts.Length >= 1 && int.TryParse(parts[0].Trim(), out var h) && h >= 0 && h <= 23) hour = h;
         if (parts.Length >= 2 && int.TryParse(parts[1].Trim(), out var m) && m >= 0 && m <= 59) minute = m;

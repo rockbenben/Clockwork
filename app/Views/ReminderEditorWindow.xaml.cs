@@ -18,10 +18,16 @@ public partial class ReminderEditorWindow : Window
     public ReminderEditorWindow(Reminder r, IReadOnlyList<ActionGroup> groups)
     {
         InitializeComponent();
-        SourceInitialized += (_, _) => Native.DarkTitleBar.Apply(this);
+        Native.DarkWindow.Apply(this);
+        WindowSizing.FitToWorkArea(this);
         _original = r;
 
-        FillCombo(TrigCombo, new[] { (Strings.Get("Ed_Trig_Time"), "time"), (Strings.Get("Ed_Trig_Startup"), "startup") }, r.Trigger);
+        // 触发下拉 = 时间 + 登录 + 七个事件。事件项的标签键与 ReminderDisplay.EventLabel 用同一套
+        // Ed_Trig_<Id 首字母大写>，别在两处各维护一张表。
+        var trigItems = new[] { (Strings.Get("Ed_Trig_Time"), "time"), (Strings.Get("Ed_Trig_Startup"), "startup") }
+            .Concat(ReminderEvent.All.Select(id => (Strings.Get("Ed_Trig_" + char.ToUpperInvariant(id[0]) + id.Substring(1)), id)))
+            .ToArray();
+        FillCombo(TrigCombo, trigItems, r.Trigger);
         FillCombo(SModeCombo, new[] { (Strings.Get("Ed_SMode_Any"), "any"), (Strings.Get("Ed_SMode_Before"), "before"), (Strings.Get("Ed_SMode_After"), "after") }, r.StartupHourMode);
         FillCombo(RecurCombo, new[] { (Strings.Get("Ed_Rec_Daily"), "daily"), (Strings.Get("Ed_Rec_EveryN"), "everyNDays"), (Strings.Get("Ed_Rec_Monthly"), "monthly"), (Strings.Get("Ed_Rec_Once"), "once") }, r.RecurType);
         var groupItems = new[] { (Strings.Get("Ed_Group_None"), "") }.Concat(groups.Select(g => (g.Name, g.Id))).ToArray();
@@ -47,19 +53,54 @@ public partial class ReminderEditorWindow : Window
         CatchUpChk.IsChecked = r.CatchUpIfMissed;
         LoadDays(r.Days, Day1, Day2, Day3, Day4, Day5, Day6, Day7);
         OnceDateBox.Text = r.OnceDate;
+        IdleBox.Text = r.IdleMinutes.ToString();
+        BatteryBox.Text = r.BatteryPercent.ToString();
         LoopMinBox.Text = r.IntervalMinutes.ToString();
         LoopUntilBox.Text = r.IntervalUntil;
         // 动作二选一是 SilentGroupId 的视图：非空=静默运行动作组。
         if (string.IsNullOrWhiteSpace(r.SilentGroupId)) ActPopup.IsChecked = true; else ActSilent.IsChecked = true;
 
         UpdateTrig(); UpdateSMode(); UpdateRecur(); UpdateOnYes(); UpdateAction();
+
+        // 「进阶」折叠条标题实时等于催促/循环的行为句（见 ReminderDisplay.AdvancedSummary 的理由）。
+        // 配过任意一项进阶的自动展开——别把已有配置藏没；全默认的收起，新用户只看到一句「到点触发一次」。
+        foreach (var tb in new[] { RepeatBox, RepeatUntilBox, LoopMinBox, LoopUntilBox })
+            tb.TextChanged += (_, _) => UpdateAdvHeader();
+        UpdateAdvHeader();
+        AdvExp.IsExpanded = r.RepeatMinutes > 0 || r.IntervalMinutes > 0 || r.DelaySeconds > 0
+            || r.RandomDelaySeconds > 0 || r.CatchUpIfMissed || r.PopupTimeoutSeconds > 0
+            || r.GraceMinutes != 5;   // 5 是模型默认；改过宽限也算「配过进阶」
+        UpdateCrossingHint();
     }
 
-    private void Trig_Changed(object sender, SelectionChangedEventArgs e) => UpdateTrig();
+    // 「仅一次」是否真的生效：事件触发不看周期（编辑器里那块也是藏着的），残留在下拉里的 "once"
+    // 只是往返保真的历史值。凡按 once 分支的地方（清循环、日期校验、标题句）都必须用这个有效值——
+    // 用原始下拉值曾造出「标题说触发一次、保存后每 30 分钟跑一轮」的口是心非（评审 #3）。
+    private bool IsEffectiveOnce()
+        => ComboVal(RecurCombo) == "once" && !ReminderEvent.IsEvent(ComboVal(TrigCombo));
+
+    // 行为句里的分钟数取「保存后真正生效」的值：静默任务的催促不生效（FireReminder 固定返回 ok）、
+    // 「仅一次」保存时强制清循环——照抄这两条口径，标题才不会许一个保存后不存在的行为。
+    private void UpdateAdvHeader()
+    {
+        int rm = ActSilent.IsChecked == true ? 0 : ParseOr(RepeatBox.Text, 0, min: 0);
+        int im = IsEffectiveOnce() ? 0 : ParseOr(LoopMinBox.Text, 0, min: 0);
+        AdvExp.Header = Strings.Lf("Ed_AdvHeader",
+            ReminderDisplay.AdvancedSummary(rm, RepeatUntilBox.Text.Trim(), im, LoopUntilBox.Text.Trim()));
+    }
+
+    // 交叉口指路：「登录时 + 静默动作组」与启动清单是同一件事的两条路，指路牌只在真走到路口时出现。
+    private void UpdateCrossingHint()
+        => Vis(LoginSilentHint, ComboVal(TrigCombo) == "startup" && ActSilent.IsChecked == true);
+
+    // 换触发方式要同时重算两组显隐：UpdateTrig 管触发本身那几行，UpdateRecur 管周期那四行 + 循环行。
+    // 只调其一会留下上一种触发的残行（换到「解锁时」还挂着「每月第几天」）。
+    // 标题句也要跟着换：触发决定「仅一次」是否生效（IsEffectiveOnce），不刷会沿用上一种触发的口径。
+    private void Trig_Changed(object sender, SelectionChangedEventArgs e) { UpdateTrig(); UpdateRecur(); UpdateCrossingHint(); UpdateAdvHeader(); }
     private void SMode_Changed(object sender, SelectionChangedEventArgs e) => UpdateSMode();
-    private void Recur_Changed(object sender, SelectionChangedEventArgs e) => UpdateRecur();
+    private void Recur_Changed(object sender, SelectionChangedEventArgs e) { UpdateRecur(); UpdateAdvHeader(); }   // 「仅一次」清循环 → 标题跟着变
     private void OnYesType_Changed(object sender, SelectionChangedEventArgs e) => UpdateOnYes();
-    private void Action_Changed(object sender, RoutedEventArgs e) => UpdateAction();
+    private void Action_Changed(object sender, RoutedEventArgs e) { UpdateAction(); UpdateAdvHeader(); UpdateCrossingHint(); }   // 静默下催促不生效 → 标题跟着变
 
     // 动作二选一：选哪边就只显示哪边的控件——填了不生效的假控件不出现（与「点是后」死控件同一条思路）。
     // MsgBox 是唯一的例外，两边都留：静默任务虽然不弹窗，这段文本仍是它**唯一的名字**——
@@ -78,11 +119,19 @@ public partial class ReminderEditorWindow : Window
 
     private void UpdateTrig()
     {
-        bool time = ComboVal(TrigCombo) == "time";
-        Vis(TimeRow, time); Vis(GraceRow, time); Vis(CatchUpRow, time); Vis(StartupRow, !time);
-        // 周期整块只对「按时间」触发有意义：登录时触发不看 recurType/days，留着等于让人配一个不起作用的东西。
+        var t = ComboVal(TrigCombo);
+        bool time = t == "time";
+        bool ev = ReminderEvent.IsEvent(t);
+        Vis(TimeRow, time);
+        // 宽限 / 错过必补都是「到点那一刻机器不在」的补救，只有按时间触发才谈得上：
+        // 事件是发生即触发，机器不在就根本没发生过，没有需要补的东西。
+        Vis(GraceRow, time); Vis(CatchUpRow, time);
+        Vis(StartupRow, t == "startup");
+        // 周期整块只对「按时间」有意义：登录时与事件都不看 recurType，留着等于让人配一个不起作用的东西。
         Vis(PeriodRow, time);
-        if (!time) { Vis(DaysRow, false); Vis(IntervalRow, false); Vis(MonthlyRow, false); Vis(OnceRow, false); }
+        Vis(IdleRow, t == "idle");
+        Vis(BatteryRow, t == "lowBattery");
+        Vis(EventDaysRow, ev);
     }
     private void UpdateSMode()
     {
@@ -91,12 +140,16 @@ public partial class ReminderEditorWindow : Window
     }
     private void UpdateRecur()
     {
-        // 登录时触发下周期整块已被 UpdateTrig 隐藏；这里按 recurType 分的显隐对它没有意义，
-        // 四个 Row 全保持隐藏后直接返回，避免两处显隐逻辑打架（谁后跑谁说了算）。LoopRow 不在此列——
-        // 循环运行（每 N 分钟）不属于「周期」，登录时触发下依旧有效（见 TimeLabel 的循环后缀）。
-        if (ComboVal(TrigCombo) != "time")
+        // 登录时/事件触发下周期整块已被 UpdateTrig 隐藏；这里按 recurType 分的显隐对它们没有意义，
+        // 四个 Row 直接收掉后返回，避免两处显隐逻辑打架（谁后跑谁说了算）。两个例外：
+        //   · DaysRow —— 星期过滤对事件触发仍然有效（「工作日解锁时打卡」），故事件下保留、登录时收掉；
+        //   · LoopRow —— 循环运行（每 N 分钟）不属于「周期」，两者下都依旧有效（见 TimeLabel 的循环后缀）。
+        var t = ComboVal(TrigCombo);
+        if (t != "time")
         {
-            Vis(DaysRow, false); Vis(IntervalRow, false); Vis(MonthlyRow, false); Vis(OnceRow, false);
+            Vis(DaysRow, ReminderEvent.IsEvent(t));
+            Vis(IntervalRow, false); Vis(MonthlyRow, false); Vis(OnceRow, false);
+            Vis(LoopRow, true);
             return;
         }
         var r = ComboVal(RecurCombo);
@@ -137,11 +190,16 @@ public partial class ReminderEditorWindow : Window
         if (anchor != "" && !IsDate(anchor)) { Warn(Strings.Get("Val_Anchor")); return; }
 
         // recur 提前到这里声明：仅一次日期校验、循环行互斥都要用到，避免和 brief 草稿里的 recurSel 重复一个同义变量。
+        // 事件触发下原样往返（曾经强改成 daily，评审 #4 指出那会静默改写用户数据：把月度提醒切去事件试了一下
+        // 再切回来，周期就丢了）。「残留 once 会被误分支」的风险改由运行时守卫兜住：
+        // Decide/ShouldDisableAfterOnce/编辑器口径全部按 IsEvent 忽略不适用的周期——保存永远保真，运行时各自把关。
         var recur = ComboVal(RecurCombo);
+        // 「仅一次」的日期校验只在它真生效时做：事件触发下 once 是隐藏的历史值，为它弹「日期已过」是无中生有。
+        bool effOnce = recur == "once" && !ReminderEvent.IsEvent(trig);
         var onceDate = OnceDateBox.Text.Trim();
-        if (recur == "once" && onceDate != "" && !IsDate(onceDate)) { Warn(Strings.Get("Val_OnceDate")); return; }
+        if (effOnce && onceDate != "" && !IsDate(onceDate)) { Warn(Strings.Get("Val_OnceDate")); return; }
         // 日期已过：提示但放行——不替用户做主（与项目校验风格一致，只拦真正会崩的）。
-        if (recur == "once" && onceDate != ""
+        if (effOnce && onceDate != ""
             && DateTime.TryParseExact(onceDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var od)
             && od.Date < DateTime.Today)
             Warn(Strings.Get("Val_OnceDatePast"));
@@ -194,9 +252,12 @@ public partial class ReminderEditorWindow : Window
             AnchorDate = anchor,
             PopupTimeoutSeconds = au,
             SilentGroupId = ActSilent.IsChecked == true ? ComboVal(SilentCombo) : "",
-            IntervalMinutes = recur == "once" ? 0 : ParseOr(LoopMinBox.Text, 0, min: 0),
+            // effOnce 而非 recur=="once"：事件触发下 LoopRow 可见、once 只是隐藏的历史值，按原始值清会吞掉刚填的循环。
+            IntervalMinutes = effOnce ? 0 : ParseOr(LoopMinBox.Text, 0, min: 0),
             IntervalUntil = DurationText.FormatTimeHHmm(LoopUntilBox.Text),
             OnceDate = onceDate,
+            IdleMinutes = ParseOr(IdleBox.Text, 10, min: 1),
+            BatteryPercent = ParseOr(BatteryBox.Text, 20, min: 1, max: 100),
             Enabled = _original.Enabled,   // 保留启用/禁用态：编辑提醒不应把用户关掉的提醒又打开
         };
         DialogResult = true;
