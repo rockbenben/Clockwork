@@ -24,8 +24,8 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 
 ## Neler yapar
 
-- 🚀 **Başlangıç listesi** — oturum açınca günlük uygulamalarınızı sırayla açar; her adımda gecikme, hafta günü koşulu ve pencere stili verilebilir, bu arada pencere kapatır, öne getirir veya sesi kapatır.
-- ⏰ **Zamanlanmış görevler** — zamanı gelince bir hatırlatma (isterseniz sesli okunur) ya da sessizce çalışan bir eylem grubu. **Evet**'e tıklamak bir program çalıştırabilir, bir dosya veya URL açabilir ya da bir grubu tetikleyebilir.
+- 🚀 **Başlangıç listesi** — oturum açınca günlük uygulamalarınızı sırayla açar; her adımda gecikme, hafta günü koşulu ve pencere stili verilebilir, bu arada pencere kapatır, öne getirir veya sesi kapatır. Adımlar makinenin durumuna da bağlanabilir: yalnızca bir uygulama çalışırken (ya da çalışmıyorken), yalnızca prizdeyken veya yalnızca pildeyken, yalnızca bir dosya ya da klasör varken.
+- ⏰ **Zamanlanmış görevler** — zamanı gelince bir hatırlatma (isterseniz sesli okunur) ya da sessizce çalışan bir eylem grubu. **Evet**'e tıklamak bir program çalıştırabilir, bir dosya veya URL açabilir ya da bir grubu tetikleyebilir. Ya da saat yerine bir olay tetiklesin — kilit açıldığında, kilitlendiğinde, uykudan uyanınca, N dakika boşta kalınca, şarj takılıp çıkarıldığında ya da pil azaldığında.
 - 🧹 **Sistem başlangıç öğeleri** — PC'nizde kendiliğinden başlayan her şey tek listede: ihtiyacınız olmayanı kapatın (silinmez, devre dışı bırakılır) ya da kendi başlangıç listenize devralın.
 - 🎛️ **Eylem grupları** — bir rutini paketleyin (Odak / Toplantı / Kapanış / Uyku vakti…) ve tepsiden, bir **genel kısayoldan**, başlangıç listesinden ya da zamanlanmış bir görevden tetikleyin. Şablonlar dahil.
 
@@ -46,22 +46,22 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 ## Başlarken
 
 1. En son sürümü [Releases](https://github.com/rockbenben/Clockwork/releases) sayfasından indirin — iki yapı, üç indirme — ve elinizde kalan tek `Clockwork.exe`'yi herhangi bir klasöre bırakın.
-   - **`Clockwork-<sürüm>-win-x64.zip`** (~67 MB) — .NET çalışma zamanı dahil, her Windows 10/11 makinesinde olduğu gibi çalışır. Kararsızsanız ya da bilgisayar çevrimdışı veya kısıtlıysa bunu alın.
-   - **`Clockwork-<sürüm>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — kurulu bir [.NET 10 Masaüstü Çalışma Zamanı](https://dotnet.microsoft.com/download/dotnet/10.0) gerektirir. İnternete bağlı bir bilgisayarda bir kez kurun, sonraki her güncelleme 0,5 MB'lık bir indirme olsun.
-   - **`Clockwork.exe`** (~1,2 MB) — yukarıdaki zip ile aynı yapı, sadece zip'siz: tıklayıp çalıştırın ya da mevcut kopyanızın üzerine kopyalayıp güncelleyin. Çalışma zamanı yoksa Windows indirmeyi kendisi önerir.
+   - **`Clockwork-<sürüm>-win-x64.zip`** — .NET çalışma zamanı dahil, her Windows 10/11 makinesinde olduğu gibi çalışır. Kararsızsanız ya da bilgisayar çevrimdışı veya kısıtlıysa bunu alın.
+   - **`Clockwork-<sürüm>-win-x64-needs-dotnet10.zip`** — kurulu bir [.NET 10 Masaüstü Çalışma Zamanı](https://dotnet.microsoft.com/download/dotnet/10.0) gerektirir. İnternete bağlı bir bilgisayarda bir kez kurun, sonraki her güncelleme çok küçük bir indirme olsun.
+   - **`Clockwork.exe`** — yukarıdaki zip ile aynı yapı, sadece zip'siz: tıklayıp çalıştırın ya da mevcut kopyanızın üzerine kopyalayıp güncelleyin. Çalışma zamanı yoksa Windows indirmeyi kendisi önerir.
 2. Ayarlar penceresini açmak için çift tıklayın. Yüklenen örneklerin hepsi **işaretsiz** gelir — siz işaretlemeden hiçbir şey çalışmaz.
 3. Her açılışta çalıştırmak için: **Ayarlar** sekmesinde **Oturum açınca başlat**'ı işaretleyin (yönetici haklarıyla bir zamanlanmış görev kaydeder, böylece açılışta yığınla UAC istemi olmaz).
 
 Sonrasında tepside durur: simgeye çift tıklayınca pencere açılır, pencerenin kapat düğmesi ise onu yalnızca yeniden gizler. Gerçekten çıkmak için tepsinin sağ tık menüsündeki **Çıkış**'ı kullanın.
 
 > [!IMPORTANT]
-> **exe kod imzalı değil**, bu yüzden ilk çalıştırmada SmartScreen «Windows bilgisayarınızı korudu» der — **Daha fazla bilgi → Yine de çalıştır**'a tıklayın. Antivirüs de tepki verebilir: kayıt defteri Run anahtarları ve zamanlanmış görevler yazmak, bir başlangıç yöneticisinin tam olarak yaptığı iştir — ve aynı zamanda kötü amaçlı yazılımın yaptığı iştir; dışarıdan ayırt edilemez. Bunu güvene dayanarak kabul etmek istemiyorsanız, [kendiniz derleyin](../../CONTRIBUTING.md) — aynı sonuç, kendi ikili dosyanız.
+> **exe kod imzalı değil**, bu yüzden ilk çalıştırmada SmartScreen «Windows bilgisayarınızı korudu» der — **Daha fazla bilgi → Yine de çalıştır**'a tıklayın. Antivirüs de tepki verebilir: kayıt defteri Run anahtarları ve zamanlanmış görevler yazmak, bir başlangıç yöneticisinin tam olarak yaptığı iştir — ve aynı zamanda kötü amaçlı yazılımın yaptığı iştir; dışarıdan ayırt edilemez. Bunu güvene dayanarak kabul etmek istemiyorsanız, [kendiniz derleyin](../../CONTRIBUTING.md) — aynı sonuç, kendi ikili dosyanız. Her sürümde ayrıca bir `SHA256SUMS.txt` ve GitHub derleme kanıtı bulunur: `gh attestation verify <dosya> -R rockbenben/Clockwork`, indirilen dosyanın birinin dizüstü bilgisayarında değil, bu deponun CI'ında derlendiğini kanıtlar.
 
 **Tam kılavuz** — her alan, her uç durum: [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## İpuçları
 
-- **Bir satırı düzenlemek için çift tıklayın.** Yollar, işlemler, kısayollar ve tarihler sizin için doldurulur: **Gözat…**, **Seç…** (aranabilir işlem seçici), **Yakala**, **Tarih seç**.
+- **Bir satırı düzenlemek için çift tıklayın.** Yolları, işlemleri ve tarihleri elle yazmanız gerekmez: **satır sonundaki … düğmesi** ilgili seçiciyi açar (dosya, aranabilir işlem listesi, tarih); kısayolları ise **Yakala** ile basarak kaydedersiniz.
 - **Sırayı değiştirmek için satırı sürükleyin** — üç listenin hepsinde ve grup düzenleyicinin adım listesinde geçerlidir; yukarı/aşağı düğmeleri de çalışmaya devam eder.
 - **Kaydetmeden önce deneyin** — grup düzenleyicideki **▶ Bu adımı çalıştır** ve **▶ Grubu çalıştır**, o an ekranda olanı çalıştırır ve çalışırken düğme **■ Durdur**'a dönüşür.
 - **Çoğalt**, seçili görev ya da grubun bir kopyasını hemen altına ekler — neredeyse aynısını sıfırdan kurmaktan hızlıdır. **Silme her yerde önce onay ister.**

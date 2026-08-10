@@ -24,8 +24,8 @@ Avvia le tue app automaticamente all'accesso · promemoria a tempo · un tocco p
 
 ## Cosa fa
 
-- 🚀 **Elenco di avvio** — apre in ordine le tue app di tutti i giorni all'accesso, con ritardo, condizione sui giorni e stile della finestra per ogni passo; chiude, mette in primo piano o silenzia lungo il percorso.
-- ⏰ **Attività pianificate** — un promemoria all'ora giusta, letto ad alta voce se vuoi, oppure un gruppo di azioni eseguito in silenzio. Cliccare **Sì** può avviare un programma, aprire un file o un URL, o lanciare un gruppo.
+- 🚀 **Elenco di avvio** — apre in ordine le tue app di tutti i giorni all'accesso, con ritardo, condizione sui giorni e stile della finestra per ogni passo; chiude, mette in primo piano o silenzia lungo il percorso. I passi possono anche dipendere da cosa sta facendo il computer: solo se un'app è in esecuzione (o non lo è), solo con l'alimentatore o solo a batteria, solo se un file o una cartella esiste.
+- ⏰ **Attività pianificate** — un promemoria all'ora giusta, letto ad alta voce se vuoi, oppure un gruppo di azioni eseguito in silenzio. Cliccare **Sì** può avviare un programma, aprire un file o un URL, o lanciare un gruppo. Oppure può scattare un evento invece dell'orologio — allo sblocco, al blocco, al risveglio dalla sospensione, dopo N minuti di inattività, quando si collega o scollega l'alimentatore, o con la batteria scarica.
 - 🧹 **Elementi di avvio del sistema** — tutto ciò che si avvia da solo sul tuo PC, in un unico elenco: disattiva ciò che non ti serve (disattivato, non eliminato) oppure prendilo in carico nel tuo elenco di avvio.
 - 🎛️ **Gruppi di azioni** — raggruppa una routine (Concentrazione / Riunione / Chiusura / Prima di dormire…) e attivala dall'area di notifica, da una **scorciatoia globale**, dall'elenco di avvio o da un'attività pianificata. Modelli inclusi.
 
@@ -46,22 +46,22 @@ Avvia le tue app automaticamente all'accesso · promemoria a tempo · un tocco p
 ## Per iniziare
 
 1. Scarica l'ultima versione dalle [Releases](https://github.com/rockbenben/Clockwork/releases) — due build, tre download — e metti l'unico `Clockwork.exe` che ti resta in una cartella qualsiasi.
-   - **`Clockwork-<versione>-win-x64.zip`** (~67 MB) — runtime .NET incluso, gira così com'è su qualsiasi Windows 10/11. Scegli questo nel dubbio, o se il PC è offline o bloccato.
-   - **`Clockwork-<versione>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — richiede il [runtime desktop di .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) installato. Installalo una volta su un PC con internet e ogni aggiornamento successivo è da 0,5 MB.
-   - **`Clockwork.exe`** (~1,2 MB) — la stessa build dello zip qui sopra, senza zip attorno: cliccalo ed è avviato, oppure sovrascrivi la copia esistente per aggiornare. Se manca il runtime, Windows ne propone il download.
+   - **`Clockwork-<versione>-win-x64.zip`** — runtime .NET incluso, gira così com'è su qualsiasi Windows 10/11. Scegli questo nel dubbio, o se il PC è offline o bloccato.
+   - **`Clockwork-<versione>-win-x64-needs-dotnet10.zip`** — richiede il [runtime desktop di .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) installato. Installalo una volta su un PC con internet e ogni aggiornamento successivo pesa pochissimo.
+   - **`Clockwork.exe`** — la stessa build dello zip qui sopra, senza zip attorno: cliccalo ed è avviato, oppure sovrascrivi la copia esistente per aggiornare. Se manca il runtime, Windows ne propone il download.
 2. Fai doppio clic per aprire la finestra delle impostazioni. Gli esempi che carica sono tutti **deselezionati** — non viene eseguito nulla finché non li spunti tu.
 3. Per eseguirlo a ogni accensione: nella scheda **Impostazioni** spunta **Avvia all'accesso** (registra un'operazione pianificata con diritti di amministratore, così niente valanga di richieste UAC all'avvio).
 
 Poi se ne sta nell'area di notifica: doppio clic sull'icona per aprire la finestra, e il pulsante di chiusura la nasconde soltanto. Per uscire davvero, usa **Esci** dal clic destro sull'area di notifica.
 
 > [!IMPORTANT]
-> **L'exe non è firmato**, quindi al primo avvio SmartScreen mostra «Windows ha protetto il PC» — fai clic su **Ulteriori informazioni → Esegui comunque**. Anche un antivirus può segnalarlo: scrivere chiavi Run del registro e attività pianificate è esattamente ciò che fa un gestore dell'avvio — ed è anche ciò che fa il malware; dall'esterno non si distinguono. Se preferisci non accettarlo sulla fiducia, [compilalo tu](../../CONTRIBUTING.md) — stesso risultato, binario tuo.
+> **L'exe non è firmato**, quindi al primo avvio SmartScreen mostra «Windows ha protetto il PC» — fai clic su **Ulteriori informazioni → Esegui comunque**. Anche un antivirus può segnalarlo: scrivere chiavi Run del registro e attività pianificate è esattamente ciò che fa un gestore dell'avvio — ed è anche ciò che fa il malware; dall'esterno non si distinguono. Se preferisci non accettarlo sulla fiducia, [compilalo tu](../../CONTRIBUTING.md) — stesso risultato, binario tuo. Ogni release include anche un `SHA256SUMS.txt` e un'attestazione di build GitHub: `gh attestation verify <file> -R rockbenben/Clockwork` dimostra che il download è stato compilato dalla CI di questo repository, non sul portatile di qualcuno.
 
 **Guida completa** — ogni campo, ogni caso limite: [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Suggerimenti
 
-- **Fai doppio clic su una riga per modificarla**. Percorsi, processi, scorciatoie e date vengono compilati per te: **Sfoglia…**, **Scegli…** (selettore di processi con ricerca), **Cattura**, **Scegli data**.
+- **Fai doppio clic su una riga per modificarla**. Percorsi, processi e date non vanno digitati: **il pulsante … a fine riga** apre il selettore giusto (file, elenco processi con ricerca, data), e le scorciatoie si registrano premendole con **Cattura**.
 - **Trascina una riga per riordinarla** — in tutti e tre gli elenchi e nell'elenco dei passi dell'editor del gruppo; i pulsanti su/giù continuano a funzionare.
 - **Provalo prima di salvare** — **▶ Esegui questo passo** e **▶ Esegui gruppo** dell'editor eseguono ciò che è in questo momento sullo schermo, e durante l'esecuzione il pulsante diventa **■ Ferma**.
 - **Duplica** clona l'attività o il gruppo selezionato subito sotto — più veloce che ricostruirne uno quasi identico. **L'eliminazione chiede sempre conferma**, ovunque.

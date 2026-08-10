@@ -24,8 +24,8 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 
 ## Qué hace
 
-- 🚀 **Lista de inicio** — abre en orden tus aplicaciones de cada día al iniciar sesión, con retardo, condición de día y estilo de ventana por paso; cierra, enfoca o silencia cosas por el camino.
-- ⏰ **Tareas programadas** — un recordatorio a su hora, leído en voz alta si quieres, o un grupo de acciones ejecutado en silencio. Pulsar **Sí** puede ejecutar un programa, abrir un archivo o una URL, o disparar un grupo.
+- 🚀 **Lista de inicio** — abre en orden tus aplicaciones de cada día al iniciar sesión, con retardo, condición de día y estilo de ventana por paso; cierra, enfoca o silencia cosas por el camino. Los pasos también pueden condicionarse a lo que hace el equipo: solo mientras una aplicación se ejecuta (o no), solo con corriente o solo con batería, solo si existe un archivo o carpeta.
+- ⏰ **Tareas programadas** — un recordatorio a su hora, leído en voz alta si quieres, o un grupo de acciones ejecutado en silencio. Pulsar **Sí** puede ejecutar un programa, abrir un archivo o una URL, o disparar un grupo. O que lo dispare un evento en vez del reloj: al desbloquear, al bloquear, al reanudar de la suspensión, tras N minutos inactivo, al conectar o desconectar la corriente, o con la batería baja.
 - 🧹 **Elementos de inicio del sistema** — todo lo que se inicia solo en tu PC, en una lista: desactiva lo que no necesites (desactivado, no eliminado) o traspásalo a tu propia lista de inicio.
 - 🎛️ **Grupos de acciones** — agrupa una rutina (Concentración / Reunión / Cierre / Antes de dormir…) y actívala desde la bandeja, un **atajo global**, la lista de inicio o una tarea programada. Incluye plantillas.
 
@@ -46,22 +46,22 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 ## Primeros pasos
 
 1. Descarga la última versión desde [Releases](https://github.com/rockbenben/Clockwork/releases) —dos compilaciones, tres descargas— y coloca el único `Clockwork.exe` que te queda en cualquier carpeta.
-   - **`Clockwork-<versión>-win-x64.zip`** (~67 MB) — incluye el entorno de ejecución de .NET; funciona tal cual en cualquier Windows 10/11. Elige este si dudas, o si el PC está sin conexión o restringido.
-   - **`Clockwork-<versión>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — necesita el [entorno de ejecución de escritorio de .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) instalado. Instálalo una vez en un PC con internet y cada actualización posterior será de 0,5 MB.
-   - **`Clockwork.exe`** (~1,2 MB) — la misma compilación del zip anterior, sin zip alrededor: haz clic y ejecútalo, o sobrescribe tu copia actual para actualizar. Si falta el entorno de ejecución, Windows te ofrece la descarga.
+   - **`Clockwork-<versión>-win-x64.zip`** — incluye el entorno de ejecución de .NET; funciona tal cual en cualquier Windows 10/11. Elige este si dudas, o si el PC está sin conexión o restringido.
+   - **`Clockwork-<versión>-win-x64-needs-dotnet10.zip`** — necesita el [entorno de ejecución de escritorio de .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) instalado. Instálalo una vez en un PC con internet y cada actualización posterior será una descarga mínima.
+   - **`Clockwork.exe`** — la misma compilación del zip anterior, sin zip alrededor: haz clic y ejecútalo, o sobrescribe tu copia actual para actualizar. Si falta el entorno de ejecución, Windows te ofrece la descarga.
 2. Haz doble clic para abrir la ventana de configuración. Los ejemplos que carga vienen todos **sin marcar** — no se ejecuta nada hasta que tú lo marques.
 3. Para ejecutarlo en cada arranque: en la pestaña **Ajustes**, marca **Iniciar al arrancar sesión** (registra una tarea programada con permisos de administrador, así no hay una avalancha de avisos de UAC al arrancar).
 
 Después se queda en la bandeja: doble clic en el icono para abrir la ventana, y el botón de cerrar solo vuelve a ocultarla. Para salir de verdad, usa **Salir** en el clic derecho de la bandeja.
 
 > [!IMPORTANT]
-> **El exe no está firmado**, así que SmartScreen muestra «Windows protegió su PC» en el primer arranque — haz clic en **Más información → Ejecutar de todas formas**. Algún antivirus también puede alertar: escribir claves Run del registro y tareas programadas es justo lo que hace un gestor de arranque… y también lo que hace el malware; desde fuera no se distinguen. Si prefieres no aceptarlo por confianza, [compílalo tú mismo](../../CONTRIBUTING.md) — mismo resultado, binario propio.
+> **El exe no está firmado**, así que SmartScreen muestra «Windows protegió su PC» en el primer arranque — haz clic en **Más información → Ejecutar de todas formas**. Algún antivirus también puede alertar: escribir claves Run del registro y tareas programadas es justo lo que hace un gestor de arranque… y también lo que hace el malware; desde fuera no se distinguen. Si prefieres no aceptarlo por confianza, [compílalo tú mismo](../../CONTRIBUTING.md) — mismo resultado, binario propio. Cada release incluye además un `SHA256SUMS.txt` y una atestación de compilación de GitHub: `gh attestation verify <archivo> -R rockbenben/Clockwork` demuestra que la descarga fue compilada por la CI de este repositorio, no en el portátil de alguien.
 
 **Guía completa** — cada campo, cada caso límite: [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Consejos
 
-- **Haz doble clic en una fila para editarla**. Rutas, procesos, atajos y fechas se rellenan por ti: **Examinar…**, **Elegir…** (selector de procesos con búsqueda), **Capturar**, **Elegir fecha**.
+- **Haz doble clic en una fila para editarla**. Rutas, procesos y fechas no hay que escribirlos: **el botón … al final de la fila** abre el selector correspondiente (archivo, lista de procesos con búsqueda, fecha), y los atajos se graban pulsándolos con **Capturar**.
 - **Arrastra una fila para reordenarla** — en las tres listas y en la lista de pasos del editor de grupos; los botones de subir/bajar siguen funcionando.
 - **Pruébalo antes de guardar** — **▶ Ejecutar este paso** y **▶ Ejecutar grupo** del editor de grupos ejecutan lo que hay ahora en pantalla, y el botón se convierte en **■ Detener** mientras dura.
 - **Duplicar** clona la tarea o el grupo seleccionado justo debajo — más rápido que rehacer uno casi idéntico. **Eliminar siempre pide confirmación**, en todas partes.

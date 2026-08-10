@@ -24,8 +24,8 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 
 ## Nó làm được gì
 
-- 🚀 **Danh sách khởi động** — mở lần lượt các ứng dụng thường dùng khi đăng nhập, mỗi bước có độ trễ, điều kiện ngày trong tuần và kiểu cửa sổ riêng; tiện thể đóng, đưa ra trước hoặc tắt tiếng.
-- ⏰ **Tác vụ theo lịch** — một lời nhắc đúng giờ, đọc to nếu bạn muốn, hoặc một nhóm thao tác chạy im lặng. Nhấn **Có** có thể chạy chương trình, mở tệp hay URL, hoặc kích hoạt một nhóm.
+- 🚀 **Danh sách khởi động** — mở lần lượt các ứng dụng thường dùng khi đăng nhập, mỗi bước có độ trễ, điều kiện ngày trong tuần và kiểu cửa sổ riêng; tiện thể đóng, đưa ra trước hoặc tắt tiếng. Các bước còn có thể phụ thuộc vào trạng thái máy: chỉ khi một ứng dụng đang chạy (hoặc không chạy), chỉ khi cắm sạc hoặc chỉ khi dùng pin, chỉ khi một tệp hay thư mục tồn tại.
+- ⏰ **Tác vụ theo lịch** — một lời nhắc đúng giờ, đọc to nếu bạn muốn, hoặc một nhóm thao tác chạy im lặng. Nhấn **Có** có thể chạy chương trình, mở tệp hay URL, hoặc kích hoạt một nhóm. Hoặc để một sự kiện kích hoạt thay cho đồng hồ — khi mở khóa, khi khóa máy, khi thức khỏi chế độ ngủ, sau N phút không dùng máy, khi cắm hay rút sạc, hoặc khi pin yếu.
 - 🧹 **Mục khởi động hệ thống** — mọi thứ tự khởi động trên máy gom vào một danh sách: tắt những gì bạn không cần (vô hiệu hóa chứ không xóa) hoặc tiếp quản vào danh sách khởi động của riêng bạn.
 - 🎛️ **Nhóm thao tác** — gói một chuỗi việc quen thuộc (Tập trung / Họp / Kết thúc / Trước khi ngủ…) và kích hoạt từ khay, một **phím tắt toàn cục**, danh sách khởi động hoặc một tác vụ theo lịch. Có sẵn mẫu dựng sẵn.
 
@@ -46,22 +46,22 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 ## Bắt đầu
 
 1. Tải bản mới nhất từ [Releases](https://github.com/rockbenben/Clockwork/releases) — hai bản dựng, ba lượt tải — rồi đặt tệp `Clockwork.exe` duy nhất bạn có vào thư mục bất kỳ.
-   - **`Clockwork-<phiên bản>-win-x64.zip`** (~67 MB) — đã kèm .NET runtime, chạy được ngay trên mọi máy Windows 10/11. Phân vân, hoặc máy offline hay bị khóa không cài được gì, thì chọn gói này.
-   - **`Clockwork-<phiên bản>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — cần đã cài [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0). Cài một lần trên máy có mạng, về sau mỗi bản cập nhật chỉ tải 0,5 MB.
-   - **`Clockwork.exe`** (~1,2 MB) — cùng bản dựng với gói zip ngay trên, chỉ là không bọc zip: bấm vào chạy luôn, hoặc ghi đè lên bản đang dùng để cập nhật. Thiếu runtime thì Windows sẽ tự mời bạn tải.
+   - **`Clockwork-<phiên bản>-win-x64.zip`** — đã kèm .NET runtime, chạy được ngay trên mọi máy Windows 10/11. Phân vân, hoặc máy offline hay bị khóa không cài được gì, thì chọn gói này.
+   - **`Clockwork-<phiên bản>-win-x64-needs-dotnet10.zip`** — cần đã cài [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0). Cài một lần trên máy có mạng, về sau mỗi bản cập nhật chỉ tải một gói rất nhỏ.
+   - **`Clockwork.exe`** — cùng bản dựng với gói zip ngay trên, chỉ là không bọc zip: bấm vào chạy luôn, hoặc ghi đè lên bản đang dùng để cập nhật. Thiếu runtime thì Windows sẽ tự mời bạn tải.
 2. Nhấp đúp để mở cửa sổ cài đặt. Các mẫu được nạp đều **chưa được tick** — không có gì chạy cho tới khi bạn tự tick.
 3. Để chạy mỗi lần khởi động máy: ở tab **Cài đặt**, tick **Khởi động cùng đăng nhập** (đăng ký một tác vụ theo lịch với quyền admin, để không phải chịu một loạt hộp thoại UAC khi khởi động).
 
 Sau đó nó nằm trong khay hệ thống: nhấp đúp biểu tượng để mở cửa sổ, còn nút đóng chỉ thu nó lại. Muốn thoát hẳn, nhấp chuột phải vào khay và chọn **Thoát**.
 
 > [!IMPORTANT]
-> **Tệp exe không được ký số**, nên ở lần chạy đầu SmartScreen hiện «Windows đã bảo vệ PC của bạn» — bấm **More info → Run anyway**. Phần mềm diệt virus cũng có thể báo: ghi khoá Run trong registry và tác vụ theo lịch đúng là việc mà một trình quản lý khởi động phải làm — và cũng là việc mà mã độc hay làm; từ bên ngoài không phân biệt được. Nếu không muốn chấp nhận bằng niềm tin, hãy [tự build lấy](../../CONTRIBUTING.md) — kết quả như nhau, tệp nhị phân là của bạn.
+> **Tệp exe không được ký số**, nên ở lần chạy đầu SmartScreen hiện «Windows đã bảo vệ PC của bạn» — bấm **More info → Run anyway**. Phần mềm diệt virus cũng có thể báo: ghi khoá Run trong registry và tác vụ theo lịch đúng là việc mà một trình quản lý khởi động phải làm — và cũng là việc mà mã độc hay làm; từ bên ngoài không phân biệt được. Nếu không muốn chấp nhận bằng niềm tin, hãy [tự build lấy](../../CONTRIBUTING.md) — kết quả như nhau, tệp nhị phân là của bạn. Mỗi bản phát hành cũng kèm `SHA256SUMS.txt` và chứng thực bản dựng của GitHub: `gh attestation verify <tệp> -R rockbenben/Clockwork` chứng minh tệp tải về được dựng bởi CI của kho này, chứ không phải trên laptop của ai đó.
 
 **Hướng dẫn đầy đủ** — từng trường, từng trường hợp biên: [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Mẹo
 
-- **Nhấp đúp một dòng để chỉnh sửa** nó. Đường dẫn, tiến trình, lối tắt và ngày đều được điền hộ: **Duyệt…**, **Chọn…** (trình chọn tiến trình có tìm kiếm), **Bắt phím**, **Chọn ngày**.
+- **Nhấp đúp một dòng để chỉnh sửa** nó. Đường dẫn, tiến trình và ngày không phải gõ tay: **nút … ở cuối dòng** mở bộ chọn tương ứng (tệp, danh sách tiến trình có tìm kiếm, ngày), còn phím tắt thì bấm **Bắt phím** rồi nhấn trực tiếp.
 - **Kéo một dòng để đổi thứ tự** — trong cả ba danh sách và trong danh sách bước của trình chỉnh sửa nhóm; các nút lên/xuống vẫn dùng được.
 - **Thử trước khi lưu** — **▶ Chạy bước này** và **▶ Chạy nhóm** trong trình chỉnh sửa nhóm chạy đúng những gì đang có trên màn hình, và nút đổi thành **■ Dừng** trong lúc chạy.
 - **Nhân bản** tạo bản sao của tác vụ hay nhóm đang chọn ngay bên dưới — nhanh hơn dựng lại một mục gần giống. **Xóa luôn hỏi xác nhận trước**, ở mọi nơi.

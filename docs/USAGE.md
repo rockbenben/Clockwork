@@ -15,7 +15,7 @@ A small Windows tray tool that manages four everyday things (plus a Settings tab
 
 ## Getting started
 
-1. Unzip `Clockwork-<version>-win-x64.zip` into any folder (portable — put it wherever); inside is a single `Clockwork.exe`. The `-needs-dotnet10` package holds the same exe minus the bundled .NET runtime — 0.5 MB instead of 67 MB, but the machine needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed; that build is also attached raw as a plain `Clockwork.exe` if you'd rather skip the unzipping.
+1. Unzip `Clockwork-<version>-win-x64.zip` into any folder (portable — put it wherever); inside is a single `Clockwork.exe`. The `-needs-dotnet10` package holds the same exe minus the bundled .NET runtime, a fraction of the size, but the machine needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed; that build is also attached raw as a plain `Clockwork.exe` if you'd rather skip the unzipping.
 2. Double-click **`Clockwork.exe`** to open the settings window.
 3. To run it every boot: on the **Settings** tab, tick **Start at login** (registers a scheduled task with admin rights, so no wall of UAC prompts at boot).
 
@@ -42,21 +42,41 @@ The most common need, "open my everyday apps at login":
 ## Startup list
 
 - An **ordered list of steps** run top-to-bottom at login. Add/remove; **drag a row to reorder it**, or use the up/down buttons; **double-click a row to edit** it. (Dragging works the same way on the Scheduled tasks and Action groups lists.)
-- Each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times, waiting the post-step delay between each), and conditions (**only on certain weekdays / only before N o'clock**).
+- Each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times, waiting the post-step delay between each), and **run conditions** (see below).
 - Selecting a step and clicking **Run** runs *just that step* immediately (ignoring its enabled state and time conditions — pure test); a tray toast reports the result.
+- **The first entry under Add ▾ is "Pick from Start menu…"** — it lists every program in your Start menu — **including Store / UWP apps like Sticky Notes or Paint, which have no exe path** (they don't exist as files, so you could never type them in). Search, multi-select with Ctrl / Shift, and each one becomes a *Launch program* step. No more right-click → Properties → copy the target path. Added steps arrive **unticked**, so you get a look before anything runs.
 
 ### Step types
 
 | Type | What it does |
 | --- | --- |
-| **Launch program** | `.exe` / document / shortcut / URL (**Browse…** to pick a file); `.ps1` runs via PowerShell. Working dir blank = target's folder. Advanced: **window style** (minimized / maximized / hidden), **activate if already running** (**on by default**: bring to front instead of relaunching; process name via **Pick…**. For a URL / `.lnk` / `.ps1` / document target the process name can't be derived, so the option quietly does nothing and the target launches as usual), **fallback paths** (one full path per line; the first existing one is used — handy when install paths differ across machines). |
+| **Launch program** | A program (full path or bare name), shortcut, script, folder, URL, document, or a protocol like `ms-settings:` (the **…** button to the right picks a file); `.ps1` runs via PowerShell. Working dir blank = target's folder. Advanced: **window style** (minimized / maximized / hidden), **activate if already running** (**on by default**: bring to front instead of relaunching; process name via the **…** button. For a URL / `.lnk` / `.ps1` / document target the process name can't be derived, so the option quietly does nothing and the target launches as usual), **fallback paths** (one full path per line; the first existing one is used — handy when install paths differ across machines). |
 | **Send keys** | e.g. Win+D, Alt+K, Ctrl+Enter, F5 (supports Enter / Tab / Esc / Del / arrows…; **Capture** records a shortcut by pressing it). |
-| **Send text** | Type a string into the focused window (newline = Enter, Tab works). Optional **target process** (**Pick…**) — brings its window to front first, then types; blank = current focus. |
-| **Volume** | Mute / unmute / set level (setting a level unmutes first). |
-| **Window action** | By process name (**Pick…**, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys. Slow apps can **wait up to N seconds for the window to appear** — acts the moment it shows, instead of a blind fixed delay. |
-| **System command** | Show desktop / lock (needs password to return) / turn off monitor (wakes on mouse move) / empty recycle bin / clear clipboard / open Windows Settings / open Task Manager / screenshot / sleep / hibernate / sign out / restart / shut down (the last three confirm first). |
+| **Send text** | Type a string into the focused window (newline = Enter, Tab works). Optional **target process** (the **…** button picks one) — brings its window to front first, then types; blank = current focus. |
+| **Volume** | Mute / unmute / set level (setting a level unmutes first) / **mute or unmute the microphone** — that one mutes the default recording device itself, so no app hears you, which is stronger than any meeting app's own mute button. |
+| **Window action** | By process name (the **…** button picks one, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys. Slow apps can **wait up to N seconds for the window to appear** — acts the moment it shows, instead of a blind fixed delay. |
+| **System command** | Show desktop / lock (needs password to return) / turn off monitor (wakes on mouse move) / empty recycle bin / clear clipboard / **set clipboard text** / open Windows Settings / open Task Manager / screenshot / **display mode: PC screen only · duplicate · extend · second screen only** / **turn notifications off · on** / **screen brightness** / sleep / hibernate / sign out / restart / shut down (the last three confirm first). Three take an argument: *set clipboard text* adds a text box and *screen brightness* a 0–100 field, shown only when that command is selected. |
 | **Delay** | Just wait N seconds before the next step; at the top of the list it delays the whole run. |
 | **Action group** | Run a defined action group; set a repeat count to loop the whole group. |
+
+> **A few caveats**
+> - **Display mode** shells out to Windows' own `DisplaySwitch.exe`, exactly like picking an option under Win+P. The switch takes a second or two to settle, so leave a delay before whatever follows.
+> - **Turn notifications off** flips Windows' master notification switch (the *Get notifications from apps and other senders* setting) — not Windows 11's Focus / Do not disturb, which has no public switch to write. It does **not** restore itself, so always pair it with a *turn notifications on*; the built-in **Back to normal** template exists for exactly this.
+> - **Screen brightness** only works on displays the system drives (laptop panels, some all-in-ones). External monitors speak a different protocol and are out of reach — you get an honest error rather than a fake success. This step shells out to PowerShell once, so it takes roughly half a second to a second.
+
+### Run conditions (available on every step)
+
+A step whose conditions aren't met is skipped and the list carries on. Conditions are **AND**-ed — set several and all of them must hold.
+
+| Condition | What it means |
+| --- | --- |
+| **Only on these weekdays** | None ticked = every day. |
+| **Only before / only after** | Each takes `HH:mm` (just the hour works too). Use both for a window: *only after 09:00* + *only before 18:00* = office hours only. |
+| **Process condition** | Pick *that process is running* / *is not running* and name the process (the **…** button picks one). Mute chat only while the game is up; start a backup only when the backup tool isn't already running. |
+| **Power condition** | Only on AC / only on battery — don't kick off heavy work once the charger is out. Desktops report no battery and always count as "on AC". |
+| **Path exists** | If filled in, the step runs only when that file or folder exists: back up once the USB drive is mounted, send the mail once the report has been exported. A folder counts as existing. |
+
+> Conditions show up in the list's **Summary** column (`(Mon Tue Wed)`, `(after 18:00)`, `(Slack running)`, `(on battery)`, `(E:\backup exists)`) — when a step didn't run, that column is the only clue you have, and you shouldn't need to open the editor to guess.
 
 ### Startup delay
 
@@ -71,20 +91,38 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 > **To stop just one action group**, press **that group's own hotkey** a second time (see "Action groups → the hotkey is a toggle"). The panic hotkey is the master switch: it stops the startup list and every running group at once.
 > This only works for groups that have a hotkey bound. A group started as a scheduled task's silent group, as an On-Yes action, or as a nested reference has no per-run cancel of its own unless you also give it a hotkey — for those the panic hotkey is the only way out. If you want an unattended long-running group to be stoppable, bind it a hotkey of its own.
 
-> **Advanced:** to "wait until the network / desktop is ready" instead of a fixed delay, set `startupWaitForReady` to `true` in `clockwork.settings.json` (default `false`; proceeds as soon as ready, capped at 90 s).
+> To "wait until the network / desktop is ready" instead of sitting out a fixed delay, tick **Wait until the system is ready** on the Settings tab (it used to be the json-only `startupWaitForReady`): it goes as soon as both are ready, waits at most 90 s, and the fixed delay above is then added on top. When the list runs too early for your apps, this beats simply raising the delay.
 
 ## Scheduled tasks
 
 - Each task either **pops a reminder** (text / speech / on-Yes action) or **silently runs an action group**.
-- **Trigger:** timed, or **at login** (with "only within N minutes of boot" counting as login — 10 min by default for new tasks).
+- **Trigger:** timed, **at login** (with "only within N minutes of boot" counting as login — 10 min by default for new tasks), or one of the 7 **events** below.
 - **Recurrence:** by weekday / every-N-days / monthly; the reminder can be read aloud.
+
+### Event triggers
+
+These don't watch the clock, they watch the machine — the task fires the moment the event happens, and does exactly what a timed task does (reminder / speech / on-Yes action / silent action group).
+
+| Event | When it happens |
+| --- | --- |
+| **When idle** | No keyboard or mouse for N minutes (10 by default). **Fires once per absence**; the count restarts when you come back. |
+| **On unlock / on lock** | The moment you hit Win+L, and the moment you come back. Switching users and remote connects don't count — that's a different thing. |
+| **On wake from sleep** | Coming back from lid-close or sleep. Good for the tidy-up work: reconnect the VPN, remount a share. |
+| **When plugged in / unplugged** | The instant the charger goes in or out. *Unplugged → switch to power saving* is the classic. |
+| **On low battery** | On battery and the charge drops below N% (20 by default). **Fires once per drop**; it re-arms after charging back above the threshold or plugging in. |
+
+- **Weekday limits still apply** ("clock in on unlock, weekdays only") — the weekday row stays visible in the editor.
+- **Grace** and **catch-up** are meaningless for events and are hidden: an event fires as it happens, and if the machine was off it simply never happened, so there is nothing to make up.
+- **Snooze, nagging and interval runs all work as usual** — everything that follows a reminder going off is shared with timed tasks.
+- **Pause reminders (do not disturb)** suppresses events too, same as timed tasks.
+- Idle and battery are **polled** (they ride the reminder timer, 30 s by default), so they can be up to half a minute late; lock / unlock / wake / power changes are pushed by Windows and are immediate.
 - **Interval runs**: "every N minutes until HH:mm" (empty = end of day). Distinct from "nag until confirmed" — nagging stops on confirmation, interval runs keep going. Intervals never cross midnight; the next day starts fresh from the task's base time.
 - **Run once**: pick "Once" and a date. After it completes, the entry unticks itself but stays in the list — set a new date and re-enable to reuse.
 - Reminders with **no On-Yes action** slide in as a **reminder card** in the corner (non-intrusive). How long it shows is set by the **auto-close** seconds — **0 = stays until you dismiss it**, so nothing is missed if you're away. Repeat-nagging reminders still use a dialog (so you can stop the nagging with one click).
 - Reminders **with** an On-Yes action (run program / open file / URL / run action group) pop a top-most **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5 / 10 / 15 / 30 / 60 min). Enter = **Yes** as always; for the first 0.6 s after the dialog appears, **Yes** doesn't respond — a dialog that steals focus mid-typing can't run the action on an in-flight space bar or Enter.
 - **An unanswered dialog gets out of the way.** The dialog is modal, so leaving it up would block every later reminder. A dialog with no auto-close stays up for at most 1 minute; when it times out unanswered it turns into an automatic **"snooze 10 minutes"** and comes back later — nothing is blocked, nothing is silently lost (the auto-snooze is persisted like a hand-clicked one, surviving restarts; it expires at midnight, except reminders with **catch up if missed** enabled, which re-fire once the next day). Repeat-nagging reminders keep nagging on your configured cadence instead.
 - **Repeat fires of one reminder share a single card** (`×N` at the top right), so the corner never fills up. Cards you dismissed, evicted, or that auto-closed can be reviewed and re-shown from **tray right-click → Recent** (session-only; cleared on restart).
-- **Advanced:** auto-close · repeat-nagging (re-pop every N minutes until a deadline) · post-trigger delay + random jitter · grace (catch a fire missed by a brief shutdown/sleep) · **catch up if missed** (re-fire once after hibernation/shutdown skipped it) · an **anchor date** for every-N-days (**Pick date**).
+- **Advanced:** auto-close · repeat-nagging (re-pop every N minutes until a deadline) · post-trigger delay + random jitter · grace (catch a fire missed by a brief shutdown/sleep) · **catch up if missed** (re-fire once after hibernation/shutdown skipped it) · an **anchor date** for every-N-days (the **…** button picks it).
 - **State persistence:** "fired today" and "snoozed until" are saved to `clockwork.state.json`, surviving restarts — a snooze carries across a restart and the same reminder never double-fires in a day. Interval progress is persisted the same way, so restarting mid-day keeps the day's remaining rounds.
 - **Do-Not-Disturb:** tray → **Pause reminders ▸** → 1 / 2 / 4 hours. Everything (including silent groups) is suppressed and auto-resumes when the time is up; you can also **Resume** early. Anything missed follows the normal grace / catch-up rules.
 - **Silent action group:** run a group on time with **no popup**. Selecting a task and clicking **Run** runs it once — note that for a silent task, Run **actually executes** the group.
@@ -104,7 +142,8 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 
 ## Action groups
 
-- **Add ▾** starts a group from a **built-in template** (Focus / Meeting / Wrap-up / Bedtime / Stepping away / Screenshot / Sitting too long) — tweak the process names and save.
+- **Add ▾** starts a group from a **built-in template** (Focus / Meeting / Back to normal / Wrap-up / Bedtime / Stepping away / Sitting too long) — tweak the process names and save.
+  - **Back to normal is the way out.** Muting notifications and muting the mic are stateful — they don't undo themselves. Focus and Meeting each switch something off, so keep a *Back to normal* around (a hotkey suits it well) to switch them all back on.
 - The list shows each group's **step summary** and **hotkey** columns (an empty group's summary reads **(empty)**).
 - A group runs **only one copy at a time** (repeat triggers are skipped — except its hotkey, see "the hotkey is a toggle" below).
 - Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**. You can also select a row on the Action groups tab and hit **Run** to fire it once by hand.
@@ -142,11 +181,22 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
 
 ## Settings
 
-- **Start at login** — a checkbox: ticking it registers a scheduled task with admin rights (so boot brings no UAC prompts), unticking removes it. If the change needs elevation, Clockwork relaunches itself to do it; if it fails, the box springs back rather than claiming a state that isn't real.
-- **Startup delay** (0–600 s, boot only).
+Three sections, ordered by when you'd reach for them.
+
+**Startup**
+
+- **Start at login** — the master switch of this section, so it comes first: ticking it registers a scheduled task with admin rights (so boot brings no UAC prompts), unticking removes it. If the change needs elevation, Clockwork relaunches itself to do it; if it fails, the box springs back rather than claiming a state that isn't real.
+- **Startup delay** (0–600 s) — waits this long after logon before running the list, so it misses the logon storm. **Only applies when Start at login is on**; a manual *Re-run startup list* is unaffected.
+- **Wait until the system is ready** (desktop / network) — goes as soon as both are ready, waits at most 90 s, then the fixed delay above is added on top. Better than simply raising the delay when the list runs too early for your apps.
 - **Start minimized to tray** (opening manually goes straight to the tray).
+
+**General**
+
 - **Panic hotkey** — click the box and press your shortcut; Esc cancels, Del clears; default `Ctrl+Alt+Q`.
 - **UI language** — Simplified Chinese, English, 日本語 and 15 more (18 total); switching restarts the app to apply.
+
+**Backup**
+
 - **Export Config** — saves a copy of `clockwork.settings.json` wherever you choose (default name `clockwork.settings.backup.json`). Use it to back up before a big change, or to move your setup to another PC.
 - **Import Config** — replaces **all** current config (startup list / scheduled tasks / action groups / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Task state (`clockwork.state.json`) is not touched.
 
@@ -158,6 +208,6 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
 - **Deleting always asks for confirmation** — list rows, steps inside the group editor, and system startup items alike. The dialog names what you're about to delete, so you can catch a wrong selection before it's gone.
 - Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Task state is `clockwork.state.json` (also local; safe to delete — at most a task fires once more today). Prefer the Settings tab's **Export / Import Config** for backups and moving between PCs.
 - **Where those files live:** next to `Clockwork.exe` when that folder is writable (the normal portable case). If it isn't — e.g. you put the exe under `C:\Program Files` — both files fall back to `%APPDATA%\Clockwork\` automatically. Export always copies whichever one is actually in use, so you never have to hunt for it.
-- When filling paths / processes / shortcuts / dates you don't have to type by hand: **Browse…**, **Pick…** (searchable process picker), **Capture**, and **Pick date**. The process picker and the system-startup list both have a search/filter box.
+- When filling paths / processes / dates you don't have to type by hand: **the … button at the end of a row** opens the matching picker (file, searchable process list, date), and **Capture** records a shortcut by pressing it. The process picker and the system-startup list both have a search/filter box.
 - **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers (e.g. Lucy) block low-level calls, so send-keys / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).
 - Global hotkeys can **run action groups** (set per group, above). Arbitrary key remapping / text expansion is still out of scope — that's AutoHotkey's strength (an `.ahk` step needs AutoHotkey installed).

@@ -24,8 +24,8 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 
 ## What it does
 
-- 🚀 **Startup list** — open your everyday apps in order at login, with per-step delays, weekday conditions and window styles; close, focus or mute things along the way.
-- ⏰ **Scheduled tasks** — a reminder on time, spoken if you like, or an action group run silently. Clicking **Yes** can launch a program, open a file or URL, or fire a group.
+- 🚀 **Startup list** — open your everyday apps in order at login, with per-step delays, weekday conditions and window styles; close, focus or mute things along the way. Steps can also be gated on what the machine is doing: only while an app is running (or isn't), only on AC or only on battery, only when a file or folder exists.
+- ⏰ **Scheduled tasks** — a reminder on time, spoken if you like, or an action group run silently. Clicking **Yes** can launch a program, open a file or URL, or fire a group. Or trigger on an event instead of a clock — on unlock, on lock, on wake from sleep, after N minutes idle, when the charger goes in or out, or when the battery runs low.
 - 🧹 **System startup items** — everything on your PC that auto-starts, in one list: switch off what you don't need (disabled, not deleted) or take it over into your own startup list.
 - 🎛️ **Action groups** — bundle a routine (Focus / Meeting / Wrap-up / Bedtime…) and fire it from the tray, a **global hotkey**, the startup list or a scheduled task. Templates included.
 
@@ -46,22 +46,22 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 ## Getting started
 
 1. Download the latest release from [Releases](https://github.com/rockbenben/Clockwork/releases) — two builds, three downloads — and drop the single `Clockwork.exe` you end up with into any folder.
-   - **`Clockwork-<version>-win-x64.zip`** (~67 MB) — .NET runtime included, runs as-is on any Windows 10/11. Take this if you're unsure, or if the PC is offline or locked down.
-   - **`Clockwork-<version>-win-x64-needs-dotnet10.zip`** (~0.5 MB) — needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed. Install it once on an online PC and every update after that is a 0.5 MB download.
-   - **`Clockwork.exe`** (~1.2 MB) — the same build as the zip above, with no zip around it: click, run, or drop it over your existing copy to update. Windows offers the runtime download if it is missing.
+   - **`Clockwork-<version>-win-x64.zip`** — .NET runtime included, runs as-is on any Windows 10/11. Take this if you're unsure, or if the PC is offline or locked down.
+   - **`Clockwork-<version>-win-x64-needs-dotnet10.zip`** — needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed. Install it once on an online PC and every update after that is a small download.
+   - **`Clockwork.exe`** — the same build as the zip above, with no zip around it: click, run, or drop it over your existing copy to update. Windows offers the runtime download if it is missing.
 2. Double-click it to open the settings window. The samples it loads all start **unticked** — nothing runs until you tick it.
 3. To run it every boot: on the **Settings** tab, tick **Start at login** (registers a scheduled task with admin rights, so boot brings no wall of UAC prompts).
 
 It then sits in the tray: double-click the icon to open the window, and the window's close button only hides it again. Quit for real from the tray's right-click **Exit**.
 
 > [!IMPORTANT]
-> **The exe isn't code-signed**, so SmartScreen shows "Windows protected your PC" on first run — click **More info → Run anyway**. Some antivirus may flag it too, because writing registry Run keys and scheduled tasks is exactly what a startup manager does and also what malware does; there is no way to tell those apart from the outside. If you'd rather not take that on faith, [build it yourself](CONTRIBUTING.md) — same result, your own binary.
+> **The exe isn't code-signed**, so SmartScreen shows "Windows protected your PC" on first run — click **More info → Run anyway**. Some antivirus may flag it too, because writing registry Run keys and scheduled tasks is exactly what a startup manager does and also what malware does; there is no way to tell those apart from the outside. If you'd rather not take that on faith, [build it yourself](CONTRIBUTING.md) — same result, your own binary. Every release also ships a `SHA256SUMS.txt` and a GitHub build attestation: `gh attestation verify <file> -R rockbenben/Clockwork` proves a download was built by this repository's CI, not on someone's laptop.
 
 **Full guide** — every field, every edge case: [English](docs/USAGE.md) · [中文](docs/USAGE.zh.md)
 
 ## Tips
 
-- **Double-click a row to edit** it. Paths, processes, shortcuts and dates are filled in for you: **Browse…**, **Pick…** (searchable process picker), **Capture**, **Pick date**.
+- **Double-click a row to edit** it. Paths, processes and dates are filled in for you: **the … button at the end of a row** opens the matching picker (a file, a searchable process list, a date), and **Capture** records a shortcut by pressing it.
 - **Drag a row to reorder it** — in all three lists and in the group editor's step list; the up/down buttons still work.
 - **Try it before you save** — the group editor's **▶ Run This Step** and **▶ Run Group** run what's currently on screen, and the button turns into **■ Stop** while it goes.
 - **Duplicate** clones the selected task or group right below it — quicker than rebuilding a near-identical one. **Deleting always asks first**, everywhere.

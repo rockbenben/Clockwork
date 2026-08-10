@@ -24,8 +24,8 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 
 ## Apa yang bisa dilakukannya
 
-- 🚀 **Daftar startup** — membuka aplikasi sehari-hari Anda secara berurutan saat login, dengan penundaan, syarat hari, dan gaya jendela per langkah; sekalian menutup, memfokuskan, atau membisukan sesuatu di sepanjang jalan.
-- ⏰ **Tugas terjadwal** — pengingat tepat waktu, dibacakan bila Anda mau, atau grup aksi yang berjalan diam-diam. Mengklik **Ya** dapat menjalankan program, membuka berkas atau URL, atau memicu sebuah grup.
+- 🚀 **Daftar startup** — membuka aplikasi sehari-hari Anda secara berurutan saat login, dengan penundaan, syarat hari, dan gaya jendela per langkah; sekalian menutup, memfokuskan, atau membisukan sesuatu di sepanjang jalan. Langkah juga bisa dikaitkan dengan keadaan mesin: hanya saat sebuah aplikasi berjalan (atau tidak), hanya saat terhubung listrik atau hanya saat memakai baterai, hanya bila sebuah berkas atau folder ada.
+- ⏰ **Tugas terjadwal** — pengingat tepat waktu, dibacakan bila Anda mau, atau grup aksi yang berjalan diam-diam. Mengklik **Ya** dapat menjalankan program, membuka berkas atau URL, atau memicu sebuah grup. Atau biarkan sebuah peristiwa yang memicunya alih-alih jam — saat membuka kunci, saat mengunci, saat bangun dari tidur, setelah N menit menganggur, saat mencolok atau melepas pengisi daya, atau saat baterai lemah.
 - 🧹 **Item startup sistem** — semua yang berjalan otomatis di PC Anda dalam satu daftar: matikan yang tidak diperlukan (dinonaktifkan, bukan dihapus) atau ambil alih ke daftar startup Anda sendiri.
 - 🎛️ **Grup aksi** — bungkus satu rutinitas (Fokus / Rapat / Beres-beres / Menjelang tidur…) dan picu dari tray, sebuah **tombol pintas global**, daftar startup, atau tugas terjadwal. Templat disertakan.
 
@@ -46,22 +46,22 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 ## Memulai
 
 1. Unduh versi terbaru dari [Releases](https://github.com/rockbenben/Clockwork/releases) — dua build, tiga unduhan — lalu letakkan satu-satunya `Clockwork.exe` yang tersisa di folder mana pun.
-   - **`Clockwork-<versi>-win-x64.zip`** (~67 MB) — runtime .NET sudah termasuk, langsung jalan di Windows 10/11 mana pun. Pilih ini kalau ragu, atau kalau PC-nya offline atau terkunci.
-   - **`Clockwork-<versi>-win-x64-needs-dotnet10.zip`** (~0,5 MB) — butuh [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) yang sudah terpasang. Pasang sekali di PC yang online, setelah itu tiap pembaruan hanya unduhan 0,5 MB.
-   - **`Clockwork.exe`** (~1,2 MB) — build yang sama dengan zip di atas, hanya tanpa zip: klik dan jalan, atau timpa salinan lama Anda untuk memperbarui. Kalau runtime-nya tidak ada, Windows menawarkan unduhannya.
+   - **`Clockwork-<versi>-win-x64.zip`** — runtime .NET sudah termasuk, langsung jalan di Windows 10/11 mana pun. Pilih ini kalau ragu, atau kalau PC-nya offline atau terkunci.
+   - **`Clockwork-<versi>-win-x64-needs-dotnet10.zip`** — butuh [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) yang sudah terpasang. Pasang sekali di PC yang online, setelah itu tiap pembaruan hanya unduhan kecil.
+   - **`Clockwork.exe`** — build yang sama dengan zip di atas, hanya tanpa zip: klik dan jalan, atau timpa salinan lama Anda untuk memperbarui. Kalau runtime-nya tidak ada, Windows menawarkan unduhannya.
 2. Klik dua kali untuk membuka jendela pengaturan. Contoh yang dimuat semuanya **tidak dicentang** — tidak ada yang berjalan sampai Anda mencentangnya.
 3. Agar berjalan setiap boot: pada tab **Pengaturan**, centang **Mulai saat login** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
 
 Setelah itu ia bertengger di tray: klik dua kali ikonnya untuk membuka jendela, dan tombol tutup hanya menyembunyikannya lagi. Untuk benar-benar keluar, klik kanan tray lalu pilih **Keluar**.
 
 > [!IMPORTANT]
-> **File exe tidak ditandatangani**, jadi pada jalankan pertama SmartScreen menampilkan «Windows protected your PC» — klik **More info → Run anyway**. Antivirus pun bisa ikut memperingatkan: menulis kunci Run di registry dan tugas terjadwal memang persis pekerjaan sebuah pengelola startup — dan juga yang biasa dilakukan malware; dari luar keduanya tak terbedakan. Kalau tak mau menerimanya atas dasar percaya saja, [bangun sendiri](../../CONTRIBUTING.md) — hasilnya sama, binernya milik Anda.
+> **File exe tidak ditandatangani**, jadi pada jalankan pertama SmartScreen menampilkan «Windows protected your PC» — klik **More info → Run anyway**. Antivirus pun bisa ikut memperingatkan: menulis kunci Run di registry dan tugas terjadwal memang persis pekerjaan sebuah pengelola startup — dan juga yang biasa dilakukan malware; dari luar keduanya tak terbedakan. Kalau tak mau menerimanya atas dasar percaya saja, [bangun sendiri](../../CONTRIBUTING.md) — hasilnya sama, binernya milik Anda. Setiap rilis juga menyertakan `SHA256SUMS.txt` dan atestasi build GitHub: `gh attestation verify <berkas> -R rockbenben/Clockwork` membuktikan bahwa unduhan dibangun oleh CI repositori ini, bukan di laptop seseorang.
 
 **Panduan lengkap** — setiap kolom, setiap kasus pinggir: [English](../USAGE.md) · [中文](../USAGE.zh.md)
 
 ## Tips
 
-- **Klik dua kali sebuah baris untuk menyuntingnya**. Jalur, proses, pintasan, dan tanggal diisikan untuk Anda: **Telusuri…**, **Pilih…** (pemilih proses yang dapat dicari), **Rekam**, **Pilih tanggal**.
+- **Klik dua kali sebuah baris untuk menyuntingnya**. Jalur, proses, dan tanggal tidak perlu diketik: **tombol … di ujung baris** membuka pemilih yang sesuai (berkas, daftar proses yang bisa dicari, tanggal), dan pintasan direkam dengan menekannya lewat **Tangkap**.
 - **Seret sebuah baris untuk mengurutkannya** — di ketiga daftar dan di daftar langkah pada editor grup; tombol naik/turun tetap berfungsi.
 - **Coba dulu sebelum menyimpan** — **▶ Jalankan langkah ini** dan **▶ Jalankan grup** di editor grup menjalankan apa yang sedang ada di layar, dan tombolnya berubah jadi **■ Hentikan** selama berjalan.
 - **Duplikat** mengkloning tugas atau grup yang dipilih tepat di bawahnya — lebih cepat daripada menyusun ulang yang nyaris sama. **Penghapusan selalu bertanya lebih dulu**, di mana pun.
