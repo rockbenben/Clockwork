@@ -38,7 +38,7 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 | **System** | Windows 10 / 11, x64 |
 | **Install** | None. A single portable `Clockwork.exe` — put it in any folder |
 | **Admin** | Only for "Start at login" and for steps you mark **run as admin** |
-| **Your setup** | `clockwork.settings.json` next to the exe (or `%APPDATA%\Clockwork\` if that folder is read-only) — nothing leaves the machine |
+| **Your setup** | `clockwork.settings.json` next to the exe (or `%APPDATA%\Clockwork\` if that folder was read-only on first run; it stays wherever it landed) — nothing leaves the machine |
 | **Interface** | 18 languages, following your Windows display language on first run |
 
 **Limits.** No installer means no auto-update — grab the new zip and replace the exe. Sandboxed launchers block send-keys, window actions, activate-if-running and volume (you get a clear notice; plain "launch program" still works). Key remapping and text expansion stay out of scope — that's AutoHotkey's job.
