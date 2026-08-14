@@ -393,6 +393,7 @@ Registro: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Pantalla: ampliar</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Pantalla: solo segunda pantalla</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>Error en {0}: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Este equipo no admite ese estado de energía o está deshabilitado (compruébelo con powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Texto del portapapeles</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Brillo (0-100)</value></data>

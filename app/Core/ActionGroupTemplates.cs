@@ -65,8 +65,9 @@ public static class ActionGroupTemplates
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_BedtimeMsg"), Speak = true },
             new LaunchStep { Kind = "volume", Action = "mute" },
             new LaunchStep { Kind = "window", Action = "close", Process = "Slack" },
-            // lockScreen 后多留 1.5 秒再息屏：它只是 Process.Start 起 rundll32，进程一创建就返回，
-            // 「已锁屏」远没完成，而锁屏过渡本身就是显示活动——紧接着 monitorOff 会黑一下又被唤醒。
+            // lockScreen 后多留 1.5 秒再息屏：LockWorkStation 是「发起后立即返回」的（换成原生调用之后
+            // 依然如此，不是子进程的锅），返回时「已锁屏」远没完成，而锁屏过渡本身就是显示活动——
+            // 紧接着 monitorOff 会黑一下又被唤醒。
             new LaunchStep { Kind = "system", Command = "lockScreen", DelayMs = 1500 },
             new LaunchStep { Kind = "system", Command = "monitorOff" },
         } },

@@ -393,6 +393,7 @@ Günlük: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Ekran: genişlet</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Ekran: yalnızca ikinci ekran</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} başarısız: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Bu makine bu güç durumunu desteklemiyor veya devre dışı bırakılmış (powercfg /a ile denetleyin)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Pano metni</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Parlaklık (0-100)</value></data>

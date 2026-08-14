@@ -393,6 +393,7 @@ Journal : {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Affichage : étendre</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Affichage : deuxième écran uniquement</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>Échec de {0} : {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Cette machine ne prend pas en charge cet état d'alimentation ou il est désactivé (vérifiez avec powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0} : {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Texte du presse-papiers</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Luminosité (0-100)</value></data>

@@ -393,6 +393,7 @@ Log: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Beeldscherm: uitbreiden</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Beeldscherm: alleen tweede scherm</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} mislukt: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Deze computer ondersteunt die energiestand niet of deze is uitgeschakeld (controleer met powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Klembordtekst</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Helderheid (0-100)</value></data>

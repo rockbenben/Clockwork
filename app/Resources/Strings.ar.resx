@@ -393,6 +393,7 @@
   <data name="Sys_displayExtend" xml:space="preserve"><value>العرض: توسيع</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>العرض: الشاشة الثانية فقط</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>فشل {0}: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>هذا الجهاز لا يدعم حالة الطاقة تلك أو أنها معطّلة (تحقّق باستخدام powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>نص الحافظة</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>السطوع (0-100)</value></data>

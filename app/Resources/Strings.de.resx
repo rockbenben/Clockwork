@@ -393,6 +393,7 @@ Protokoll: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Anzeige: erweitern</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Anzeige: nur zweiter Bildschirm</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} fehlgeschlagen: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Dieser Computer unterstützt diesen Energiezustand nicht oder er ist deaktiviert (mit powercfg /a prüfen)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Text für Zwischenablage</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Helligkeit (0-100)</value></data>

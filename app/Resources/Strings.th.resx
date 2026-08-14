@@ -393,6 +393,7 @@
   <data name="Sys_displayExtend" xml:space="preserve"><value>จอแสดงผล: ขยาย</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>จอแสดงผล: หน้าจอที่สองเท่านั้น</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} ล้มเหลว: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>เครื่องนี้ไม่รองรับสถานะพลังงานดังกล่าวหรือถูกปิดใช้งานไว้ (ตรวจสอบด้วย powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>ข้อความคลิปบอร์ด</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>ความสว่าง (0-100)</value></data>

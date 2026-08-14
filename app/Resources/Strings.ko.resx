@@ -393,6 +393,7 @@
   <data name="Sys_displayExtend" xml:space="preserve"><value>디스플레이: 확장</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>디스플레이: 두 번째 화면만</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} 실패: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>이 컴퓨터는 해당 전원 상태를 지원하지 않거나 사용하지 않도록 설정되어 있습니다(powercfg /a로 확인하세요)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>클립보드 텍스트</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>밝기(0-100)</value></data>

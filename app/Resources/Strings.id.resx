@@ -393,6 +393,7 @@ Log: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Layar: perluas</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Layar: hanya layar kedua</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} gagal: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Komputer ini tidak mendukung status daya tersebut atau status itu dinonaktifkan (periksa dengan powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Teks papan klip</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Kecerahan (0-100)</value></data>

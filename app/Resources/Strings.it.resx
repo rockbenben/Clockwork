@@ -393,6 +393,7 @@ Registro: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Schermo: estendi</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Schermo: solo secondo schermo</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} non riuscito: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Questo computer non supporta quello stato di alimentazione o è disattivato (verifica con powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Testo appunti</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Luminosità (0-100)</value></data>

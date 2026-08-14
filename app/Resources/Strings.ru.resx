@@ -393,6 +393,7 @@
   <data name="Sys_displayExtend" xml:space="preserve"><value>Экран: расширить</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Экран: только второй экран</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>Не удалось выполнить «{0}»: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Этот компьютер не поддерживает данное состояние питания или оно отключено (проверьте командой powercfg /a)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Текст буфера обмена</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Яркость (0-100)</value></data>

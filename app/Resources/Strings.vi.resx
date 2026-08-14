@@ -393,6 +393,7 @@ Nhật ký: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Màn hình: mở rộng</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Màn hình: chỉ màn hình phụ</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} thất bại: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Máy này không hỗ trợ hoặc đã tắt trạng thái nguồn đó (chạy powercfg /a để kiểm tra)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Nội dung clipboard</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Độ sáng (0-100)</value></data>

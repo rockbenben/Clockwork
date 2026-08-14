@@ -394,6 +394,7 @@
   <data name="Sys_displayExtend" xml:space="preserve"><value>ディスプレイ：拡張</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>ディスプレイ：セカンド スクリーンのみ</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} に失敗しました：{1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>この PC はその電源状態に対応していないか、無効化されています（powercfg /a で確認できます）</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}：{1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>クリップボードの文字</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>明るさ(0-100)</value></data>

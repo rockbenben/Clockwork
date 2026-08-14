@@ -396,6 +396,7 @@
   <data name="Sys_displayExtend" xml:space="preserve"><value>显示器：扩展</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>显示器：仅第二屏幕</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} 失败：{1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>这台机器不支持或已禁用该电源状态（可在命令行运行 powercfg /a 查看）</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}：{1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>剪贴板文本</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>亮度(0-100)</value></data>

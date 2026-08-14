@@ -393,6 +393,7 @@
   <data name="Sys_displayExtend" xml:space="preserve"><value>डिस्प्ले: विस्तारित</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>डिस्प्ले: केवल दूसरी स्क्रीन</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} विफल: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>यह मशीन उस पावर स्थिति का समर्थन नहीं करती या वह अक्षम है (powercfg /a चलाकर जाँचें)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>क्लिपबोर्ड टेक्स्ट</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>चमक (0-100)</value></data>

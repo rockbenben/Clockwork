@@ -396,6 +396,7 @@ Log: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Display: Extend</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Display: Second screen only</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} failed: {1}</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>This machine doesn't support or has disabled that power state (run powercfg /a to check)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Clipboard text</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Brightness (0-100)</value></data>

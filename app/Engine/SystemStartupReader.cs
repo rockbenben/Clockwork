@@ -28,7 +28,9 @@ public sealed class SystemStartupItem
 }
 
 // 系统启动项只读枚举/开关。注册表用 Microsoft.Win32.Registry；
-// 计划任务用 COM Schedule.Service（含隐藏任务）；开关用 schtasks.exe（避开 CIM 卡顿）。全为真机交互、无单测（仅冒烟）。
+// 计划任务全程走 COM Schedule.Service（枚举含隐藏任务、开关、删除、注册都是同一条通道）。
+// 不用 schtasks.exe：它的失败只有本地化文本可判，「是不是权限问题」在非中英文系统上只能靠猜。
+// 全为真机交互、无单测（仅冒烟）。
 public static class SystemStartupReader
 {
     // hive 名→根键、StartupApproved 子键路径：各写一处。枚举/开关/删除共用，改动不必多处同步。
@@ -256,7 +258,7 @@ public static class SystemStartupReader
 
     // 开关/删除共用的错误口径：唯一一份映射，新的「拒绝访问」形态只需在此补一处。
     // COM 的 E_ACCESSDENIED 按 HResult 判（与系统语言无关），文本正则只是最后一层兜底。
-    private static string GuardAdminErrors(Func<string> body)
+    internal static string GuardAdminErrors(Func<string> body)
     {
         try { return body(); }
         catch (UnauthorizedAccessException) { return "NeedsAdmin"; }
@@ -274,7 +276,7 @@ public static class SystemStartupReader
     // 猜偏哪头都错（认不出的「拒绝访问」丢一键提权；非权限失败被拉去无效提权）。COM 的
     // E_ACCESSDENIED(0x80070005) 语义与系统语言无关，GuardAdminErrors 按 HResult 精确归类，
     // 任务不存在等其他失败则带真实 HRESULT 信息如实上报。
-    private static void RunTaskOp(string taskPath, Action<dynamic> op)
+    internal static void RunTaskOp(string taskPath, Action<dynamic> op)
     {
         var svcType = Type.GetTypeFromProgID("Schedule.Service") ?? throw new Exception("Schedule.Service unavailable");
         dynamic? svc = null;
@@ -380,24 +382,12 @@ public static class SystemStartupReader
     {
         if (item.Type == "StartupFolder")
             return new LaunchStep { Kind = "app", Label = item.Name, Target = item.Command, Args = "", DelayMs = 2000, Enabled = true };
-        var p = LaunchTarget.ParseCommandLine(item.Command);
+        // 探盘版：Run 键的值常不带引号，纯切分会把带空格的路径截断（详见 ParseCommandLineProbing）。
+        var p = LaunchTarget.ParseCommandLineProbing(item.Command);
         return new LaunchStep { Kind = "app", Label = item.Name, Target = p.Target, Args = p.Arguments, DelayMs = 2000, Enabled = true };
     }
 
-    internal static (int Code, string Output) RunSchtasks(string args)
-    {
-        var psi = new ProcessStartInfo
-        {
-            FileName = "schtasks.exe", Arguments = args,
-            UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true,
-        };
-        using var p = Process.Start(psi)!;
-        // 并发读两条管道：串行 ReadToEnd(stdout) 再 ReadToEnd(stderr) 会在子进程先写满 stderr 缓冲(~4KB)
-        // 时死锁（父等 stdout EOF、子阻塞在 stderr 写）。stdout 异步读、stderr 同步读即可避免。
-        var outTask = p.StandardOutput.ReadToEndAsync();
-        var err = p.StandardError.ReadToEnd();
-        var o = outTask.GetAwaiter().GetResult() + err;
-        p.WaitForExit();
-        return (p.ExitCode, o);
-    }
+    // 这里原有一个 RunSchtasks：起 schtasks.exe 并抓 stdout/stderr。最后三个调用方（Autostart 的
+    // 查询/注册/删除）已改走上面的 COM 通道，故一并删除——留着一条「失败只能靠本地化文本猜」的
+    // 旁路，等于给后来者留一条会在 16 种语言上悄悄失灵的老路。
 }

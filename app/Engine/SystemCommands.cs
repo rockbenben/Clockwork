@@ -21,6 +21,13 @@ public static class SystemCommands
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern int SHQueryRecycleBin(string? pszRootPath, ref SHQUERYRBINFO pSHQueryRBInfo);
 
+    // 锁屏。原先是 rundll32.exe user32.dll,LockWorkStation——而 rundll32 干的就是「加载 user32、调这个导出」，
+    // 中间那层进程纯属多余，更要紧的是 rundll32 是典型 LOLBin，被 AppLocker / ASR 规则 / 不少企业杀软直接拦截，
+    // 那种机器上这条命令永远不生效且毫无反馈。直接调则连失败都能如实报（返回 BOOL）。
+    // 注意它与 rundll32 版一样是「发起后立即返回」，锁屏本身是异步完成的——依赖它的步骤该留的延时照留。
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool LockWorkStation();
+
     [StructLayout(LayoutKind.Sequential)]
     private struct SHQUERYRBINFO { public int cbSize; public long i64Size; public long i64NumItems; }
 
@@ -46,7 +53,9 @@ public static class SystemCommands
                 if (!toggled) KeyInput.SendKeyCombo("Win+D");
                 break;
             }
-            case "lockScreen": Start("rundll32.exe", "user32.dll,LockWorkStation"); break;
+            case "lockScreen":
+                if (!LockWorkStation()) throw Fail("lockScreen", new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error()).Message);
+                break;
             case "taskManager": Start("taskmgr.exe"); break;
             case "clearClipboard":
                 // WinForms Clipboard 要求 STA 线程，而所有执行路径（开机序列/单步/动作组）都在 MTA 线程池上——
@@ -58,7 +67,13 @@ public static class SystemCommands
                 // HWND_BROADCAST(0xFFFF) WM_SYSCOMMAND(0x0112) SC_MONITORPOWER(0xF170) 2=关。
                 Win32.PostMessage((IntPtr)0xFFFF, 0x0112, (IntPtr)0xF170, (IntPtr)2);
                 break;
-            case "hibernate": Start("shutdown.exe", "/h"); break;
+            // 与下面的 sleep 用同一个 API，只差 PowerState——原先这条起 shutdown.exe /h，
+            // 在禁用了休眠的机器上错误只打进一个看不见的控制台，这一步照记 ✓（与 sleep 曾经的坑同源）。
+            // 休眠没有 rundll32 兜底：那条命令固定的参数组合在休眠可用时才休眠，而这里失败恰恰意味着休眠不可用，
+            // 退过去只会变成「睡眠」——把用户要的「存盘断电」悄悄换成另一件事，不如如实报错。
+            case "hibernate":
+                if (!SetSuspend(WinForms.PowerState.Hibernate)) throw Fail("hibernate", Strings.Get("Err_PowerStateUnavailable"));
+                break;
             case "signOut": if (confirmDestructive(Strings.Get("Sys_signOut"))) Start("shutdown.exe", "/l"); break;
             case "restart": if (confirmDestructive(Strings.Get("Sys_restart"))) Start("shutdown.exe", "/r /t 0"); break;
             case "shutdown": if (confirmDestructive(Strings.Get("Sys_shutdown"))) Start("shutdown.exe", "/s /t 0"); break;
@@ -79,10 +94,9 @@ public static class SystemCommands
                 // 原生截图协议（Win10 1809+/Win11），不注入按键；协议缺失才退回 Win+Shift+S。
                 try { Start("ms-screenclip:", useShell: true); } catch { KeyInput.SendKeyCombo("Win+Shift+S"); }
                 break;
+            // 失败才退回 rundll32：它无法传类型化参数，在开启休眠的机器上会误休眠，所以只当兜底、不当主路。
             case "sleep":
-                // rundll32 无法传类型化参数，会在开启休眠的机器上误休眠——用 .NET 明确指定 Suspend；失败才退回旧方式。
-                try { WinForms.Application.SetSuspendState(WinForms.PowerState.Suspend, false, false); }
-                catch { Start("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0"); }
+                if (!SetSuspend(WinForms.PowerState.Suspend)) Start("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0");
                 break;
             // 显示器模式：系统自带的 DisplaySwitch.exe，和按 Win+P 选一项完全等价，不注入按键。
             case "displayInternal": Start("DisplaySwitch.exe", "/internal"); break;
@@ -160,6 +174,16 @@ public static class SystemCommands
     }
 
     // 命令失败的统一措辞：命令名用本地化标签（用户在下拉里看到的那个），后面接系统给的原文。
+    // 睡眠/休眠共用。必须接住返回值：待机或休眠被驱动/组策略禁用时（powercfg /a 会显示不可用），
+    // SetSuspendState 是**返回 false 而不抛异常**的。原先只 try/catch，等于假定失败会抛——
+    // 于是回退分支永远不跑、电脑整夜醒着，而这一步照记 ✓。
+    // 成功时本调用要到机器唤醒之后才返回，那时返回的是 true，不会重复触发兜底。
+    private static bool SetSuspend(WinForms.PowerState state)
+    {
+        try { return WinForms.Application.SetSuspendState(state, false, false); }
+        catch { return false; }
+    }
+
     private static InvalidOperationException Fail(string command, string detail)
         => new(Strings.Lf("Err_SysCommand", Strings.Get("Sys_" + command), detail));
 
