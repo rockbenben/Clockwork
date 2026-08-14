@@ -101,7 +101,12 @@ internal static class DataGridReorder
     // 命中的行号与「是否落在该行下半」。没命中任何行有两种截然不同的情形，必须分开判：
     //   · 落在列表下方空白（拖过最后一行）→ 末行、下半——拖到底。
     //   · 落在表头或首行上方空白（拖过第一行顶部/松早了）→ 首行、上半——拖到顶。
-    // 原先两种都按第一种处理：网上越拖越远反而把行摔到最底，跟用户的手完全反着来。
+    // 原先两种都按第一种处理：往上越拖越远反而把行摔到最底，跟用户的手完全反着来。
+    //
+    // 定位必须用「已实例化的行」，不能固定看第 0 行的容器。三个 DataGrid 都开着行虚拟化（WPF 默认即开，
+    // 项目里没有任何地方关掉），列表一滚动，第 0 行的容器就被回收、ContainerFromIndex(0) 返回 null——
+    // 于是上面那条修复只对「短到不用滚动」的列表成立，长清单滚到中后部往上拖，照样摔到最底，还立刻存盘。
+    // 返回 -1 = 判不出来（落在滚动条之类的地方），两个调用方都已按「小于 0 就别动」处理。
     private static int TargetIndex(DataGrid grid, Point p, out bool below)
     {
         below = false;
@@ -109,14 +114,12 @@ internal static class DataGridReorder
         var row = hit == null ? null : FindParent<DataGridRow>(hit);
         if (row == null)
         {
-            var first = RowAt(grid, 0);
-            if (first != null && grid.TranslatePoint(p, first).Y < 0)
-            {
-                below = false;
-                return 0;
-            }
-            below = true;
-            return grid.Items.Count - 1;
+            DataGridRow? topRow = null, bottomRow = null;
+            for (int i = 0; i < grid.Items.Count && topRow == null; i++) topRow = RowAt(grid, i);
+            if (topRow != null && grid.TranslatePoint(p, topRow).Y < 0) return topRow.GetIndex();   // below 已是 false
+            for (int i = grid.Items.Count - 1; i >= 0 && bottomRow == null; i--) bottomRow = RowAt(grid, i);
+            if (bottomRow != null && grid.TranslatePoint(p, bottomRow).Y > bottomRow.ActualHeight) { below = true; return bottomRow.GetIndex(); }
+            return -1;
         }
         var rp = grid.TranslatePoint(p, row);
         below = rp.Y > row.ActualHeight / 2;

@@ -13,6 +13,16 @@ public class StepHelpersTests
     public void ClampRepeat_bounds(int input, int expected)
         => Assert.Equal(expected, StepHelpers.ClampRepeat(input));
 
+    // 消息步骤恒跑一次：编辑器隐藏了它的重复行，盘上出现的 repeat>1 只可能是切换步骤类型时残留的。
+    // 夹取放在这个共用漏斗里（而不是编辑器保存处），既有配置和手改的 json 才能立刻正确。
+    [Fact]
+    public void StepRepeat_message_step_always_once()
+        => Assert.Equal(1, StepHelpers.StepRepeat(new LaunchStep { Kind = "message", Repeat = 3 }));
+
+    [Fact]
+    public void StepRepeat_other_kinds_keep_their_count()
+        => Assert.Equal(3, StepHelpers.StepRepeat(new LaunchStep { Kind = "keys", Repeat = 3 }));
+
     [Theory]
     [InlineData(0, 0)]    // 0 时（午夜）现为合法：支持「仅 00:MM 前」
     [InlineData(24, 8)]

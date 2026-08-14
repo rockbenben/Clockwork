@@ -12,7 +12,11 @@ public static class StepHelpers
     public static int ClampRepeat(int n) => n < 1 ? 1 : (n > 999 ? 999 : n);
 
     // 步骤重复次数：夹到 1..999（C# 强类型，缺失即默认 1）。
-    public static int StepRepeat(LaunchStep s) => ClampRepeat(s.Repeat);
+    // 消息步骤恒为 1：编辑器对它隐藏了重复行，所以那个值只可能是切换步骤类型时残留下来的
+    //（「发送按键 ×3」改成「消息」→ repeat 仍是 3 → 每次运行连弹 3 张一模一样的卡片）。
+    // 夹在这里而不是编辑器保存处，是因为本方法是所有读取方的唯一漏斗——启动清单、动作组、单步运行、
+    // 列表摘要的「×N」后缀都走它，于是盘上已有的配置和手改的 json 立刻就对，不必等用户重新打开那一步保存一次。
+    public static int StepRepeat(LaunchStep s) => s.Kind == "message" ? 1 : ClampRepeat(s.Repeat);
 
     // 「仅 N 前」阈值的时/分（各自夹取）与「当天分钟数」。支持任意时刻（不再只整点）：时 0..23、分 0..59，
     // 越界回退 8:00（兼容旧配置只有 onlyBefore8 没有 beforeHour/beforeMinute——缺失即模型默认 8:00）。

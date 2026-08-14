@@ -125,6 +125,8 @@ public partial class StepEditorWindow : Window
         ParseBeforeTime(AfterTimeBox.Text, out int ah, out int am, fallbackHour: 18);
         return new LaunchStep
         {
+            // 消息步骤的重复次数不在这里清：StepHelpers.StepRepeat 是所有读取方的共用漏斗，已经在那儿恒定为 1，
+            // 那份修法连盘上既有配置和手改的 json 一起管，比只管新保存的这一次深。
             Repeat = StepHelpers.ClampRepeat(ParseOr(RepeatBox.Text, 0)),
             Days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7),
             OnlyBefore8 = OnlyBeforeChk.IsChecked == true, BeforeHour = bh, BeforeMinute = bm,
