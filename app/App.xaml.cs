@@ -802,6 +802,9 @@ public partial class App : System.Windows.Application
         int rd = r.RandomDelaySeconds;
         long rand = rd > 0 ? _rng.Next(0, rd == int.MaxValue ? rd : rd + 1) : 0;
         st.PendingFireAt = baseTime.AddSeconds((long)r.DelaySeconds + rand);
+        // 与 ReminderEngine 的 arm 出口同口径：记基准日而非引爆日，否则延迟把引爆推过午夜时，
+        // LastFiredDate 会记成次日、把次日那次挡掉。事件触发只经这条路，Decide 的 Arm() 管不到。
+        st.PendingForDate = baseTime.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
     }
 
     private ReminderState StateOf(Reminder r)

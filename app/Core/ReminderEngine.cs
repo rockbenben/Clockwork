@@ -85,7 +85,12 @@ public static class ReminderEngine
             // 事件触发除外：编辑器为了往返保真会把隐藏的「错过必补」原样存回（把时间型改成事件型时它还在），
             // 而事件的语义是「没发生就是没发生」——凭一个残留勾选把昨晚的稍后在今早（比如满电插电时）诈尸成
             // 「电量偏低」提醒，是在补一个从未发生的事件。
-            if (snooze.Date < now.Date) { st.SnoozeUntil = null; if (r.CatchUpIfMissed && !ReminderEvent.IsEvent(r.Trigger)) return new("fire", null); }
+            // 荒谬的未来值一并丢弃：稍后最多是几分钟到几小时（跨午夜也就落到明天），
+            // 落盘里出现「一年后」只可能是当时的系统时间不对（虚拟机还原 / 主板电池没电 / 手动改错）。
+            // 不丢的话，时间校回来之后这个未来时刻会把这条提醒的所有分支永久挡死——界面上看不出任何异常，
+            // 编辑它也没用（迁移会把 SnoozeUntil 原样带到新 id），只能手删状态文件才能恢复。
+            if (snooze > now.AddDays(1)) { st.SnoozeUntil = null; }
+            else if (snooze.Date < now.Date) { st.SnoozeUntil = null; if (r.CatchUpIfMissed && !ReminderEvent.IsEvent(r.Trigger)) return new("fire", null); }
             else if (now >= snooze) { st.SnoozeUntil = null; return new("fire", null); }
             else return new("none", null);
         }
@@ -95,8 +100,12 @@ public static class ReminderEngine
         // 受 repeatUntil 截止 + MaxRepeats 约束，有界，不会漂到别的周期。故放在周期过滤之前。
         if (st.NextRepeatAt is DateTime nr)
         {
-            if (now >= nr) { st.NextRepeatAt = null; return new("fire", null); }
-            return new("none", null);
+            // 先看这条链的截止有没有过。不查的话，23:50 起的链排到 00:05、机器合盖睡过去，
+            // 次日 08:00 唤醒时它照样引爆，而 UpdateAfterFire 又会按当时的 now 把截止重新解析成
+            // 「明天 00:30」，于是接着每 15 分钟催一次直到 MaxRepeats——催了一个上午。
+            if (st.NextRepeatUntil is DateTime until && now > until) { EndRepeatChain(st); }
+            else if (now >= nr) { st.NextRepeatAt = null; return new("fire", null); }
+            else return new("none", null);
         }
 
         // 循环运行到点：确认不终止循环（与催促的根本区别）。与催促同侧、放在周期过滤与 LastFiredDate 之前——
@@ -122,7 +131,12 @@ public static class ReminderEngine
         {
             if (now >= pf)
             {
-                st.PendingFireAt = null; st.LastFiredDate = today;
+                st.PendingFireAt = null;
+                // 记「这次是为哪一天准备的」，而不是「引爆发生在哪一天」。23:59 的每日提醒在 23:59:xx 武装、
+                // 下一跳落到 00:00:xx 才引爆；记成引爆当天的话，次日 23:59 会被下面的「今天已弹过」挡掉，
+                // 每日提醒就退化成隔天一次，而且开了「错过必补」也救不回来（那条检查在补发之前）。
+                st.LastFiredDate = st.PendingForDate != "" ? st.PendingForDate : today;
+                st.PendingForDate = "";
                 if (r.Trigger == "startup") st.StartupHandled = true;
                 return new("fire", null);
             }
@@ -140,7 +154,10 @@ public static class ReminderEngine
         if (ReminderEvent.IsEvent(r.Trigger)) return new("none", null);
 
         // 周期过滤。走到这里 pending/repeat/snooze 都已在上面处理并返回，无需再清。
-        if (!IsRecurrenceDueToday(r, now)) return new("none", null);
+        // 只对「按时间」触发生效：事件在上一行已经返回，而「登录时」若也照周期过滤，就会被编辑器
+        // 隐藏起来的旧 recurType 静默钉死（详见 ReminderEvent.UsesRecurrence）——而编辑器注释、
+        // 列表的「每次登录」、文档三处都写着它不看周期。判据别在这里手写，走那个共享谓词。
+        if (ReminderEvent.UsesRecurrence(r.Trigger) && !IsRecurrenceDueToday(r, now)) return new("none", null);
 
         // 3) 首发判定
         if (r.Trigger == "startup")
@@ -152,7 +169,7 @@ public static class ReminderEngine
                 st.StartupHandled = true;   // 本次运行不再反复判定
                 return new("none", null);
             }
-            if (!st.StartupHandled && now >= startTime && IsStartupHourOk(r, startTime)) return new("arm", startTime);
+            if (!st.StartupHandled && now >= startTime && IsStartupHourOk(r, startTime)) return Arm(st, startTime);
             return new("none", null);
         }
 
@@ -167,11 +184,27 @@ public static class ReminderEngine
         // 错过必补：到点后不设窗口上限补弹——覆盖休眠/关机/程序没跑而错过的（回来照弹）。
         // 仅限"启动时就存在"的提醒(existedAtStartup)，排除"到点后才新建"的，免得刚建一条 09:00 的下午就突然弹。
         // 靠持久化的 LastFiredDate 判"当天没弹过"，故重启不会重复弹。
-        if (r.CatchUpIfMissed && existedAtStartup) return new("arm", baseTime);
+        if (r.CatchUpIfMissed && existedAtStartup) return Arm(st, baseTime);
         // 否则只在 [base, base+grace] 窗口内弹，过了就算错过。
         int grace = r.GraceMinutes < 0 ? 0 : r.GraceMinutes;
-        if (nowMin <= baseTime.AddMinutes(grace)) return new("arm", baseTime);
+        if (nowMin <= baseTime.AddMinutes(grace)) return Arm(st, baseTime);
         return new("none", null);
+    }
+
+    // 武装：记下这次触发的基准日，供引爆时写 LastFiredDate（引爆可能已跨过午夜，见 pending 分支）。
+    // 三条 arm 出口都必须经这里，漏一条那条路径就又会把日期记错。
+    private static ReminderDecision Arm(ReminderState st, DateTime baseTime)
+    {
+        st.PendingForDate = baseTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        return new("arm", baseTime);
+    }
+
+    // 催促链结束：把链上三个字段一起清干净，别漏掉截止（留着会误判下一条链）。
+    private static void EndRepeatChain(ReminderState st)
+    {
+        st.NextRepeatAt = null;
+        st.NextRepeatUntil = null;
+        st.RepeatCount = 0;
     }
 
     // 弹窗后推进周期重复状态。确认(yes/no/ok)=催促停；未确认('')按 repeatMinutes 排下次，受 repeatUntil 截止与 MaxRepeats 约束。
@@ -180,29 +213,36 @@ public static class ReminderEngine
     // 链在途（NextRepeatAt 刚排上）不排循环，两条链同时挂会互相插队刷屏。「稍后」由 Snooze 单独处理，不经此。
     public static ReminderState UpdateAfterFire(Reminder r, DateTime now, string result, ReminderState st)
     {
-        if (result is "yes" or "no" or "ok") { st.NextRepeatAt = null; st.RepeatCount = 0; return ScheduleInterval(r, now, st); }
+        if (result is "yes" or "no" or "ok") { EndRepeatChain(st); return ScheduleInterval(r, now, st); }
 
         int rep = r.RepeatMinutes;
-        if (rep <= 0) { st.NextRepeatAt = null; return ScheduleInterval(r, now, st); }
+        if (rep <= 0) { EndRepeatChain(st); return ScheduleInterval(r, now, st); }
 
         int count = st.RepeatCount + 1;
-        if (count >= MaxRepeats) { st.NextRepeatAt = null; st.RepeatCount = 0; return ScheduleInterval(r, now, st); }
+        if (count >= MaxRepeats) { EndRepeatChain(st); return ScheduleInterval(r, now, st); }
 
         var next = now.AddMinutes(rep);
-        // 两个时刻都先规整：手改 json 的 "9:30" 会过不了严格 HH:mm 校验、整个截止判定被静默跳过；
-        // "9:00" 的序数比较会把 "10:30"<"9:00" 误判成跨午夜、催促窗被错误顺延一天。
-        var untilStr = DurationText.FormatTimeHHmm(r.RepeatUntil ?? "");
-        if (Regex.IsMatch(untilStr, HhmmPattern))
-        {
-            var until = DateTime.ParseExact($"{now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} {untilStr}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-            // 仅当 repeatUntil 时刻早于提醒自身触发时刻（窗口真跨午夜，如 23:50→00:30）才把截止顺延到次日。
-            // 若 repeatUntil 只是"今天已过"（如触发被延时推过当天截止），仍按原样停——不误判为次日、避免刷屏。
-            if (until < now && string.CompareOrdinal(untilStr, DurationText.FormatTimeHHmm(r.Time)) < 0) until = until.AddDays(1);
-            if (next > until) { st.NextRepeatAt = null; st.RepeatCount = 0; return ScheduleInterval(r, now, st); }
-        }
+        // 截止只在开链时解析一次、之后钉住（见 ReminderState.NextRepeatUntil）：每次续排都按当时的 now
+        // 重新解析的话，机器睡过整个窗口再唤醒时，「是否跨午夜」会把截止一路往后推、链永远结束不了。
+        var until = st.NextRepeatUntil ??= ResolveRepeatUntil(r, now);
+        if (until != null && next > until) { EndRepeatChain(st); return ScheduleInterval(r, now, st); }
         st.RepeatCount = count;
         st.NextRepeatAt = next;
         return st;
+    }
+
+    // 催促链的绝对截止时刻；没配 repeatUntil（或手改 json 写成非法格式）返回 null=不设截止，只受 MaxRepeats 约束。
+    private static DateTime? ResolveRepeatUntil(Reminder r, DateTime now)
+    {
+        // 先规整：手改 json 的 "9:30" 会过不了严格 HH:mm 校验、整个截止判定被静默跳过；
+        // "9:00" 的序数比较会把 "10:30"<"9:00" 误判成跨午夜、催促窗被错误顺延一天。
+        var untilStr = DurationText.FormatTimeHHmm(r.RepeatUntil ?? "");
+        if (!Regex.IsMatch(untilStr, HhmmPattern)) return null;
+        var until = DateTime.ParseExact($"{now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} {untilStr}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+        // 仅当 repeatUntil 时刻早于提醒自身触发时刻（窗口真跨午夜，如 23:50→00:30）才把截止顺延到次日。
+        // 若 repeatUntil 只是「今天已过」（如触发被延时推过当天截止），仍按原样停——不误判为次日、避免刷屏。
+        if (until < now && string.CompareOrdinal(untilStr, DurationText.FormatTimeHHmm(r.Time)) < 0) until = until.AddDays(1);
+        return until;
     }
 
     // 催促链结束时排下一轮循环。IntervalUntil 走与 RepeatUntil 同一套规整+校验；空/非法 = 当天 23:59。
@@ -234,10 +274,10 @@ public static class ReminderEngine
     // 「仅一次」触发完成后是否应自动取消勾选：已实际弹过（LastFiredDate 非空）且催促/稍后链都已结束。
     // 立刻停用是错的——Decide 开头就 if(!Enabled) return none，会把已武装的催促链和用户刚点的「稍后」一起掐死。
     // 引擎不改 Reminder（保持纯函数边界）：判定在此，停用动作（Enabled=false + 存盘 + 刷新列表）归 App。
-    // 事件触发不参与：编辑器为往返保真会把隐藏的周期原样存回，事件提醒身上残留的 "once" 只是历史配置，
-    // 若按它把「解锁时」提醒响一次就自动取消勾选，等于替用户悄悄关掉一条还想要的提醒。
+    // 事件与「登录时」都不参与：编辑器为往返保真会把隐藏的周期原样存回，它们身上残留的 "once" 只是
+    // 历史配置，若按它把「解锁时」/「登录时」提醒响一次就自动取消勾选，等于替用户悄悄关掉一条还想要的提醒。
     public static bool ShouldDisableAfterOnce(Reminder r, ReminderState st)
-        => r.RecurType == "once" && !ReminderEvent.IsEvent(r.Trigger) && r.Enabled && !string.IsNullOrEmpty(st.LastFiredDate)
+        => r.RecurType == "once" && ReminderEvent.UsesRecurrence(r.Trigger) && r.Enabled && !string.IsNullOrEmpty(st.LastFiredDate)
            && st.NextRepeatAt == null && st.SnoozeUntil == null && st.NextIntervalAt == null;
 }
 

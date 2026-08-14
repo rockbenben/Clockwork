@@ -14,6 +14,14 @@ public static class ReminderEvent
 
     public static bool IsEvent(string? trigger) => Array.IndexOf(All, trigger ?? "") >= 0;
 
+    // 这个触发类型是否受「周期」（recurType / 每 N 天 / 每月某号 / 仅一次 / 起算日）约束。
+    // 只有「按时间」受约束——事件和「登录时」都不看周期，编辑器为此把整块周期 UI 对它们隐藏。
+    // 各处历史上是写成 !IsEvent(...) 的，那等于默认「非事件即时间型」，把 startup 漏在了受约束的一侧：
+    // 编辑器隐藏了周期 UI 却原样保存旧值，运行期 Decide 又照着旧值过滤，于是把一条「每月 1 号」的提醒
+    // 改成「登录时」之后，它只有每月 1 号登录才响；改自「仅一次」且日期已过的更是永远不再触发，
+    // 而列表上一直写着「每次登录」。判据集中到这一个谓词，别再各处手写触发类型的补集。
+    public static bool UsesRecurrence(string? trigger) => trigger == "time";
+
     // 本条提醒是否该响应这次 ev。星期过滤照旧生效（「工作日解锁时打卡」是真实需求）；
     // recurType 那一套（每 N 天 / 每月 / 仅一次）对事件没有意义，编辑器保存事件触发时会把它归成 daily。
     public static bool ShouldFire(Reminder r, string ev, DateTime now)

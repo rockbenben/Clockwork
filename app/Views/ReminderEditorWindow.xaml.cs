@@ -73,11 +73,13 @@ public partial class ReminderEditorWindow : Window
         UpdateCrossingHint();
     }
 
-    // 「仅一次」是否真的生效：事件触发不看周期（编辑器里那块也是藏着的），残留在下拉里的 "once"
-    // 只是往返保真的历史值。凡按 once 分支的地方（清循环、日期校验、标题句）都必须用这个有效值——
+    // 「仅一次」是否真的生效：事件与「登录时」都不看周期（编辑器里那块也是藏着的），残留在下拉里的
+    // "once" 只是往返保真的历史值。凡按 once 分支的地方（清循环、日期校验、标题句）都必须用这个有效值——
     // 用原始下拉值曾造出「标题说触发一次、保存后每 30 分钟跑一轮」的口是心非（评审 #3）。
+    // 判据走 UsesRecurrence 而非 !IsEvent：后者把「登录时」错划进受周期约束的一侧，于是登录时下
+    // 那个明明可见的循环行填了值会在保存时被静默清零。
     private bool IsEffectiveOnce()
-        => ComboVal(RecurCombo) == "once" && !ReminderEvent.IsEvent(ComboVal(TrigCombo));
+        => ComboVal(RecurCombo) == "once" && ReminderEvent.UsesRecurrence(ComboVal(TrigCombo));
 
     // 行为句里的分钟数取「保存后真正生效」的值：静默任务的催促不生效（FireReminder 固定返回 ok）、
     // 「仅一次」保存时强制清循环——照抄这两条口径，标题才不会许一个保存后不存在的行为。
@@ -128,7 +130,8 @@ public partial class ReminderEditorWindow : Window
         Vis(GraceRow, time); Vis(CatchUpRow, time);
         Vis(StartupRow, t == "startup");
         // 周期整块只对「按时间」有意义：登录时与事件都不看 recurType，留着等于让人配一个不起作用的东西。
-        Vis(PeriodRow, time);
+        // 判据走共享谓词而不是就地写 == "time"：这次的整个 bug 类就是「编辑器藏了、运行期照旧过滤」的口径分家。
+        Vis(PeriodRow, ReminderEvent.UsesRecurrence(t));
         Vis(IdleRow, t == "idle");
         Vis(BatteryRow, t == "lowBattery");
         Vis(EventDaysRow, ev);
@@ -145,7 +148,7 @@ public partial class ReminderEditorWindow : Window
         //   · DaysRow —— 星期过滤对事件触发仍然有效（「工作日解锁时打卡」），故事件下保留、登录时收掉；
         //   · LoopRow —— 循环运行（每 N 分钟）不属于「周期」，两者下都依旧有效（见 TimeLabel 的循环后缀）。
         var t = ComboVal(TrigCombo);
-        if (t != "time")
+        if (!ReminderEvent.UsesRecurrence(t))   // 同 UpdateTrig：周期判据只此一处，别就地写 == "time"
         {
             Vis(DaysRow, ReminderEvent.IsEvent(t));
             Vis(IntervalRow, false); Vis(MonthlyRow, false); Vis(OnceRow, false);
@@ -195,7 +198,7 @@ public partial class ReminderEditorWindow : Window
         // Decide/ShouldDisableAfterOnce/编辑器口径全部按 IsEvent 忽略不适用的周期——保存永远保真，运行时各自把关。
         var recur = ComboVal(RecurCombo);
         // 「仅一次」的日期校验只在它真生效时做：事件触发下 once 是隐藏的历史值，为它弹「日期已过」是无中生有。
-        bool effOnce = recur == "once" && !ReminderEvent.IsEvent(trig);
+        bool effOnce = IsEffectiveOnce();   // 与折叠条标题同一个判据，别在这儿再手写一遍
         var onceDate = OnceDateBox.Text.Trim();
         if (effOnce && onceDate != "" && !IsDate(onceDate)) { Warn(Strings.Get("Val_OnceDate")); return; }
         // 日期已过：提示但放行——不替用户做主（与项目校验风格一致，只拦真正会崩的）。
@@ -221,7 +224,10 @@ public partial class ReminderEditorWindow : Window
         int rd = ParseOr(RandomBox.Text, 0, min: 0);
         int gm = ParseOr(GraceBox.Text, 5, min: 0);
 
-        if (recur == "everyNDays" && anchor == "") anchor = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        // 只在周期真生效时补起算日：给「登录时」补一个起算日，等于把它钉成每 N 天才认一次登录，
+        // 而那块 UI 对它是隐藏的，用户既看不见也改不掉。
+        if (recur == "everyNDays" && anchor == "" && ReminderEvent.UsesRecurrence(trig))
+            anchor = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
         var days = CollectDays(Day1, Day2, Day3, Day4, Day5, Day6, Day7);
 
