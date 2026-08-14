@@ -188,6 +188,7 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>Se omitió «{0}»: el destino es el propio Clockwork (evita un bucle de inicio automático)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Error al iniciar: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» se cerró en 0,5 s (código {1}); probablemente no arrancó</value></data>
+  <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>No se pudo leer el archivo de configuración (probablemente JSON dañado); se inició con los valores predeterminados. El original se copió a {0}: corríjalo y reinicie para recuperarlo.</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>No se encuentra el archivo de script (indique la ruta completa)</value></data>
   <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>El script está en UTF-8 sin BOM y Windows PowerShell 5.1 no puede descodificarlo correctamente; instale PowerShell 7 o vuelva a guardar el script como UTF-8 con BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Enviado (sin verificar)</value></data>

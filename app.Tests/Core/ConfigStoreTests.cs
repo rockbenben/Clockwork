@@ -147,6 +147,33 @@ public class ConfigStoreTests : IDisposable
         Assert.Equal("Ctrl+Alt+F", cfg.ActionGroups[^1].SnapshotForRun().Hotkey);
     }
 
+    // unreadable 是「别写回」的开关：App.LoadConfig 读到它为 true 就跳过写回。
+    // 不区分的话，解析失败返回的默认配置会被语言规范化顺手写回原路径——用户漏打一个逗号，全部设置就没了。
+    [Fact]
+    public void Read_corrupt_json_reports_unreadable()
+    {
+        var path = Path.Combine(_dir, "corrupt.json");
+        File.WriteAllText(path, "{\"launchSteps\": [ , ] 这不是 json");
+        ConfigStore.Read(path, out _, out bool unreadable);
+        Assert.True(unreadable);
+    }
+
+    [Fact]
+    public void Read_missing_file_is_not_unreadable()   // 首次启动：写默认配置是对的，不该被当成坏文件
+    {
+        ConfigStore.Read(Path.Combine(_dir, "nope.json"), out _, out bool unreadable);
+        Assert.False(unreadable);
+    }
+
+    [Fact]
+    public void Read_valid_file_is_not_unreadable()
+    {
+        var path = Path.Combine(_dir, "ok.json");
+        ConfigStore.Write(RootConfig.Default(), path);
+        ConfigStore.Read(path, out _, out bool unreadable);
+        Assert.False(unreadable);
+    }
+
     [Fact]
     public void Read_null_array_elements_are_dropped_not_crashed()
     {

@@ -188,6 +188,7 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>تم تخطي «{0}»: الهدف هو Clockwork نفسه (لتجنّب حلقة بدء تلقائي)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>فشل التشغيل: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>انتهى «{0}» خلال 0.5 ث (الرمز {1})؛ فشل تشغيل محتمل</value></data>
+  <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>تعذّرت قراءة ملف الإعدادات (على الأرجح JSON تالف)؛ تم البدء بالإعدادات الافتراضية. نُسخ الملف الأصلي إلى {0} — أصلحه ثم أعد التشغيل للاسترجاع.</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>تعذّر العثور على ملف البرنامج النصي (أدخل المسار الكامل)</value></data>
   <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>الملف بترميز UTF-8 بدون BOM ولا يستطيع Windows PowerShell 5.1 فك ترميزه بشكل صحيح؛ ثبّت PowerShell 7 أو أعد حفظ الملف بترميز UTF-8 مع BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ أُرسل (غير مؤكد)</value></data>

@@ -188,6 +188,7 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» atlandı: hedef Clockwork'ün kendisi (otomatik başlatma döngüsünden kaçınılıyor)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Başlatma başarısız: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» 0,5 sn içinde kapandı (kod {1}); başlatma başarısız olabilir</value></data>
+  <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>Yapılandırma dosyası okunamadı (büyük olasılıkla bozuk JSON); varsayılanlarla başlatıldı. Özgün dosya {0} olarak yedeklendi — düzeltip yeniden başlatın.</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>Betik dosyası bulunamadı (tam yolu girin)</value></data>
   <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Betik BOM'suz UTF-8 biçiminde; Windows PowerShell 5.1 bunu doğru çözemiyor. PowerShell 7 kurun veya betiği BOM'lu UTF-8 olarak yeniden kaydedin</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Gönderildi (doğrulanmadı)</value></data>

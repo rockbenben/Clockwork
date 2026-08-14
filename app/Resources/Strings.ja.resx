@@ -190,6 +190,7 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>「{0}」をスキップ：ターゲットが Clockwork 自身のため（自動起動ループ回避）</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>起動失敗：{0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>「{0}」は起動後 0.5 秒以内に終了（終了コード {1}）、起動失敗の可能性</value></data>
+  <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>設定ファイルを読み込めませんでした（JSON の破損の可能性）。今回は既定値で起動しました。元のファイルは {0} にバックアップ済みです。修正後に再起動すると復元されます。</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>スクリプトファイルが見つかりません（フルパスを入力してください）</value></data>
   <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>スクリプトが BOM なし UTF-8 のため、Windows PowerShell 5.1 では正しく読み取れません。PowerShell 7 をインストールするか、BOM 付き UTF-8 で保存し直してください</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ 送信済み（未検証）</value></data>

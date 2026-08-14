@@ -86,6 +86,8 @@ public partial class App : System.Windows.Application
         ApplyUiCulture();
 
         BuildShell();          // 主窗口 + 托盘
+        // 配置读不出来的告警要等到这里才发得出去：LoadConfig 跑在托盘之前，那时没有任何可用的提示通道。
+        if (_configUnreadable) WarnToast(Lf("Warn_ConfigUnreadable", _cfgPath + ".bad"));
         StartEngines();        // 提醒计时器 / 系统事件 / 全局热键 / 跨实例显示信号
         ShowInitialWindow(e.Args);
 
@@ -194,7 +196,14 @@ public partial class App : System.Windows.Application
     {
         _cfgPath = ConfigPath.Resolve(_exeDir);
         EnsureConfigFile();
-        _config = ConfigStore.Read(_cfgPath, out var normalized);
+        _config = ConfigStore.Read(_cfgPath, out var normalized, out _configUnreadable);
+        // 读不出来（漏个逗号 / 上次断电留下半截文件）：先把原文件留一份 .bad 再往下走。
+        // 光靠下面「不写回」还不够——用户看到界面空空，多半会当成配置丢了、照着重建一遍，
+        // 那一次保存才是真正把原文件盖掉的时刻。备份是给那一刻留的后路。
+        if (_configUnreadable)
+        {
+            try { File.Copy(_cfgPath, _cfgPath + ".bad", overwrite: true); } catch { }
+        }
         // 规范化界面语言到「必是受支持的一门」：空→跟随系统；不在 18 项列表里的有效文化→映射最接近（pt-BR→pt）；
         // 无效→跟随系统。既尊重示例配置指定的语言，又保证送进 MainWindow 下拉的语言必能匹配——
         // 否则「非空但不在列表」会被下拉初始化当不匹配、强存 zh-CN 并重启，弄丢用户/系统语言。变了就落盘。
@@ -203,8 +212,16 @@ public partial class App : System.Windows.Application
         { _config.Settings.Language = normLang; normalized = true; }
         // 读入时若发生了重启后有影响的规范化（剔 null / 补生或重发 id / 补语言），立即写回——
         // 尤其去重重发的提醒 id：不落盘则每次启动都换新 id，运行态接不上、被去重那条每次重启都重弹。
-        if (normalized) { try { ConfigStore.Write(_config, _cfgPath); } catch { } }
+        // 解析失败时绝不写回。这里的 _config 是与用户内容毫无关系的默认配置，而 normalized 一定会被
+        // 上面那段语言规范化翻成 true（默认配置的 Language 是空串，Normalize 必返回具体语言码）——
+        // 于是「解析失败落回默认」这个本意是止损的分支，反而在启动那一刻就把坏配置抹平成默认配置，
+        // 用户漏打一个逗号就永久失去全部设置。ConfigStore.Read 承诺的「不损坏」必须在这里兑现。
+        if (normalized && !_configUnreadable) { try { ConfigStore.Write(_config, _cfgPath); } catch { } }
     }
+
+    // 配置读不出来：本次以默认配置启动。true 时既不写回配置，也在托盘就绪后弹一条告警——
+    // 不说的话用户只会看到一个空界面，无从知道原因，更不会想到原文件还在、修好就能恢复。
+    private bool _configUnreadable;
 
     // 提醒运行态落盘路径 + 载入上次的耐久态（上次触发日期/稍后到点）。重启后不再重复弹当天已弹过的。
     private void LoadReminderState()

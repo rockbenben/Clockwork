@@ -56,12 +56,19 @@ public static class ConfigStore
 
     public static RootConfig Read(string path) => Read(path, out _);
 
+    public static RootConfig Read(string path, out bool normalized) => Read(path, out normalized, out _);
+
     // normalized：本次读入是否做了「重启后有影响」的规范化（剔 null 元素 / 补生或重发 id）。
     // 为 true 时调用方应把规范化结果写回文件——尤其重发的提醒 id 若不落盘，每次启动都换新 id、
     // 运行态（今天已弹/稍后）永远接不上，被去重那条提醒会每次重启都重弹。
-    public static RootConfig Read(string path, out bool normalized)
+    //
+    // unreadable：文件存在但读不出来（JSON 语法错 / 上次断电留下的半截文件 / 编码坏）。
+    // 调用方拿到 true 时**绝不能把返回的配置写回原路径**——这里返回的默认配置与用户的内容毫无关系，
+    // 写回去就是把一份还能手工修好的配置抹掉。「文件不存在」不算 unreadable：那是首次启动，写默认是对的。
+    public static RootConfig Read(string path, out bool normalized, out bool unreadable)
     {
         normalized = false;
+        unreadable = false;
         if (!File.Exists(path)) return RootConfig.Default();
         RootConfig? cfg;
         try
@@ -70,9 +77,10 @@ public static class ConfigStore
         }
         catch
         {
+            unreadable = true;
             return RootConfig.Default(); // 解析失败落回默认（不损坏、不崩溃）
         }
-        if (cfg is null) return RootConfig.Default();
+        if (cfg is null) { unreadable = true; return RootConfig.Default(); }   // json 字面量 "null"
         normalized = Normalize(cfg);
         return cfg;
     }
