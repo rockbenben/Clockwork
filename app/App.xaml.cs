@@ -1073,7 +1073,16 @@ public partial class App : System.Windows.Application
         {
             // 把本次运行的取消闸一路传进步骤执行层：等窗口 / 置前重试 / 置前延时都可能挂几秒到几十秒，
             // 只查全局急停的话，用户取消了动作组，这些步骤过一会儿照样把窗口拽到前台、把按键打进去。
-            RunStep = s => StepRunner.InvokeStepAction(s, a => ConfirmDestructive(a, owner), selfPaths, deps.Cancel),
+            // 接住 InvokeStepAction 的返回值。以前这里是 `RunStep = s => StepRunner.InvokeStepAction(...)`，
+            // ActionResult 被 C# 当表达式语句静默丢弃——于是「脚本不存在」「找不到窗口」「启动失败」这类
+            // Warn 在动作组这条路径上一个都到不了用户面前，组照样「跑完」。同一个步骤放开机清单里
+            // 有「⚠」可查（LaunchSequence 走 StepRunner.MarkOf），而热键 / 定时静默组——正是无人值守跑的
+            // 那条——什么都不说。Unverified（「发出去了但没法证实」）有意不报：它不是失败，报了只会变成噪音。
+            RunStep = s =>
+            {
+                var r = StepRunner.InvokeStepAction(s, a => ConfirmDestructive(a, owner), selfPaths, deps.Cancel);
+                if (r.Warning != null) LogGroupStepWarn(s, r.Warning);
+            },
             ShowMessage = s => ShowGroupMessage(s, owner),
             // onYes 组的结局也丢弃：ReminderActions.RunOnYes 是 Action<ActionGroup> 契约（提醒弹窗路径共用），
             // 且语义上 onYes 是「是」分支的副作用出口——它内部的确认框属于那条子流程，把它的中止回灌成父组中止，
@@ -1105,31 +1114,36 @@ public partial class App : System.Windows.Application
         return deps;
     }
 
-    // 动作组内某步抛异常：记一笔到错误日志并弹一次托盘气泡，随后整组继续（不静默中止）。
-    // 仅用于 RunStep 真正抛出的异常——「这次没跑」但没有异常的情况（嵌套组引用缺失/禁用/重入）走 LogGroupStepSkipped。
-    private void LogGroupStepError(LaunchStep step, Exception ex)
+    // 动作组内某步没有正常跑完的统一出口：记一笔到错误日志，并弹一次托盘气泡，随后整组继续（不静默中止）。
+    // 三种结局只在三件事上不同——日志措辞、气泡文案与等级、合并键分桶——所以只在这里传参，别再各抄一份。
+    // 措辞不能互借：说成「已跳过」会让人以为是条件没满足，说成「异常」又是给一个不存在的故障去查。
+    // 合并键先按结局分桶再按步骤摘要分桶：同一步上次是真异常、这次只是良性跳过（或反过来），两张卡不该
+    // 互相盖掉——用户需要分别看到「确实失败过」与「最近一次只是被跳过」；而同一步在多轮/多次引用里反复
+    // 出事时靠合并键叠加计数，不会堆一摞 12 秒的卡片（整组 Repeat 会让同一步出事很多次）。
+    private void LogGroupStep(LaunchStep step, string what, string detail, string bucket, string toast, Views.ToastLevel level)
     {
-        var logPath = Path.Combine(CfgDir, "clockwork.error.log");
-        try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] 动作组步骤失败（已跳过、整组继续）: {StepDisplay.StepSummary(step)} — {ex.Message}\r\n"); } catch { }
-        // 带合并键（按步骤摘要分桶）：同一步在多轮/多次引用里反复失败时叠加计数而不是堆一摞 12 秒的卡片
-        // （整组 Repeat 仍会让同一步失败很多次）；不同步骤的失败仍各占一张，不会互相盖掉。
-        ShowToast("Clockwork", Lf("Mark_Exception", StepDisplay.StepSummary(step)), Views.ToastLevel.Warn,
-                  key: "groupstep:" + StepDisplay.StepSummary(step));
+        var summary = StepDisplay.StepSummary(step);
+        AppendErrorLog($"动作组步骤{what}: {summary} — {detail}");
+        ShowToast("Clockwork", toast, level, key: bucket + ":" + summary);
     }
 
-    // 动作组内某步被跳过（没有异常，如嵌套组引用的目标缺失/已禁用/重入）：记一笔到错误日志（措辞用「已跳过」
-    // 而非「失败」）并弹一次托盘气泡，气泡文案带上具体原因——不能只报步骤摘要，否则用户只能打开日志文件才知道
-    // 为什么。已禁用是正常配置状态（与 LaunchSequence 对同一条件的判断口径一致），用 Info；其余用 Warn。
+    // 真抛出的异常。「这次没跑」但没有异常的情况（嵌套组引用缺失/禁用/重入）走 LogGroupStepSkipped。
+    private void LogGroupStepError(LaunchStep step, Exception ex)
+        => LogGroupStep(step, "失败（已跳过、整组继续）", ex.Message, "groupstep",
+                        Lf("Mark_Exception", StepDisplay.StepSummary(step)), Views.ToastLevel.Warn);
+
+    // 跑了但没生效（ActionResult.Warning：脚本不存在 / 需要 PowerShell 7 / 启动失败 / 找不到窗口…）。
+    // 气泡复用 Toast_GroupStepSkipped——它的文案就是中性的「{0}，{1}」，「已跳过」只出现在日志行里。
+    private void LogGroupStepWarn(LaunchStep step, string warning)
+        => LogGroupStep(step, "未生效（整组继续）", warning, "groupwarn",
+                        Lf("Toast_GroupStepSkipped", StepDisplay.StepSummary(step), warning), Views.ToastLevel.Warn);
+
+    // 压根没跑（嵌套组引用的目标缺失/已禁用/重入）。气泡文案必须带上具体原因，不能只报步骤摘要，
+    // 否则用户只能打开日志文件才知道为什么。已禁用是正常配置状态（与 LaunchSequence 同口径），用 Info。
     private void LogGroupStepSkipped(LaunchStep step, string reason, bool benign)
-    {
-        var logPath = Path.Combine(CfgDir, "clockwork.error.log");
-        try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] 动作组步骤已跳过（整组继续）: {StepDisplay.StepSummary(step)} — {reason}\r\n"); } catch { }
-        // 合并键与 LogGroupStepError 分桶（groupskip: vs groupstep:）：同一步骤上一次是真异常这一次只是良性
-        // 跳过（或反过来），两张卡不该互相盖掉——用户需要分别看到「确实失败过」与「最近一次只是被跳过」。
-        ShowToast("Clockwork", Lf("Toast_GroupStepSkipped", StepDisplay.StepSummary(step), reason),
-                  benign ? Views.ToastLevel.Info : Views.ToastLevel.Warn,
-                  key: "groupskip:" + StepDisplay.StepSummary(step));
-    }
+        => LogGroupStep(step, "已跳过（整组继续）", reason, "groupskip",
+                        Lf("Toast_GroupStepSkipped", StepDisplay.StepSummary(step), reason),
+                        benign ? Views.ToastLevel.Info : Views.ToastLevel.Warn);
 
     // 卡片形态 message 的投递（启动清单路径专用）。返回 ✓——卡片弹出即算完成，没有可失败的部分。
     // 这条路径必须自己播报：ActionGroupRunner 的 message 分支会先调 deps.Speak，而启动清单
@@ -1328,12 +1342,21 @@ public partial class App : System.Windows.Application
         catch { }
     }
 
-    // 追加错误日志，返回日志路径。任何线程可调（UnobservedTaskException 在终结器线程上进来）。
+    // 错误日志路径与写入格式的唯一出处。best-effort：写不进去不影响主流程。
+    // 任何线程可调（UnobservedTaskException 在终结器线程上进来）。
+    private string ErrorLogPath => Path.Combine(CfgDir, "clockwork.error.log");
+
+    private void AppendErrorLog(string line)
+    {
+        try { File.AppendAllText(ErrorLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {line}\r\n"); } catch { }
+    }
+
+    // 崩溃日志额外空一行分隔（异常带多行堆栈，挤在一起没法读），故不走 AppendErrorLog。返回路径供崩溃框指路。
     private string LogError(Exception? ex)
     {
-        var logPath = Path.Combine(CfgDir, "clockwork.error.log");
-        try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {ex}\r\n\r\n"); } catch { }
-        return logPath;
+        var path = ErrorLogPath;
+        try { File.AppendAllText(path, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {ex}\r\n\r\n"); } catch { }
+        return path;
     }
 
     private void ShowCrash(Exception? ex)

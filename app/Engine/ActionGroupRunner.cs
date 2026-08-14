@@ -20,7 +20,10 @@ public sealed class GroupDeps
 {
     public int Hour { get; init; } = -1;                                   // <0 → 取当前
     public int IsoDay { get; init; }                                       // <=0 → 取当前
-    public Action<LaunchStep> RunStep { get; init; } = _ => { };           // 非 message 步骤执行（生产=InvokeStepAction 丢结果）
+    // 非 message 步骤执行。签名是 Action 而非 Func<,ActionResult>：接线方（App.BuildGroupDeps）自己接住
+    // InvokeStepAction 的返回值并把 Warning 转给告警通道，runner 不需要看见它。
+    // 注意别改回「调用即忘」的写法——那正是「脚本不存在」这类告警在动作组路径上一个都到不了用户面前的原因。
+    public Action<LaunchStep> RunStep { get; init; } = _ => { };
     public Func<LaunchStep, MsgResult> ShowMessage { get; init; } = _ => MsgResult.Ok;  // message 步骤弹窗
     public Action<LaunchStep> RunOnYes { get; init; } = _ => { };          // message 点是→onYes
     public Action<string> Speak { get; init; } = _ => { };                 // message 播报
