@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Tasten an „{0}“ fehlgeschlagen: Fenster erschien nicht oder konnte nicht in den Vordergrund (häufig bei Start/Hintergrund)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Kein Fenster für „{0}“ gefunden (Prozess nicht aktiv oder nicht bereit?); {1} ohne Wirkung</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Fenster für „{0}“ gefunden, aber {1} hatte keine Wirkung (Vordergrundsperre, Fenster verweigerte das Schließen, oder es läuft als Administrator)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Unbekannte Fensteraktion: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Unbekannte Lautstärke-Aktion: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Unbekannter Schritttyp: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>„{0}“ übersprungen: Ziel ist Clockwork selbst (vermeidet Autostart-Schleife)</value></data>

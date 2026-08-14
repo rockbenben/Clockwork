@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Invio tasti a «{0}» non riuscito: finestra non comparsa o impossibile portarla in primo piano (comune all'avvio/in background)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Nessuna finestra trovata per «{0}» (processo non in esecuzione o non pronto?); {1} senza effetto</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Finestra di «{0}» trovata, ma {1} non ha avuto effetto (blocco del primo piano, la finestra ha rifiutato di chiudersi, o è in esecuzione come amministratore)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Azione finestra sconosciuta: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Azione volume sconosciuta: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Tipo di passo sconosciuto: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» saltato: la destinazione è Clockwork stesso (evita un ciclo di avvio automatico)</value></data>

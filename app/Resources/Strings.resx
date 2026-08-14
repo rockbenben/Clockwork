@@ -185,6 +185,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>未能向「{0}」发送按键：窗口没出现，或找到了却无法把它带到最前（后台/开机自启触发时常见）</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>没有找到「{0}」的窗口（进程未运行或尚未就绪？），{1} 未生效</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>找到了「{0}」的窗口，但 {1} 没有生效（前台被锁定、窗口拒绝关闭，或它以管理员身份运行）</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>未知窗口操作：{0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>未知音量操作：{0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>未知步骤类型：{0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>跳过「{0}」：目标是Clockwork自身，避免开机自启动循环</value></data>

@@ -155,31 +155,8 @@ public static class KeyCombo
         return j;
     }
 
-    // 字面文本 → SendKeys 序列：转义元字符（+ ^ % ~ ( ) [ ] { }），换行→{ENTER}，Tab→{TAB}。
-    public static string ToSendKeysLiteral(string text)
-    {
-        if (string.IsNullOrEmpty(text)) return "";
-        var sb = new StringBuilder();
-        var s = text.Replace("\r\n", "\n");   // 先归一 CRLF→LF，避免 {ENTER}{ENTER}
-        foreach (var ch in s)
-        {
-            switch (ch)
-            {
-                case '\n': sb.Append("{ENTER}"); break;
-                case '\t': sb.Append("{TAB}"); break;
-                case '+': sb.Append("{+}"); break;
-                case '^': sb.Append("{^}"); break;
-                case '%': sb.Append("{%}"); break;
-                case '~': sb.Append("{~}"); break;
-                case '(': sb.Append("{(}"); break;
-                case ')': sb.Append("{)}"); break;
-                case '[': sb.Append("{[}"); break;
-                case ']': sb.Append("{]}"); break;
-                case '{': sb.Append("{{}"); break;
-                case '}': sb.Append("{}}"); break;
-                default: sb.Append(ch); break;
-            }
-        }
-        return sb.ToString();
-    }
+    // 原先这里有个 ToSendKeysLiteral：把字面文本转义成 SendKeys 序列。「发送文本」改走
+    // Win32.SendUnicodeText（KEYEVENTF_UNICODE 注入）之后它就没有调用方了，故删除——
+    // 留着一个「把文本喂给 SendKeys」的现成函数，只会诱导后来者把文本路径改回虚拟键那条，
+    // 而那条正是会被输入法整段吞掉的路。按键组合仍走 ToSendKeysSequence，两者别再混为一谈。
 }

@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>فشل إرسال المفاتيح إلى «{0}»: لم تظهر النافذة أو تعذّر إحضارها للأمام (شائع عند البدء/في الخلفية)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>لم يُعثر على نافذة لـ «{0}» (العملية غير مشغّلة أو غير جاهزة؟)؛ {1} بلا أثر</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>تم العثور على نافذة «{0}» لكن {1} لم يُنفَّذ (قفل المقدمة، أو رفضت النافذة الإغلاق، أو أنها تعمل بصلاحيات المسؤول)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>إجراء نافذة غير معروف: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>إجراء صوت غير معروف: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>نوع خطوة غير معروف: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>تم تخطي «{0}»: الهدف هو Clockwork نفسه (لتجنّب حلقة بدء تلقائي)</value></data>

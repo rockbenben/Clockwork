@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>ส่งปุ่มไปยัง «{0}» ไม่สำเร็จ: หน้าต่างไม่ปรากฏ หรือไม่สามารถนำมาด้านหน้าได้ (พบบ่อยตอนเริ่มต้น/เบื้องหลัง)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>ไม่พบหน้าต่างของ «{0}» (โปรเซสไม่ทำงานหรือยังไม่พร้อม?); {1} ไม่มีผล</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>พบหน้าต่างของ «{0}» แล้ว แต่ {1} ไม่มีผล (ถูกล็อกโฟร์กราวด์ หน้าต่างปฏิเสธการปิด หรือทำงานในสิทธิ์ผู้ดูแลระบบ)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>การกระทำกับหน้าต่างที่ไม่รู้จัก: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>การกระทำระดับเสียงไม่รู้จัก: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>ชนิดขั้นไม่รู้จัก: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>ข้าม «{0}»: เป้าหมายคือ Clockwork เอง (เลี่ยงลูปเริ่มต้นอัตโนมัติ)</value></data>

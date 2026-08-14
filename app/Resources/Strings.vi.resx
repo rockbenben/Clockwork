@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Gửi phím tới «{0}» thất bại: cửa sổ không hiện hoặc không đưa lên trước được (thường gặp khi khởi động/nền)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Không tìm thấy cửa sổ của «{0}» (tiến trình chưa chạy hoặc chưa sẵn sàng?); {1} không có tác dụng</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Đã tìm thấy cửa sổ của «{0}» nhưng {1} không có tác dụng (khóa tiền cảnh, cửa sổ từ chối đóng, hoặc nó chạy với quyền quản trị)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Thao tác cửa sổ không xác định: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Hành động âm lượng không xác định: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Loại bước không xác định: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>Bỏ qua «{0}»: đích là chính Clockwork (tránh vòng lặp khởi động tự động)</value></data>

@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Toetsen sturen naar «{0}» mislukt: venster verscheen niet of kon niet naar voren worden gehaald (vaak bij opstart/achtergrond)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Venster van «{0}» niet gevonden (proces draait niet of nog niet klaar?); {1} heeft geen effect</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Venster van "{0}" gevonden, maar {1} had geen effect (voorgrondvergrendeling, venster weigerde te sluiten, of het draait als beheerder)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Onbekende vensteractie: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Onbekende volumeactie: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Onbekend staptype: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» overgeslagen: doel is Clockwork zelf (opstartlus vermeden)</value></data>

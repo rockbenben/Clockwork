@@ -183,6 +183,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>無法向「{0}」傳送按鍵：視窗沒出現，或找到了卻無法帶到最前（背景/開機自動啟動觸發時常見）</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>找不到「{0}」的視窗（處理程序未執行或尚未就緒？），{1} 未生效</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>找到了「{0}」的視窗，但 {1} 沒有生效（前景被鎖定、視窗拒絕關閉，或它以系統管理員身分執行）</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>未知視窗操作：{0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>未知音量動作：{0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>未知步驟類型：{0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>略過「{0}」：目標是 Clockwork 本身，避免開機自動啟動迴圈</value></data>

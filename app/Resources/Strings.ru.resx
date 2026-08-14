@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Не удалось отправить клавиши в «{0}»: окно не появилось или не удалось вывести на передний план (часто при запуске/в фоне)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Окно для «{0}» не найдено (процесс не запущен или не готов?); {1} без эффекта</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Окно «{0}» найдено, но {1} не сработало (блокировка переднего плана, окно отказалось закрываться или запущено от имени администратора)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Неизвестное действие с окном: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Неизвестное действие громкости: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Неизвестный тип шага: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» пропущено: цель — сам Clockwork (во избежание цикла автозапуска)</value></data>

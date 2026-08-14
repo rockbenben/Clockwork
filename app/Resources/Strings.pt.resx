@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Falha ao enviar teclas para «{0}»: a janela não apareceu ou não foi possível trazê-la à frente (comum na inicialização/em segundo plano)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Nenhuma janela encontrada para «{0}» (processo não em execução ou não pronto?); {1} sem efeito</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>A janela de "{0}" foi encontrada, mas {1} não teve efeito (bloqueio de primeiro plano, a janela recusou fechar ou está em execução como administrador)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Ação de janela desconhecida: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Ação de volume desconhecida: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Tipo de passo desconhecido: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» ignorado: o destino é o próprio Clockwork (evita um loop de inicialização automática)</value></data>

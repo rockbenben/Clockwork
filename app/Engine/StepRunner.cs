@@ -72,18 +72,25 @@ public static class StepRunner
                 }
             case "window":
                 {
-                    int n = WindowManager.WindowAction(s.Process, s.Action, s.SendKey, s.WaitForWindowSeconds, s.PostWindowDelaySeconds, cancel);
+                    var r = WindowManager.WindowAction(s.Process, s.Action, s.SendKey, s.WaitForWindowSeconds, s.PostWindowDelaySeconds, cancel);
                     if (s.Action == "sendkey")
                     {
-                        // 键注入前台后无法证实接收 → 成功记「~ 未校验」；n=0（窗口没出现/抢不到前台）才告警；急停/取消打断也返 0，静默。
-                        if (n > 0) return ActionResult.Unver();
-                        if (!RunCancel.Stopped(cancel)) return ActionResult.Warn(Strings.Lf("Warn_SendKeyFail", s.Process));
-                        return ActionResult.Empty;
+                        // 键注入前台后无法证实接收 → 成功记「~ 未校验」；没发出去才告警；急停/取消静默。
+                        if (r == WindowOutcome.Ok) return ActionResult.Unver();
+                        if (r == WindowOutcome.Cancelled) return ActionResult.Empty;
+                        return ActionResult.Warn(Strings.Lf("Warn_SendKeyFail", s.Process));
                     }
-                    // close 幂等：目标态就是「不在运行」，没开=已达成，记 ✓ 不告警。其余动作 0 仍告警；急停/取消返 0 静默。
-                    if (n <= 0 && s.Action != "close" && !RunCancel.Stopped(cancel))
-                        return ActionResult.Warn(Strings.Lf("Warn_WindowNotFound", s.Process, s.Action));
-                    return ActionResult.Empty;
+                    return r switch
+                    {
+                        WindowOutcome.Ok or WindowOutcome.Cancelled => ActionResult.Empty,
+                        // close 幂等：目标态就是「不在运行」，没开=已达成，记 ✓ 不告警。
+                        WindowOutcome.NoWindow => s.Action == "close" ? ActionResult.Empty
+                            : ActionResult.Warn(Strings.Lf("Warn_WindowNotFound", s.Process, s.Action)),
+                        // 窗口在、动作没生效：与「找不到窗口」是两回事，措辞必须分开——
+                        // 前者该去查进程为什么没起来，后者该去看是不是前台锁定/提权窗口/弹框挡住了。
+                        WindowOutcome.Failed => ActionResult.Warn(Strings.Lf("Warn_WindowActionFailed", s.Process, s.Action)),
+                        _ => ActionResult.Warn(Strings.Lf("Warn_UnknownWindowAction", s.Action)),
+                    };
                 }
             case "system": SystemCommands.Invoke(s.Command, confirmDestructive, s.Text, s.Level); return ActionResult.Empty;
             case "text": return WindowManager.SendText(s.Text, s.Process, cancel);

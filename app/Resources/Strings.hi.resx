@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>«{0}» को कुंजियाँ भेजना विफल: विंडो नहीं दिखी या सामने नहीं लाई जा सकी (स्टार्टअप/बैकग्राउंड में आम)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>«{0}» की विंडो नहीं मिली (प्रोसेस नहीं चल रही या तैयार नहीं?); {1} बेअसर</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>«{0}» की विंडो मिली, लेकिन {1} का कोई असर नहीं हुआ (फ़ोरग्राउंड लॉक, विंडो ने बंद होने से मना किया, या वह व्यवस्थापक के रूप में चल रही है)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>अज्ञात विंडो क्रिया: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>अज्ञात वॉल्यूम क्रिया: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>अज्ञात चरण प्रकार: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» छोड़ा गया: लक्ष्य स्वयं Clockwork है (ऑटो-स्टार्ट लूप से बचाव)</value></data>

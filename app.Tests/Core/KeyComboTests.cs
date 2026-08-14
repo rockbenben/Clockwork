@@ -63,17 +63,7 @@ public class KeyComboTests
     public void SendKeysSequence_win_stays_literal()
         => Assert.Equal("Win+D", KeyCombo.ToSendKeysSequence("Win+D")); // SendKeys 不支持 Win
 
-    [Fact]
-    public void SendKeysLiteral_escapes_metachars()
-        => Assert.Equal("a{+}b{(}c{)}", KeyCombo.ToSendKeysLiteral("a+b(c)"));
-
-    [Fact]
-    public void SendKeysLiteral_newline_to_enter()
-        => Assert.Equal("a{ENTER}b", KeyCombo.ToSendKeysLiteral("a\r\nb"));
-
-    [Fact]
-    public void SendKeysLiteral_braces_escaped()
-        => Assert.Equal("{{}{}}", KeyCombo.ToSendKeysLiteral("{}"));
+    // ToSendKeysLiteral 及其三条用例已随「发送文本」改走 Unicode 注入而删除（见 KeyCombo 末尾注释）。
 
     [Theory]
     [InlineData("", true)]
@@ -88,7 +78,7 @@ public class KeyComboTests
     [InlineData("{} 5}", true)]          // 「{} n}」特例：发 n 个字面 }（真实解析器专门分支支持）
     [InlineData("{{}", true)]            // 字面 {
     [InlineData("{}}", true)]            // 字面 }
-    [InlineData("{{}{}}", true)]         // ToSendKeysLiteral("{}") 的输出必须被判合法（校验与转义闭环）
+    [InlineData("{{}{}}", true)]         // 转义后的一对花括号必须被判合法
     [InlineData("{%}", true)]            // 单字符元字符组
     [InlineData("+(abc)", true)]         // 圆括号分组
     [InlineData("(a)(b)", true)]         // 顺序多组合法

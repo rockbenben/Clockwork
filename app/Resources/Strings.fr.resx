@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Échec de l'envoi de touches à « {0} » : fenêtre absente ou impossible à mettre au premier plan (fréquent au démarrage/en arrière-plan)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Aucune fenêtre trouvée pour « {0} » (processus non lancé ou pas prêt ?) ; {1} sans effet</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Fenêtre de « {0} » trouvée, mais {1} n'a eu aucun effet (verrou de premier plan, fenêtre refusant de se fermer, ou exécution en administrateur)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Action de fenêtre inconnue : {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Action de volume inconnue : {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Type d'étape inconnu : {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>« {0} » ignoré : la cible est Clockwork lui-même (évite une boucle de démarrage auto)</value></data>

@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Gagal kirim tombol ke «{0}»: jendela tak muncul atau tak bisa dibawa ke depan (umum saat startup/latar)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Jendela «{0}» tak ditemukan (proses tak berjalan atau belum siap?); {1} tanpa efek</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Jendela «{0}» ditemukan, tetapi {1} tidak berpengaruh (kunci latar depan, jendela menolak ditutup, atau berjalan sebagai administrator)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Aksi jendela tidak dikenal: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Aksi volume tak dikenal: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Jenis langkah tak dikenal: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» dilewati: target adalah Clockwork sendiri (menghindari loop startup otomatis)</value></data>

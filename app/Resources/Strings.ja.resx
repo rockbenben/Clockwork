@@ -183,6 +183,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>「{0}」へのキー送信に失敗：ウィンドウが出現しない、または最前面にできませんでした（バックグラウンド/起動時に多い）</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>「{0}」のウィンドウが見つかりません（プロセス未実行/未準備？）。{1} は無効でした</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>「{0}」のウィンドウは見つかりましたが、{1} が効きませんでした（フォアグラウンドロック、ウィンドウが閉じるのを拒否、または管理者として実行中）</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>不明なウィンドウ操作：{0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>不明な音量アクション：{0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>不明なステップ種類：{0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>「{0}」をスキップ：ターゲットが Clockwork 自身のため（自動起動ループ回避）</value></data>

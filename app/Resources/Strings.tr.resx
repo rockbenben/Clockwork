@@ -181,6 +181,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>«{0}» hedefine tuş gönderilemedi: pencere görünmedi veya öne getirilemedi (başlangıçta/arka planda sık görülür)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>«{0}» penceresi bulunamadı (işlem çalışmıyor veya hazır değil?); {1} etkisiz</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>«{0}» penceresi bulundu ancak {1} etkili olmadı (ön plan kilidi, pencere kapanmayı reddetti veya yönetici olarak çalışıyor)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Bilinmeyen pencere işlemi: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Bilinmeyen ses eylemi: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Bilinmeyen adım türü: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» atlandı: hedef Clockwork'ün kendisi (otomatik başlatma döngüsünden kaçınılıyor)</value></data>

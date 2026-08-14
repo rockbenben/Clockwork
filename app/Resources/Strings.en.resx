@@ -185,6 +185,8 @@
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Failed to send keys to "{0}": window didn't appear, or couldn't bring it to front (common at startup/background triggers)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>No window found for "{0}" (process not running or not ready?); {1} had no effect</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Found a window for "{0}" but {1} had no effect (foreground lock, the window refused to close, or it runs as administrator)</value></data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Unknown window action: {0}</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Unknown volume action: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Unknown step type: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>Skipped "{0}": target is Clockwork itself (avoids an autostart loop)</value></data>
