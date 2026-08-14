@@ -186,6 +186,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>« {0} » ignoré : la cible est Clockwork lui-même (évite une boucle de démarrage auto)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Échec du lancement : {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>« {0} » s'est fermé en 0,5 s (code {1}) ; échec de démarrage probable</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>Fichier de script introuvable (indiquez un chemin complet)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Le script est en UTF-8 sans BOM, que Windows PowerShell 5.1 ne peut pas décoder correctement ; installez PowerShell 7 ou réenregistrez le script en UTF-8 avec BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Envoyé (non vérifié)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Erreur : {0}</value></data>
 

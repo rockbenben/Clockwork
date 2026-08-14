@@ -188,6 +188,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>略過「{0}」：目標是 Clockwork 本身，避免開機自動啟動迴圈</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>啟動失敗：{0} —— {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>「{0}」啟動後 0.5 秒內結束（結束代碼 {1}），疑似啟動失敗</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>找不到指令碼檔案（請填完整路徑）</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>指令碼是無 BOM 的 UTF-8，Windows PowerShell 5.1 會解碼出錯；請安裝 PowerShell 7，或將指令碼另存為帶 BOM 的 UTF-8</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ 已傳送（未驗證）</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>例外：{0}</value></data>
 

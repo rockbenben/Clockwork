@@ -72,13 +72,19 @@ public static class ReminderActions
             switch (type)
             {
                 case "run":
-                    if (LaunchTarget.IsPowerShellScript(onYes.Target))
-                        Process.Start(new ProcessStartInfo { FileName = LaunchTarget.PowerShellExe, Arguments = LaunchTarget.PowerShellFileArgs(onYes.Target), UseShellExecute = true });
+                    // 规范化与解释器选择都走 LaunchTarget 那一份：同一个路径在「启动程序」步骤和
+                    // 提醒的「点是后」必须表现一致，两处各写一版迟早只修好一处。
+                    // 这里没有告警通道（整个方法吞异常），pwsh 缺席时退回 powershell.exe 照常尝试。
+                    var run = LaunchTarget.NormalizeTarget(onYes.Target);
+                    if (LaunchTarget.IsPowerShellScript(run))
+                        Process.Start(new ProcessStartInfo { FileName = LaunchTarget.PowerShellExeFor(run) ?? LaunchTarget.PowerShellExe, Arguments = LaunchTarget.PowerShellFileArgs(run), UseShellExecute = true });
                     else
-                        Process.Start(new ProcessStartInfo { FileName = onYes.Target, UseShellExecute = true });
+                        Process.Start(new ProcessStartInfo { FileName = run, UseShellExecute = true });
                     break;
                 case "url":
-                    Process.Start(new ProcessStartInfo { FileName = onYes.Target, UseShellExecute = true });
+                    // 和上面的 run 分支读的是同一个 Target 字段、同一个输入框，规范化口径也得一样，
+                    // 否则「粘进来末尾带个空格」在两个分支里表现不同。
+                    Process.Start(new ProcessStartInfo { FileName = LaunchTarget.NormalizeTarget(onYes.Target), UseShellExecute = true });
                     break;
                 case "group":
                     if (string.IsNullOrWhiteSpace(onYes.Target)) break;   // 从未选过组（下拉留在「（无）」）：不算悬空引用，不误报「组被删」

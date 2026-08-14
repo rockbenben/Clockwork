@@ -136,6 +136,21 @@ public class StepConditionTests
         Assert.True(StepCondition.IsSatisfied(new LaunchStep { IfPathExists = "  " }, 12, 3, 0, Env(pathExists: false)));
     }
 
+    // 条件框收到的路径要和目标框走同一套规范化。不做的话，「资源管理器复制文件地址」给的带引号路径
+    // 和 %USERPROFILE% 这类写法会恒判为「不存在」，而条件不成立的步骤是静默跳过、日志里一行都没有。
+    [Fact]
+    public void IfPathExists_normalizes_quotes_and_env_vars()
+    {
+        string? seen = null;
+        var env = new StepEnv(_ => false, () => true, p => { seen = p; return true; });
+
+        StepCondition.IsSatisfied(new LaunchStep { IfPathExists = "  \"E:\\backup\"  " }, 12, 3, 0, env);
+        Assert.Equal(@"E:\backup", seen);   // 成对引号与首尾空白已脱掉
+
+        StepCondition.IsSatisfied(new LaunchStep { IfPathExists = @"%WINDIR%\Temp" }, 12, 3, 0, env);
+        Assert.Equal(Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\Temp", seen);   // 环境变量已展开
+    }
+
     // 没配环境条件的步骤一次探针都不该跑——每条开机步骤白白枚举一遍进程表是真实的代价。
     [Fact]
     public void Unconfigured_conditions_never_touch_the_probes()

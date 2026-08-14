@@ -186,6 +186,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>Bỏ qua «{0}»: đích là chính Clockwork (tránh vòng lặp khởi động tự động)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Khởi chạy thất bại: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» đã thoát trong 0,5 giây (mã {1}); có thể khởi chạy thất bại</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>Không tìm thấy tệp script (hãy nhập đường dẫn đầy đủ)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Script ở dạng UTF-8 không BOM nên Windows PowerShell 5.1 không giải mã đúng; hãy cài PowerShell 7 hoặc lưu lại script dưới dạng UTF-8 có BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Đã gửi (chưa xác minh)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Lỗi: {0}</value></data>
 

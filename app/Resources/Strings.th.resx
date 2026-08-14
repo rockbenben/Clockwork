@@ -186,6 +186,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>ข้าม «{0}»: เป้าหมายคือ Clockwork เอง (เลี่ยงลูปเริ่มต้นอัตโนมัติ)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>เริ่มไม่สำเร็จ: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» ปิดภายใน 0.5 วิ (รหัส {1}); น่าจะเริ่มไม่สำเร็จ</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>ไม่พบไฟล์สคริปต์ (โปรดระบุพาธแบบเต็ม)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>สคริปต์เป็น UTF-8 แบบไม่มี BOM ซึ่ง Windows PowerShell 5.1 ถอดรหัสได้ไม่ถูกต้อง โปรดติดตั้ง PowerShell 7 หรือบันทึกสคริปต์ใหม่เป็น UTF-8 แบบมี BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ ส่งแล้ว (ไม่ได้ยืนยัน)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>ข้อผิดพลาด: {0}</value></data>
 

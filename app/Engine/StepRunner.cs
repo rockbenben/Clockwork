@@ -125,7 +125,15 @@ public static class StepRunner
             if (LaunchTarget.IsPowerShellScript(tgt))
             {
                 // .ps1 直接用 PowerShell 跑（否则文件关联进编辑器）。
-                psi.FileName = LaunchTarget.PowerShellExe;
+                // 两道前置检查存在的理由都一样：这两种失败下 powershell 会在解析脚本之前就退出，
+                // 于是只留下一个退出码（找不到文件 -196608 / 解码失败 1），而黑窗一闪即逝、错误没人看得到。
+                // 光靠下面那条「0.5 秒内退出」的告警，用户只会拿到一串数字，照着查不出任何东西。
+                if (!File.Exists(tgt))
+                    return ActionResult.Warn(Strings.Lf("Warn_LaunchFail", item.Label, Strings.Get("Err_ScriptMissing")));
+                var exe = LaunchTarget.PowerShellExeFor(tgt);
+                if (exe == null)
+                    return ActionResult.Warn(Strings.Lf("Warn_LaunchFail", item.Label, Strings.Get("Err_ScriptNeedsPwsh")));
+                psi.FileName = exe;
                 psi.Arguments = LaunchTarget.PowerShellFileArgs(tgt, item.Args);
             }
             else
@@ -135,7 +143,11 @@ public static class StepRunner
             }
 
             // 工作目录：留空时默认目标所在目录（仅当目标是完整路径且该目录存在）。
-            if (!string.IsNullOrEmpty(item.WorkDir)) psi.WorkingDirectory = item.WorkDir;
+            // 同样过 NormalizeTarget——它和「目标」是同一个编辑器里的两个路径框、同一个浏览按钮，
+            // 粘贴来源也一样（资源管理器带引号的路径、%USERPROFILE%）。只规范化其中一个，
+            // 就会出现「目标能开、工作目录悄悄没生效」这种没人会联想到编码/引号的故障。
+            var workDir = LaunchTarget.NormalizeTarget(item.WorkDir);
+            if (!string.IsNullOrEmpty(workDir)) psi.WorkingDirectory = workDir;
             else if (!string.IsNullOrEmpty(tgt))
             {
                 string td = "";

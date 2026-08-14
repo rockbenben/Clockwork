@@ -186,6 +186,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» dilewati: target adalah Clockwork sendiri (menghindari loop startup otomatis)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Gagal memulai: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» keluar dalam 0,5 dtk (kode {1}); kemungkinan gagal memulai</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>File skrip tidak ditemukan (masukkan jalur lengkap)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Skrip berformat UTF-8 tanpa BOM sehingga Windows PowerShell 5.1 tidak dapat mendekodenya dengan benar; pasang PowerShell 7 atau simpan ulang skrip sebagai UTF-8 dengan BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Terkirim (tak terverifikasi)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Kesalahan: {0}</value></data>
 

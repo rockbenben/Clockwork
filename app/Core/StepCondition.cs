@@ -65,7 +65,10 @@ public static class StepCondition
         {
             if (probe.OnAcPower() != (s.IfPower == "ac")) return false;
         }
-        if (!string.IsNullOrWhiteSpace(s.IfPathExists) && !probe.PathExists(s.IfPathExists.Trim())) return false;
+        // 与目标框同一套写法规范化（去成对引号 / 展开 %VAR%），别让同一个窗口里两个路径框认的写法不一样：
+        // 目标框认「资源管理器复制来的带引号路径」和 %USERPROFILE%，条件框若只 Trim，这两种写法就恒判为
+        // 「不存在」——而条件不成立的步骤是静默跳过、日志里连一行都没有，用户没有任何线索可查。
+        if (!string.IsNullOrWhiteSpace(s.IfPathExists) && !probe.PathExists(LaunchTarget.NormalizeTarget(s.IfPathExists))) return false;
         return true;
     }
 }

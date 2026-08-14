@@ -186,6 +186,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>「{0}」 건너뜀: 대상이 Clockwork 자신(자동 시작 루프 방지)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>시작 실패: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>「{0}」이(가) 시작 후 0.5초 내 종료(종료 코드 {1}), 시작 실패 의심</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>스크립트 파일을 찾을 수 없습니다(전체 경로를 입력하세요)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>스크립트가 BOM 없는 UTF-8이라 Windows PowerShell 5.1에서 올바르게 디코딩되지 않습니다. PowerShell 7을 설치하거나 BOM 포함 UTF-8로 다시 저장하세요</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ 전송됨(미검증)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>예외: {0}</value></data>
 

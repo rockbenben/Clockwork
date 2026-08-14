@@ -190,6 +190,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>Skipped "{0}": target is Clockwork itself (avoids an autostart loop)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Launch failed: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>"{0}" exited within 0.5s (exit code {1}); likely failed to start</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>Script file not found (enter a full path)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Script is UTF-8 without BOM, which Windows PowerShell 5.1 cannot decode correctly; install PowerShell 7, or re-save the script as UTF-8 with BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Sent (unverified)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Error: {0}</value></data>
 

@@ -190,6 +190,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>跳过「{0}」：目标是Clockwork自身，避免开机自启动循环</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>启动失败：{0} —— {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>「{0}」启动后 0.5 秒内退出（退出码 {1}），疑似启动失败</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>找不到脚本文件（请填完整路径）</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>脚本是无 BOM 的 UTF-8，Windows PowerShell 5.1 会解码出错；请安装 PowerShell 7，或把脚本另存为带 BOM 的 UTF-8</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ 已发送（未校验）</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>异常：{0}</value></data>
 

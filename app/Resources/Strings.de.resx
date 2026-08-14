@@ -186,6 +186,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>„{0}“ übersprungen: Ziel ist Clockwork selbst (vermeidet Autostart-Schleife)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Start fehlgeschlagen: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>„{0}“ endete innerhalb 0,5 s (Code {1}); Start wahrscheinlich fehlgeschlagen</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>Skriptdatei nicht gefunden (vollständigen Pfad angeben)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Skript ist UTF-8 ohne BOM; Windows PowerShell 5.1 kann es nicht korrekt dekodieren. Installieren Sie PowerShell 7 oder speichern Sie das Skript als UTF-8 mit BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Gesendet (unbestätigt)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Fehler: {0}</value></data>
 

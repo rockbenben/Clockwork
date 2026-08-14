@@ -186,6 +186,8 @@
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» overgeslagen: doel is Clockwork zelf (opstartlus vermeden)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Starten mislukt: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» sloot binnen 0,5 s (code {1}); starten is mogelijk mislukt</value></data>
+  <data name="Err_ScriptMissing" xml:space="preserve"><value>Scriptbestand niet gevonden (geef het volledige pad op)</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Script is UTF-8 zonder BOM; Windows PowerShell 5.1 kan het niet juist decoderen. Installeer PowerShell 7 of sla het script opnieuw op als UTF-8 met BOM</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Verstuurd (niet geverifieerd)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Fout: {0}</value></data>
 
