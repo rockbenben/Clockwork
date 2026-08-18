@@ -893,7 +893,7 @@ public partial class App : System.Windows.Application
         int psecs = ReminderEngine.PopupTimeoutSeconds(r);
         int timeoutSecs = psecs > 0 ? psecs : ReminderEngine.UnattendedPopupSeconds;
         int? autoSnooze = r.RepeatMinutes > 0 ? null : ReminderEngine.UnattendedSnoozeMinutes;
-        var (act, snooze) = Views.ReminderPopupWindow.Show(_main, r.Message, confirm, timeoutSecs, autoSnooze);
+        var (act, snooze) = Views.ReminderPopupWindow.Show(r.Message, confirm, timeoutSecs, autoSnooze);
         if (act == "yes") ReminderActions.RunOnYes(r.OnYes, _config.ActionGroups, g => RunGroupAsync(g), WarnToast);
         if (act == "snooze") return ("", snooze);
         return (act, null);
@@ -1062,7 +1062,7 @@ public partial class App : System.Windows.Application
         return deps.Cancel;
     }
 
-    // owner：本次运行的弹窗归属窗口（null=主窗口）。嵌套子组与 onYes 组共用同一份 deps，
+    // owner：本次运行的弹窗归属窗口（null=无归属：后台触发，弹窗置顶但不认主窗为父）。嵌套子组与 onYes 组共用同一份 deps，
     // 故 owner 自动传遍整条引用链，不必在每一层再传一次。
     private GroupDeps BuildGroupDeps(Window? owner = null)
     {
@@ -1173,10 +1173,9 @@ public partial class App : System.Windows.Application
         }
         return Dispatcher.Invoke(() =>
         {
-            var win = owner ?? _main;
             if (form == MessageForm.Confirm)
-                return Views.BrandDialog.Confirm(win, Strings.Get("Confirm_Title"), step.Message) ? MsgResult.Yes : MsgResult.No;
-            Views.BrandDialog.Info(win, "Clockwork", step.Message);
+                return Views.BrandDialog.Confirm(owner, Strings.Get("Confirm_Title"), step.Message) ? MsgResult.Yes : MsgResult.No;
+            Views.BrandDialog.Info(owner, "Clockwork", step.Message);
             return MsgResult.Ok;
         });
     }
@@ -1243,9 +1242,11 @@ public partial class App : System.Windows.Application
 
     // 破坏性系统命令（重启/关机/注销）的确认框。owner 决定它弹在谁前面——组编辑器试跑时必须是编辑器，
     // 否则确认框藏在模态编辑器后面，用户看着「卡住了」而实际是有个框在等他。
+    // owner=null（开机清单/托盘重跑/热键/提醒触发）不再补成主窗：无主时 BrandDialog 自己置顶，
+    // 见得着且不会把主界面一起拽到前台。
     private bool ConfirmDestructive(string action, Window? owner = null)
         => Dispatcher.Invoke(() => Views.BrandDialog.Confirm(
-            owner ?? _main, Strings.Get("Confirm_Title"), Lf("Confirm_Destructive", action), Views.ToastLevel.Warn));
+            owner, Strings.Get("Confirm_Title"), Lf("Confirm_Destructive", action), Views.ToastLevel.Warn));
 
     // 配置存盘（原子写）。ViewModel 增删改移时回调。持续写失败（OneDrive/杀软锁死超过重试）不再静默吞——
     // 界面看着已保存、重启全回退是静默数据丢失，至少弹个警告让用户知道改动只在内存里。

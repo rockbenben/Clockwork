@@ -98,10 +98,15 @@ public partial class ReminderPopupWindow : Window
     }
 
     // 在 UI 线程弹出并等待。返回 (Action, SnoozeMinutes)。
-    public static (string Action, int? Snooze) Show(Window? owner, string message, bool confirm, int autoDismissSeconds, int? timeoutSnoozeMinutes = null)
+    // 刻意不设 Owner：本窗不请自来。Win32 里被拥有窗口永远压在 owner 之上，所以一旦认主窗为 owner，
+    // 弹窗被激活时系统会把整条 owner 链一起提到前台——用户正在别的应用里干活，只要主界面没收进托盘就会被
+    // 一并拽到前面（"主界面关了就不弹、开着就跟着冒出来"正是这个）。提醒该打断的是注意力，不是窗口栈。
+    // 三件事都不靠 Owner：可见性靠 Topmost；模态靠 ShowDialog（WPF 的模态是应用级的，与 Owner 无关）；
+    // 不进任务栏/alt-tab 靠 ShowInTaskbar=False（WPF 会自建一个隐藏窗当 owner，隐藏窗不会被"提到前台"）。
+    // 关窗后焦点也就回到用户原来那个窗口，而不是落回 Clockwork 主界面。
+    public static (string Action, int? Snooze) Show(string message, bool confirm, int autoDismissSeconds, int? timeoutSnoozeMinutes = null)
     {
         var dlg = new ReminderPopupWindow(message, confirm, autoDismissSeconds, timeoutSnoozeMinutes);
-        if (owner != null && owner.IsVisible) { try { dlg.Owner = owner; } catch { } }
         dlg.ShowDialog();
         return (dlg.Action, dlg.SnoozeMinutes);
     }

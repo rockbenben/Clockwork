@@ -65,8 +65,13 @@ public partial class BrandDialog : Window
     public static bool Show(Window? owner, string? title, string message, bool confirm, ToastLevel level)
     {
         var dlg = new BrandDialog(title, message, confirm, level);
+        // owner=用户此刻正在交互的那个窗（主窗/编辑器）→ 认它为父：CenterOwner 居中，关窗后焦点也回它。
+        // owner=null → 本框不请自来（开机清单、托盘重跑、热键、提醒触发的动作组、崩溃兜底）：
+        // 刻意不退回主窗当 owner——Win32 会把整条 owner 链一起提到前台，用户在别的应用里干活时
+        // 主界面会跟着被拽出来（同 ReminderPopupWindow.Show 的说明）。可见性改由 Topmost 保证：
+        // 没有它，无主的框会藏在用户当前窗口后面，用户看着「卡住了」而实际是有个框在等他。
         if (owner != null && owner.IsVisible) { try { dlg.Owner = owner; } catch { } }
-        else dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        else { dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen; dlg.Topmost = true; }
         dlg.ShowDialog();
         return dlg.Result;
     }

@@ -420,15 +420,17 @@ public partial class MainWindow : Window
         if (s.Kind == "group")
         {
             var g = ActionGroupResolver.Resolve(_config?.ActionGroups, s.GroupId);
-            if (g != null) AppInstance?.RunGroupAsync(g);
+            if (g != null) AppInstance?.RunGroupAsync(g, this);
         }
-        else AppInstance?.RunStepAsync(s);
+        else AppInstance?.RunStepAsync(s, this);
     }
 
     private void GRun_Click(object sender, RoutedEventArgs e)
     {
         var g = _groups?.SelectedGroup;
-        if (g != null) AppInstance?.RunGroupAsync(g);
+        // 传 this：用户此刻正对着主窗点「运行」，这一趟里的消息/确认框该认主窗为父（居中其上、关后焦点回它）。
+        // 托盘/热键/提醒那些入口照旧不传——那时用户不在主窗前。
+        if (g != null) AppInstance?.RunGroupAsync(g, this);
     }
 
     private IReadOnlyList<ActionGroup> Groups => _config?.ActionGroups ?? new List<ActionGroup>();
