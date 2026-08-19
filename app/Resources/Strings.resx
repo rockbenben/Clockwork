@@ -164,6 +164,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>逐字输入（换行=回车）。目标进程留空=发给当前焦点窗口（最稳）。</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>消息</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>语音播报</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>提示音</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否确认（是=继续，否=中止本组）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>点是后</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈现方式</value></data>
@@ -234,10 +235,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>运行动作组</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>运行动作组</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>自动关闭（秒）</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>没人点就自动关（0=不关；重复提醒默认 60）</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>没人点就自动关（0：卡片=不关，对话框=60 秒）</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>已设 {0} 分钟后提醒，但正在勿扰中——要到勿扰结束才会响</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>已恢复今天的提醒：{0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>今天不再提醒：{0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>已设 {0} 分钟后提醒（{1}）</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} 分钟到了</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>今天不再</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>快速提醒</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>未确认时催促</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分钟一次（0=不重复），直到</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>（HH:mm，留空=不限）</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>（HH:mm，留空=最多弹 20 次）</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>循环运行</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>分钟一次（0=不循环），直到</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>（HH:mm，留空=当天结束）</value></data>

@@ -360,6 +360,15 @@ public partial class MainWindow : Window
         foreach (var row in _reminders.Rows) row.Refresh();
     }
 
+    // 托盘「快速提醒」的增 / 删入口。必须经 VM：Models 就是 _config.Reminders 本身，Rows 是平行的另一份，
+    // 绕过 VM 直接改配置会让两者错位，之后每一行都指向相邻那条提醒。两个方法内部都会存盘。
+    // SyncSel 一个都不能省——本文件里每一个动列表的调用点都紧跟着它，因为 VM 的 SelectedIndex 变了
+    // （Add 设成落点、RemoveWhere 做钳位）而 DataGrid 那边不会自己跟上：删掉高亮行之前的一条时，
+    // WPF 保住 SelectedItem 把 grid 索引前移一位却不发 SelectionChanged，两边就此错开，
+    // 之后按「删除」删掉的是另一条提醒。
+    public void AddReminderRow(Reminder r) { _reminders?.Add(r); SyncSel(GridRemind, _reminders); }
+    public void RemoveReminderRow(Reminder r) { _reminders?.RemoveWhere(x => ReferenceEquals(x, r)); SyncSel(GridRemind, _reminders); }
+
     private void LAdd_Click(object sender, RoutedEventArgs e)
     {
         // 新增 ▾：按意图分节的类型菜单（见 StepMenu）→ 打开对应编辑器 → 插入。
@@ -452,6 +461,13 @@ public partial class MainWindow : Window
     {
         var sel = _reminders?.SelectedReminder;
         if (sel != null) AppInstance?.PreviewReminder(sel);
+    }
+    // 「今天不再」：不改配置、只改当天的运行态，所以不需要确认框也不必存配置——
+    // 误点的代价是少响一天，且明天自动恢复；而取消勾选那条路才是会被忘掉的那个。
+    private void RSkip_Click(object sender, RoutedEventArgs e)
+    {
+        var sel = _reminders?.SelectedReminder;
+        if (sel != null) AppInstance?.SkipReminderToday(sel);
     }
     private void RDel_Click(object sender, RoutedEventArgs e)
     {

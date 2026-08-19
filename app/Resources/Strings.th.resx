@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>พิมพ์ทีละอักขระ (ขึ้นบรรทัด = Enter) เว้นโปรเซสว่างเพื่อส่งไปยังหน้าต่างที่โฟกัส (เชื่อถือได้สุด)</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>ข้อความ</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>อ่านออกเสียง</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>เสียงเตือน</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>ยืนยัน ใช่/ไม่ (ใช่ = ทำต่อ, ไม่ = ยกเลิกกลุ่ม)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>หลัง «ใช่»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>แสดงเป็น</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>รันกลุ่มการทำงาน</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>รันกลุ่มการทำงาน</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>ปิดอัตโนมัติ (วิ)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>ปิดเองถ้าไม่กด (0 = ไม่ปิด; การเตือนซ้ำ: ค่าเริ่มต้น 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>ปิดเองถ้าไม่กด (0: การ์ด = ไม่ปิด, กล่องโต้ตอบ = 60 วินาที)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>ตั้งไว้อีก {0} นาที แต่การเตือนถูกหยุดชั่วคราว จะเตือนเมื่อเลิกหยุด</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>ยกเลิกการข้ามวันนี้: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>ข้ามวันนี้: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>ตั้งเตือนอีก {0} นาที ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>ครบ {0} นาทีแล้ว</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>ข้ามวันนี้</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>เตือนด่วน</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>เตือนซ้ำจนกว่าจะยืนยัน</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>นาทีต่อครั้ง (0 = ไม่ซ้ำ), จนถึง</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, ว่าง = ไม่จำกัด)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, ว่าง = แสดงสูงสุด 20 ครั้ง)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>รันซ้ำทุก</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>นาที (0 = ปิด), จนถึง</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, ว่าง = สิ้นสุดวัน)</value></data>

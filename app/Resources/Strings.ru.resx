@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Ввод посимвольно (перенос = Enter). Оставьте процесс пустым, чтобы отправить в активное окно (надёжнее всего).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Сообщение</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Озвучивание</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Звук</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Подтверждение Да/Нет (Да = продолжить, Нет = прервать группу)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>После «Да»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Показывать как</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Выполнить группу действий</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Выполнить группу действий</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Автозакрытие (с)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>закрывается само без нажатия (0 = никогда; повторное напоминание: по умолчанию 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>закрывается само без нажатия (0: карточка — никогда, диалог — 60 с)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Напоминание через {0} мин, но напоминания на паузе — сработает после её окончания</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Пропуск на сегодня отменён: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Пропущено на сегодня: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>Напоминание через {0} мин ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>Прошло {0} мин</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Пропустить сегодня</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Быстрое напоминание</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Напоминать до подтверждения</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>мин (0 = без повтора), до</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, пусто = без ограничения)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, пусто = не более 20 показов)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Периодический запуск, каждые</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>мин (0 = выкл), до</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, пусто = конец дня)</value></data>

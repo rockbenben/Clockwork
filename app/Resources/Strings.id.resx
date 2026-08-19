@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Mengetik per karakter (baris baru = Enter). Kosongkan proses untuk kirim ke jendela fokus (paling andal).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Pesan</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Baca suara</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Suara</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Konfirmasi Ya/Tidak (Ya = lanjut, Tidak = batalkan grup)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Setelah «Ya»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Tampilkan sebagai</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Jalankan grup aksi</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Jalankan grup aksi</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Tutup otomatis (dtk)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>tutup sendiri tanpa klik (0 = tak pernah; pengingat berulang: default 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>tutup sendiri tanpa klik (0: kartu = tak pernah, dialog = 60 detik)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Diatur {0} menit lagi, tetapi pengingat sedang dijeda — akan berbunyi setelah jeda berakhir</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Batal lewati hari ini: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Dilewati hari ini: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>Pengingat {0} menit lagi ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} menit sudah habis</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Lewati hari ini</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Pengingat cepat</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Ingatkan sampai dikonfirmasi</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>mnt (0 = tak berulang), sampai</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, kosong = tanpa batas)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, kosong = maks 20 tampilan)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Jalankan berulang, setiap</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>mnt (0 = nonaktif), sampai</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, kosong = akhir hari)</value></data>

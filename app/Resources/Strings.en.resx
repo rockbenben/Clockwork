@@ -164,6 +164,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Types text literally (newline = Enter). Leave target process blank to send to the focused window (most reliable).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Message</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Speak</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Sound</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Yes/No confirm (Yes = continue, No = abort group)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>On Yes</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Show as</value></data>
@@ -234,10 +235,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Run action group</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Run action group</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Auto-close (s)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>auto-close if no click (0 = never; repeat default 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>auto-close if no click (0: card = never, dialog = 60s)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Reminder set for {0} min, but reminders are paused — it will fire once the pause ends</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Un-skipped for today: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Skipped for today: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>Reminder set for {0} min from now ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} minutes are up</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Skip today</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Quick reminder</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Nag until confirmed</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = off), until</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, blank = no limit)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, blank = 20 pops max)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Interval run, every</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>min (0 = off), until</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, empty = end of day)</value></data>

@@ -104,7 +104,7 @@ public class ReminderAfterFireTests
     public void Snooze_sets_and_clears_repeat()
     {
         var st = new ReminderState { NextRepeatAt = N(10, 5) };
-        ReminderEngine.Snooze(st, N(10, 0), 15);
+        ReminderEngine.Snooze(new Reminder(), st, N(10, 0), 15);
         Assert.Equal(N(10, 15), st.SnoozeUntil);
         Assert.Null(st.NextRepeatAt);
     }
@@ -113,8 +113,145 @@ public class ReminderAfterFireTests
     public void Snooze_under_1_defaults_10()
     {
         var st = new ReminderState();
-        ReminderEngine.Snooze(st, N(10, 0), 0);
+        ReminderEngine.Snooze(new Reminder(), st, N(10, 0), 0);
         Assert.Equal(N(10, 10), st.SnoozeUntil);
+    }
+
+    [Fact]
+    public void Snooze_keeps_repeat_count_while_nag_chain_runs()
+    {
+        // 配了催促：RepeatCount 是这条链的已催次数。手点稍后不该让它重新拿满 MaxRepeats 次额度。
+        var st = new ReminderState { RepeatCount = 3 };
+        ReminderEngine.Snooze(new Reminder { RepeatMinutes = 15 }, st, N(10, 0), 10);
+        Assert.Equal(3, st.RepeatCount);
+    }
+
+    [Fact]
+    public void AutoSnooze_counts_then_degrades_at_cap()
+    {
+        // 无人应答的自动稍后：MaxAutoSnoozes-1 轮内照常稍后并计数；到顶那轮返回 false=降级，链清零、不再排稍后。
+        var st = new ReminderState();
+        for (int i = 1; i < ReminderEngine.MaxAutoSnoozes; i++)
+        {
+            Assert.True(ReminderEngine.AutoSnooze(st, N(10, 0), 10));
+            Assert.Equal(N(10, 10), st.SnoozeUntil);
+            Assert.Equal(i, st.RepeatCount);
+        }
+        Assert.False(ReminderEngine.AutoSnooze(st, N(11, 0), 10));
+        Assert.Null(st.SnoozeUntil);
+        Assert.Equal(0, st.RepeatCount);
+    }
+
+    [Fact]
+    public void Manual_snooze_does_not_count_toward_auto_cap()
+    {
+        // 手点稍后是人的明确决定：不进自动稍后的计数，点多少次都不会被降级。
+        var st = new ReminderState();
+        for (int i = 0; i < ReminderEngine.MaxAutoSnoozes + 2; i++) ReminderEngine.Snooze(new Reminder(), st, N(10, 0), 10);
+        Assert.Equal(0, st.RepeatCount);
+        Assert.Equal(N(10, 10), st.SnoozeUntil);
+    }
+
+    [Fact]
+    public void Manual_snooze_resets_the_unanswered_streak()
+    {
+        // 「自动 ×N → 人点了稍后 → 再离开」：计时从头来，而不是只剩最后一轮就降级成卡片。
+        // 「连续一小时没人理才降级」这句话的成立条件就是这条。
+        var st = new ReminderState();
+        for (int i = 1; i < ReminderEngine.MaxAutoSnoozes; i++) ReminderEngine.AutoSnooze(st, N(10, 0), 10);
+        ReminderEngine.Snooze(new Reminder(), st, N(10, 30), 10);
+        Assert.Equal(0, st.RepeatCount);
+        for (int i = 1; i < ReminderEngine.MaxAutoSnoozes; i++)
+            Assert.True(ReminderEngine.AutoSnooze(st, N(11, 0), 10));   // 满额度重新起算
+    }
+
+    [Fact]
+    public void SkipToday_clears_every_in_flight_chain()
+    {
+        // 「今天不再」必须连在途的链一起清。尤其 SnoozeUntil：留着它，开了「错过必补」的提醒
+        // 明天会把这条昨天的稍后当成一次没送达的投递补弹——用户说的是今天别响，不是明天早上诈尸。
+        var st = new ReminderState
+        {
+            SnoozeUntil = N(10, 5), NextRepeatAt = N(10, 5), NextRepeatUntil = N(11, 0),
+            RepeatCount = 3, NextIntervalAt = N(10, 30), PendingFireAt = N(10, 1), PendingForDate = "2026-07-15",
+        };
+        ReminderEngine.SkipToday(st, N(10, 0));
+        Assert.Equal("2026-07-15", st.SkippedDate);
+        Assert.Null(st.SnoozeUntil);
+        Assert.Null(st.NextRepeatAt);
+        Assert.Null(st.NextRepeatUntil);
+        Assert.Null(st.NextIntervalAt);
+        Assert.Null(st.PendingFireAt);
+        Assert.Equal(0, st.RepeatCount);
+        Assert.Equal("", st.PendingForDate);
+        Assert.True(st.StartupHandled);
+    }
+
+    [Fact]
+    public void Skipped_today_blocks_every_branch_then_recovers_tomorrow()
+    {
+        // 跳过当天：连「错过必补」这种最强的补弹路径也拦住；次日同一条状态照常触发。
+        var r = new Reminder { Time = "09:00", CatchUpIfMissed = true };
+        var st = new ReminderState();
+        ReminderEngine.SkipToday(st, N(10, 0));
+        Assert.Equal("none", ReminderEngine.Decide(r, N(10, 0), N(8, 0), st).Action);
+        Assert.Equal("arm", ReminderEngine.Decide(r, N(10, 0).AddDays(1), N(8, 0), st).Action);
+    }
+
+    [Fact]
+    public void Skipped_today_also_silences_event_triggers()
+    {
+        // 事件型的 ShouldFire 不看 LastFiredDate，所以「今天不再」才需要独立的 SkippedDate——
+        // 否则这句话在「解锁时」提醒上会变成一个安静的谎。
+        var r = new Reminder { Trigger = "unlock" };
+        var st = new ReminderState();
+        Assert.True(ReminderEvent.ShouldFire(r, "unlock", N(10, 0), st));
+        ReminderEngine.SkipToday(st, N(10, 0));
+        Assert.False(ReminderEvent.ShouldFire(r, "unlock", N(10, 0), st));
+        Assert.True(ReminderEvent.ShouldFire(r, "unlock", N(10, 0).AddDays(1), st));
+    }
+
+    [Fact]
+    public void Nag_chain_without_a_deadline_tops_out_at_MaxRepeats_pops()
+    {
+        // 「直到」留空时到底会弹几次——文案照这个数字写，别靠脑补。
+        // 首弹之后每次未确认排下一次，count 达到 MaxRepeats 那一轮结束链、不再排。
+        var r = new Reminder { RepeatMinutes = 1 };   // 无 repeatUntil
+        var st = new ReminderState();
+        int pops = 1;   // 首弹
+        var now = N(10, 0);
+        while (true)
+        {
+            ReminderEngine.UpdateAfterFire(r, now, "", st);
+            if (st.NextRepeatAt == null) break;
+            pops++;
+            now = st.NextRepeatAt.Value;
+            st.NextRepeatAt = null;   // 模拟这一次已引爆
+        }
+        Assert.Equal(ReminderEngine.MaxRepeats, pops);   // 首弹 + 19 次催促 = 20 次
+    }
+
+    [Fact]
+    public void Degrade_still_schedules_the_next_interval_round()
+    {
+        // 降级时链结束，但「循环运行」是另一条链——不排下一轮的话，配了循环的提醒一降级就把当天
+        // 余下的轮次全部静默丢掉，而降级卡片没有按钮，用户回来也无从把它接回去。
+        var r = new Reminder { IntervalMinutes = 30, IntervalUntil = "18:00" };
+        var st = new ReminderState();
+        for (int i = 1; i < ReminderEngine.MaxAutoSnoozes; i++) ReminderEngine.AutoSnooze(st, N(10, 0), 10);
+        Assert.False(ReminderEngine.AutoSnooze(st, N(11, 0), 10));   // 到顶 → 降级
+        ReminderEngine.UpdateAfterFire(r, N(11, 0), "ok", st);        // App 在降级出口做的事
+        Assert.Equal(N(11, 30), st.NextIntervalAt);
+    }
+
+    [Fact]
+    public void Confirm_resets_auto_snooze_count()
+    {
+        // 人回来点了确定 → EndRepeatChain 清零，下一轮无人应答重新拿满额度。
+        var st = new ReminderState { RepeatCount = ReminderEngine.MaxAutoSnoozes - 1 };
+        ReminderEngine.UpdateAfterFire(new Reminder { RepeatMinutes = 0 }, N(10, 0), "ok", st);
+        Assert.Equal(0, st.RepeatCount);
+        Assert.True(ReminderEngine.AutoSnooze(st, N(22, 0), 10));
     }
 
     [Fact]

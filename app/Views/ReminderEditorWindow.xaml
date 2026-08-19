@@ -55,6 +55,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="90" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MsgBox" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="420" Height="72" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
                 <CheckBox x:Name="SpeakChk" Content="{loc:Loc Ed_Speak}" Margin="100,3,0,3"/>
+                <CheckBox x:Name="SoundChk" Content="{loc:Loc Ed_Sound}" Margin="100,3,0,3"/>
 
                 <StackPanel x:Name="OnYesRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_OnYes}" Width="90" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="OnYesTypeCombo" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="140" Height="28" SelectionChanged="OnYesType_Changed"/>
                     <TextBox x:Name="OnYesTargetBox" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="150" Height="28" Margin="8,0,0,0"/><Button x:Name="OnYesBrowseBtn" Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="6,0,0,0" Click="BrowseOnYes_Click"/><ComboBox x:Name="OnYesGroupCombo" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="220" Height="28" Margin="8,0,0,0"/></StackPanel>

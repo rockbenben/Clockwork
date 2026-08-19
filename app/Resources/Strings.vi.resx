@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Gõ từng ký tự (xuống dòng = Enter). Để trống tiến trình để gửi tới cửa sổ đang lấy nét (đáng tin nhất).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Thông báo</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Đọc thành tiếng</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Âm báo</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Xác nhận Có/Không (Có = tiếp tục, Không = hủy nhóm)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Sau «Có»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Hiển thị dạng</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Chạy nhóm hành động</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Chạy nhóm hành động</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Tự đóng (giây)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>tự đóng nếu không bấm (0 = không bao giờ; nhắc lặp: mặc định 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>tự đóng nếu không bấm (0: thẻ = không bao giờ, hộp thoại = 60 giây)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Đã hẹn sau {0} phút, nhưng nhắc nhở đang tạm dừng — sẽ báo khi hết tạm dừng</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Đã bỏ qua hôm nay: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Bỏ qua hôm nay: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>Đã hẹn nhắc sau {0} phút ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>Đã hết {0} phút</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Bỏ qua hôm nay</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Nhắc nhanh</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Nhắc đến khi xác nhận</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>phút (0 = không lặp), đến</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, trống = không giới hạn)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, trống = tối đa 20 lần hiện)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Chạy lặp lại, mỗi</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>phút (0 = tắt), đến</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, trống = cuối ngày)</value></data>

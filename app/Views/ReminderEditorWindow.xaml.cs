@@ -43,6 +43,7 @@ public partial class ReminderEditorWindow : Window
         MonthlyBox.Text = r.MonthlyDay.ToString();
         MsgBox.Text = r.Message;
         SpeakChk.IsChecked = r.Speak;
+        SoundChk.IsChecked = r.Sound;
         OnYesTargetBox.Text = r.OnYes.Target;
         AutoBox.Text = r.PopupTimeoutSeconds.ToString();
         RepeatBox.Text = r.RepeatMinutes.ToString();
@@ -114,6 +115,7 @@ public partial class ReminderEditorWindow : Window
         bool silent = ActSilent.IsChecked == true;
         Vis(SilentRow, silent);
         Vis(SpeakChk, !silent);
+        Vis(SoundChk, !silent);   // 静默组不出声，留个勾不生效的框只会骗人（同 AutoRow/NagRow）
         Vis(OnYesRow, !silent);
         Vis(AutoRow, !silent);
         Vis(NagRow, !silent);
@@ -248,6 +250,14 @@ public partial class ReminderEditorWindow : Window
             StartupWithinMinutes = sw,
             Message = MsgBox.Text,
             Speak = SpeakChk.IsChecked == true,
+            Sound = SoundChk.IsChecked == true,
+            // 编辑过就不再是「临时」——打开编辑器改一遍，等于把这个随手计时器收编成自己的提醒。
+            // 反过来保留 Temporary 会招来一个无声删除：编辑器为往返保真会原样存回 onceDate，
+            // 于是一条被改成「每天 07:00」的提醒身上还挂着昨天的 onceDate，启动时的过期临时项清理
+            // 会把它连根删掉——用户既没得到提示，也不知道自己动过什么。
+            // 代价是反向的：只打开看看就点确定，它从此不再自删、响完留一行。那一行看得见、删得掉，
+            // 比静默消失一条你想要的提醒轻得多。
+            Temporary = false,
             OnYes = new OnYes { Type = yType, Target = yTarget },
             GraceMinutes = gm,
             CatchUpIfMissed = CatchUpChk.IsChecked == true,

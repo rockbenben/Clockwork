@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Typt teken voor teken (nieuwe regel = Enter). Laat proces leeg om naar het venster met focus te sturen (meest betrouwbaar).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Bericht</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Hardop voorlezen</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Geluid</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Ja/Nee bevestigen (Ja = doorgaan, Nee = groep annuleren)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Na «Ja»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Tonen als</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Actiegroep uitvoeren</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Actiegroep uitvoeren</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Automatisch sluiten (s)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>sluit vanzelf als niet geklikt (0 = nooit; herhaalde herinnering: standaard 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>sluit vanzelf als niet geklikt (0: kaart = nooit, dialoogvenster = 60 s)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Herinnering over {0} min, maar herinneringen staan gepauzeerd — hij gaat daarna af</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Overslaan vandaag ongedaan: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Vandaag overgeslagen: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>Herinnering over {0} min ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} minuten zijn om</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Sla vandaag over</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Snelle herinnering</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Aandringen tot bevestiging</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>minuten (0 = niet herhalen), tot</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, leeg = onbeperkt)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, leeg = max. 20 meldingen)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Herhaalde uitvoering, elke</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>min (0 = uit), tot</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, leeg = einde van de dag)</value></data>

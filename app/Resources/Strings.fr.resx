@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Saisit caractère par caractère (saut = Entrée). Laissez le processus vide pour envoyer à la fenêtre active (le plus fiable).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Message</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Lecture vocale</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Son</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Confirmation Oui/Non (Oui = continuer, Non = annuler le groupe)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Après « Oui »</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Afficher comme</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Exécuter un groupe d'actions</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Exécuter un groupe d'actions</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Fermeture auto (s)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>se ferme seul sans clic (0 = jamais ; rappel répété : 60 par défaut)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>se ferme seul sans clic (0 : carte = jamais, dialogue = 60 s)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Rappel dans {0} min, mais les rappels sont en pause — il sonnera à la fin de la pause</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Rétabli pour aujourd’hui : {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Passé pour aujourd’hui : {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>Rappel dans {0} min ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} minutes écoulées</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Passer aujourd’hui</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Rappel rapide</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Insister jusqu'à confirmation</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = pas de répétition), jusqu'à</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, vide = sans limite)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, vide = 20 affichages max)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Exécution périodique, toutes les</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>min (0 = désactivé), jusqu'à</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, vide = fin de journée)</value></data>

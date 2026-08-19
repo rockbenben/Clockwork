@@ -240,7 +240,21 @@ public partial class App : System.Windows.Application
                 if (owner is { Enabled: true, CatchUpIfMissed: true } && !ReminderEvent.IsEvent(owner.Trigger)) continue;
                 kv.Value.SnoozeUntil = null; cleaned = true;
             }
+        // 陈旧的「今天不再」同理清掉。它是耐久内容（Save 的跳空判断认它），不扫的话一月里跳过一次的提醒
+        // 会在 clockwork.state.json 里留一行到天荒地老，且每次耐久写盘都跟着重新序列化一遍。
+        foreach (var kv in _reminderStates)
+            if (kv.Value.SkippedDate.Length > 0 && string.CompareOrdinal(kv.Value.SkippedDate, ReminderEngine.DateKey(DateTime.Now)) < 0)
+            { kv.Value.SkippedDate = ""; cleaned = true; }
         if (cleaned) ReminderStateStore.Save(_statePath, _reminderStates);
+        // 过期的「快速提醒」清干净。它靠触发后自删收尾，可机器要是整天关着、错过了那个日期，
+        // once + 已过的 onceDate 就再也触发不了，于是永远删不掉——一条谁都不认识的死行留在定时任务里。
+        // 必须赶在建 MainWindow（列表 VM 由 _config.Reminders 建行）之前做，否则又得走 VM 删。
+        _config.Reminders.RemoveAll(x => x.Temporary && string.CompareOrdinal(x.OnceDate, ReminderEngine.DateKey(DateTime.Now)) < 0);
+        // 有意不在这里 SaveConfig：它的失败路径要弹 toast=建窗口，而本方法跑在 ApplyUiCulture 之前，
+        // 那里的 RTL 元数据覆盖硬性要求「建任何窗口之前」，一旦被抢跑就抛异常、整个启动流程断在半路
+        // （ShutdownMode.OnExplicitShutdown 下进程还活着，却没有托盘也没有窗口）。
+        // 从内存里摘掉就够了：列表 VM 稍后按 _config 建行，看不到这些死行；盘上那几行等下一次
+        // 任何配置改动顺手带走，带不走也只是下次启动再清一遍，无害。
         _startupReminderIds = new HashSet<string>(_config.Reminders.Select(x => x.Id));
     }
 
@@ -668,16 +682,119 @@ public partial class App : System.Windows.Application
         // 自动关闭设得长（如 30 分钟）时 now 已陈旧半小时，「稍后 10 分钟」会算出一个已经过去的
         // SnoozeUntil，下个 tick 立即重弹、再挂 30 分钟，成了永久模态循环；重复催促同理会背靠背连弹。
         var after = DateTime.Now;
-        if (snooze is int m) ReminderEngine.Snooze(st, after, m);
+        if (snooze is int m)
+        {
+            // 自动稍后有上限（人不在，别对着空屏幕弹一天）；手点的没有（人的明确决定）。
+            // 到顶降级：链结束，改挂常驻卡片等人回来——不再抢焦点，提醒也不静默消失。
+            // 卡片没有「是/否」按钮：降级只保留「看到」，onYes 动作不随卡片走。
+            if (action == "autosnooze")
+            {
+                if (!ReminderEngine.AutoSnooze(st, after, m))
+                {
+                    // 降级成常驻卡片。Warn 级不是为了吓人，是为了别骗人：FireReminder 刚按同一个 key 记了一条
+                    // 警示级「无人应答」，而 NotificationLog.Add 会先删同 key 的旧条目——这里用 Info 会把那条
+                    // 警示改写成普通回执，托盘「最近通知」里最坏的情况反倒看着最正常。
+                    ShowToast(Strings.Get("Tray_ReminderTitle"), r.Message, Views.ToastLevel.Warn, 0, key: ReminderToastKey(r));
+                    // 催促链到此结束，但「循环运行」是另一条链，必须在这个出口照常排下一轮——
+                    // 不排的话，配了循环的提醒一降级就把当天余下所有轮次静默丢掉，而卡片没有按钮，
+                    // 用户回来也无从把它接回去（与 UpdateAfterFire 各出口都排下一轮同一条口径）。
+                    ReminderEngine.UpdateAfterFire(r, after, "ok", st);
+                }
+                // ponytail: 降级卡片是会话态，重启即消失（LastFiredDate 已记今天，不会重弹）；「仅一次」的
+                // 提醒还会在下面被自动取消勾选——即卡片被挤掉/重启后，它在界面上不留任何痕迹。
+                // 要跨重启得给 ReminderState 再落一个字段并在启动时重挂卡片，等真有人踩到再说。
+            }
+            else ReminderEngine.Snooze(r, st, after, m);   // 手点=人在场，无人应答计数由引擎清零
+        }
         else ReminderEngine.UpdateAfterFire(r, after, action, st);
         // 「仅一次」触发完成（催促/稍后链都结束）→ 自动取消勾选：条目保留（想再用改个日期重新勾上），
         // 用完即焚会让误设时间没得救。时机必须在链结束后——立刻停用会被 Decide 的 !Enabled 早退掐死在途链。
+        // 例外是托盘「快速提醒」（Temporary）：那是个当场用完的计时器，不是配置，留行只会堆垃圾——整条删掉。
+        // 状态字典里的那份由 ReminderTick 的孤儿清理顺手回收（按 id 比对存活提醒），这儿不必手动删。
         if (ReminderEngine.ShouldDisableAfterOnce(r, st))
         {
-            r.Enabled = false;
-            SaveConfig();
+            // 删除必须走列表 VM：ListVm.Models 就是 _config.Reminders 这份 List 本身，而 Rows 是与它平行的
+            // 另一份集合，RefreshReminderRows 只会逐行 Refresh()、加不了也删不掉行。直接动 _config.Reminders
+            // 会让两者错位一位，之后每一行都映射到相邻的那条提醒（编辑/删除/预览全部张冠李戴），
+            // 选中最后一行还会让 ListVm.Selected 越界抛异常。
+            if (r.Temporary) _main?.RemoveReminderRow(r);   // VM 内部会存盘
+            else { r.Enabled = false; SaveConfig(); }
             _main?.RefreshReminderRows();
         }
+    }
+
+    // 托盘「快速提醒」：N 分钟后响一次，响完自删。复用「仅一次」那套机制，不新开一条计时路径。
+    //
+    // 精度：直接预置 PendingFireAt = 现在+N（秒级），让计时器的 pending 分支引爆，误差 ≤ 一个 tick(默认 30s)
+    // 且绝不提前。不这么做就得走「到点判定 → arm → 下一跳才 fire」，那条路要吃两次 tick，再叠上
+    // Time 只有 HH:mm 精度带来的取整——5 分钟的计时器实测能拖到近 7 分钟，对一个计时器是不能接受的误差。
+    // Time 字段仍照常填（向上取整，绝不提前），它是列表和气泡上显示的那个时刻，也是 PendingFireAt
+    // 这个会话态被重启抹掉之后的兜底路径。
+    public void QuickReminder(int minutes)
+    {
+        var at = DateTime.Now.AddMinutes(minutes).AddSeconds(59);
+        var r = new Reminder
+        {
+            Trigger = "time",
+            Time = at.ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture),
+            RecurType = "once",
+            OnceDate = ReminderEngine.DateKey(at),   // 跨午夜时自然落到明天
+            Message = Lf("Quick_Done", minutes),
+            Sound = true,             // 计时器无声等于没有计时器
+            PopupTimeoutSeconds = 0,  // 卡片形态下 0=常驻到点掉，别让人错过自己刚设的那一下
+            GraceMinutes = 5,
+            CatchUpIfMissed = true,   // 那一分钟恰好在勿扰/睡眠里错过时补响，而不是变成一条永不触发的死行
+            Temporary = true,
+        };
+        // 必须经 VM 增加，理由同 FireAndAdvance 里的删除：Rows 与 Models 是两份平行集合。
+        // 直接 _config.Reminders.Add 的话这条根本不会出现在列表里——用户想反悔都没有入口，
+        // 而文档写着「响过就自己从列表里删掉」，等于承诺了一个它从没进过的列表。
+        // 直接调、不做 null 兜底：BuildShell 先建 _main 再建托盘，而本方法只能由托盘菜单进来，
+        // _main 必然已在；写成 _main?. 只会造一个谁也测不到的分支，还让"气泡说已设、其实没加"成为可能。
+        _main!.AddReminderRow(r);   // VM 内部会存盘
+        // 「错过必补」只对启动时就存在的提醒生效（防「刚建一条早时刻的就立刻补弹」）。快速提醒的时刻
+        // 永远在未来，那道防线对它没有意义，却会让上面这个 CatchUpIfMissed 完全失效——补登记一下。
+        _startupReminderIds.Add(r.Id);
+        // 预置引爆时刻（见方法头的精度说明）。PendingForDate 要跟着记，否则跨午夜引爆时
+        // LastFiredDate 会记成次日，与 ArmAt 同一个坑。
+        var st = StateOf(r);
+        st.PendingFireAt = DateTime.Now.AddMinutes(minutes);
+        st.PendingForDate = ReminderEngine.DateKey(st.PendingFireAt.Value);
+        // 勿扰期间 ReminderTick 整轮直接返回，这条也不例外——气泡必须说实话，不能承诺一个做不到的时刻。
+        bool dnd = DndRemaining != null;
+        ShowToast("Clockwork", dnd ? Lf("Toast_QuickSetDnd", minutes) : Lf("Toast_QuickSet", minutes, r.Time),
+                  dnd ? Views.ToastLevel.Warn : Views.ToastLevel.Info);
+    }
+
+    // 「今天不再提醒」：当天剩余的这条全部作废（含在途的催促/循环/稍后），明天照常。
+    // 比取消勾选安全——取消勾选没有到期日，忘了打开就是一条永久静默失效的提醒。
+    //
+    // 做成开关：再点一次即撤销。按钮就在「运行」正上方、单击即生效、没有确认框，误点必然发生；
+    // 而列表行看不出任何差别，编辑保存也撤不掉（迁移会把 SkippedDate 原样带到新 id），
+    // 没有这个反向操作就只剩「删掉重建」和「手改状态文件」两条路。
+    public void SkipReminderToday(Reminder r)
+    {
+        var st = StateOf(r);
+        var now = DateTime.Now;
+        bool undo = st.SkippedDate == ReminderEngine.DateKey(now);
+        if (undo) st.SkippedDate = "";
+        else
+        {
+            ReminderEngine.SkipToday(st, now);
+            // 「仅一次」且这一次就是今天 → 跳过之后它永远不会再触发（周期过滤此后一直为 false），
+            // 而 ShouldDisableAfterOnce 只在触发路径上判定，跳过永远走不到那儿。不在这里收尾的话，
+            // 列表里就留下一条勾着的、和活提醒长得一模一样、却再也不会响的死行。
+            if (r.RecurType == "once" && ReminderEvent.UsesRecurrence(r.Trigger)
+                && ReminderEngine.IsRecurrenceDueToday(r, now))
+            {
+                if (r.Temporary) _main!.RemoveReminderRow(r);   // 快速提醒被跳过=不要了，整条删掉
+                else { r.Enabled = false; SaveConfig(); _main?.RefreshReminderRows(); }
+            }
+        }
+        ReminderStateStore.Save(_statePath, _reminderStates, durable: true);
+        ShowToast("Clockwork", Lf(undo ? "Toast_SkipTodayOff" : "Toast_SkipToday",
+                                  ReminderDisplay.TextSummary(r, _config.ActionGroups)),
+                  Views.ToastLevel.Info, key: "skip:" + r.Id);   // TextSummary 自己已经截断，别再套一层
     }
 
     // —— 事件触发（空闲 / 锁屏 / 解锁 / 唤醒 / 插拔电源 / 低电量）——
@@ -778,7 +895,7 @@ public partial class App : System.Windows.Application
         bool changed = false;
         foreach (var r in _config.Reminders.ToList())
         {
-            if (!ReminderEvent.ShouldFire(r, ev, now)) continue;
+            if (!ReminderEvent.ShouldFire(r, ev, now, PeekState(r))) continue;
             FireOrArm(r);
             changed = true;
         }
@@ -804,8 +921,13 @@ public partial class App : System.Windows.Application
         st.PendingFireAt = baseTime.AddSeconds((long)r.DelaySeconds + rand);
         // 与 ReminderEngine 的 arm 出口同口径：记基准日而非引爆日，否则延迟把引爆推过午夜时，
         // LastFiredDate 会记成次日、把次日那次挡掉。事件触发只经这条路，Decide 的 Arm() 管不到。
-        st.PendingForDate = baseTime.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+        st.PendingForDate = ReminderEngine.DateKey(baseTime);
     }
+
+    // 只读查询运行态，查不到给 null。给 ShouldFire 这类纯谓词用——C# 求值实参在前，
+    // 写 StateOf(r) 的话每次锁屏/解锁/插拔电源都会给配置里每一条提醒（包括禁用的、按时间触发的）
+    // 建一行状态，把「没状态就不建行」这个前提（孤儿清理与 Save 跳空都建立在它上面）打掉。
+    private ReminderState? PeekState(Reminder r) => _reminderStates.GetValueOrDefault(r.Id);
 
     private ReminderState StateOf(Reminder r)
     {
@@ -833,7 +955,7 @@ public partial class App : System.Windows.Application
             if (r.Trigger == "idle")
             {
                 if (!fire) continue;   // 勿扰中不触发也不置位：空闲跨过勿扰结束仍在持续的，结束后照常响
-                if (!ReminderEvent.ShouldFire(r, "idle", now)) continue;
+                if (!ReminderEvent.ShouldFire(r, "idle", now, PeekState(r))) continue;
                 if (!ReminderEvent.IdleDue(r, idle, _idleFired.Contains(r.Id))) continue;
                 _idleFired.Add(r.Id);
                 FireOrArm(r);
@@ -844,7 +966,7 @@ public partial class App : System.Windows.Application
                 // 复位判定不看 Enabled/星期/勿扰：电量涨回去了就是涨回去了，跟这条现在该不该响无关。
                 if (ReminderEvent.LowBatteryReset(r, pct, onAc)) { _lowBatteryFired.Remove(r.Id); continue; }
                 if (!fire) continue;
-                if (!ReminderEvent.ShouldFire(r, "lowBattery", now)) continue;
+                if (!ReminderEvent.ShouldFire(r, "lowBattery", now, PeekState(r))) continue;
                 if (!ReminderEvent.LowBatteryDue(r, pct, onAc, _lowBatteryFired.Contains(r.Id))) continue;
                 _lowBatteryFired.Add(r.Id);
                 FireOrArm(r);
@@ -854,7 +976,9 @@ public partial class App : System.Windows.Application
         return changed;
     }
 
-    // 触发一条提醒：静默组 / 语音 / 通知 / 弹窗（是-否-稍后）。返回 (result, snoozeMinutes)。
+    // 触发一条提醒：静默组 / 语音 / 通知 / 弹窗（是-否-稍后）。
+    // 返回 (result, snoozeMinutes)：result ∈ yes/no/ok/snooze(手点稍后)/autosnooze(超时自动稍后)/""(超时未确认)。
+    // 手点与自动必须分开传到 FireAndAdvance——只有后者计入「连续无人应答」的降级计数。
     // preview=编辑器「预览这条」：被动提醒 toast 固定几秒自动消失（预览是试看，不该常驻堆屏）。
     private (string Action, int? Snooze) FireReminder(Reminder r, bool preview = false)
     {
@@ -869,6 +993,9 @@ public partial class App : System.Windows.Application
             // 静默任务的周期轮询正是靠这个返回值成立，改动它会悄悄弄断循环。
             return ("ok", null);
         }
+        // 提示音先于朗读：一声短提示把头抬起来，随后的朗读才有人在听。
+        // 静默组走不到这里（上面已 return）——「静默」就该是静默的。
+        if (r.Sound) ReminderActions.Ding();
         if (r.Speak) ReminderActions.Speak(r.Message);
         bool confirm = r.OnYes != null && r.OnYes.Type != "none";
         // 无动作、非重复 → 走右下角提醒卡片（不置顶抢视线）。时长遵循配置的「自动关闭」（0=常驻到点击）。
@@ -890,12 +1017,23 @@ public partial class App : System.Windows.Application
         //   没配 → 自动「稍后 10 分钟」——这类提醒没有任何续催机制，超时记成已处理或未确认都等于静默丢弃。
         // 「未应答」因此落在引擎的持久状态（SnoozeUntil 落盘，重启也不丢，删除提醒后由孤儿清理回收），
         // 而不是落在某个 UI 构件上——卡片会被挤掉/误点/比配置活得久，投递保证不能跟着 UI 的生死走。
+        // 唯一的例外在链的末端：连续 MaxAutoSnoozes 轮无人应答后降级成常驻卡片（见 FireAndAdvance）。
+        // 那不是把投递保证交给 UI，而是承认「一小时没人理=人不在」，此时继续抢焦点已无收件人；
+        // 卡片够撑到人回来，代价（会话态、重启即失、没有是/否按钮）都写在降级那处。
         int psecs = ReminderEngine.PopupTimeoutSeconds(r);
         int timeoutSecs = psecs > 0 ? psecs : ReminderEngine.UnattendedPopupSeconds;
         int? autoSnooze = r.RepeatMinutes > 0 ? null : ReminderEngine.UnattendedSnoozeMinutes;
+        var shownAt = DateTime.Now;
         var (act, snooze) = Views.ReminderPopupWindow.Show(r.Message, confirm, timeoutSecs, autoSnooze);
+        // 弹窗路径也在托盘「最近通知」留痕——卡片路径由 ShowToast 顺手记，这条路之前没人记，
+        // 于是「22:00 到底弹没弹」只能去翻状态文件反推。无人应答（超时未确认/自动稍后）记警示级：
+        // 那是「你需要知道」的结果，不是看过就算的回执。预览不留痕，与卡片路径同口径。
+        // DurationMs 必须给真值：NotificationEntry 的契约是「重放须忠实还原原卡片的时长」，
+        // 留默认 0 等于声明"常驻"，于是回看一条 60 秒的提醒会得到一张永不自动关的卡片。
+        if (!preview) _notifications.Add(new NotificationEntry(shownAt, Strings.Get("Tray_ReminderTitle"), r.Message,
+            Warn: act is "" or "autosnooze", Key: ReminderToastKey(r), DurationMs: timeoutSecs * 1000));
         if (act == "yes") ReminderActions.RunOnYes(r.OnYes, _config.ActionGroups, g => RunGroupAsync(g), WarnToast);
-        if (act == "snooze") return ("", snooze);
+        if (act is "snooze" or "autosnooze") return (act, snooze);
         return (act, null);
     }
 
@@ -1285,11 +1423,16 @@ public partial class App : System.Windows.Application
         if (_startupReminderIds.Remove(oldId)) _startupReminderIds.Add(newId);
         if (!_reminderStates.TryGetValue(oldId, out var old)) return;
         var carryInterval = updated.IntervalMinutes >= 1 ? old.NextIntervalAt : null;
-        if (old.SnoozeUntil != null || carryInterval != null)
+        // SkippedDate 必须跟着迁：用户上午点了「今天不再」、随后改了一下文案，跳过就被悄悄撤销、
+        // 提醒照常响——而编辑是撤销跳过的唯一入口，等于让人在毫不知情的情况下误撤。
+        // 它也是三者中唯一可能单独存在的（SkipToday 会把 SnoozeUntil/NextIntervalAt 一起清成 null），
+        // 所以下面的建档条件必须把它算进去，否则永远走不到赋值那一步。
+        if (old.SnoozeUntil != null || carryInterval != null || !string.IsNullOrEmpty(old.SkippedDate))
         {
             if (!_reminderStates.TryGetValue(newId, out var st)) { st = new ReminderState(); _reminderStates[newId] = st; }
             st.SnoozeUntil = old.SnoozeUntil;
             st.NextIntervalAt = carryInterval;
+            st.SkippedDate = old.SkippedDate;
         }
         // PendingFireAt 有意不迁：它按旧时间算出，编辑就是要按新配置重新判定。
         _reminderStates.Remove(oldId);   // 旧 id 已不被任何提醒引用，成孤儿；显式移除并落盘

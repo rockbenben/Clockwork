@@ -162,6 +162,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>1文字ずつ入力（改行=Enter）。対象プロセスを空にするとフォーカス中のウィンドウへ送信（最も安定）。</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>メッセージ</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>読み上げ</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>通知音</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>はい/いいえ確認（はい=続行、いいえ=グループ中止）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>はいの後</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>表示方法</value></data>
@@ -232,10 +233,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>アクショングループ実行</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>アクショングループ実行</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>自動クローズ(秒)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>操作しないと自動で閉じる（0=閉じない；繰り返し通知は既定60）</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>操作しないと自動で閉じる（0：カード=閉じない、ダイアログ=60秒）</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>{0} 分後に設定しましたが、現在通知は一時停止中です。解除後に鳴ります</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>今日のスキップを解除：{0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>今日はスキップ：{0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>{0} 分後に通知します（{1}）</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} 分が経過しました</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>今日はスキップ</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>クイックリマインダー</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>確認するまで催促</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分ごと(0=なし)、次の時刻まで</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm、空=無制限)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm、空=最大20回表示)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>定期実行</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>分ごと(0=オフ)、次の時刻まで</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm、空=当日終了まで)</value></data>

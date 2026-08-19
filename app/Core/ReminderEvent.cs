@@ -24,9 +24,14 @@ public static class ReminderEvent
 
     // 本条提醒是否该响应这次 ev。星期过滤照旧生效（「工作日解锁时打卡」是真实需求）；
     // recurType 那一套（每 N 天 / 每月 / 仅一次）对事件没有意义，编辑器保存事件触发时会把它归成 daily。
-    public static bool ShouldFire(Reminder r, string ev, DateTime now)
+    // st 只用来看「今天不再提醒」：这是本方法唯一读运行态的地方——事件的语义仍是"发生了就是发生了"，
+    // 但用户手动跳过是凌驾于触发之上的表态，三种触发（时间/登录/事件）必须给出同一个答案，
+    // 否则「今天不再」这句话在解锁类提醒上会变成一个安静的谎。刻意做成必填而不给默认值：
+    // 可选参数会让下一个调用方漏传时静默丢掉这条保证，而现有测试全都不会发现。纯谓词测试显式传 null。
+    public static bool ShouldFire(Reminder r, string ev, DateTime now, ReminderState? st)
     {
         if (r == null || !r.Enabled || r.Trigger != ev) return false;
+        if (st != null && st.SkippedDate == ReminderEngine.DateKey(now)) return false;
         var days = r.Days ?? new();
         return days.Count == 0 || days.Contains(StepCondition.IsoDayOfWeek(now));
     }

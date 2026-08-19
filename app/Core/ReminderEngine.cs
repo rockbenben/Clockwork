@@ -14,12 +14,29 @@ public static class ReminderEngine
     // 「稍后 UnattendedSnoozeMinutes 分钟」自动重发——SnoozeUntil 落盘、重启不丢、跨天由 Decide 丢弃
     // （「错过必补」的提醒例外：跨天补发一次）、提醒被删后由孤儿清理回收。
     // 绝不把无人应答记成已处理/未确认然后静默丢弃。
+    // 但重发也不是无限的：连续 MaxAutoSnoozes 轮没人理，就不再弹模态窗，改由 App 挂一张常驻卡片
+    // 等人回来（见 AutoSnooze）——「不静默丢弃」要的是提醒仍在，不是非得一直抢焦点。
     // 配了重复催促的提醒超时仍走 UpdateAfterFire 按用户节奏续催（受 repeatUntil/MaxRepeats 约束）。见 App.FireReminder。
     public const int UnattendedPopupSeconds = 60;
     public const int UnattendedSnoozeMinutes = 10;
 
+    // 连续无人应答的自动稍后上限。闹钟类系统的同款边界（iOS 闹钟响 ~15 分钟即停、AOSP 时钟默认 10 分钟静音）：
+    // 无人应答说明人不在，对没人看的屏幕反复弹模态窗没有意义。
+    // 到顶后由 App 降级成常驻卡片——不再抢焦点，但提醒仍挂在屏上等人回来，投递保证不丢。
+    //
+    // 这是**轮数**上限，不是时长上限：默认（自动关闭兜底 60 秒）下 6 轮 × 10 分钟稍后 ≈ 1 小时，
+    // 但把「自动关闭」设成 1800 秒的话，每轮还要先挂 30 分钟模态窗，6 轮就是 4 小时——而且那 30 分钟里
+    // _reminderTickBusy 一直占着，其余提醒全部排队。真要按墙钟封顶得再落一个「本串起始时刻」，
+    // 会话态还是耐久态又是一串取舍；配长自动关闭本来就是少数派，先按轮数封，文档如实写清两种口径。
+    public const int MaxAutoSnoozes = 6;
+
     // HH:mm 校验（编辑器与 repeatUntil 判定共用一份，避免两处手抄漂移）。宽松输入先经 DurationText.FormatTimeHHmm 规整。
     public const string HhmmPattern = @"^([01]\d|2[0-3]):[0-5]\d$";
+
+    // 「哪一天」的统一键。LastFiredDate / SkippedDate / PendingForDate 三者都是它，且都靠 == 比较，
+    // 其中 SkippedDate 还要跨进程比（落盘的值 vs 运行时现算的值）——格式各处手抄一份，
+    // 哪天有人写成 "yyyy/MM/dd" 或漏了 InvariantCulture，跳过就会在某些区域设置下静默失效。只此一份。
+    public static string DateKey(DateTime d) => d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
     // 今天是否落在提醒周期上。daily=星期过滤(空=每天)；everyNDays=从 anchorDate 取模(防漂移)；monthly=每月第N天(夹月末)。
     public static bool IsRecurrenceDueToday(Reminder r, DateTime today)
@@ -28,6 +45,8 @@ public static class ReminderEngine
         {
             case "everyNDays":
                 int n = r.IntervalDays < 1 ? 1 : r.IntervalDays;
+                // 空/非法 anchor=每天都在周期上（宽容兜底）。按时间触发的提醒经编辑器保存时留空已被落成今天，
+                // 故走到这条兜底的是手改的 json、以及「登录时/事件」身上残留的 everyNDays（那两种本就不看周期）。
                 if (string.IsNullOrWhiteSpace(r.AnchorDate)) return true;
                 if (!DateTime.TryParseExact(r.AnchorDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var anchor)) return true;
                 anchor = anchor.Date;
@@ -75,6 +94,13 @@ public static class ReminderEngine
     {
         if (!r.Enabled) return new("none", null);
 
+        // 手动「今天不再提醒」：挡在所有分支之前——稍后 / 催促 / 循环 / 已武装的延迟都算"今天的事"，
+        // 用户说的是这一整天不想被这条打扰，不是只掐掉下一次。在途链已在 SkipToday 里一并清干净，
+        // 这里只需拦住当天剩余的重新排程。明天此值不再等于今天，一切照常恢复。
+        // today 在此提前算出：下面首发判定也要用同一份，两处各格式化一次既浪费也让日期格式有两份要同步。
+        var today = DateKey(now);
+        if (st.SkippedDate == today) return new("none", null);
+
         // 稍后(snooze)：一次性、显式请求，优先于周期门——跨午夜落到非周期日也照发一次，到点即清。
         if (st.SnoozeUntil is DateTime snooze)
         {
@@ -118,8 +144,6 @@ public static class ReminderEngine
             else if (now >= ni) { st.NextIntervalAt = null; return new("fire", null); }
             else return new("none", null);
         }
-
-        var today = now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
         // 已 arm，等延迟到点。与 snooze/repeat 同理放在周期过滤之前：arm 只发生在有效周期日，
         // 延迟把到点推过午夜（如周五 23:58 + 随机延迟）不该被次日的周期过滤抹掉——那是已到期、已武装的一次触发。
@@ -195,7 +219,7 @@ public static class ReminderEngine
     // 三条 arm 出口都必须经这里，漏一条那条路径就又会把日期记错。
     private static ReminderDecision Arm(ReminderState st, DateTime baseTime)
     {
-        st.PendingForDate = baseTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        st.PendingForDate = DateKey(baseTime);
         return new("arm", baseTime);
     }
 
@@ -261,13 +285,52 @@ public static class ReminderEngine
         return st;
     }
 
-    // 用户「稍后」N 分钟：钉一次性 snoozeUntil（独立于周期），清掉进行中的周期重复。N<1 视作默认 10 分钟。
-    // 保留 repeatCount：snooze 后续上重复仍受 MaxRepeats 约束。
-    public static ReminderState Snooze(ReminderState st, DateTime now, int minutes)
+    // 钉一次性 snoozeUntil（独立于周期），并清掉进行中的周期重复。N<1 视作默认 10 分钟。
+    // 手点与自动两条路共用，计数口径各自在下面把关——两处都手抄这三行的话，改一处漏一处。
+    private static void SetSnooze(ReminderState st, DateTime now, int minutes)
     {
         if (minutes < 1) minutes = 10;
         st.NextRepeatAt = null;
         st.SnoozeUntil = now.AddMinutes(minutes);
+    }
+
+    // 用户手点「稍后」N 分钟。RepeatCount 在两种提醒身上含义不同，清不清也就相反：
+    //   配了催促(repeatMinutes>0) → 它是催促链的已催次数：保留，手点稍后不该让这条链重新拿满 MaxRepeats 次额度。
+    //   没配催促              → 它是「连续无人应答」计数(见 AutoSnooze)：清零，人在场了，之后再离开重新起算一小时。
+    // 这条「人碰过就重新起算」的规则必须和 UpdateAfterFire 里明确应答走的 EndRepeatChain 待在同一层——
+    // 分散到调用方的话，下一个 Snooze 调用方就会忘掉它，而 App 那层又没有测试能照到。
+    public static ReminderState Snooze(Reminder r, ReminderState st, DateTime now, int minutes)
+    {
+        SetSnooze(st, now, minutes);
+        if (r.RepeatMinutes <= 0) st.RepeatCount = 0;
+        return st;
+    }
+
+    // 无人应答（弹窗超时）的自动稍后。与手点分开的理由见 Snooze：人的明确决定不设上限，没人理的必须有边界。
+    // 返回 false=连续无人应答已达 MaxAutoSnoozes：计数清零、不再排稍后，呈现交回上层（App 降级为常驻卡片）。
+    // 计数复用 RepeatCount：走到这里的提醒必然 repeatMinutes<=0（配了催促的超时走 UpdateAfterFire），
+    // 该字段在这类提醒身上原本闲置。会话态不落盘：跨重启的链重新拿满一轮额度——宁可多弹一小时，别丢投递。
+    public static bool AutoSnooze(ReminderState st, DateTime now, int minutes)
+    {
+        if (++st.RepeatCount >= MaxAutoSnoozes) { st.RepeatCount = 0; st.SnoozeUntil = null; return false; }
+        SetSnooze(st, now, minutes);
+        return true;
+    }
+
+    // 手动「今天不再提醒」：记下日期，并把当天所有在途链清干净。
+    // 清链不是顺手打扫，是必需的：留着一条昨天的 SnoozeUntil，开了「错过必补」的提醒明天会把它当作
+    // 一次没送达的投递补弹出来——用户明明说的是"今天别响"，结果第二天早上诈尸。
+    // 会话态字段（Pending/Repeat）一并清：跳过之后当天不该还留着一个已武装的引爆时刻。
+    // StartupHandled 置位是给「登录时」用的：它不看 SkippedDate 之外的日期，不置位则本次运行内反复判定。
+    public static ReminderState SkipToday(ReminderState st, DateTime now)
+    {
+        st.SkippedDate = DateKey(now);
+        st.SnoozeUntil = null;
+        st.NextIntervalAt = null;
+        st.PendingFireAt = null;
+        st.PendingForDate = "";
+        st.StartupHandled = true;
+        EndRepeatChain(st);
         return st;
     }
 

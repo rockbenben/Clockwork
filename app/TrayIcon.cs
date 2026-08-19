@@ -83,6 +83,15 @@ public sealed class TrayIcon : IDisposable
             dnd.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Tray_Hours", hh), TrayGlyph.Dnd, (s, e) => app.PauseReminders(hh)));
         }
         menu.Items.Add(dnd);
+        // 快速提醒——同样折成子菜单。它和勿扰是一对：一个让接下来安静，一个在接下来某刻叫你。
+        // 五个档位覆盖绝大多数临场需求（煮面 / 番茄 / 会议前），要别的时长就去定时任务里建一条。
+        var quick = TrayMenu.SubMenu(Strings.Get("Tray_QuickRemind"), TrayGlyph.Log, menu.Renderer, menu.Font);
+        foreach (int m in new[] { 5, 15, 25, 30, 60 })
+        {
+            int mm = m;
+            quick.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Unit_Minutes", mm), TrayGlyph.Log, (s, e) => app.QuickReminder(mm)));
+        }
+        menu.Items.Add(quick);
         if (app.DndRemaining is TimeSpan left)
             menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_DndResume", (int)Math.Ceiling(left.TotalMinutes)), TrayGlyph.Run,
                 (s, e) => app.ResumeReminders()));

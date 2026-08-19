@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>अक्षर-दर-अक्षर टाइप करता है (नई लाइन = Enter)। फोकस वाली विंडो को भेजने के लिए प्रोसेस खाली रखें (सबसे विश्वसनीय)।</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>संदेश</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>वाचन</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>ध्वनि</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>हाँ/नहीं पुष्टि (हाँ = जारी, नहीं = समूह रद्द)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«हाँ» के बाद</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>इस रूप में दिखाएँ</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>क्रिया समूह चलाएँ</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>क्रिया समूह चलाएँ</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>स्वतः बंद (से)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>क्लिक न होने पर स्वयं बंद (0 = कभी नहीं; दोहराव रिमाइंडर: डिफ़ॉल्ट 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>क्लिक न होने पर स्वयं बंद (0: कार्ड = कभी नहीं, संवाद = 60 सेकंड)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>{0} मिनट बाद सेट, पर रिमाइंडर रुके हुए हैं — रुकावट खत्म होने पर बजेगा</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>आज के लिए छोड़ना रद्द: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>आज के लिए छोड़ा: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>{0} मिनट बाद रिमाइंडर सेट ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} मिनट पूरे हुए</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>आज छोड़ें</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>त्वरित रिमाइंडर</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>पुष्टि होने तक याद दिलाएँ</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>मिनट (0 = कोई दोहराव नहीं), तक</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, खाली = बिना सीमा)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, खाली = अधिकतम 20 बार दिखेगा)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>दोहराव चलाना, हर</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>मिनट (0 = बंद), तक</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, खाली = दिन का अंत)</value></data>

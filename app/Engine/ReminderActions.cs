@@ -17,6 +17,14 @@ public static class ReminderActions
     private static readonly object _speakLock = new();
     private static volatile bool _speakUnavailable;   // SAPI 建不出来：停用，后续 Speak 直接丢弃不入队
 
+    // 到点提示音。用系统「星号（信息）」音而不是自带 wav：不占体积、跟随用户的系统声音方案，
+    // 静音方案下自然不响（那正是用户的表态）。Play() 是异步的，不会拖住调用它的 UI 线程。
+    // 失败仅吞：没有声卡 / 远程桌面会话下响不出来，不该因此把提醒本身搅黄。
+    public static void Ding()
+    {
+        try { System.Media.SystemSounds.Asterisk.Play(); } catch { }
+    }
+
     public static void Speak(string text)
     {
         if (string.IsNullOrEmpty(text) || _speakUnavailable) return;

@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Karakter karakter yazar (yeni satır = Enter). Odaktaki pencereye göndermek için işlemi boş bırakın (en güvenilir).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Mesaj</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Sesli oku</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Ses</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Evet/Hayır onayla (Evet = devam, Hayır = grubu iptal)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«Evet»ten sonra</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Gösterim</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Eylem grubunu çalıştır</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Eylem grubunu çalıştır</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Otomatik kapat (sn)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>tıklanmazsa kendi kapanır (0 = asla; yinelenen hatırlatma: varsayılan 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>tıklanmazsa kendi kapanır (0: kart = asla, iletişim kutusu = 60 sn)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>{0} dk sonraya kuruldu, ama hatırlatmalar duraklatıldı — duraklatma bitince çalar</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Bugün atlama geri alındı: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Bugün atlandı: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>{0} dk sonraya hatırlatma kuruldu ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} dakika doldu</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Bugün atla</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Hızlı hatırlatma</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Onaylanana kadar hatırlat</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>dakikada bir (0 = yineleme yok), şuna kadar</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, boş = sınırsız)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, boş = en çok 20 bildirim)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Yinelenen çalıştırma, her</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>dk (0 = kapalı), şuna kadar</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, boş = gün sonu)</value></data>

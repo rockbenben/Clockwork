@@ -93,6 +93,14 @@ public sealed class Reminder
     public List<int> Days { get; set; } = new();
     public string Message { get; set; } = "";
     public bool Speak { get; set; }
+    // 到点时先响一声系统提示音（卡片与弹窗两种形态都响；静默组不响——「静默」的字面意思）。
+    // 默认关：升级不该让所有存量提醒突然开始出声。内置样例开着，新用户一上手就是有声的。
+    // 卡片不抢焦点、不置顶，人在看别的屏幕就是错过——朗读能补，但那是为了"听清内容"，
+    // 而这里要的只是"抬头看一眼"。用 SystemSounds 而非自带音频：不增体积，且跟随用户的系统声音方案。
+    public bool Sound { get; set; }
+    // 托盘「快速提醒」建出来的一次性条目：响完即从配置里删掉，而不是像普通「仅一次」那样取消勾选留行。
+    // 不删的话，用几周就在定时任务列表里攒一堆"25 分钟到了"的死行，得手动清。
+    public bool Temporary { get; set; }
     public OnYes OnYes { get; set; } = new();
     public int GraceMinutes { get; set; } = 5;
     // 错过必补：到点没弹(PC 休眠/关机/程序没跑)时，下次程序在跑且当天还没弹过就补弹一次，不受 grace 窗口上限约束。
@@ -199,10 +207,12 @@ public sealed class RootConfig
     // 每月那条是唯一演示「按月」周期的样例——原来三条全是每天/工作日。同样默认不启用。
     public static List<Reminder> DefaultReminders() => new()
     {
-        new Reminder { Time = "10:00", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemWater"), Enabled = false },
-        new Reminder { Time = "17:30", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemWrapUp"), Speak = true, Enabled = false },
-        new Reminder { Time = "23:00", Message = Strings.Get("Smp_RemSleep"), Enabled = false },
-        new Reminder { Time = "09:00", RecurType = "monthly", MonthlyDay = 1, Message = Strings.Get("Smp_RemBills"), Enabled = false },
+        // 样例一律开提示音：卡片不抢焦点、不置顶，静默弹出等于没弹——新用户第一次见到提醒就该听见它。
+        // 模型默认仍是关（Reminder.Sound=false），升级的存量提醒不会突然集体出声。
+        new Reminder { Time = "10:00", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemWater"), Sound = true, Enabled = false },
+        new Reminder { Time = "17:30", Days = new() { 1, 2, 3, 4, 5 }, Message = Strings.Get("Smp_RemWrapUp"), Speak = true, Sound = true, Enabled = false },
+        new Reminder { Time = "23:00", Message = Strings.Get("Smp_RemSleep"), Sound = true, Enabled = false },
+        new Reminder { Time = "09:00", RecurType = "monthly", MonthlyDay = 1, Message = Strings.Get("Smp_RemBills"), Sound = true, Enabled = false },
     };
 
     // 首次预置的动作组：直接从模板里挑，避免同一套步骤在两处各写一份、日后漂移。

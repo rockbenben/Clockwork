@@ -5,7 +5,8 @@ using Clockwork.I18n;
 namespace Clockwork.Views;
 
 // 提醒弹窗：文本 + 是/否（或确定）+ 稍后 + 可选自动关闭。
-// 返回 (Action, SnoozeMinutes)：Action ∈ yes/no/ok/""(超时未确认)；SnoozeMinutes 非空=点了稍后。
+// 返回 (Action, SnoozeMinutes)：Action ∈ yes/no/ok/snooze(手点稍后)/autosnooze(超时自动稍后)/""(超时未确认)；
+// SnoozeMinutes 非空=稍后分钟数。手点与超时必须分开报——上层只对 autosnooze 计数封顶（人点的不设上限）。
 public partial class ReminderPopupWindow : Window
 {
     public string Action { get; private set; } = "";
@@ -61,7 +62,8 @@ public partial class ReminderPopupWindow : Window
         {
             _autoTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(autoDismissSeconds) };
             // 超时：有 timeoutSnoozeMinutes 就自动「稍后」（无人应答≠已处理）；否则 ""=超时未确认（重复催促续催）。
-            _autoTimer.Tick += (s, e) => { if (timeoutSnoozeMinutes is int m) Finish("snooze", m); else Finish(""); };
+            // autosnooze 而非 snooze：上层要对无人应答计数封顶，混用会把手点的稍后也算进上限、或让自动的永远不封顶。
+            _autoTimer.Tick += (s, e) => { if (timeoutSnoozeMinutes is int m) Finish("autosnooze", m); else Finish(""); };
             _autoTimer.Start();
         }
     }

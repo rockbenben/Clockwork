@@ -22,10 +22,10 @@ public class ReminderEventTests
     public void ShouldFire_needs_enabled_and_a_matching_trigger()
     {
         var r = new Reminder { Trigger = "unlock", Enabled = true };
-        Assert.True(ReminderEvent.ShouldFire(r, "unlock", Mon));
-        Assert.False(ReminderEvent.ShouldFire(r, "lock", Mon));     // 别的事件不该把它带响
+        Assert.True(ReminderEvent.ShouldFire(r, "unlock", Mon, null));
+        Assert.False(ReminderEvent.ShouldFire(r, "lock", Mon, null));     // 别的事件不该把它带响
         r.Enabled = false;
-        Assert.False(ReminderEvent.ShouldFire(r, "unlock", Mon));
+        Assert.False(ReminderEvent.ShouldFire(r, "unlock", Mon, null));
     }
 
     // 星期过滤对事件同样有效——「工作日解锁时打卡」是这套东西最常见的用法。
@@ -33,9 +33,9 @@ public class ReminderEventTests
     public void ShouldFire_respects_the_weekday_filter()
     {
         var r = new Reminder { Trigger = "unlock", Days = new() { 1, 2, 3, 4, 5 } };
-        Assert.True(ReminderEvent.ShouldFire(r, "unlock", Mon));
-        Assert.False(ReminderEvent.ShouldFire(r, "unlock", Sat));
-        Assert.True(ReminderEvent.ShouldFire(new Reminder { Trigger = "unlock" }, "unlock", Sat));   // 不限星期
+        Assert.True(ReminderEvent.ShouldFire(r, "unlock", Mon, null));
+        Assert.False(ReminderEvent.ShouldFire(r, "unlock", Sat, null));
+        Assert.True(ReminderEvent.ShouldFire(new Reminder { Trigger = "unlock" }, "unlock", Sat, null));   // 不限星期
     }
 
     [Fact]

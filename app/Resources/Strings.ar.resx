@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>يكتب حرفًا حرفًا (سطر جديد = Enter). اترك العملية فارغة للإرسال إلى النافذة النشطة (الأكثر موثوقية).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>رسالة</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>قراءة صوتية</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>صوت</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>تأكيد نعم/لا (نعم = متابعة، لا = إلغاء المجموعة)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>بعد «نعم»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>طريقة العرض</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>تشغيل مجموعة الإجراءات</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>تشغيل مجموعة إجراءات</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>إغلاق تلقائي (ث)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>يُغلق تلقائيًا دون نقر (0 = أبدًا؛ التذكير المتكرر: 60 افتراضيًا)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>يُغلق تلقائيًا دون نقر (0: البطاقة = أبدًا، مربع الحوار = 60 ثانية)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>تم الضبط بعد {0} دقيقة، لكن التذكيرات موقوفة مؤقتًا — سينبّه بعد انتهاء الإيقاف</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>تم التراجع عن تخطّي اليوم: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>تم تخطّيه اليوم: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>تذكير بعد {0} دقيقة ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>انقضت {0} دقيقة</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>تخطَّ اليوم</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>تذكير سريع</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>التذكير حتى التأكيد</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>دقيقة (0 = بلا تكرار)، حتى</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = بلا حد)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = 20 ظهورًا كحد أقصى)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>تشغيل دوري</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>دقيقة (0 = إيقاف)، حتى</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = نهاية اليوم)</value></data>

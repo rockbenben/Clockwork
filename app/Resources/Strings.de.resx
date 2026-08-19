@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Tippt Zeichen für Zeichen (Zeilenumbruch = Enter). Zielprozess leer lassen, um an das aktive Fenster zu senden (am zuverlässigsten).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Nachricht</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Vorlesen</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>Ton</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Ja/Nein-Bestätigung (Ja = weiter, Nein = Gruppe abbrechen)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Nach „Ja“</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Anzeigen als</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Aktionsgruppe ausführen</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Aktionsgruppe ausführen</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Auto-Schließen (s)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>schließt sich ohne Klick (0 = nie; wiederholte Erinnerung: Standard 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>schließt sich ohne Klick (0: Karte = nie, Dialog = 60 s)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Erinnerung in {0} Min. gesetzt, aber Erinnerungen pausieren — sie meldet sich erst danach</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Aussetzen für heute aufgehoben: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>Heute ausgesetzt: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>Erinnerung in {0} Min. gesetzt ({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0} Minuten sind um</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>Heute aussetzen</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>Schnellerinnerung</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Mahnen bis Bestätigung</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>Min (0 = keine Wiederholung), bis</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, leer = unbegrenzt)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, leer = max. 20 Meldungen)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>Wiederkehrender Lauf, alle</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>Min (0 = aus), bis</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, leer = Tagesende)</value></data>

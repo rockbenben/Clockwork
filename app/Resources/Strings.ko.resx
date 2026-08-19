@@ -160,6 +160,7 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>한 글자씩 입력(줄바꿈=Enter). 대상 프로세스를 비우면 포커스된 창으로 전송(가장 안정적).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>메시지</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>음성 낭독</value></data>
+  <data name="Ed_Sound" xml:space="preserve"><value>알림음</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>예/아니오 확인(예=계속, 아니오=그룹 중단)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>예 누른 후</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>표시 방식</value></data>
@@ -230,10 +231,17 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>동작 그룹 실행</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>동작 그룹 실행</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>자동 닫기(초)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>누르지 않으면 자동으로 닫힘(0=닫지 않음; 반복 알림 기본 60)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>누르지 않으면 자동으로 닫힘(0: 카드=닫지 않음, 대화 상자=60초)</value></data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>{0}분 뒤로 설정했지만 알림이 일시 중지 상태입니다. 해제된 뒤에 울립니다</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>오늘 건너뛰기 해제: {0}</value></data>
+  <data name="Toast_SkipToday" xml:space="preserve"><value>오늘 건너뜀: {0}</value></data>
+  <data name="Toast_QuickSet" xml:space="preserve"><value>{0}분 뒤 알림 설정됨({1})</value></data>
+  <data name="Quick_Done" xml:space="preserve"><value>{0}분이 지났습니다</value></data>
+  <data name="Btn_SkipToday" xml:space="preserve"><value>오늘 건너뛰기</value></data>
+  <data name="Tray_QuickRemind" xml:space="preserve"><value>빠른 알림</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>확인할 때까지 재촉</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>분마다(0=반복 안 함), 다음 시각까지</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, 비우면 무제한)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, 비우면 최대 20회 표시)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>반복 실행</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>분마다(0=끔), 다음 시각까지</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, 비우면 당일 종료)</value></data>

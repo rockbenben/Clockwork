@@ -15,6 +15,7 @@ public static class ReminderStateStore
         public string LastFiredDate { get; set; } = "";
         public string SnoozeUntil { get; set; } = "";   // ISO8601("o") 或空
         public string NextIntervalAt { get; set; } = "";   // ISO8601("o") 或空——循环运行是全天日程，不落盘等于中午重启丢半天
+        public string SkippedDate { get; set; } = "";   // yyyy-MM-dd 或空——手动「今天不再提醒」，不落盘则重启一次就白跳了
     }
 
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = true };
@@ -39,12 +40,14 @@ public static class ReminderStateStore
         var map = new Dictionary<string, Persisted>();
         foreach (var (id, st) in states)
         {
-            if (string.IsNullOrEmpty(st.LastFiredDate) && st.SnoozeUntil == null && st.NextIntervalAt == null) continue;   // 无耐久内容不写
+            if (string.IsNullOrEmpty(st.LastFiredDate) && st.SnoozeUntil == null && st.NextIntervalAt == null
+                && string.IsNullOrEmpty(st.SkippedDate)) continue;   // 无耐久内容不写
             map[id] = new Persisted
             {
                 LastFiredDate = st.LastFiredDate,
                 SnoozeUntil = st.SnoozeUntil?.ToString("o", CultureInfo.InvariantCulture) ?? "",
                 NextIntervalAt = st.NextIntervalAt?.ToString("o", CultureInfo.InvariantCulture) ?? "",
+                SkippedDate = st.SkippedDate,
             };
         }
         var json = JsonSerializer.Serialize(map, JsonOpts);
@@ -125,7 +128,7 @@ public static class ReminderStateStore
             foreach (var (id, p) in map)
             {
                 if (p == null || string.IsNullOrWhiteSpace(id)) continue;
-                var st = new ReminderState { LastFiredDate = p.LastFiredDate ?? "" };
+                var st = new ReminderState { LastFiredDate = p.LastFiredDate ?? "", SkippedDate = p.SkippedDate ?? "" };
                 if (!string.IsNullOrEmpty(p.SnoozeUntil) &&
                     DateTime.TryParse(p.SnoozeUntil, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var su))
                     st.SnoozeUntil = su;
