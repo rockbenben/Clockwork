@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Запуск от имени администратора</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Целью может быть программа (полный путь или просто имя), ярлык, скрипт, папка, URL, документ или протокол вроде ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Сочетание клавиш</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план. Комбинации, занятые самой Windows (Win+D, Win+6…), перехватить нельзя — дважды щёлкните поле и введите вручную.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план. Комбинации, занятые самой Windows (Win+D, Win+6…), перехватить нельзя — дважды щёлкните поле и введите вручную. Можно также ввести WheelUp / WheelDown для прокрутки (вместе с числом повторов — N щелчков; Ctrl+WheelDown масштабирует).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Действие</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Громкость (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Процесс</value></data>

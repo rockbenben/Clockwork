@@ -35,6 +35,20 @@ public static class KeyCombo
         return new ParsedCombo { Modifiers = mods, Key = key, UseWin = mods.Contains("Win") };
     }
 
+    // 主键是不是滚轮伪键，返回滚动格数：WheelUp=+1 / WheelDown=-1 / 其它=0。
+    //
+    // 做成「组合键里的一个主键」而不是新开一种步骤类型，是为了白拿现成的四样东西：
+    // 「重复次数」（滑 N 次直接就有）、「执行后延时」（两格之间的节奏）、修饰键解析（Ctrl+WheelDown 缩放
+    // 免费得到）、以及编辑器那一行 + 列表摘要 + 校验通路。新开类型要再走一遍这四样，还要加 18 份文案。
+    // 滚轮不是键盘事件，注入走 Win32.SendWheel（鼠标通道）——但它只能"发"，不能"绑"：
+    // RegisterHotKey 表达不了滚轮，所以全局热键那条路照旧只认 ToHotkeyParams，别把这个伪键放进去。
+    public static int WheelNotches(string? key) => (key ?? "").Trim().ToLowerInvariant() switch
+    {
+        "wheelup" => 1,
+        "wheeldown" => -1,
+        _ => 0,
+    };
+
     // 组合串里是否有拼错/多余的修饰键段。ParseCombo 对不认识的段是「当成主键」，后面的段再把它覆盖掉——
     // 于是 "Ctrl+Shft+A" 静默变成 Ctrl+A、"Wn+D" 静默变成 D：框里显示一套、发出去另一套。
     // 捕捉出来的串不会畸形，手输的会，故手输校验必须过这一关。

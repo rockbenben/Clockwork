@@ -78,7 +78,7 @@ public partial class StepEditorWindow : Window
         // HasUnknownModifier：手输才需要的一道关。ToHotkeyParams 单独用不够——它对 "Ctrl+Shft+A" 也返回非空
         // （Shft 被当主键、又被 A 覆盖），结果框里显示 Ctrl+Shft+A、实际发 Ctrl+A。捕捉出来的串不会畸形。
         KeyCaptureBox.Attach(ComboBox2, Native.HotkeyCapture.KeyCaptureMode.SendKeys,
-            c => Native.KeyInput.ToHotkeyParams(c) != null && !KeyCombo.HasUnknownModifier(c),
+            Native.KeyInput.CanSendCombo,
             () => ComboBox2.Text, _ => { }, allowTyping: true);
     }
 

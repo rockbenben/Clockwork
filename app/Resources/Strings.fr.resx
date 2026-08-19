@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Exécuter en administrateur</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La cible peut être un programme (chemin complet ou nom seul), un raccourci, un script, un dossier, une URL, un document ou un protocole comme ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Raccourci</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan. Les combinaisons réservées par Windows (Win+D, Win+6…) ne peuvent pas être capturées — double-cliquez sur le champ pour les saisir.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan. Les combinaisons réservées par Windows (Win+D, Win+6…) ne peuvent pas être capturées — double-cliquez sur le champ pour les saisir. Vous pouvez aussi saisir WheelUp / WheelDown pour faire défiler (avec le nombre de répétitions pour N crans ; Ctrl+WheelDown zoome).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Action</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Processus</value></data>

@@ -42,6 +42,10 @@ public static class Win32
     [StructLayout(LayoutKind.Sequential)]
     public struct INPUT { public int type; public InputUnion U; }
 
+    private const int INPUT_MOUSE = 0;
+    private const uint MOUSEEVENTF_WHEEL = 0x0800;
+    private const int WHEEL_DELTA = 120;   // 一格滚轮的标准刻度
+
     public const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
     public const uint KEYEVENTF_KEYUP = 0x0002;
     public const uint KEYEVENTF_UNICODE = 0x0004;
@@ -113,6 +117,25 @@ public static class Win32
         foreach (var m in mods) list.Add(MakeKey(m, false));
         list.Add(MakeKey(vk, false));
         list.Add(MakeKey(vk, true));
+        for (int i = mods.Length - 1; i >= 0; i--) list.Add(MakeKey(mods[i], true));
+        var arr = list.ToArray();
+        return SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT)));
+    }
+
+    // 滚轮：修饰键按下 → 一格滚轮 → 修饰键逆序抬起，与 SendCombo 同样一次原子注入
+    //（Ctrl+滚轮缩放靠的就是"滚的那一刻 Ctrl 确实按着"，拆成两次 SendInput 中间可能被别的输入插进来）。
+    // 一次只发一格：mouseData 填 120*N 理论上等于 N 格，但不少应用只按"来了一条消息"处理、仍只走一步；
+    // 发 N 条独立事件才是普遍兼容的做法——次数交给步骤自带的「重复次数」，这里不自己造循环。
+    // notches>0 向上（远离用户），<0 向下。返回实际注入的事件数（0 = 被 UIPI/安全桌面拒绝，与 SendCombo 同）。
+    public static uint SendWheel(ushort[] mods, int notches)
+    {
+        var list = new List<INPUT>();
+        foreach (var m in mods) list.Add(MakeKey(m, false));
+        list.Add(new INPUT
+        {
+            type = INPUT_MOUSE,
+            U = new InputUnion { mi = new MOUSEINPUT { mouseData = unchecked((uint)(WHEEL_DELTA * notches)), dwFlags = MOUSEEVENTF_WHEEL } },
+        });
         for (int i = mods.Length - 1; i >= 0; i--) list.Add(MakeKey(mods[i], true));
         var arr = list.ToArray();
         return SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT)));

@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Yönetici olarak çalıştır</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Hedef bir program (tam yol veya yalnızca ad), kısayol, betik, klasör, URL, belge ya da ms-settings: gibi bir protokol olabilir.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Kısayol</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın. Kaydırmak için WheelUp / WheelDown da yazabilirsiniz (tekrar sayısıyla N tık; Ctrl+WheelDown yakınlaştırır).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Eylem</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Ses düzeyi (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>İşlem</value></data>

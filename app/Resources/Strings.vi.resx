@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Chạy với quyền quản trị</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Mục tiêu có thể là chương trình (đường dẫn đầy đủ hoặc chỉ tên), lối tắt, tập lệnh, thư mục, URL, tài liệu hoặc giao thức như ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Phím tắt</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập. Bạn cũng có thể gõ WheelUp / WheelDown để cuộn (kết hợp số lần lặp để cuộn N nấc; Ctrl+WheelDown để phóng to thu nhỏ).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Hành động</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Âm lượng (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Tiến trình</value></data>

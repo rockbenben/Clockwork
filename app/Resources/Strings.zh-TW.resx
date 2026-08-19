@@ -148,7 +148,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>以系統管理員身分執行</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>目標可填：程式（完整路徑或裸名）/ 捷徑 / 指令碼 / 資料夾 / 網址 / 文件 / ms-settings: 等通訊協定。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>組合鍵</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。傳送給目前焦點視窗，請先確保目標在最前。 Win+D、Win+6 等被 Windows 佔用的組合擷取不到，雙擊本框可手動輸入。</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。傳送給目前焦點視窗，請先確保目標在最前。 Win+D、Win+6 等被 Windows 佔用的組合擷取不到，雙擊本框可手動輸入。 也可手輸 WheelUp / WheelDown 模擬滾輪（配「重複次數」滑 N 次；Ctrl+WheelDown 縮放）。</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>動作</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>音量(0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>處理程序名稱</value></data>

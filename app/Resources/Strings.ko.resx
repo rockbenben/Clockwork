@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>관리자 권한으로 실행</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>대상에는 프로그램(전체 경로 또는 이름만), 바로 가기, 스크립트, 폴더, URL, 문서, ms-settings: 같은 프로토콜을 넣을 수 있습니다.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>단축키</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>예: Win+D / Alt+K / Ctrl+Enter / F5. 포커스된 창으로 전송되므로 대상을 먼저 앞으로 가져오세요. Win+D, Win+6 처럼 Windows가 선점한 조합은 캡처되지 않습니다. 상자를 두 번 클릭하면 직접 입력할 수 있습니다.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>예: Win+D / Alt+K / Ctrl+Enter / F5. 포커스된 창으로 전송되므로 대상을 먼저 앞으로 가져오세요. Win+D, Win+6 처럼 Windows가 선점한 조합은 캡처되지 않습니다. 상자를 두 번 클릭하면 직접 입력할 수 있습니다. WheelUp / WheelDown을 입력하면 휠 스크롤이 됩니다(반복 횟수와 함께 쓰면 N칸, Ctrl+WheelDown은 확대/축소).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>동작</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>볼륨(0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>프로세스 이름</value></data>

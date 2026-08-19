@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Esegui come amministratore</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La destinazione può essere un programma (percorso completo o solo il nome), un collegamento, uno script, una cartella, un URL, un documento o un protocollo come ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Scorciatoia</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle. Puoi anche digitare WheelUp / WheelDown per scorrere (con il numero di ripetizioni per N scatti; Ctrl+WheelDown fa zoom).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Azione</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Processo</value></data>

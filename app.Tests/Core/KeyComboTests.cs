@@ -3,6 +3,28 @@ using Xunit;
 
 public class KeyComboTests
 {
+    [Theory]
+    [InlineData("WheelUp", 1)]
+    [InlineData("WheelDown", -1)]
+    [InlineData("wheeldown", -1)]      // 手输不分大小写
+    [InlineData(" WheelUp ", 1)]       // 捕捉/手输都可能带空白
+    [InlineData("PageDown", 0)]
+    [InlineData("Wheel", 0)]           // 半个词不算，免得拼错的当成滚轮静默发出去
+    [InlineData("", 0)]
+    [InlineData(null, 0)]
+    public void WheelNotches_recognises_only_the_two_pseudo_keys(string? key, int expected)
+        => Assert.Equal(expected, KeyCombo.WheelNotches(key));
+
+    [Fact]
+    public void Wheel_pseudo_key_keeps_its_modifiers()
+    {
+        // Ctrl+WheelDown 缩放靠的就是修饰键照常解析——伪键只替换主键那一段，不该吃掉修饰键。
+        var p = KeyCombo.ParseCombo("Ctrl+WheelDown");
+        Assert.Equal(-1, KeyCombo.WheelNotches(p.Key));
+        Assert.Contains("Ctrl", p.Modifiers);
+        Assert.False(KeyCombo.HasUnknownModifier("Ctrl+WheelDown"));   // 别被当成拼错的修饰键
+    }
+
     [Fact]
     public void Parse_ctrl_alt_key()
     {

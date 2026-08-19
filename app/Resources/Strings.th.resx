@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>เรียกใช้ในฐานะผู้ดูแล</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>เป้าหมายใส่ได้ทั้งโปรแกรม (พาธเต็มหรือแค่ชื่อ) ทางลัด สคริปต์ โฟลเดอร์ URL เอกสาร หรือโปรโตคอลอย่าง ms-settings:</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>ทางลัด</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง พิมพ์ WheelUp / WheelDown เพื่อเลื่อนล้อได้ด้วย (ใช้คู่กับจำนวนครั้งเพื่อเลื่อน N ระดับ; Ctrl+WheelDown เพื่อย่อขยาย)</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>การกระทำ</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>ระดับเสียง (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>โปรเซส</value></data>

@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Als Administrator ausführen</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Als Ziel möglich: Programm (voller Pfad oder bloßer Name), Verknüpfung, Skript, Ordner, URL, Dokument oder ein Protokoll wie ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Tastenkürzel</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen. Von Windows belegte Kombinationen (Win+D, Win+6 …) lassen sich nicht aufzeichnen – doppelklicke das Feld, um sie einzutippen.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen. Von Windows belegte Kombinationen (Win+D, Win+6 …) lassen sich nicht aufzeichnen – doppelklicke das Feld, um sie einzutippen. Sie können auch WheelUp / WheelDown eintippen, um zu scrollen (mit der Wiederholungszahl für N Rastungen; Ctrl+WheelDown zoomt).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Aktion</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Lautstärke (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Prozess</value></data>

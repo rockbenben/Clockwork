@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Jalankan sebagai administrator</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Target bisa berupa program (path lengkap atau namanya saja), pintasan, skrip, folder, URL, dokumen, atau protokol seperti ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Pintasan</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu. Kombinasi milik Windows sendiri (Win+D, Win+6…) tidak bisa ditangkap — klik dua kali kotak ini untuk mengetiknya.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu. Kombinasi milik Windows sendiri (Win+D, Win+6…) tidak bisa ditangkap — klik dua kali kotak ini untuk mengetiknya. Anda juga bisa mengetik WheelUp / WheelDown untuk menggulir (padukan dengan jumlah pengulangan untuk N takik; Ctrl+WheelDown untuk zoom).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Aksi</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Proses</value></data>

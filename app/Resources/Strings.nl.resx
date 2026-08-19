@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Als beheerder uitvoeren</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Het doel kan een programma zijn (volledig pad of alleen de naam), een snelkoppeling, een script, een map, een URL, een document of een protocol zoals ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Sneltoets</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Bijv. Win+D / Alt+K / Ctrl+Enter / F5. Gaat naar het venster met focus; haal eerst het doel naar voren. Combinaties die Windows zelf gebruikt (Win+D, Win+6…) kun je niet opnemen — dubbelklik op het vak om ze te typen.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Bijv. Win+D / Alt+K / Ctrl+Enter / F5. Gaat naar het venster met focus; haal eerst het doel naar voren. Combinaties die Windows zelf gebruikt (Win+D, Win+6…) kun je niet opnemen — dubbelklik op het vak om ze te typen. Je kunt ook WheelUp / WheelDown typen om te scrollen (met het herhaalaantal voor N klikken; Ctrl+WheelDown zoomt).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Actie</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Proces</value></data>

@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Ejecutar como administrador</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>El destino puede ser un programa (ruta completa o solo el nombre), un acceso directo, un script, una carpeta, una URL, un documento o un protocolo como ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Atajo</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ej.: Win+D / Alt+K / Ctrl+Enter / F5. Se envía a la ventana con foco; pon el destino al frente primero. Las combinaciones que usa Windows (Win+D, Win+6…) no se pueden capturar; haz doble clic en el cuadro para escribirlas.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ej.: Win+D / Alt+K / Ctrl+Enter / F5. Se envía a la ventana con foco; pon el destino al frente primero. Las combinaciones que usa Windows (Win+D, Win+6…) no se pueden capturar; haz doble clic en el cuadro para escribirlas. También puedes escribir WheelUp / WheelDown para desplazar (con el número de repeticiones para N muescas; Ctrl+WheelDown hace zoom).</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Acción</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volumen (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Proceso</value></data>
