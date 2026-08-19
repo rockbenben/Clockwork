@@ -5,6 +5,24 @@ using Xunit;
 public class ReminderStateStoreTests
 {
     [Fact]
+    public void SkippedDate_survives_a_round_trip_on_its_own()
+    {
+        // 「今天不再」必须扛得住重启，否则重启一次就白跳了。它还是唯一可能单独存在的耐久字段
+        // （SkipToday 会把 SnoozeUntil/NextIntervalAt 一起清成 null），所以 Save 的「无耐久内容不写」
+        // 那道判断必须认它——不认的话整行被跳过，跳过状态无声消失。
+        var path = Path.Combine(Path.GetTempPath(), "cw_state_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var states = new Dictionary<string, ReminderState> { ["a"] = new ReminderState { SkippedDate = "2026-08-20" } };
+            ReminderStateStore.Save(path, states, durable: true);
+            var loaded = ReminderStateStore.Load(path);
+            Assert.True(loaded.ContainsKey("a"));
+            Assert.Equal("2026-08-20", loaded["a"].SkippedDate);
+        }
+        finally { try { File.Delete(path); } catch { } }
+    }
+
+    [Fact]
     public void RoundTrip_persists_durable_only()
     {
         var path = Path.Combine(Path.GetTempPath(), "cw_state_" + Guid.NewGuid().ToString("N") + ".json");

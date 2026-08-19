@@ -105,6 +105,26 @@ public class ConfigStoreTests : IDisposable
     }
 
     [Fact]
+    public void Reminder_sound_and_temporary_survive_a_round_trip()
+    {
+        // 两个都是「悄悄丢了也看不出来」的布尔：sound 丢了只是提醒从此没声音，temporary 丢了
+        // 会让快速提醒响完不自删、在列表里堆死行。序列化用的是 camelCase 策略，字段名一改就静默归默认值。
+        var path = Path.Combine(_dir, "flags.json");
+        var cfg = new RootConfig();
+        cfg.Reminders.Add(new Reminder { Message = "m", Sound = true, Temporary = true });
+        ConfigStore.Write(cfg, path);
+        Assert.Contains("\"sound\": true", File.ReadAllText(path));       // camelCase 落盘，不是 Sound
+        var back = ConfigStore.Read(path, out _);
+        Assert.True(back.Reminders[0].Sound);
+        Assert.True(back.Reminders[0].Temporary);
+        // 旧配置（没有这两个键）读入应为 false，而不是抛或变 true——升级不该给存量提醒平白加上声音。
+        File.WriteAllText(path, "{\"reminders\":[{\"id\":\"x\",\"message\":\"old\"}]}");
+        var old = ConfigStore.Read(path, out _);
+        Assert.False(old.Reminders[0].Sound);
+        Assert.False(old.Reminders[0].Temporary);
+    }
+
+    [Fact]
     public void Read_clean_file_reports_no_normalization()
     {
         var path = Path.Combine(_dir, "clean.json");
