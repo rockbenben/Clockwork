@@ -25,7 +25,7 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 ## Nó làm được gì
 
 - 🚀 **Danh sách khởi động** — mở lần lượt các ứng dụng thường dùng khi đăng nhập, mỗi bước có độ trễ, điều kiện ngày trong tuần và kiểu cửa sổ riêng; tiện thể đóng, đưa ra trước hoặc tắt tiếng. Các bước còn có thể phụ thuộc vào trạng thái máy: chỉ khi một ứng dụng đang chạy (hoặc không chạy), chỉ khi cắm sạc hoặc chỉ khi dùng pin, chỉ khi một tệp hay thư mục tồn tại.
-- ⏰ **Tác vụ theo lịch** — một lời nhắc đúng giờ, đọc to nếu bạn muốn, hoặc một nhóm thao tác chạy im lặng. Nhấn **Có** có thể chạy chương trình, mở tệp hay URL, hoặc kích hoạt một nhóm. Hoặc để một sự kiện kích hoạt thay cho đồng hồ — khi mở khóa, khi khóa máy, khi thức khỏi chế độ ngủ, sau N phút không dùng máy, khi cắm hay rút sạc, hoặc khi pin yếu.
+- ⏰ **Tác vụ theo lịch** — một lời nhắc đúng giờ, đọc to nếu bạn muốn, hoặc một nhóm thao tác chạy im lặng. Nhấn **Có** có thể chạy chương trình, mở tệp hay URL, hoặc kích hoạt một nhóm. Hoặc để một sự kiện kích hoạt thay cho đồng hồ — khi mở khóa, khi khóa máy, khi thức khỏi chế độ ngủ, sau N phút không dùng máy, khi cắm hay rút sạc, hoặc khi pin yếu. Chỉ cần một lần thôi? Khay hệ thống có **nhắc nhanh** — từ 5 đến 60 phút, báo một lần rồi tự xóa.
 - 🧹 **Mục khởi động hệ thống** — mọi thứ tự khởi động trên máy gom vào một danh sách: tắt những gì bạn không cần (vô hiệu hóa chứ không xóa) hoặc tiếp quản vào danh sách khởi động của riêng bạn.
 - 🎛️ **Nhóm thao tác** — gói một chuỗi việc quen thuộc (Tập trung / Họp / Kết thúc / Trước khi ngủ…) và kích hoạt từ khay, một **phím tắt toàn cục**, danh sách khởi động hoặc một tác vụ theo lịch. Có sẵn mẫu dựng sẵn.
 

@@ -25,7 +25,7 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 ## What it does
 
 - 🚀 **Startup list** — open your everyday apps in order at login, with per-step delays, weekday conditions and window styles; close, focus or mute things along the way. Steps can also be gated on what the machine is doing: only while an app is running (or isn't), only on AC or only on battery, only when a file or folder exists.
-- ⏰ **Scheduled tasks** — a reminder on time, spoken if you like, or an action group run silently. Clicking **Yes** can launch a program, open a file or URL, or fire a group. Or trigger on an event instead of a clock — on unlock, on lock, on wake from sleep, after N minutes idle, when the charger goes in or out, or when the battery runs low.
+- ⏰ **Scheduled tasks** — a reminder on time, spoken if you like, or an action group run silently. Clicking **Yes** can launch a program, open a file or URL, or fire a group. Or trigger on an event instead of a clock — on unlock, on lock, on wake from sleep, after N minutes idle, when the charger goes in or out, or when the battery runs low. Need something once, right now? The tray has a **quick reminder** — 5 to 60 minutes, fires once and deletes itself.
 - 🧹 **System startup items** — everything on your PC that auto-starts, in one list: switch off what you don't need (disabled, not deleted) or take it over into your own startup list.
 - 🎛️ **Action groups** — bundle a routine (Focus / Meeting / Wrap-up / Bedtime…) and fire it from the tray, a **global hotkey**, the startup list or a scheduled task. Templates included.
 
