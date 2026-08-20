@@ -43,7 +43,12 @@ public static class Win32
     public struct INPUT { public int type; public InputUnion U; }
 
     private const int INPUT_MOUSE = 0;
-    private const uint MOUSEEVENTF_WHEEL = 0x0800;
+    private const uint MOUSEEVENTF_WHEEL = 0x0800, MOUSEEVENTF_HWHEEL = 0x1000;
+    private const uint MOUSEEVENTF_LEFTDOWN = 0x0002, MOUSEEVENTF_LEFTUP = 0x0004;
+    private const uint MOUSEEVENTF_RIGHTDOWN = 0x0008, MOUSEEVENTF_RIGHTUP = 0x0010;
+    private const uint MOUSEEVENTF_MIDDLEDOWN = 0x0020, MOUSEEVENTF_MIDDLEUP = 0x0040;
+    private const uint MOUSEEVENTF_XDOWN = 0x0080, MOUSEEVENTF_XUP = 0x0100;
+    private const uint XBUTTON1 = 1, XBUTTON2 = 2;   // 侧键：后退 / 前进
     private const int WHEEL_DELTA = 120;   // 一格滚轮的标准刻度
 
     public const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
@@ -126,16 +131,42 @@ public static class Win32
     //（Ctrl+滚轮缩放靠的就是"滚的那一刻 Ctrl 确实按着"，拆成两次 SendInput 中间可能被别的输入插进来）。
     // 一次只发一格：mouseData 填 120*N 理论上等于 N 格，但不少应用只按"来了一条消息"处理、仍只走一步；
     // 发 N 条独立事件才是普遍兼容的做法——次数交给步骤自带的「重复次数」，这里不自己造循环。
-    // notches>0 向上（远离用户），<0 向下。返回实际注入的事件数（0 = 被 UIPI/安全桌面拒绝，与 SendCombo 同）。
-    public static uint SendWheel(ushort[] mods, int notches)
+    // notches>0 向上/向右，<0 向下/向左（与 Windows 的 mouseData 符号约定一致）。返回实际注入的事件数（0 = 被 UIPI/安全桌面拒绝，与 SendCombo 同）。
+    public static uint SendWheel(ushort[] mods, int notches, bool horizontal = false)
     {
         var list = new List<INPUT>();
         foreach (var m in mods) list.Add(MakeKey(m, false));
-        list.Add(new INPUT
+        list.Add(MakeMouse(horizontal ? MOUSEEVENTF_HWHEEL : MOUSEEVENTF_WHEEL, unchecked((uint)(WHEEL_DELTA * notches))));
+        for (int i = mods.Length - 1; i >= 0; i--) list.Add(MakeKey(mods[i], true));
+        var arr = list.ToArray();
+        return SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT)));
+    }
+
+    private static INPUT MakeMouse(uint flags, uint data = 0)
+        => new() { type = INPUT_MOUSE, U = new InputUnion { mi = new MOUSEINPUT { mouseData = data, dwFlags = flags } } };
+
+    // 鼠标按键：修饰键按下 → 按下/抬起 ×clicks → 修饰键逆序抬起，同样一次原子注入。
+    // 不带坐标：SendInput 的按键事件作用在指针当前位置，本程序不挪指针（见 KeyCombo.Mouse 的注释）。
+    // 双击靠同一批里连发两组按下/抬起——同一次 SendInput 内的时间差远小于系统双击间隔，稳定成对。
+    // 侧键(Back/Forward)的按下与抬起都要带 mouseData 指明是哪个 X 键，漏了会被当成未知 X 键丢弃。
+    // 返回实际注入的事件数（0 = 被 UIPI/安全桌面拒绝，与 SendCombo/SendWheel 同）。
+    // button 取 Core.MouseButton 的**数值**（Left=1 Right=2 Middle=3 Back=4 Forward=5）。
+    // 有意不直接收那个枚举：Win32 这层是薄薄一层 P/Invoke，不该反向依赖模型层。
+    // 代价是这份对应关系靠数值隐式对齐——枚举一旦重排就会静默错位（右键变中键这种），
+    // 故由 Win32MouseButtonMappingTests 把两边的数值钉死。
+    public static uint SendMouseButton(ushort[] mods, int button, int clicks)
+    {
+        (uint down, uint up, uint data) = button switch
         {
-            type = INPUT_MOUSE,
-            U = new InputUnion { mi = new MOUSEINPUT { mouseData = unchecked((uint)(WHEEL_DELTA * notches)), dwFlags = MOUSEEVENTF_WHEEL } },
-        });
+            1 => (MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, 0u),
+            2 => (MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP, 0u),
+            3 => (MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, 0u),
+            4 => (MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP, XBUTTON1),
+            _ => (MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP, XBUTTON2),
+        };
+        var list = new List<INPUT>();
+        foreach (var m in mods) list.Add(MakeKey(m, false));
+        for (int i = 0; i < Math.Max(1, clicks); i++) { list.Add(MakeMouse(down, data)); list.Add(MakeMouse(up, data)); }
         for (int i = mods.Length - 1; i >= 0; i--) list.Add(MakeKey(mods[i], true));
         var arr = list.ToArray();
         return SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT)));

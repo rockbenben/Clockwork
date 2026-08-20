@@ -44,6 +44,11 @@
                     <TextBlock Text="{loc:Loc Ed_KeysHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
+                <StackPanel x:Name="PanMouse">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Action}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="MouseActCombo" AutomationProperties.Name="{loc:Loc Ed_Action}" Width="200" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_MouseHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
                 <StackPanel x:Name="PanVolume">
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Action}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="VolActionCombo" AutomationProperties.Name="{loc:Loc Ed_Action}" Width="160" Height="28" SelectionChanged="VolAction_Changed"/></StackPanel>
                     <StackPanel x:Name="VolLevelRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Level}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="LevelBox" AutomationProperties.Name="{loc:Loc Ed_Level}" Width="90" Height="28"/></StackPanel>

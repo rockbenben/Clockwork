@@ -4,23 +4,54 @@ using Xunit;
 public class KeyComboTests
 {
     [Theory]
-    [InlineData("WheelUp", 1)]
-    [InlineData("WheelDown", -1)]
-    [InlineData("wheeldown", -1)]      // 手输不分大小写
-    [InlineData(" WheelUp ", 1)]       // 捕捉/手输都可能带空白
-    [InlineData("PageDown", 0)]
-    [InlineData("Wheel", 0)]           // 半个词不算，免得拼错的当成滚轮静默发出去
-    [InlineData("", 0)]
-    [InlineData(null, 0)]
-    public void WheelNotches_recognises_only_the_two_pseudo_keys(string? key, int expected)
-        => Assert.Equal(expected, KeyCombo.WheelNotches(key));
+    [InlineData("WheelUp", 1, false)]
+    [InlineData("WheelDown", -1, false)]
+    [InlineData("WheelRight", 1, true)]
+    [InlineData("WheelLeft", -1, true)]
+    [InlineData("wheeldown", -1, false)]   // 手输不分大小写
+    [InlineData(" WheelUp ", 1, false)]    // 捕捉/手输都可能带空白
+    public void Mouse_recognises_the_four_wheel_pseudo_keys(string key, int notches, bool horizontal)
+    {
+        var w = KeyCombo.Mouse(key);
+        Assert.NotNull(w);
+        Assert.Equal(MouseButton.None, w!.Button);   // 滚轮＝没有按键
+        Assert.Equal(notches, w.Notches);
+        Assert.Equal(horizontal, w.Horizontal);
+        Assert.Equal(0, w.Clicks);
+    }
+
+    [Theory]
+    [InlineData("LeftClick", MouseButton.Left, 1)]
+    [InlineData("DoubleClick", MouseButton.Left, 2)]
+    [InlineData("RightClick", MouseButton.Right, 1)]
+    [InlineData("MiddleClick", MouseButton.Middle, 1)]
+    [InlineData("MouseBack", MouseButton.Back, 1)]
+    [InlineData("MouseForward", MouseButton.Forward, 1)]
+    [InlineData("rightclick", MouseButton.Right, 1)]   // 大小写不敏感
+    public void Mouse_recognises_the_button_pseudo_keys(string key, MouseButton button, int clicks)
+    {
+        var m = KeyCombo.Mouse(key);
+        Assert.NotNull(m);
+        Assert.Equal(button, m!.Button);
+        Assert.Equal(clicks, m.Clicks);
+        Assert.Equal(0, m.Notches);   // 按键动作不带滚动量
+    }
+
+    [Theory]
+    [InlineData("PageDown")]
+    [InlineData("Wheel")]              // 半个词不算，免得拼错的当成滚轮静默发出去
+    [InlineData("Click")]              // 同理：必须写全 LeftClick / RightClick
+    [InlineData("WheelSideways")]
+    [InlineData("")]
+    [InlineData(null)]
+    public void Mouse_rejects_everything_else(string? key) => Assert.Null(KeyCombo.Mouse(key));
 
     [Fact]
     public void Wheel_pseudo_key_keeps_its_modifiers()
     {
         // Ctrl+WheelDown 缩放靠的就是修饰键照常解析——伪键只替换主键那一段，不该吃掉修饰键。
         var p = KeyCombo.ParseCombo("Ctrl+WheelDown");
-        Assert.Equal(-1, KeyCombo.WheelNotches(p.Key));
+        Assert.Equal(-1, KeyCombo.Mouse(p.Key)!.Notches);
         Assert.Contains("Ctrl", p.Modifiers);
         Assert.False(KeyCombo.HasUnknownModifier("Ctrl+WheelDown"));   // 别被当成拼错的修饰键
     }

@@ -148,7 +148,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>以系統管理員身分執行</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>目標可填：程式（完整路徑或裸名）/ 捷徑 / 指令碼 / 資料夾 / 網址 / 文件 / ms-settings: 等通訊協定。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>組合鍵</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。傳送給目前焦點視窗，請先確保目標在最前。 Win+D、Win+6 等被 Windows 佔用的組合擷取不到，雙擊本框可手動輸入。 也可手輸 WheelUp / WheelDown 模擬滾輪（配「重複次數」滑 N 次；Ctrl+WheelDown 縮放）。</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。傳送給目前焦點視窗，請先確保目標在最前。 Win+D、Win+6 等被 Windows 佔用的組合擷取不到，雙擊本框可手動輸入。 要滾輪就在框裡滾一下（按住 Ctrl 滾=縮放），配「重複次數」即滑 N 次。按住 Shift 滾=橫向滾。</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>捲動發給滑鼠指標下的視窗；**點擊落在滑鼠目前位置**（本程式不移動指標），所以點擊類動作請先用「視窗動作 → 帶到最前面」把目標擺好，或只用在上一頁/下一頁這類與位置無關的動作上。要點 N 次 / 捲 N 格就把下面的「重複次數」調大，用「執行後延時」控制節奏。</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>向下滾</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>向右滾</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>下一頁（側鍵）</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>上一頁（側鍵）</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>中鍵單擊</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>右鍵單擊</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>左鍵雙擊</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>左鍵單擊</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>向左滾</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>向上滾</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>滑鼠</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>動作</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>音量(0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>處理程序名稱</value></data>

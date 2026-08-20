@@ -146,7 +146,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Esegui come amministratore</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La destinazione può essere un programma (percorso completo o solo il nome), un collegamento, uno script, una cartella, un URL, un documento o un protocollo come ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Scorciatoia</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle. Puoi anche digitare WheelUp / WheelDown per scorrere (con il numero di ripetizioni per N scatti; Ctrl+WheelDown fa zoom).</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle. Per la rotellina basta scorrere qui (tenendo Ctrl per lo zoom); abbinala al numero di ripetizioni per N scatti. Con Maiusc premuto, scorrimento orizzontale.</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>Lo scorrimento va alla finestra sotto il puntatore; i clic avvengono dove il puntatore già si trova (questa app non lo sposta mai). Porta prima la finestra in primo piano con Azione finestra, oppure limitati ad azioni indipendenti dalla posizione come Indietro/Avanti. Aumenta il numero di ripetizioni per N clic o scatti e usa il ritardo dopo il passo per il ritmo.</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>Scorri giù</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>Scorri a destra</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>Avanti (tasto laterale)</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>Indietro (tasto laterale)</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>Clic centrale</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>Clic destro</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>Doppio clic</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>Clic sinistro</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>Scorri a sinistra</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>Scorri su</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>Mouse</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Azione</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Processo</value></data>

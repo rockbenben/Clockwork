@@ -24,7 +24,7 @@ public static class StepDisplay
 
     // 步骤类型 id 的规范顺序（步骤编辑器「类型」下拉用；标签一律经 StepKindLabel 本地化）。
     public static readonly string[] StepKinds =
-        { "app", "keys", "text", "volume", "window", "system", "group", "delay", "message" };
+        { "app", "keys", "mouse", "text", "volume", "window", "system", "group", "delay", "message" };
 
     // 「新增 ▾」菜单的意图分节。九个机制名平铺时，新用户不知道「关掉微信」该点「窗口动作」还是
     // 「发送按键」——分节按「你想对什么做事」组织，机制名降到节内。节顺序即菜单顺序。
@@ -32,10 +32,31 @@ public static class StepDisplay
     public static readonly (string SectionKey, string[] Kinds)[] StepKindSections =
     {
         ("Menu_SecOpen", new[] { "app" }),
-        ("Menu_SecControl", new[] { "window", "keys", "text" }),
+        ("Menu_SecControl", new[] { "window", "keys", "mouse", "text" }),
         ("Menu_SecSystem", new[] { "volume", "system" }),
         ("Menu_SecFlow", new[] { "delay", "message", "group" }),
     };
+
+    // 鼠标步骤的动作 id ↔ 文案键 ↔ 伪键三者的唯一映射表。摘要、编辑器下拉、执行三处都从这里取——
+    // 各写一份的话，加一个动作就得改三处，漏一处就是「下拉里选得到、跑起来没反应」这种最难查的错。
+    // 缺省（手改 json 漏填 action、或旧配置）落到向下滚，与编辑器下拉的首项一致。
+    public static readonly (string Action, string LabelKey, string Combo)[] MouseActions =
+    {
+        ("down", "Wheel_down", "WheelDown"), ("up", "Wheel_up", "WheelUp"),
+        ("left", "Wheel_left", "WheelLeft"), ("right", "Wheel_right", "WheelRight"),
+        ("leftClick", "Mouse_leftClick", "LeftClick"), ("doubleClick", "Mouse_doubleClick", "DoubleClick"),
+        ("rightClick", "Mouse_rightClick", "RightClick"), ("middleClick", "Mouse_middleClick", "MiddleClick"),
+        ("back", "Mouse_back", "MouseBack"), ("forward", "Mouse_forward", "MouseForward"),
+    };
+
+    private static (string Action, string LabelKey, string Combo) MouseAction(string? action)
+    {
+        foreach (var m in MouseActions) if (m.Action == action) return m;
+        return MouseActions[0];
+    }
+
+    public static string MouseActionLabelKey(string? action) => MouseAction(action).LabelKey;
+    public static string MouseActionCombo(string? action) => MouseAction(action).Combo;
 
     // 已知键则取译文，否则原样返回（未知 kind/command）。
     private static string OrRaw(string key, string raw)
@@ -79,6 +100,8 @@ public static class StepDisplay
         {
             "app" => !string.IsNullOrEmpty(s.Label) ? s.Label : s.Target,
             "keys" => Strings.Lf("Sum_SendKeys", s.Combo),
+            // 次数由摘要共用的 ×N 修饰段（DecorationSummary）负责，这里只说动作，别把次数写两遍
+            "mouse" => Strings.Get(MouseActionLabelKey(s.Action)),
             "volume" => s.Action switch
             {
                 "mute" => Strings.Get("Vol_mute"), "unmute" => Strings.Get("Vol_unmute"), "set" => Strings.Lf("Vol_set", s.Level),

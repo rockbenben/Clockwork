@@ -78,6 +78,25 @@ internal static class KeyCaptureBox
             };
             box.Loaded += onLoaded;
         }
+        // 滚轮捕捉：与按键捕捉同一个手势模型——进了捕捉态（点一下框），滚一下就录。
+        // 必须限定「框持键盘焦点」：WPF 的滚轮事件按鼠标指针所在元素路由，不看焦点，
+        // 不加这道闸的话，用户滚动编辑器对话框、指针恰好扫过这个框，就会被静默录进一条滚轮动作。
+        // 组不出结果（热键模式 / accept 不认）就不吞事件，让滚动照常传给外层滚动条。
+        box.PreviewMouseWheel += (_, e) =>
+        {
+            if (typing || !box.IsKeyboardFocused) return;
+            var wmods = HotkeyCapture.WithWin(Keyboard.Modifiers,
+                                              Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin));
+            // Shift+滚轮录成横向滚：这是 Windows 里「用普通滚轮横向滚」的通行手势，绝大多数人没有倾斜滚轮，
+            // 不认它的话横向滚就只剩手输一条路，等于又回到「藏起来只给知道的人用」。
+            // 录成 WheelLeft/WheelRight 后 Shift 本身不再进组合——发的是真 HWHEEL，比 Shift+竖滚兼容性更好。
+            bool horiz = wmods.HasFlag(ModifierKeys.Shift);
+            if (horiz) wmods &= ~ModifierKeys.Shift;
+            if (HotkeyCapture.BuildWheelCombo(wmods, e.Delta, mode, accept, horiz) is not string wc) return;
+            e.Handled = true;
+            committed = wc; set(wc); box.Text = wc;
+            Keyboard.ClearFocus();
+        };
         box.PreviewKeyDown += (_, e) =>
         {
             var key0 = e.Key == Key.System ? e.SystemKey : e.Key;

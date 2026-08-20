@@ -146,7 +146,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Executar como administrador</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>O destino pode ser um programa (caminho completo ou apenas o nome), um atalho, um script, uma pasta, um URL, um documento ou um protocolo como ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Atalho</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex.: Win+D / Alt+K / Ctrl+Enter / F5. Enviado à janela em foco; traga o destino para a frente primeiro. Combinações usadas pelo próprio Windows (Win+D, Win+6…) não podem ser capturadas — clique duas vezes no campo para digitá-las. Também podes escrever WheelUp / WheelDown para deslocar (com o número de repetições para N cliques; Ctrl+WheelDown faz zoom).</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex.: Win+D / Alt+K / Ctrl+Enter / F5. Enviado à janela em foco; traga o destino para a frente primeiro. Combinações usadas pelo próprio Windows (Win+D, Win+6…) não podem ser capturadas — clique duas vezes no campo para digitá-las. Para a roda, basta deslocar aqui (com Ctrl premido faz zoom); combina com o número de repetições para N cliques. Com Shift premido, deslocamento horizontal.</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>O deslocamento vai para a janela sob o ponteiro; os cliques acontecem onde o ponteiro já está (esta aplicação nunca o move). Coloca primeiro a janela em primeiro plano com Ação de janela, ou usa apenas ações independentes da posição como Retroceder/Avançar. Aumenta o número de repetições para N cliques ou cliques de roda e usa o atraso após o passo para o ritmo.</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>Deslocar para baixo</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>Deslocar para a direita</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>Avançar (botão lateral)</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>Retroceder (botão lateral)</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>Clique do meio</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>Clique direito</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>Duplo clique</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>Clique esquerdo</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>Deslocar para a esquerda</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>Deslocar para cima</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>Rato</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Ação</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Processo</value></data>

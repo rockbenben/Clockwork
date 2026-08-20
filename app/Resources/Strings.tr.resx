@@ -146,7 +146,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Yönetici olarak çalıştır</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Hedef bir program (tam yol veya yalnızca ad), kısayol, betik, klasör, URL, belge ya da ms-settings: gibi bir protokol olabilir.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Kısayol</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın. Kaydırmak için WheelUp / WheelDown da yazabilirsiniz (tekrar sayısıyla N tık; Ctrl+WheelDown yakınlaştırır).</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın. Tekerlek için burada kaydırmanız yeter (Ctrl basılıyken yakınlaştırır); tekrar sayısıyla N tık olur. Shift basılıyken yatay kaydırma.</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>Kaydırma işaretçinin altındaki pencereye gider; tıklamalar işaretçinin bulunduğu yerde olur (bu uygulama işaretçiyi hiç oynatmaz). Bu yüzden önce Pencere eylemi → öne getir ile hedefi yerleştirin ya da Geri/İleri gibi konumdan bağımsız eylemlerde kalın. N tıklama veya tık için aşağıdaki tekrar sayısını artırın, temposunu adım sonrası gecikmeyle ayarlayın.</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>Aşağı kaydır</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>Sağa kaydır</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>İleri (yan düğme)</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>Geri (yan düğme)</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>Orta tık</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>Sağ tık</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>Çift tık</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>Sol tık</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>Sola kaydır</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>Yukarı kaydır</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>Fare</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Eylem</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Ses düzeyi (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>İşlem</value></data>

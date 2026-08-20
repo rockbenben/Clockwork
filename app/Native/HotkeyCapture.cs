@@ -88,6 +88,24 @@ public static class HotkeyCapture
         return accept == null || accept(combo) ? combo : null;
     }
 
+    // 滚轮捕捉：在捕捉框上滚一下就录成 WheelUp / WheelDown，按住修饰键滚则带上修饰键。
+    // 录键盘是「按一下」，录滚轮理应是「滚一下」——让人手输 WheelDown 这种魔法字符串，
+    // 等于把功能藏起来只给知道的人用。手输仍然有效（改 json、无鼠标时的退路），但不再是唯一入口。
+    // Hotkey 模式一律返回 null：RegisterHotKey 表达不了滚轮，录进去会得到一个永不触发的热键。
+    // delta>0 = 向上（远离用户），与 Windows 的 WM_MOUSEWHEEL 同向。
+    public static string? BuildWheelCombo(ModifierKeys mods, int delta, KeyCaptureMode mode, Func<string, bool>? accept, bool horizontal = false)
+    {
+        if (mode != KeyCaptureMode.SendKeys || delta == 0) return null;
+        var parts = new List<string>();
+        if (mods.HasFlag(ModifierKeys.Control)) parts.Add("Ctrl");
+        if (mods.HasFlag(ModifierKeys.Alt)) parts.Add("Alt");
+        if (mods.HasFlag(ModifierKeys.Shift)) parts.Add("Shift");
+        if (mods.HasFlag(ModifierKeys.Windows)) parts.Add("Win");
+        parts.Add(horizontal ? (delta > 0 ? "WheelRight" : "WheelLeft") : (delta > 0 ? "WheelUp" : "WheelDown"));
+        var combo = string.Join("+", parts);
+        return accept == null || accept(combo) ? combo : null;
+    }
+
     // 捕捉框有两种模式：Hotkey=全局热键（急停键/组热键，要修饰键、拒保留组合）；
     // SendKeys=发送键（步骤里「发送按键」/「置前发送键」，允许裸键、按 accept 校验）。
     public enum KeyCaptureMode { Hotkey, SendKeys }

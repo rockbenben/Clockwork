@@ -146,7 +146,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Als Administrator ausführen</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Als Ziel möglich: Programm (voller Pfad oder bloßer Name), Verknüpfung, Skript, Ordner, URL, Dokument oder ein Protokoll wie ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Tastenkürzel</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen. Von Windows belegte Kombinationen (Win+D, Win+6 …) lassen sich nicht aufzeichnen – doppelklicke das Feld, um sie einzutippen. Sie können auch WheelUp / WheelDown eintippen, um zu scrollen (mit der Wiederholungszahl für N Rastungen; Ctrl+WheelDown zoomt).</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen. Von Windows belegte Kombinationen (Win+D, Win+6 …) lassen sich nicht aufzeichnen – doppelklicke das Feld, um sie einzutippen. Für das Mausrad einfach hier scrollen (mit gedrückter Strg-Taste zum Zoomen); mit der Wiederholungszahl für N Rastungen. Mit gedrückter Umschalttaste horizontal scrollen.</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>Scrollen geht an das Fenster unter dem Zeiger; Klicks passieren dort, wo der Zeiger gerade steht (diese App bewegt ihn nie). Bringen Sie das Ziel daher zuerst per Fensteraktion → in den Vordergrund, oder bleiben Sie bei positionsunabhängigen Aktionen wie Zurück/Vor. Für N Klicks bzw. Rastungen die Wiederholungszahl unten erhöhen; das Tempo regelt die Verzögerung nach dem Schritt.</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>Nach unten scrollen</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>Nach rechts scrollen</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>Vor (Seitentaste)</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>Zurück (Seitentaste)</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>Mittelklick</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>Rechtsklick</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>Doppelklick</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>Linksklick</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>Nach links scrollen</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>Nach oben scrollen</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>Maus</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Aktion</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Lautstärke (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Prozess</value></data>

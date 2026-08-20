@@ -146,7 +146,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Chạy với quyền quản trị</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Mục tiêu có thể là chương trình (đường dẫn đầy đủ hoặc chỉ tên), lối tắt, tập lệnh, thư mục, URL, tài liệu hoặc giao thức như ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Phím tắt</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập. Bạn cũng có thể gõ WheelUp / WheelDown để cuộn (kết hợp số lần lặp để cuộn N nấc; Ctrl+WheelDown để phóng to thu nhỏ).</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập. Với con lăn, chỉ cần cuộn ngay tại đây (giữ Ctrl để phóng to thu nhỏ); kết hợp số lần lặp để cuộn N nấc. Giữ Shift để cuộn ngang.</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>Cuộn được gửi tới cửa sổ dưới con trỏ; cú nhấp xảy ra ngay tại vị trí con trỏ đang đứng (ứng dụng này không di chuyển con trỏ). Vì vậy hãy đưa cửa sổ đích ra trước bằng Hành động cửa sổ, hoặc chỉ dùng các thao tác không phụ thuộc vị trí như Lùi/Tiến. Tăng số lần lặp bên dưới để nhấp N lần hay cuộn N nấc, dùng độ trễ sau bước để chỉnh nhịp.</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>Cuộn xuống</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>Cuộn sang phải</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>Tiến (nút bên)</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>Lùi (nút bên)</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>Nhấp giữa</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>Nhấp phải</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>Nhấp đúp</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>Nhấp trái</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>Cuộn sang trái</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>Cuộn lên</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>Chuột</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Hành động</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Âm lượng (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Tiến trình</value></data>

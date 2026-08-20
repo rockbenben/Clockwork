@@ -146,7 +146,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>เรียกใช้ในฐานะผู้ดูแล</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>เป้าหมายใส่ได้ทั้งโปรแกรม (พาธเต็มหรือแค่ชื่อ) ทางลัด สคริปต์ โฟลเดอร์ URL เอกสาร หรือโปรโตคอลอย่าง ms-settings:</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>ทางลัด</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง พิมพ์ WheelUp / WheelDown เพื่อเลื่อนล้อได้ด้วย (ใช้คู่กับจำนวนครั้งเพื่อเลื่อน N ระดับ; Ctrl+WheelDown เพื่อย่อขยาย)</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง พิมพ์  ถ้าต้องการล้อเลื่อน ให้เลื่อนล้อตรงช่องนี้ได้เลย (กด Ctrl ค้างไว้เพื่อย่อขยาย) ใช้คู่กับจำนวนครั้งเพื่อเลื่อน N ระดับ กด Shift ค้างไว้เพื่อเลื่อนแนวนอน</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>การเลื่อนจะไปยังหน้าต่างใต้ตัวชี้ ส่วนการคลิกจะเกิดตรงตำแหน่งที่ตัวชี้อยู่ (โปรแกรมนี้ไม่ย้ายตัวชี้) จึงควรใช้ “การกระทำกับหน้าต่าง → นำมาไว้หน้าสุด” จัดเป้าหมายก่อน หรือใช้เฉพาะการกระทำที่ไม่ขึ้นกับตำแหน่ง เช่น ย้อนกลับ/ไปหน้าถัดไป ถ้าต้องการคลิก N ครั้งหรือเลื่อน N ระดับ ให้เพิ่มจำนวนครั้งด้านล่าง และใช้การหน่วงหลังขั้นตอนคุมจังหวะ</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>เลื่อนลง</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>เลื่อนไปทางขวา</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>ไปหน้าถัดไป (ปุ่มข้าง)</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>ย้อนกลับ (ปุ่มข้าง)</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>คลิกกลาง</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>คลิกขวา</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>ดับเบิลคลิก</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>คลิกซ้าย</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>เลื่อนไปทางซ้าย</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>เลื่อนขึ้น</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>เมาส์</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>การกระทำ</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>ระดับเสียง (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>โปรเซส</value></data>

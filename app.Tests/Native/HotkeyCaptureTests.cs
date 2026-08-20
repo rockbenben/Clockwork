@@ -5,6 +5,37 @@ using Xunit;
 public class HotkeyCaptureTests
 {
     [Theory]
+    [InlineData(ModifierKeys.None, 120, "WheelUp")]
+    [InlineData(ModifierKeys.None, -120, "WheelDown")]
+    [InlineData(ModifierKeys.None, -40, "WheelDown")]                       // 高精度触控板的小增量也算一格
+    [InlineData(ModifierKeys.Control, -120, "Ctrl+WheelDown")]              // 按住 Ctrl 滚=缩放，修饰键要带上
+    [InlineData(ModifierKeys.Control | ModifierKeys.Shift, 120, "Ctrl+Shift+WheelUp")]
+    public void Wheel_capture_builds_the_combo_from_direction_and_modifiers(ModifierKeys mods, int delta, string expected)
+        => Assert.Equal(expected, HotkeyCapture.BuildWheelCombo(mods, delta, HotkeyCapture.KeyCaptureMode.SendKeys, null));
+
+    [Theory]
+    [InlineData(120, "WheelRight")]
+    [InlineData(-120, "WheelLeft")]
+    public void Wheel_capture_switches_axis(int delta, string expected)
+        => Assert.Equal(expected, HotkeyCapture.BuildWheelCombo(ModifierKeys.None, delta, HotkeyCapture.KeyCaptureMode.SendKeys, null, horizontal: true));
+
+    [Fact]
+    public void Wheel_capture_is_refused_for_global_hotkeys_and_no_op_deltas()
+    {
+        // 热键模式必须拒：RegisterHotKey 表达不了滚轮，录进去只会得到一个永不触发的热键。
+        Assert.Null(HotkeyCapture.BuildWheelCombo(ModifierKeys.Control, -120, HotkeyCapture.KeyCaptureMode.Hotkey, null));
+        Assert.Null(HotkeyCapture.BuildWheelCombo(ModifierKeys.None, 0, HotkeyCapture.KeyCaptureMode.SendKeys, null));
+    }
+
+    [Fact]
+    public void Wheel_capture_honours_the_accept_predicate()
+    {
+        // 与按键捕捉同口径：组出来的串要过调用方的校验，不然就当没录到（绝不存一个跑不了的值）。
+        Assert.Null(HotkeyCapture.BuildWheelCombo(ModifierKeys.None, 120, HotkeyCapture.KeyCaptureMode.SendKeys, _ => false));
+        Assert.Equal("WheelUp", HotkeyCapture.BuildWheelCombo(ModifierKeys.None, 120, HotkeyCapture.KeyCaptureMode.SendKeys, KeyInput.CanSendCombo));
+    }
+
+    [Theory]
     [InlineData(ModifierKeys.Control | ModifierKeys.Alt, Key.Q, "Ctrl+Alt+Q")]
     [InlineData(ModifierKeys.Control | ModifierKeys.Alt | ModifierKeys.Shift, Key.F12, "Ctrl+Alt+Shift+F12")]
     [InlineData(ModifierKeys.Control, Key.D1, "Ctrl+1")]                 // 数字显示 1 而非 D1

@@ -146,7 +146,19 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Jalankan sebagai administrator</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Target bisa berupa program (path lengkap atau namanya saja), pintasan, skrip, folder, URL, dokumen, atau protokol seperti ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Pintasan</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu. Kombinasi milik Windows sendiri (Win+D, Win+6…) tidak bisa ditangkap — klik dua kali kotak ini untuk mengetiknya. Anda juga bisa mengetik WheelUp / WheelDown untuk menggulir (padukan dengan jumlah pengulangan untuk N takik; Ctrl+WheelDown untuk zoom).</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu. Kombinasi milik Windows sendiri (Win+D, Win+6…) tidak bisa ditangkap — klik dua kali kotak ini untuk mengetiknya. Untuk roda, cukup gulir di sini (tahan Ctrl untuk zoom); padukan dengan jumlah pengulangan untuk N takik. Tahan Shift untuk gulir mendatar.</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>Guliran dikirim ke jendela di bawah penunjuk; klik terjadi di tempat penunjuk berada sekarang (aplikasi ini tidak pernah memindahkannya). Jadi siapkan dulu jendelanya lewat Aksi jendela → bawa ke depan, atau pakai saja aksi yang tak bergantung posisi seperti Mundur/Maju. Naikkan jumlah pengulangan untuk N klik atau takik, dan atur iramanya lewat jeda setelah langkah.</value></data>
+  <data name="Wheel_down" xml:space="preserve"><value>Gulir ke bawah</value></data>
+  <data name="Wheel_right" xml:space="preserve"><value>Gulir ke kanan</value></data>
+  <data name="Mouse_forward" xml:space="preserve"><value>Maju (tombol samping)</value></data>
+  <data name="Mouse_back" xml:space="preserve"><value>Mundur (tombol samping)</value></data>
+  <data name="Mouse_middleClick" xml:space="preserve"><value>Klik tengah</value></data>
+  <data name="Mouse_rightClick" xml:space="preserve"><value>Klik kanan</value></data>
+  <data name="Mouse_doubleClick" xml:space="preserve"><value>Klik ganda</value></data>
+  <data name="Mouse_leftClick" xml:space="preserve"><value>Klik kiri</value></data>
+  <data name="Wheel_left" xml:space="preserve"><value>Gulir ke kiri</value></data>
+  <data name="Wheel_up" xml:space="preserve"><value>Gulir ke atas</value></data>
+  <data name="Kind_mouse" xml:space="preserve"><value>Tetikus</value></data>
   <data name="Ed_Action" xml:space="preserve"><value>Aksi</value></data>
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Proses</value></data>

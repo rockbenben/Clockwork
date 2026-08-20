@@ -28,6 +28,10 @@ public partial class StepEditorWindow : Window
             (Strings.Get("Vol_mute"), "mute"), (Strings.Get("Vol_unmute"), "unmute"), (Strings.Get("Ed_Vol_Set"), "set"),
             (Strings.Get("Vol_micMute"), "micMute"), (Strings.Get("Vol_micUnmute"), "micUnmute"),
         }, string.IsNullOrEmpty(step.Action) ? "mute" : step.Action);
+        // 下拉项直接由 StepDisplay.MouseActions 生成：动作 id / 文案 / 伪键只此一张表，
+        // 加一个动作只改那张表，编辑器、摘要、执行三处自动跟上，不会出现「选得到但跑不了」。
+        FillCombo(MouseActCombo, StepDisplay.MouseActions.Select(m => (Strings.Get(m.LabelKey), m.Action)).ToArray(),
+                  StepDisplay.MouseActions.Any(m => m.Action == step.Action) ? step.Action : "down");
         FillCombo(WinActionCombo, new[] { (Strings.Get("Win_close"), "close"), (Strings.Get("Win_minimize"), "minimize"), (Strings.Get("Win_maximize"), "maximize"), (Strings.Get("Win_activate"), "activate"), (Strings.Get("Win_sendkey"), "sendkey") }, string.IsNullOrEmpty(step.Action) ? "close" : step.Action);
         FillCombo(SysCmdCombo, StepDisplay.SystemCommandMap().Select(kv => (kv.Value, kv.Key)).ToArray(), step.Command);
         FillCombo(OnYesTypeCombo, new[] { (Strings.Get("Ed_OnYes_None"), "none"), (Strings.Get("Ed_OnYes_Run"), "run"), (Strings.Get("Ed_OnYes_Url"), "url") }, step.OnYes.Type == "sound" ? "run" : step.OnYes.Type);
@@ -186,6 +190,7 @@ public partial class StepEditorWindow : Window
     private void ShowPanelForKind(string kind)
     {
         Vis(PanApp, kind == "app"); Vis(PanKeys, kind == "keys"); Vis(PanVolume, kind == "volume");
+        Vis(PanMouse, kind == "mouse");
         Vis(PanWindow, kind == "window"); Vis(PanSystem, kind == "system"); Vis(PanText, kind == "text");
         Vis(PanMessage, kind == "message"); Vis(PanGroup, kind == "group");
         Vis(RepeatRow, kind != "message");   // 消息步骤不循环
@@ -236,6 +241,9 @@ public partial class StepEditorWindow : Window
                 r.AltTargets = AltTargetsBox.Text;
                 break;
             case "keys": r.Combo = ComboBox2.Text; r.Label = string.IsNullOrEmpty(r.Label) ? ComboBox2.Text : r.Label; break;
+            // 动作存进 Action（与音量/窗口步骤同一个字段的用法），不为它新开配置字段。
+            // 点几次/滚几格用共用的「重复次数」，这里不存第二个计数。
+            case "mouse": r.Action = ComboVal(MouseActCombo); break;
             case "volume": r.Action = ComboVal(VolActionCombo); r.Level = Math.Clamp(ParseOr(LevelBox.Text, 0), 0, 100); break;
             case "window":
                 r.Action = ComboVal(WinActionCombo); r.Process = StepHelpers.ToProcessName(ProcessBox.Text);
@@ -283,7 +291,7 @@ public partial class StepEditorWindow : Window
     // 打开编辑器，返回编辑后的新步骤（取消→null）。step 为 null=新建指定 kind。
     public static LaunchStep? Edit(Window owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups)
     {
-        var s = step ?? new LaunchStep { Kind = kind, Action = kind == "volume" ? "set" : (kind == "window" ? "close" : "") };
+        var s = step ?? new LaunchStep { Kind = kind, Action = kind == "volume" ? "set" : (kind == "window" ? "close" : (kind == "mouse" ? "down" : "")) };
         var dlg = new StepEditorWindow(s, groups) { Owner = owner };
         return dlg.ShowDialog() == true ? dlg.Result : null;
     }

@@ -63,7 +63,7 @@ public static class KeyInput
     // 合成一个判据的话，要么滚轮进不了发送框，要么滚轮能被绑成一个永远不触发的全局热键。
     public static bool CanSendCombo(string combo)
         => !KeyCombo.HasUnknownModifier(combo)
-           && (ToHotkeyParams(combo) != null || KeyCombo.WheelNotches(KeyCombo.ParseCombo(combo).Key) != 0);
+           && (ToHotkeyParams(combo) != null || KeyCombo.Mouse(KeyCombo.ParseCombo(combo).Key) != null);
 
     // 活：发送组合键（SendInput 原子注入）。成功→Unverified；各失败态→Warn。
     public static ActionResult SendKeyCombo(string combo)
@@ -72,17 +72,20 @@ public static class KeyInput
         if (string.IsNullOrWhiteSpace(p.Key))
             return ActionResult.Warn(Strings.Lf("Warn_KeyNoMain", combo));
 
-        // 滚轮伪键：走鼠标通道。修饰键仍按下面那套解析，Ctrl+WheelDown 因此免费可用。
+        // 鼠标伪键（滚轮 / 点击 / 侧键）：走鼠标通道。修饰键仍按下面那套解析，Ctrl+WheelDown 因此免费可用。
         // 放在主键→虚拟键码解析之前——WheelDown 不是任何虚拟键，往下走只会得到「无法识别的键」。
-        int notches = KeyCombo.WheelNotches(p.Key);
-        if (notches != 0)
+        if (KeyCombo.Mouse(p.Key) is MouseInput mi)
         {
             var wmods = ModifierVks(p);
-            int wexpected = wmods.Length * 2 + 1;   // 修饰键按下 + 一格滚轮 + 修饰键抬起
+            bool wheel = mi.Button == MouseButton.None;
+            // 事件数 = 修饰键按下 + 主体 + 修饰键抬起。滚轮主体 1 条，点击每次 2 条（按下+抬起）。
+            int wexpected = wmods.Length * 2 + (wheel ? 1 : mi.Clicks * 2);
             bool wgot = InjectionLock.Enter();
             try
             {
-                uint n = Win32.SendWheel(wmods, notches);
+                uint n = wheel
+                    ? Win32.SendWheel(wmods, mi.Notches, mi.Horizontal)
+                    : Win32.SendMouseButton(wmods, (int)mi.Button, mi.Clicks);
                 if (n == 0) return ActionResult.Warn(Strings.Lf("Warn_KeyRejected", combo));
                 if (n < wexpected)
                 {

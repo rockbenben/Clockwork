@@ -11,6 +11,13 @@ public sealed class ParsedCombo
     public bool UseWin { get; init; }
 }
 
+// 鼠标伪键能表达的按键。None=滚轮（没有按键，只有滚动量）。
+public enum MouseButton { None, Left, Right, Middle, Back, Forward }
+
+// 鼠标伪键的解析结果。滚轮用 Notches(正=上/右，负=下/左) + Horizontal；
+// 按键用 Clicks(1=单击，2=双击)。两者互斥：Button==None 即滚轮。
+public sealed record MouseInput(MouseButton Button, int Notches = 0, bool Horizontal = false, int Clicks = 0);
+
 // 键解析与 SendKeys 转换——纯字符串逻辑，不引用 WinForms/WPF。
 public static class KeyCombo
 {
@@ -35,18 +42,32 @@ public static class KeyCombo
         return new ParsedCombo { Modifiers = mods, Key = key, UseWin = mods.Contains("Win") };
     }
 
-    // 主键是不是滚轮伪键，返回滚动格数：WheelUp=+1 / WheelDown=-1 / 其它=0。
+    // 主键是不是鼠标伪键。null=不是。
     //
     // 做成「组合键里的一个主键」而不是新开一种步骤类型，是为了白拿现成的四样东西：
     // 「重复次数」（滑 N 次直接就有）、「执行后延时」（两格之间的节奏）、修饰键解析（Ctrl+WheelDown 缩放
     // 免费得到）、以及编辑器那一行 + 列表摘要 + 校验通路。新开类型要再走一遍这四样，还要加 18 份文案。
     // 滚轮不是键盘事件，注入走 Win32.SendWheel（鼠标通道）——但它只能"发"，不能"绑"：
     // RegisterHotKey 表达不了滚轮，所以全局热键那条路照旧只认 ToHotkeyParams，别把这个伪键放进去。
-    public static int WheelNotches(string? key) => (key ?? "").Trim().ToLowerInvariant() switch
+    public static MouseInput? Mouse(string? key) => (key ?? "").Trim().ToLowerInvariant() switch
     {
-        "wheelup" => 1,
-        "wheeldown" => -1,
-        _ => 0,
+        "wheelup" => new MouseInput(MouseButton.None, Notches: 1),
+        "wheeldown" => new MouseInput(MouseButton.None, Notches: -1),
+        // 横向滚发的是真 HWHEEL，比 Shift+竖滚那种土办法兼容性好（倾斜滚轮发的正是它）。
+        "wheelright" => new MouseInput(MouseButton.None, Notches: 1, Horizontal: true),
+        "wheelleft" => new MouseInput(MouseButton.None, Notches: -1, Horizontal: true),
+        // 按键点击落在**鼠标当前所在位置**——SendInput 不带坐标，本程序也不去挪指针
+        //（挪指针要处理绝对/相对、多屏、DPI 缩放，且会打断用户手上的操作）。
+        // 所以这几个只在"指针已经在该在的地方"时才有意义：接在「窗口动作 → 带到最前」之后，
+        // 或用来发后退/前进这种与位置无关的导航键。
+        "leftclick" => new MouseInput(MouseButton.Left, Clicks: 1),
+        "doubleclick" => new MouseInput(MouseButton.Left, Clicks: 2),
+        "rightclick" => new MouseInput(MouseButton.Right, Clicks: 1),
+        "middleclick" => new MouseInput(MouseButton.Middle, Clicks: 1),
+        // 侧键：语义与位置无关（浏览器/资源管理器一律解释成后退/前进），是这几个里最稳的。
+        "mouseback" => new MouseInput(MouseButton.Back, Clicks: 1),
+        "mouseforward" => new MouseInput(MouseButton.Forward, Clicks: 1),
+        _ => null,
     };
 
     // 组合串里是否有拼错/多余的修饰键段。ParseCombo 对不认识的段是「当成主键」，后面的段再把它覆盖掉——
