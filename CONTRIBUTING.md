@@ -30,7 +30,7 @@ Run `--smoke` before any PR that touches XAML (CI runs it on every push too). Af
 | Folder | What lives there |
 | --- | --- |
 | `app/Core/` | Pure logic — no Win32, no UI. This is where the tests point |
-| `app/Native/` | Win32 interop (hotkeys, window actions, volume, send-keys) |
+| `app/Native/` | Win32 interop (hotkeys, window actions, volume, send-keys, mouse injection) |
 | `app/Engine/` | Execution: startup list, action groups, reminder scheduling |
 | `app/ViewModels/` + `app/Views/` | WPF UI |
 | `app/I18n/` + `app/Resources/` | Localization. Neutral `Strings.resx` is the Chinese source; one `Strings.<code>.resx` satellite per language |
