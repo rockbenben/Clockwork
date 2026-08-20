@@ -16,8 +16,9 @@ public class ReminderGroupVmTests
         vm.Add(new Reminder { Message = "b" });
         Assert.Equal(2, cfg.Reminders.Count);
 
-        vm.Rows[0].Speak = true;
-        Assert.True(cfg.Reminders[0].Speak);
+        // 行上的可写属性写穿到模型并触发存盘。「语音播报」列去掉后，列表里唯一可直接勾的就是启用态。
+        vm.Rows[0].Enabled = false;
+        Assert.False(cfg.Reminders[0].Enabled);
 
         vm.SelectedIndex = 0;
         vm.DeleteSelected();

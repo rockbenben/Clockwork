@@ -29,7 +29,6 @@
   <data name="Col_Time" xml:space="preserve"><value>Time</value></data>
   <data name="Col_Period" xml:space="preserve"><value>Period</value></data>
   <data name="Col_Text" xml:space="preserve"><value>Text</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>Speak</value></data>
   <data name="Col_Name" xml:space="preserve"><value>Name</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>Steps</value></data>
   <data name="Col_Command" xml:space="preserve"><value>Command</value></data>

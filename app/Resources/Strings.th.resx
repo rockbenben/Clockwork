@@ -27,7 +27,6 @@
   <data name="Col_Time" xml:space="preserve"><value>เวลา</value></data>
   <data name="Col_Period" xml:space="preserve"><value>รอบ</value></data>
   <data name="Col_Text" xml:space="preserve"><value>ข้อความ</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>เสียง</value></data>
   <data name="Col_Name" xml:space="preserve"><value>ชื่อ</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>ขั้น</value></data>
   <data name="Col_Command" xml:space="preserve"><value>คำสั่ง</value></data>

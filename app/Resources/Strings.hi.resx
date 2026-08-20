@@ -27,7 +27,6 @@
   <data name="Col_Time" xml:space="preserve"><value>समय</value></data>
   <data name="Col_Period" xml:space="preserve"><value>अवधि</value></data>
   <data name="Col_Text" xml:space="preserve"><value>पाठ</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>वाणी</value></data>
   <data name="Col_Name" xml:space="preserve"><value>नाम</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>चरण</value></data>
   <data name="Col_Command" xml:space="preserve"><value>कमांड</value></data>

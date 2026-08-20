@@ -29,7 +29,6 @@
   <data name="Col_Time" xml:space="preserve"><value>时间</value></data>
   <data name="Col_Period" xml:space="preserve"><value>周期</value></data>
   <data name="Col_Text" xml:space="preserve"><value>文本</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>语音</value></data>
   <data name="Col_Name" xml:space="preserve"><value>名称</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>步骤</value></data>
   <data name="Col_Command" xml:space="preserve"><value>命令</value></data>

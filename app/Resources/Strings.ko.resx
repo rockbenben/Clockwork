@@ -27,7 +27,6 @@
   <data name="Col_Time" xml:space="preserve"><value>시간</value></data>
   <data name="Col_Period" xml:space="preserve"><value>주기</value></data>
   <data name="Col_Text" xml:space="preserve"><value>텍스트</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>음성</value></data>
   <data name="Col_Name" xml:space="preserve"><value>이름</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>단계</value></data>
   <data name="Col_Command" xml:space="preserve"><value>명령</value></data>

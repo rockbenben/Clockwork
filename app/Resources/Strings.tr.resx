@@ -27,7 +27,6 @@
   <data name="Col_Time" xml:space="preserve"><value>Saat</value></data>
   <data name="Col_Period" xml:space="preserve"><value>Dönem</value></data>
   <data name="Col_Text" xml:space="preserve"><value>Metin</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>Ses</value></data>
   <data name="Col_Name" xml:space="preserve"><value>Ad</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>Adımlar</value></data>
   <data name="Col_Command" xml:space="preserve"><value>Komut</value></data>

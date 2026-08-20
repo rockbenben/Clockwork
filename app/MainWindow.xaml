@@ -115,11 +115,6 @@
                                                     ElementStyle="{StaticResource CellEllipsis}"/>
                                 <DataGridTextColumn Header="{loc:Loc Col_Text}" Binding="{Binding Text}" Width="*" IsReadOnly="True"
                                                     ElementStyle="{StaticResource CellEllipsis}"/>
-                                <DataGridTemplateColumn Header="{loc:Loc Col_Speak}" Width="56" HeaderStyle="{StaticResource CenterHeader}">
-                                    <DataGridTemplateColumn.CellTemplate><DataTemplate>
-                                        <CheckBox IsChecked="{Binding Speak, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </DataTemplate></DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         </Border>

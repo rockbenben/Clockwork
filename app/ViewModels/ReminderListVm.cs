@@ -24,12 +24,6 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
         set { if (Reminder.Enabled != value) { Reminder.Enabled = value; OnPropertyChanged(); _onChanged(); } }
     }
 
-    public bool Speak
-    {
-        get => Reminder.Speak;
-        set { if (Reminder.Speak != value) { Reminder.Speak = value; OnPropertyChanged(); _onChanged(); } }
-    }
-
     public string TimeLabel => ReminderDisplay.TimeLabel(Reminder);
     public string PeriodLabel => ReminderDisplay.PeriodLabel(Reminder);
     public string Text => ReminderDisplay.TextSummary(Reminder, _groups);
@@ -40,7 +34,6 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
     public void Refresh()
     {
         OnPropertyChanged(nameof(Enabled));
-        OnPropertyChanged(nameof(Speak));
         OnPropertyChanged(nameof(TimeLabel));
         OnPropertyChanged(nameof(PeriodLabel));
         OnPropertyChanged(nameof(Text));

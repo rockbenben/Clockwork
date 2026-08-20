@@ -27,7 +27,6 @@
   <data name="Col_Time" xml:space="preserve"><value>الوقت</value></data>
   <data name="Col_Period" xml:space="preserve"><value>الدورة</value></data>
   <data name="Col_Text" xml:space="preserve"><value>نص</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>صوت</value></data>
   <data name="Col_Name" xml:space="preserve"><value>الاسم</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>خطوات</value></data>
   <data name="Col_Command" xml:space="preserve"><value>أمر</value></data>

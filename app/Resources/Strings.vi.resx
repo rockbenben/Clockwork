@@ -27,7 +27,6 @@
   <data name="Col_Time" xml:space="preserve"><value>Giờ</value></data>
   <data name="Col_Period" xml:space="preserve"><value>Chu kỳ</value></data>
   <data name="Col_Text" xml:space="preserve"><value>Văn bản</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>Giọng</value></data>
   <data name="Col_Name" xml:space="preserve"><value>Tên</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>Bước</value></data>
   <data name="Col_Command" xml:space="preserve"><value>Lệnh</value></data>

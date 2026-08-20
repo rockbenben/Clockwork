@@ -27,7 +27,6 @@
   <data name="Col_Time" xml:space="preserve"><value>Waktu</value></data>
   <data name="Col_Period" xml:space="preserve"><value>Periode</value></data>
   <data name="Col_Text" xml:space="preserve"><value>Teks</value></data>
-  <data name="Col_Speak" xml:space="preserve"><value>Suara</value></data>
   <data name="Col_Name" xml:space="preserve"><value>Nama</value></data>
   <data name="Col_Steps" xml:space="preserve"><value>Langkah</value></data>
   <data name="Col_Command" xml:space="preserve"><value>Perintah</value></data>
