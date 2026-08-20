@@ -333,6 +333,7 @@ Registro: {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>A execução parou no limite de 5000 passos; os passos restantes foram ignorados (verifique se há contagens de repetição excessivas)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>O grupo de ações a executar ao clicar em "Sim" não existe mais; ignorado</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>O grupo de ações a executar ao clicar em "Sim" está desabilitado; ignorado</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>A ação após «Sim» não pôde ser executada: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Tarefas agendadas ainda não podem ser assumidas; apenas chaves Run do registro e itens da pasta Inicializar são suportados</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Execução da lista de inicialização interrompida: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Ver o último log de inicialização</value></data>

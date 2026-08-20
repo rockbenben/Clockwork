@@ -337,6 +337,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>单次运行已达 5000 步上限，剩余步骤未执行（检查是否有过大的循环次数）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「点是后」要运行的动作组不存在，已跳过</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「点是后」要运行的动作组已禁用，已跳过</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>「点是后」没能执行：{0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>计划任务项暂不支持接管；仅支持注册表 Run 键与启动文件夹项</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>启动清单运行中断：{0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>查看上次启动日志</value></data>

@@ -333,6 +333,7 @@ Journal : {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>L'exécution s'est arrêtée à la limite de 5000 étapes ; les étapes restantes ont été ignorées (vérifiez si des nombres de répétitions sont excessifs)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Le groupe d'actions à exécuter sur « Oui » n'existe plus ; ignoré</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Le groupe d'actions à exécuter sur « Oui » est désactivé ; ignoré</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>L’action après « Oui » n’a pas pu s’exécuter : {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Les tâches planifiées ne peuvent pas encore être reprises ; seules les clés Run du registre et les éléments du dossier Démarrage sont pris en charge</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Exécution de la liste de démarrage interrompue : {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Voir le dernier journal de démarrage</value></data>

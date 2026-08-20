@@ -333,6 +333,7 @@ Protokoll: {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Der Lauf wurde beim Limit von 5000 Schritten gestoppt; die restlichen Schritte wurden übersprungen (prüfen Sie auf zu große Wiederholungszahlen)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Die bei "Ja" auszuführende Aktionsgruppe existiert nicht mehr; übersprungen</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Die bei "Ja" auszuführende Aktionsgruppe ist deaktiviert; übersprungen</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>Die Aktion nach „Ja“ konnte nicht ausgeführt werden: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Geplante Aufgaben können noch nicht übernommen werden; nur Registry-Run-Schlüssel und Autostart-Ordner-Einträge werden unterstützt</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Startlisten-Lauf abgebrochen: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Letztes Startprotokoll anzeigen</value></data>

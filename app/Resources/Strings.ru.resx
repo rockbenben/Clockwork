@@ -333,6 +333,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>Выполнение остановлено при достижении лимита в 5000 шагов; оставшиеся шаги пропущены (проверьте, нет ли слишком большого количества повторений)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Группа действий для запуска по «Да» больше не существует; пропущено</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Группа действий для запуска по «Да» отключена; пропущено</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>Не удалось выполнить действие после «Да»: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Задачи планировщика пока нельзя перехватить; поддерживаются только ключи Run реестра и элементы папки автозагрузки</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Выполнение списка запуска прервано: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Показать последний журнал запуска</value></data>

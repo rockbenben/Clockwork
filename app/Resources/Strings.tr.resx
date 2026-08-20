@@ -333,6 +333,7 @@ Günlük: {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Çalıştırma 5000 adım sınırında durdu; kalan adımlar atlandı (aşırı büyük tekrar sayıları olup olmadığını kontrol edin)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu artık yok; atlandı</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"Evet" ile çalıştırılacak eylem grubu devre dışı; atlandı</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>«Evet» sonrası eylem çalıştırılamadı: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Zamanlanmış görevler henüz devralınamıyor; yalnızca kayıt defteri Run anahtarları ve Başlangıç klasörü öğeleri desteklenir</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Başlangıç listesi çalıştırması kesildi: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Son başlangıç günlüğünü görüntüle</value></data>

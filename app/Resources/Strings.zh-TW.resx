@@ -335,6 +335,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>單次執行已達 5000 步上限，剩餘步驟未執行（請檢查是否有過大的循環次數）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「點是後」要執行的動作組不存在，已略過</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「點是後」要執行的動作組已停用，已略過</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>「按是之後」沒能執行：{0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>排程工作項暫不支援接管；僅支援登錄 Run 鍵與啟動資料夾項</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>啟動清單執行中斷：{0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>檢視上次啟動日誌</value></data>

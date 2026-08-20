@@ -79,7 +79,8 @@ public static class ReminderActions
         }
     }
 
-    // 「点是后」：运行程序/打开文件（run，兼容旧 sound）、开网页（url）、运行动作组（group）。失败仅吞（不弹崩溃框）。
+    // 「点是后」：运行程序/打开文件（run，兼容旧 sound）、开网页（url）、运行动作组（group）。
+    // 失败经 warn 报一条托盘警示，不弹崩溃框——点了「是」却什么都没发生是最糟的反馈。
     // warn：组引用悬空（被删/被禁用）时回调一条已本地化的提示——用户点了「是」却什么都没发生，不该零反馈。
     public static void RunOnYes(OnYes? onYes, IReadOnlyList<ActionGroup> groups, Action<ActionGroup> runGroup, Action<string>? warn = null)
     {
@@ -92,7 +93,7 @@ public static class ReminderActions
                 case "run":
                     // 规范化与解释器选择都走 LaunchTarget 那一份：同一个路径在「启动程序」步骤和
                     // 提醒的「点是后」必须表现一致，两处各写一版迟早只修好一处。
-                    // 这里没有告警通道（整个方法吞异常），pwsh 缺席时退回 powershell.exe 照常尝试。
+                    // pwsh 缺席时退回 powershell.exe 照常尝试；真起不来由方法末尾的 catch 报进 warn。
                     var run = LaunchTarget.NormalizeTarget(onYes.Target);
                     if (LaunchTarget.IsPowerShellScript(run))
                         Process.Start(new ProcessStartInfo { FileName = LaunchTarget.PowerShellExeFor(run) ?? LaunchTarget.PowerShellExe, Arguments = LaunchTarget.PowerShellFileArgs(run), UseShellExecute = true });
@@ -112,6 +113,13 @@ public static class ReminderActions
                     break;
             }
         }
-        catch { }
+        catch (Exception ex)
+        {
+            // 报出去，不吞。这是提醒里最「用户刚刚亲手点过」的一步——点了「是」却什么都没发生
+            // （目标被移走、路径改了、脚本删了），无声就是最糟的反馈：用户会以为自己没点上。
+            // 组缺失/禁用两条路本来就在用这个 warn 通道，异常没理由是唯一的例外。
+            // 仍然不弹崩溃框（那正是原本吞异常想避免的），只出一条托盘警示。
+            warn?.Invoke(Strings.Lf("Warn_OnYesFailed", ex.Message));
+        }
     }
 }

@@ -337,6 +337,7 @@ Log: {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Run stopped at the 5000-step limit; remaining steps were skipped (check for oversized repeat counts)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>The action group to run on "Yes" no longer exists; skipped</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>The action group to run on "Yes" is disabled; skipped</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>The On-Yes action could not run: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Scheduled tasks can't be taken over yet; only registry Run keys and Startup-folder items are supported</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Launch-list run aborted: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>View last startup log</value></data>

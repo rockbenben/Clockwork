@@ -333,6 +333,7 @@ Registro: {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>La ejecución se detuvo al alcanzar el límite de 5000 pasos; los pasos restantes se omitieron (compruebe si hay recuentos de repetición excesivos)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>El grupo de acciones a ejecutar al pulsar "Sí" ya no existe; omitido</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>El grupo de acciones a ejecutar al pulsar "Sí" está deshabilitado; omitido</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>No se pudo ejecutar la acción de «Sí»: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Las tareas programadas aún no admiten la toma de control; solo se admiten claves Run del registro y elementos de la carpeta de inicio</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Ejecución de la lista de inicio interrumpida: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Ver el último registro de inicio</value></data>

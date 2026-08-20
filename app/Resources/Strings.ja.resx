@@ -335,6 +335,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>実行は5000ステップの上限に達したため停止し、残りのステップはスキップされました（繰り返し回数が大きすぎないか確認してください）</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「はい」で実行するアクショングループが存在しないため、スキップしました</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「はい」で実行するアクショングループが無効のため、スキップしました</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>「はいの後」の動作を実行できませんでした：{0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>タスクスケジューラ項目の引き継ぎは未対応です。レジストリ Run キーとスタートアップフォルダー項目のみ対応</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>起動リストの実行が中断：{0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>前回の起動ログを表示</value></data>

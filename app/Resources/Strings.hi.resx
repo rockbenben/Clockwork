@@ -333,6 +333,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>रन 5000-चरण की सीमा पर रुक गया; शेष चरण छोड़ दिए गए (जांचें कि कहीं दोहराव की संख्या बहुत बड़ी तो नहीं है)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"हाँ" पर चलने वाला एक्शन समूह अब मौजूद नहीं है; छोड़ दिया गया</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"हाँ" पर चलने वाला एक्शन समूह अक्षम है; छोड़ दिया गया</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>«हाँ» के बाद की क्रिया नहीं चल सकी: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>शेड्यूल किए गए कार्य अभी अधिग्रहण का समर्थन नहीं करते; केवल रजिस्ट्री Run कुंजियाँ और स्टार्टअप फ़ोल्डर आइटम समर्थित हैं</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>स्टार्टअप सूची का निष्पादन बाधित: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>पिछला स्टार्टअप लॉग देखें</value></data>

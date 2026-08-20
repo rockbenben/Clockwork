@@ -333,6 +333,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>توقّف التشغيل عند حد 5000 خطوة؛ تم تخطي الخطوات المتبقية (تحقّق من وجود عدد تكرار كبير جدًا)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" لم تعد موجودة؛ تم التخطي</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>مجموعة الإجراءات المقرر تشغيلها عند "نعم" معطّلة؛ تم التخطي</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>تعذّر تنفيذ الإجراء بعد «نعم»: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>المهام المجدولة لا تدعم الاستيلاء بعد؛ يُدعم فقط مفاتيح Run في السجل وعناصر مجلد بدء التشغيل</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>توقف تشغيل قائمة البدء: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>عرض سجل بدء التشغيل الأخير</value></data>

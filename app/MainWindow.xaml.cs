@@ -621,6 +621,12 @@ public partial class MainWindow : Window
     // 此前点了静默无反应，看起来像功能坏了。行内代码守卫仍保留作兜底。
     private void GridSystem_MenuOpening(object sender, ContextMenuEventArgs e)
     {
+        // 与另外三张表同一条规则：右键没落在某一行上就不弹菜单（键盘 Menu 键除外，
+        // 它按当前选中行走，光标坐标为 -1 是 WPF 给出的区分方式）。
+        // 不拦的话，选中一行后右键列表下方空白，菜单照弹并作用在那一行——「接管/删除」
+        // 这两个操作作用错行的代价，比排序那几个大得多。
+        bool byKeyboard = e.CursorLeft < 0 && e.CursorTop < 0;
+        if (!byKeyboard && !_sysRightClickOnRow) { e.Handled = true; return; }
         bool can = GridSystem.SelectedItem is SystemStartupRowVm row && row.CanEdit;
         SysMenuTakeover.IsEnabled = can;
         SysMenuDelete.IsEnabled = can;
@@ -629,9 +635,13 @@ public partial class MainWindow : Window
     // 右键先选中光标下的行，使随后的上下文菜单作用于该行。
     // 命中点→行统一走 DataGridReorder.RowFromHit：这里原先手写的那圈遍历漏了「非 Visual 的
     // DependencyObject 要走逻辑树」那道分流，直接喂给 VisualTreeHelper.GetParent 会抛。
+    private bool _sysRightClickOnRow;   // 上一次右键是否落在某一行上（见 GridSystem_MenuOpening）
+
     private void GridSystem_RightClick(object sender, MouseButtonEventArgs e)
     {
-        if (Views.DataGridReorder.RowFromHit(e.OriginalSource as DependencyObject) is { } row) row.IsSelected = true;
+        var row = Views.DataGridReorder.RowFromHit(e.OriginalSource as DependencyObject);
+        _sysRightClickOnRow = row != null;
+        if (row != null) row.IsSelected = true;
     }
 
     // 「接管到启动清单」：禁用原系统自启项 + 去重导入为托管 app 步骤（延迟 2s 体现接管价值）。

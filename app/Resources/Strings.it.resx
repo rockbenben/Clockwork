@@ -333,6 +333,7 @@ Registro: {1}</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>L'esecuzione si è interrotta al limite di 5000 passaggi; i passaggi rimanenti sono stati saltati (verifica la presenza di conteggi di ripetizione eccessivi)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Il gruppo di azioni da eseguire su "Sì" non esiste più; saltato</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Il gruppo di azioni da eseguire su "Sì" è disabilitato; saltato</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>Non è stato possibile eseguire l’azione dopo «Sì»: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Le attività pianificate non supportano ancora l'acquisizione; sono supportati solo le chiavi Run del registro e gli elementi della cartella Esecuzione automatica</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Esecuzione dell'elenco di avvio interrotta: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Visualizza l'ultimo log di avvio</value></data>

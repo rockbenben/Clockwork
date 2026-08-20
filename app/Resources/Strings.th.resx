@@ -333,6 +333,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>การทำงานหยุดที่ขีดจำกัด 5000 ขั้นตอน ขั้นตอนที่เหลือถูกข้าม (ตรวจสอบว่ามีจำนวนการทำซ้ำมากเกินไปหรือไม่)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ไม่มีอยู่แล้ว ข้ามไป</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ถูกปิดใช้งาน ข้ามไป</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>ไม่สามารถทำงานหลังกด “ใช่” ได้: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>ยังไม่รองรับการรับช่วงงานตามกำหนดเวลา รองรับเฉพาะคีย์ Run ในรีจิสทรีและรายการในโฟลเดอร์เริ่มต้นเท่านั้น</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>การรันรายการเริ่มต้นถูกขัดจังหวะ: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>ดูบันทึกการเริ่มต้นครั้งล่าสุด</value></data>

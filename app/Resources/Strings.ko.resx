@@ -333,6 +333,7 @@
   <data name="Warn_RunBudget" xml:space="preserve"><value>실행이 5000단계 한도에 도달하여 중지되었으며 나머지 단계는 건너뛰었습니다(반복 횟수가 너무 크지 않은지 확인하세요)</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"예" 클릭 시 실행할 동작 그룹이 없어 건너뛰었습니다</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"예" 클릭 시 실행할 동작 그룹이 비활성화되어 건너뛰었습니다</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>“예를 누른 뒤” 동작을 실행하지 못했습니다: {0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>예약 작업 항목은 아직 인수를 지원하지 않습니다. 레지스트리 Run 키와 시작 폴더 항목만 지원됩니다</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>시작 목록 실행 중단: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>마지막 시작 로그 보기</value></data>
