@@ -993,10 +993,11 @@ public partial class App : System.Windows.Application
             // 静默任务的周期轮询正是靠这个返回值成立，改动它会悄悄弄断循环。
             return ("ok", null);
         }
-        // 提示音先于朗读：一声短提示把头抬起来，随后的朗读才有人在听。
+        // 提示音先于朗读：一声短提示把头抬起来，随后的朗读才有人在听。两者都开时必须给朗读一段前导——
+        // SystemSounds.Play() 是异步的，不传前导的话「叮」会和第一个字同时响，等于两个都没听清。
         // 静默组走不到这里（上面已 return）——「静默」就该是静默的。
         if (r.Sound) ReminderActions.Ding();
-        if (r.Speak) ReminderActions.Speak(r.Message);
+        if (r.Speak) ReminderActions.Speak(r.Message, r.Sound ? ReminderActions.SoundLeadInMs : 0);
         bool confirm = r.OnYes != null && r.OnYes.Type != "none";
         // 无动作、非重复 → 走右下角提醒卡片（不置顶抢视线）。时长遵循配置的「自动关闭」（0=常驻到点击）。
         if (!confirm && r.RepeatMinutes <= 0)
@@ -1226,7 +1227,7 @@ public partial class App : System.Windows.Application
             // 且语义上 onYes 是「是」分支的副作用出口——它内部的确认框属于那条子流程，把它的中止回灌成父组中止，
             // 会变成「点了是反而整组停了」，比现状更难解释。
             RunOnYes = s => ReminderActions.RunOnYes(s.OnYes, groups, g => { _ = ActionGroupRunner.RunGroup(g.SnapshotForRun(), deps); }, WarnToast),
-            Speak = ReminderActions.Speak,
+            Speak = t => ReminderActions.Speak(t),   // 显式 lambda：Speak 有可选参数，方法组匹配不上 Action<string>
             OnStepError = (s, ex) => LogGroupStepError(s, ex),
             OnStepSkipped = (s, reason, benign) => LogGroupStepSkipped(s, reason, benign),
             Budget = new RunBudget(() => WarnToast(Strings.Get("Warn_RunBudget"))),

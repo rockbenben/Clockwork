@@ -12,10 +12,13 @@ public static class ReminderActions
     // 语音播报走一个专属 STA 后台线程：SpVoice 在该线程创建并只在该线程使用，避免"一处线程建、
     // 另一处线程用"的跨单元 COM 调用(旧实现把静态 SpVoice 在 UI 线程建、又从动作组后台线程调，
     // 会随机变慢或失败)。Speak 只入队立即返回；worker 逐条同步播报，天然串行不叠音。
-    private static readonly BlockingCollection<string> _speakQueue = new();
+    private static readonly BlockingCollection<(string Text, int LeadInMs)> _speakQueue = new();
     private static Thread? _speakThread;
     private static readonly object _speakLock = new();
     private static volatile bool _speakUnavailable;   // SAPI 建不出来：停用，后续 Speak 直接丢弃不入队
+
+    // 提示音的前导时长。系统「星号」音约半秒，取 500ms 让它基本落完再开口。
+    public const int SoundLeadInMs = 500;
 
     // 到点提示音。用系统「星号（信息）」音而不是自带 wav：不占体积、跟随用户的系统声音方案，
     // 静音方案下自然不响（那正是用户的表态）。Play() 是异步的，不会拖住调用它的 UI 线程。
@@ -25,11 +28,17 @@ public static class ReminderActions
         try { System.Media.SystemSounds.Asterisk.Play(); } catch { }
     }
 
-    public static void Speak(string text)
+    // leadInMs：开口前先静候这么久。给「提示音 + 朗读」都开的提醒用——两者若同时开始，
+    // 「叮」会盖在第一个字上，而提示音存在的意义正是先让人抬头、随后的朗读才有人在听。
+    // SystemSounds.Play() 是异步的、没有播完回调，所以只能按经验留一段前导（提示音本身约半秒）。
+    // 等待放在这条专属播报线程上：它本来就是串行读稿的，睡在这儿谁也挡不着；放到 UI 线程上
+    // 睡半秒则会卡住提醒 tick，紧随其后的模态弹窗也跟着晚开。
+    // 只在真放了提示音时才传非 0——只朗读不出声的提醒不该白等这半秒。
+    public static void Speak(string text, int leadInMs = 0)
     {
         if (string.IsNullOrEmpty(text) || _speakUnavailable) return;
         EnsureSpeakWorker();
-        try { _speakQueue.Add(text); } catch { }
+        try { _speakQueue.Add((text, leadInMs)); } catch { }
     }
 
     private static void EnsureSpeakWorker()
@@ -62,8 +71,9 @@ public static class ReminderActions
             while (_speakQueue.TryTake(out _)) { }
             return;
         }
-        foreach (var text in _speakQueue.GetConsumingEnumerable())
+        foreach (var (text, leadInMs) in _speakQueue.GetConsumingEnumerable())
         {
+            if (leadInMs > 0) Thread.Sleep(leadInMs);   // 给前面那声提示音让出时间，见 Speak 的注释
             try { voice.Speak(text, 0); }   // 0 = SVSFDefault：同步，本线程逐条读完再取下一条
             catch { }
         }
