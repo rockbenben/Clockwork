@@ -50,16 +50,19 @@ public partial class MainWindow : Window
         GridLaunch.ItemsSource = _launch.Rows;
         GridLaunch.SelectionChanged += (s, e) => { _launch.SelectedIndex = GridLaunch.SelectedIndex; LaunchRowOps.IsEnabled = GridLaunch.SelectedIndex >= 0; };
         Views.DataGridReorder.Attach(GridLaunch, (from, to) => { _launch.MoveTo(from, to); SyncSelection(); });
+        AttachRowContextMenu(GridLaunch);   // 右键先选中该行，见该方法的注释
 
         _reminders = new ReminderListVm(config, save, migrateReminderState, isSkippedToday);
         GridRemind.ItemsSource = _reminders.Rows;
         GridRemind.SelectionChanged += (s, e) => { _reminders.SelectedIndex = GridRemind.SelectedIndex; ReminderRowOps.IsEnabled = GridRemind.SelectedIndex >= 0; };
         Views.DataGridReorder.Attach(GridRemind, (from, to) => { _reminders.MoveTo(from, to); SyncSel(GridRemind, _reminders); });
+        AttachRowContextMenu(GridRemind);   // 右键先选中该行，见该方法的注释
 
         _groups = new GroupListVm(config, save);
         GridGroup.ItemsSource = _groups.Rows;
         GridGroup.SelectionChanged += (s, e) => { _groups.SelectedIndex = GridGroup.SelectedIndex; GroupRowOps.IsEnabled = GridGroup.SelectedIndex >= 0; };
         Views.DataGridReorder.Attach(GridGroup, (from, to) => { _groups.MoveTo(from, to); SyncSel(GridGroup, _groups); });
+        AttachRowContextMenu(GridGroup);   // 右键先选中该行，见该方法的注释
 
         _system = new SystemStartupVm(SystemStartupReader.SetItemEnabled, ReportSystemMsg, PromptRelaunchAdmin);
         GridSystem.ItemsSource = _system.Rows;
@@ -349,6 +352,31 @@ public partial class MainWindow : Window
         // 上面那道 MarkConfigSuperseded 闸门就是为这段窗口设的。
         Views.BrandDialog.Info(this, "Clockwork", Strings.Get("Config_Imported"));
         app.RelaunchForLanguage();   // 复用重启逻辑：重开自身 + 退出当前实例（内部保证无论成败都退出）
+    }
+
+    // 右键菜单开之前，先把光标底下那一行选中。
+    //
+    // WPF 的 DataGrid 右键**不会**改变选中行（ListBox 同理），而菜单里的命令——上移/下移/复制/
+    // 今天不再——全都按 SelectedIndex 走。不补这一步就会：选中第 1 行、右键第 3 行、点「复制」，
+    // 复制的是第 1 行。用户看着高亮在别处、菜单从这一行弹出来，结果作用在另一条上，且毫无提示。
+    // 这与侧栏按钮时代的语义差别正在于此：按钮明摆着作用于「选中项」，右键则天然指向「这一行」。
+    //
+    // 空白处右键：没有行可指，直接取消菜单——弹一个作用在别处的菜单比不弹更糟。
+    private static void AttachRowContextMenu(System.Windows.Controls.DataGrid grid)
+    {
+        grid.PreviewMouseRightButtonDown += (s, e) =>
+        {
+            if (RowUnder(grid, e.OriginalSource as DependencyObject) is { } row) grid.SelectedItem = row.Item;
+        };
+        grid.ContextMenuOpening += (s, e) => { if (grid.SelectedIndex < 0) e.Handled = true; };
+    }
+
+    // 从命中的可视元素往上找它所属的行；没找到（表头/空白区）返回 null。
+    private static System.Windows.Controls.DataGridRow? RowUnder(System.Windows.Controls.DataGrid grid, DependencyObject? hit)
+    {
+        while (hit != null && hit is not System.Windows.Controls.DataGridRow)
+            hit = System.Windows.Media.VisualTreeHelper.GetParent(hit);
+        return hit as System.Windows.Controls.DataGridRow;
     }
 
     // 变更(增/改/删/移)后把 VM 的选中回推到对应 DataGrid。三个列表页统一走它。
