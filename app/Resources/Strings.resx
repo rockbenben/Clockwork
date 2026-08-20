@@ -257,6 +257,7 @@
   <data name="Toast_QuickSet" xml:space="preserve"><value>已设 {0} 分钟后提醒（{1}）</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>{0} 分钟到了</value></data>
   <data name="Btn_SkipToday" xml:space="preserve"><value>今天不再</value></data>
+  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · 今天跳过</value></data>
   <data name="Tray_QuickRemind" xml:space="preserve"><value>快速提醒</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>未确认时催促</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分钟一次（0=不重复），直到</value></data>

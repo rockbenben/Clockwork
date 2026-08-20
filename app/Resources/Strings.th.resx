@@ -253,6 +253,7 @@
   <data name="Toast_QuickSet" xml:space="preserve"><value>ตั้งเตือนอีก {0} นาที ({1})</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>ครบ {0} นาทีแล้ว</value></data>
   <data name="Btn_SkipToday" xml:space="preserve"><value>ข้ามวันนี้</value></data>
+  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · ข้ามวันนี้</value></data>
   <data name="Tray_QuickRemind" xml:space="preserve"><value>เตือนด่วน</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>เตือนซ้ำจนกว่าจะยืนยัน</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>นาทีต่อครั้ง (0 = ไม่ซ้ำ), จนถึง</value></data>

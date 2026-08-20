@@ -34,7 +34,10 @@ public partial class MainWindow : Window
         RefreshStopButton();   // 无配置也先摆正：默认隐藏，别让设计器/兜底路径漏出一颗常驻按钮
     }
 
-    public MainWindow(RootConfig config, Action save, Action<string, Reminder>? migrateReminderState = null)
+    // isSkippedToday：查一条提醒今天是否被手动跳过。运行态住在 App 的字典里（按 id 做键），
+    // 列表拿不到，故由 App 注入一个只读谓词——比把这个「只管今天」的临时状态搬进配置轻得多。
+    public MainWindow(RootConfig config, Action save, Action<string, Reminder>? migrateReminderState = null,
+                      Func<Reminder, bool>? isSkippedToday = null)
     {
         InitializeComponent();
         Native.DarkWindow.Apply(this);   // 深色标题栏 + 消除开窗白闪（本方法自己挂 SourceInitialized/ContentRendered）
@@ -48,7 +51,7 @@ public partial class MainWindow : Window
         GridLaunch.SelectionChanged += (s, e) => { _launch.SelectedIndex = GridLaunch.SelectedIndex; LaunchRowOps.IsEnabled = GridLaunch.SelectedIndex >= 0; };
         Views.DataGridReorder.Attach(GridLaunch, (from, to) => { _launch.MoveTo(from, to); SyncSelection(); });
 
-        _reminders = new ReminderListVm(config, save, migrateReminderState);
+        _reminders = new ReminderListVm(config, save, migrateReminderState, isSkippedToday);
         GridRemind.ItemsSource = _reminders.Rows;
         GridRemind.SelectionChanged += (s, e) => { _reminders.SelectedIndex = GridRemind.SelectedIndex; ReminderRowOps.IsEnabled = GridRemind.SelectedIndex >= 0; };
         Views.DataGridReorder.Attach(GridRemind, (from, to) => { _reminders.MoveTo(from, to); SyncSel(GridRemind, _reminders); });

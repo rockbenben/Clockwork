@@ -1,20 +1,26 @@
 using System.Collections.ObjectModel;
 using Clockwork.Core;
+using Clockwork.I18n;
 
 namespace Clockwork.ViewModels;
 
-// 提醒页一行（启用/时间/周期/文本/语音）。
+// 提醒页一行（启用/时间/周期/文本）。
+// 「今天不再」的状态查询：由 App 注入（运行态按 id 做键，存在 App 的字典里，不在配置上）。
+// 传 null = 查不到，行照常显示——单元测试与设计器都不必为此准备一个运行态。
 public sealed class ReminderRowVm : ObservableObject, IRowVm
 {
     private readonly Action _onChanged;
     private readonly IReadOnlyList<ActionGroup> _groups;   // 静默任务解析组名用（见 Text）
 
-    public ReminderRowVm(Reminder reminder, Action onChanged, IReadOnlyList<ActionGroup> groups)
+    public ReminderRowVm(Reminder reminder, Action onChanged, IReadOnlyList<ActionGroup> groups, Func<Reminder, bool>? isSkippedToday = null)
     {
         Reminder = reminder;
         _onChanged = onChanged;
         _groups = groups;
+        _isSkippedToday = isSkippedToday;
     }
+
+    private readonly Func<Reminder, bool>? _isSkippedToday;
 
     public Reminder Reminder { get; }
 
@@ -24,7 +30,11 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
         set { if (Reminder.Enabled != value) { Reminder.Enabled = value; OnPropertyChanged(); _onChanged(); } }
     }
 
-    public string TimeLabel => ReminderDisplay.TimeLabel(Reminder);
+    // 跳过状态显示在时间列：那是这一行最先被读到的地方，而跳过的语义正是「这一天的这个时刻不算数」。
+    // 只加后缀不改文案本体——用户仍要靠时间认出是哪一条。
+    public string TimeLabel => _isSkippedToday?.Invoke(Reminder) == true
+        ? Strings.Lf("Sum_SkippedToday", ReminderDisplay.TimeLabel(Reminder))
+        : ReminderDisplay.TimeLabel(Reminder);
     public string PeriodLabel => ReminderDisplay.PeriodLabel(Reminder);
     public string Text => ReminderDisplay.TextSummary(Reminder, _groups);
 
@@ -47,8 +57,9 @@ public sealed class ReminderListVm : ListVm<Reminder, ReminderRowVm>
     // 传整个新 Reminder 而非只传 newId：迁移要按新配置决定迁什么（如循环已关掉就不该续上下一轮）。
     private readonly Action<string, Reminder>? _migrateState;
 
-    public ReminderListVm(RootConfig config, Action save, Action<string, Reminder>? migrateState = null)
-        : base(config, config.Reminders, r => new ReminderRowVm(r, save, config.ActionGroups), save)
+    public ReminderListVm(RootConfig config, Action save, Action<string, Reminder>? migrateState = null,
+                          Func<Reminder, bool>? isSkippedToday = null)
+        : base(config, config.Reminders, r => new ReminderRowVm(r, save, config.ActionGroups, isSkippedToday), save)
         => _migrateState = migrateState;
 
     // 编辑后必须换新 id：运行态(是否今天已触发/稍后延迟)按 id 做键，沿用旧 id 会让改了时间的提醒

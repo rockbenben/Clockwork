@@ -253,6 +253,7 @@
   <data name="Toast_QuickSet" xml:space="preserve"><value>{0} dk sonraya hatırlatma kuruldu ({1})</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>{0} dakika doldu</value></data>
   <data name="Btn_SkipToday" xml:space="preserve"><value>Bugün atla</value></data>
+  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · bugün atlandı</value></data>
   <data name="Tray_QuickRemind" xml:space="preserve"><value>Hızlı hatırlatma</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Onaylanana kadar hatırlat</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>dakikada bir (0 = yineleme yok), şuna kadar</value></data>

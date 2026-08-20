@@ -257,6 +257,7 @@
   <data name="Toast_QuickSet" xml:space="preserve"><value>Reminder set for {0} min from now ({1})</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>{0} minutes are up</value></data>
   <data name="Btn_SkipToday" xml:space="preserve"><value>Skip today</value></data>
+  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · skipped today</value></data>
   <data name="Tray_QuickRemind" xml:space="preserve"><value>Quick reminder</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Nag until confirmed</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = off), until</value></data>

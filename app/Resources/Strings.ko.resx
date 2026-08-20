@@ -253,6 +253,7 @@
   <data name="Toast_QuickSet" xml:space="preserve"><value>{0}분 뒤 알림 설정됨({1})</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>{0}분이 지났습니다</value></data>
   <data name="Btn_SkipToday" xml:space="preserve"><value>오늘 건너뛰기</value></data>
+  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · 오늘 건너뜀</value></data>
   <data name="Tray_QuickRemind" xml:space="preserve"><value>빠른 알림</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>확인할 때까지 재촉</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>분마다(0=반복 안 함), 다음 시각까지</value></data>

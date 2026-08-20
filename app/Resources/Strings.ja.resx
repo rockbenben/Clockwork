@@ -255,6 +255,7 @@
   <data name="Toast_QuickSet" xml:space="preserve"><value>{0} 分後に通知します（{1}）</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>{0} 分が経過しました</value></data>
   <data name="Btn_SkipToday" xml:space="preserve"><value>今日はスキップ</value></data>
+  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · 今日はスキップ</value></data>
   <data name="Tray_QuickRemind" xml:space="preserve"><value>クイックリマインダー</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>確認するまで催促</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>分ごと(0=なし)、次の時刻まで</value></data>

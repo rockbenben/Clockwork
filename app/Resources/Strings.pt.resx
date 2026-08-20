@@ -253,6 +253,7 @@
   <data name="Toast_QuickSet" xml:space="preserve"><value>Lembrete daqui a {0} min ({1})</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>Passaram {0} minutos</value></data>
   <data name="Btn_SkipToday" xml:space="preserve"><value>Ignorar hoje</value></data>
+  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · ignorado hoje</value></data>
   <data name="Tray_QuickRemind" xml:space="preserve"><value>Lembrete rápido</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>Insistir até confirmar</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>min (0 = sem repetição), até</value></data>

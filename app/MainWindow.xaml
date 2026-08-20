@@ -42,6 +42,14 @@
                              会让 SelectedIndex(视图序)与 Models(配置序)错位——删除/上移/复制会操作错行并落盘。 -->
                         <DataGrid x:Name="GridLaunch" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridLaunch_DoubleClick">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{loc:Loc Btn_Up}" Click="LUp_Click"/>
+                                    <MenuItem Header="{loc:Loc Btn_Down}" Click="LDown_Click"/>
+                                    <Separator/>
+                                    <MenuItem Header="{loc:Loc Btn_Copy}" Click="LCopy_Click"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="24" CanUserResize="False" CellTemplate="{StaticResource RailCell}" CellStyle="{StaticResource RailCellStyle}"/>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52" HeaderStyle="{StaticResource CenterHeader}">
@@ -79,13 +87,7 @@
                             <StackPanel x:Name="LaunchRowOps" IsEnabled="False">
                                 <Button x:Name="LEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="LEdit_Click"/>
                                 <Button x:Name="LDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="LDel_Click"/>
-                                <Grid Margin="0,10,0,0">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Button x:Name="LUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="LUp_Click"/>
-                                    <Button x:Name="LDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="LDown_Click"/>
-                                </Grid>
-                                <Button x:Name="LCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="LCopy_Click"/>
-                                <Button x:Name="LRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="LRun_Click"/>
+                                <Button x:Name="LRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,14,0,2" Click="LRun_Click"/>
                             </StackPanel>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
@@ -104,6 +106,15 @@
                         <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <DataGrid x:Name="GridRemind" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridRemind_DoubleClick">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{loc:Loc Btn_Up}" Click="RUp_Click"/>
+                                    <MenuItem Header="{loc:Loc Btn_Down}" Click="RDown_Click"/>
+                                    <Separator/>
+                                    <MenuItem Header="{loc:Loc Btn_Copy}" Click="RCopy_Click"/>
+                                    <MenuItem Header="{loc:Loc Btn_SkipToday}" Click="RSkip_Click"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52" HeaderStyle="{StaticResource CenterHeader}">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>
@@ -124,14 +135,7 @@
                             <StackPanel x:Name="ReminderRowOps" IsEnabled="False">
                                 <Button x:Name="REdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="REdit_Click"/>
                                 <Button x:Name="RDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="RDel_Click"/>
-                                <Grid Margin="0,10,0,0">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Button x:Name="RUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="RUp_Click"/>
-                                    <Button x:Name="RDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="RDown_Click"/>
-                                </Grid>
-                                <Button x:Name="RCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="RCopy_Click"/>
-                                <Button x:Name="RSkip" Content="{loc:Loc Btn_SkipToday}" Margin="0,10,0,2" Click="RSkip_Click"/>
-                                <Button x:Name="RPreview" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,2,0,2" Click="RPreview_Click"/>
+                                <Button x:Name="RPreview" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,14,0,2" Click="RPreview_Click"/>
                             </StackPanel>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">
@@ -150,6 +154,14 @@
                         <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <DataGrid x:Name="GridGroup" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
                                   CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridGroup_DoubleClick">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{loc:Loc Btn_Up}" Click="GUp_Click"/>
+                                    <MenuItem Header="{loc:Loc Btn_Down}" Click="GDown_Click"/>
+                                    <Separator/>
+                                    <MenuItem Header="{loc:Loc Btn_Copy}" Click="GCopy_Click"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Enabled}" Width="52" HeaderStyle="{StaticResource CenterHeader}">
                                     <DataGridTemplateColumn.CellTemplate><DataTemplate>
@@ -171,13 +183,7 @@
                             <StackPanel x:Name="GroupRowOps" IsEnabled="False">
                                 <Button x:Name="GEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="GEdit_Click"/>
                                 <Button x:Name="GDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="GDel_Click"/>
-                                <Grid Margin="0,10,0,0">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Button x:Name="GUp" Grid.Column="0" Content="{loc:Loc Btn_Up}" Margin="0,0,3,0" Click="GUp_Click"/>
-                                    <Button x:Name="GDown" Grid.Column="1" Content="{loc:Loc Btn_Down}" Margin="3,0,0,0" Click="GDown_Click"/>
-                                </Grid>
-                                <Button x:Name="GCopy" Content="{loc:Loc Btn_Copy}" Margin="0,10,0,2" Click="GCopy_Click"/>
-                                <Button x:Name="GRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="GRun_Click"/>
+                                <Button x:Name="GRun" Content="{loc:Loc Btn_Run}" Style="{StaticResource RunButton}" Margin="0,14,0,2" Click="GRun_Click"/>
                             </StackPanel>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="2,12,2,2">

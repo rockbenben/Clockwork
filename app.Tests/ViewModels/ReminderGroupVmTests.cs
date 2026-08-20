@@ -28,6 +28,19 @@ public class ReminderGroupVmTests
     }
 
     [Fact]
+    public void Row_shows_the_skipped_today_state()
+    {
+        // 「今天不再」的状态住在 App 的运行态里，列表靠注入的谓词读它。谓词返回 true 时
+        // 时间列要带上跳过后缀——这是去掉侧栏按钮后，用户唯一能看出「这条今天不响」的地方。
+        var cfg = new RootConfig { Reminders = new() { new Reminder { Time = "22:00", Message = "a" } } };
+        var plain = new ReminderListVm(cfg, () => { });
+        var skipped = new ReminderListVm(cfg, () => { }, null, _ => true);
+        Assert.DoesNotContain("·", plain.Rows[0].TimeLabel);
+        Assert.Contains(plain.Rows[0].TimeLabel, skipped.Rows[0].TimeLabel);   // 原文案仍在，只是加了后缀
+        Assert.NotEqual(plain.Rows[0].TimeLabel, skipped.Rows[0].TimeLabel);
+    }
+
+    [Fact]
     public void ReplaceSelected_mints_new_id_so_edited_reminder_rearms()
     {
         var cfg = new RootConfig { Reminders = new() { new Reminder { Id = "old-id", Time = "10:00" } } };

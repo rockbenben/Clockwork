@@ -270,7 +270,8 @@ public partial class App : System.Windows.Application
     {
         // 运行闸的变化搬到 UI 线程再广播：Begin/End 都在后台运行线程上调，订阅方（急停按钮）要动控件。
         _runGate.ActiveChanged += () => Dispatcher.BeginInvoke(() => RunStateChanged?.Invoke());
-        _main = new MainWindow(_config, SaveConfig, MigrateReminderState);
+        _main = new MainWindow(_config, SaveConfig, MigrateReminderState,
+                               r => PeekState(r)?.SkippedDate == ReminderEngine.DateKey(DateTime.Now));
         _tray = new TrayIcon(this);
     }
 
@@ -792,6 +793,7 @@ public partial class App : System.Windows.Application
             }
         }
         ReminderStateStore.Save(_statePath, _reminderStates, durable: true);
+        _main?.RefreshReminderRows();   // 跳过状态显示在时间列上，改了就得让那一行重画
         ShowToast("Clockwork", Lf(undo ? "Toast_SkipTodayOff" : "Toast_SkipToday",
                                   ReminderDisplay.TextSummary(r, _config.ActionGroups)),
                   Views.ToastLevel.Info, key: "skip:" + r.Id);   // TextSummary 自己已经截断，别再套一层
