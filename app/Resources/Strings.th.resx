@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>พิมพ์ทีละอักขระ (ขึ้นบรรทัด = Enter) เว้นโปรเซสว่างเพื่อส่งไปยังหน้าต่างที่โฟกัส (เชื่อถือได้สุด)</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>ข้อความ</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>อ่านออกเสียง</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>เสียงเตือน</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>เป็นคนละอย่างและเปิดแยกกันได้ เสียงเตือนคือเสียงสั้น ๆ ครั้งเดียวเพื่อให้คุณเงยหน้ามอง ส่วนการอ่านออกเสียงจะอ่านข้อความด้านบนออกมาทั้งประโยค</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>เสียงเตือน + อ่านออกเสียง</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>อ่านออกเสียง (อ่านข้อความ)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>เสียงเตือน (ครั้งเดียว)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>ไม่มีเสียง</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>เสียง</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>ยืนยัน ใช่/ไม่ (ใช่ = ทำต่อ, ไม่ = ยกเลิกกลุ่ม)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>หลัง «ใช่»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>แสดงเป็น</value></data>

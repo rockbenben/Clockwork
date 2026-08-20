@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Tippt Zeichen für Zeichen (Zeilenumbruch = Enter). Zielprozess leer lassen, um an das aktive Fenster zu senden (am zuverlässigsten).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Nachricht</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Vorlesen</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>Ton</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>Zwei verschiedene Dinge, unabhängig voneinander nutzbar: Der Ton ist ein einzelnes Signal, damit Sie aufblicken; Vorlesen liest den Text oben laut vor.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>Signalton + Vorlesen</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>Vorlesen (liest den Text)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>Signalton (einmal)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>Lautlos</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>Ton</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Ja/Nein-Bestätigung (Ja = weiter, Nein = Gruppe abbrechen)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Nach „Ja“</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Anzeigen als</value></data>

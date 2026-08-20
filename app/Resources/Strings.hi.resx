@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>अक्षर-दर-अक्षर टाइप करता है (नई लाइन = Enter)। फोकस वाली विंडो को भेजने के लिए प्रोसेस खाली रखें (सबसे विश्वसनीय)।</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>संदेश</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>वाचन</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>ध्वनि</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>ये दो अलग चीज़ें हैं और अलग-अलग चालू की जा सकती हैं: ध्वनि सिर्फ़ एक बार बजने वाली टोन है ताकि आप नज़र उठाएँ; वाचन ऊपर लिखा संदेश ज़ोर से पढ़ता है।</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>टोन + वाचन</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>वाचन (संदेश पढ़ता है)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>टोन (एक बार)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>मौन</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>ध्वनि</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>हाँ/नहीं पुष्टि (हाँ = जारी, नहीं = समूह रद्द)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«हाँ» के बाद</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>इस रूप में दिखाएँ</value></data>

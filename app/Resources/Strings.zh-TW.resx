@@ -174,8 +174,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>逐字輸入（換行=Enter）。目標處理程序留空=傳送給目前焦點視窗（最穩）。</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>訊息</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>語音朗讀</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>提示音</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>兩者不同，可各開各的：提示音只是一聲「叮」，為的是讓你抬頭；語音播報會把上面這段內容整句念出來。</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>提示音 + 語音播報</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>語音播報（念出內容）</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>提示音（叮一聲）</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>不出聲</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>聲音</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否確認（是=繼續，否=中止本組）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>按是後</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈現方式</value></data>

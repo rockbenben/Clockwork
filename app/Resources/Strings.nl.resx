@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Typt teken voor teken (nieuwe regel = Enter). Laat proces leeg om naar het venster met focus te sturen (meest betrouwbaar).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Bericht</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Hardop voorlezen</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>Geluid</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>Twee verschillende dingen, los van elkaar in te schakelen: het geluid is één signaal om je te laten opkijken; voorlezen leest de tekst hierboven hardop voor.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>Signaal + voorlezen</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>Voorlezen (leest de tekst)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>Signaal (één keer)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>Stil</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>Geluid</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Ja/Nee bevestigen (Ja = doorgaan, Nee = groep annuleren)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Na «Ja»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Tonen als</value></data>

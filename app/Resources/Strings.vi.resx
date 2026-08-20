@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Gõ từng ký tự (xuống dòng = Enter). Để trống tiến trình để gửi tới cửa sổ đang lấy nét (đáng tin nhất).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Thông báo</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Đọc thành tiếng</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>Âm báo</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>Hai thứ khác nhau, bật riêng cũng được: âm báo chỉ là một tiếng “ting” để bạn ngẩng đầu lên; đọc thành tiếng sẽ đọc to nội dung ở trên.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>Âm báo + đọc to</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>Đọc to (đọc nội dung)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>Âm báo (một tiếng)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>Im lặng</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>Âm thanh</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Xác nhận Có/Không (Có = tiếp tục, Không = hủy nhóm)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Sau «Có»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Hiển thị dạng</value></data>

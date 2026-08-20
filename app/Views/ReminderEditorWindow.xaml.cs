@@ -42,8 +42,13 @@ public partial class ReminderEditorWindow : Window
         AnchorBox.Text = r.AnchorDate;
         MonthlyBox.Text = r.MonthlyDay.ToString();
         MsgBox.Text = r.Message;
-        SpeakChk.IsChecked = r.Speak;
-        SoundChk.IsChecked = r.Sound;
+        // 两个独立布尔 ↔ 四个具名状态。存的仍是 speak/sound 两个字段（配置格式不变，
+        // 老配置的任意组合都能原样映射回来），只有编辑器把它们呈现成一个选择。
+        FillCombo(SoundCombo, new[]
+        {
+            (Strings.Get("Snd_None"), "none"), (Strings.Get("Snd_Sound"), "sound"),
+            (Strings.Get("Snd_Speak"), "speak"), (Strings.Get("Snd_Both"), "both"),
+        }, r.Speak ? (r.Sound ? "both" : "speak") : (r.Sound ? "sound" : "none"));
         OnYesTargetBox.Text = r.OnYes.Target;
         AutoBox.Text = r.PopupTimeoutSeconds.ToString();
         RepeatBox.Text = r.RepeatMinutes.ToString();
@@ -114,9 +119,7 @@ public partial class ReminderEditorWindow : Window
     {
         bool silent = ActSilent.IsChecked == true;
         Vis(SilentRow, silent);
-        Vis(SpeakChk, !silent);
-        Vis(SoundChk, !silent);   // 静默组不出声，留个勾不生效的框只会骗人（同 AutoRow/NagRow）
-        Vis(SoundHint, !silent);  // 说明跟着它说明的那两个框一起收
+        Vis(SoundRow, !silent);   // 静默组不出声，留个不生效的选择框只会骗人（同 AutoRow/NagRow）
         Vis(OnYesRow, !silent);
         Vis(AutoRow, !silent);
         Vis(NagRow, !silent);
@@ -250,8 +253,8 @@ public partial class ReminderEditorWindow : Window
             StartupHour = sh,
             StartupWithinMinutes = sw,
             Message = MsgBox.Text,
-            Speak = SpeakChk.IsChecked == true,
-            Sound = SoundChk.IsChecked == true,
+            Speak = ComboVal(SoundCombo) is "speak" or "both",
+            Sound = ComboVal(SoundCombo) is "sound" or "both",
             // 编辑过就不再是「临时」——打开编辑器改一遍，等于把这个随手计时器收编成自己的提醒。
             // 反过来保留 Temporary 会招来一个无声删除：编辑器为往返保真会原样存回 onceDate，
             // 于是一条被改成「每天 07:00」的提醒身上还挂着昨天的 onceDate，启动时的过期临时项清理

@@ -176,8 +176,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>逐字输入（换行=回车）。目标进程留空=发给当前焦点窗口（最稳）。</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>消息</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>语音播报</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>提示音</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>两者不同，可各开各的：提示音只是一声「叮」，为的是让你抬头；语音播报会把上面这段内容整句念出来。</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>提示音 + 语音播报</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>语音播报（念出内容）</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>提示音（叮一声）</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>不出声</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>声音</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否确认（是=继续，否=中止本组）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>点是后</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈现方式</value></data>

@@ -174,8 +174,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>1文字ずつ入力（改行=Enter）。対象プロセスを空にするとフォーカス中のウィンドウへ送信（最も安定）。</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>メッセージ</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>読み上げ</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>通知音</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>別物で、片方だけでも使えます。通知音は「ポン」と一度鳴るだけで、顔を上げてもらうためのもの。読み上げは上の本文をそのまま音声で読みます。</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>通知音 + 読み上げ</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>読み上げ（本文を音声で）</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>通知音（1 回ポン）</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>鳴らさない</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>音</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>はい/いいえ確認（はい=続行、いいえ=グループ中止）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>はいの後</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>表示方法</value></data>

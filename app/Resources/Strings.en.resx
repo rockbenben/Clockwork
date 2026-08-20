@@ -176,8 +176,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Types text literally (newline = Enter). Leave target process blank to send to the focused window (most reliable).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Message</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Speak</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>Sound</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>Two different things, either can be on alone: Sound is a single chime to make you look up; Speak reads the message above aloud.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>Chime + read aloud</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>Read aloud (speaks the text)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>Chime (a single ding)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>Silent</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>Sound</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Yes/No confirm (Yes = continue, No = abort group)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>On Yes</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Show as</value></data>

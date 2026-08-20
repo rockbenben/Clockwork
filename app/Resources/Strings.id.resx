@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Mengetik per karakter (baris baru = Enter). Kosongkan proses untuk kirim ke jendela fokus (paling andal).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Pesan</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Baca suara</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>Suara</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>Dua hal berbeda dan bisa dinyalakan sendiri-sendiri: suara hanya satu nada agar Anda mendongak; pembacaan akan membacakan teks di atas dengan lantang.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>Nada + bacakan</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>Bacakan (membaca teksnya)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>Nada (sekali)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>Senyap</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>Suara</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Konfirmasi Ya/Tidak (Ya = lanjut, Tidak = batalkan grup)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Setelah «Ya»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Tampilkan sebagai</value></data>

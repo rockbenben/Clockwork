@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Karakter karakter yazar (yeni satır = Enter). Odaktaki pencereye göndermek için işlemi boş bırakın (en güvenilir).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Mesaj</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Sesli oku</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>Ses</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>İkisi farklı şeydir, ayrı ayrı açılabilir: ses tek bir uyarı sesidir, başınızı kaldırmanız içindir; seslendirme ise yukarıdaki metni yüksek sesle okur.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>Uyarı sesi + seslendirme</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>Seslendirme (metni okur)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>Uyarı sesi (tek)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>Sessiz</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>Ses</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Evet/Hayır onayla (Evet = devam, Hayır = grubu iptal)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«Evet»ten sonra</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Gösterim</value></data>

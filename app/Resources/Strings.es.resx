@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>Escribe carácter a carácter (salto = Enter). Deja el proceso vacío para enviar a la ventana con foco (lo más fiable).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>Mensaje</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Leer en voz alta</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>Sonido</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>Son cosas distintas y se activan por separado: el sonido es un único aviso para que levantes la vista; la voz lee en alto el texto de arriba.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>Aviso + voz</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>Voz (lee el texto)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>Aviso (un solo tono)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>Silencio</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>Sonido</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Confirmar Sí/No (Sí = continuar, No = cancelar grupo)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Tras «Sí»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Mostrar como</value></data>

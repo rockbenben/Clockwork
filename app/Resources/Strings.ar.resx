@@ -172,8 +172,11 @@
   <data name="Ed_TextHint" xml:space="preserve"><value>يكتب حرفًا حرفًا (سطر جديد = Enter). اترك العملية فارغة للإرسال إلى النافذة النشطة (الأكثر موثوقية).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>رسالة</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>قراءة صوتية</value></data>
-  <data name="Ed_Sound" xml:space="preserve"><value>صوت</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>شيئان مختلفان ويمكن تشغيل كل منهما وحده: الصوت مجرد رنّة واحدة لتلفت انتباهك، أما القراءة الصوتية فتقرأ النص أعلاه بصوت مسموع.</value></data>
+  <data name="Snd_Both" xml:space="preserve"><value>رنّة + قراءة صوتية</value></data>
+  <data name="Snd_Speak" xml:space="preserve"><value>قراءة صوتية (تقرأ النص)</value></data>
+  <data name="Snd_Sound" xml:space="preserve"><value>رنّة (مرة واحدة)</value></data>
+  <data name="Snd_None" xml:space="preserve"><value>بلا صوت</value></data>
+  <data name="Ed_SoundMode" xml:space="preserve"><value>الصوت</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>تأكيد نعم/لا (نعم = متابعة، لا = إلغاء المجموعة)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>بعد «نعم»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>طريقة العرض</value></data>
