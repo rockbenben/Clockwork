@@ -42,7 +42,7 @@ The most common need, "open my everyday apps at login":
 
 ## Startup list
 
-- An **ordered list of steps** run top-to-bottom at login. Add/remove; **drag a row to reorder it**; **double-click a row to edit** it; **right-click** for Move up / Move down / Duplicate (plus Skip today on the Scheduled tasks page). Move up/down live in the menu rather than being dropped — dragging needs a mouse, while the menu is one Menu-key press away. (All three list pages work the same way.)
+- An **ordered list of steps** run top-to-bottom at login. Add/remove; **drag a row to reorder it** — each row has a **drag handle** (≡) at its left edge that lights up as you hover the row; the up/down buttons still work too (keyboard-reachable, and better for nudging one step at a time). **Double-click a row to edit** it; **right-click** for Duplicate (plus Skip today on the Scheduled tasks page). (All three list pages work the same way.)
 - Each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times, waiting the post-step delay between each), and **run conditions** (see below). *Message* steps have no repeat count — they always show once, and a count left over from switching a step to *Message* has no effect.
 - Selecting a step and clicking **Run** runs *just that step* immediately (ignoring its enabled state and time conditions — pure test); a tray toast reports the result.
 - **The first entry under Add ▾ is "Pick from Start menu…"** — it lists every program in your Start menu — **including Store / UWP apps like Sticky Notes or Paint, which have no exe path** (they don't exist as files, so you could never type them in). Search, multi-select with Ctrl / Shift, and each one becomes a *Launch program* step. No more right-click → Properties → copy the target path. Added steps arrive **unticked**, so you get a look before anything runs.
@@ -165,7 +165,7 @@ These don't watch the clock, they watch the machine — the task fires the momen
   - If group A references group B and you press **B's** hotkey while B runs, **the whole run is cancelled** (A stops too) — stopping only B and letting A carry on would leave you with a half-finished state that is harder to clean up than not cancelling at all.
 - A **message** step can act as a confirmation gate — answering **No** aborts the rest of the group (e.g. "Did you log today's tasks?" before wrap-up).
 - **Presentation:** a message step shows as either **Dialog (blocks)** — the default, same as above — or **Card (non-blocking)**: it slides into the corner and **auto-closes** after the seconds you set (**0 = stays until clicked**), and the group carries straight on without waiting for an answer. Switching to card hides and clears the confirm (Yes/No) and On-Yes fields, since a card's only interaction is click-to-dismiss. Cards are also the only message form that fires from the **startup list** — a dialog at boot would block the whole list, so dialog-form message steps are silently skipped there.
-- Inside the group editor, **drag a step to reorder it** (the up/down buttons still work).
+- Inside the group editor, **drag a step to reorder it** — same as the three list pages, each row carries a drag handle (≡) at its left edge; the up/down buttons still work too.
 - **Duplicate** clones the selected group as "… (copy)" — a quick base for a variant. The copy gets **no hotkey** (two groups can't share one), so assign a new one if you want it.
 - Deleting a group that is **referenced** (by a scheduled task's On-Yes / silent group, or an action-group step) tells you how many references there are and clears them along with it, so nothing is left pointing at a group that no longer exists.
 
@@ -214,7 +214,7 @@ Three sections, ordered by when you'd reach for them.
 ## Tips
 
 - Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.
-- **The side buttons follow the selection** — with no row selected, **Edit / Delete / Up / Down / Duplicate / Run** are greyed out, since they only ever act on the selected row. **Add** always works.
+- **The side buttons follow the selection** — with no row selected, **Edit / Delete / Up / Down / Run** are greyed out, since they only ever act on the selected row. **Add** always works. The right-click menu's **Duplicate** (plus **Skip today** on the Scheduled tasks page) behaves the same way: with nothing selected, or when you right-click the header or empty space, the menu simply does not open — a menu that acts somewhere else is worse than no menu.
 - **Nothing is cut off silently** — in all four lists, a cell too wide for its column ends in "…"; hover it to read the whole thing.
 - **Deleting always asks for confirmation** — list rows, steps inside the group editor, and system startup items alike. The dialog names what you're about to delete, so you can catch a wrong selection before it's gone.
 - Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Task state is `clockwork.state.json` (also local; safe to delete — at most a task fires once more today). Prefer the Settings tab's **Export / Import Config** for backups and moving between PCs.

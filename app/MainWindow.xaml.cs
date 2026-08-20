@@ -364,19 +364,21 @@ public partial class MainWindow : Window
     // 空白处右键：没有行可指，直接取消菜单——弹一个作用在别处的菜单比不弹更糟。
     private static void AttachRowContextMenu(System.Windows.Controls.DataGrid grid)
     {
+        bool overRow = false;   // 上一次右键是不是落在某一行上（表头/空白处则为 false）
         grid.PreviewMouseRightButtonDown += (s, e) =>
         {
-            if (RowUnder(grid, e.OriginalSource as DependencyObject) is { } row) grid.SelectedItem = row.Item;
+            var row = Views.DataGridReorder.RowFromHit(e.OriginalSource as DependencyObject);
+            overRow = row != null;
+            if (row != null) grid.SelectedItem = row.Item;
         };
-        grid.ContextMenuOpening += (s, e) => { if (grid.SelectedIndex < 0) e.Handled = true; };
-    }
-
-    // 从命中的可视元素往上找它所属的行；没找到（表头/空白区）返回 null。
-    private static System.Windows.Controls.DataGridRow? RowUnder(System.Windows.Controls.DataGrid grid, DependencyObject? hit)
-    {
-        while (hit != null && hit is not System.Windows.Controls.DataGridRow)
-            hit = System.Windows.Media.VisualTreeHelper.GetParent(hit);
-        return hit as System.Windows.Controls.DataGridRow;
+        grid.ContextMenuOpening += (s, e) =>
+        {
+            // 键盘 Menu 键也会走到这里，但它不经过上面那个鼠标事件——用陈旧的 overRow 判断
+            // 会把键盘那条路整个堵死。WPF 在键盘调起时把光标坐标置为 -1，据此分流：
+            // 键盘按当前选中行走（那正是用户焦点所在），鼠标才要求确实点在某一行上。
+            bool byKeyboard = e.CursorLeft < 0 && e.CursorTop < 0;
+            if (grid.SelectedIndex < 0 || (!byKeyboard && !overRow)) e.Handled = true;
+        };
     }
 
     // 变更(增/改/删/移)后把 VM 的选中回推到对应 DataGrid。三个列表页统一走它。
@@ -625,11 +627,11 @@ public partial class MainWindow : Window
     }
 
     // 右键先选中光标下的行，使随后的上下文菜单作用于该行。
+    // 命中点→行统一走 DataGridReorder.RowFromHit：这里原先手写的那圈遍历漏了「非 Visual 的
+    // DependencyObject 要走逻辑树」那道分流，直接喂给 VisualTreeHelper.GetParent 会抛。
     private void GridSystem_RightClick(object sender, MouseButtonEventArgs e)
     {
-        var dep = e.OriginalSource as System.Windows.DependencyObject;
-        while (dep != null && dep is not DataGridRow) dep = System.Windows.Media.VisualTreeHelper.GetParent(dep);
-        if (dep is DataGridRow row) row.IsSelected = true;
+        if (Views.DataGridReorder.RowFromHit(e.OriginalSource as DependencyObject) is { } row) row.IsSelected = true;
     }
 
     // 「接管到启动清单」：禁用原系统自启项 + 去重导入为托管 app 步骤（延迟 2s 体现接管价值）。

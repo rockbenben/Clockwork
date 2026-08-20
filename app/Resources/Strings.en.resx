@@ -41,6 +41,7 @@
   <data name="Btn_Edit" xml:space="preserve"><value>Edit</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ Up</value></data>
+  <data name="A11y_DragHandle" xml:space="preserve"><value>Drag to reorder</value></data>
   <data name="Btn_Down" xml:space="preserve"><value>↓ Down</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Run This Step</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Run Group</value></data>

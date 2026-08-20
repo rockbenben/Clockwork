@@ -39,6 +39,7 @@
   <data name="Btn_Edit" xml:space="preserve"><value>Editar</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>Eliminar</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ Subir</value></data>
+  <data name="A11y_DragHandle" xml:space="preserve"><value>Arrastrar para reordenar</value></data>
   <data name="Btn_Down" xml:space="preserve"><value>↓ Bajar</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ Ejecutar este paso</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Ejecutar grupo</value></data>

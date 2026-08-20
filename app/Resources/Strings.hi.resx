@@ -39,6 +39,7 @@
   <data name="Btn_Edit" xml:space="preserve"><value>संपादित करें</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>हटाएँ</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ ऊपर</value></data>
+  <data name="A11y_DragHandle" xml:space="preserve"><value>क्रम बदलने के लिए खींचें</value></data>
   <data name="Btn_Down" xml:space="preserve"><value>↓ नीचे</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ यह चरण चलाएँ</value></data>
   <data name="Btn_RunGroup" xml:space="preserve"><value>▶ समूह चलाएँ</value></data>
