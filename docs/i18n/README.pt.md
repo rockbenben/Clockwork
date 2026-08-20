@@ -41,7 +41,7 @@ Abra seus apps automaticamente ao entrar · lembretes com hora marcada · um toq
 | **Suas configurações** | `clockwork.settings.json` ao lado do exe (ou `%APPDATA%\Clockwork\` se essa pasta for somente leitura) — nada sai da máquina |
 | **Interface** | 18 idiomas, seguindo o idioma do Windows no primeiro uso |
 
-**Limites.** Sem instalador não há atualização automática — baixe o zip novo e substitua o exe. Lançadores em sandbox bloqueiam envio de teclas, ações de janela, ativar-se-já-estiver-aberto e volume (você recebe um aviso claro; o simples «executar programa» continua funcionando). Remapear teclas e expandir texto ficam fora do escopo — isso é trabalho do AutoHotkey.
+**Limites.** Sem instalador não há atualização automática — baixe o zip novo e substitua o exe. Lançadores em sandbox bloqueiam envio de teclas, ações de rato, ações de janela, ativar-se-já-estiver-aberto e volume (você recebe um aviso claro; o simples «executar programa» continua funcionando). Remapear teclas e expandir texto ficam fora do escopo — isso é trabalho do AutoHotkey.
 
 ## Como começar
 

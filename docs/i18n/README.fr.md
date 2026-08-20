@@ -41,7 +41,7 @@ Lancez vos applications automatiquement à l'ouverture de session · rappels pro
 | **Vos réglages** | `clockwork.settings.json` à côté de l'exe (ou `%APPDATA%\Clockwork\` si ce dossier est en lecture seule) — rien ne quitte la machine |
 | **Interface** | 18 langues, suivant la langue d'affichage de Windows au premier lancement |
 
-**Limites.** Sans installateur, pas de mise à jour automatique — téléchargez le nouveau zip et remplacez l'exe. Les lanceurs en bac à sable bloquent l'envoi de touches, les actions de fenêtre, activer-si-déjà-lancé et le volume (vous recevez un avertissement clair ; le simple « lancer un programme » fonctionne toujours). Le remappage de touches et l'expansion de texte restent hors périmètre — c'est le travail d'AutoHotkey.
+**Limites.** Sans installateur, pas de mise à jour automatique — téléchargez le nouveau zip et remplacez l'exe. Les lanceurs en bac à sable bloquent l'envoi de touches, les actions de souris, les actions de fenêtre, activer-si-déjà-lancé et le volume (vous recevez un avertissement clair ; le simple « lancer un programme » fonctionne toujours). Le remappage de touches et l'expansion de texte restent hors périmètre — c'est le travail d'AutoHotkey.
 
 ## Prise en main
 

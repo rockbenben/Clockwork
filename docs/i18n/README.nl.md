@@ -41,7 +41,7 @@ Start je apps automatisch bij het aanmelden · herinneringen op tijd · met éé
 | **Jouw instellingen** | `clockwork.settings.json` naast de exe (of `%APPDATA%\Clockwork\` als die map alleen-lezen is) — er verlaat niets de machine |
 | **Interface** | 18 talen, volgt bij de eerste start je Windows-weergavetaal |
 
-**Beperkingen.** Geen installatie betekent ook geen automatische update — pak de nieuwe zip en vervang de exe. Sandbox-lanceerders blokkeren toetsen-versturen, vensteracties, activeren-indien-actief en volume (je krijgt een duidelijke melding; het gewone «programma starten» werkt gewoon). Toetsen hertoewijzen en tekstuitbreiding vallen buiten de scope — dat is het werk van AutoHotkey.
+**Beperkingen.** Geen installatie betekent ook geen automatische update — pak de nieuwe zip en vervang de exe. Sandbox-lanceerders blokkeren toetsen-versturen, muisacties, vensteracties, activeren-indien-actief en volume (je krijgt een duidelijke melding; het gewone «programma starten» werkt gewoon). Toetsen hertoewijzen en tekstuitbreiding vallen buiten de scope — dat is het werk van AutoHotkey.
 
 ## Aan de slag
 

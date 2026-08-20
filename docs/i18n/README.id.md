@@ -41,7 +41,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 | **Pengaturan Anda** | `clockwork.settings.json` di samping exe (atau `%APPDATA%\Clockwork\` bila folder itu hanya-baca) — tidak ada yang meninggalkan mesin |
 | **Antarmuka** | 18 bahasa, mengikuti bahasa tampilan Windows pada jalankan pertama |
 
-**Batasan.** Tanpa penginstal berarti tanpa pembaruan otomatis — unduh zip baru dan ganti exe-nya. Peluncur sandbox memblokir kirim-tombol, aksi jendela, aktifkan-jika-berjalan, dan volume (Anda akan mendapat pemberitahuan yang jelas; «luncurkan program» biasa tetap berfungsi). Pemetaan ulang tombol dan ekspansi teks di luar cakupan — itu pekerjaan AutoHotkey.
+**Batasan.** Tanpa penginstal berarti tanpa pembaruan otomatis — unduh zip baru dan ganti exe-nya. Peluncur sandbox memblokir kirim-tombol, aksi tetikus, aksi jendela, aktifkan-jika-berjalan, dan volume (Anda akan mendapat pemberitahuan yang jelas; «luncurkan program» biasa tetap berfungsi). Pemetaan ulang tombol dan ekspansi teks di luar cakupan — itu pekerjaan AutoHotkey.
 
 ## Memulai
 
