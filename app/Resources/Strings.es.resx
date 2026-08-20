@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Ejecutar como administrador</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>El destino puede ser un programa (ruta completa o solo el nombre), un acceso directo, un script, una carpeta, una URL, un documento o un protocolo como ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Atajo</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ej.: Win+D / Alt+K / Ctrl+Enter / F5. Se envía a la ventana con foco; pon el destino al frente primero. Las combinaciones que usa Windows (Win+D, Win+6…) no se pueden capturar; haz doble clic en el cuadro para escribirlas. Para la rueda, basta con desplazar aquí (con Ctrl pulsado hace zoom); combínalo con el número de repeticiones para N muescas. Con Mayús pulsado, desplazamiento horizontal.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ej.: Win+D / Alt+K / Ctrl+Enter / F5. Se envía a la ventana con foco; pon el destino al frente primero. Las combinaciones que usa Windows (Win+D, Win+6…) no se pueden capturar; haz doble clic en el cuadro para escribirlas. Las acciones de ratón con modificadores también van aquí: desplaza dentro del cuadro para grabar una (Ctrl para zoom, Mayús para horizontal). Los botones se escriben como LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Para desplazar o hacer clic sin más, el paso «Ratón» es más cómodo.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>El desplazamiento va a la ventana bajo el puntero; los clics ocurren donde ya está el puntero (esta app nunca lo mueve). Coloca antes la ventana con Acción de ventana → traer al frente, o limítate a acciones independientes de la posición como Atrás/Adelante. Sube el número de repeticiones para N clics o muescas y usa el retardo posterior para el ritmo.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Desplazar abajo</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Desplazar a la derecha</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Mensaje</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Leer en voz alta</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Sonido</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Son cosas distintas y se activan por separado: el sonido es un único aviso para que levantes la vista; la voz lee en alto el texto de arriba.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Confirmar Sí/No (Sí = continuar, No = cancelar grupo)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Tras «Sí»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Mostrar como</value></data>

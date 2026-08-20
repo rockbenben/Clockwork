@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Chạy với quyền quản trị</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Mục tiêu có thể là chương trình (đường dẫn đầy đủ hoặc chỉ tên), lối tắt, tập lệnh, thư mục, URL, tài liệu hoặc giao thức như ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Phím tắt</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập. Với con lăn, chỉ cần cuộn ngay tại đây (giữ Ctrl để phóng to thu nhỏ); kết hợp số lần lặp để cuộn N nấc. Giữ Shift để cuộn ngang.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập. Thao tác chuột kèm phím bổ trợ cũng ở đây: cuộn ngay trong ô để ghi lại (giữ Ctrl để phóng to, Shift để cuộn ngang). Các nút gõ là LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Nếu chỉ cần cuộn hay nhấp, bước «Chuột» tiện hơn.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Cuộn được gửi tới cửa sổ dưới con trỏ; cú nhấp xảy ra ngay tại vị trí con trỏ đang đứng (ứng dụng này không di chuyển con trỏ). Vì vậy hãy đưa cửa sổ đích ra trước bằng Hành động cửa sổ, hoặc chỉ dùng các thao tác không phụ thuộc vị trí như Lùi/Tiến. Tăng số lần lặp bên dưới để nhấp N lần hay cuộn N nấc, dùng độ trễ sau bước để chỉnh nhịp.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Cuộn xuống</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Cuộn sang phải</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Thông báo</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Đọc thành tiếng</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Âm báo</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Hai thứ khác nhau, bật riêng cũng được: âm báo chỉ là một tiếng “ting” để bạn ngẩng đầu lên; đọc thành tiếng sẽ đọc to nội dung ở trên.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Xác nhận Có/Không (Có = tiếp tục, Không = hủy nhóm)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Sau «Có»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Hiển thị dạng</value></data>

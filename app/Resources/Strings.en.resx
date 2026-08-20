@@ -150,7 +150,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Run as administrator</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Target can be a program (full path or bare name), shortcut, script, folder, URL, document, or a protocol like ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Hotkey</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first. Combos Windows itself owns (Win+D, Win+6…) can't be captured — double-click this box to type one. For the wheel, just scroll here (hold Ctrl while scrolling to zoom); pair it with the repeat count for N notches. Hold Shift while scrolling for horizontal scroll.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first. Combos Windows itself owns (Win+D, Win+6…) can't be captured — double-click this box to type one. Mouse actions with modifiers live here too: scroll inside the box to record one (hold Ctrl to zoom, Shift for horizontal), and type LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward for buttons. For plain scrolling or clicking, the Mouse step is easier.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Scrolling goes to the window under the pointer; clicks land wherever the pointer already is (this app never moves it), so put the target in place first with Window action → bring to front, or stick to position-independent actions like Back/Forward. Raise the repeat count below for N clicks or notches, and use the post-step delay for the rhythm.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Scroll down</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Scroll right</value></data>
@@ -177,6 +177,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Message</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Speak</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Sound</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Two different things, either can be on alone: Sound is a single chime to make you look up; Speak reads the message above aloud.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Yes/No confirm (Yes = continue, No = abort group)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>On Yes</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Show as</value></data>

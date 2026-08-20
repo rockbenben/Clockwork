@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Запуск от имени администратора</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Целью может быть программа (полный путь или просто имя), ярлык, скрипт, папка, URL, документ или протокол вроде ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Сочетание клавиш</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план. Комбинации, занятые самой Windows (Win+D, Win+6…), перехватить нельзя — дважды щёлкните поле и введите вручную. Для колёсика просто прокрутите здесь (с зажатым Ctrl — масштаб); вместе с числом повторов получится N щелчков. С зажатым Shift — горизонтальная прокрутка.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Напр.: Win+D / Alt+K / Ctrl+Enter / F5. Отправляется в активное окно; сначала выведите цель на передний план. Комбинации, занятые самой Windows (Win+D, Win+6…), перехватить нельзя — дважды щёлкните поле и введите вручную. Действия мыши с модификаторами тоже здесь: прокрутите внутри поля, чтобы записать одно (Ctrl — масштаб, Shift — по горизонтали). Кнопки вводятся как LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Для простой прокрутки или щелчка удобнее шаг «Мышь».</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Прокрутка идёт окну под указателем; щелчки происходят там, где указатель уже стоит (программа его не двигает). Сначала выведите нужное окно на передний план действием с окном либо используйте независимые от позиции «Назад»/«Вперёд». Для N щелчков или делений увеличьте число повторов ниже, а темп задайте задержкой после шага.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Прокрутить вниз</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Прокрутить вправо</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Сообщение</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Озвучивание</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Звук</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Это разные вещи, включаются независимо: звук — один короткий сигнал, чтобы вы подняли глаза; озвучивание читает вслух текст выше.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Подтверждение Да/Нет (Да = продолжить, Нет = прервать группу)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>После «Да»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Показывать как</value></data>

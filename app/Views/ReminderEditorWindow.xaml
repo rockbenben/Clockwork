@@ -31,7 +31,9 @@
                 <StackPanel x:Name="IdleRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_IdleMinutes}" Width="90" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="IdleBox" AutomationProperties.Name="{loc:Loc Ed_IdleMinutes}" Width="60" Height="28"/><TextBlock Text="{loc:Loc Ed_IdleHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" VerticalAlignment="Center" Margin="8,0,0,0"/></StackPanel>
                 <StackPanel x:Name="BatteryRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_BatteryPercent}" Width="90" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="BatteryBox" AutomationProperties.Name="{loc:Loc Ed_BatteryPercent}" Width="60" Height="28"/><TextBlock Text="{loc:Loc Ed_BatteryHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" VerticalAlignment="Center" Margin="8,0,0,0"/></StackPanel>
                 <StackPanel x:Name="EventDaysRow" Margin="0,3">
-                    <TextBlock Text="{loc:Loc Ed_EventHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="100,0,0,4"/>
+                    <!-- 三条独立成行的提示都要 MaxWidth：本窗 ScrollViewer 开了横向滚动，子元素测量宽度是无限，
+             不钉上限的话 TextWrapping 不会生效，长译文会顶出横向滚动条并把整窗内容推着走。 -->
+        <TextBlock Text="{loc:Loc Ed_EventHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" MaxWidth="430" HorizontalAlignment="Left" Margin="100,0,0,4"/>
                 </StackPanel>
 
                 <StackPanel x:Name="PeriodRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Period}" Width="90" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="RecurCombo" AutomationProperties.Name="{loc:Loc Ed_Period}" Width="160" Height="28" SelectionChanged="Recur_Changed"/></StackPanel>
@@ -51,11 +53,12 @@
                 <StackPanel x:Name="SilentRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SilentGroup}" Width="90" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SilentCombo" AutomationProperties.Name="{loc:Loc Ed_SilentGroup}" Width="240" Height="28"/></StackPanel>
                 <!-- 交叉口指路：「登录时 + 静默动作组」与启动清单是同一件事的两条路。指路牌立在路口
                      ——只有真选出这个组合的人才看得到（见 UpdateCrossingHint），诚实写两边各自赢在哪。 -->
-                <TextBlock x:Name="LoginSilentHint" Text="{loc:Loc Ed_LoginSilentHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="100,2,0,4"/>
+                <TextBlock x:Name="LoginSilentHint" Text="{loc:Loc Ed_LoginSilentHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" MaxWidth="430" HorizontalAlignment="Left" Margin="100,2,0,4"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="90" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MsgBox" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="420" Height="72" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
                 <CheckBox x:Name="SpeakChk" Content="{loc:Loc Ed_Speak}" Margin="100,3,0,3"/>
                 <CheckBox x:Name="SoundChk" Content="{loc:Loc Ed_Sound}" Margin="100,3,0,3"/>
+                <TextBlock x:Name="SoundHint" Text="{loc:Loc Ed_SoundHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" MaxWidth="430" HorizontalAlignment="Left" Margin="118,0,0,4"/>
 
                 <StackPanel x:Name="OnYesRow" Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_OnYes}" Width="90" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="OnYesTypeCombo" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="140" Height="28" SelectionChanged="OnYesType_Changed"/>
                     <TextBox x:Name="OnYesTargetBox" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="150" Height="28" Margin="8,0,0,0"/><Button x:Name="OnYesBrowseBtn" Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="6,0,0,0" Click="BrowseOnYes_Click"/><ComboBox x:Name="OnYesGroupCombo" AutomationProperties.Name="{loc:Loc Ed_OnYes}" Width="220" Height="28" Margin="8,0,0,0"/></StackPanel>

@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Als beheerder uitvoeren</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Het doel kan een programma zijn (volledig pad of alleen de naam), een snelkoppeling, een script, een map, een URL, een document of een protocol zoals ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Sneltoets</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Bijv. Win+D / Alt+K / Ctrl+Enter / F5. Gaat naar het venster met focus; haal eerst het doel naar voren. Combinaties die Windows zelf gebruikt (Win+D, Win+6…) kun je niet opnemen — dubbelklik op het vak om ze te typen. Voor het muiswiel scroll je hier gewoon (met Ctrl ingedrukt om te zoomen); combineer met het herhaalaantal voor N klikken. Met Shift ingedrukt scroll je horizontaal.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Bijv. Win+D / Alt+K / Ctrl+Enter / F5. Gaat naar het venster met focus; haal eerst het doel naar voren. Combinaties die Windows zelf gebruikt (Win+D, Win+6…) kun je niet opnemen — dubbelklik op het vak om ze te typen. Muisacties met modificatietoetsen horen hier ook: scroll in het vak om er een op te nemen (Ctrl om te zoomen, Shift voor horizontaal). Knoppen typ je als LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Voor gewoon scrollen of klikken is de stap “Muis” makkelijker.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Scrollen gaat naar het venster onder de aanwijzer; klikken gebeurt waar de aanwijzer al staat (deze app verplaatst hem nooit). Zet het doel dus eerst klaar met Vensteractie → naar voorgrond, of blijf bij positieonafhankelijke acties als Terug/Vooruit. Verhoog het herhaalaantal voor N klikken of stappen en regel het tempo met de vertraging na de stap.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Omlaag scrollen</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Naar rechts scrollen</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Bericht</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Hardop voorlezen</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Geluid</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Twee verschillende dingen, los van elkaar in te schakelen: het geluid is één signaal om je te laten opkijken; voorlezen leest de tekst hierboven hardop voor.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Ja/Nee bevestigen (Ja = doorgaan, Nee = groep annuleren)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Na «Ja»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Tonen als</value></data>

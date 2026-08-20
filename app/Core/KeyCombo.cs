@@ -44,11 +44,14 @@ public static class KeyCombo
 
     // 主键是不是鼠标伪键。null=不是。
     //
-    // 做成「组合键里的一个主键」而不是新开一种步骤类型，是为了白拿现成的四样东西：
-    // 「重复次数」（滑 N 次直接就有）、「执行后延时」（两格之间的节奏）、修饰键解析（Ctrl+WheelDown 缩放
-    // 免费得到）、以及编辑器那一行 + 列表摘要 + 校验通路。新开类型要再走一遍这四样，还要加 18 份文案。
-    // 滚轮不是键盘事件，注入走 Win32.SendWheel（鼠标通道）——但它只能"发"，不能"绑"：
-    // RegisterHotKey 表达不了滚轮，所以全局热键那条路照旧只认 ToHotkeyParams，别把这个伪键放进去。
+    // 鼠标动作有两个入口，都归到这里解析，好让行为只有一份：
+    //   · 「鼠标」步骤——普通用户的路，下拉选动作，由 StepDisplay.MouseActions 映射到这些伪键；
+    //   · 「发送按键」的组合串——伪键当主键用，好处是白拿修饰键解析，Ctrl+WheelDown 缩放
+    //     这类带修饰键的组合只有这条路能表达（步骤下拉里放不下修饰键，放了就臃肿）。
+    // 两条路最终都走 KeyInput.SendKeyCombo，注入与告警完全同一套。
+    //
+    // 鼠标事件不是键盘事件，注入走 Win32 的鼠标通道——但它只能"发"，不能"绑"：
+    // RegisterHotKey 表达不了鼠标，所以全局热键那条路照旧只认 ToHotkeyParams，别把这些伪键放进去。
     public static MouseInput? Mouse(string? key) => (key ?? "").Trim().ToLowerInvariant() switch
     {
         "wheelup" => new MouseInput(MouseButton.None, Notches: 1),

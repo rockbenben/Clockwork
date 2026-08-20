@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Jalankan sebagai administrator</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Target bisa berupa program (path lengkap atau namanya saja), pintasan, skrip, folder, URL, dokumen, atau protokol seperti ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Pintasan</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu. Kombinasi milik Windows sendiri (Win+D, Win+6…) tidak bisa ditangkap — klik dua kali kotak ini untuk mengetiknya. Untuk roda, cukup gulir di sini (tahan Ctrl untuk zoom); padukan dengan jumlah pengulangan untuk N takik. Tahan Shift untuk gulir mendatar.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Mis.: Win+D / Alt+K / Ctrl+Enter / F5. Dikirim ke jendela fokus; bawa target ke depan dulu. Kombinasi milik Windows sendiri (Win+D, Win+6…) tidak bisa ditangkap — klik dua kali kotak ini untuk mengetiknya. Aksi tetikus dengan tombol pengubah juga di sini: gulir di dalam kotak untuk merekamnya (tahan Ctrl untuk zoom, Shift untuk mendatar). Tombol diketik sebagai LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Untuk sekadar menggulir atau mengeklik, langkah «Tetikus» lebih praktis.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Guliran dikirim ke jendela di bawah penunjuk; klik terjadi di tempat penunjuk berada sekarang (aplikasi ini tidak pernah memindahkannya). Jadi siapkan dulu jendelanya lewat Aksi jendela → bawa ke depan, atau pakai saja aksi yang tak bergantung posisi seperti Mundur/Maju. Naikkan jumlah pengulangan untuk N klik atau takik, dan atur iramanya lewat jeda setelah langkah.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Gulir ke bawah</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Gulir ke kanan</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Pesan</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Baca suara</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Suara</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Dua hal berbeda dan bisa dinyalakan sendiri-sendiri: suara hanya satu nada agar Anda mendongak; pembacaan akan membacakan teks di atas dengan lantang.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Konfirmasi Ya/Tidak (Ya = lanjut, Tidak = batalkan grup)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Setelah «Ya»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Tampilkan sebagai</value></data>

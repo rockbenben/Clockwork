@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>التشغيل كمسؤول</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>يمكن أن يكون الهدف برنامجًا (مسارًا كاملًا أو الاسم فقط) أو اختصارًا أو نصًا برمجيًا أو مجلدًا أو رابطًا أو مستندًا أو بروتوكولًا مثل ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>اختصار</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>مثال: Win+D / Alt+K / Ctrl+Enter / F5. يُرسَل إلى النافذة النشطة؛ أحضر الهدف للأمام أولًا. التركيبات التي يحجزها ويندوز (Win+D، Win+6…) لا يمكن التقاطها — انقر نقرًا مزدوجًا على الحقل لكتابتها. لاستخدام العجلة، مرّر داخل هذا الحقل فقط (مع الضغط على Ctrl للتكبير والتصغير)؛ مع عدد التكرارات للتمرير N درجة. مع الضغط على Shift يكون التمرير أفقيًا.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>مثال: Win+D / Alt+K / Ctrl+Enter / F5. يُرسَل إلى النافذة النشطة؛ أحضر الهدف للأمام أولًا. التركيبات التي يحجزها ويندوز (Win+D، Win+6…) لا يمكن التقاطها — انقر نقرًا مزدوجًا على الحقل لكتابتها. إجراءات الفأرة مع مفاتيح التعديل موجودة هنا أيضًا: مرّر داخل الحقل لتسجيل واحد (Ctrl للتكبير، Shift للتمرير الأفقي)، واكتب LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward للأزرار. أما التمرير أو النقر العادي فخطوة «الفأرة» أسهل.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>يذهب التمرير إلى النافذة تحت المؤشر، أما النقر فيقع حيث يوجد المؤشر بالفعل (لا يحرّك هذا البرنامج المؤشر أبدًا). لذا هيّئ الهدف أولًا عبر إجراء النافذة ← الإحضار إلى المقدمة، أو اكتفِ بإجراءات لا تعتمد على الموضع مثل رجوع/تقدّم. للنقر N مرة أو التمرير N درجة ارفع عدد التكرارات بالأسفل، واضبط الإيقاع بمهلة ما بعد الخطوة.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>التمرير لأسفل</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>التمرير لليمين</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>رسالة</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>قراءة صوتية</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>صوت</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>شيئان مختلفان ويمكن تشغيل كل منهما وحده: الصوت مجرد رنّة واحدة لتلفت انتباهك، أما القراءة الصوتية فتقرأ النص أعلاه بصوت مسموع.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>تأكيد نعم/لا (نعم = متابعة، لا = إلغاء المجموعة)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>بعد «نعم»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>طريقة العرض</value></data>

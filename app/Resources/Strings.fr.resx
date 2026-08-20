@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Exécuter en administrateur</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La cible peut être un programme (chemin complet ou nom seul), un raccourci, un script, un dossier, une URL, un document ou un protocole comme ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Raccourci</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan. Les combinaisons réservées par Windows (Win+D, Win+6…) ne peuvent pas être capturées — double-cliquez sur le champ pour les saisir. Pour la molette, faites simplement défiler ici (avec Ctrl enfoncé pour zoomer) ; combinez avec le nombre de répétitions pour N crans. Avec Maj enfoncée, défilement horizontal.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan. Les combinaisons réservées par Windows (Win+D, Win+6…) ne peuvent pas être capturées — double-cliquez sur le champ pour les saisir. Les actions de souris avec modificateurs sont ici aussi : faites défiler dans le champ pour en enregistrer une (Ctrl pour zoomer, Maj pour l’horizontal). Les boutons se saisissent LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Pour un simple défilement ou clic, l’étape « Souris » est plus simple.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Le défilement va à la fenêtre sous le pointeur ; les clics se produisent là où le pointeur se trouve déjà (cette appli ne le déplace jamais). Placez donc la cible avec Action de fenêtre → premier plan, ou tenez-vous-en aux actions indépendantes de la position comme Précédent/Suivant. Augmentez le nombre de répétitions pour N clics ou crans, et réglez le rythme avec le délai après l’étape.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Défiler vers le bas</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Défiler vers la droite</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Message</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Lecture vocale</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Son</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Deux choses différentes, activables séparément : le son est un simple bip pour vous faire lever les yeux ; la lecture vocale lit à voix haute le texte ci-dessus.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Confirmation Oui/Non (Oui = continuer, Non = annuler le groupe)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Après « Oui »</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Afficher comme</value></data>

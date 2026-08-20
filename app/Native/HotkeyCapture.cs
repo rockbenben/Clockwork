@@ -88,11 +88,15 @@ public static class HotkeyCapture
         return accept == null || accept(combo) ? combo : null;
     }
 
-    // 滚轮捕捉：在捕捉框上滚一下就录成 WheelUp / WheelDown，按住修饰键滚则带上修饰键。
+    // 滚轮捕捉：在捕捉框上滚一下就录成 WheelUp/Down（horizontal 时为 Right/Left），按住修饰键滚则带上修饰键。
     // 录键盘是「按一下」，录滚轮理应是「滚一下」——让人手输 WheelDown 这种魔法字符串，
     // 等于把功能藏起来只给知道的人用。手输仍然有效（改 json、无鼠标时的退路），但不再是唯一入口。
-    // Hotkey 模式一律返回 null：RegisterHotKey 表达不了滚轮，录进去会得到一个永不触发的热键。
-    // delta>0 = 向上（远离用户），与 Windows 的 WM_MOUSEWHEEL 同向。
+    //
+    // 只捕捉滚轮、不捕捉点击：这个框正是**靠点击来获得焦点**的，把点击也录进去的话，
+    // 点进框的那一下就会被当成用户想录的动作。点击类动作走「鼠标」步骤的下拉选，
+    // 那条路本来就更好找；要 Ctrl+左键这种带修饰键的组合则手输伪键。
+    // Hotkey 模式一律返回 null：RegisterHotKey 表达不了鼠标，录进去会得到一个永不触发的热键。
+    // delta>0 = 向上/向右，与 Windows 的 mouseData 符号约定同向。
     public static string? BuildWheelCombo(ModifierKeys mods, int delta, KeyCaptureMode mode, Func<string, bool>? accept, bool horizontal = false)
     {
         if (mode != KeyCaptureMode.SendKeys || delta == 0) return null;

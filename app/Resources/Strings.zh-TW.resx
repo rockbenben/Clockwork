@@ -148,7 +148,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>以系統管理員身分執行</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>目標可填：程式（完整路徑或裸名）/ 捷徑 / 指令碼 / 資料夾 / 網址 / 文件 / ms-settings: 等通訊協定。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>組合鍵</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。傳送給目前焦點視窗，請先確保目標在最前。 Win+D、Win+6 等被 Windows 佔用的組合擷取不到，雙擊本框可手動輸入。 要滾輪就在框裡滾一下（按住 Ctrl 滾=縮放），配「重複次數」即滑 N 次。按住 Shift 滾=橫向滾。</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。傳送給目前焦點視窗，請先確保目標在最前。 Win+D、Win+6 等被 Windows 佔用的組合擷取不到，雙擊本框可手動輸入。 帶修飾鍵的滑鼠動作也在這裡：在框裡滾一下即錄（按住 Ctrl 滾＝縮放、按住 Shift 滾＝橫向捲動），點擊類可手輸 LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward。單純的捲動或點擊用「滑鼠」步驟更省事。</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>捲動發給滑鼠指標下的視窗；**點擊落在滑鼠目前位置**（本程式不移動指標），所以點擊類動作請先用「視窗動作 → 帶到最前面」把目標擺好，或只用在上一頁/下一頁這類與位置無關的動作上。要點 N 次 / 捲 N 格就把下面的「重複次數」調大，用「執行後延時」控制節奏。</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>向下滾</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>向右滾</value></data>
@@ -175,6 +175,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>訊息</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>語音朗讀</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>提示音</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>兩者不同，可各開各的：提示音只是一聲「叮」，為的是讓你抬頭；語音播報會把上面這段內容整句念出來。</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否確認（是=繼續，否=中止本組）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>按是後</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈現方式</value></data>

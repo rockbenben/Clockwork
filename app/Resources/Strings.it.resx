@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Esegui come amministratore</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La destinazione può essere un programma (percorso completo o solo il nome), un collegamento, uno script, una cartella, un URL, un documento o un protocollo come ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Scorciatoia</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle. Per la rotellina basta scorrere qui (tenendo Ctrl per lo zoom); abbinala al numero di ripetizioni per N scatti. Con Maiusc premuto, scorrimento orizzontale.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Es.: Win+D / Alt+K / Ctrl+Invio / F5. Inviato alla finestra attiva; porta prima la destinazione in primo piano. Le combinazioni riservate a Windows (Win+D, Win+6…) non si possono catturare: fai doppio clic sul campo per digitarle. Anche le azioni del mouse con modificatori stanno qui: scorri dentro il campo per registrarne una (Ctrl per lo zoom, Maiusc per l’orizzontale). I pulsanti si scrivono LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Per un semplice scorrimento o clic, il passo «Mouse» è più comodo.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Lo scorrimento va alla finestra sotto il puntatore; i clic avvengono dove il puntatore già si trova (questa app non lo sposta mai). Porta prima la finestra in primo piano con Azione finestra, oppure limitati ad azioni indipendenti dalla posizione come Indietro/Avanti. Aumenta il numero di ripetizioni per N clic o scatti e usa il ritardo dopo il passo per il ritmo.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Scorri giù</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Scorri a destra</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Messaggio</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Lettura vocale</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Suono</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Due cose diverse, attivabili separatamente: il suono è un singolo segnale per farti alzare lo sguardo; la lettura vocale legge ad alta voce il testo qui sopra.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Conferma Sì/No (Sì = continua, No = annulla gruppo)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>Dopo «Sì»</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Mostra come</value></data>

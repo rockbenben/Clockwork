@@ -46,7 +46,7 @@ public static class KeyInput
         return new HotkeyParams { Modifiers = mods, Vk = vk };
     }
 
-    // 修饰键 → 虚拟键码。键盘与滚轮两条注入路共用一份：顺序即按下顺序，抬起按逆序。
+    // 修饰键 → 虚拟键码。键盘与鼠标两条注入路共用一份：顺序即按下顺序，抬起按逆序。
     // addShift 供键盘路使用——'+' 这类字符本身就需要 Shift，与用户写没写 Shift 无关。
     private static ushort[] ModifierVks(ParsedCombo p, bool addShift = false)
     {
@@ -58,9 +58,9 @@ public static class KeyInput
         return mods.ToArray();
     }
 
-    // 「发送按键」框里可接受的内容：能绑成热键的组合，或滚轮伪键。
-    // 与热键绑定的判据（ToHotkeyParams）刻意分开：RegisterHotKey 表达不了滚轮，
-    // 合成一个判据的话，要么滚轮进不了发送框，要么滚轮能被绑成一个永远不触发的全局热键。
+    // 「发送按键」框里可接受的内容：能绑成热键的组合，或鼠标伪键。
+    // 与热键绑定的判据（ToHotkeyParams）刻意分开：RegisterHotKey 表达不了鼠标，
+    // 合成一个判据的话，要么鼠标伪键进不了发送框，要么它能被绑成一个永远不触发的全局热键。
     public static bool CanSendCombo(string combo)
         => !KeyCombo.HasUnknownModifier(combo)
            && (ToHotkeyParams(combo) != null || KeyCombo.Mouse(KeyCombo.ParseCombo(combo).Key) != null);

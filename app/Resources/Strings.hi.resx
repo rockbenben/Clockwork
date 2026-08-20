@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>व्यवस्थापक के रूप में चलाएँ</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>लक्ष्य में प्रोग्राम (पूरा पथ या केवल नाम), शॉर्टकट, स्क्रिप्ट, फ़ोल्डर, URL, दस्तावेज़, या ms-settings: जैसा प्रोटोकॉल दिया जा सकता है।</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>शॉर्टकट</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>जैसे: Win+D / Alt+K / Ctrl+Enter / F5. व्हील के लिए यहीं स्क्रॉल करें (Ctrl दबाए रखकर ज़ूम); N बार के लिए दोहराव संख्या के साथ इस्तेमाल करें। Shift दबाए रखकर क्षैतिज स्क्रॉल।</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>जैसे: Win+D / Alt+K / Ctrl+Enter / F5. मॉडिफ़ायर सहित माउस क्रियाएँ भी यहीं: रिकॉर्ड करने के लिए इसी बॉक्स में स्क्रॉल करें (Ctrl से ज़ूम, Shift से क्षैतिज)। बटन के लिए LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward टाइप करें। सिर्फ़ स्क्रॉल या क्लिक करना हो तो “माउस” चरण आसान है।</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>स्क्रॉल पॉइंटर के नीचे वाली विंडो पर जाता है; क्लिक वहीं होता है जहाँ पॉइंटर पहले से है (यह ऐप उसे कभी नहीं हिलाता)। इसलिए पहले “विंडो क्रिया → सामने लाएँ” से लक्ष्य सेट करें, या केवल पीछे/आगे जैसी स्थिति-निरपेक्ष क्रियाएँ ही उपयोग करें। N क्लिक या N निशान के लिए नीचे दोहराव संख्या बढ़ाएँ और गति के लिए चरण-बाद विलंब का उपयोग करें।</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>नीचे स्क्रॉल</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>दाएँ स्क्रॉल</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>संदेश</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>वाचन</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>ध्वनि</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>ये दो अलग चीज़ें हैं और अलग-अलग चालू की जा सकती हैं: ध्वनि सिर्फ़ एक बार बजने वाली टोन है ताकि आप नज़र उठाएँ; वाचन ऊपर लिखा संदेश ज़ोर से पढ़ता है।</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>हाँ/नहीं पुष्टि (हाँ = जारी, नहीं = समूह रद्द)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«हाँ» के बाद</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>इस रूप में दिखाएँ</value></data>

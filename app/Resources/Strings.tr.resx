@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Yönetici olarak çalıştır</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Hedef bir program (tam yol veya yalnızca ad), kısayol, betik, klasör, URL, belge ya da ms-settings: gibi bir protokol olabilir.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Kısayol</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın. Tekerlek için burada kaydırmanız yeter (Ctrl basılıyken yakınlaştırır); tekrar sayısıyla N tık olur. Shift basılıyken yatay kaydırma.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Örn. Win+D / Alt+K / Ctrl+Enter / F5. Odaktaki pencereye gönderilir; önce hedefi öne getirin. Windows'un kendi kullandığı kombinasyonlar (Win+D, Win+6…) yakalanamaz — kutuya çift tıklayıp elle yazın. Değiştirici tuşlu fare eylemleri de burada: kaydetmek için kutunun içinde kaydırın (Ctrl yakınlaştırır, Shift yatay kaydırır). Düğmeleri LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward olarak yazın. Yalnızca kaydırma veya tıklama için «Fare» adımı daha kolaydır.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Kaydırma işaretçinin altındaki pencereye gider; tıklamalar işaretçinin bulunduğu yerde olur (bu uygulama işaretçiyi hiç oynatmaz). Bu yüzden önce Pencere eylemi → öne getir ile hedefi yerleştirin ya da Geri/İleri gibi konumdan bağımsız eylemlerde kalın. N tıklama veya tık için aşağıdaki tekrar sayısını artırın, temposunu adım sonrası gecikmeyle ayarlayın.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Aşağı kaydır</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Sağa kaydır</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>Mesaj</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>Sesli oku</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>Ses</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>İkisi farklı şeydir, ayrı ayrı açılabilir: ses tek bir uyarı sesidir, başınızı kaldırmanız içindir; seslendirme ise yukarıdaki metni yüksek sesle okur.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>Evet/Hayır onayla (Evet = devam, Hayır = grubu iptal)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>«Evet»ten sonra</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>Gösterim</value></data>

@@ -116,6 +116,7 @@ public partial class ReminderEditorWindow : Window
         Vis(SilentRow, silent);
         Vis(SpeakChk, !silent);
         Vis(SoundChk, !silent);   // 静默组不出声，留个勾不生效的框只会骗人（同 AutoRow/NagRow）
+        Vis(SoundHint, !silent);  // 说明跟着它说明的那两个框一起收
         Vis(OnYesRow, !silent);
         Vis(AutoRow, !silent);
         Vis(NagRow, !silent);

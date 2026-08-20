@@ -150,7 +150,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>以管理员运行</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>目标可填：程序（全路径或裸名）/ 快捷方式 / 脚本 / 文件夹 / 网址 / 文档 / ms-settings: 等协议。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>组合键</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。发给当前焦点窗口，请先确保目标在最前。 Win+D、Win+6 等被 Windows 占用的组合捕捉不到，双击本框可手动输入。 要滚轮就在框里滚一下（按住 Ctrl 滚=缩放），配「重复次数」即滑 N 次。按住 Shift 滚=横向滚。</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。发给当前焦点窗口，请先确保目标在最前。 Win+D、Win+6 等被 Windows 占用的组合捕捉不到，双击本框可手动输入。 带修饰键的鼠标动作也在这里：在框里滚一下即录（按住 Ctrl 滚＝缩放、按住 Shift 滚＝横向滚），点击类可手输 LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward。单纯的滚动或点击用「鼠标」步骤更省事。</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>滚动发给鼠标指针下的窗口；**点击落在鼠标当前位置**（本程序不挪指针），所以点击类动作请先用「窗口动作 → 带到最前面」把目标摆好，或只用在后退/前进这类与位置无关的动作上。要点 N 次 / 滚 N 格就把下面的「重复次数」调大，用「执行后延时」控制节奏。</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>向下滚</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>向右滚</value></data>
@@ -177,6 +177,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>消息</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>语音播报</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>提示音</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>两者不同，可各开各的：提示音只是一声「叮」，为的是让你抬头；语音播报会把上面这段内容整句念出来。</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否确认（是=继续，否=中止本组）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>点是后</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈现方式</value></data>

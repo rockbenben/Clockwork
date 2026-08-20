@@ -59,9 +59,6 @@ public static class StepRunner
         {
             case "app": return RunLaunchItem(s, selfPaths);
             case "keys": return KeyInput.SendKeyCombo(s.Combo);
-            // 滚轮步骤只是「发送按键」的一个预设入口：转成伪键走同一条注入路（含 UIPI 被拒的同款告警），
-            // 别在这里另起一套 SendWheel 调用——两处各写一份，将来改注入行为必漏一处。
-            // 滚 N 格用步骤自带的「重复次数」，与手写 WheelDown 的行为完全一致。
             // 鼠标步骤只是「发送按键」的一个预设入口：转成伪键走同一条注入路（含 UIPI 被拒的同款告警）。
             // 别在这里另起一套 SendWheel/SendMouseButton 调用——两处各写一份，将来改注入行为必漏一处。
             // 点几次/滚几格用步骤自带的「重复次数」，与手写伪键的行为完全一致。

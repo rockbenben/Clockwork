@@ -26,7 +26,7 @@ public static class StepDisplay
     public static readonly string[] StepKinds =
         { "app", "keys", "mouse", "text", "volume", "window", "system", "group", "delay", "message" };
 
-    // 「新增 ▾」菜单的意图分节。九个机制名平铺时，新用户不知道「关掉微信」该点「窗口动作」还是
+    // 「新增 ▾」菜单的意图分节。十个机制名平铺时，新用户不知道「关掉微信」该点「窗口动作」还是
     // 「发送按键」——分节按「你想对什么做事」组织，机制名降到节内。节顺序即菜单顺序。
     // 必须恰好覆盖 StepKinds（有测试盯着）：漏一个那种步骤就没了入口，重一个会出现两条同名菜单项。
     public static readonly (string SectionKey, string[] Kinds)[] StepKindSections =

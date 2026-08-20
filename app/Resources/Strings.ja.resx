@@ -148,7 +148,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>管理者として実行</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>対象にはプログラム（フルパスまたは名前のみ）/ ショートカット / スクリプト / フォルダー / URL / ドキュメント / ms-settings: などのプロトコルを指定できます。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>ショートカット</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。フォーカス中のウィンドウへ送信されます。対象を最前面にしてください。 Win+D / Win+6 など Windows が占有する組み合わせはキャプチャできません。ダブルクリックで手入力できます。 ホイール操作はこの枠内でホイールを回すだけ（Ctrl を押しながらで拡大縮小）。「繰り返し回数」と併用で N 目盛り。Shift を押しながらで横スクロール。</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。フォーカス中のウィンドウへ送信されます。対象を最前面にしてください。 Win+D / Win+6 など Windows が占有する組み合わせはキャプチャできません。ダブルクリックで手入力できます。 修飾キー付きのマウス操作もここで：枠内でホイールを回すと記録されます（Ctrl で拡大縮小、Shift で横スクロール）。ボタンは LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward と入力します。単純なスクロールやクリックは「マウス」ステップが簡単です。</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>スクロールはポインターの下のウィンドウへ。クリックはポインターの現在位置で起こります（本アプリはポインターを動かしません）。クリック系は「ウィンドウ操作 → 最前面へ」で対象を整えてから使うか、位置に依存しない「戻る/進む」に留めてください。N 回・N 目盛りは下の「繰り返し回数」で、間隔は「実行後の待ち時間」で調整します。</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>下にスクロール</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>右にスクロール</value></data>
@@ -175,6 +175,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>メッセージ</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>読み上げ</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>通知音</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>別物で、片方だけでも使えます。通知音は「ポン」と一度鳴るだけで、顔を上げてもらうためのもの。読み上げは上の本文をそのまま音声で読みます。</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>はい/いいえ確認（はい=続行、いいえ=グループ中止）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>はいの後</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>表示方法</value></data>

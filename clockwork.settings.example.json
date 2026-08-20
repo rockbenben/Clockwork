@@ -207,6 +207,7 @@
       ],
       "message": "起来活动一下、喝口水~（示例）",
       "speak": false,
+      "sound": true,
       "onYes": {
         "type": "none",
         "target": ""
@@ -244,6 +245,7 @@
       ],
       "message": "该收工了，看看今天的待办有没有收尾（示例）",
       "speak": true,
+      "sound": true,
       "onYes": {
         "type": "none",
         "target": ""
@@ -275,6 +277,7 @@
       "days": [],
       "message": "该睡觉了（示例）",
       "speak": false,
+      "sound": true,
       "onYes": {
         "type": "none",
         "target": ""
@@ -306,6 +309,7 @@
       "days": [],
       "message": "检查这个月的账单 / 订阅扣费（示例·每月 1 号）",
       "speak": false,
+      "sound": true,
       "onYes": {
         "type": "none",
         "target": ""

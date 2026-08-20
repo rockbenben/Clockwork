@@ -146,7 +146,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>관리자 권한으로 실행</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>대상에는 프로그램(전체 경로 또는 이름만), 바로 가기, 스크립트, 폴더, URL, 문서, ms-settings: 같은 프로토콜을 넣을 수 있습니다.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>단축키</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>예: Win+D / Alt+K / Ctrl+Enter / F5. 포커스된 창으로 전송되므로 대상을 먼저 앞으로 가져오세요. Win+D, Win+6 처럼 Windows가 선점한 조합은 캡처되지 않습니다. 상자를 두 번 클릭하면 직접 입력할 수 있습니다. 휠은 이 칸에서 그냥 굴리면 됩니다(Ctrl을 누른 채 굴리면 확대/축소). 반복 횟수와 함께 쓰면 N칸. Shift를 누른 채 굴리면 가로 스크롤.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>예: Win+D / Alt+K / Ctrl+Enter / F5. 포커스된 창으로 전송되므로 대상을 먼저 앞으로 가져오세요. Win+D, Win+6 처럼 Windows가 선점한 조합은 캡처되지 않습니다. 상자를 두 번 클릭하면 직접 입력할 수 있습니다. 수식 키를 곁들인 마우스 동작도 여기서: 칸 안에서 굴리면 기록됩니다(Ctrl은 확대/축소, Shift는 가로 스크롤). 버튼은 LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward로 입력하세요. 단순한 스크롤이나 클릭은 “마우스” 단계가 더 간편합니다.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>스크롤은 포인터 아래 창으로 갑니다. 클릭은 포인터가 지금 있는 자리에서 일어납니다(이 앱은 포인터를 옮기지 않습니다). 클릭 계열은 “창 동작 → 맨 앞으로”로 대상을 맞춘 뒤 쓰거나, 위치와 무관한 뒤로/앞으로만 쓰세요. N번·N칸은 아래 반복 횟수로, 간격은 실행 후 지연으로 조절합니다.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>아래로 스크롤</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>오른쪽으로 스크롤</value></data>
@@ -173,6 +173,7 @@
   <data name="Ed_Message" xml:space="preserve"><value>메시지</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>음성 낭독</value></data>
   <data name="Ed_Sound" xml:space="preserve"><value>알림음</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>서로 다른 기능이며 각각 따로 켤 수 있습니다. 알림음은 “딩” 한 번으로 고개를 들게 하는 용도이고, 음성 안내는 위의 내용을 소리 내어 읽어 줍니다.</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>예/아니오 확인(예=계속, 아니오=그룹 중단)</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>예 누른 후</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>표시 방식</value></data>
