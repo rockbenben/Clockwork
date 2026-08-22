@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Hiện tất cả cổng</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>Chỉ dev server</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Chỉ liệt kê các cổng TCP đang lắng nghe, làm mới mỗi lần bạn mở thẻ này. Nhấp đúp một dòng để mở trong trình duyệt; nhấp chuột phải để kết thúc tiến trình đang giữ cổng, kể cả tiến trình con. Mặc định chỉ hiện các môi trường dev như node và python: bỏ chọn «Chỉ dev server» để thấy phần mềm khác, hoặc chọn «Hiện tất cả cổng» để gồm cả dịch vụ hệ thống.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Mở liên kết</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>Kết thúc tiến trình</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>Không thể kết thúc {0}: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Chỉ liệt kê các cổng TCP đang lắng nghe, làm mới mỗi lần bạn mở thẻ này. Nhấp đúp một dòng để mở trong trình duyệt; nhấp chuột phải để giải phóng cổng, kết thúc mọi tiến trình đang giữ nó kể cả tiến trình con. Mặc định chỉ hiện các môi trường dev như node và python: bỏ chọn «Chỉ dev server» để thấy phần mềm khác, hoặc chọn «Hiện tất cả cổng» để gồm cả dịch vụ hệ thống.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Mở trong trình duyệt</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Giải phóng cổng</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Không thể giải phóng cổng {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Bật</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Loại</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Hằng ngày</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>T2</value></data>
   <data name="Day_2" xml:space="preserve"><value>T3</value></data>
   <data name="Day_3" xml:space="preserve"><value>T4</value></data>
@@ -320,7 +321,8 @@ Nhật ký: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Xóa khỏi hệ thống</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Xóa «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Xóa vĩnh viễn mục khởi động «{0}» khỏi hệ thống? Thao tác này không thể hoàn tác (nếu chỉ muốn ngăn nó chạy khi khởi động, hãy bỏ chọn).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>Kết thúc {0} (PID {1})? Nó đang lắng nghe cổng {2}. Các tiến trình con cũng sẽ bị kết thúc và mọi thứ chưa lưu sẽ mất.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Giải phóng cổng {0}? Thao tác này kết thúc {1}, cùng các tiến trình con. Mọi thứ chưa lưu sẽ mất.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Tiến trình đó cũng giữ cổng {0}, và cổng đó cũng sẽ được giải phóng.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Mục khởi động «{0}» đã được đưa vào danh sách khởi động và vẫn có một bước trỏ tới tệp lối tắt của nó. Xóa khỏi hệ thống sẽ xóa cả lối tắt, khiến bước đó không thể khởi chạy nó nữa. Vẫn xóa?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Xóa «{0}» thất bại: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Đích xuất không thể là chính tệp cấu hình — hãy chọn tên hoặc vị trí khác.</value></data>

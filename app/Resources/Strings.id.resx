@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Tampilkan semua port</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>Hanya dev server</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Hanya menampilkan port TCP yang sedang didengarkan, disegarkan setiap kali Anda membuka tab ini. Klik ganda sebuah baris untuk membukanya di peramban; klik kanan untuk mengakhiri proses yang memakainya beserta proses anaknya. Secara bawaan hanya runtime dev seperti node dan python yang muncul: hapus centang «Hanya dev server» untuk melihat perangkat lunak lain, atau centang «Tampilkan semua port» untuk menyertakan layanan sistem.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Buka tautan</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>Akhiri proses</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>Tidak dapat mengakhiri {0}: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Hanya menampilkan port TCP yang sedang didengarkan, disegarkan setiap kali Anda membuka tab ini. Klik ganda sebuah baris untuk membukanya di peramban; klik kanan untuk membebaskan port, yang mengakhiri semua proses yang memakainya beserta proses anaknya. Secara bawaan hanya runtime dev seperti node dan python yang muncul: hapus centang «Hanya dev server» untuk melihat perangkat lunak lain, atau centang «Tampilkan semua port» untuk menyertakan layanan sistem.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Buka di peramban</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Bebaskan port</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Tidak dapat membebaskan port {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Aktif</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Jenis</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Setiap hari</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Sen</value></data>
   <data name="Day_2" xml:space="preserve"><value>Sel</value></data>
   <data name="Day_3" xml:space="preserve"><value>Rab</value></data>
@@ -320,7 +321,8 @@ Log: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Hapus dari sistem</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Hapus «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Hapus permanen item startup «{0}» dari sistem? Tindakan ini tidak dapat dibatalkan (untuk sekadar mencegahnya berjalan saat mulai, hapus centangnya).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>Akhiri {0} (PID {1})? Proses ini mendengarkan di port {2}. Proses anaknya ikut berhenti dan apa pun yang belum disimpan akan hilang.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Bebaskan port {0}? Ini mengakhiri {1}, beserta proses anaknya. Apa pun yang belum disimpan akan hilang.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Proses itu juga memakai port {0}, yang ikut dibebaskan.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Item startup «{0}» telah diambil alih ke daftar mulai dan sebuah langkah masih menunjuk ke berkas pintasannya. Menghapusnya dari sistem juga menghapus pintasan itu, sehingga langkah tersebut tidak bisa lagi menjalankannya. Tetap hapus?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Gagal menghapus «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Tujuan ekspor tidak boleh berkas konfigurasi itu sendiri — pilih nama atau lokasi lain.</value></data>

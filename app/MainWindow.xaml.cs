@@ -27,6 +27,9 @@ public partial class MainWindow : Window
     private readonly SystemStartupVm? _system;
     private bool _systemLoaded;
     private readonly PortsVm? _ports;
+    // 端口页的自动刷新。只在「停在本页 + 窗口可见」时跑：本程序常驻托盘，
+    // 隐起来还轮询是纯浪费。扫一轮 3ms，所以 5 秒一次的成本约等于零。
+    private System.Windows.Threading.DispatcherTimer? _portsTimer;
 
     // 设计器/兜底无参构造。
     public MainWindow()
@@ -69,6 +72,9 @@ public partial class MainWindow : Window
         GridSystem.ItemsSource = _system.Rows;
 
         _ports = new PortsVm { DevOnly = config.Settings.PortsDevOnly };
+        _portsTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+        _portsTimer.Tick += (_, _) => LoadPorts();
+        IsVisibleChanged += (_, _) => SyncPortsTimer();   // 隐到托盘就停，重新显示再起
         DevOnlyPorts.IsChecked = config.Settings.PortsDevOnly;
         GridPorts.ItemsSource = _ports.Rows;
         // 系统启动项页首次选中时才扫描（枚举较慢）；端口页每次选中都重扫（数据易变、扫描很快）。
@@ -596,6 +602,7 @@ public partial class MainWindow : Window
         // 按名比较，不再用魔数序号（插/删 tab 不失效）
         if (Tabs.SelectedItem == TabSystem && !_systemLoaded) LoadSystemAsync();
         else if (Tabs.SelectedItem == TabPorts) LoadPorts();
+        SyncPortsTimer();
     }
 
     private void SRefresh_Click(object sender, RoutedEventArgs e) => LoadSystemAsync();
@@ -701,6 +708,17 @@ public partial class MainWindow : Window
     // 每次切进来都重扫，不像系统启动项页那样只扫一次：端口是分钟级变化的（终端里刚 Ctrl+C
     // 掉的服务留在列表里，点「打开链接」就是一个打不开的页面），而 GetExtendedTcpTable 是毫秒级，
     // 不值得为它套一层异步 + loading 态。刷新按钮仍留着：人就停在这一页上起服务时用得着。
+    // 仅当端口页处于前台且窗口可见时让 timer 跑。
+    private void SyncPortsTimer()
+    {
+        if (_portsTimer == null) return;
+        bool want = IsVisible && Tabs.SelectedItem == TabPorts;
+        if (want && !_portsTimer.IsEnabled) _portsTimer.Start();
+        else if (!want && _portsTimer.IsEnabled) _portsTimer.Stop();
+    }
+
+    // 同步就够：扫端口 + 读命令行/工作目录整轮实测 3ms。
+    // （曾用 WMI 读命令行要 413ms，不得不放后台；改成直读 PEB 后这层异步就多余了。）
     private void LoadPorts() => _ports?.SetItems(PortReader.GetEntries());
 
     private void PRefresh_Click(object sender, RoutedEventArgs e) => LoadPorts();
@@ -751,15 +769,19 @@ public partial class MainWindow : Window
         PortMenuKill.IsEnabled = GridPorts.SelectedItem is PortRowVm row && row.CanKill;
     }
 
-    // 结束占用端口的进程：破坏性且不可撤销（未保存的东西没了），故与「从系统中删除自启项」同级：
-    // 走带警示色的确认框，文案把进程名、PID、端口和「子进程一并结束」都摆出来。
+    // 释放端口：破坏性且不可撤销（未保存的东西没了），故与「从系统中删除自启项」同级：
+    // 走带警示色的确认框。一个端口可能被好几个进程同时占着，所以文案逐个点名，
+    // 不能只说「结束进程」——这一下可能带走不止一个。
     private void PortKill_Click(object sender, RoutedEventArgs e)
     {
         if (GridPorts.SelectedItem is not PortRowVm row || !row.CanKill) return;
-        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
-                Lf("Confirm_KillPort", row.ProcessName, row.Pid, row.PortText), Views.ToastLevel.Warn)) return;
-        var err = PortReader.Kill(row.Pid);
-        if (err != "") Views.BrandDialog.Warn(this, "Clockwork", Lf("Ports_KillFail", row.ProcessName, err));
+        // 释放端口杀的是进程，同进程的其余端口会一并没。不把它们列出来，
+        // 就是把破坏半径藏起来：你以为在释放 3000，实际是停掉整个 dev server 加另外 7 个端口。
+        var msg = Lf("Confirm_KillPort", row.PortText, row.OwnersText);
+        if (row.SiblingPorts.Count > 0) msg += " " + Lf("Confirm_KillPortAlso", row.SiblingPortsText);
+        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), msg, Views.ToastLevel.Warn)) return;
+        var err = PortReader.FreePort(row.Item);
+        if (err != "") Views.BrandDialog.Warn(this, "Clockwork", Lf("Ports_KillFail", row.PortText, err));
         LoadPorts();   // 成败都重扫：成功要让那行消失，失败要让人看见它还在
     }
 }

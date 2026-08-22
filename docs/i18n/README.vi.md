@@ -26,9 +26,9 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 
 - 🚀 **Danh sách khởi động** — mở lần lượt các ứng dụng thường dùng khi đăng nhập, mỗi bước có độ trễ, điều kiện ngày trong tuần và kiểu cửa sổ riêng; tiện thể đóng, đưa ra trước hoặc tắt tiếng. Các bước còn có thể phụ thuộc vào trạng thái máy: chỉ khi một ứng dụng đang chạy (hoặc không chạy), chỉ khi cắm sạc hoặc chỉ khi dùng pin, chỉ khi một tệp hay thư mục tồn tại.
 - ⏰ **Tác vụ theo lịch** — một lời nhắc đúng giờ, đọc to nếu bạn muốn, hoặc một nhóm thao tác chạy im lặng. Nhấn **Có** có thể chạy chương trình, mở tệp hay URL, hoặc kích hoạt một nhóm. Hoặc để một sự kiện kích hoạt thay cho đồng hồ — khi mở khóa, khi khóa máy, khi thức khỏi chế độ ngủ, sau N phút không dùng máy, khi cắm hay rút sạc, hoặc khi pin yếu. Chỉ cần một lần thôi? Khay hệ thống có **nhắc nhanh** — từ 5 đến 60 phút, báo một lần rồi tự xóa.
+- 🎛️ **Nhóm thao tác** — gói một chuỗi việc quen thuộc (Tập trung / Họp / Kết thúc / Trước khi ngủ…) và kích hoạt từ khay, một **phím tắt toàn cục**, danh sách khởi động hoặc một tác vụ theo lịch. Có sẵn mẫu dựng sẵn.
 - 🧹 **Mục khởi động hệ thống** — mọi thứ tự khởi động trên máy gom vào một danh sách: tắt những gì bạn không cần (vô hiệu hóa chứ không xóa) hoặc tiếp quản vào danh sách khởi động của riêng bạn.
 - 🔌 **Cổng** — mọi cổng TCP đang lắng nghe cùng tiến trình đang giữ nó: nhấp đúp một dòng để mở `localhost:3000` trong trình duyệt, nhấp chuột phải để kết thúc tiến trình đó cùng các tiến trình con. Tiện để tìm dev server bạn quên tắt; dịch vụ hệ thống được ẩn theo mặc định.
-- 🎛️ **Nhóm thao tác** — gói một chuỗi việc quen thuộc (Tập trung / Họp / Kết thúc / Trước khi ngủ…) và kích hoạt từ khay, một **phím tắt toàn cục**, danh sách khởi động hoặc một tác vụ theo lịch. Có sẵn mẫu dựng sẵn.
 
 > **Dừng bất cứ lúc nào** — nút dừng ở cuối thanh thẻ (chỉ hiện khi có thứ gì đang chạy), khay hệ thống → **Dừng các hành động đang chạy**, hoặc phím dừng khẩn toàn cục (mặc định `Ctrl+Alt+Q`). Các khoảng chờ dài bị cắt ngắn chứ không phải ngồi đợi.
 

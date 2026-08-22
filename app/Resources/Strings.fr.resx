@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Afficher tous les ports</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>Serveurs de dev uniquement</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>N'affiche que les ports TCP en écoute, actualisés à chaque ouverture de cet onglet. Double-cliquez sur une ligne pour l'ouvrir dans le navigateur ; le clic droit termine le processus qui l'occupe, processus enfants compris. Par défaut, seuls les environnements de dev comme node et python apparaissent : décochez « Serveurs de dev uniquement » pour voir vos autres logiciels, ou cochez « Afficher tous les ports » pour inclure les services système.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Ouvrir le lien</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>Terminer le processus</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>Impossible de terminer {0} : {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>N'affiche que les ports TCP en écoute, actualisés à chaque ouverture de cet onglet. Double-cliquez sur une ligne pour l'ouvrir dans le navigateur ; le clic droit libère le port, ce qui termine tous les processus qui l'occupent, processus enfants compris. Par défaut, seuls les environnements de dev comme node et python apparaissent : décochez « Serveurs de dev uniquement » pour voir vos autres logiciels, ou cochez « Afficher tous les ports » pour inclure les services système.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Ouvrir dans le navigateur</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Libérer le port</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Impossible de libérer le port {0} : {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Act.</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Type</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Tous les jours</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Lun</value></data>
   <data name="Day_2" xml:space="preserve"><value>Mar</value></data>
   <data name="Day_3" xml:space="preserve"><value>Mer</value></data>
@@ -320,7 +321,8 @@ Journal : {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Supprimer du système</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Supprimer « {0} » ?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Supprimer définitivement l'élément de démarrage « {0} » du système ? Cette action est irréversible (pour seulement l'empêcher de se lancer au démarrage, décochez-le).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>Terminer {0} (PID {1}) ? Il écoute sur le port {2}. Ses processus enfants seront fermés avec lui et tout travail non enregistré sera perdu.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Libérer le port {0} ? Cela termine {1}, ainsi que les processus enfants. Tout travail non enregistré sera perdu.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Ce processus occupe aussi le port {0}, qui sera libéré également.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>L'élément de démarrage « {0} » a été repris dans la liste de démarrage, et une étape pointe encore vers son fichier de raccourci. Le supprimer du système supprimera aussi le raccourci : cette étape ne pourra plus le lancer. Supprimer quand même ?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Échec de la suppression de « {0} » : {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>La destination d'export ne peut pas être le fichier de configuration lui-même — choisissez un autre nom ou emplacement.</value></data>

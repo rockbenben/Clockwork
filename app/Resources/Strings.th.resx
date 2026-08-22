@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>แสดงพอร์ตทั้งหมด</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>เฉพาะ dev server</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>แสดงเฉพาะพอร์ต TCP ที่กำลังรับฟัง และรีเฟรชทุกครั้งที่เปิดแท็บนี้ ดับเบิลคลิกที่แถวเพื่อเปิดในเบราว์เซอร์ คลิกขวาเพื่อสิ้นสุดโปรเซสที่ถือพอร์ตนั้นรวมถึงโปรเซสลูก ค่าเริ่มต้นจะแสดงเฉพาะรันไทม์สำหรับพัฒนาอย่าง node และ python เอาเครื่องหมาย «เฉพาะ dev server» ออกเพื่อดูซอฟต์แวร์อื่น หรือติ๊ก «แสดงพอร์ตทั้งหมด» เพื่อรวมบริการของระบบ</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>เปิดลิงก์</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>สิ้นสุดโปรเซส</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>ไม่สามารถสิ้นสุด {0} ได้: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>แสดงเฉพาะพอร์ต TCP ที่กำลังรับฟัง และรีเฟรชทุกครั้งที่เปิดแท็บนี้ ดับเบิลคลิกที่แถวเพื่อเปิดในเบราว์เซอร์ คลิกขวาเพื่อปล่อยพอร์ต ซึ่งจะสิ้นสุดทุกโปรเซสที่ถือพอร์ตนั้นรวมถึงโปรเซสลูก ค่าเริ่มต้นจะแสดงเฉพาะรันไทม์สำหรับพัฒนาอย่าง node และ python เอาเครื่องหมาย «เฉพาะ dev server» ออกเพื่อดูซอฟต์แวร์อื่น หรือติ๊ก «แสดงพอร์ตทั้งหมด» เพื่อรวมบริการของระบบ</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>เปิดในเบราว์เซอร์</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>ปล่อยพอร์ต</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>ปล่อยพอร์ต {0} ไม่สำเร็จ: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>เปิด</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>ชนิด</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>ทุกวัน</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>จ</value></data>
   <data name="Day_2" xml:space="preserve"><value>อ</value></data>
   <data name="Day_3" xml:space="preserve"><value>พ</value></data>
@@ -320,7 +321,8 @@
   <data name="Sys_Delete" xml:space="preserve"><value>ลบออกจากระบบ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>ลบ «{0}» หรือไม่?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>ลบรายการเริ่มต้น «{0}» ออกจากระบบอย่างถาวรหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้ (หากต้องการเพียงหยุดไม่ให้ทำงานตอนเปิดเครื่อง ให้ยกเลิกการเลือกแทน)</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>สิ้นสุด {0} (PID {1}) หรือไม่ กำลังรับฟังที่พอร์ต {2} โปรเซสลูกจะถูกปิดไปด้วย และสิ่งที่ยังไม่ได้บันทึกจะหายไป</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>ปล่อยพอร์ต {0} หรือไม่ จะสิ้นสุด {1} พร้อมโปรเซสลูก สิ่งที่ยังไม่ได้บันทึกจะหายไป</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>โปรเซสนี้ยังถือพอร์ต {0} อยู่ด้วย ซึ่งจะถูกปล่อยไปพร้อมกัน</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>รายการเริ่มต้น «{0}» ถูกนำเข้าสู่รายการเริ่มต้นแล้ว และยังมีขั้นตอนที่ชี้ไปยังไฟล์ทางลัดของมัน การลบออกจากระบบจะลบทางลัดไปด้วย ทำให้ขั้นตอนนั้นไม่สามารถเรียกใช้งานได้อีก ยังต้องการลบหรือไม่?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>ลบ «{0}» ไม่สำเร็จ: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>ปลายทางการส่งออกต้องไม่ใช่ไฟล์การตั้งค่าเอง โปรดเลือกชื่อหรือตำแหน่งอื่น</value></data>

@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>إظهار كل المنافذ</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>خوادم التطوير فقط</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>يعرض منافذ TCP التي يجري الاستماع عليها فقط، ويُحدَّث في كل مرة تفتح فيها علامة التبويب هذه. انقر نقرًا مزدوجًا فوق صف لفتحه في المتصفح، وانقر بزر الفأرة الأيمن لإنهاء العملية التي تشغله ومعها عملياتها الفرعية. تظهر افتراضيًا بيئات التطوير مثل node وpython فقط: أزل تحديد «خوادم التطوير فقط» لرؤية بقية برامجك، أو حدّد «إظهار كل المنافذ» لتضمين خدمات النظام.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>فتح الرابط</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>إنهاء العملية</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>تعذّر إنهاء {0}: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>يعرض منافذ TCP التي يجري الاستماع عليها فقط، ويُحدَّث في كل مرة تفتح فيها علامة التبويب هذه. انقر نقرًا مزدوجًا فوق صف لفتحه في المتصفح، وانقر بزر الفأرة الأيمن لتحرير المنفذ، فتُنهى كل العمليات التي تشغله ومعها عملياتها الفرعية. تظهر افتراضيًا بيئات التطوير مثل node وpython فقط: أزل تحديد «خوادم التطوير فقط» لرؤية بقية برامجك، أو حدّد «إظهار كل المنافذ» لتضمين خدمات النظام.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>فتح في المتصفح</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>تحرير المنفذ</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>تعذّر تحرير المنفذ {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>تفعيل</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>النوع</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>يوميًا</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>إثنين</value></data>
   <data name="Day_2" xml:space="preserve"><value>ثلاثاء</value></data>
   <data name="Day_3" xml:space="preserve"><value>أربعاء</value></data>
@@ -320,7 +321,8 @@
   <data name="Sys_Delete" xml:space="preserve"><value>حذف من النظام</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>هل تريد حذف «{0}»؟</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>هل تريد حذف عنصر بدء التشغيل «{0}» نهائيًا من النظام؟ لا يمكن التراجع عن هذا الإجراء (لمنع تشغيله عند البدء فقط، ألغِ التحديد بدلًا من ذلك).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>إنهاء {0} (PID {1})؟ إنه يستمع على المنفذ {2}. ستُنهى العمليات الفرعية معه، وسيُفقد كل ما لم يُحفظ.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>تحرير المنفذ {0}؟ سيؤدي ذلك إلى إنهاء {1} ومعها عملياتها الفرعية. سيُفقد كل ما لم يُحفظ.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>تشغل هذه العملية أيضًا المنفذ {0}، وسيتحرر هو الآخر.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>عنصر بدء التشغيل «{0}» تم نقله إلى قائمة البدء، وما زالت هناك خطوة تشير إلى ملف الاختصار الخاص به. حذفه من النظام سيحذف الاختصار أيضًا، فلن تتمكن تلك الخطوة من تشغيله بعد الآن. هل تريد الحذف على أي حال؟</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>فشل حذف «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>لا يمكن أن تكون وجهة التصدير ملف الإعدادات نفسه — اختر اسمًا أو موقعًا آخر.</value></data>

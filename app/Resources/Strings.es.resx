@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Mostrar todos los puertos</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>Solo servidores de desarrollo</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Muestra solo los puertos TCP en escucha y se actualiza cada vez que abres esta pestaña. Haz doble clic en una fila para abrirla en el navegador; con el botón derecho puedes finalizar el proceso que la ocupa, incluidos sus procesos secundarios. De forma predeterminada solo aparecen entornos de desarrollo como node y python: desmarca «Solo servidores de desarrollo» para ver el resto de tu software o marca «Mostrar todos los puertos» para incluir los servicios del sistema.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Abrir enlace</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>Finalizar proceso</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>No se pudo finalizar {0}: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Muestra solo los puertos TCP en escucha y se actualiza cada vez que abres esta pestaña. Haz doble clic en una fila para abrirla en el navegador; con el botón derecho puedes liberar el puerto, lo que finaliza todos los procesos que lo ocupan y sus procesos secundarios. De forma predeterminada solo aparecen entornos de desarrollo como node y python: desmarca «Solo servidores de desarrollo» para ver el resto de tu software o marca «Mostrar todos los puertos» para incluir los servicios del sistema.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Abrir en el navegador</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Liberar el puerto</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>No se pudo liberar el puerto {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Act.</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Tipo</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Todos los días</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Lun</value></data>
   <data name="Day_2" xml:space="preserve"><value>Mar</value></data>
   <data name="Day_3" xml:space="preserve"><value>Mié</value></data>
@@ -320,7 +321,8 @@ Registro: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Eliminar del sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>¿Eliminar «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>¿Eliminar permanentemente el elemento de inicio «{0}» del sistema? Esta acción no se puede deshacer (para solo impedir que se ejecute al inicio, desmárquelo).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>¿Finalizar {0} (PID {1})? Está escuchando en el puerto {2}. Sus procesos secundarios también terminarán y se perderá todo lo que no esté guardado.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>¿Liberar el puerto {0}? Se finalizará {1}, junto con sus procesos secundarios. Se perderá todo lo que no esté guardado.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Ese proceso también ocupa el puerto {0}, que quedará libre igualmente.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>El elemento de inicio «{0}» fue asumido en la lista de inicio y un paso todavía apunta a su archivo de acceso directo. Al eliminarlo del sistema también se eliminará el acceso directo, y ese paso ya no podrá iniciarlo. ¿Eliminar de todos modos?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>No se pudo eliminar «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>El destino de exportación no puede ser el propio archivo de configuración; elija otro nombre o ubicación.</value></data>

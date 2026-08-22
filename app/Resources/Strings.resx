@@ -25,10 +25,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>显示全部端口</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>只看 dev 服务</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>只列出正在监听的 TCP 端口，每次切到本页自动刷新。双击一行用浏览器打开，右键可结束占用它的进程（连同子进程）。默认只看 node / python 这类 dev 运行时；取消「只看 dev 服务」可看到其余软件，勾「显示全部端口」则连系统服务一并列出。</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>打开链接</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>结束进程</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>结束 {0} 失败：{1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>只列出正在监听的 TCP 端口，每次切到本页自动刷新。双击一行用浏览器打开，右键可释放端口——结束占用它的全部进程，连同子进程。默认只看 node / python 这类 dev 运行时；取消「只看 dev 服务」可看到其余软件，勾「显示全部端口」则连系统服务一并列出。</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>用浏览器打开</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>释放端口</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>释放端口 {0} 失败：{1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>启用</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>类型</value></data>
@@ -126,6 +126,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>每天</value></data>
   <data name="Days_Sep" xml:space="preserve"><value></value></data>
+  <data name="List_Sep" xml:space="preserve"><value>、</value></data>
   <data name="Day_1" xml:space="preserve"><value>一</value></data>
   <data name="Day_2" xml:space="preserve"><value>二</value></data>
   <data name="Day_3" xml:space="preserve"><value>三</value></data>
@@ -324,7 +325,8 @@
   <data name="Sys_Delete" xml:space="preserve"><value>从系统中删除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>确定要删除「{0}」吗？</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>确定要从系统中彻底删除启动项「{0}」吗？此操作无法撤销（若只想阻止它开机启动，取消勾选即可）。</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>结束 {0}（PID {1}）？它正在监听端口 {2}，其子进程会一并结束，未保存的内容会丢失。</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>释放端口 {0}？将结束：{1}，连同子进程一并结束。未保存的内容会丢失。</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>该进程同时占着端口 {0}，也会一并释放。</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>启动项「{0}」已被接管到启动清单，仍有步骤指向它的快捷方式文件。从系统中删除会连同快捷方式一并移除，该步骤将无法再启动它。仍要删除吗？</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」删除失败：{1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>导出目标不能是配置文件本身，请换一个文件名或位置。</value></data>

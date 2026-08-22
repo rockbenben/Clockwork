@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>सभी पोर्ट दिखाएँ</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>केवल dev सर्वर</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>केवल वे TCP पोर्ट दिखाता है जिन पर अभी सुना जा रहा है; यह टैब खोलने पर हर बार ताज़ा होता है। किसी पंक्ति पर डबल-क्लिक करके उसे ब्राउज़र में खोलें; राइट-क्लिक से उस पोर्ट को रोके हुए प्रोसेस को उसकी चाइल्ड प्रोसेस सहित समाप्त करें। डिफ़ॉल्ट रूप से केवल node और python जैसे dev रनटाइम दिखते हैं: बाकी सॉफ़्टवेयर के लिए «केवल dev सर्वर» का टिक हटाएँ, और सिस्टम सेवाओं तक के लिए «सभी पोर्ट दिखाएँ» चुनें।</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>लिंक खोलें</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>प्रोसेस समाप्त करें</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>{0} को समाप्त नहीं किया जा सका: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>केवल वे TCP पोर्ट दिखाता है जिन पर अभी सुना जा रहा है; यह टैब खोलने पर हर बार ताज़ा होता है। किसी पंक्ति पर डबल-क्लिक करके उसे ब्राउज़र में खोलें; राइट-क्लिक से पोर्ट मुक्त करें, जिससे उसे रोके हुए सभी प्रोसेस उनकी चाइल्ड प्रोसेस सहित समाप्त हो जाती हैं। डिफ़ॉल्ट रूप से केवल node और python जैसे dev रनटाइम दिखते हैं: बाकी सॉफ़्टवेयर के लिए «केवल dev सर्वर» का टिक हटाएँ, और सिस्टम सेवाओं तक के लिए «सभी पोर्ट दिखाएँ» चुनें।</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>ब्राउज़र में खोलें</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>पोर्ट मुक्त करें</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>पोर्ट {0} मुक्त नहीं किया जा सका: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>चालू</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>प्रकार</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>रोज़</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>सोम</value></data>
   <data name="Day_2" xml:space="preserve"><value>मंगल</value></data>
   <data name="Day_3" xml:space="preserve"><value>बुध</value></data>
@@ -320,7 +321,8 @@
   <data name="Sys_Delete" xml:space="preserve"><value>सिस्टम से हटाएँ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>क्या «{0}» हटाना है?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>क्या स्टार्टअप आइटम «{0}» को सिस्टम से स्थायी रूप से हटाना है? यह क्रिया पूर्ववत नहीं की जा सकती (सिर्फ़ स्टार्टअप पर चलने से रोकने के लिए अनचेक करें)।</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>{0} (PID {1}) समाप्त करें? यह पोर्ट {2} पर सुन रहा है। इसकी चाइल्ड प्रोसेस भी बंद हो जाएँगी और बिना सहेजा गया काम खो जाएगा।</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>पोर्ट {0} मुक्त करें? इससे {1} समाप्त हो जाएगी, चाइल्ड प्रोसेस सहित। बिना सहेजा गया काम खो जाएगा।</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>यह प्रोसेस पोर्ट {0} भी रोके हुए है, जो साथ ही मुक्त हो जाएँगे।</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>स्टार्टअप आइटम «{0}» को स्टार्टअप सूची में लिया जा चुका है और एक चरण अब भी उसकी शॉर्टकट फ़ाइल की ओर इशारा करता है। सिस्टम से हटाने पर शॉर्टकट भी हट जाएगा, जिससे वह चरण उसे चला नहीं पाएगा। फिर भी हटाएँ?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>«{0}» हटाना विफल: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>निर्यात लक्ष्य कॉन्फ़िग फ़ाइल स्वयं नहीं हो सकता — कोई अन्य नाम या स्थान चुनें।</value></data>

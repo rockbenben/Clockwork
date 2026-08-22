@@ -25,10 +25,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Show all ports</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>Dev servers only</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Lists the TCP ports currently being listened on, refreshed each time you open this tab. Double-click a row to open it in your browser, or right-click to end the process holding it along with its children. Only dev runtimes such as node and python are shown by default: untick Dev servers only for your other software, or tick Show all ports to include system services.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Open link</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>End process</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>Couldn't end {0}: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Lists the TCP ports currently being listened on, refreshed each time you open this tab. Double-click a row to open it in your browser, or right-click to free the port — that ends every process holding it, child processes included. Only dev runtimes such as node and python are shown by default: untick Dev servers only for your other software, or tick Show all ports to include system services.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Open in browser</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Free the port</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Couldn't free port {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>On</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Type</value></data>
@@ -126,6 +126,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Every day</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Mon</value></data>
   <data name="Day_2" xml:space="preserve"><value>Tue</value></data>
   <data name="Day_3" xml:space="preserve"><value>Wed</value></data>
@@ -324,7 +325,8 @@ Log: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Delete from system</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Delete "{0}"?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Permanently delete startup item "{0}" from the system? This cannot be undone (to just stop it from launching at startup, uncheck it instead).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>End {0} (PID {1})? It is listening on port {2}. Its child processes go with it, and anything unsaved is lost.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Free port {0}? This ends {1}, along with any child processes. Anything unsaved is lost.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>That process also holds port {0}, which will be freed too.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Startup item "{0}" has been taken over into the launch list, and a step still points to its shortcut file. Deleting it from the system also removes the shortcut, so that step will no longer be able to launch it. Delete anyway?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>"{0}" delete failed: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>The export target cannot be the config file itself — choose a different name or location.</value></data>

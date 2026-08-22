@@ -26,9 +26,9 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 
 - 🚀 **Başlangıç listesi** — oturum açınca günlük uygulamalarınızı sırayla açar; her adımda gecikme, hafta günü koşulu ve pencere stili verilebilir, bu arada pencere kapatır, öne getirir veya sesi kapatır. Adımlar makinenin durumuna da bağlanabilir: yalnızca bir uygulama çalışırken (ya da çalışmıyorken), yalnızca prizdeyken veya yalnızca pildeyken, yalnızca bir dosya ya da klasör varken.
 - ⏰ **Zamanlanmış görevler** — zamanı gelince bir hatırlatma (isterseniz sesli okunur) ya da sessizce çalışan bir eylem grubu. **Evet**'e tıklamak bir program çalıştırabilir, bir dosya veya URL açabilir ya da bir grubu tetikleyebilir. Ya da saat yerine bir olay tetiklesin — kilit açıldığında, kilitlendiğinde, uykudan uyanınca, N dakika boşta kalınca, şarj takılıp çıkarıldığında ya da pil azaldığında. Sadece bir kez mi gerekiyor? Tepside bir **hızlı hatırlatma** var — 5 ila 60 dakika, bir kez çalar ve kendini siler.
+- 🎛️ **Eylem grupları** — bir rutini paketleyin (Odak / Toplantı / Kapanış / Uyku vakti…) ve tepsiden, bir **genel kısayoldan**, başlangıç listesinden ya da zamanlanmış bir görevden tetikleyin. Şablonlar dahil.
 - 🧹 **Sistem başlangıç öğeleri** — PC'nizde kendiliğinden başlayan her şey tek listede: ihtiyacınız olmayanı kapatın (silinmez, devre dışı bırakılır) ya da kendi başlangıç listenize devralın.
 - 🔌 **Portlar** — dinlenen her TCP portu, onu tutan işlemle yan yana: bir satıra çift tıklayarak `localhost:3000` adresini tarayıcıda açın, sağ tıklayarak o işlemi alt işlemleriyle birlikte sonlandırın. Kapatmayı unuttuğunuz dev sunucusunu bulmak için pratik; sistem hizmetleri varsayılan olarak gizli kalır.
-- 🎛️ **Eylem grupları** — bir rutini paketleyin (Odak / Toplantı / Kapanış / Uyku vakti…) ve tepsiden, bir **genel kısayoldan**, başlangıç listesinden ya da zamanlanmış bir görevden tetikleyin. Şablonlar dahil.
 
 > **İstediğin an durdur** — sekme çubuğunun sağ ucundaki durdurma düğmesi (yalnızca bir şey çalışırken görünür), tepsi → **Çalışan eylemleri durdur** ya da genel acil durdurma kısayolu (varsayılan `Ctrl+Alt+Q`). Uzun beklemeler beklenmez, kesilir.
 

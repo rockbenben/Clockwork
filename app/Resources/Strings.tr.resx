@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Tüm portları göster</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>Yalnızca dev sunucuları</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Yalnızca dinlenen TCP portlarını listeler; bu sekmeyi her açtığınızda yenilenir. Bir satıra çift tıklayarak tarayıcıda açın, sağ tıklayarak portu tutan işlemi alt işlemleriyle birlikte sonlandırın. Varsayılan olarak yalnızca node ve python gibi dev çalışma zamanları görünür: diğer yazılımlarınız için «Yalnızca dev sunucuları» işaretini kaldırın, sistem hizmetleri için «Tüm portları göster» seçeneğini işaretleyin.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Bağlantıyı aç</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>İşlemi sonlandır</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>{0} sonlandırılamadı: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Yalnızca dinlenen TCP portlarını listeler; bu sekmeyi her açtığınızda yenilenir. Bir satıra çift tıklayarak tarayıcıda açın, sağ tıklayarak portu serbest bırakın: portu tutan tüm işlemler alt işlemleriyle birlikte sonlandırılır. Varsayılan olarak yalnızca node ve python gibi dev çalışma zamanları görünür: diğer yazılımlarınız için «Yalnızca dev sunucuları» işaretini kaldırın, sistem hizmetleri için «Tüm portları göster» seçeneğini işaretleyin.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Tarayıcıda aç</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Portu serbest bırak</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>{0} numaralı port serbest bırakılamadı: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Açık</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Tür</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Her gün</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Pzt</value></data>
   <data name="Day_2" xml:space="preserve"><value>Sal</value></data>
   <data name="Day_3" xml:space="preserve"><value>Çar</value></data>
@@ -320,7 +321,8 @@ Günlük: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Sistemden sil</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» silinsin mi?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Başlangıç öğesi «{0}» sistemden kalıcı olarak silinsin mi? Bu işlem geri alınamaz (yalnızca açılışta çalışmasını engellemek için işaretini kaldırın).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>{0} (PID {1}) sonlandırılsın mı? {2} numaralı portu dinliyor. Alt işlemleri de kapanır, kaydedilmemiş her şey kaybolur.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>{0} numaralı port serbest bırakılsın mı? Şunlar sonlandırılır: {1} — alt işlemleriyle birlikte. Kaydedilmemiş her şey kaybolur.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Bu işlem {0} numaralı portu da tutuyor; o da serbest kalır.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Başlangıç öğesi «{0}» başlangıç listesine alındı ve bir adım hâlâ kısayol dosyasına işaret ediyor. Sistemden silmek kısayolu da kaldırır; o adım artık onu başlatamaz. Yine de silinsin mi?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>«{0}» silinemedi: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Dışa aktarma hedefi yapılandırma dosyasının kendisi olamaz — başka bir ad veya konum seçin.</value></data>

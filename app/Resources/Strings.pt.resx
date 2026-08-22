@@ -23,10 +23,10 @@
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Mostrar todas as portas</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>Apenas servidores de dev</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Lista apenas as portas TCP em escuta e é atualizada sempre que você abre esta guia. Clique duas vezes em uma linha para abri-la no navegador; com o botão direito você encerra o processo que a ocupa, incluindo os processos filhos. Por padrão aparecem apenas runtimes de dev como node e python: desmarque «Apenas servidores de dev» para ver seus outros programas ou marque «Mostrar todas as portas» para incluir os serviços do sistema.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Abrir link</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>Encerrar processo</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>Não foi possível encerrar {0}: {1}</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Lista apenas as portas TCP em escuta e é atualizada sempre que você abre esta guia. Clique duas vezes em uma linha para abri-la no navegador; com o botão direito você libera a porta, encerrando todos os processos que a ocupam e seus processos filhos. Por padrão aparecem apenas runtimes de dev como node e python: desmarque «Apenas servidores de dev» para ver seus outros programas ou marque «Mostrar todas as portas» para incluir os serviços do sistema.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Abrir no navegador</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Liberar a porta</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Não foi possível liberar a porta {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Ativ.</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Tipo</value></data>
@@ -122,6 +122,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Todos os dias</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Seg</value></data>
   <data name="Day_2" xml:space="preserve"><value>Ter</value></data>
   <data name="Day_3" xml:space="preserve"><value>Qua</value></data>
@@ -320,7 +321,8 @@ Registro: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Excluir do sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Excluir «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Excluir permanentemente o item de inicialização «{0}» do sistema? Esta ação não pode ser desfeita (para apenas impedir que ele inicie com o sistema, desmarque-o).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>Encerrar {0} (PID {1})? Ele está escutando na porta {2}. Os processos filhos também serão encerrados e tudo o que não estiver salvo será perdido.</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Liberar a porta {0}? Isso encerra {1}, junto com os processos filhos. Tudo o que não estiver salvo será perdido.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Esse processo também ocupa a porta {0}, que será liberada junto.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>O item de inicialização «{0}» foi assumido na lista de inicialização e uma etapa ainda aponta para o seu arquivo de atalho. Excluí-lo do sistema também removerá o atalho, e essa etapa não poderá mais iniciá-lo. Excluir mesmo assim?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Falha ao excluir «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>O destino da exportação não pode ser o próprio arquivo de configuração — escolha outro nome ou local.</value></data>
