@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Geplande taken</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Actiegroepen</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Systeemopstart</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Poorten</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Draait één keer bij aanmelden, van boven naar beneden · sleep rijen om te herschikken. Op schema of gebeurtenis → Geplande taken; op afroep met één klik → Actiegroepen.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Gaat af op een tijdstip, bij aanmelden of bij gebeurtenissen zoals ontgrendelen / stroom — herinnering of stil draaiende groep. Alleen apps openen bij aanmelden → Opstartlijst; op afroep → Actiegroepen.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundel een routine en start die op elk moment via sneltoets / systeemvak; de Opstartlijst en Geplande taken kunnen ernaar verwijzen. Iets dat alleen bij aanmelden draait, is simpeler als gewone opstartlijst-stappen.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Systeem- / alleen-lezen items tonen</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Opstartitems scannen…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Vernieuwen</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Alle poorten tonen</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Alleen dev-servers</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Toont alleen TCP-poorten waarop wordt geluisterd, ververst telkens als je dit tabblad opent. Dubbelklik op een rij om die in de browser te openen; met rechtsklik beëindig je het proces dat de poort bezet, inclusief onderliggende processen. Standaard verschijnen alleen dev-runtimes zoals node en python: haal het vinkje bij 'Alleen dev-servers' weg voor je overige software, of vink 'Alle poorten tonen' aan voor de systeemservices.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Link openen</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Proces beëindigen</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Kan {0} niet beëindigen: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Aan</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Type</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Bron</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Bereik</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Sneltoets</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Poort</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Proces</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Adres</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Toevoegen</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Toevoegen ▾</value></data>
@@ -308,6 +320,7 @@ Log: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Uit het systeem verwijderen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» verwijderen?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Opstartitem «{0}» definitief uit het systeem verwijderen? Dit kan niet ongedaan worden gemaakt (om alleen het opstarten te blokkeren, vink het uit).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>{0} (PID {1}) beëindigen? Het proces luistert op poort {2}. Onderliggende processen gaan mee en niet-opgeslagen werk gaat verloren.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Opstartitem «{0}» is overgenomen naar de startlijst en een stap verwijst nog naar het snelkoppelingsbestand. Verwijderen uit het systeem verwijdert ook de snelkoppeling, waardoor die stap het niet meer kan starten. Toch verwijderen?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Verwijderen van «{0}» mislukt: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Het exportdoel kan niet het configuratiebestand zelf zijn — kies een andere naam of locatie.</value></data>

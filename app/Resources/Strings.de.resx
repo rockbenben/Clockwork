@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Geplante Aufgaben</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Aktionsgruppen</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Systemautostart</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Ports</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Läuft einmal bei der Anmeldung, von oben nach unten · Zeilen per Ziehen umordnen. Nach Zeitplan oder Ereignis → Geplante Aufgaben; jederzeit per Klick → Aktionsgruppen.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Löst zu einer Uhrzeit, bei der Anmeldung oder bei Ereignissen wie Entsperren / Netzteil aus — Erinnerung oder still laufende Gruppe. Nur Apps beim Anmelden öffnen → Startliste; jederzeit per Klick → Aktionsgruppen.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bündle eine Routine und starte sie jederzeit per Hotkey / Tray; Startliste und geplante Aufgaben können sie referenzieren. Was nur bei der Anmeldung läuft, ist als einfacher Startlisten-Schritt simpler.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>System- / schreibgeschützte Einträge anzeigen</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Autostart-Einträge werden gescannt…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Aktualisieren</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Alle Ports anzeigen</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Nur Dev-Server</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Zeigt nur TCP-Ports, auf denen gerade gelauscht wird — bei jedem Öffnen dieser Registerkarte aktualisiert. Ein Doppelklick öffnet die Adresse im Browser, per Rechtsklick lässt sich der belegende Prozess samt Unterprozessen beenden. Standardmäßig erscheinen nur Dev-Laufzeiten wie node und python: „Nur Dev-Server“ abwählen zeigt deine übrige Software, „Alle Ports anzeigen“ auch die Systemdienste.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Link öffnen</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Prozess beenden</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>{0} konnte nicht beendet werden: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>An</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Typ</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Quelle</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Bereich</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Tastenkombi.</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Prozess</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Adresse</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Hinzufügen</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Hinzufügen ▾</value></data>
@@ -308,6 +320,7 @@ Protokoll: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Aus dem System löschen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>„{0}“ wirklich löschen?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Autostart-Eintrag „{0}“ endgültig aus dem System löschen? Dies kann nicht rückgängig gemacht werden (zum bloßen Deaktivieren einfach das Häkchen entfernen).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>{0} (PID {1}) beenden? Der Prozess lauscht auf Port {2}. Untergeordnete Prozesse werden mitbeendet, nicht Gespeichertes geht verloren.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Der Autostart-Eintrag „{0}“ wurde in die Startliste übernommen, und ein Schritt verweist noch auf seine Verknüpfungsdatei. Beim Löschen aus dem System wird auch die Verknüpfung entfernt – dieser Schritt kann ihn dann nicht mehr starten. Trotzdem löschen?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Löschen von „{0}“ fehlgeschlagen: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Das Exportziel darf nicht die Konfigurationsdatei selbst sein – bitte anderen Namen oder Ort wählen.</value></data>

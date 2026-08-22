@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tarefas agendadas</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Grupos de ações</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Inicialização do sistema</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Portas</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Corre uma vez no login, de cima para baixo · arraste linhas para reordenar. Por horário ou evento → Tarefas agendadas; a pedido com um clique → Grupos de ações.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Dispara a uma hora, no login ou em eventos como desbloqueio / energia — lembrete ou grupo silencioso. Só abrir apps no login → Lista de inicialização; a pedido → Grupos de ações.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Agrupe uma rotina e dispare-a a qualquer momento por atalho / bandeja; a Lista de inicialização e as Tarefas agendadas também podem referenciá-la. O que só corre no login fica mais simples como passos da Lista de inicialização.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Mostrar itens de sistema / somente leitura</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Verificando entradas de inicialização…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Atualizar</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Mostrar todas as portas</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Apenas servidores de dev</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Lista apenas as portas TCP em escuta e é atualizada sempre que você abre esta guia. Clique duas vezes em uma linha para abri-la no navegador; com o botão direito você encerra o processo que a ocupa, incluindo os processos filhos. Por padrão aparecem apenas runtimes de dev como node e python: desmarque «Apenas servidores de dev» para ver seus outros programas ou marque «Mostrar todas as portas» para incluir os serviços do sistema.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Abrir link</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Encerrar processo</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Não foi possível encerrar {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Ativ.</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Tipo</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Origem</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Escopo</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Atalho</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Porta</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Processo</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Endereço</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Adicionar</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Adicionar ▾</value></data>
@@ -308,6 +320,7 @@ Registro: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Excluir do sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Excluir «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Excluir permanentemente o item de inicialização «{0}» do sistema? Esta ação não pode ser desfeita (para apenas impedir que ele inicie com o sistema, desmarque-o).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Encerrar {0} (PID {1})? Ele está escutando na porta {2}. Os processos filhos também serão encerrados e tudo o que não estiver salvo será perdido.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>O item de inicialização «{0}» foi assumido na lista de inicialização e uma etapa ainda aponta para o seu arquivo de atalho. Excluí-lo do sistema também removerá o atalho, e essa etapa não poderá mais iniciá-lo. Excluir mesmo assim?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Falha ao excluir «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>O destino da exportação não pode ser o próprio arquivo de configuração — escolha outro nome ou local.</value></data>

@@ -160,6 +160,10 @@ public sealed class AppSettings
     public int StartupDelaySeconds { get; set; } = 30;
     public string StopHotkey { get; set; } = "Ctrl+Alt+Q";
     public string Language { get; set; } = "";   // 空=跟随系统显示语言（App 启动时解析成具体 code 并落盘）
+    // 端口页「只看 dev 服务」的勾选状态。存进配置而不是像系统启动项页那个复选框一样只活在内存：
+    // 那边是「偶尔看一眼只读项」，这边是「我就是个写代码的」——后者每次重启都要重新勾一遍就是磨人。
+    // 默认开：这个页存在的理由就是找 dev server；页面是跟功能一起新增的，不存在「升级后行为突变」的存量用户。
+    public bool PortsDevOnly { get; set; } = true;
 }
 
 public sealed class RootConfig

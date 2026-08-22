@@ -1,4 +1,4 @@
-﻿<Window x:Class="Clockwork.MainWindow"
+<Window x:Class="Clockwork.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -239,7 +239,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     </Border>
-                    <TextBlock x:Name="SysLoading" Grid.Row="1" Text="{loc:Loc System_Scanning}" Style="{StaticResource Hint}" FontSize="13"
+                    <TextBlock x:Name="SysLoading" Grid.Row="1" Text="{loc:Loc System_Scanning}" Style="{StaticResource Hint}" FontSize="13" TextWrapping="Wrap"
                                HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
                     <!-- 必须是 Grid（Auto|*），不能是横向 StackPanel：StackPanel 给子元素的可用宽度是无限的，
                          TextWrapping 永远不触发，说明文字直接顶出窗口右缘被裁掉。原来靠 MaxWidth="1000" 兜，
@@ -248,6 +248,69 @@
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                         <Button Grid.Column="0" x:Name="SRefresh" Content="{loc:Loc System_Refresh}" VerticalAlignment="Center" Click="SRefresh_Click"/>
                         <TextBlock Grid.Column="1" Text="{loc:Loc System_Footer}" Style="{StaticResource Hint}"
+                                   VerticalAlignment="Center" Margin="14,0,0,0" TextWrapping="Wrap"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- ===== 端口 ===== -->
+            <TabItem x:Name="TabPorts" Header="{loc:Loc Tab_Ports}">
+                <Grid Margin="2,10,2,2">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                    <!-- 右内边距 1px 对齐下方列表面板的右缘，理由同「系统启动项」页那处注释。
+                         两栏分列（Auto | *）而不是像系统启动项页那样让两个控件叠在同一格里：
+                         那边只有一个复选框，这边是两个，德语这种长译文下会直接压到 320px 的搜索框上。 -->
+                    <Grid Grid.Row="0" Margin="0,0,1,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <TextBlock Text="{loc:Loc System_Filter}" Style="{StaticResource Hint}" VerticalAlignment="Center" FontSize="13" Margin="2,0,10,0"/>
+                            <TextBox x:Name="PSearch" Width="320" Height="30" VerticalContentAlignment="Center" TextChanged="PSearch_TextChanged"
+                                     AutomationProperties.Name="{loc:Loc System_Filter}"/>
+                        </StackPanel>
+                        <!-- WrapPanel 而非横向 StackPanel：后者放不下时直接被列裁掉。
+                             这两条标签在西语（Solo servidores de desarrollo / Mostrar todos los puertos）
+                             比德语还长一截，而截图矩阵只跑 zh/en/de/ar，挡不住它。 -->
+                        <WrapPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <CheckBox x:Name="DevOnlyPorts" Content="{loc:Loc Ports_DevOnly}" FontSize="12.5" Margin="12,0,0,0"
+                                      Checked="PortsView_Changed" Unchecked="PortsView_Changed"/>
+                            <CheckBox x:Name="ShowAllPorts" Content="{loc:Loc Ports_ShowAll}" FontSize="12.5" Margin="16,0,0,0"
+                                      Checked="PortsView_Changed" Unchecked="PortsView_Changed"/>
+                        </WrapPanel>
+                    </Grid>
+                    <Border Grid.Row="1" Margin="0,10,0,0" Style="{StaticResource ListPanel}">
+                    <DataGrid x:Name="GridPorts" AutomationProperties.Name="{loc:Loc Tab_Ports}" AutoGenerateColumns="False" CanUserAddRows="False"
+                              CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridPorts_DoubleClick"
+                              PreviewMouseRightButtonDown="GridPorts_RightClick" ContextMenuOpening="GridPorts_MenuOpening">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="PortMenuOpen" Header="{loc:Loc Ports_Open}" Click="PortOpen_Click"/>
+                                <MenuItem x:Name="PortMenuKill" Header="{loc:Loc Ports_Kill}" Click="PortKill_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <!-- 端口/PID/地址走等宽体：三列都是数字与点号，比例字体下同一位数字对不齐，扫一眼找不到 3000。 -->
+                            <DataGridTextColumn Header="{loc:Loc Col_Port}" Binding="{Binding PortText}" Width="Auto" MinWidth="90" IsReadOnly="True"
+                                                ElementStyle="{StaticResource CellEllipsisMono}"/>
+                            <!-- 随内容伸缩并封顶：实测下最长的就是进程名（logioptionsplus_agent、
+                                 PBCCRCPassGuardXInput），写死宽度会把它们截掉；不封顶则一行奇长的名字就能把其余列挤跑。 -->
+                            <DataGridTextColumn Header="{loc:Loc Col_Process}" Binding="{Binding ProcessName}" Width="Auto" MinWidth="160" MaxWidth="320" IsReadOnly="True"
+                                                ElementStyle="{StaticResource CellEllipsis}"/>
+                            <DataGridTextColumn Header="{loc:Loc Col_Pid}" Binding="{Binding Pid}" Width="Auto" MinWidth="80" IsReadOnly="True"
+                                                ElementStyle="{StaticResource CellEllipsisMono}"/>
+                            <!-- 最后一列用星号吃掉尾部剩余：内容左对齐，多出来的就是尾部留白，
+                                 行高亮也能铺满整行。若反过来让进程名列吃剩余，PID 和地址会被推到最右，
+                                 中间空出一大片，看一行要横跨半个窗口。 -->
+                            <DataGridTextColumn Header="{loc:Loc Col_Address}" Binding="{Binding Address}" Width="*" MinWidth="120" IsReadOnly="True"
+                                                ElementStyle="{StaticResource CellEllipsisMono}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    </Border>
+                    <!-- 与「系统启动项」页同一个 Grid(Auto|*) 结构：横向 StackPanel 下 TextWrapping 永不触发，
+                         最窄窗口 + 德语/俄语这句说明会被顶出右缘裁掉。 -->
+                    <Grid Grid.Row="2" Margin="0,12,1,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" x:Name="PRefresh" Content="{loc:Loc System_Refresh}" VerticalAlignment="Center" Click="PRefresh_Click"/>
+                        <TextBlock Grid.Column="1" Text="{loc:Loc Ports_Footer}" Style="{StaticResource Hint}"
                                    VerticalAlignment="Center" Margin="14,0,0,0" TextWrapping="Wrap"/>
                     </Grid>
                 </Grid>
@@ -286,7 +349,10 @@
                                  可视区，而面板本身没有滚动条——看起来就是功能消失了。靠收紧间距去躲这个高度只是
                                  把悬崖往后挪一格（换一种语言、换个 DPI 又会掉下去），滚动条才是不挑窗口大小的那个答案。 -->
                             <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Style="{StaticResource FormScroll}">
-                            <StackPanel Margin="28,26,28,26" VerticalAlignment="Top">
+                            <!-- IsSharedSizeScope：下面每一行的标签列原本写死 112px，中文标签短所以一直没事，
+                                 德语的 Startverzögerung (s) 直接被硬切成半个词。换成共享尺寸组后，
+                                 所有行仍然对齐（取最宽的那条），而它会随语言长度自己长。 -->
+                            <StackPanel Margin="28,26,28,26" VerticalAlignment="Top" Grid.IsSharedSizeScope="True">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
                                     <Border Width="3" Height="16" Background="{StaticResource BrushBrass}" CornerRadius="1.5" VerticalAlignment="Center"/>
                                     <TextBlock Text="{loc:Loc Settings_Boot}" FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center"/>
@@ -294,14 +360,14 @@
 
                                 <!-- 开机自启：这一段的总开关，故排在最前 -->
                                 <Grid Margin="0,2,0,5">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <CheckBox Grid.Column="1" x:Name="AutostartChk" Content="{loc:Loc Autostart_Label}" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Autostart_Click"/>
                                 </Grid>
 
                                 <!-- 开机延迟。补上「仅开机自启时生效」这句：以前只写在文档里，界面上看不出来，
                                      手动重跑清单时用户会以为它没生效。 -->
                                 <Grid Margin="0,5">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StartupDelay}" Style="{StaticResource FieldLabel}"
                                                VerticalAlignment="Top" Margin="0,7,14,0"/>
                                     <StackPanel Grid.Column="1">
@@ -314,7 +380,7 @@
                                 <!-- 等系统就绪再跑：本来只能手改 json 才打得开（startupWaitForReady），
                                      而它恰恰是「开机延迟该设多少」的更好答案，藏起来没道理。 -->
                                 <Grid Margin="0,8,0,5">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="1">
                                         <CheckBox x:Name="WaitReadyChk" Content="{loc:Loc Settings_WaitReady}" VerticalAlignment="Center" Click="Settings_Changed"/>
                                         <TextBlock Text="{loc:Loc Settings_WaitReadyTip}" Style="{StaticResource Hint}" Margin="0,6,0,0" TextWrapping="Wrap"/>
@@ -323,7 +389,7 @@
 
                                 <!-- 启动时最小化 -->
                                 <Grid Margin="0,5,0,0">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <CheckBox Grid.Column="1" x:Name="StartMinChk" Content="{loc:Loc Settings_StartMinimized}" VerticalAlignment="Center" Click="Settings_Changed"/>
                                 </Grid>
 
@@ -335,7 +401,7 @@
 
                                 <!-- 急停键（按键捕捉） -->
                                 <Grid Margin="0,5">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <!-- 右列是「控件+说明」的竖排时，标签必须顶对齐再下压半个控件高；
                                          否则 FieldLabel 的居中会让它去和说明文字齐平，看着像标错了行。 -->
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_StopHotkey}" Style="{StaticResource FieldLabel}"
@@ -351,7 +417,7 @@
 
                                 <!-- 语言 -->
                                 <Grid Margin="0,10,0,5">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_Language}" Style="{StaticResource FieldLabel}"
                                                VerticalAlignment="Top" Margin="0,6,14,0"/>
                                     <StackPanel Grid.Column="1">
@@ -370,7 +436,7 @@
                                 <!-- 配置导入/导出。走同一个 112px 标签列：原来这行直接贴在面板左内边距上，
                                      是整页唯一一处跳出字段左缘的控件，看着像掉出了栏。 -->
                                 <Grid Margin="0,2,0,2">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="112"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button x:Name="ExportBtn" Content="{loc:Loc Btn_ExportConfig}" Click="ExportConfig_Click" Margin="0,0,10,0"/>
                                         <Button x:Name="ImportBtn" Content="{loc:Loc Btn_ImportConfig}" Click="ImportConfig_Click"/>

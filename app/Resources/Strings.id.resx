@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tugas terjadwal</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Grup aksi</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Startup sistem</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Port</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Berjalan sekali saat masuk, dari atas ke bawah · seret baris untuk mengurutkan. Berdasarkan jadwal / peristiwa → Tugas terjadwal; sesuai permintaan sekali tekan → Grup aksi.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Terpicu pada waktu tertentu, saat masuk, atau peristiwa seperti buka kunci / daya — pengingat atau grup yang berjalan diam-diam. Hanya membuka aplikasi saat masuk → Daftar startup; sesuai permintaan → Grup aksi.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Kemas serangkaian aksi menjadi grup, jalankan kapan saja lewat pintasan / baki; Daftar startup dan Tugas terjadwal juga bisa merujuknya. Yang hanya berjalan saat masuk lebih sederhana ditulis langsung di Daftar startup.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Tampilkan item sistem / read-only</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Memindai entri startup…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Segarkan</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Tampilkan semua port</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Hanya dev server</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Hanya menampilkan port TCP yang sedang didengarkan, disegarkan setiap kali Anda membuka tab ini. Klik ganda sebuah baris untuk membukanya di peramban; klik kanan untuk mengakhiri proses yang memakainya beserta proses anaknya. Secara bawaan hanya runtime dev seperti node dan python yang muncul: hapus centang «Hanya dev server» untuk melihat perangkat lunak lain, atau centang «Tampilkan semua port» untuk menyertakan layanan sistem.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Buka tautan</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Akhiri proses</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Tidak dapat mengakhiri {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Aktif</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Jenis</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Sumber</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Lingkup</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Tombol pintas</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Proses</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Alamat</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Tambah</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Tambah ▾</value></data>
@@ -308,6 +320,7 @@ Log: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Hapus dari sistem</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Hapus «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Hapus permanen item startup «{0}» dari sistem? Tindakan ini tidak dapat dibatalkan (untuk sekadar mencegahnya berjalan saat mulai, hapus centangnya).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Akhiri {0} (PID {1})? Proses ini mendengarkan di port {2}. Proses anaknya ikut berhenti dan apa pun yang belum disimpan akan hilang.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Item startup «{0}» telah diambil alih ke daftar mulai dan sebuah langkah masih menunjuk ke berkas pintasannya. Menghapusnya dari sistem juga menghapus pintasan itu, sehingga langkah tersebut tidak bisa lagi menjalankannya. Tetap hapus?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Gagal menghapus «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Tujuan ekspor tidak boleh berkas konfigurasi itu sendiri — pilih nama atau lokasi lain.</value></data>

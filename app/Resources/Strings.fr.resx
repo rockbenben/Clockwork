@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tâches planifiées</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Groupes d'actions</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Démarrage système</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Ports</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>S'exécute une fois à l'ouverture de session, de haut en bas · glissez les lignes pour réordonner. Sur horaire ou événement → Tâches planifiées ; à la demande en un clic → Groupes d'actions.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Se déclenche à une heure, à l'ouverture de session ou sur des événements (déverrouillage, secteur…) — rappel ou groupe silencieux. Juste ouvrir des applis à la connexion → Liste de démarrage ; à la demande → Groupes d'actions.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Regroupez une routine et lancez-la à tout moment par raccourci / zone de notification ; la Liste de démarrage et les Tâches planifiées peuvent aussi y faire référence. Ce qui ne tourne qu'à la connexion est plus simple en étapes de la Liste de démarrage.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Afficher les éléments système / en lecture seule</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Analyse des entrées de démarrage…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Actualiser</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Afficher tous les ports</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Serveurs de dev uniquement</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>N'affiche que les ports TCP en écoute, actualisés à chaque ouverture de cet onglet. Double-cliquez sur une ligne pour l'ouvrir dans le navigateur ; le clic droit termine le processus qui l'occupe, processus enfants compris. Par défaut, seuls les environnements de dev comme node et python apparaissent : décochez « Serveurs de dev uniquement » pour voir vos autres logiciels, ou cochez « Afficher tous les ports » pour inclure les services système.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Ouvrir le lien</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Terminer le processus</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Impossible de terminer {0} : {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Act.</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Type</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Source</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Portée</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Raccourci</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Processus</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Adresse</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Ajouter</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Ajouter ▾</value></data>
@@ -308,6 +320,7 @@ Journal : {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Supprimer du système</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Supprimer « {0} » ?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Supprimer définitivement l'élément de démarrage « {0} » du système ? Cette action est irréversible (pour seulement l'empêcher de se lancer au démarrage, décochez-le).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Terminer {0} (PID {1}) ? Il écoute sur le port {2}. Ses processus enfants seront fermés avec lui et tout travail non enregistré sera perdu.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>L'élément de démarrage « {0} » a été repris dans la liste de démarrage, et une étape pointe encore vers son fichier de raccourci. Le supprimer du système supprimera aussi le raccourci : cette étape ne pourra plus le lancer. Supprimer quand même ?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Échec de la suppression de « {0} » : {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>La destination d'export ne peut pas être le fichier de configuration lui-même — choisissez un autre nom ou emplacement.</value></data>

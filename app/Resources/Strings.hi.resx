@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>शेड्यूल किए गए कार्य</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>क्रिया समूह</value></data>
   <data name="Tab_System" xml:space="preserve"><value>सिस्टम स्टार्टअप</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>पोर्ट</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>लॉगिन पर एक बार, ऊपर से नीचे चलता है · पंक्तियाँ खींचकर क्रम बदलें। समय / घटना पर चलाना है → शेड्यूल किए गए कार्य; कभी भी एक क्लिक से → क्रिया समूह।</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>समय पर, लॉगिन पर, या अनलॉक / पावर जैसी घटनाओं पर चलता है — रिमाइंडर या मौन समूह। लॉगिन पर सिर्फ़ ऐप खोलने हैं → स्टार्टअप सूची; कभी भी एक क्लिक से → क्रिया समूह।</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>क्रियाओं की शृंखला को समूह बनाएं, हॉटकी / ट्रे से कभी भी चलाएं; स्टार्टअप सूची और शेड्यूल किए गए कार्य भी इसका संदर्भ ले सकते हैं। जो सिर्फ़ लॉगिन पर चलना है, उसे सीधे स्टार्टअप सूची में लिखना आसान है।</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>सिस्टम / केवल-पठन आइटम दिखाएँ</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>ऑटो-स्टार्ट प्रविष्टियाँ स्कैन हो रही हैं…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>रीफ़्रेश</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>सभी पोर्ट दिखाएँ</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>केवल dev सर्वर</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>केवल वे TCP पोर्ट दिखाता है जिन पर अभी सुना जा रहा है; यह टैब खोलने पर हर बार ताज़ा होता है। किसी पंक्ति पर डबल-क्लिक करके उसे ब्राउज़र में खोलें; राइट-क्लिक से उस पोर्ट को रोके हुए प्रोसेस को उसकी चाइल्ड प्रोसेस सहित समाप्त करें। डिफ़ॉल्ट रूप से केवल node और python जैसे dev रनटाइम दिखते हैं: बाकी सॉफ़्टवेयर के लिए «केवल dev सर्वर» का टिक हटाएँ, और सिस्टम सेवाओं तक के लिए «सभी पोर्ट दिखाएँ» चुनें।</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>लिंक खोलें</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>प्रोसेस समाप्त करें</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>{0} को समाप्त नहीं किया जा सका: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>चालू</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>प्रकार</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>स्रोत</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>दायरा</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>हॉटकी</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>पोर्ट</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>प्रोसेस</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>पता</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>जोड़ें</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>जोड़ें ▾</value></data>
@@ -308,6 +320,7 @@
   <data name="Sys_Delete" xml:space="preserve"><value>सिस्टम से हटाएँ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>क्या «{0}» हटाना है?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>क्या स्टार्टअप आइटम «{0}» को सिस्टम से स्थायी रूप से हटाना है? यह क्रिया पूर्ववत नहीं की जा सकती (सिर्फ़ स्टार्टअप पर चलने से रोकने के लिए अनचेक करें)।</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>{0} (PID {1}) समाप्त करें? यह पोर्ट {2} पर सुन रहा है। इसकी चाइल्ड प्रोसेस भी बंद हो जाएँगी और बिना सहेजा गया काम खो जाएगा।</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>स्टार्टअप आइटम «{0}» को स्टार्टअप सूची में लिया जा चुका है और एक चरण अब भी उसकी शॉर्टकट फ़ाइल की ओर इशारा करता है। सिस्टम से हटाने पर शॉर्टकट भी हट जाएगा, जिससे वह चरण उसे चला नहीं पाएगा। फिर भी हटाएँ?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>«{0}» हटाना विफल: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>निर्यात लक्ष्य कॉन्फ़िग फ़ाइल स्वयं नहीं हो सकता — कोई अन्य नाम या स्थान चुनें।</value></data>

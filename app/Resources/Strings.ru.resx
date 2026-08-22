@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Задачи по расписанию</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Группы действий</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Автозагрузка системы</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Порты</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Выполняется один раз при входе, сверху вниз · строки можно перетаскивать. По расписанию или событию → Задачи по расписанию; в любой момент одним нажатием → Группы действий.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Срабатывает по времени, при входе или по событиям (разблокировка, питание) — напоминание или тихая группа. Просто открыть программы при входе → Список запуска; вручную одним нажатием → Группы действий.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Соберите набор действий в группу и запускайте её в любой момент хоткеем / из трея; Список запуска и Задачи по расписанию могут ссылаться на неё. То, что нужно только при входе, проще записать прямо в Список запуска.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Показать системные / только для чтения</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Сканирование элементов автозагрузки…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Обновить</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Показать все порты</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Только dev-серверы</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Показывает только прослушиваемые TCP-порты и обновляется при каждом открытии этой вкладки. Двойной щелчок открывает адрес в браузере, правый — завершает занявший порт процесс вместе с дочерними. По умолчанию видны только dev-среды вроде node и python: снимите флажок «Только dev-серверы», чтобы увидеть остальные программы, или включите «Показать все порты», чтобы добавить системные службы.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Открыть ссылку</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Завершить процесс</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Не удалось завершить {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Вкл.</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Тип</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Источник</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Область</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Горячая клавиша</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Порт</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Процесс</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Адрес</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Добавить</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Добавить ▾</value></data>
@@ -308,6 +320,7 @@
   <data name="Sys_Delete" xml:space="preserve"><value>Удалить из системы</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Удалить «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Навсегда удалить элемент автозагрузки «{0}» из системы? Это действие нельзя отменить (чтобы просто отключить запуск, снимите флажок).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Завершить {0} (PID {1})? Он слушает порт {2}. Дочерние процессы будут завершены вместе с ним, несохранённые данные пропадут.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Элемент автозагрузки «{0}» перенесён в список запуска, и один из шагов всё ещё указывает на его файл ярлыка. Удаление из системы удалит и ярлык — этот шаг больше не сможет его запустить. Всё равно удалить?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Не удалось удалить «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Файл назначения экспорта не может совпадать с самим файлом конфигурации — выберите другое имя или папку.</value></data>

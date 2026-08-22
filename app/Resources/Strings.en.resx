@@ -11,6 +11,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Scheduled tasks</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Action Groups</value></data>
   <data name="Tab_System" xml:space="preserve"><value>System Startup</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Ports</value></data>
 
   <data name="Launch_Hint" xml:space="preserve"><value>Runs once at login, top to bottom · drag rows to reorder. On a schedule or an event → Scheduled tasks; on demand with one tap → Action Groups.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Fires at a time, at login, or on events like unlock / power — a reminder, or a group run silently. Just opening apps at login → Startup List; on demand with one tap → Action Groups.</value></data>
@@ -21,6 +22,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Show system / read-only items</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Scanning autostart entries…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Refresh</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Show all ports</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Dev servers only</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Lists the TCP ports currently being listened on, refreshed each time you open this tab. Double-click a row to open it in your browser, or right-click to end the process holding it along with its children. Only dev runtimes such as node and python are shown by default: untick Dev servers only for your other software, or tick Show all ports to include system services.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Open link</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>End process</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Couldn't end {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>On</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Type</value></data>
@@ -35,6 +43,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Source</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Scope</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Hotkey</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Process</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Address</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Add</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Add ▾</value></data>
@@ -312,6 +324,7 @@ Log: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Delete from system</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Delete "{0}"?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Permanently delete startup item "{0}" from the system? This cannot be undone (to just stop it from launching at startup, uncheck it instead).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>End {0} (PID {1})? It is listening on port {2}. Its child processes go with it, and anything unsaved is lost.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Startup item "{0}" has been taken over into the launch list, and a step still points to its shortcut file. Deleting it from the system also removes the shortcut, so that step will no longer be able to launch it. Delete anyway?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>"{0}" delete failed: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>The export target cannot be the config file itself — choose a different name or location.</value></data>

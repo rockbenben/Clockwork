@@ -11,6 +11,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>定时任务</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>动作组</value></data>
   <data name="Tab_System" xml:space="preserve"><value>系统启动项</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>端口</value></data>
 
   <data name="Launch_Hint" xml:space="preserve"><value>只在登录时跑一次，从上到下依次执行 · 拖动行可调顺序。要按时间 / 事件触发 → 「定时任务」；要随时一键触发 → 「动作组」。</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>到点、登录或解锁 / 插拔电源等事件时，弹提醒或静默跑动作组。只想开机开软件 → 「我的启动清单」；想随手一键触发 → 「动作组」。</value></data>
@@ -21,6 +22,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>显示系统 / 只读项</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>正在扫描开机自启项…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>刷新</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>显示全部端口</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>只看 dev 服务</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>只列出正在监听的 TCP 端口，每次切到本页自动刷新。双击一行用浏览器打开，右键可结束占用它的进程（连同子进程）。默认只看 node / python 这类 dev 运行时；取消「只看 dev 服务」可看到其余软件，勾「显示全部端口」则连系统服务一并列出。</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>打开链接</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>结束进程</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>结束 {0} 失败：{1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>启用</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>类型</value></data>
@@ -35,6 +43,10 @@
   <data name="Col_Source" xml:space="preserve"><value>来源</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>范围</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>热键</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>端口</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>进程</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>地址</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>新增</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>新增 ▾</value></data>
@@ -312,6 +324,7 @@
   <data name="Sys_Delete" xml:space="preserve"><value>从系统中删除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>确定要删除「{0}」吗？</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>确定要从系统中彻底删除启动项「{0}」吗？此操作无法撤销（若只想阻止它开机启动，取消勾选即可）。</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>结束 {0}（PID {1}）？它正在监听端口 {2}，其子进程会一并结束，未保存的内容会丢失。</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>启动项「{0}」已被接管到启动清单，仍有步骤指向它的快捷方式文件。从系统中删除会连同快捷方式一并移除，该步骤将无法再启动它。仍要删除吗？</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」删除失败：{1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>导出目标不能是配置文件本身，请换一个文件名或位置。</value></data>

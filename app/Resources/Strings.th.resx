@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>งานตามกำหนดเวลา</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>กลุ่มการทำงาน</value></data>
   <data name="Tab_System" xml:space="preserve"><value>การเริ่มต้นของระบบ</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>พอร์ต</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>ทำงานครั้งเดียวตอนเข้าสู่ระบบ จากบนลงล่าง · ลากแถวเพื่อจัดลำดับ อยากให้ทำตามเวลา / เหตุการณ์ → งานตามกำหนดเวลา อยากสั่งเองทุกเมื่อ → กลุ่มการทำงาน</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>ทำงานตามเวลา ตอนเข้าสู่ระบบ หรือเหตุการณ์อย่างปลดล็อก / เสียบไฟ — เด้งเตือนหรือรันกลุ่มแบบเงียบ แค่อยากเปิดแอปตอนเข้าระบบ → รายการเริ่มต้น อยากสั่งเอง → กลุ่มการทำงาน</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่ม สั่งได้ทุกเมื่อด้วยฮ็อตคีย์ / เทรย์ รายการเริ่มต้นและงานตามกำหนดเวลาก็อ้างอิงได้ ถ้าจะรันแค่ตอนเปิดเครื่อง เขียนลงรายการเริ่มต้นตรง ๆ ง่ายกว่า</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>แสดงรายการระบบ / อ่านอย่างเดียว</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>กำลังสแกนรายการเริ่มต้น…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>รีเฟรช</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>แสดงพอร์ตทั้งหมด</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>เฉพาะ dev server</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>แสดงเฉพาะพอร์ต TCP ที่กำลังรับฟัง และรีเฟรชทุกครั้งที่เปิดแท็บนี้ ดับเบิลคลิกที่แถวเพื่อเปิดในเบราว์เซอร์ คลิกขวาเพื่อสิ้นสุดโปรเซสที่ถือพอร์ตนั้นรวมถึงโปรเซสลูก ค่าเริ่มต้นจะแสดงเฉพาะรันไทม์สำหรับพัฒนาอย่าง node และ python เอาเครื่องหมาย «เฉพาะ dev server» ออกเพื่อดูซอฟต์แวร์อื่น หรือติ๊ก «แสดงพอร์ตทั้งหมด» เพื่อรวมบริการของระบบ</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>เปิดลิงก์</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>สิ้นสุดโปรเซส</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>ไม่สามารถสิ้นสุด {0} ได้: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>เปิด</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>ชนิด</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>แหล่ง</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>ขอบเขต</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>ปุ่มลัด</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>พอร์ต</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>โปรเซส</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>ที่อยู่</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>เพิ่ม</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>เพิ่ม ▾</value></data>
@@ -308,6 +320,7 @@
   <data name="Sys_Delete" xml:space="preserve"><value>ลบออกจากระบบ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>ลบ «{0}» หรือไม่?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>ลบรายการเริ่มต้น «{0}» ออกจากระบบอย่างถาวรหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้ (หากต้องการเพียงหยุดไม่ให้ทำงานตอนเปิดเครื่อง ให้ยกเลิกการเลือกแทน)</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>สิ้นสุด {0} (PID {1}) หรือไม่ กำลังรับฟังที่พอร์ต {2} โปรเซสลูกจะถูกปิดไปด้วย และสิ่งที่ยังไม่ได้บันทึกจะหายไป</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>รายการเริ่มต้น «{0}» ถูกนำเข้าสู่รายการเริ่มต้นแล้ว และยังมีขั้นตอนที่ชี้ไปยังไฟล์ทางลัดของมัน การลบออกจากระบบจะลบทางลัดไปด้วย ทำให้ขั้นตอนนั้นไม่สามารถเรียกใช้งานได้อีก ยังต้องการลบหรือไม่?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>ลบ «{0}» ไม่สำเร็จ: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>ปลายทางการส่งออกต้องไม่ใช่ไฟล์การตั้งค่าเอง โปรดเลือกชื่อหรือตำแหน่งอื่น</value></data>

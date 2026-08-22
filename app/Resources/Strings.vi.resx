@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Tác vụ theo lịch</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Nhóm hành động</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Khởi động hệ thống</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Cổng</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Chạy một lần khi đăng nhập, từ trên xuống · kéo dòng để đổi thứ tự. Muốn chạy theo giờ / sự kiện → Tác vụ theo lịch; muốn chạy bất cứ lúc nào → Nhóm hành động.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Kích hoạt đúng giờ, khi đăng nhập hoặc theo sự kiện như mở khóa / cắm sạc — nhắc nhở hoặc chạy nhóm im lặng. Chỉ mở ứng dụng lúc đăng nhập → Danh sách khởi động; chạy thủ công → Nhóm hành động.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Gói một chuỗi thao tác thành nhóm, kích hoạt bất cứ lúc nào bằng phím tắt / khay hệ thống; Danh sách khởi động và Tác vụ theo lịch cũng tham chiếu được. Việc chỉ chạy lúc đăng nhập thì viết thẳng vào Danh sách khởi động sẽ gọn hơn.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Hiện mục hệ thống / chỉ đọc</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Đang quét mục khởi động…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Làm mới</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Hiện tất cả cổng</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Chỉ dev server</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Chỉ liệt kê các cổng TCP đang lắng nghe, làm mới mỗi lần bạn mở thẻ này. Nhấp đúp một dòng để mở trong trình duyệt; nhấp chuột phải để kết thúc tiến trình đang giữ cổng, kể cả tiến trình con. Mặc định chỉ hiện các môi trường dev như node và python: bỏ chọn «Chỉ dev server» để thấy phần mềm khác, hoặc chọn «Hiện tất cả cổng» để gồm cả dịch vụ hệ thống.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Mở liên kết</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Kết thúc tiến trình</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Không thể kết thúc {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Bật</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Loại</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Nguồn</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Phạm vi</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Phím tắt</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Cổng</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Tiến trình</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Địa chỉ</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Thêm</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Thêm ▾</value></data>
@@ -308,6 +320,7 @@ Nhật ký: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Xóa khỏi hệ thống</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Xóa «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Xóa vĩnh viễn mục khởi động «{0}» khỏi hệ thống? Thao tác này không thể hoàn tác (nếu chỉ muốn ngăn nó chạy khi khởi động, hãy bỏ chọn).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Kết thúc {0} (PID {1})? Nó đang lắng nghe cổng {2}. Các tiến trình con cũng sẽ bị kết thúc và mọi thứ chưa lưu sẽ mất.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Mục khởi động «{0}» đã được đưa vào danh sách khởi động và vẫn có một bước trỏ tới tệp lối tắt của nó. Xóa khỏi hệ thống sẽ xóa cả lối tắt, khiến bước đó không thể khởi chạy nó nữa. Vẫn xóa?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Xóa «{0}» thất bại: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Đích xuất không thể là chính tệp cấu hình — hãy chọn tên hoặc vị trí khác.</value></data>

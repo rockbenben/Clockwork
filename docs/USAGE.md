@@ -4,12 +4,13 @@
 
 Put the repetitive parts of your PC on autopilot: auto-launch your apps at login · timed reminders · one tap to run a whole routine.
 
-A small Windows tray tool that manages four everyday things (plus a Settings tab):
+A small Windows tray tool that manages five everyday things (plus a Settings tab):
 
 1. **Startup list** — open your everyday apps in order at login, and do a few chores along the way.
 2. **Scheduled tasks** — pop a reminder (on-time / read aloud / repeat-nagging / do something when you click **Yes**) or silently run an action group; runs once, on an interval, or on the usual weekday/every-N-days/monthly recurrence.
 3. **System startup items** — view and manage everything on your PC that auto-starts; switch off what you don't need.
-4. **Action groups** — bundle a series of actions into a group (Focus / Wrap-up / Bedtime…) and trigger it with one tap or a **global hotkey**.
+4. **Ports** — see which ports are being listened on and what is holding them; double-click to open `localhost:3000`, right-click to end the process.
+5. **Action groups** — bundle a series of actions into a group (Focus / Wrap-up / Bedtime…) and trigger it with one tap or a **global hotkey**.
 
 ---
 
@@ -148,6 +149,19 @@ These don't watch the clock, they watch the machine — the task fires the momen
   - **Take over into launch list** — hands the item to Clockwork (disables the original + adds it to your list). Registry Run keys and Startup-folder items only; scheduled tasks aren't supported yet (you'll get a notice).
   - **Delete from system** — removes the entry for good (registry value / Startup-folder shortcut / scheduled task). It asks first and **cannot be undone** — if you only want to stop it running at boot, uncheck **Enable** instead. If the item was taken over earlier and a step still points at its shortcut file, the confirmation says so, because deleting the shortcut breaks that step.
 - A top **filter** searches by name / command.
+
+## Ports
+
+- Lists the **TCP ports currently being listened on**, with the name and PID of the process holding each one. Both IPv4 and IPv6 are read; when one service listens on `127.0.0.1` and `::1` at once, the two collapse into a single row (the Address column shows both).
+- **Rescans every time you open this tab** — no manual refresh needed. If you start a server while sitting on this page, hit **Refresh** at the bottom left.
+- **Double-click a row** to open `http://localhost:<port>` in your default browser; **Open link** in the right-click menu does the same thing.
+- Right-click **End process** — ends the process holding that port, **together with its child processes** (something like `npm run dev` spawns its own workers, and killing only the listener leaves them orphaned). A confirmation comes first, spelling out the process name, PID and port — **anything unsaved is lost**. PIDs 0 and 4 are kernel placeholders, so the menu item is greyed out for them.
+- The two checkboxes at the top right give you **three views**, narrowest first:
+  - **Dev servers only (on by default)** — an allowlist: node / bun / deno, python, java, dotnet, ruby / php, nginx / caddy, postgres / mysqld / mongod / redis-server, Docker's port-forwarding processes, ngrok / cloudflared / ollama and friends. This view **skips the 1024 floor**, so a local nginx on port 80 still shows up.
+  - **Neither ticked** — system services hidden: port ≥ 1024, kernel placeholders excluded, and noisy owners such as `svchost` and `services` filtered out (svchost alone holds a dozen dynamic ports from boot). **A Go or Rust binary can be named anything, so the allowlist will miss it — this is the view to find it in.**
+  - **Show all ports** — no filter. Ticking it greys out Dev servers only, since having both on is a contradiction.
+- The Dev servers only tick is **remembered in your settings**, so you set it once. Show all ports is not: it is a one-off "let me see everything".
+- The **filter box** at the top matches on port number or process name. It narrows what the default filter already left — searching for a system service will not pull it back; tick "Show all ports" for that.
 
 ## Action groups
 

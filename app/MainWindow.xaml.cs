@@ -26,6 +26,7 @@ public partial class MainWindow : Window
     private readonly GroupListVm? _groups;
     private readonly SystemStartupVm? _system;
     private bool _systemLoaded;
+    private readonly PortsVm? _ports;
 
     // 设计器/兜底无参构造。
     public MainWindow()
@@ -66,7 +67,12 @@ public partial class MainWindow : Window
 
         _system = new SystemStartupVm(SystemStartupReader.SetItemEnabled, ReportSystemMsg, PromptRelaunchAdmin);
         GridSystem.ItemsSource = _system.Rows;
-        Tabs.SelectionChanged += Tabs_SelectionChanged;   // 系统启动项页首次选中时才扫描（枚举较慢）
+
+        _ports = new PortsVm { DevOnly = config.Settings.PortsDevOnly };
+        DevOnlyPorts.IsChecked = config.Settings.PortsDevOnly;
+        GridPorts.ItemsSource = _ports.Rows;
+        // 系统启动项页首次选中时才扫描（枚举较慢）；端口页每次选中都重扫（数据易变、扫描很快）。
+        Tabs.SelectionChanged += Tabs_SelectionChanged;
 
         // 设置页
         VersionText.Text = "v" + AppVersion();
@@ -586,7 +592,10 @@ public partial class MainWindow : Window
     // —— 系统启动项页 ——
     private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (e.Source is System.Windows.Controls.TabControl && Tabs.SelectedItem == TabSystem && !_systemLoaded) LoadSystemAsync();   // 按名比较，不再用魔数序号（插/删 tab 不失效）
+        if (e.Source is not System.Windows.Controls.TabControl) return;
+        // 按名比较，不再用魔数序号（插/删 tab 不失效）
+        if (Tabs.SelectedItem == TabSystem && !_systemLoaded) LoadSystemAsync();
+        else if (Tabs.SelectedItem == TabPorts) LoadPorts();
     }
 
     private void SRefresh_Click(object sender, RoutedEventArgs e) => LoadSystemAsync();
@@ -687,6 +696,71 @@ public partial class MainWindow : Window
         if (_config == null || string.IsNullOrEmpty(path)) return false;
         bool Hit(LaunchStep s) => s.Kind == "app" && string.Equals(s.Target, path, StringComparison.OrdinalIgnoreCase);
         return _config.LaunchSteps.Any(Hit) || _config.ActionGroups.Any(g => g.Steps.Any(Hit));
+    }
+    // —— 端口页 ——
+    // 每次切进来都重扫，不像系统启动项页那样只扫一次：端口是分钟级变化的（终端里刚 Ctrl+C
+    // 掉的服务留在列表里，点「打开链接」就是一个打不开的页面），而 GetExtendedTcpTable 是毫秒级，
+    // 不值得为它套一层异步 + loading 态。刷新按钮仍留着：人就停在这一页上起服务时用得着。
+    private void LoadPorts() => _ports?.SetItems(PortReader.GetEntries());
+
+    private void PRefresh_Click(object sender, RoutedEventArgs e) => LoadPorts();
+    private void PSearch_TextChanged(object sender, TextChangedEventArgs e) { if (_ports != null) _ports.Search = PSearch.Text; }
+    // 两个复选框共用一个处理器：它们描述的是同一个三档视图，分开写两份就得在两边各维护一遍优先级。
+    // 「显示全部」勾上时把「只看 dev」置灰：两者同时勾上是自相矛盾的说法，
+    // 置灰把「后者不生效」直接摄在界面上，而不是让人对着两个对勾猜为什么没反应。
+    private void PortsView_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_ports == null) return;
+        bool all = ShowAllPorts.IsChecked == true;
+        bool dev = DevOnlyPorts.IsChecked == true;
+        DevOnlyPorts.IsEnabled = !all;
+        _ports.ShowAll = all;
+        _ports.DevOnly = dev;
+        // 只持久化 DevOnly。「显示全部」是一次性的「让我看看全貌」，下次开程序还默认勾着反而意外。
+        if (_config != null && _config.Settings.PortsDevOnly != dev)
+        {
+            _config.Settings.PortsDevOnly = dev;
+            _save?.Invoke();
+        }
+    }
+
+    private void GridPorts_DoubleClick(object sender, MouseButtonEventArgs e) => PortOpen_Click(sender, e);
+
+    private void PortOpen_Click(object sender, RoutedEventArgs e)
+    {
+        if (GridPorts.SelectedItem is PortRowVm row) OpenUrl(row.Url);
+    }
+
+    // 与另外四张表同一条规则：右键没落在某一行上就不弹菜单（键盘 Menu 键除外，
+    // 它按当前选中行走，光标坐标为 -1 是 WPF 给出的区分方式）。
+    // 「结束进程」作用错行的代价比排序那几个大得多，不能靠「上次选中的行」蒙。
+    private bool _portRightClickOnRow;
+
+    private void GridPorts_RightClick(object sender, MouseButtonEventArgs e)
+    {
+        var row = Views.DataGridReorder.RowFromHit(e.OriginalSource as DependencyObject);
+        _portRightClickOnRow = row != null;
+        if (row != null) row.IsSelected = true;
+    }
+
+    private void GridPorts_MenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        bool byKeyboard = e.CursorLeft < 0 && e.CursorTop < 0;
+        if (!byKeyboard && !_portRightClickOnRow) { e.Handled = true; return; }
+        // PID 0/4 是内核占位，杀必失败 → 灰掉而不是让人点了没反应（同系统启动项页的 CanEdit 门控）。
+        PortMenuKill.IsEnabled = GridPorts.SelectedItem is PortRowVm row && row.CanKill;
+    }
+
+    // 结束占用端口的进程：破坏性且不可撤销（未保存的东西没了），故与「从系统中删除自启项」同级：
+    // 走带警示色的确认框，文案把进程名、PID、端口和「子进程一并结束」都摆出来。
+    private void PortKill_Click(object sender, RoutedEventArgs e)
+    {
+        if (GridPorts.SelectedItem is not PortRowVm row || !row.CanKill) return;
+        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
+                Lf("Confirm_KillPort", row.ProcessName, row.Pid, row.PortText), Views.ToastLevel.Warn)) return;
+        var err = PortReader.Kill(row.Pid);
+        if (err != "") Views.BrandDialog.Warn(this, "Clockwork", Lf("Ports_KillFail", row.ProcessName, err));
+        LoadPorts();   // 成败都重扫：成功要让那行消失，失败要让人看见它还在
     }
 }
 

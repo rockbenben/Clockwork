@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>Attività pianificate</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>Gruppi di azioni</value></data>
   <data name="Tab_System" xml:space="preserve"><value>Avvio di sistema</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>Porte</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Viene eseguito una volta all'accesso, dall'alto in basso · trascina le righe per riordinare. A orario o su evento → Attività pianificate; su richiesta con un clic → Gruppi di azioni.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Scatta a un orario, all'accesso o su eventi come sblocco / alimentazione: promemoria o gruppo silenzioso. Solo aprire app all'accesso → Elenco di avvio; su richiesta → Gruppi di azioni.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Raggruppa una routine e lanciala quando vuoi con scorciatoia / tray; anche l'Elenco di avvio e le Attività pianificate possono richiamarla. Ciò che gira solo all'accesso è più semplice come passi dell'Elenco di avvio.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Mostra voci di sistema / sola lettura</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Scansione voci di avvio…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>Aggiorna</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>Mostra tutte le porte</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Solo server di sviluppo</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Elenca solo le porte TCP in ascolto, aggiornate ogni volta che apri questa scheda. Fai doppio clic su una riga per aprirla nel browser; con il tasto destro puoi terminare il processo che la occupa, processi figli inclusi. Per impostazione predefinita compaiono solo runtime di sviluppo come node e python: togli la spunta da «Solo server di sviluppo» per vedere gli altri programmi oppure attiva «Mostra tutte le porte» per includere i servizi di sistema.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>Apri collegamento</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>Termina processo</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Impossibile terminare {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Att.</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Tipo</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>Origine</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Ambito</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Scorciatoia</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>Porta</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>Processo</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>Indirizzo</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>Aggiungi</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Aggiungi ▾</value></data>
@@ -308,6 +320,7 @@ Registro: {1}</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Elimina dal sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Eliminare «{0}»?</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Eliminare definitivamente l'elemento di avvio «{0}» dal sistema? L'operazione non può essere annullata (per impedirne solo l'avvio, deseleziona la casella).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>Terminare {0} (PID {1})? È in ascolto sulla porta {2}. Anche i processi figli verranno chiusi e tutto ciò che non è salvato andrà perso.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>L'elemento di avvio «{0}» è stato assunto nell'elenco di avvio e un passaggio punta ancora al suo file di collegamento. Eliminandolo dal sistema verrà rimosso anche il collegamento e quel passaggio non potrà più avviarlo. Eliminare comunque?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Eliminazione di «{0}» non riuscita: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>La destinazione di esportazione non può essere il file di configurazione stesso: scegli un altro nome o percorso.</value></data>

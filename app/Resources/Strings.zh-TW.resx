@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>定時任務</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>動作組</value></data>
   <data name="Tab_System" xml:space="preserve"><value>系統開機項目</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>連接埠</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>只在登入時跑一次，由上而下依序執行 · 拖曳列可調順序。要按時間 / 事件觸發 → 「定時任務」；要隨時一鍵觸發 → 「動作組」。</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>到點、登入或解鎖 / 插拔電源等事件時，跳提醒或靜默執行動作組。只想開機開軟體 → 「我的開機清單」；想隨手一鍵觸發 → 「動作組」。</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>把一串動作打包成組，熱鍵 / 系統匣隨時一鍵觸發，也可被開機清單和定時任務引用。只在開機跑一次的，直接寫進「我的開機清單」更省事。</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>顯示系統 / 唯讀項目</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>正在掃描開機自動啟動項目…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>重新整理</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>顯示全部連接埠</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>只看 dev 服務</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>只列出正在監聽的 TCP 連接埠，每次切到本頁自動重新整理。按兩下一列可用瀏覽器開啟，按右鍵可結束佔用它的處理程序（連同子處理程序）。預設只看 node / python 這類 dev 執行環境；取消「只看 dev 服務」可看到其餘軟體，勾「顯示全部連接埠」則連系統服務一併列出。</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>開啟連結</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>結束處理程序</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>結束 {0} 失敗：{1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>啟用</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>類型</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>來源</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>範圍</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>快速鍵</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>連接埠</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>處理程序</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>位址</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>新增</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>新增 ▾</value></data>
@@ -310,6 +322,7 @@
   <data name="Sys_Delete" xml:space="preserve"><value>從系統中刪除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>確定要刪除「{0}」嗎？</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>確定要從系統中徹底刪除啟動項「{0}」嗎？此操作無法復原（若只想阻止它開機啟動，取消勾選即可）。</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>結束 {0}（PID {1}）？它正在監聽連接埠 {2}，其子處理程序會一併結束，未儲存的內容會遺失。</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>啟動項「{0}」已被接管到啟動清單，仍有步驟指向它的捷徑檔案。從系統中刪除會連同捷徑一併移除，該步驟將無法再啟動它。仍要刪除嗎？</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」刪除失敗：{1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>匯出目標不能是設定檔本身，請換一個檔名或位置。</value></data>

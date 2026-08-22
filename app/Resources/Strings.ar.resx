@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>المهام المجدولة</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>مجموعات الإجراءات</value></data>
   <data name="Tab_System" xml:space="preserve"><value>بدء تشغيل النظام</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>المنافذ</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>يعمل مرة واحدة عند تسجيل الدخول، من الأعلى إلى الأسفل · اسحب الصفوف لإعادة الترتيب. حسب وقت أو حدث → المهام المجدولة؛ وعند الطلب بنقرة → مجموعات الإجراءات.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>يعمل في وقت محدد أو عند تسجيل الدخول أو مع أحداث مثل إلغاء القفل / الطاقة — تذكير أو مجموعة تعمل بصمت. فقط فتح تطبيقات عند الدخول → قائمة البدء؛ وعند الطلب → مجموعات الإجراءات.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>اجمع سلسلة إجراءات في مجموعة وشغّلها في أي وقت عبر اختصار / علبة النظام؛ ويمكن لقائمة البدء والمهام المجدولة الإشارة إليها أيضًا. ما يعمل عند تسجيل الدخول فقط يكون أبسط كخطوات مباشرة في قائمة البدء.</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>إظهار عناصر النظام / للقراءة فقط</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>جارٍ فحص عناصر البدء التلقائي…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>تحديث</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>إظهار كل المنافذ</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>خوادم التطوير فقط</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>يعرض منافذ TCP التي يجري الاستماع عليها فقط، ويُحدَّث في كل مرة تفتح فيها علامة التبويب هذه. انقر نقرًا مزدوجًا فوق صف لفتحه في المتصفح، وانقر بزر الفأرة الأيمن لإنهاء العملية التي تشغله ومعها عملياتها الفرعية. تظهر افتراضيًا بيئات التطوير مثل node وpython فقط: أزل تحديد «خوادم التطوير فقط» لرؤية بقية برامجك، أو حدّد «إظهار كل المنافذ» لتضمين خدمات النظام.</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>فتح الرابط</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>إنهاء العملية</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>تعذّر إنهاء {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>تفعيل</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>النوع</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>المصدر</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>النطاق</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>اختصار</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>المنفذ</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>العملية</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>العنوان</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>إضافة</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>إضافة ▾</value></data>
@@ -308,6 +320,7 @@
   <data name="Sys_Delete" xml:space="preserve"><value>حذف من النظام</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>هل تريد حذف «{0}»؟</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>هل تريد حذف عنصر بدء التشغيل «{0}» نهائيًا من النظام؟ لا يمكن التراجع عن هذا الإجراء (لمنع تشغيله عند البدء فقط، ألغِ التحديد بدلًا من ذلك).</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>إنهاء {0} (PID {1})؟ إنه يستمع على المنفذ {2}. ستُنهى العمليات الفرعية معه، وسيُفقد كل ما لم يُحفظ.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>عنصر بدء التشغيل «{0}» تم نقله إلى قائمة البدء، وما زالت هناك خطوة تشير إلى ملف الاختصار الخاص به. حذفه من النظام سيحذف الاختصار أيضًا، فلن تتمكن تلك الخطوة من تشغيله بعد الآن. هل تريد الحذف على أي حال؟</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>فشل حذف «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>لا يمكن أن تكون وجهة التصدير ملف الإعدادات نفسه — اختر اسمًا أو موقعًا آخر.</value></data>

@@ -10,6 +10,7 @@
   <data name="Tab_Reminder" xml:space="preserve"><value>定時タスク</value></data>
   <data name="Tab_Group" xml:space="preserve"><value>アクショングループ</value></data>
   <data name="Tab_System" xml:space="preserve"><value>システム起動項目</value></data>
+  <data name="Tab_Ports" xml:space="preserve"><value>ポート</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>ログイン時に一度だけ、上から順に実行 · 行はドラッグで並べ替え。時間やイベントで実行するなら → 定時タスク、いつでもワンタップなら → アクショングループ。</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>時刻・ログイン・ロック解除や電源などのイベントで、リマインダーを出すかグループをサイレント実行。ログイン時にアプリを開くだけなら → 起動リスト、手動ワンタップなら → アクショングループ。</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>一連の動作をグループにまとめ、ホットキー / トレイからいつでも実行。起動リストや定時タスクからも参照できます。ログイン時に一度だけなら、直接起動リストに書くほうが簡単です。</value></data>
@@ -19,6 +20,13 @@
   <data name="System_ShowReadOnly" xml:space="preserve"><value>システム / 読み取り専用を表示</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>自動起動項目をスキャン中…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>更新</value></data>
+
+  <data name="Ports_ShowAll" xml:space="preserve"><value>すべてのポートを表示</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>dev サービスのみ</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>待ち受け中の TCP ポートだけを表示します（このタブを開くたびに更新）。行をダブルクリックするとブラウザーで開き、右クリックで占有しているプロセスを子プロセスごと終了できます。既定では node や python などの dev ランタイムのみ表示します。ほかのソフトも見るには「dev サービスのみ」のチェックを外し、システムサービスまで含めるには「すべてのポートを表示」をオンにします。</value></data>
+  <data name="Ports_Open" xml:space="preserve"><value>リンクを開く</value></data>
+  <data name="Ports_Kill" xml:space="preserve"><value>プロセスを終了</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>{0} を終了できませんでした: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>有効</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>種類</value></data>
@@ -33,6 +41,10 @@
   <data name="Col_Source" xml:space="preserve"><value>ソース</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>範囲</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>ホットキー</value></data>
+  <data name="Col_Port" xml:space="preserve"><value>ポート</value></data>
+  <data name="Col_Process" xml:space="preserve"><value>プロセス</value></data>
+  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="Col_Address" xml:space="preserve"><value>アドレス</value></data>
 
   <data name="Btn_Add" xml:space="preserve"><value>追加</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>追加 ▾</value></data>
@@ -310,6 +322,7 @@
   <data name="Sys_Delete" xml:space="preserve"><value>システムから削除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>「{0}」を削除しますか？</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>スタートアップ項目「{0}」をシステムから完全に削除しますか？この操作は元に戻せません（起動時の実行を止めるだけならチェックを外してください）。</value></data>
+  <data name="Confirm_KillPort" xml:space="preserve"><value>{0}（PID {1}）を終了しますか？ポート {2} を待ち受け中です。子プロセスも一緒に終了し、保存していない内容は失われます。</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>スタートアップ項目「{0}」は起動リストに取り込まれており、そのショートカットファイルを指すステップが残っています。システムから削除するとショートカットも消え、そのステップは起動できなくなります。それでも削除しますか？</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」の削除に失敗：{1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>エクスポート先に設定ファイル自身は指定できません。別の名前または場所を選んでください。</value></data>
