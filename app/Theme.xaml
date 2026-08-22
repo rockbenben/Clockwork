@@ -376,17 +376,28 @@
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <!-- 全 App 的复选框文案一律可折行：本应用 18 种语言，同一句话德/俄/西比中文长一倍有余，
+             写死不折行等于把「窄窗口 + 长译文」这一格永远留成裁切。 -->
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate><TextBlock Text="{Binding}" TextWrapping="Wrap"/></DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
-                    <StackPanel Orientation="Horizontal" Background="Transparent">
-                        <Border x:Name="box" Width="18" Height="18" CornerRadius="5" VerticalAlignment="Center"
+                    <!-- Grid(Auto|*) 而不是横向 StackPanel：StackPanel 给子元素的可用宽度是无限的，
+                         ContentPresenter 永远拿不到宽度约束，配套的 TextWrapping 也就永远不触发 ——
+                         德语的「Warten, bis das System bereit ist (Desktop / Netzwerk)」正是这么被硬切成半个词的。 -->
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Border x:Name="box" Grid.Column="0" Width="18" Height="18" CornerRadius="5" VerticalAlignment="Center"
                                 Background="Transparent" BorderBrush="{StaticResource BrushFaint}" BorderThickness="2">
                             <Path x:Name="tick" Data="M 3,8 L 7,12 L 14,4" Stroke="#231708" StrokeThickness="2"
                                   StrokeStartLineCap="Round" StrokeEndLineCap="Round" Visibility="Collapsed"/>
                         </Border>
-                        <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
+                        <ContentPresenter Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="box" Property="Background" Value="{StaticResource BrushBrass}"/>
@@ -691,7 +702,11 @@
                         <Border Padding="14,10">
                             <ContentPresenter x:Name="hdr" ContentSource="Header" HorizontalAlignment="Center"/>
                         </Border>
-                        <Border x:Name="tick" Height="2" VerticalAlignment="Bottom" Visibility="Collapsed" Margin="14,0">
+                        <!-- 宽度绑到标题本身而不是标签格子：不折行时两者相等（Padding 14 与原来的 Margin 14 正好抵消），
+                             一旦标签条放不下而折成两行，TabPanel 会把每个标签拉伸填满行宽，
+                             黑铜虚线跟着拉到文字的两三倍长（俄语 @820 实测：「Порты」下面的线长达 180px）。 -->
+                        <Border x:Name="tick" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Visibility="Collapsed"
+                                Width="{Binding ActualWidth, ElementName=hdr}">
                             <Border.Background>
                                 <DrawingBrush TileMode="Tile" Viewport="0,0,10,2" ViewportUnits="Absolute" Stretch="None">
                                     <DrawingBrush.Drawing>
