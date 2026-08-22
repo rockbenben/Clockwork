@@ -125,6 +125,16 @@
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
+
+    <!-- 表单里的说明。与通用 Hint（12px）分开：它们现在独占一列，
+         位置已经把主次说清楚了，再叠一层缩字号是三重编码同一件事，
+         代价是本就承载实信息的句子（0–600 秒、最多等 90 秒、Esc 取消 / Del 清空）更难读。
+         颜色维持 Muted（对 Ink 背景 6.6:1，过 WCAG AA）——再暗一档的 Faint 只有 3.3:1，
+         当正文用是不合格的，所以层级靠「标签变亮」而不是「说明变暗」。
+         页脚那类 Hint 不跟着改：它们是长段落的次要 chrome，放大会把已经四行的端口页页脚再推长一行。 -->
+    <Style x:Key="FieldHint" TargetType="TextBlock" BasedOn="{StaticResource Hint}">
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
     <!-- ============ Expander（编辑器的折叠区） ============
          标题不是「高级选项」这类死文案，而是调用方填入的一句行为描述（见步骤/提醒编辑器的
          UpdateCondHeader / UpdateAdvHeader）：收起时那一行字就是当前配置的完整摘要。
@@ -674,7 +684,12 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TabPanel Grid.Column="0" IsItemsHost="True" Margin="4,0,0,0" Background="Transparent"/>
+                                <!-- WrapPanel 而非 TabPanel：标签条放不下而折行时，TabPanel 会把「选中标签所在的那一行」
+                                     挪到最靠近内容区的位置——经典带边框的选项卡需要这个，本扩平设计不需要。
+                                     代价是阅读顺序变成 4,5,6 / 1,2,3，而且换一个标签页两行就对调，
+                                     你要找的标签会自己移位（俄语 @820 实测）。WrapPanel 按阅读顺序折行、不重排，
+                                     且标签保持内容宽度左对齐，不再被拉伸填满行宽。 -->
+                                <WrapPanel Grid.Column="0" IsItemsHost="True" Margin="4,0,0,0" Background="Transparent"/>
                                 <ContentPresenter Grid.Column="1" Content="{TemplateBinding Tag}"
                                                   VerticalAlignment="Center" Margin="10,0,6,5"/>
                             </Grid>
@@ -1007,7 +1022,9 @@
 
     <!-- 设置项标签（右对齐、钢灰） -->
     <Style x:Key="FieldLabel" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
+        <!-- Paper 而非 Muted：标签是用来扫的，得看得清。而且复选框的文字本来就是 Paper，
+             「开机延迟」（FieldLabel）暗、「等系统就绪」（复选框）亮，同一列的同类东西两种亮度。 -->
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="13.5"/>
         <!-- 左对齐（曾是 Right）：右对齐标签配上长短悬殊的中文标签，表单左缘是一条锯齿，
