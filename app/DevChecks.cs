@@ -32,6 +32,22 @@ public partial class App
 
     // 每个 XAML 窗口一个工厂。构造参数给最小样例对象——够 InitializeComponent + 布局走完就行，
     // 不读用户配置（RootConfig.Default() 是全新对象，save 是 no-op，冒烟进程绝不碰真数据）。
+    // 当前语言下、键名以这些前缀开头的最长一条文案（已填好占位符）。
+    // 截图要测的是「最坏情况下版面碎不碎」，那就得把最坏情况喂进去。
+    private static string LongestOf(params string[] prefixes)
+    {
+        var rm = new System.Resources.ResourceManager("Clockwork.Resources.Strings", typeof(Strings).Assembly);
+        var set = rm.GetResourceSet(System.Globalization.CultureInfo.CurrentUICulture, true, true);
+        string best = "";
+        if (set != null)
+            foreach (System.Collections.DictionaryEntry e in set)
+                if (e.Key is string k && e.Value is string v && prefixes.Any(k.StartsWith) && v.Length > best.Length)
+                    best = v;
+        // 占位符填上真实长度的样本值，否则 {0} 只算三个字符，测不出实际宽度。
+        var args = new object[] { "logioptionsplus_agent", 30844, 58000, @"C:\Program Files\Some Vendor\App\launcher.exe" };
+        try { return string.Format(best, args); } catch { return best; }
+    }
+
     private static (string Name, Func<Window> Make)[] AllXamlWindows()
     {
         var groups = new[] { new ActionGroup() };
@@ -51,9 +67,12 @@ public partial class App
             ("StepEditor", () => new StepEditorWindow(new LaunchStep(), groups)),
             ("ReminderEditor", () => new ReminderEditorWindow(new Reminder(), groups)),
             ("GroupEditor", () => new GroupEditorWindow(new ActionGroup(), groups, "F9")),
-            ("ReminderPopup", () => new ReminderPopupWindow("smoke", confirm: true, autoDismissSeconds: 0)),
-            ("Toast", () => new NotificationToast("smoke", "smoke", ToastLevel.Info, durationMs: 0)),
-            ("BrandDialog", () => new BrandDialog(null, "smoke", confirm: true, ToastLevel.Info)),
+            // 喂真实的最长文案，不再喂 "smoke"：这三个窗口的尺寸完全由文案长度决定，
+            // 喂一个五字占位串等于根本没测它们——带三个变量的确认文案在窄窗口下什么样，
+            // 一直是空白。长度按当前语言现算，不维护人工清单（哪一条最长逐语言不同）。
+            ("ReminderPopup", () => new ReminderPopupWindow(LongestOf("Msg_", "Reminder_", "Confirm_"), confirm: true, autoDismissSeconds: 0)),
+            ("Toast", () => new NotificationToast("Clockwork", LongestOf("SysMsg_", "Warn_", "Err_"), ToastLevel.Info, durationMs: 0)),
+            ("BrandDialog", () => new BrandDialog(null, LongestOf("Confirm_"), confirm: true, ToastLevel.Info)),
         };
     }
 
@@ -66,8 +85,24 @@ public partial class App
     }
 
     // 把队列泵到 Loaded 档：Show() 排进队列的 Loaded 级收尾活（模板实例化等）当场做完再量尺寸。
+    // 截图文件名里的 Tab 标识。只留英数：标题本身是翻译过的，中文/阿语下会落成空串，
+    // 此时靠前面的序号区分；英德下则能直接从文件名看出是哪一页。
+    private static string TabSlug(TabControl tabs)
+    {
+        string header = (tabs.SelectedItem as System.Windows.Controls.TabItem)?.Header as string ?? "";
+        var keep = new string(header.Where(ch => ch < 128 && (char.IsLetterOrDigit(ch))).ToArray());
+        return keep.Length == 0 ? "" : "-" + keep;
+    }
+
     private void PumpToLoaded()
         => Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Loaded);
+
+    // 比 PumpToLoaded 再低两档。DataGrid 的列宽分配（Pixel / Star 实际取值）发生在
+    // Loaded 之后的异步一轮里：只泵到 Loaded 就截图，每一列都停在自己的 MinWidth 上
+    // （220px 的列量出来是 20，星号列也是 20），拍出一张看上去版式崩了的假图。
+    // 初始选中的那个 Tab 在 Show 期间已经 settle，所以这个坑在只截首页的年代从未暴露。
+    private void PumpToIdle()
+        => Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.ContextIdle);
 
     private void RunSmoke()
     {
@@ -86,6 +121,7 @@ public partial class App
                 // 的环境里照样绿灯（上面 PumpToLoaded 注释里的 84/84 全零正是这么漏掉的）。
                 if (w.ActualWidth <= 0 || w.ActualHeight <= 0)
                     throw new InvalidOperationException($"{name}: laid out to zero size");
+                VisitAllTabs(w);
                 w.Close();
             }
             File.WriteAllText(marker, "OK");
@@ -96,6 +132,23 @@ public partial class App
             try { File.WriteAllText(marker, ex.ToString()); } catch { }
             Shutdown(1);
         }
+    }
+
+    // WPF 的 TabControl 只实例化当前选中页：只 Show 一下，非首页的几个 Tab 其实一行都没跑过，
+    // 里面写错的 StaticResource / 绑定名能一路带到发版——正是这个开关要替用户堆掉的那类问题。
+    // 逐个选一遍，把每页都 realize 出来；选中事件里的懒加载（扫自启项 / 扫端口）一并跑到。
+    private void VisitAllTabs(Window w)
+    {
+        if (w.FindName("Tabs") is not TabControl tabs) return;
+        object? original = tabs.SelectedItem;
+        foreach (var item in tabs.Items)
+        {
+            tabs.SelectedItem = item;
+            PumpToIdle();
+            w.UpdateLayout();
+        }
+        tabs.SelectedItem = original;
+        PumpToIdle();
     }
 
     private void RunShots(string[] args)
@@ -113,9 +166,15 @@ public partial class App
             // 工作区高度（DIP）= 物理高 / 缩放 - 任务栏（Win11 约 48 DIP）。
             // 第一档就是最容易出事的 1366×768 @125%。
             var waHeights = new[] { 768 / 1.25 - 48, 1080 / 1.5 - 48, 1080.0 - 48 };
-            // 高危语言：中文基线 / 英文 / 德语（最长翻译）/ 阿语（RTL）。
+            // 高危语言：中文基线 / 英文 / 德语 / 西语 / 俄语 / 阿语（RTL）。
+            // “德语最长”只是平均意义上成立，逐条看并不是：端口页那两个复选框
+            // （Solo servidores de desarrollo / Mostrar todos los puertos）西语比德语长一截，
+            // 俄语在另一批串上同理。只跑德语就会把这类裁切放过去（实测已发生过一次）。
             // RTL 不走 App 里的 OverrideMetadata（每类型只能调一次，逐语言循环会炸），逐窗口设 FlowDirection。
-            var langs = new[] { "zh-CN", "en", "de", "ar" };
+            var langs = new[] { "zh-CN", "en", "de", "es", "ru", "ar" };
+            // 宽度两档：MinWidth(820) 是用户能拖到的最窄处，1040 是默认开窗宽。
+            // 此前只变高度、宽度永远是 1040，于是「长译文顶出右缘」这类问题全靠人肉发现。
+            var widths = new[] { 820.0, 1040.0 };
 
             int count = 0;
             var fails = new List<string>();
@@ -124,38 +183,57 @@ public partial class App
                 Strings.ApplyCulture(lang);
                 foreach (var (name, make) in AllXamlWindows())
                     foreach (var wa in waHeights)
-                    {
-                        Window? w = null;
-                        try
+                        foreach (var ww in widths)
                         {
-                        Park(w = make());
-                        w.FlowDirection = Strings.IsRightToLeft
-                            ? System.Windows.FlowDirection.RightToLeft
-                            : System.Windows.FlowDirection.LeftToRight;
-                        w.Show();
-                        w.MaxHeight = wa;   // 必须 Show 之后设，否则被 FitToWorkArea 按真实显示器算的值覆盖
-                        PumpToLoaded();
-                        w.UpdateLayout();
-                        var rtb = new RenderTargetBitmap(
-                            (int)Math.Ceiling(w.ActualWidth), (int)Math.Ceiling(w.ActualHeight),
-                            96, 96, PixelFormats.Pbgra32);
-                        rtb.Render(w);
-                        var enc = new PngBitmapEncoder();
-                        enc.Frames.Add(BitmapFrame.Create(rtb));
-                        using (var fs = File.Create(Path.Combine(dir, $"{name}@{lang}@{(int)wa}.png")))
-                            enc.Save(fs);
-                        w.Close();
-                        count++;
+                            Window? w = null;
+                            string shot = $"{name}@{lang}@{(int)ww}x{(int)wa}";
+                            try
+                            {
+                                Park(w = make());
+                                w.FlowDirection = Strings.IsRightToLeft
+                                    ? System.Windows.FlowDirection.RightToLeft
+                                    : System.Windows.FlowDirection.LeftToRight;
+                                w.Show();
+                                w.MaxHeight = wa;   // 必须 Show 之后设，否则被 FitToWorkArea 按真实显示器算的值覆盖
+                                if (w.MinWidth <= ww) w.Width = ww;   // 窗口自己的 MinWidth 优先，不提供它不允许的尺寸
+                                PumpToIdle();
+                                w.UpdateLayout();
+
+                                // 一个窗口可能有多页（MainWindow 的 6 个 Tab）。WPF 只实例化当前选中页，
+                                // 不逐个选一遍，截出来的图里有 5/6 的界面从没被渲染过。
+                                var tabs = w.FindName("Tabs") as TabControl;
+                                int pages = tabs?.Items.Count ?? 1;
+                                for (int p = 0; p < pages; p++)
+                                {
+                                    string suffix = "";
+                                    if (tabs != null)
+                                    {
+                                        tabs.SelectedIndex = p;
+                                        PumpToIdle();
+                                        w.UpdateLayout();
+                                        suffix = $"-{p + 1}{TabSlug(tabs)}";
+                                    }
+                                    var rtb = new RenderTargetBitmap(
+                                        (int)Math.Ceiling(w.ActualWidth), (int)Math.Ceiling(w.ActualHeight),
+                                        96, 96, PixelFormats.Pbgra32);
+                                    rtb.Render(w);
+                                    var enc = new PngBitmapEncoder();
+                                    enc.Frames.Add(BitmapFrame.Create(rtb));
+                                    using (var fs = File.Create(Path.Combine(dir, $"{name}{suffix}@{lang}@{(int)ww}x{(int)wa}.png")))
+                                        enc.Save(fs);
+                                    count++;
+                                }
+                                w.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                string diag = w == null ? "ctor" :
+                                    $"aw={w.ActualWidth} vis={w.IsVisible} loaded={w.IsLoaded} visprop={w.Visibility} " +
+                                    $"hwnd={new System.Windows.Interop.WindowInteropHelper(w).Handle}";
+                                fails.Add($"{shot} [{diag}] {ex.GetType().Name}: {ex.Message}");
+                                try { w?.Close(); } catch { }
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            string diag = w == null ? "ctor" :
-                                $"aw={w.ActualWidth} vis={w.IsVisible} loaded={w.IsLoaded} visprop={w.Visibility} " +
-                                $"hwnd={new System.Windows.Interop.WindowInteropHelper(w).Handle}";
-                            fails.Add($"{name}@{lang}@{(int)wa} [{diag}] {ex.GetType().Name}: {ex.Message}");
-                            try { w?.Close(); } catch { }
-                        }
-                    }
             }
             File.WriteAllText(marker, fails.Count == 0
                 ? $"OK {count} shots -> {dir}"
