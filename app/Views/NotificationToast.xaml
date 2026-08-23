@@ -34,7 +34,8 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" x:Name="TimeText" FontFamily="{StaticResource FontMono}" FontSize="11.5"
                                    Foreground="{StaticResource BrushPaper}" Margin="0,0,8,0"/>
-                        <TextBlock Grid.Column="1" x:Name="TitleText" FontFamily="{StaticResource FontMono}" FontSize="11.5"
+                        <!-- 提醒标题是用户自己写的，什么文字都可能，绝不能锁进等宽体 -->
+                        <TextBlock Grid.Column="1" x:Name="TitleText" FontSize="11.5"
                                    Foreground="{StaticResource BrushMuted}" TextTrimming="CharacterEllipsis"
                                    VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="2" x:Name="CountText" FontFamily="{StaticResource FontMono}" FontSize="11.5"

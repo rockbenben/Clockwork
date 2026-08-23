@@ -32,7 +32,8 @@
                            RenderOptions.BitmapScalingMode="HighQuality"/>
                     <TextBlock x:Name="TimeText" FontFamily="{StaticResource FontMono}" FontSize="12"
                                Foreground="{StaticResource BrushPaper}" VerticalAlignment="Center" Margin="10,0,8,0"/>
-                    <TextBlock x:Name="Eyebrow" FontFamily="{StaticResource FontMono}" FontSize="12"
+                    <!-- 眉标取 Tray_ReminderTitle（译文），不走等宽体；左边的 TimeText 是读数，保留 -->
+                    <TextBlock x:Name="Eyebrow" FontSize="12"
                                Foreground="{StaticResource BrushMuted}" VerticalAlignment="Center"/>
                 </StackPanel>
 

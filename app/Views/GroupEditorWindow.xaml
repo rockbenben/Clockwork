@@ -5,7 +5,12 @@
         Title="{loc:Loc Ed_Title_Group}" Width="720" Height="640" WindowStartupLocation="CenterOwner"
         Background="{StaticResource BrushInk}"
         ShowInTaskbar="False" MinWidth="600" MinHeight="460">
-    <Grid Margin="18,16,18,16">
+    <!-- IsSharedSizeScope：让「新增」那一格与下方按钮列那一格共用宽度（SharedSizeGroup="StepRail"）。
+         这两格分处两行不同的 Grid，各自算宽度就必然对不齐；而它们在视觉上是同一列按钮。
+         此前是靠两处都写死 Width=104 手动同步的——按钮列改成随语言自适应之后那个约定就断了，
+         德语实测「新增」比「编辑」窄了一大截、左右缘全错开。交给共享尺寸组，谁也不用记住那个数字。
+         注意别让任何元素 ColumnSpan 跨过共享列（设置页实测会把布局转成无限循环），这里没有。 -->
+    <Grid Margin="18,16,18,16" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>   <!-- 名称 + 热键 -->
             <RowDefinition Height="Auto"/>   <!-- 说明 -->
@@ -34,14 +39,19 @@
             </Grid>
 
             <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Ed_GroupRepeat}" Style="{StaticResource FieldLabel}"/>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,8,0,0">
-                <TextBox x:Name="GroupRepeatBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeat}" Width="60" Height="28"/>
-                <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,0"/>
+            <!-- WrapPanel 而非横向 StackPanel：正是本文件上面那条注释说的坑——横向 StackPanel
+                 给子元素无限可用宽度，排不下不会换行、直接被右缘裁掉。
+                 实测德语 820 宽下最后那个复选框被切成「Im Infobereich-Menü anzeig」。
+                 换行的单位是整个控件，不会把标签从字中间断开。 -->
+            <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0,8,0,0">
+                <TextBox x:Name="GroupRepeatBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeat}" Width="60" Height="28" Margin="0,0,0,6"/>
+                <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,6"/>
                 <!-- 单位并入 Ed_GroupRepeatDelay 文案（各语言自带 ms 缩写，同 Ed_DelayMs）：写死的 "ms" 阿拉伯语/俄语用户会看到一截拉丁字母 -->
-                <TextBox x:Name="GroupRepeatDelayBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeatDelay}" Width="80" Height="28"/>
-                <!-- 托盘显示开关与「整组重复」同排：都是"这个组怎么被用"的属性，不占额外一行 -->
-                <CheckBox x:Name="ShowInTrayChk" Content="{loc:Loc Ed_GroupShowInTray}" VerticalAlignment="Center" Margin="24,0,0,0"/>
-            </StackPanel>
+                <TextBox x:Name="GroupRepeatDelayBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeatDelay}" Width="80" Height="28" Margin="0,0,0,6"/>
+                <!-- 托盘显示开关与「整组重复」同排：都是"这个组怎么被用"的属性，不占额外一行；
+                     窄到放不下时它整个掉到下一行，而不是被裁掉半个词。 -->
+                <CheckBox x:Name="ShowInTrayChk" Content="{loc:Loc Ed_GroupShowInTray}" VerticalAlignment="Center" Margin="24,0,0,6"/>
+            </WrapPanel>
         </Grid>
 
         <!-- 动作组只定义动作，触发在别处引用 -->
@@ -49,17 +59,18 @@
 
         <!-- ===== 「步骤」小标题（刻字面板标签）+ 添加按钮 ===== -->
         <Grid Grid.Row="2" Margin="0,16,0,6">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" SharedSizeGroup="StepRail"/></Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="{loc:Loc Col_Steps}" Style="{StaticResource GroupLabel}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
-            <!-- 宽度/左边距必须与下方按钮列（Width=104, Margin=14,0,0,0）逐字相同：这颗「新增」就摞在
-                 「编辑 / 删除 / 复制」正上方，宽度由内容决定时两边各差几像素，一列按钮的左右缘就都对不齐。 -->
+            <!-- 这颗「新增」就摞在「编辑 / 删除 / 复制」正上方，宽度必须与它们一致，否则一列按钮的左右缘都对不齐。
+                 靠共享尺寸组 StepRail 自动取齐（见窗口根 Grid 的说明），不再两处各写死一个 104。
+                 Stretch：让它填满共享列，而不是按自身内容缩在里面。 -->
             <Button Grid.Column="1" x:Name="SAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}"
-                    Width="104" Height="30" Padding="4,0" Margin="14,0,0,0" Click="SAdd_Click"/>
+                    HorizontalAlignment="Stretch" Height="30" Padding="4,0" Margin="14,0,0,0" Click="SAdd_Click"/>
         </Grid>
 
         <!-- ===== 步骤序列：黄铜轨 · 类型徽标 · 摘要 · 延时（与启动清单同一套仪表化列表）===== -->
         <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" SharedSizeGroup="StepRail"/></Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Style="{StaticResource ListPanel}">
                 <!-- 禁点表头排序：步骤顺序即执行顺序，排序会让选中索引与模型错位（与主窗口三列表同理） -->
@@ -89,7 +100,14 @@
                  「运行这一步 / 运行整组」的标签在西语下会折成两行）比 * 行还高，末尾按钮会被窗口底边切掉半个。
                  与设置页左栏同一条结论：收紧间距只是把悬崖往后挪一格，滞动条才不挑窗口大小。 -->
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Width="104" Margin="14,0,0,0">
+            <!-- 宽度随语言自己长，不写死 104：那个数字是照中文标签量的。
+                 俄语实测这六行（七个按钮）里有三行放不下要折行——上移/下移各两行、「运行这一步」三行、
+                 「运行整组」两行，合计 10 行文字；摞起来超出可用高度，滚动条把最后两个按钮从字当中切开
+                 （820x566 实测切在「Выполнить」的字腰上）。
+                 约束是标签长度而不是竖向空间：让它一行放得下，同样六行按钮就只剩 6 行文字。
+                 MinWidth 保住中文下的手感（实测中文表格宽度 683px 一分未变），
+                 MaxWidth 挡住某个语言把步骤表挤瘦（德语最狠，820 窗口下表格 666→583px）。 -->
+            <StackPanel MinWidth="104" MaxWidth="190" Margin="14,0,0,0">
                 <Button Content="{loc:Loc Btn_Edit}" Margin="0,0,0,8" Click="SEdit_Click"/>
                 <Button Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,0,0,8" Click="SDel_Click"/>
                 <Button Content="{loc:Loc Btn_Copy}" Margin="0,0,0,8" Click="SCopy_Click"/>

@@ -67,6 +67,16 @@
     <!-- fonts (all Windows-native, no external dependency) -->
     <FontFamily x:Key="FontDisplay">Bahnschrift, DIN, Segoe UI, Microsoft YaHei</FontFamily>
     <FontFamily x:Key="FontBody">Segoe UI, Microsoft YaHei, PingFang SC</FontFamily>
+    <!-- 等宽体只给「机器读数」：端口 / PID / 地址 / 时间 / 版本号 / 快捷键 / ×N。
+         凡是会被翻译的词都不要用它。
+         实测（CharacterToGlyphMap 逐码位探）本软件这 18 种语言用到的文字里，Cascadia Mono 只有
+         拉丁、西里尔、希腊；阿拉伯、天城文、泰文、汉字都没有，交给系统回退——
+         而等宽主字体下回退到的还是等宽体：阿拉伯语「منفذ」被拆成「مـنـفـذ」，
+         字母塞进固定格子、连写断掉，同一行的正文字体则正常。
+         改字体栈救不了：把 Consolas 从这一行去掉后重拍，阿拉伯语表头逐像素不变
+         （ImageChops 差异框为 None——回退表不看这个列表）。
+         中日韩没暴露只是因为方块字本来就不连写，断无可断；
+         也就是说这套等宽标签本来就只对拉丁/西里尔/希腊成立。 -->
     <FontFamily x:Key="FontMono">Cascadia Mono, Consolas, Segoe UI</FontFamily>
 
     <!-- ============ ScrollBar (slim) ============ -->
@@ -198,9 +208,9 @@
     <Style x:Key="FormScroll" TargetType="ScrollViewer">
         <Setter Property="Padding" Value="0,0,12,6"/>
     </Style>
+    <!-- 分组标签（「选中的行」「步骤」）同样是译文，不走等宽体。 -->
     <Style x:Key="GroupLabel" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
-        <Setter Property="FontFamily" Value="{StaticResource FontMono}"/>
         <Setter Property="FontSize" Value="10.5"/>
         <Setter Property="Margin" Value="2,10,0,3"/>
     </Style>
@@ -552,13 +562,15 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CalendarItem">
                     <!-- 日名行（一 二 三…）：自带模板给的是浅色主题下的灰，暗底上几乎看不见。
-                         走列名同款——等宽小字 + faint，和 DataGrid 表头一个口径。
+                         走列名同款——小字 + faint，和 DataGrid 表头一个口径（两边都已从等宽体挪走，
+                         理由见 FontMono 定义处：这两处印的都是译文）。
                          必须放在模板资源里：FrameworkElement.Resources 不是依赖属性，
                          写成 <Setter Property="Resources"> 会在运行时抛 XamlParseException。 -->
                     <ControlTemplate.Resources>
                         <DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}">
+                            <!-- 星期名按语言变（日月火…／SMTWTFS／阿拉伯语），是译文不是读数 -->
                             <TextBlock Text="{Binding}" HorizontalAlignment="Center" Margin="0,2,0,8"
-                                       FontFamily="{StaticResource FontMono}" FontSize="11"
+                                       FontSize="11"
                                        Foreground="{StaticResource BrushFaint}"/>
                         </DataTemplate>
                     </ControlTemplate.Resources>
@@ -696,8 +708,8 @@
                         </Border>
                         <Border Grid.Row="1" Background="Transparent">
                             <!-- 名字不能改：TabControlAutomationPeer 按 "PART_SelectedContentHost" 这个名字找选中页的
-                                 内容宿主，找不到就不把内容挂进无障碍树。本模板原来没给名字，于是五个标签页里的所有控件
-                                 对读屏软件整体不可见（UIA 树里只剩窗口＋5 个标签头）。 -->
+                                 内容宿主，找不到就不把内容挂进无障碍树。本模板原来没给名字，于是六个标签页里的所有控件
+                                 对读屏软件整体不可见（UIA 树里只剩窗口＋6 个标签头）。 -->
                             <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent"/>
                         </Border>
                     </Grid>
@@ -748,10 +760,10 @@
     </Style>
 
     <!-- ============ DataGrid ============ -->
+    <!-- 列名不走等宽体：它们条条都要翻译，而等宽体排不了阿拉伯语的连写（见 FontMono 处的说明）。 -->
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="FontFamily" Value="{StaticResource FontMono}"/>
         <Setter Property="FontSize" Value="11.5"/>
         <Setter Property="Padding" Value="8,8"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -1092,7 +1104,9 @@
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-    <!-- 等宽读数的省略号版（命令行 / 热键列）：见上方 CellEllipsis 的说明，字体走 DelayCol。
+    <!-- 等宽读数的省略号版：热键 / 命令行 / 端口 / PID / 地址五列在用。
+         共同点是内容都由机器给定、不经翻译，正是可以放心进等宽体的那一类（反面见 FontMono 处的说明）。
+         见上方 CellEllipsis 的说明，字体走 DelayCol。
          定义必须排在 DelayCol 之后——StaticResource 只认字典里已经出现过的键。 -->
     <Style x:Key="CellEllipsisMono" TargetType="TextBlock" BasedOn="{StaticResource DelayCol}">
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
