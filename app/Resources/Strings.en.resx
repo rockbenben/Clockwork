@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
 
-  <data name="App_Subtitle" xml:space="preserve"><value>Startup · Reminders · One-tap Actions</value></data>
+  <data name="App_Subtitle" xml:space="preserve"><value>Startup · Reminders · One-tap actions</value></data>
 
   <data name="Tab_Launch" xml:space="preserve"><value>Startup List</value></data>
   <data name="Tab_Reminder" xml:space="preserve"><value>Scheduled tasks</value></data>
@@ -24,10 +24,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Refresh</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Show all ports</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Dev servers only</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Lists the TCP ports currently being listened on, refreshed each time you open this tab. Double-click a row to open it in your browser, or right-click to free the port — that ends every process holding it, child processes included. Only dev runtimes such as node and python are shown by default: untick Dev servers only for your other software, or tick Show all ports to include system services.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>When one process holds several ports, only the outward-facing one is listed. Check this to list every port and skip the filter above.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Project services only</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Lists only services started from one of your project folders, recognized by markers like .git or package.json. Uncheck to see the rest of your listening software.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Double-click a row to open it in your browser; right-click to free the port.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} of {1} ports · refreshes every 5s</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Open in browser</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Free the port</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Also listening on {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Couldn't free port {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>On</value></data>
@@ -312,7 +316,6 @@ Log: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Operation failed: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Settings</value></data>
   <data name="Settings_General" xml:space="preserve"><value>General</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>About</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Check for updates</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Checking…</value></data>
@@ -416,8 +419,8 @@ Log: {1}</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>delay between rounds (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Circular group reference ({0}) — break the reference chain before saving</value></data>
 
-  <data name="Btn_ExportConfig" xml:space="preserve"><value>Export Config</value></data>
-  <data name="Btn_ImportConfig" xml:space="preserve"><value>Import Config</value></data>
+  <data name="Btn_ExportConfig" xml:space="preserve"><value>Export settings</value></data>
+  <data name="Btn_ImportConfig" xml:space="preserve"><value>Import settings</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>Config exported to: {0}</value></data>
   <data name="Config_Imported" xml:space="preserve"><value>Config imported. Restarting to apply.</value></data>
   <data name="Config_ImportFail" xml:space="preserve"><value>Import failed: {0}</value></data>
@@ -483,6 +486,7 @@ Log: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Back to normal</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Startup</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Backup</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Exports a single .json file. Importing replaces all current settings.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s, and only when Start at login is on: waits this long after logon before running the list, so it misses the logon storm. Manual re-runs are unaffected.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Wait until the system is ready (desktop / network)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Goes as soon as both are ready, waiting at most 90 s, then the fixed delay above is added on top. Turn this on when the list runs too early for your apps.</value></data>

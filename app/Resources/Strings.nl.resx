@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Vernieuwen</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Alle poorten tonen</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Alleen dev-servers</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Toont alleen TCP-poorten waarop wordt geluisterd, ververst telkens als je dit tabblad opent. Dubbelklik op een rij om die in de browser te openen; met rechtsklik geef je de poort vrij, wat elk proces dat de poort bezet beëindigt, inclusief onderliggende processen. Standaard verschijnen alleen dev-runtimes zoals node en python: haal het vinkje bij 'Alleen dev-servers' weg voor je overige software, of vink 'Alle poorten tonen' aan voor de systeemservices.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Als één proces meerdere poorten bezet, wordt alleen de naar buiten gerichte getoond. Vink aan om elke poort te tonen en het filter hierboven over te slaan.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Alleen projectservices</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Toont alleen services die vanuit een van je projectmappen zijn gestart, herkend aan markeringen als .git of package.json. Vink uit om de overige luisterende software te zien.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Dubbelklik op een rij om die in de browser te openen; rechtsklik om de poort vrij te geven.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} van {1} poorten · ververst elke 5 s</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Openen in browser</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Poort vrijgeven</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Luistert ook op {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Kan poort {0} niet vrijgeven: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Aan</value></data>
@@ -308,7 +312,6 @@ Log: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Bewerking mislukt: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Instellingen</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Algemeen</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>Over</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Controleren op updates</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Controleren…</value></data>
@@ -480,6 +483,7 @@ Log: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Terug naar normaal</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Opstarten</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Back-up</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Exporteert één .json-bestand. Importeren vervangt alle huidige instellingen.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s en alleen als starten bij aanmelden aanstaat: wacht zo lang na het aanmelden voordat de lijst draait, zodat de aanmeldstorm wordt vermeden. Handmatig opnieuw uitvoeren blijft ongewijzigd.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Wachten tot het systeem gereed is (bureaublad / netwerk)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Gaat verder zodra beide klaar zijn, met maximaal 90 s wachten; de vaste vertraging hierboven komt daar nog bij. Zet dit aan als de lijst te vroeg draait voor uw programma's.</value></data>

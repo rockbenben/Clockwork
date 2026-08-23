@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Actualizar</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Mostrar todos los puertos</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Solo servidores de desarrollo</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Muestra solo los puertos TCP en escucha y se actualiza cada vez que abres esta pestaña. Haz doble clic en una fila para abrirla en el navegador; con el botón derecho puedes liberar el puerto, lo que finaliza todos los procesos que lo ocupan y sus procesos secundarios. De forma predeterminada solo aparecen entornos de desarrollo como node y python: desmarca «Solo servidores de desarrollo» para ver el resto de tu software o marca «Mostrar todos los puertos» para incluir los servicios del sistema.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Cuando un proceso ocupa varios puertos, solo se muestra el que da al exterior. Márcalo para enumerar todos los puertos y omitir el filtro de arriba.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Solo servicios de proyecto</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Muestra solo los servicios iniciados desde una de tus carpetas de proyecto, reconocidos por marcas como .git o package.json. Desmárcalo para ver el resto del software a la escucha.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Haz doble clic en una fila para abrirla en el navegador; clic derecho para liberar el puerto.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} de {1} puertos · se actualiza cada 5 s</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Abrir en el navegador</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Liberar el puerto</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>También a la escucha en {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>No se pudo liberar el puerto {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Act.</value></data>
@@ -308,7 +312,6 @@ Registro: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Operación fallida: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Ajustes</value></data>
   <data name="Settings_General" xml:space="preserve"><value>General</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>Acerca de</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Buscar actualizaciones</value></data>
   <data name="About_Series" xml:space="preserve"><value>Plan 365 de código abierto · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Comprobando…</value></data>
@@ -480,6 +483,7 @@ Registro: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Volver a la normalidad</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Inicio</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Copia de seguridad</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Exporta un único archivo .json. Importar reemplaza toda la configuración actual.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s y solo si «Iniciar al iniciar sesión» está activo: espera este tiempo tras iniciar sesión antes de ejecutar la lista, evitando la avalancha de arranque. Las ejecuciones manuales no se ven afectadas.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Esperar a que el sistema esté listo (escritorio / red)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Continúa en cuanto ambos están listos, con un máximo de 90 s, y luego se suma el retardo fijo de arriba. Actívalo si la lista se ejecuta demasiado pronto para tus programas.</value></data>

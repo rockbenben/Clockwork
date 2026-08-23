@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>تحديث</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>إظهار كل المنافذ</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>خوادم التطوير فقط</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>يعرض منافذ TCP التي يجري الاستماع عليها فقط، ويُحدَّث في كل مرة تفتح فيها علامة التبويب هذه. انقر نقرًا مزدوجًا فوق صف لفتحه في المتصفح، وانقر بزر الفأرة الأيمن لتحرير المنفذ، فتُنهى كل العمليات التي تشغله ومعها عملياتها الفرعية. تظهر افتراضيًا بيئات التطوير مثل node وpython فقط: أزل تحديد «خوادم التطوير فقط» لرؤية بقية برامجك، أو حدّد «إظهار كل المنافذ» لتضمين خدمات النظام.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>عندما تشغل عملية واحدة عدة منافذ، يُعرض المنفذ الخارجي فقط افتراضيًا. حدّد هذا الخيار لسرد كل منفذ وتجاوز عامل التصفية أعلاه.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>خدمات المشاريع فقط</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>يعرض فقط الخدمات التي بدأت من أحد مجلدات مشاريعك، ويتعرّف عليها من علامات مثل .git أو package.json. أزل التحديد لرؤية بقية البرامج المستمعة.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>انقر نقرًا مزدوجًا على صف لفتحه في المتصفح، وانقر بالزر الأيمن لتحرير المنفذ.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} من {1} منفذ · يتحدّث كل 5 ثوانٍ</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>فتح في المتصفح</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>تحرير المنفذ</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>يستمع أيضًا على {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>تعذّر تحرير المنفذ {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>تفعيل</value></data>
@@ -308,7 +312,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>فشلت العملية: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>الإعدادات</value></data>
   <data name="Settings_General" xml:space="preserve"><value>عام</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>حول</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>التحقق من التحديثات</value></data>
   <data name="About_Series" xml:space="preserve"><value>خطة 365 مفتوحة المصدر · ‏#020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>جارٍ التحقق…</value></data>
@@ -480,6 +483,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>العودة إلى الوضع الطبيعي</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>بدء التشغيل</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>النسخ الاحتياطي</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>يصدّر ملف .json واحدًا. والاستيراد يستبدل كل الإعدادات الحالية.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>من 0 إلى 600 ثانية، وتسري فقط عند تفعيل البدء عند تسجيل الدخول: تنتظر هذه المدة بعد تسجيل الدخول قبل تشغيل القائمة لتفادي ازدحام البداية. التشغيل اليدوي لا يتأثر.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>الانتظار حتى يصبح النظام جاهزًا (سطح المكتب / الشبكة)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>يتابع فور جاهزية الاثنين، بانتظار 90 ثانية كحد أقصى، ثم يُضاف التأخير الثابت أعلاه فوق ذلك. فعِّله عندما تعمل القائمة مبكرًا جدًا بالنسبة لبرامجك.</value></data>

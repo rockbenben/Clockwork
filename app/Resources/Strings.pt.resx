@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Atualizar</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Mostrar todas as portas</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Apenas servidores de dev</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Lista apenas as portas TCP em escuta e é atualizada sempre que você abre esta guia. Clique duas vezes em uma linha para abri-la no navegador; com o botão direito você libera a porta, encerrando todos os processos que a ocupam e seus processos filhos. Por padrão aparecem apenas runtimes de dev como node e python: desmarque «Apenas servidores de dev» para ver seus outros programas ou marque «Mostrar todas as portas» para incluir os serviços do sistema.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Quando um processo ocupa várias portas, só é mostrada a que está virada para fora. Marca para listar todas as portas e ignorar o filtro acima.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Apenas serviços de projeto</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Mostra apenas os serviços iniciados a partir de uma das tuas pastas de projeto, reconhecidos por marcas como .git ou package.json. Desmarca para ver o restante software à escuta.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Clique duas vezes numa linha para abri-la no navegador; clique com o botão direito para liberar a porta.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} de {1} portas · atualiza a cada 5 s</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Abrir no navegador</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Liberar a porta</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Também à escuta em {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Não foi possível liberar a porta {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Ativ.</value></data>
@@ -308,7 +312,6 @@ Registro: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Falha na operação: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Configurações</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Geral</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>Sobre</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Verificar atualizações</value></data>
   <data name="About_Series" xml:space="preserve"><value>Plano 365 de código aberto · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Verificando…</value></data>
@@ -480,6 +483,7 @@ Registro: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Voltar ao normal</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Arranque</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Cópia de segurança</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Exporta um único ficheiro .json. Importar substitui toda a configuração atual.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s e só com o arranque no início de sessão ativo: espera este tempo depois do login antes de correr a lista, evitando a enxurrada do arranque. As execuções manuais não são afetadas.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Esperar até o sistema estar pronto (ambiente de trabalho / rede)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Avança assim que ambos estiverem prontos, esperando no máximo 90 s; o atraso fixo acima soma-se a isso. Ative se a lista corre cedo demais para os seus programas.</value></data>

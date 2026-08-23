@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Segarkan</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Tampilkan semua port</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Hanya dev server</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Hanya menampilkan port TCP yang sedang didengarkan, disegarkan setiap kali Anda membuka tab ini. Klik ganda sebuah baris untuk membukanya di peramban; klik kanan untuk membebaskan port, yang mengakhiri semua proses yang memakainya beserta proses anaknya. Secara bawaan hanya runtime dev seperti node dan python yang muncul: hapus centang «Hanya dev server» untuk melihat perangkat lunak lain, atau centang «Tampilkan semua port» untuk menyertakan layanan sistem.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Bila satu proses memakai beberapa port, secara bawaan hanya port yang menghadap keluar yang ditampilkan. Centang untuk mendaftar semua port dan melewati filter di atas.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Hanya layanan proyek</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Hanya menampilkan layanan yang dijalankan dari salah satu folder proyek Anda, dikenali dari penanda seperti .git atau package.json. Hapus centang untuk melihat perangkat lunak lain yang sedang mendengarkan.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Klik dua kali baris untuk membukanya di browser; klik kanan untuk membebaskan port.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} dari {1} port · menyegarkan tiap 5 detik</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Buka di peramban</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Bebaskan port</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Juga mendengarkan di {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Tidak dapat membebaskan port {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Aktif</value></data>
@@ -308,7 +312,6 @@ Log: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Operasi gagal: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Pengaturan</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Umum</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>Tentang</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Periksa pembaruan</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Memeriksa…</value></data>
@@ -480,6 +483,7 @@ Log: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Kembali normal</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Startup</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Cadangan</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Mengekspor satu berkas .json. Mengimpor akan mengganti seluruh pengaturan saat ini.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 dtk dan hanya bila mulai saat masuk aktif: menunggu selama ini setelah login sebelum menjalankan daftar, sehingga melewati kesibukan awal. Menjalankan ulang secara manual tidak terpengaruh.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Tunggu sampai sistem siap (desktop / jaringan)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Lanjut begitu keduanya siap, menunggu maksimal 90 dtk, lalu jeda tetap di atas ditambahkan. Nyalakan bila daftar berjalan terlalu awal bagi program Anda.</value></data>

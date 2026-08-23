@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Yenile</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Tüm portları göster</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Yalnızca dev sunucuları</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Yalnızca dinlenen TCP portlarını listeler; bu sekmeyi her açtığınızda yenilenir. Bir satıra çift tıklayarak tarayıcıda açın, sağ tıklayarak portu serbest bırakın: portu tutan tüm işlemler alt işlemleriyle birlikte sonlandırılır. Varsayılan olarak yalnızca node ve python gibi dev çalışma zamanları görünür: diğer yazılımlarınız için «Yalnızca dev sunucuları» işaretini kaldırın, sistem hizmetleri için «Tüm portları göster» seçeneğini işaretleyin.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Bir işlem birden çok port tutuyorsa varsayılan olarak yalnızca dışa dönük olan gösterilir. İşaretlerseniz her port listelenir ve yukarıdaki süzgeç atlanır.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Yalnızca proje hizmetleri</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Yalnızca proje klasörlerinizden başlatılan hizmetleri listeler; .git veya package.json gibi işaretlerle tanınır. İşareti kaldırırsanız dinlemede olan diğer yazılımlar da görünür.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Bir satıra çift tıklayınca tarayıcıda açılır, sağ tıklayınca port serbest bırakılır.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{1} porttan {0} tanesi · her 5 sn’de yenilenir</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Tarayıcıda aç</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Portu serbest bırak</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Ayrıca şu portları dinliyor: {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>{0} numaralı port serbest bırakılamadı: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Açık</value></data>
@@ -308,7 +312,6 @@ Günlük: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>İşlem başarısız: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Ayarlar</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Genel</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>Hakkında</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Güncellemeleri denetle</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 Açık Kaynak Planı · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Denetleniyor…</value></data>
@@ -480,6 +483,7 @@ Günlük: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Normale dön</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Başlangıç</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Yedekleme</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Tek bir .json dosyası olarak dışa aktarır. İçe aktarmak mevcut tüm ayarların yerine geçer.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 sn ve yalnızca oturum açılışında başlatma açıkken geçerli: oturum açtıktan sonra bu kadar bekleyip listeyi çalıştırır, böylece açılış yoğunluğunu atlar. Elle yeniden çalıştırma etkilenmez.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Sistem hazır olana kadar bekle (masaüstü / ağ)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>İkisi de hazır olur olmaz devam eder, en fazla 90 sn bekler; yukarıdaki sabit gecikme bunun üstüne eklenir. Liste programlarınız için çok erken çalışıyorsa açın.</value></data>

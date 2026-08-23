@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>更新</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>すべてのポートを表示</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>dev サービスのみ</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>待ち受け中の TCP ポートだけを表示します（このタブを開くたびに更新）。行をダブルクリックするとブラウザーで開き、右クリックでポートを解放できます（占有しているプロセスをすべて、子プロセスごと終了します）。既定では node や python などの dev ランタイムのみ表示します。ほかのソフトも見るには「dev サービスのみ」のチェックを外し、システムサービスまで含めるには「すべてのポートを表示」をオンにします。</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>1 つのプロセスが複数のポートを持つ場合、既定では外向きのものだけを表示します。オンにすると全ポートを列挙し、上の絞り込みも無視します。</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>プロジェクトのサービスのみ</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>プロジェクトフォルダーから起動したサービスだけを表示します（.git や package.json などの目印で判定）。チェックを外すと、ほかの待ち受け中のソフトも表示されます。</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>行をダブルクリックするとブラウザーで開き、右クリックでポートを解放します。</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} ポート · 5 秒ごとに自動更新</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>ブラウザーで開く</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>ポートを解放</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>同時に待ち受け中: {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>ポート {0} を解放できませんでした: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>有効</value></data>
@@ -310,7 +314,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>操作に失敗：{0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>設定</value></data>
   <data name="Settings_General" xml:space="preserve"><value>一般</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>バージョン情報</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>更新を確認</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 オープンソース計画 · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>確認中…</value></data>
@@ -481,6 +484,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>通常に戻す</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>起動</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>設定のバックアップ</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>1 つの json ファイルに書き出します。読み込むと現在の設定はすべて置き換わります。</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0〜600 秒。「ログオン時に起動」がオンのときだけ有効です。ログオン後この時間だけ待ってからリストを実行し、ログオン直後の混雑を避けます。手動の再実行には影響しません。</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>システムの準備が整うまで待つ（デスクトップ / ネットワーク）</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>両方そろい次第すぐ進みます（最大 90 秒）。そのうえで上の固定待機時間が加算されます。起動が早すぎてアプリが立ち上がらないときにオンにしてください。</value></data>

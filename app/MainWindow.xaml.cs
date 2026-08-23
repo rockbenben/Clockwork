@@ -71,7 +71,12 @@ public partial class MainWindow : Window
         _system = new SystemStartupVm(SystemStartupReader.SetItemEnabled, ReportSystemMsg, PromptRelaunchAdmin);
         GridSystem.ItemsSource = _system.Rows;
 
-        _ports = new PortsVm { DevOnly = config.Settings.PortsDevOnly };
+        var ports = new PortsVm { DevOnly = config.Settings.PortsDevOnly };
+        _ports = ports;
+        // 「N / M 个端口」：M 是全部在监听的端口，N 是当前档位筛出来的。挂在 Changed 上，
+        // 刷新、搜索、切档位三条路径都会经过 ApplyFilter，不用在三个事件处理器里各写一遍。
+        ports.Changed = () => PortsCount.Text = Lf("Ports_Count", ports.Rows.Count, ports.TotalCount);
+        ports.Changed();
         _portsTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
         _portsTimer.Tick += (_, _) => LoadPorts();
         IsVisibleChanged += (_, _) => SyncPortsTimer();   // 隐到托盘就停，重新显示再起
@@ -706,7 +711,7 @@ public partial class MainWindow : Window
     }
     // —— 端口页 ——
     // 每次切进来都重扫，不像系统启动项页那样只扫一次：端口是分钟级变化的（终端里刚 Ctrl+C
-    // 掉的服务留在列表里，点「打开链接」就是一个打不开的页面），而 GetExtendedTcpTable 是毫秒级，
+    // 掉的服务留在列表里，点「用浏览器打开」就是一个打不开的页面），而 GetExtendedTcpTable 是毫秒级，
     // 不值得为它套一层异步 + loading 态。刷新按钮仍留着：人就停在这一页上起服务时用得着。
     // 仅当端口页处于前台且窗口可见时让 timer 跑。
     private void SyncPortsTimer()
@@ -751,7 +756,7 @@ public partial class MainWindow : Window
 
     // 与另外四张表同一条规则：右键没落在某一行上就不弹菜单（键盘 Menu 键除外，
     // 它按当前选中行走，光标坐标为 -1 是 WPF 给出的区分方式）。
-    // 「结束进程」作用错行的代价比排序那几个大得多，不能靠「上次选中的行」蒙。
+    // 「释放端口」作用错行的代价比排序那几个大得多，不能靠「上次选中的行」蒙。
     private bool _portRightClickOnRow;
 
     private void GridPorts_RightClick(object sender, MouseButtonEventArgs e)
@@ -771,7 +776,7 @@ public partial class MainWindow : Window
 
     // 释放端口：破坏性且不可撤销（未保存的东西没了），故与「从系统中删除自启项」同级：
     // 走带警示色的确认框。一个端口可能被好几个进程同时占着，所以文案逐个点名，
-    // 不能只说「结束进程」——这一下可能带走不止一个。
+    // 不能只说「释放端口」——这一下可能带走不止一个进程。
     private void PortKill_Click(object sender, RoutedEventArgs e)
     {
         if (GridPorts.SelectedItem is not PortRowVm row || !row.CanKill) return;

@@ -119,9 +119,12 @@ public sealed class PortOwner
 
 // 端口页的一行：一个正在被监听的端口，连同占用它的全部进程。
 //
-// 单位是端口而不是进程：一个端口能被多个进程同时绑住（Windows 的 SO_REUSEADDR 允许后来者
-// 直接绑到已占用的地址上，且后绑的接管新连接——Linux 上这个选项基本只影响 TIME_WAIT，
-// 语义完全不同）。按进程分行会把「29029 上有两个东西在打架」呈现成两条各自正常的行，
+// 单位是端口而不是进程：一个端口能被多个进程同时绑住。Windows 的 SO_REUSEADDR 允许
+// 后来者直接绑到一个已被占用的地址上（Linux 上这个选项基本只影响 TIME_WAIT，语义完全不同），
+// 而哪一个真正收新连接微软文档写的是 indeterminate——实测过：连续三次连接全部落到
+// **先**启动的那个进程，按启动时间猜“后绑的赢”会猜反。
+// Python 的 HTTPServer 默认开着这个选项，所以同一个脚本跑两遍不报错，早那个静静变成收不到连接的僵尸。
+// 按进程分行会把「29029 上有两个东西在打架」呈现成两条各自正常的行，
 // 而人想知道的、想操作的都是「这个端口」。
 public sealed class PortEntry
 {
@@ -135,21 +138,18 @@ public sealed class PortEntry
 // 只读系统状态 + 一个破坏性动作（那边是删除自启项，这边是结束占用进程）。
 public static class PortReader
 {
-    // 默认视图挡掉的系统噪音源。svchost 是关键的一个：它的 RPC 动态端口（49664 起）
+    // 中间档（IsUserService）挡掉的系统噪音源。svchost 是关键的一个：它的 RPC 动态端口（49664 起）
     // 一开机就有十来个，全都 ≥1024，光靠端口号门槛拦不住。
     // ponytail: 进程名黑名单挡掉约 95% 的噪音；不够干净就改成判断 exe 是否在 C:\Windows 下。
     private static readonly HashSet<string> SystemOwners = new(StringComparer.OrdinalIgnoreCase)
     { "svchost", "System", "Idle", "lsass", "services", "wininit", "spoolsv", "dasHost", "wslservice", "vmms" };
 
-    // 「只看 dev 服务」的白名单。黑名单堆不出干净的列表——它只能挡系统服务，
-    // 而实际噪音是 QQ / 微信 / 罗技驱动这类桌面软件，每台机器装的不一样，堆到最后
-    // 是在维护别人机器上的软件清单。反过来列「什么东西会开 dev server」则是个有限集合。
-    //
-    // 已知代价：Go / Rust 编译出来的二进制叫什么名字都有（myapi.exe、__debug_bin12345.exe），
-    // 白名单必然漏掉。这正是中间那一档（IsUserService）要留着的理由：漏掉的在那里找，
-    // 不必一路退到「全部」里跟 svchost 一起翻。
-    // ponytail: 进程名白名单；要连 Go/Rust 二进制一并认出来，得改成读 exe 路径
-    // （落在你项目目录 / build 输出下的算 dev），代价是提权进程读不到路径。
+    // 「只看项目服务」的**补充**判据（主判据是工作目录里的项目标记，见 IsDevService）。
+    // 它存在的理由只有一个：提权 / 受保护进程读不到 cwd（实测 42 个监听端口里有一半读不到），
+    // 只靠主判据会把那种情况下的 dev server 一并藏掉。
+    // 它不区分「你的 dev server」和「工具链常驻的服务」，也不区分项目内外——
+    // 有意不去猜：命令行已经显示在「来源」列里，看一眼就知道是谁，
+    // 比一条会出错、会把你自己的服务藏起来的规则可靠。
     private static readonly HashSet<string> DevRuntimes = new(StringComparer.OrdinalIgnoreCase)
     {
         // JS/TS：Vite / Next / webpack-dev-server / Nest / Storybook 全在 node 名下

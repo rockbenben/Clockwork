@@ -193,8 +193,8 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
 ## Ports
 
 - **One row is one port**, not one process, followed by every process holding it. Both the IPv4 and IPv6 tables are read, so a service listening on `127.0.0.1` and `::1` at once is still a single row (the Address column shows both).
-- **A port really can be held by several processes at once.** The Process column then reads `python ×2` and the PID column lists them all. Windows' `SO_REUSEADDR` lets a later process bind an address that is already taken, **and the later binder takes over new connections** (on Linux that option mostly just affects TIME_WAIT — the semantics are not the same). Python's `HTTPServer` enables it by default, so running the same script twice raises no error: the earlier one becomes a zombie that receives nothing, while everything looks fine from the outside. Grouping by port is what makes that visible.
-- **Rescans when you open the tab, and every 5 seconds while you stay on it** — a server you just started shows up within 5 seconds on its own. **Refresh** at the bottom left is still there for when you want it now.
+- **A port really can be held by several processes at once.** The Process column then reads `python ×2` and the PID column lists them all. Windows' `SO_REUSEADDR` lets a later process bind an address that is already taken (on Linux that option mostly just affects TIME_WAIT — the semantics are not the same), and **which one actually receives new connections is documented as indeterminate** — measured here, three connections in a row all went to the process that started **first**, so guessing by start time guesses wrong. Python's `HTTPServer` enables it by default, so running the same script twice raises no error: the earlier one becomes a zombie that receives nothing, while everything looks fine from the outside. Grouping by port is what makes that visible.
+- **Rescans when you open the tab, and every 5 seconds while you stay on it** — a server you just started shows up within 5 seconds on its own. **Refresh** at the bottom left is still there for when you want it now. The bottom right carries a running **`5 of 49 ports · refreshes every 5s`**: the first number is what the current view kept, the second is everything listening — one number answers “am I being shown less than there is?” faster than a paragraph explaining the filters.
   - When a scan comes back identical to the last one, **nothing in the UI is touched at all**: no flicker, no lost selection, no scroll jumping back to the top.
   - The polling stops when the window is hidden to the tray or you switch to another tab.
 - The **Source** column answers "what is this port, really", as **project · entry**: two `node` rows look identical by process name, but `web-tools-by-ai · start-server.js` and `035-shiye · cdp-proxy.mjs` do not.
@@ -202,22 +202,26 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
   - When the cwd is an anonymous directory such as `C:\Windows`, the path in the command line is used instead: the segment before `node_modules` is the project name, and failing that, generic container directories (`scripts`, `bin`, `dist`) are skipped on the way up.
   - **Hover a row for the full command line and working directory.** Elevated and protected processes hand over neither, so the column stays empty for those (13 of 34 port-owning processes were readable in testing; the rest were svchost and friends).
 - Note that Source **plays no part in the filtering**: a resident tool process like `cdp-proxy` still shows up under Dev servers only. That is deliberate — the origin is right there to read, which beats a rule that can be wrong and hide a server you actually care about.
-- **Double-click a row** to open `http://localhost:<port>` in your default browser; **Open link** in the right-click menu does the same thing.
-- One process can hold **several ports** (Next's build workers do, and so do QQ and WeChat). The Port column then reads `3000 +7`, telling you the same process holds seven others. **Freeing any one of them frees them all**, and the confirmation lists every port that goes.
+- **Double-click a row** to open `http://localhost:<port>` in your default browser; **Open in browser** in the right-click menu does the same thing.
+- A process often holds **several ports** (Next's build workers do, and so do QQ and WeChat). The two filtered views **show only the outward-facing one** (bound to `0.0.0.0` / `::`) and fold the rest away, with the Port column reading `3000 +7` to say how many went — one Next server was measured holding 14 ports, exactly one public and the rest loopback-only worker IPC, and a row each buries the list.
+  - If none is outward-facing, the lowest port stands in; if a process really serves two (HTTP and HTTPS), both stay. **Show all ports does not fold**, since listing every one is what that view is for.
+  - Folded ports have not vanished: **freeing any one of them frees them all**. **Hover the row** and it names them (`Also listening on 10290, 10291`); the confirmation before freeing lists them again, and search still finds them (below).
 - Right-click **Free the port** — ends **every** process holding it, each **together with its child processes** (something like `npm run dev` spawns its own workers, and killing only the listener leaves them orphaned). The confirmation names each one (`python (8588)、python (9800)`) — **anything unsaved is lost**. A row held only by kernel placeholders (PID 0 or 4) has nothing to end, so the menu item is greyed out.
-- The two checkboxes at the top right give you **three views**, narrowest first:
-  - **Dev servers only (on by default)** — the union of two tests:
+- The two checkboxes at the top right give you **three views**, narrowest first (**each one carries its own rule in its tooltip** — “what does this switch actually go by?” is a question people ask while pointing at the switch):
+  - **Project services only (on by default)** — the union of two tests:
     - **The working directory carries a project marker** (walking up to six levels from the cwd, looking for `.git`, `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml` and friends) — the **primary** test. It never looks at the process name, so a Go or Rust binary with an arbitrary name is recognised too — precisely the blind spot a name allowlist has.
     - **The process name is a known runtime** (node / bun / deno, python, java, dotnet, ruby / php, nginx / caddy, postgres / mysqld / mongod / redis-server, Docker's port-forwarding processes, ngrok / cloudflared / ollama) — the **fallback**. Elevated processes never hand over their cwd, and the primary test alone would hide those.
     - This view **skips the 1024 floor**, so a local nginx on port 80 still shows up.
   - **Neither ticked** — system services hidden: port ≥ 1024, kernel placeholders excluded, and noisy owners such as `svchost` and `services` filtered out (svchost alone holds a dozen dynamic ports from boot). **A Go or Rust binary can be named anything, so the allowlist will miss it — this is the view to find it in.**
   - **Show all ports** — no filter. Ticking it greys out Dev servers only, since having both on is a contradiction.
-- The Dev servers only tick is **remembered in your settings**, so you set it once. Show all ports is not: it is a one-off "let me see everything".
-- The **filter box** at the top matches on port number, or on a process name held by any of the owners. It narrows what the default filter already left — searching for a system service will not pull it back; tick "Show all ports" for that.
+- The Project services only tick is **remembered in your settings**, so you set it once. Show all ports is not: it is a one-off "let me see everything".
+- The **filter box** at the top matches on port number, process name or command line (any owner counts, so searching "serve" or a project name beats remembering the port).
+  - **Searching turns folding off**: folding exists to keep the default browse view quiet, and typing a query says exactly what you want — otherwise typing a port number that was folded away (and really is listening) would return nothing.
+  - It does **not** bypass the view: it narrows whatever the current tier left. Tick "Show all ports" to reach system services; search will not pull them back.
 
 ## Settings
 
-Three sections, ordered by when you'd reach for them.
+Two sections, ordered by when you'd reach for them.
 
 **Startup**
 
@@ -230,11 +234,8 @@ Three sections, ordered by when you'd reach for them.
 
 - **Panic hotkey** — click the box and press your shortcut; Esc cancels, Del clears; default `Ctrl+Alt+Q`.
 - **UI language** — Simplified Chinese, English, 日本語 and 15 more (18 total); switching restarts the app to apply.
-
-**Backup**
-
-- **Export Config** — saves a copy of `clockwork.settings.json` wherever you choose (default name `clockwork.settings.backup.json`). Use it to back up before a big change, or to move your setup to another PC.
-- **Import Config** — replaces **all** current config (startup list / scheduled tasks / action groups / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Task state (`clockwork.state.json`) is not touched.
+- **Export settings** — saves a copy of `clockwork.settings.json` wherever you choose (default name `clockwork.settings.backup.json`). Use it to back up before a big change, or to move your setup to another PC.
+- **Import settings** — replaces **all** current config (startup list / scheduled tasks / action groups / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Task state (`clockwork.state.json`) is not touched.
 - **A config file that can't be read is never overwritten.** Hand-edit the json and miss a comma, or lose power mid-save, and the app starts on defaults, tells you so, and saves your file aside as `clockwork.settings.json.bad`. The original is not clobbered by the defaults — fix it and restart to recover. Even if you miss the notice, rebuild everything by hand and save, that `.bad` copy is still there.
 
 ## Tips
@@ -243,7 +244,7 @@ Three sections, ordered by when you'd reach for them.
 - **The side buttons follow the selection** — with no row selected, **Edit / Delete / Up / Down / Run** are greyed out, since they only ever act on the selected row. **Add** always works. The right-click menu's **Duplicate** (plus **Skip today** on the Scheduled tasks page) behaves the same way: with nothing selected, or when you right-click the header or empty space, the menu simply does not open — a menu that acts somewhere else is worse than no menu.
 - **Nothing is cut off silently** — in all four lists, a cell too wide for its column ends in "…"; hover it to read the whole thing.
 - **Deleting always asks for confirmation** — list rows, steps inside the group editor, and system startup items alike. The dialog names what you're about to delete, so you can catch a wrong selection before it's gone.
-- Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Task state is `clockwork.state.json` (also local; safe to delete — at most a task fires once more today). Prefer the Settings tab's **Export / Import Config** for backups and moving between PCs.
+- Your config is `clockwork.settings.json` (local only). Delete it and reopen to reset to the sample. Task state is `clockwork.state.json` (also local; safe to delete — at most a task fires once more today). Prefer the Settings tab's **Export / Import settings** for backups and moving between PCs.
 - **Where those files live:** on first run, next to `Clockwork.exe` when that folder is writable (the normal portable case); if it isn't — e.g. the exe sits under `C:\Program Files` — both files go to `%APPDATA%\Clockwork\`. **After that the app follows wherever the config already is, rather than re-testing writability each launch** — otherwise a double-click (not elevated) and autostart (elevated) would pick different copies on the same machine, showing up as "my settings vanished after reopening as administrator" or "autostart runs a list I never configured". Export always copies whichever one is actually in use, so you never have to hunt for it.
 - When filling paths / processes / dates you don't have to type by hand: **the … button at the end of a row** opens the matching picker (file, searchable process list, date), and **Capture** records a shortcut by pressing it. The process picker and the system-startup list both have a search/filter box.
 - **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers (e.g. Lucy) block low-level calls, so send-keys / mouse / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).

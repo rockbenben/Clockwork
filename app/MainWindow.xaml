@@ -206,14 +206,23 @@
                     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <!-- 右内边距 1px 对齐下方列表面板的右缘：面板带 1px 描边，不减这一格，
                          「显示系统/只读项」会比列表右缘再往外探出一点，成了整页唯一一处出栏的控件。 -->
+                    <!-- 与端口页顶栏同一个结构：Grid(Auto|*) + WrapPanel。
+                         原来搜索框与复选框同处一个单元格、靠左右对齐各据一端：两者都没有列去约束，
+                         真放不下时不是换行、也不是被裁，而是**叠**在一起——比裁掉更难看懂。
+                         现在还没到那一步（已渲染的六种语言里德语最挤，搜索框右缘到复选框左缘仍有 168px），
+                         改的是结构而不是救火：越界方式从「重叠」变成「整块换行」，
+                         而截图矩阵只跑 zh/en/de/es/ru/ar，土耳其语、越南语这些更长的挡不住。 -->
                     <Grid Grid.Row="0" Margin="0,0,1,0">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                             <TextBlock Text="{loc:Loc System_Filter}" Style="{StaticResource Hint}" VerticalAlignment="Center" FontSize="13" Margin="2,0,10,0"/>
                             <TextBox x:Name="SSearch" Width="320" Height="30" VerticalContentAlignment="Center" TextChanged="SSearch_TextChanged"
                                      AutomationProperties.Name="{loc:Loc System_Filter}"/>
                         </StackPanel>
-                        <CheckBox x:Name="ShowReadOnly" Content="{loc:Loc System_ShowReadOnly}" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                  FontSize="12.5" Checked="ShowReadOnly_Changed" Unchecked="ShowReadOnly_Changed"/>
+                        <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <CheckBox x:Name="ShowReadOnly" Content="{loc:Loc System_ShowReadOnly}" VerticalAlignment="Center" Margin="12,0,0,0"
+                                      FontSize="12.5" Checked="ShowReadOnly_Changed" Unchecked="ShowReadOnly_Changed"/>
+                        </WrapPanel>
                     </Grid>
                     <Border Grid.Row="1" Margin="0,10,0,0" Style="{StaticResource ListPanel}">
                     <DataGrid x:Name="GridSystem" AutomationProperties.Name="{loc:Loc Tab_System}" AutoGenerateColumns="False" CanUserAddRows="False"
@@ -260,6 +269,9 @@
                     <!-- 右内边距 1px 对齐下方列表面板的右缘，理由同「系统启动项」页那处注释。
                          两栏分列（Auto | *）而不是像系统启动项页那样让两个控件叠在同一格里：
                          那边只有一个复选框，这边是两个，德语这种长译文下会直接压到 320px 的搜索框上。 -->
+                    <!-- 本页借用了系统启动项页的两个键：System_Filter（「过滤」）与 System_Refresh（「刷新」）。
+                         都是通用词，为两个字再开一套 18 语言的键不划算；但键名带 System_ 前缀，
+                         改动前请注意它不只服务那一页——照「系统启动项」的语境去改措辞会连带改掉这里。 -->
                     <Grid Grid.Row="0" Margin="0,0,1,0">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
@@ -268,12 +280,17 @@
                                      AutomationProperties.Name="{loc:Loc System_Filter}"/>
                         </StackPanel>
                         <!-- WrapPanel 而非横向 StackPanel：后者放不下时直接被列裁掉。
-                             这两条标签在西语（Solo servidores de desarrollo / Mostrar todos los puertos）
-                             比德语还长一截，而截图矩阵只跑 zh/en/de/ar，挡不住它。 -->
+                             这两条标签在西语（Solo servicios de proyecto / Mostrar todos los puertos）
+                             比德语还长一截——发现这件事正是把 es 加进截图矩阵语言轴的起因，
+                             在那之前只跑 zh/en/de/ar，这一处永远是「看着没问题」。 -->
                         <WrapPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <!-- 筛选规则放在各自的 ToolTip 里而不是底栏说明里：规则是「这个开关到底按什么认」，
+                                 而人恰好是在指着这个开关时才问它。 -->
                             <CheckBox x:Name="DevOnlyPorts" Content="{loc:Loc Ports_DevOnly}" FontSize="12.5" Margin="12,0,0,0"
+                                      ToolTip="{loc:Loc Ports_DevOnlyTip}" ToolTipService.ShowDuration="30000"
                                       Checked="PortsView_Changed" Unchecked="PortsView_Changed"/>
                             <CheckBox x:Name="ShowAllPorts" Content="{loc:Loc Ports_ShowAll}" FontSize="12.5" Margin="16,0,0,0"
+                                      ToolTip="{loc:Loc Ports_ShowAllTip}" ToolTipService.ShowDuration="30000"
                                       Checked="PortsView_Changed" Unchecked="PortsView_Changed"/>
                         </WrapPanel>
                     </Grid>
@@ -316,13 +333,26 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     </Border>
-                    <!-- 与「系统启动项」页同一个 Grid(Auto|*) 结构：横向 StackPanel 下 TextWrapping 永不触发，
-                         最窄窗口 + 德语/俄语这句说明会被顶出右缘裁掉。 -->
+                    <!-- 底栏：刷新 | 两个手势 | 计数。
+                         这句说明原来是 159 字一段，把九件事挤在一起（只列监听 TCP、5 秒自动刷新、双击、
+                         右键连坐子进程、默认只看项目目录、按 .git 认、一进程多端口只留对外那个、
+                         取消勾选看其余、勾全部则列全）。俄语 820x566 下实测占满 5 行约 90px——
+                         566 高的窗口里五分之一给了没人读的说明，表格只剩 5 行可见。
+                         现在只留「双击 / 右键」这两个看界面看不出来的手势；筛选规则搬进两个复选框自己的
+                         ToolTip（用户正是悬停它时才问那个问题），而「被藏了多少」由右侧计数用数字直接回答。
+                         Grid(Auto|*|Auto) 而非横向 StackPanel：后者给子元素无限宽度，TextWrapping 永不触发，
+                         最窄窗口 + 德语/俄语这句会被顶出右缘裁掉。 -->
                     <Grid Grid.Row="2" Margin="0,12,1,0">
-                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                         <Button Grid.Column="0" x:Name="PRefresh" Content="{loc:Loc System_Refresh}" VerticalAlignment="Center" Click="PRefresh_Click"/>
                         <TextBlock Grid.Column="1" Text="{loc:Loc Ports_Footer}" Style="{StaticResource Hint}"
                                    VerticalAlignment="Center" Margin="14,0,0,0" TextWrapping="Wrap"/>
+                        <!-- 正文字体，不用等宽：这是一句带数字的话，不是表格里的数字列
+                             （译文为什么不能进等宽体，见 Theme.xaml 里 FontMono 定义处那条注释）。
+                             当初想用等宽挡住「每 5 秒刷新一次、数字变了宽度跟着抖」，但抖动来自位数变化
+                             （4→10），等宽照样挡不住，白赔一门字形。 -->
+                        <TextBlock Grid.Column="2" x:Name="PortsCount" Style="{StaticResource Hint}"
+                                   VerticalAlignment="Center" Margin="14,0,0,0" TextAlignment="Right"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -407,7 +437,9 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Grid.Column="0" x:Name="WaitReadyChk" MaxWidth="442" Content="{loc:Loc Settings_WaitReady}" VerticalAlignment="Center" Click="Settings_Changed"/>
-                                    <TextBlock Grid.Column="2" Text="{loc:Loc Settings_WaitReadyTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="16,0,0,0"/>
+                                    <!-- 说明在第 1 列（这一行只有 0、1 两列）。此前写的是 Grid.Column="2"，
+                                         越界的列号被 WPF 夹到最后一列，看着是对的——纯属侥幸，不是设计。 -->
+                                    <TextBlock Grid.Column="1" Text="{loc:Loc Settings_WaitReadyTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="16,0,0,0"/>
                                 </Grid>
 
                                 <Grid Margin="0,4,0,2">
@@ -458,9 +490,14 @@
                                      单独开一节要搭上黄铜标记 + 显示字体标题 + 一条分隔线，这层 chrome 没挣到它占的位置。
                                      WrapPanel 而非横向 StackPanel：后者给子元素无限宽度，放不下就被裁——
                                      这两条标签中文 4 字、德语 25 字（Konfiguration exportieren），实测 1040 宽下都并不下。 -->
+                                <!-- 与上面各行同为三列，说明左缘才对得齐（此前它只有两列，说明缺位，
+                                     右侧那一列在这一行上是断的）。
+                                     补说明的理由：这是「常规」里唯一会**覆盖**你现有配置的操作，
+                                     偏偏又是唯一一行什么都没写的。 -->
                                 <Grid Margin="0,8,0,2">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="200" MaxWidth="330"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{loc:Loc Settings_Backup}" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
@@ -468,6 +505,7 @@
                                         <Button x:Name="ExportBtn" Content="{loc:Loc Btn_ExportConfig}" Click="ExportConfig_Click" Margin="0,0,10,6"/>
                                         <Button x:Name="ImportBtn" Content="{loc:Loc Btn_ImportConfig}" Click="ImportConfig_Click" Margin="0,0,0,6"/>
                                     </WrapPanel>
+                                    <TextBlock Grid.Column="2" Text="{loc:Loc Settings_BackupTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="16,0,0,0"/>
                                 </Grid>
                             </StackPanel>
                             </ScrollViewer>
@@ -491,7 +529,7 @@
                                         <TextBlock Text="Clockwork" FontFamily="{StaticResource FontDisplay}" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Bottom"/>
                                         <TextBlock x:Name="VersionText" Foreground="{StaticResource BrushMuted}" FontFamily="{StaticResource FontMono}" FontSize="12" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
                                         <!-- 这一行原来是写死的中文，18 种语言的界面里都印着「365 开源计划」 -->
-                                        <TextBlock Text="{loc:Loc About_Series}" Style="{StaticResource Hint}" FontFamily="{StaticResource FontMono}" VerticalAlignment="Bottom" Margin="16,0,0,2"/>
+                                        <TextBlock Text="{loc:Loc About_Series}" Style="{StaticResource Hint}" VerticalAlignment="Bottom" Margin="16,0,0,2"/>
                                     </StackPanel>
                                     <TextBlock Text="{loc:Loc App_Subtitle}" Foreground="{StaticResource BrushMuted}" FontSize="12.5" TextWrapping="Wrap" Margin="0,3,0,0"/>
                                 </StackPanel>

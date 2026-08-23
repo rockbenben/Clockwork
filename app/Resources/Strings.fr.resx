@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Actualiser</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Afficher tous les ports</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Serveurs de dev uniquement</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>N'affiche que les ports TCP en écoute, actualisés à chaque ouverture de cet onglet. Double-cliquez sur une ligne pour l'ouvrir dans le navigateur ; le clic droit libère le port, ce qui termine tous les processus qui l'occupent, processus enfants compris. Par défaut, seuls les environnements de dev comme node et python apparaissent : décochez « Serveurs de dev uniquement » pour voir vos autres logiciels, ou cochez « Afficher tous les ports » pour inclure les services système.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Quand un processus occupe plusieurs ports, seul celui exposé vers l’extérieur est affiché. Cochez pour lister chaque port et ignorer le filtre ci-dessus.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Services de projet uniquement</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>N’affiche que les services lancés depuis un de vos dossiers de projet, reconnus par des marqueurs comme .git ou package.json. Décochez pour voir le reste des logiciels à l’écoute.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Double-cliquez sur une ligne pour l’ouvrir dans le navigateur ; clic droit pour libérer le port.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} sur {1} ports · actualisé toutes les 5 s</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Ouvrir dans le navigateur</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Libérer le port</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>À l’écoute également sur {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Impossible de libérer le port {0} : {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Act.</value></data>
@@ -308,7 +312,6 @@ Journal : {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Échec de l'opération : {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Paramètres</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Général</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>À propos</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Rechercher des mises à jour</value></data>
   <data name="About_Series" xml:space="preserve"><value>Plan 365 open source · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Vérification…</value></data>
@@ -480,6 +483,7 @@ Journal : {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Retour à la normale</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Démarrage</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Sauvegarde</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Exporte un seul fichier .json. L’import remplace toute la configuration actuelle.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s, et uniquement si le démarrage à l'ouverture de session est activé : attend ce délai après la connexion avant d'exécuter la liste, pour éviter la ruée du démarrage. Les relances manuelles ne sont pas concernées.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Attendre que le système soit prêt (bureau / réseau)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Repart dès que les deux sont prêts, avec 90 s d'attente maximum ; le délai fixe ci-dessus s'y ajoute. À activer si la liste s'exécute trop tôt pour vos logiciels.</value></data>

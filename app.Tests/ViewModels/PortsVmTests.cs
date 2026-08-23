@@ -1,3 +1,4 @@
+using Clockwork.I18n;
 using Clockwork.Engine;
 using Clockwork.ViewModels;
 using Xunit;
@@ -16,11 +17,12 @@ public class PortsVmTests
         E(3000, "127.0.0.1, ::1", (100, "node")),
         E(8080, "0.0.0.0", (200, "java")),
         E(5432, "127.0.0.1", (300, "postgres")),
-        // dev 运行时但端口 <1024：白名单该收，「隐藏系统服务」那档因端口门槛收不到。
+        // 在运行时白名单里但端口 <1024：项目服务那档该收，「隐藏系统服务」那档因端口门槛收不到。
         E(80, "0.0.0.0", (400, "nginx")),
-        // 普通桌面软件：不是系统服务，也不是 dev 运行时 —— 中间那档能看到，白名单看不到。
+        // 普通桌面软件：不是系统服务，也不在运行时白名单里 —— 中间那档能看到，项目服务那档看不到。
         E(4001, "127.0.0.1", (500, "QQ")),
-        // Go/Rust 编译出来的任意名字：白名单必然漏掉，这是它已知的代价。
+        // Go/Rust 编译出来的任意名字，且这条没设 WorkingDir：两个判据都接不住。
+        // （真实场景里它从项目目录跑起来，主判据靠 cwd 的项目标记能认出来。）
         E(7100, "0.0.0.0", (600, "myapi")),
         E(49670, "0.0.0.0", (700, "svchost")),
         E(445, "0.0.0.0", (4, "System")),
@@ -40,7 +42,8 @@ public class PortsVmTests
         Assert.Equal(new[] { 100 }, r[0].Owners.Select(o => o.Pid));
     }
 
-    // Windows 的 SO_REUSEADDR 允许第二个进程绑到已占用的地址上（后绑的接管新连接）。
+    // Windows 的 SO_REUSEADDR 允许第二个进程绑到已占用的地址上；哪个真正收连接是 indeterminate
+    // （实测过：三次连接全落到先启动的那个，按启动时间猜会猜反）。
     // 按端口分行才看得出「29029 上有两个东西在打架」，按进程分行则是两条各自正常的行。
     [Fact]
     public void Merge_keeps_every_pid_holding_one_port_in_a_single_row()
@@ -66,7 +69,7 @@ public class PortsVmTests
         Assert.Equal(new[] { 3000, 8080 }, r.Select(e => e.Port));
     }
 
-    // —— 三档视图：只看 dev 服务 / 隐藏系统服务（默认兜底）/ 全部 ——
+    // —— 三档视图：只看项目服务（默认）/ 隐藏系统服务 / 全部 ——
 
     [Fact]
     public void DevOnly_keeps_dev_runtimes_only()
@@ -126,7 +129,7 @@ public class PortsVmTests
         Assert.Single(PortsVm.Filter(mixed, "python", devOnly: false, showAll: false));
     }
 
-    // 搜索是在当前那一档之上再筛，不是绕过它：勾着「只看 dev 服务」时搜 QQ 搜不出来。
+    // 搜索是在当前那一档之上再筛，不是绕过它：勾着「只看项目服务」时搜 QQ 搜不出来。
     [Fact]
     public void Filter_search_does_not_bypass_the_current_view()
     {
@@ -234,6 +237,26 @@ public class PortsVmTests
         Assert.Equal("5432", vm.Rows.Single(r => r.PortText == "5432").PortLabel);
     }
 
+    // +N 徽标只说得出「还有 N 个」，是哪几个得由悬停回答——否则这个数字提了一个界面
+    // 自己答不上来的问题。独占端口的行则不该多这一段。
+    [Fact]
+    public void Tooltip_names_the_sibling_ports_behind_the_badge()
+    {
+        var vm = new PortsVm { ShowAll = true };
+        vm.SetItems(new List<PortEntry>
+        {
+            E(3000, "0.0.0.0", (40784, "node")),
+            E(10290, "127.0.0.1", (40784, "node")),
+            E(5432, "127.0.0.1", (300, "postgres")),
+        });
+        var tip = vm.Rows.Single(r => r.PortText == "3000").Tooltip;
+        Assert.Contains("10290", tip, StringComparison.Ordinal);
+        Assert.StartsWith(Strings.Lf("Ports_AlsoListening", "10290"), tip, StringComparison.Ordinal);
+
+        Assert.DoesNotContain(Strings.Get("Ports_AlsoListening").Replace("{0}", ""),
+                              vm.Rows.Single(r => r.PortText == "5432").Tooltip, StringComparison.Ordinal);
+    }
+
     // 兄弟端口必须从**未过滤**的全集算：被当前档位挡掉的端口看不见，但释放时照样会没，
     // 按可见行算会把破坏半径报小。
     [Fact]
@@ -248,6 +271,83 @@ public class PortsVmTests
         var visible = Assert.Single(vm.Rows);
         Assert.Equal("3000", visible.PortText);
         Assert.Equal(new[] { 80 }, visible.SiblingPorts);   // 但它仍在破坏半径里
+    }
+
+    // —— 多端口进程折叠 ——
+    // 一个 next 服务实测占 14 个端口，逐个占一行会把列表淹掉。
+    // 判据：绑全网卡的是对外服务，只绑回环的是内部通信。
+
+    private static List<PortEntry> NextLike() => new()
+    {
+        E(3000, "0.0.0.0, ::", (6600, "node")),
+        E(4131, "127.0.0.1", (6600, "node")),
+        E(4134, "127.0.0.1", (6600, "node")),
+        E(9083, "127.0.0.1", (6600, "node")),
+        E(5432, "127.0.0.1", (300, "postgres")),
+    };
+
+    [Fact]
+    public void Folding_keeps_only_the_port_bound_to_all_interfaces()
+    {
+        var r = PortsVm.Filter(NextLike(), "", devOnly: false, showAll: false);
+        Assert.Equal(new[] { 3000, 5432 }, Ports(r));
+    }
+
+    // 折叠掉的端口不是消失了：它们仍在破坏半径里，标记与确认框都要带上
+    [Fact]
+    public void Folded_ports_still_count_as_siblings()
+    {
+        var vm = new PortsVm();
+        vm.SetItems(NextLike());
+        var row = vm.Rows.Single(r => r.PortText == "3000");
+        Assert.Equal("3000 +3", row.PortLabel);
+        Assert.Equal(new[] { 4131, 4134, 9083 }, row.SiblingPorts);
+    }
+
+    // 「显示全部端口」的意思就是逐条列全，折叠会与它自相矛盾
+    [Fact]
+    public void ShowAll_does_not_fold()
+        => Assert.Equal(5, PortsVm.Filter(NextLike(), "", devOnly: false, showAll: true).Count);
+
+    // 搜索时不折叠：折叠是为了让默认浏览视图安静，而敲了查询就是明确说了要找什么。
+    // 不这样的话，敲一个被折进去的端口号（它真实存在）会得到零行。
+    [Fact]
+    public void Searching_finds_a_folded_port()
+    {
+        Assert.DoesNotContain(PortsVm.Filter(NextLike(), "", devOnly: false, showAll: false), e => e.Port == 4131);
+        var hit = Assert.Single(PortsVm.Filter(NextLike(), "4131", devOnly: false, showAll: false));
+        Assert.Equal(4131, hit.Port);
+    }
+
+    // 但搜索不绕过档位：勾着「只看项目服务」时，搜系统服务的端口仍然搜不到
+    [Fact]
+    public void Searching_still_respects_the_current_view()
+        => Assert.Empty(PortsVm.Filter(Entries(), "49670", devOnly: true, showAll: false));
+
+    // 一个都不绑全网卡（Vite 默认、QQ 之流）：退回最小端口号
+    [Fact]
+    public void Folding_falls_back_to_the_lowest_port_when_none_is_public()
+    {
+        var loopbackOnly = new List<PortEntry>
+        {
+            E(4310, "127.0.0.1", (19352, "QQ")),
+            E(4001, "127.0.0.1", (19352, "QQ")),
+            E(9210, "127.0.0.1", (19352, "QQ")),
+        };
+        Assert.Equal(new[] { 4001 }, Ports(PortsVm.Filter(loopbackOnly, "", devOnly: false, showAll: false)));
+    }
+
+    // 真对外服务两个端口（HTTP + HTTPS）时两个都留，宁可多显示一行也不藏真服务
+    [Fact]
+    public void Folding_keeps_every_public_port()
+    {
+        var two = new List<PortEntry>
+        {
+            E(3000, "0.0.0.0", (700, "node")),
+            E(3443, "0.0.0.0", (700, "node")),
+            E(4131, "127.0.0.1", (700, "node")),
+        };
+        Assert.Equal(new[] { 3000, 3443 }, Ports(PortsVm.Filter(two, "", devOnly: false, showAll: false)));
     }
 
     // —— 自动刷新：数据没变就不能碰 UI ——

@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Aktualisieren</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Alle Ports anzeigen</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Nur Dev-Server</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Zeigt nur TCP-Ports, auf denen gerade gelauscht wird — bei jedem Öffnen dieser Registerkarte aktualisiert. Ein Doppelklick öffnet die Adresse im Browser, per Rechtsklick lässt sich der Port freigeben: alle belegenden Prozesse werden samt Unterprozessen beendet. Standardmäßig erscheinen nur Dev-Laufzeiten wie node und python: „Nur Dev-Server“ abwählen zeigt deine übrige Software, „Alle Ports anzeigen“ auch die Systemdienste.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Belegt ein Prozess mehrere Ports, wird standardmäßig nur der nach außen gerichtete gezeigt. Aktivieren, um jeden Port aufzulisten und den Filter oben zu überspringen.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Nur Projektdienste</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Zeigt nur Dienste, die aus einem Ihrer Projektordner gestartet wurden – erkannt an Markern wie .git oder package.json. Abwählen, um die übrige lauschende Software zu sehen.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Doppelklick öffnet die Zeile im Browser, Rechtsklick gibt den Port frei.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} von {1} Ports · aktualisiert alle 5 s</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Im Browser öffnen</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Port freigeben</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Lauscht außerdem auf {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Port {0} konnte nicht freigegeben werden: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>An</value></data>
@@ -308,7 +312,6 @@ Protokoll: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Vorgang fehlgeschlagen: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Einstellungen</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Allgemein</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>Über</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Nach Updates suchen</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Suche…</value></data>
@@ -480,6 +483,7 @@ Protokoll: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Zurück zum Normalzustand</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Systemstart</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Sicherung</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Exportiert eine einzelne .json-Datei. Ein Import ersetzt alle aktuellen Einstellungen.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s und nur bei aktiviertem Autostart: wartet nach der Anmeldung so lange, bevor die Liste läuft, und umgeht so den Anmeldesturm. Manuelles erneutes Ausführen bleibt unberührt.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Warten, bis das System bereit ist (Desktop / Netzwerk)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Geht weiter, sobald beides bereit ist, wartet höchstens 90 s; die feste Verzögerung oben kommt zusätzlich dazu. Einschalten, wenn die Liste zu früh für Ihre Programme läuft.</value></data>

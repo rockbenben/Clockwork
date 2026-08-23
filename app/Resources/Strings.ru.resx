@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Обновить</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Показать все порты</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Только dev-серверы</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Показывает только прослушиваемые TCP-порты и обновляется при каждом открытии этой вкладки. Двойной щелчок открывает адрес в браузере, правый — освобождает порт, завершая все занявшие его процессы вместе с дочерними. По умолчанию видны только dev-среды вроде node и python: снимите флажок «Только dev-серверы», чтобы увидеть остальные программы, или включите «Показать все порты», чтобы добавить системные службы.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Если процесс занимает несколько портов, по умолчанию показывается только внешний. Включите, чтобы перечислить каждый порт и пропустить фильтр выше.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Только сервисы проектов</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Показывает только сервисы, запущенные из ваших каталогов проектов, — они распознаются по меткам вроде .git или package.json. Снимите флажок, чтобы увидеть остальные слушающие программы.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Двойной щелчок открывает строку в браузере, правый — освобождает порт.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} из {1} портов · обновление каждые 5 с</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Открыть в браузере</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Освободить порт</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Также слушает {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Не удалось освободить порт {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Вкл.</value></data>
@@ -308,7 +312,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>Ошибка операции: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Настройки</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Общие</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>О программе</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Проверить обновления</value></data>
   <data name="About_Series" xml:space="preserve"><value>План 365 Open Source · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Проверка…</value></data>
@@ -480,6 +483,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>Вернуть как было</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Запуск</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Резервная копия</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Экспортирует один файл .json. Импорт заменяет все текущие настройки.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 с и только при включённом автозапуске: ждёт столько после входа, прежде чем выполнить список, обходя пик загрузки. На ручной перезапуск не влияет.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Ждать готовности системы (рабочий стол / сеть)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Продолжает, как только оба готовы, ожидая не более 90 с; затем добавляется фиксированная задержка выше. Включите, если список запускается слишком рано для ваших программ.</value></data>

@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>重新整理</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>顯示全部連接埠</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>只看 dev 服務</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>只列出正在監聽的 TCP 連接埠，每次切到本頁自動重新整理。按兩下一列可用瀏覽器開啟，按右鍵可釋放連接埠——結束佔用它的全部處理程序，連同子處理程序。預設只看 node / python 這類 dev 執行環境；取消「只看 dev 服務」可看到其餘軟體，勾「顯示全部連接埠」則連系統服務一併列出。</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>一個行程佔多個連接埠時，預設只顯示對外的那個。勾選後逐條列全，並略過上面的篩選。</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>只看專案服務</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>只列出從你的專案目錄跑起來的服務，按 .git、package.json 這類標記認。取消勾選可看到其餘正在監聽的軟體。</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>雙擊一列用瀏覽器開啟，右鍵釋放連接埠。</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} 個連接埠 · 每 5 秒自動重新整理</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>用瀏覽器開啟</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>釋放連接埠</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>同時監聽：{0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>釋放連接埠 {0} 失敗：{1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>啟用</value></data>
@@ -310,7 +314,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>操作失敗：{0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>設定</value></data>
   <data name="Settings_General" xml:space="preserve"><value>一般</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>關於</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>檢查更新</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 開源計劃 · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>檢查中…</value></data>
@@ -481,6 +484,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>恢復常態</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>開機與啟動</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>設定備份</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>匯出為單一 json 檔；匯入會覆蓋目前全部設定。</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0–600 秒，僅開機自動啟動時生效：登入後先等這麼久再跑清單，避開登入尖峰。手動重跑不受影響。</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>等系統就緒再跑（桌面 / 網路）</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>就緒即走，最多等 90 秒，然後再疊加上面的固定延遲。開機太早、軟體起不來時開啟它。</value></data>

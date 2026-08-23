@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>रीफ़्रेश</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>सभी पोर्ट दिखाएँ</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>केवल dev सर्वर</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>केवल वे TCP पोर्ट दिखाता है जिन पर अभी सुना जा रहा है; यह टैब खोलने पर हर बार ताज़ा होता है। किसी पंक्ति पर डबल-क्लिक करके उसे ब्राउज़र में खोलें; राइट-क्लिक से पोर्ट मुक्त करें, जिससे उसे रोके हुए सभी प्रोसेस उनकी चाइल्ड प्रोसेस सहित समाप्त हो जाती हैं। डिफ़ॉल्ट रूप से केवल node और python जैसे dev रनटाइम दिखते हैं: बाकी सॉफ़्टवेयर के लिए «केवल dev सर्वर» का टिक हटाएँ, और सिस्टम सेवाओं तक के लिए «सभी पोर्ट दिखाएँ» चुनें।</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>जब एक ही प्रोसेस कई पोर्ट रखती है, तब डिफ़ॉल्ट रूप से केवल बाहर की ओर वाला पोर्ट दिखता है। हर पोर्ट सूचीबद्ध करने और ऊपर का फ़िल्टर छोड़ने के लिए इसे चुनें।</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>केवल प्रोजेक्ट सेवाएँ</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>केवल वे सेवाएँ दिखाता है जो आपके किसी प्रोजेक्ट फ़ोल्डर से चली हैं — .git या package.json जैसे चिह्नों से पहचानी जाती हैं। बाकी सुन रहे सॉफ़्टवेयर देखने के लिए चिह्न हटाएँ।</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>किसी पंक्ति पर डबल-क्लिक करने पर वह ब्राउज़र में खुलती है; राइट-क्लिक से पोर्ट मुक्त होता है।</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{1} में से {0} पोर्ट · हर 5 सेकंड में ताज़ा</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>ब्राउज़र में खोलें</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>पोर्ट मुक्त करें</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>{0} पर भी सुन रहा है</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>पोर्ट {0} मुक्त नहीं किया जा सका: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>चालू</value></data>
@@ -308,7 +312,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>ऑपरेशन विफल: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>सेटिंग्स</value></data>
   <data name="Settings_General" xml:space="preserve"><value>सामान्य</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>परिचय</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>अपडेट जांचें</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 ओपन सोर्स प्लान · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>जाँच रहे हैं…</value></data>
@@ -480,6 +483,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>सामान्य पर लौटें</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>स्टार्टअप</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>बैकअप</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>एक ही .json फ़ाइल में निर्यात करता है। आयात करने पर मौजूदा सभी सेटिंग्स बदल जाती हैं।</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 सेकंड, और केवल तब जब लॉगऑन पर शुरू चालू हो: लॉगऑन के बाद इतनी देर रुककर सूची चलाता है, ताकि शुरुआती भीड़ टल जाए। मैन्युअल रन पर असर नहीं पड़ता।</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>सिस्टम तैयार होने तक प्रतीक्षा करें (डेस्कटॉप / नेटवर्क)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>दोनों तैयार होते ही आगे बढ़ता है, अधिकतम 90 सेकंड प्रतीक्षा करता है; उसके ऊपर ऊपर वाली निश्चित देरी जुड़ती है। जब सूची आपके प्रोग्राम के लिए बहुत जल्दी चले, तब इसे चालू करें।</value></data>

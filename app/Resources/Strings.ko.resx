@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>새로 고침</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>모든 포트 표시</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>dev 서비스만</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>현재 수신 중인 TCP 포트만 표시하며, 이 탭을 열 때마다 새로 고칩니다. 행을 두 번 클릭하면 브라우저로 열리고, 마우스 오른쪽 버튼으로 포트를 비울 수 있습니다(그 포트를 점유한 모든 프로세스를 자식 프로세스까지 종료). 기본값은 node·python 같은 dev 런타임만 보여 줍니다. 다른 소프트웨어까지 보려면 'dev 서비스만' 체크를 해제하고, 시스템 서비스까지 보려면 '모든 포트 표시'를 켜세요.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>한 프로세스가 여러 포트를 쓰면 기본적으로 외부용 포트만 표시합니다. 켜면 모든 포트를 나열하고 위의 필터도 건너뜁니다.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>프로젝트 서비스만</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>프로젝트 폴더에서 시작한 서비스만 표시합니다(.git, package.json 같은 표시로 판별). 체크를 해제하면 나머지 수신 대기 중인 소프트웨어도 보입니다.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>행을 두 번 클릭하면 브라우저에서 열리고, 오른쪽 클릭으로 포트를 해제합니다.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} 포트 · 5초마다 자동 새로 고침</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>브라우저에서 열기</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>포트 비우기</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>함께 수신 중: {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>포트 {0}을(를) 비우지 못했습니다: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>사용</value></data>
@@ -308,7 +312,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>작업 실패: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>설정</value></data>
   <data name="Settings_General" xml:space="preserve"><value>일반</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>정보</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>업데이트 확인</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 오픈소스 플랜 · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>확인 중…</value></data>
@@ -480,6 +483,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>평소대로 되돌리기</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>시작</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>설정 백업</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>하나의 json 파일로 내보냅니다. 가져오면 현재 설정이 모두 대체됩니다.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0~600초이며 '로그온 시 시작'이 켜져 있을 때만 적용됩니다. 로그온 후 이만큼 기다렸다가 목록을 실행해 로그온 직후의 혼잡을 피합니다. 수동 재실행에는 영향이 없습니다.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>시스템이 준비될 때까지 대기(바탕 화면 / 네트워크)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>둘 다 준비되면 바로 진행하며 최대 90초까지 기다립니다. 그 뒤에 위의 고정 지연이 더해집니다. 너무 일찍 실행돼 프로그램이 뜨지 않을 때 켜세요.</value></data>

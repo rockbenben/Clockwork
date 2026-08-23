@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>Làm mới</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>Hiện tất cả cổng</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Chỉ dev server</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Chỉ liệt kê các cổng TCP đang lắng nghe, làm mới mỗi lần bạn mở thẻ này. Nhấp đúp một dòng để mở trong trình duyệt; nhấp chuột phải để giải phóng cổng, kết thúc mọi tiến trình đang giữ nó kể cả tiến trình con. Mặc định chỉ hiện các môi trường dev như node và python: bỏ chọn «Chỉ dev server» để thấy phần mềm khác, hoặc chọn «Hiện tất cả cổng» để gồm cả dịch vụ hệ thống.</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Khi một tiến trình giữ nhiều cổng, mặc định chỉ hiện cổng hướng ra ngoài. Chọn để liệt kê mọi cổng và bỏ qua bộ lọc phía trên.</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>Chỉ dịch vụ dự án</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Chỉ liệt kê các dịch vụ khởi chạy từ thư mục dự án của bạn, nhận biết qua dấu hiệu như .git hay package.json. Bỏ chọn để thấy những phần mềm đang lắng nghe còn lại.</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>Nhấp đúp vào một hàng để mở trong trình duyệt; nhấp chuột phải để giải phóng cổng.</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} cổng · tự làm mới mỗi 5 giây</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Mở trong trình duyệt</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Giải phóng cổng</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>Cũng đang lắng nghe trên {0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>Không thể giải phóng cổng {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>Bật</value></data>
@@ -308,7 +312,6 @@ Nhật ký: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Thao tác thất bại: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Cài đặt</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Chung</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>Giới thiệu</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Kiểm tra cập nhật</value></data>
   <data name="About_Series" xml:space="preserve"><value>Kế hoạch 365 nguồn mở · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Đang kiểm tra…</value></data>
@@ -480,6 +483,7 @@ Nhật ký: {1}</value></data>
   <data name="Tpl_Restore" xml:space="preserve"><value>Trở lại bình thường</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Khởi động</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Sao lưu</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>Xuất ra một tệp .json duy nhất. Nhập vào sẽ thay thế toàn bộ cấu hình hiện tại.</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 giây và chỉ khi bật khởi động cùng đăng nhập: chờ bấy nhiêu sau khi đăng nhập rồi mới chạy danh sách, để tránh lúc máy đang bận. Chạy lại thủ công không bị ảnh hưởng.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Đợi hệ thống sẵn sàng (màn hình nền / mạng)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Đi tiếp ngay khi cả hai sẵn sàng, chờ tối đa 90 giây; độ trễ cố định ở trên được cộng thêm. Bật khi danh sách chạy quá sớm so với phần mềm của bạn.</value></data>

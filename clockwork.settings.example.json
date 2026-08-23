@@ -340,7 +340,8 @@
     "startupWaitForReady": false,
     "startupDelaySeconds": 30,
     "stopHotkey": "Ctrl+Alt+Q",
-    "language": ""
+    "language": "",
+    "portsDevOnly": true
   },
   "actionGroups": [
     {

@@ -24,10 +24,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>刷新</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>显示全部端口</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>只看 dev 服务</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>只列出正在监听的 TCP 端口，每次切到本页自动刷新。双击一行用浏览器打开，右键可释放端口——结束占用它的全部进程，连同子进程。默认只看 node / python 这类 dev 运行时；取消「只看 dev 服务」可看到其余软件，勾「显示全部端口」则连系统服务一并列出。</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>一个进程占多个端口时，默认只显示对外的那个。勾选后逐条列全，并跳过上面的筛选。</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>只看项目服务</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>只列出从你的项目目录跑起来的服务，按 .git、package.json 这类标记认。取消勾选可看到其余正在监听的软件。</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>双击一行用浏览器打开，右键释放端口。</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} 个端口 · 每 5 秒自动刷新</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>用浏览器打开</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>释放端口</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>同时监听：{0}</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>释放端口 {0} 失败：{1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>启用</value></data>
@@ -312,7 +316,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>操作失败：{0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>设置</value></data>
   <data name="Settings_General" xml:space="preserve"><value>常规</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>关于</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>检查更新</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 开源计划 · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>检查中…</value></data>
@@ -483,6 +486,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>恢复常态</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>开机与启动</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>配置备份</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>导出为单个 json 文件；导入会覆盖当前全部配置。</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0–600 秒，仅开机自启时生效：登录后先等这么久再跑清单，避开登录风暴。手动重跑不受影响。</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>等系统就绪再跑（桌面 / 网络）</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>就绪即走，最多等 90 秒，然后再叠加上面的固定延迟。开机太早、软件起不来时打开它。</value></data>

@@ -22,10 +22,14 @@
   <data name="System_Refresh" xml:space="preserve"><value>รีเฟรช</value></data>
 
   <data name="Ports_ShowAll" xml:space="preserve"><value>แสดงพอร์ตทั้งหมด</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>เฉพาะ dev server</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>แสดงเฉพาะพอร์ต TCP ที่กำลังรับฟัง และรีเฟรชทุกครั้งที่เปิดแท็บนี้ ดับเบิลคลิกที่แถวเพื่อเปิดในเบราว์เซอร์ คลิกขวาเพื่อปล่อยพอร์ต ซึ่งจะสิ้นสุดทุกโปรเซสที่ถือพอร์ตนั้นรวมถึงโปรเซสลูก ค่าเริ่มต้นจะแสดงเฉพาะรันไทม์สำหรับพัฒนาอย่าง node และ python เอาเครื่องหมาย «เฉพาะ dev server» ออกเพื่อดูซอฟต์แวร์อื่น หรือติ๊ก «แสดงพอร์ตทั้งหมด» เพื่อรวมบริการของระบบ</value></data>
+  <data name="Ports_ShowAllTip" xml:space="preserve"><value>เมื่อโปรเซสหนึ่งจับหลายพอร์ต ค่าเริ่มต้นจะแสดงเฉพาะพอร์ตที่เปิดออกภายนอก เลือกเพื่อแสดงทุกพอร์ตและข้ามตัวกรองด้านบน</value></data>
+  <data name="Ports_DevOnly" xml:space="preserve"><value>เฉพาะบริการของโปรเจกต์</value></data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>แสดงเฉพาะบริการที่เริ่มจากโฟลเดอร์โปรเจกต์ของคุณ ซึ่งดูจากเครื่องหมายอย่าง .git หรือ package.json ยกเลิกการเลือกเพื่อดูซอฟต์แวร์อื่นที่กำลังรอรับการเชื่อมต่อ</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>ดับเบิลคลิกแถวเพื่อเปิดในเบราว์เซอร์ คลิกขวาเพื่อปล่อยพอร์ต</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} พอร์ต · รีเฟรชทุก 5 วินาที</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>เปิดในเบราว์เซอร์</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>ปล่อยพอร์ต</value></data>
+  <data name="Ports_AlsoListening" xml:space="preserve"><value>กำลังรอรับที่ {0} ด้วย</value></data>
   <data name="Ports_KillFail" xml:space="preserve"><value>ปล่อยพอร์ต {0} ไม่สำเร็จ: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>เปิด</value></data>
@@ -308,7 +312,6 @@
   <data name="Autostart_Fail" xml:space="preserve"><value>การดำเนินการล้มเหลว: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>การตั้งค่า</value></data>
   <data name="Settings_General" xml:space="preserve"><value>ทั่วไป</value></data>
-  <data name="Settings_About" xml:space="preserve"><value>เกี่ยวกับ</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>ตรวจหาการอัปเดต</value></data>
   <data name="About_Series" xml:space="preserve"><value>แผน 365 โอเพนซอร์ส · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>กำลังตรวจสอบ…</value></data>
@@ -480,6 +483,7 @@
   <data name="Tpl_Restore" xml:space="preserve"><value>กลับสู่ปกติ</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>การเริ่มต้น</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>สำรองข้อมูล</value></data>
+  <data name="Settings_BackupTip" xml:space="preserve"><value>ส่งออกเป็นไฟล์ .json ไฟล์เดียว การนำเข้าจะแทนที่การตั้งค่าปัจจุบันทั้งหมด</value></data>
   <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 วินาที และมีผลเฉพาะเมื่อเปิด "เริ่มเมื่อเข้าสู่ระบบ": จะรอเท่านี้หลังเข้าสู่ระบบก่อนรันรายการ เพื่อเลี่ยงช่วงที่เครื่องกำลังยุ่ง การรันซ้ำด้วยตนเองไม่ได้รับผลกระทบ</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>รอจนระบบพร้อม (เดสก์ท็อป / เครือข่าย)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>ไปต่อทันทีที่ทั้งสองพร้อม รอไม่เกิน 90 วินาที แล้วจึงบวกหน่วงเวลาคงที่ด้านบนเพิ่ม เปิดไว้เมื่อรายการทำงานเร็วเกินไปจนโปรแกรมยังไม่ขึ้น</value></data>
