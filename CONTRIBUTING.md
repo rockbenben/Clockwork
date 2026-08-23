@@ -19,22 +19,25 @@ Two switches built into the exe (see `app/DevChecks.cs`). Both run before the si
 ```powershell
 .\Clockwork.exe --smoke              # constructs and lays out every window, asserts each got a real size —
                                      # XAML is lazy-loaded, so a broken window throws nothing until opened
-.\Clockwork.exe --shots shots-dir    # renders every window to PNG: 3 work-area heights × zh/en/de/ar
-                                     # (Chinese baseline, English, longest translation, RTL)
+.\Clockwork.exe --shots shots-dir    # renders every tab of every window to PNG: 2 widths × 3 work-area
+                                     # heights × 6 languages = 432 images. Every axis was added after a
+                                     # real defect slipped past the one before it (see DevChecks.cs header)
 ```
 
-Run `--smoke` before any PR that touches XAML (CI runs it on every push too). After layout changes, run `--shots` and eyeball the images — German at the tightest height and Arabic RTL break in ways Chinese at a comfortable size never shows.
+Run `--smoke` before any PR that touches XAML (CI runs it on every push too). After layout changes, run `--shots` and eyeball the images. The languages are `zh-CN, en, de, es, ru, ar`, and the tight combinations are where things break: German and Russian run longest, Spanish beats German on some strings, and Arabic is the only RTL. Chinese at a comfortable size shows none of it.
+
+The tallest tier does not give you a taller window: work-area height is the *available* height, and each window is still capped by its own `Height` (720 for the main window, 640 for the group editor). That tier tests "more room than the window needs", not a bigger window.
 
 ## Layout
 
 | Folder | What lives there |
 | --- | --- |
-| `app/Core/` | Pure logic — no Win32, no UI. This is where the tests point |
-| `app/Native/` | Win32 interop (hotkeys, window actions, volume, send-keys, mouse injection) |
-| `app/Engine/` | Execution: startup list, action groups, reminder scheduling |
+| `app/Core/` | Pure logic — no Win32, no UI. The cheapest thing to test, so put logic here when you can |
+| `app/Native/` | Win32 interop (hotkeys, window actions, volume, send-keys, mouse injection; also listening-port enumeration and reading another process's command line / working directory) |
+| `app/Engine/` | Execution: startup list, action groups, reminder scheduling, and the system-startup / listening-port readers |
 | `app/ViewModels/` + `app/Views/` | WPF UI |
 | `app/I18n/` + `app/Resources/` | Localization. Neutral `Strings.resx` is the Chinese source; one `Strings.<code>.resx` satellite per language |
-| `app.Tests/` | xunit.v3 on Microsoft.Testing.Platform, mirroring the `Core/` and `Engine/` layout |
+| `app.Tests/` | xunit.v3 on Microsoft.Testing.Platform, mirroring the app layout: `Core/`, `Engine/`, `Native/`, `ViewModels/`, `Views/`, plus `I18n/` which enforces resx coverage across every language |
 
 Adding a UI string means adding the key to `Strings.resx` **and** to all 17 satellites — a missing key falls back to the neutral Chinese value, which is worse than an obviously untranslated English one.
 
@@ -44,4 +47,4 @@ GitHub Actions builds, runs every test and then `--smoke` on a Windows runner fo
 
 ## Docs
 
-User-facing behaviour is documented in [`docs/USAGE.md`](docs/USAGE.md) (and [`docs/USAGE.zh.md`](docs/USAGE.zh.md)); the READMEs are the short version, translated into 18 languages under [`docs/i18n/`](docs/i18n/). A change that alters what a user sees should land in the same commit as its doc update.
+User-facing behaviour is documented in [`docs/USAGE.md`](docs/USAGE.md) (and [`docs/USAGE.zh.md`](docs/USAGE.zh.md)); the READMEs are the short version, in 18 languages — English and Chinese at the repo root, the other 16 under [`docs/i18n/`](docs/i18n/). A change that alters what a user sees should land in the same commit as its doc update.

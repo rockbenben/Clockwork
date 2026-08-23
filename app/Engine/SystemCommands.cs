@@ -143,7 +143,9 @@ public static class SystemCommands
 
     // 屏幕亮度。唯一的路是 WMI 的 WmiMonitorBrightnessMethods，而 System.Management 在 .NET 上是个要单独装的包——
     // 为一个滑杆让自包含发布多背一个依赖不划算，改由系统自带的 powershell.exe 现调。
-    // ponytail: 起一次 powershell ≈ 0.5–1 秒；真嫌慢再换 System.Management。
+    // ponytail: 起一次 powershell ≈ 0.5–1 秒；真嫌慢再换 System.Management——
+    //           但先知道价码：实测那个包让单文件 exe 涨约 832KB（+40%），且是全仓唯一的外部依赖
+    //           （同一笔账在 Native/ProcessInfo.cs 里算过一次，那边最终没买）。
     // 必须走 Invoke-CimMethod：第一版写的是 (Get-CimInstance ...).WmiSetBrightness(1,p)，
     // 而 CimInstance 根本不携带 WMI 方法，那一版在所有机器上（含支持的笔记本）都必然失败（评审 #1 实跑证实）。
     // 两段都挂 -ErrorAction Stop：Get-CimInstance 的「不支持」是非终止错误，不升级的话
