@@ -22,3 +22,13 @@ desktop.ini
 docs/superpowers/
 # SDD 执行期的账本 / 简报 / 审查包（纯本地草稿，随计划完成即删）
 .superpowers/
+
+# 第三方资料的本地副本（竞品手册等），仅供参考，不入库
+docs/research/
+
+# Python 字节码缓存（tools/ 下的生成脚本会留下它）。
+# 不只是「不该入库的产物」：.pyc 里嵌着编译那台机器上源文件的**绝对路径**，
+# 提交它等于把作者的本机目录结构写进版本库。实测已经进去过一次
+# （tools/__pycache__/make_icon.cpython-314.pyc 里就是一条 D:\Backup\... 的完整路径）。
+__pycache__/
+*.pyc

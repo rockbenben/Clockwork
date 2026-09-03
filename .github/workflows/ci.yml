@@ -50,6 +50,23 @@ jobs:
           if (-not $ok) { if (Test-Path $marker) { Get-Content $marker } else { 'no marker written' }; exit 1 }
           if ($p.ExitCode -and $p.ExitCode -ne 0) { exit 1 }
 
+      # 问句弹框是模态的，从外面驱动不了它，所以这条链（打字 → 点确定 → 答案进变量 →
+      # 后面的步骤用得上）进不了 app.Tests。--selftest（app/DevSelfTest.cs）在真进程里
+      # 按脚本点一遍，7 条检查。同 --smoke：成败以 marker 为准，退出码只在明确非零时才判失败。
+      # 它第一次跑就抓到一个线上的死递归（SystemCommands.ClipboardText 调它自己），
+      # 那种错会让进程当场消失、日志里一个字都不留——正是单元测试罩不到的那一类。
+      - name: Self-test (drive the ask dialog end to end)
+        shell: pwsh
+        run: |
+          $marker = Join-Path ([System.IO.Path]::GetTempPath()) 'clockwork-selftest.txt'
+          Remove-Item $marker -ErrorAction SilentlyContinue
+          $p = Start-Process app/bin/Release/net10.0-windows/Clockwork.exe -ArgumentList '--selftest' -PassThru -Wait
+          if (-not (Test-Path $marker)) { 'no marker written'; exit 1 }
+          $out = (Get-Content $marker -Raw).Trim()
+          $out
+          if (-not $out.StartsWith('OK')) { exit 1 }
+          if ($p.ExitCode -and $p.ExitCode -ne 0) { exit 1 }
+
   # 一个文件两个 job：needs 让红的树发不出 Release，且不额外花一次测试——同一次运行已经跑过了。
   # 拆成 ci.yml + release.yml 就丢了这点，needs 不能跨 workflow 文件。
   release:
