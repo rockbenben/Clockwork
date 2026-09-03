@@ -18,6 +18,8 @@ public sealed class GroupRowVm : ObservableObject, IRowVm
 
     public ActionGroup Group { get; }
 
+    public object Model => Group;
+
     public bool Enabled
     {
         get => Group.Enabled;
@@ -26,17 +28,9 @@ public sealed class GroupRowVm : ObservableObject, IRowVm
 
     public string Name => Group.Name;
 
-    // 列表摘要：前 3 步的动作摘要串起来。用 StepSummary 而非 StepListSummary——后者会把「用途说明」
-    // 当后缀拼进去，在这个窄列里太长。空组返回占位符：光一个数字 0 说不清"这个组什么都不会做"。
-    public string Summary
-    {
-        get
-        {
-            if (Group.Steps.Count == 0) return Strings.Get("Group_Empty");
-            var head = string.Join(" · ", Group.Steps.Take(3).Select(StepDisplay.StepSummary));
-            return Group.Steps.Count > 3 ? head + " …" : head;
-        }
-    }
+    // 摘要口径在 StepDisplay.GroupSummary 一处维护：步骤编辑器选组时的内容预览用的是同一个，
+    // 两处回答的是同一个问题「这个组里有什么」，各写一份迟早漂移（曾经就是两份）。
+    public string Summary => StepDisplay.GroupSummary(Group);
 
     // 组热键此前只在组编辑器里可见，多个组时根本说不出某个组合键属于谁。无热键时留空——
     // 一列占位符号比空白更吵。

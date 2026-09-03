@@ -24,6 +24,8 @@ public sealed class ReminderRowVm : ObservableObject, IRowVm
 
     public Reminder Reminder { get; }
 
+    public object Model => Reminder;
+
     public bool Enabled
     {
         get => Reminder.Enabled;

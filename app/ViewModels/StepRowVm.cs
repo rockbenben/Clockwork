@@ -15,6 +15,8 @@ public sealed class StepRowVm : ObservableObject, IRowVm
 
     public LaunchStep Step { get; }
 
+    public object Model => Step;
+
     public bool Enabled
     {
         get => Step.Enabled;

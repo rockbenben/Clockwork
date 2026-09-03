@@ -70,6 +70,10 @@ public partial class MainWindow : Window
 
         _system = new SystemStartupVm(SystemStartupReader.SetItemEnabled, ReportSystemMsg, PromptRelaunchAdmin);
         GridSystem.ItemsSource = _system.Rows;
+        // 「N / M 项」：与端口页同一形状。默认隐藏只读项，被藏了多少由这个数字直接回答——
+        // 这句从前是页脚里的一句话（「系统 / 策略 / 一次性等只读项默认隐藏」），没人读，还占着一行。
+        _system.Changed = () => SysCount.Text = Lf("System_Count", _system.Rows.Count, _system.TotalCount);
+        _system.Changed();
 
         var ports = new PortsVm { DevOnly = config.Settings.PortsDevOnly };
         _ports = ports;
@@ -87,10 +91,31 @@ public partial class MainWindow : Window
 
         // 设置页
         VersionText.Text = "v" + AppVersion();
-        StartupDelayBox.Text = config.Settings.StartupDelaySeconds.ToString();
-        StartMinChk.IsChecked = config.Settings.StartMinimized;
-        WaitReadyChk.IsChecked = config.Settings.StartupWaitForReady;
-        WireHotkeyBox();   // 急停键「点击即录键」（Attach 内会填入当前值）
+        // **这个置位一直没人写过。** _loadingSettings 声明在下面、也被 Settings_Changed 读着，
+        // 却从来没有被赋过值（编译器一直在报 CS0649），于是那道重入守卫恒为假、等于不存在——
+        // 而它上面那两行注释描述的正是这里：构造期间填这几个控件会逐个触发 Settings_Changed
+        // → _save，每开一次主窗口就把配置文件白写好几遍。
+        // try/finally 而不是直接两句：中间任一句抛出去，标志留在 true 上会让整个设置页从此不再存盘。
+        _loadingSettings = true;
+        try
+        {
+            StartupDelayBox.Text = config.Settings.StartupDelaySeconds.ToString();
+            StartMinChk.IsChecked = config.Settings.StartMinimized;
+            WaitReadyChk.IsChecked = config.Settings.StartupWaitForReady;
+            PanelEnabledChk.IsChecked = config.Settings.PanelEnabled;
+            MiddleLongPressChk.IsChecked = config.Settings.PanelMiddleLongPress;
+            LongPressMsBox.Text = config.Settings.PanelLongPressMs.ToString();
+            // 手势总开关与手势管理器标题行那个勾是**同一个字段**的两个视图。
+            // 这里只能填一次（主窗口关闭只是隐藏，构造函数不会再跑），所以真正要守的接缝
+            // 在 GestureManager_Click：管理器关掉之后必须把这个勾读回来，否则它手里那个
+            // 陈旧值会在下一次 SaveConfig 时被回写。（曾经这里写的是「不会互相看到旧值，
+            // 因为管理器是模态开的、每次构造时重读」——那只能证明**管理器**看到的是新的，
+            // 反方向压根没论及。）
+            GesturesEnabledChk.IsChecked = config.Settings.GesturesEnabled;
+            UpdatePanelRows();
+            WireHotkeyBox();   // 急停键「点击即录键」（Attach 内会填入当前值）
+        }
+        finally { _loadingSettings = false; }
         // 急停按钮跟着运行状态走：订阅一次，窗口真正关闭（托盘退出）时摘掉——
         // 平时关窗只是隐到托盘，窗口对象还在，摘早了再打开就不会更新了。
         if (AppInstance is { } app)
@@ -107,7 +132,29 @@ public partial class MainWindow : Window
             if (code == config.Settings.Language) langSel = i;
         }
         LangCombo.SelectedIndex = langSel;
+
+        int themeSel = 0;
+        for (int i = 0; i < Themes.All.Length; i++)
+        {
+            ThemeCombo.Items.Add(new ComboBoxItem { Content = Strings.Get("Theme_" + Themes.All[i]), Tag = Themes.All[i] });
+            if (Themes.All[i] == Themes.Normalize(config.Settings.Theme)) themeSel = i;
+        }
+        ThemeCombo.SelectedIndex = themeSel;
         UpdateAutostartLabel();
+    }
+
+    // 与换语言同样重启。原本想做成当场生效（颜色不像文案那样在构造时定死），
+    // 实测不成立：只替换调色板时，切回去会剩一半旧颜色（详见 App.ApplyTheme 里的记录）。
+    // 改成整份资源重建之后颜色是齐的，但已经开着的窗口抓的是旧画笔实例，仍然不会变——
+    // 一个「有的窗口新主题、有的窗口旧主题」的程序比重启一次糟得多。
+    private void Theme_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (_config == null) return;
+        var theme = (ThemeCombo.SelectedItem as ComboBoxItem)?.Tag as string ?? "dark";
+        if (theme == Themes.Normalize(_config.Settings.Theme)) return;   // 含初始化时的自赋值
+        _config.Settings.Theme = theme;
+        _save?.Invoke();
+        (System.Windows.Application.Current as App)?.RelaunchForLanguage();
     }
 
     private void Lang_Changed(object sender, SelectionChangedEventArgs e)
@@ -122,10 +169,27 @@ public partial class MainWindow : Window
         (System.Windows.Application.Current as App)?.RelaunchForLanguage();
     }
 
+    // 构造期间填下拉框会触发 SelectionChanged → Settings_Changed → 存盘。存的值和读到的一样，
+    // 不会改坏数据，但每开一次窗口就白写一次配置文件。置位期间早退，比给每个控件都写一遍
+    //「新值等于旧值就 return」省事，也不会漏掉下一个新增的控件。
+    private bool _loadingSettings;
+
+    // 面板关掉时把它下属的两行收起来：热键和中键长按此刻控制不了任何东西，
+    // 留着就是「看着能填、填了不生效」——本程序在编辑器里对这件事一向的处理是收起来
+    // （UpdateOnYes / UpdateMessageRows / UpdateSysRows 三处同一条立场）。
+    // 只收这两行，不收「管理面板…」：关的是「用不用」，不是「删不删」，
+    // 面板页那些数据还在，用户仍该进得去看和整理。
+    private void UpdatePanelRows()
+    {
+        var vis = PanelEnabledChk.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        PanelHotkeyRow.Visibility = vis;
+        PanelMiddleRow.Visibility = vis;
+    }
+
     // —— 底部设置栏 ——
     private void Settings_Changed(object sender, RoutedEventArgs e)
     {
-        if (_config == null) return;
+        if (_config == null || _loadingSettings) return;
         // 非法/越界输入不静默丢弃：合法则 clamp 到 [0,600] 存下，非法则保持旧值；
         // 两种情况都把规范化后的值回写输入框，保证「看到的 = 存下的」。
         if (int.TryParse(StartupDelayBox.Text.Trim(), out var d) && d >= 0)
@@ -133,10 +197,24 @@ public partial class MainWindow : Window
         StartupDelayBox.Text = _config.Settings.StartupDelaySeconds.ToString();
         _config.Settings.StartMinimized = StartMinChk.IsChecked == true;
         _config.Settings.StartupWaitForReady = WaitReadyChk.IsChecked == true;
+        _config.Settings.PanelEnabled = PanelEnabledChk.IsChecked == true;
+        UpdatePanelRows();
+        _config.Settings.GesturesEnabled = GesturesEnabledChk.IsChecked == true;
+        _config.Settings.PanelMiddleLongPress = MiddleLongPressChk.IsChecked == true;
+        // 长按阈值同上：合法则 clamp 到 [150, 2000] 存下，非法保持旧值，规范化后的值回写输入框。
+        // 下界 150——低于这个数，稍慢一点的普通中键点击就会被判成长按，中键从此不好点了；
+        // 上界 2000，按到两秒还没反应，人早就以为坏了。
+        if (int.TryParse(LongPressMsBox.Text.Trim(), out var ms))
+            _config.Settings.PanelLongPressMs = StepHelpers.ClampLongPressMs(ms);
+        LongPressMsBox.Text = _config.Settings.PanelLongPressMs.ToString();
+        // 面板外观。下拉的值从 Tag 取（Content 是本地化文案，换语言就对不上了）；
+        // 取不到就保持旧值，不静默改成默认——用户选过的东西不该因为一次读取失败被抹掉。
         _save?.Invoke();
     }
 
-    // 急停键「点击即录键」——与组热键/发送键统一走 KeyCaptureBox（见 WireHotkeyBox，在构造末尾调用）。
+    // 急停键与面板键「点击即录键」——与组热键/发送键统一走 KeyCaptureBox（见 WireHotkeyBox，在构造末尾调用）。
+    // 两个框都不做「和另一个撞了」的前置校验：撞了的那个注册失败时会点名 toast（见 RebindFunctionHotkey），
+    // 而在这里再拦一道就得决定谁让谁——那是用户的事，不是表单该替他做的决定。
     private void WireHotkeyBox()
     {
         if (_config == null) return;
@@ -144,6 +222,10 @@ public partial class MainWindow : Window
             () => _config.Settings.StopHotkey,
             // 保存→SaveConfig→按新配置重注册全部热键；急停按钮的提示里印着这个键，一并刷新
             combo => { _config.Settings.StopHotkey = combo; _save?.Invoke(); RefreshStopButton(); });
+        Views.KeyCaptureBox.Attach(PanelHotkeyBox, HotkeyCapture.KeyCaptureMode.Hotkey, null,
+            () => _config.Settings.PanelHotkey,
+            // 面板键没有对应的界面按钮要刷（面板是热键/托盘唤出的），保存后重注册就够
+            combo => { _config.Settings.PanelHotkey = combo; _save?.Invoke(); });
     }
 
     // 标签条右端的急停按钮：只在真有东西在跑时存在。
@@ -163,7 +245,7 @@ public partial class MainWindow : Window
         System.Windows.Automation.AutomationProperties.SetName(StopAllBtn, hint);
     }
 
-    // 鼠标点完不把焦点环留在急停按钮上：环是黄铜色，而黄铜在本应用里读作「活动 / 正在跑」
+    // 鼠标点完不把焦点环留在急停按钮上：环是强调色，而强调色在本应用里读作「活动 / 正在跑」
     // （选中标签的刻度线、「运行这一步」都是它），一直亮在一颗红色急停按钮上会被误读成「还有东西在运行」。
     // 只对鼠标这么做：键盘激活(空格/回车)时保留焦点——那是用户自己 Tab 过来的位置，抹掉会让下一次 Tab 从头开始。
     private bool _stopClickedByMouse;
@@ -348,7 +430,7 @@ public partial class MainWindow : Window
             // 验证 JSON 可解析为 RootConfig，防止导入无效文件后应用启动异常。
             var json = File.ReadAllText(dlg.FileName);
             var test = System.Text.Json.JsonSerializer.Deserialize<RootConfig>(json, ConfigStore.JsonOptions);
-            if (test == null) throw new InvalidOperationException("JSON 解析结果为 null");
+            if (test == null) throw new InvalidOperationException(Strings.Get("Err_JsonNull"));
             // 与启动读取同一套规范化管线（剔 null 元素/补重 id/OnYes 归一）：导入落盘的就是规范形，
             // 「什么算合法配置」不在此另定义一份浅版本，也不把修补推迟到重启后的 Read。
             ConfigStore.Normalize(test);
@@ -367,7 +449,21 @@ public partial class MainWindow : Window
         // 循环期间提醒计时器照常在走（DispatcherTimer 不因模态停摆，正是 _reminderTickBusy 存在的原因），
         // 一次 SaveConfig（如「仅一次」提醒触发完自动取消勾选）就会把旧配置写回、无声还原导入——
         // 上面那道 MarkConfigSuperseded 闸门就是为这段窗口设的。
-        Views.BrandDialog.Info(this, "Clockwork", Strings.Get("Config_Imported"));
+        // 迁移的账要在**这里**报，不能指望重启后那一次。
+        //
+        // 上面那句 Normalize 与启动读取共用同一条管线，所以导入一份旧版配置（panelSchema < 3）
+        // 时，面板页迁移就在此刻真的发生了：几个「只当页用」的动作组被从动作列表里删掉、
+        // 托盘也少了几行——一次结构性改写。而 LastMigrationLog 只有 App.OnStartup 会读，
+        // 等重启后再读时 panelSchema 已经是 3、迁移那道门早关了，账是空的。
+        // 于是用户看到的只有「导入成功」，然后发现三个动作和两行托盘不见了——
+        // 正是 MigratePanelPages 自己的文档明令不许发生的结局。
+        // 与「导入成功」合成一段说：两句话都是关于这一次导入的，分两个框弹反而像出了两件事。
+        var mig = Core.ConfigStore.LastMigrationLog;
+        Views.BrandDialog.Info(this, "Clockwork", mig.Count == 0
+            ? Strings.Get("Config_Imported")
+            : Strings.Get("Config_Imported") + Environment.NewLine + Environment.NewLine
+              + Strings.Get("Mig_Title") + Environment.NewLine
+              + string.Join(Environment.NewLine, mig));
         app.RelaunchForLanguage();   // 复用重启逻辑：重开自身 + 退出当前实例（内部保证无论成败都退出）
     }
 
@@ -410,6 +506,59 @@ public partial class MainWindow : Window
         foreach (var row in _reminders.Rows) row.Refresh();
     }
 
+    // 快捷面板上增删改动作后调用（见 App.EditPanelItem）：面板改的是同一批模型对象，
+    // 而这一页的行是与之平行的另一份 VM——不刷的话，主窗口开着时步骤数、摘要会停在改动之前，
+    // 看着像面板那次编辑没生效。与上面那条同一形状：只发通知，不触发存盘（存盘在调用方）。
+    // 面板管理器：同一批动作组的另一种视图（页与格），编辑仍走本页那两个编辑器。
+    // 关闭后统一刷一次列表——管理器里改的是同一批模型对象，而这一页的行是与之平行的另一份 VM。
+    // 手势管理器：改的是 RootConfig.Gestures（一份独立的步骤清单），不碰动作组本身——
+    // 所以这里**不需要**刷本页的行。仍然刷一次是因为手势可以引用动作组（group 步骤），
+    // 而管理器里能顺手编辑被引用的那个组；不刷的话主窗口开着时那一行会停在改动之前。
+    // 它自己即时存盘（画完那一刻语义就完整了），故这里不再调 _save。
+    private void GestureManager_Click(object sender, RoutedEventArgs e)
+    {
+        if (_config == null) return;
+        new Views.GestureManagerWindow(_config, () => _save?.Invoke()) { Owner = this }.ShowDialog();
+        RefreshGroupRows();
+        // 手势总开关在管理器里也能改（标题行那个勾），而设置页这个勾只在本窗口
+        // **构造时**填过一次——主窗口关闭只是隐藏，不会重建。不在这里读回来的话，
+        // 下一次随便动设置页任何一项（SaveConfig 会把整页回写）就把旧值盖了回去，
+        // 双向静默回滚：在管理器里关掉的又被重新装上钩子，反之亦然。
+        // 抬 IsChecked 会触发 Settings_Changed，所以要抬在 _loadingSettings 里（否则又存一次）。
+        _loadingSettings = true;
+        try { GesturesEnabledChk.IsChecked = _config.Settings.GesturesEnabled; }
+        finally { _loadingSettings = false; }
+    }
+
+    private void PanelManager_Click(object sender, RoutedEventArgs e)
+    {
+        if (_config == null) return;
+        new Views.PanelManagerWindow(_config, () => _save?.Invoke()) { Owner = this }.ShowDialog();
+        // 管理器现在只动 _config.PanelPages，不碰动作列表（页独立成实体之后，「添加面板页」
+        // 不再是「新建一个动作」）。仍走 Resync 而不是 RefreshGroupRows：它能改格子里的步骤，
+        // 而那些步骤可能指向某个动作，整份拉回来最省心，也不必去分辨这次到底改没改到。
+        _groups?.Resync();
+        SyncSel(GridGroup, _groups);
+        RefreshGroupRows();
+    }
+
+    /// <summary>动作组列表被别处改动过（重排 / 新增）之后，把 VM 拉回与配置一致。</summary>
+    //
+    // Models 就是 _config.ActionGroups 本身，而 Rows 与它平行、删除按下标同删。
+    // 外面动过那个列表却不 Resync 的话，两者错位，在这一页按删除删掉的会是另一个组。
+    public void ResyncGroups()
+    {
+        _groups?.Resync();
+        SyncSel(GridGroup, _groups);
+        RefreshGroupRows();
+    }
+
+    public void RefreshGroupRows()
+    {
+        if (_groups == null) return;
+        foreach (var row in _groups.Rows) row.Refresh();
+    }
+
     // 托盘「快速提醒」的增 / 删入口。必须经 VM：Models 就是 _config.Reminders 本身，Rows 是平行的另一份，
     // 绕过 VM 直接改配置会让两者错位，之后每一行都指向相邻那条提醒。两个方法内部都会存盘。
     // SyncSel 一个都不能省——本文件里每一个动列表的调用点都紧跟着它，因为 VM 的 SelectedIndex 变了
@@ -426,11 +575,13 @@ public partial class MainWindow : Window
         // 而其余每一项都要先开编辑器再手填目标。最常见的需求应该排在最省事的入口上。
         var fromMenu = new MenuItem { Header = Strings.Get("Menu_FromStartMenu") };
         fromMenu.Click += (_, _) => AddFromStartMenu();
-        var menu = Views.StepMenu.Build(k =>
+        // 开机清单不显示「常用」：那一节里的每一条问的都是「你眼下正看着什么」——
+        // 复制哪段文字、最小化哪个窗口。开机那一刻没人在场，答案不存在。
+        var menu = Views.StepMenu.Build((k, seed) =>
         {
-            var step = Views.StepEditorWindow.Edit(this, null, k, _config?.ActionGroups ?? new List<ActionGroup>());
+            var step = Views.StepEditorWindow.Edit(this, seed, k, _config?.ActionGroups ?? new List<ActionGroup>());
             if (step != null) { _launch?.Add(step); SyncSelection(); }
-        }, firstOpenItem: fromMenu);
+        }, firstOpenItem: fromMenu, presets: false);
         menu.PlacementTarget = LAdd;
         menu.IsOpen = true;
     }
@@ -522,22 +673,23 @@ public partial class MainWindow : Window
     private void RDel_Click(object sender, RoutedEventArgs e)
     {
         var sel = _reminders?.SelectedReminder;
-        if (sel == null || !ConfirmDelete(sel.Message)) return;
+        // 点名用列表里显示的那句话，不用 Message 原文：**静默运行动作的提醒没有正文**，
+        // 传原文会得到「确定删除「」吗？」——点名点了个寂寞（同 BlankRowTests 那条规矩）。
+        if (sel == null || !ConfirmDelete(ReminderDisplay.TextSummary(sel, Groups))) return;
         _reminders?.DeleteSelected(); SyncSel(GridRemind, _reminders);
     }
     private void RUp_Click(object sender, RoutedEventArgs e) { _reminders?.MoveUp(); SyncSel(GridRemind, _reminders); }
     private void RDown_Click(object sender, RoutedEventArgs e) { _reminders?.MoveDown(); SyncSel(GridRemind, _reminders); }
     private void RCopy_Click(object sender, RoutedEventArgs e) { _reminders?.DuplicateSelected(); SyncSel(GridRemind, _reminders); }
 
-    private void GAdd_Click(object sender, RoutedEventArgs e)
+    // 直接开一个空动作的编辑器，不先弹菜单——只有一种东西可建（同「定时任务」那一页）。
+    private void GAdd_Click(object sender, RoutedEventArgs e) => AddGroupFrom(new ActionGroup { Name = "" });
+
+    // 内置模板。每次现生成新 id，选中即开编辑器预填，按需改进程名再保存。
+    // 它们此前和「空白动作」挤在同一个菜单里，于是每建一个动作都要先从 9 项里挑第 1 项。
+    private void GTemplate_Click(object sender, RoutedEventArgs e)
     {
-        // 新增 ▾：空白组 + 内置模板（专注/会议/收工/睡前/离开/截图/久坐，旧版 Get-ActionGroupTemplates 的移植）。
-        // 模板每次现生成新 id，选中即开编辑器预填，按需改进程名再保存。
         var menu = new ContextMenu();
-        var blank = new MenuItem { Header = Strings.Get("Menu_BlankGroup") };
-        blank.Click += (_, _) => AddGroupFrom(new ActionGroup { Name = "" });
-        menu.Items.Add(blank);
-        menu.Items.Add(new Separator());
         foreach (var t in ActionGroupTemplates.All())
         {
             var tt = t;
@@ -545,21 +697,32 @@ public partial class MainWindow : Window
             mi.Click += (_, _) => AddGroupFrom(tt);
             menu.Items.Add(mi);
         }
-        menu.PlacementTarget = GAdd;
+        menu.PlacementTarget = GTemplate;
         menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
         menu.IsOpen = true;
     }
 
+    // 本程序自己占着的全局键，交给动作编辑器查重用。**加了新的功能键就往这儿添一行**——
+    // 漏了不会报错，只会在某天变成一条按了没反应的热键（面板键加进来的那一轮就漏过一次）。
+    private IReadOnlyList<(string Key, string Owner)> FunctionHotkeys()
+        => _config == null
+            ? System.Array.Empty<(string, string)>()
+            : new[]
+            {
+                (_config.Settings.StopHotkey, Strings.Get("Settings_StopHotkey")),
+                (_config.Settings.PanelHotkey, Strings.Get("Settings_PanelHotkey")),
+            };
+
     private void AddGroupFrom(ActionGroup template)
     {
-        var g = Views.GroupEditorWindow.Edit(this, template, Groups, _config?.Settings.StopHotkey ?? "");
+        var g = Views.GroupEditorWindow.Edit(this, template, Groups, FunctionHotkeys());
         if (g != null) { _groups?.Add(g); SyncSel(GridGroup, _groups); }
     }
     private void GEdit_Click(object sender, RoutedEventArgs e)
     {
         var sel = _groups?.SelectedGroup;
         if (sel == null) return;
-        var edited = Views.GroupEditorWindow.Edit(this, sel, Groups, _config?.Settings.StopHotkey ?? "");
+        var edited = Views.GroupEditorWindow.Edit(this, sel, Groups, FunctionHotkeys());
         if (edited != null) { _groups?.ReplaceSelected(edited); SyncSel(GridGroup, _groups); }
     }
     private void GridGroup_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => GEdit_Click(sender, e);
@@ -575,8 +738,17 @@ public partial class MainWindow : Window
         var refReminders = _config.Reminders.Where(r =>
             r.SilentGroupId == g.Id || (r.OnYes?.Type == "group" && r.OnYes.Target == g.Id)).ToList();
         bool RefsGroup(LaunchStep s) => s.Kind == "group" && s.GroupId == g.Id;
+        // **四份清单都要算**：单步清单、手势、其余组里的步骤、以及面板页上的格子。
+        // 漏掉任何一份，删掉一个被它指着的组时确认框都只字不提，删完那个引用永远解析成 null——
+        // 用户照旧点得到 / 画得出来，什么都不发生，而管理器里它看着完好。
+        //
+        // 面板页这一份是最后补上的，也是**最容易撞上的一份**：RootConfig.DefaultPanelPages
+        // 给每个出厂动作都摆了一个 Kind="group" 的格子，所以任何用户从第一次启动就有这类引用。
+        // （这一段注释原先写着「三份」，而 PanelPages 是这一版才从 ActionGroups 里分出来的第四份。）
         int refSteps = _config.LaunchSteps.Count(RefsGroup)
-                     + _config.ActionGroups.Where(x => x.Id != g.Id).Sum(x => x.Steps.Count(RefsGroup));
+                     + _config.Gestures.Count(RefsGroup)
+                     + _config.ActionGroups.Where(x => x.Id != g.Id).Sum(x => x.Steps.Count(RefsGroup))
+                     + _config.PanelPages.Sum(p => (p.Steps ?? new()).Count(s => s != null && RefsGroup(s)));
         if (refReminders.Count > 0 || refSteps > 0)
         {
             // 有引用走专用确认文案（说明会联动清理），无引用走通用删除确认——两条路径都必确认。
@@ -588,6 +760,25 @@ public partial class MainWindow : Window
                 if (r.OnYes?.Type == "group" && r.OnYes.Target == g.Id) r.OnYes = new OnYes();
             }
             _launch?.RemoveWhere(RefsGroup, save: false);   // 随后的 DeleteSelected 会整体落盘，不写两次
+            // **删了行就得同步选中。** 这是本文件第 505 行那条规矩唯一漏掉的调用点：RemoveWhere 只对
+            // VM 的 SelectedIndex 做钳位，而删掉高亮行**之前**的一条时钳位是空操作（Math.Min(1,2)=1），
+            // WPF 那边保住 SelectedItem 把 grid 索引前移一位却不发 SelectionChanged——两边就此错开。
+            // 之后在启动清单页按「删除」，删掉的是另一条，而且直接落盘：静默丢数据。
+            SyncSelection();
+            // 手势那一份也要清。计数早就算上它了，清理却漏着——于是确认框承诺「会联动清理」，
+            // 而删完那条手势仍指着一个不存在的组：画得出来、什么都不发生，管理器里看着完好。
+            // 承诺了不做，比一开始就不提更糟。
+            if (_config.Gestures.Any(RefsGroup))
+                _config.Gestures = _config.Gestures.Where(s => !RefsGroup(s)).ToList();
+            // 面板页上的格子同理。**只数不清更糟**：确认框刚承诺过「这些引用会一并清除」，
+            // 而留下来的格子带着被删动作的名字和图标，点它 ActionGroupResolver 返回 null，
+            // 于是既没有气泡也没有日志——出厂默认页每个动作都有这样一个格子，人人都撞得到。
+            foreach (var p in _config.PanelPages)
+            {
+                if (p.Steps == null) continue;
+                if (p.Steps.Any(s => s != null && RefsGroup(s)))
+                    p.Steps = p.Steps.Where(s => s == null || !RefsGroup(s)).ToList();
+            }
             // 替换整个列表而非就地 RemoveAll：后台可能正拿着旧列表引用在枚举（跑组/拍快照），
             // 引用赋值是原子的——旧引用照常枚举完旧内容，不会抛「集合已修改」。
             foreach (var other in _config.ActionGroups.Where(x => x.Id != g.Id))

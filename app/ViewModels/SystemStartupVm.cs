@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Clockwork.Core;
 using Clockwork.Engine;
@@ -64,6 +64,13 @@ public sealed class SystemStartupVm
 
     public ObservableCollection<SystemStartupRowVm> Rows { get; } = new();
 
+    // 与 PortsVm 对称的两个成员（那边的注释写着「与 SystemStartupVm 同形」，但计数是端口页
+    // 单方面加的）：Rows 是筛出来的，TotalCount 是扫到的全部，界面拿这两个数报「N / M 项」。
+    // 挂在这里而不是在三个事件处理器里各写一遍：搜索、切「显示系统 / 只读项」、重扫都经过 ApplyFilter。
+    public Action? Changed;
+
+    public int TotalCount => _all.Count;
+
     public SystemStartupVm(Func<SystemStartupItem, bool, string> toggle, Action<string> report, Action? needsAdmin = null)
     {
         _toggle = toggle;
@@ -95,5 +102,6 @@ public sealed class SystemStartupVm
         Rows.Clear();
         foreach (var it in Filter(_all, _search, _showReadOnly))
             Rows.Add(new SystemStartupRowVm(it, _toggle, _report, _needsAdmin));
+        Changed?.Invoke();
     }
 }

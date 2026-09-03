@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
+// UseWindowsForms 把 WinForms 也加进了隐式全局 using，Panel 两边同名（同别处那批别名）。
+using Panel = System.Windows.Controls.Panel;
 
 namespace Clockwork;
 
@@ -20,9 +23,13 @@ public sealed class StripTabControl : TabControl
         protected override List<AutomationPeer> GetChildrenCore()
         {
             var children = base.GetChildrenCore() ?? new List<AutomationPeer>();
-            if (Owner is TabControl { Tag: UIElement extra }
-                && UIElementAutomationPeer.CreatePeerForElement(extra) is { } peer)
-                children.Add(peer);
+            // Tag 现在挂的是一排按钮（管理面板 / 管理手势 / 急停），不是单个控件。
+            // 只补容器自己的 peer 不够：容器的 peer 未必把子控件展开，读屏软件就会漏掉整排。
+            // 逐个补子元素；Tag 仍是单控件时按原样补它自己。
+            if (Owner is TabControl { Tag: UIElement extra })
+                foreach (var el in extra is Panel panel ? panel.Children.OfType<UIElement>() : new[] { extra })
+                    if (UIElementAutomationPeer.CreatePeerForElement(el) is { } peer)
+                        children.Add(peer);
             return children;
         }
     }

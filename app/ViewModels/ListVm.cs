@@ -4,7 +4,9 @@ using Clockwork.Core;
 namespace Clockwork.ViewModels;
 
 // 列表行的公共契约：编辑后刷新显示。
-public interface IRowVm { void Refresh(); }
+// Model：这一行包的是哪个模型对象。Resync 靠它把选中项按**引用**找回来——
+// 清单在外面被重排过之后，原来那个下标已经指向别的东西了。
+public interface IRowVm { void Refresh(); object Model { get; } }
 
 // 三个列表页 VM 的非泛型基：仅暴露与类型无关的选中索引，便于 MainWindow 用一个 helper 统一
 // "变更后把选中回推到 DataGrid"，取代此前 launch 用 helper、reminder/group 各内联的不一致写法。
@@ -50,6 +52,30 @@ public abstract class ListVm<TModel, TRow> : ListVmBase where TModel : class whe
         Rows.RemoveAt(i);
         SelectedIndex = Math.Min(i, Rows.Count - 1);
         Save();
+    }
+
+    /// <summary>模型清单在**外面**被改过之后，把行重建成与它同序同长。</summary>
+    //
+    // Models 就是 config 里那份 List，Rows 是平行的另一份，而删除走的是**下标**同删
+    //（Models.RemoveAt(i); Rows.RemoveAt(i)）。所以只要有谁绕过本 VM 去动那份 List，
+    // 两边就此错位——之后在界面上按「删除」删掉的是**另一条**。
+    // 面板管理器正是这样的调用方：拖页眉会重排动作组、加动作页会追加一个组，
+    // 而它拿到的是 RootConfig 本身。Refresh() 只重画既有行，救不了顺序和条数。
+    //
+    // 选中项按**引用**找回来而不是按下标：重排之后同一个下标已经是别的东西了。
+    public void Resync()
+    {
+        // 选中项要从**行**上取，不能从 Models[SelectedIndex] 取：走到这儿时那份清单
+        // 已经被外面改过了，同一个下标早就是别的东西——那正是这个方法要收拾的局面。
+        object? keep = SelectedIndex >= 0 && SelectedIndex < Rows.Count ? Rows[SelectedIndex].Model : null;
+        Rows.Clear();
+        int at = -1;
+        for (int i = 0; i < Models.Count; i++)
+        {
+            Rows.Add(_makeRow(Models[i]));
+            if (keep != null && ReferenceEquals(Models[i], keep)) at = i;
+        }
+        SelectedIndex = at >= 0 ? at : Math.Min(SelectedIndex, Rows.Count - 1);
     }
 
     // 编辑后刷新选中行显示并存盘。
