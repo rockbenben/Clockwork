@@ -7,8 +7,8 @@ Put the repetitive parts of your PC on autopilot: auto-launch your apps at login
 A small Windows tray tool that manages five everyday things (plus a Settings tab):
 
 1. **Startup list** — open your everyday apps in order at login, and do a few chores along the way.
-2. **Scheduled tasks** — pop a reminder (on-time / read aloud / repeat-nagging / do something when you click **Yes**) or silently run an action group; runs once, on an interval, or on the usual weekday/every-N-days/monthly recurrence.
-3. **Action groups** — bundle a series of actions into a group (Focus / Wrap-up / Bedtime…) and trigger it with one tap or a **global hotkey**.
+2. **Scheduled tasks** — pop a reminder (on-time / read aloud / repeat-nagging / do something when you click **Yes**) or silently run an action; runs once, on an interval, or on the usual weekday/every-N-days/monthly recurrence.
+3. **Actions** — bundle a series of actions into a group (Focus / Wrap-up / Bedtime…) and trigger it with one tap or a **global hotkey**.
 4. **System startup items** — view and manage everything on your PC that auto-starts; switch off what you don't need.
 5. **Ports** — see which ports are being listened on and what is holding them; double-click to open `localhost:3000` in your browser, right-click to free the port.
 
@@ -24,29 +24,32 @@ It sits quietly in the tray. The window's close button only hides it to the tray
 
 ## First run: replace the samples with your own
 
-On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — muting the speakers, launching an app, opening a URL on weekdays only (conditional execution), starting a chat app minimized in the background, sending a key combo. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Action groups tab starts with two ready-to-run groups already in place (Stepping away / Wrap up · End of day) — add more from the built-in templates under **Add ▾**.
+On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — muting the speakers, launching an app, opening a URL on weekdays only (conditional execution), starting a chat app minimized in the background, sending a key combo. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Actions tab starts with two ready-to-run groups already in place (Stepping away / Wrap up · End of day) — add more from the built-in templates under **From a template…**.
 
 The most common need, "open my everyday apps at login":
 
 1. Go to **Startup list**.
 2. Delete the samples you don't need (select → delete → confirm; the next row is auto-selected, so deleting in a row is quick).
-3. **Add ▾ → Launch program**, and fill **Target** with the app you want:
+3. **Add ▾ → Open → Launch program**, and fill **Target** with the app you want:
    - Apps the system can find: just the name — `msedge.exe` (Edge), `notepad.exe` (Notepad).
    - Otherwise a **full path**: right-click the app → "Open file location" → right-click the icon → "Properties", and copy the **Target** path.
    - URLs (`https://…`), documents, `.ps1` scripts and shortcuts (`.lnk`) all work too; paths may include surrounding quotes or environment variables like `%USERPROFILE%` — both are handled for you.
    - Give `.ps1` scripts a **full path** (PowerShell can't resolve a bare filename); which PowerShell runs them is picked for you — see the notes under *Step types* below.
 4. Want an app to open later (e.g. after another one is up, or after the network is ready)? Raise its **post-step delay**, or move it up/down.
-5. Tray → **Re-run startup list** to test it once.
+5. Tray → **Rerun startup list** to test it once.
 6. Happy with it? On the **Settings** tab, enable **Start at login** — it'll run automatically every boot.
 
-> Only want scheduled tasks or action groups? Adjust the samples on the matching tab the same way; the startup list can be emptied entirely — the four features are independent.
+> Only want scheduled tasks or actions? Adjust the samples on the matching tab the same way; the startup list can be emptied entirely — the four features are independent.
 
 ## Startup list
 
 - An **ordered list of steps** run top-to-bottom at login. Add/remove; **drag a row to reorder it** — each row has a **drag handle** (≡) at its left edge that lights up as you hover the row; the up/down buttons still work too (keyboard-reachable, and better for nudging one step at a time). **Double-click a row to edit** it; **right-click** for Duplicate (plus Skip today on the Scheduled tasks page). (All three list pages work the same way.)
 - Each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times, waiting the post-step delay between each), and **run conditions** (see below). *Message* steps have no repeat count — they always show once, and a count left over from switching a step to *Message* has no effect.
 - Selecting a step and clicking **Run** runs *just that step* immediately (ignoring its enabled state and time conditions — pure test); a tray toast reports the result.
-- **The first entry under Add ▾ is "Pick from Start menu…"** — it lists every program in your Start menu — **including Store / UWP apps like Sticky Notes or Paint, which have no exe path** (they don't exist as files, so you could never type them in). Search, multi-select with Ctrl / Shift, and each one becomes a *Launch program* step. No more right-click → Properties → copy the target path. Added steps arrive **unticked**, so you get a look before anything runs.
+- **Under Add ▾ → Open, the first entry is "Pick from Start menu…"** — it lists every program in your Start menu — **including Store / UWP apps like Sticky Notes or Paint, which have no exe path** (they don't exist as files, so you could never type them in). Search, multi-select with Ctrl / Shift, and each one becomes a *Launch program* step. No more right-click → Properties → copy the target path. Added steps arrive **unticked**, so you get a look before anything runs.
+- **Add ▾ groups the step types by what you want to do, one submenu each** (Common / Run action / Open / Control an app / System & sound / Flow). The top level is just those intent words and the mechanism names live inside — so "close WeChat: is that a window action or send keys?" never has to be answered up front; you pick *Control an app* and read from there. (It was flat once: a dozen-plus types plus section headings made a twenty-row wall that grew scroll arrows on a 1366×768 laptop, hiding the last few entries.)
+- **Add ▾ → Common** — a list of ready-filled steps: copy / paste / search the selected text / back / forward / play-pause · previous · next track / volume up · down / minimize · maximize · toggle-on-top · close the current window. They are not new step types, just existing ones with their fields filled in (*Copy* is really *Send keys `Ctrl+C`*), and picking one still opens the same step editor, where you can change it. **They are here for mouse gestures**: the word in your head while drawing one is “copy”, not “send keys”.
+  The startup list has no such section — every entry in it asks what you are looking at right now, and at login nobody is there.
 
 ### Step types
 
@@ -57,11 +60,16 @@ The most common need, "open my everyday apps at login":
 | **Mouse** | One dropdown for every mouse action: **scroll** (up / down / left / right, one notch per run), **click** (left / double / right / middle) and the **side buttons** (back / forward). Raise the **repeat count** for N clicks or notches and use the post-step delay for the rhythm (e.g. 5 × 50 ms).<br>Horizontal scrolling emits a real tilt-wheel event (`HWHEEL`), which more apps honour than the `Shift+wheel` workaround — handy for wide tables, Gantt charts and timelines.<br>**The targeting rules differ, so keep them straight:** scrolling goes to the window **under the pointer** (Windows’ “Scroll inactive windows when I hover over them” setting, on by default on Win10/11; turn it off and it goes to the foreground window), while **clicks land wherever the pointer already is** — this app never moves it (moving it would mean absolute vs relative coordinates, multi-monitor and DPI scaling, and it would interrupt whatever you are doing). So either put the target in place first with **Window action → bring to front** and make sure the pointer is where it needs to be, or stick to position-independent actions like **back / forward**.<br>Prefer the keyboard where it works: `PageDown` via **Send keys** scrolls more predictably and `Alt+←` goes back; reach for the mouse only where nothing else does (maps, image viewers, Electron virtual lists, CAD). |
 | **Send text** | Type a string into the focused window (newline = Enter, Tab works). Optional **target process** (the **…** button picks one) — brings its window to front first, then types; blank = current focus. **An active IME doesn't interfere**: text goes in as Unicode, bypassing the keyboard layout, so it can't be swallowed into a candidate window — CJK, accents and emoji all arrive intact. |
 | **Volume** | Mute / unmute / set level (setting a level unmutes first) / **mute or unmute the microphone** — that one mutes the default recording device itself, so no app hears you, which is stronger than any meeting app's own mute button. |
-| **Window action** | By process name (the **…** button picks one, searchable): close / minimize / maximize / bring-to-front / bring-to-front-and-send-keys. Slow apps can **wait up to N seconds for the window to appear** — acts the moment it shows, instead of a blind fixed delay. Only **real application windows** are targeted — a process's hidden helper windows (the taskbar, the desktop, background shells) are filtered out, so "close explorer" can't hit your taskbar. After acting it **verifies the window actually changed** and reports honestly when it didn't, worded separately from "no window found" (the first points at foreground lock / an elevated window / an unsaved-changes dialog; the second at why the process isn't up). |
-| **System command** | Show desktop / lock (needs password to return) / turn off monitor (wakes on mouse move) / empty recycle bin / clear clipboard / **set clipboard text** / open Windows Settings / open Task Manager / screenshot / **display mode: PC screen only · duplicate · extend · second screen only** / **turn notifications off · on** / **screen brightness** / sleep / hibernate / sign out / restart / shut down (the last three confirm first). Three take an argument: *set clipboard text* adds a text box and *screen brightness* a 0–100 field, shown only when that command is selected. |
-| **Message** | Show a line of text. Two forms: a **dialog** (must be clicked away; can ask Yes/No and act on Yes) or a **card** (slides in from the corner, non-blocking, auto-closes after the seconds you set, 0 = stays until you dismiss it). **Only the card form pops from the startup list** — a dialog at login would stall the whole list, so dialog-form messages are silently skipped there. A message step always shows once and has no repeat count. See the Action groups section below for the details. |
+| **Window action** | By process name (the **…** button picks one, searchable): close / minimize / maximize / **keep on top** / bring-to-front / bring-to-front-and-send-keys / **back to the previous window**. **Keeping a window on top is a toggle** — run the same step again to release it, so one gesture covers both pinning and unpinning. **It is tracked per window**: pin A, click over to B, and triggering it again pins B; to release A, bring A to the front first. It does not steal focus, because what you pin is usually a secondary window (a reference doc, a player) and stealing focus would bury the one you are typing in. **Type `*` as the process name for the current window** — the one you were using before you drew the gesture or opened the panel. (An empty process name means the step does nothing at all.) Gestures need this: whichever window you draw on is the one to act on, and there is no process name to type in advance. (If Clockwork itself is in front, nothing happens — otherwise clicking Run to test a *Close current window* step would close Clockwork.) Slow apps can **wait up to N seconds for the window to appear** — acts the moment it shows, instead of a blind fixed delay. **Back to the previous window takes no target**: it returns to whatever you were using at the moment the action fired. Put it at the end of a run of window steps — each of those grabs the foreground before acting, so after "minimize Slack, minimize Discord" focus lands wherever Windows feels like, and where you want to be is where you started. If Clockwork itself was in front when it fired (which is what happens when you hit Run to test a step), it says plainly that there is nowhere to go back to. Only **real application windows** are targeted — a process's hidden helper windows (the taskbar, the desktop, background shells) are filtered out, so "close explorer" can't hit your taskbar. After acting it **verifies the window actually changed** and reports honestly when it didn't, worded separately from "no window found" (the first points at foreground lock / an elevated window / an unsaved-changes dialog; the second at why the process isn't up). |
+| **System command** | Show desktop / lock (needs password to return) / turn off monitor (wakes on mouse move) / empty recycle bin / clear clipboard / **set clipboard text** / **search the selected text** / **play a sound** / open Windows Settings / open Task Manager / screenshot / **display mode: PC screen only · duplicate · extend · second screen only** / **turn notifications off · on** / **screen brightness** / sleep / hibernate / sign out / restart / shut down (the last three confirm first). Four take an argument, shown only when that command is selected: *set clipboard text* adds a text box, *play a sound* a file path (**leave it empty for the system notification sound**, which follows your Windows sound scheme; give a path and it plays that `.wav`. Wav only — for other formats point **Launch App** at the file and let the system player have it. The sound plays asynchronously, so it never holds the action up), *screen brightness* a 0–100 field, and *search the selected text* a **search engine** dropdown — Bing / Google / Baidu / DuckDuckGo / Yandex / Naver, Bing by default. Pick *Custom…* to type your own URL, with `{0}` where the query belongs.<br>*Search the selected text* presses `Ctrl+C` for you and searches whatever lands on the clipboard — nothing can ask the system what is selected, so this is the only way to get it, and **it does overwrite your clipboard**. With nothing selected it tells you so instead of opening an empty search page.<br>**In a terminal it tries a different set of copy keys** (cmd / PowerShell / Windows Terminal / conhost / mintty / ConEmu): there `Ctrl+C` means *interrupt the running command*, so searching for a word would kill your `npm install`. The order is **`Ctrl+Insert` → `Ctrl+Shift+C` → `Ctrl+C`**, stopping at the first one that works. The first two only ever copy and never interrupt, and on a default configuration one of them always lands. `Ctrl+C` is last because measurement forced it: **Windows Terminal does not bind `Ctrl+C` to copy by default**, so many people rebind it themselves — and that rebinding shadows the first two. The cost, stated plainly: draw this gesture in a terminal with **nothing selected** and the last attempt interrupts whatever is running. Editors that host a terminal (VS Code, Visual Studio) deliberately stay on `Ctrl+C`: a process name cannot tell whether focus is in the editor or the terminal pane.<br>The clipboard wait is capped at 1s: a successful copy continues immediately, and only a genuine failure waits it out. Complex web pages and PDF readers can take hundreds of milliseconds (Quicker documents this exact failure). |
+| **Message** | Show a line of text. Two forms: a **dialog** (must be clicked away; can ask Yes/No and act on Yes) or a **card** (slides in from the corner, non-blocking, auto-closes after the seconds you set, 0 = stays until you dismiss it). **Only the card form pops from the startup list** — a dialog at login would stall the whole list, so dialog-form messages are silently skipped there. A message step always shows once and has no repeat count. See the Actions section below for the details. |
+| **Open URL** | Just an address box. It was split out of *Launch program*, whose box is labelled "program / shortcut / script / folder / URL / document" — anyone wanting to open a web page had to first recognise which of six things they had. The address can contain `{name}` placeholders, substituted at run time and escaped for you (see *Chaining steps into one action*). Program paths deliberately do **not** get this substitution — that is an injection surface. |
+| **Get the selected text** | Presses the copy key for you and puts the selection on the clipboard for later steps to read as `{clipboard}`; it can also **save the answer to a variable**. Same machinery as *search the selected text*: clipboard sequence numbers, a different key order inside terminals, and a named diagnosis when nothing comes back. |
+| **Wait for the clipboard** | Waits until the clipboard changes, or until N seconds pass (1–60). A timeout is **not** a failure — it continues either way and just says so. |
+| **User input** | Pops a box, asks a question, and **saves what you type into a variable**. The question is the text on the box; a default answer is optional (prefilled and selected, so type to replace or press Enter to accept). Esc / Cancel means *don't do this action* and stops the remaining steps — not "carry on with a blank", because the steps after it are usually waiting on that value. Pressing Enter on an empty box is **not** a cancel: that's "I want this one blank". |
+| **User choice** | The same, with a list instead of a text box: one option per line, listed at run time for you to pick one, and the line you picked goes into the variable. Double-clicking an option picks it and confirms. With no options configured it says so and skips, rather than popping an empty list you cannot dismiss with a choice. |
 | **Delay** | Just wait N seconds before the next step; at the top of the list it delays the whole run. |
-| **Action group** | Run a defined action group; set a repeat count to loop the whole group. |
+| **Action** | Run a defined action; set a repeat count to loop the whole group. |
 
 > **A few caveats**
 > - **Display mode** shells out to Windows' own `DisplaySwitch.exe`, exactly like picking an option under Win+P. The switch takes a second or two to settle, so leave a delay before whatever follows.
@@ -88,65 +96,83 @@ A step whose conditions aren't met is skipped and the list carries on. Condition
 
 On the **Settings** tab, "Startup delay N seconds" applies **only when auto-started at boot**. After login it waits a fixed number of seconds so the "login storm" (disk/CPU contention from every autostart) passes before the list runs; a manual re-run is not affected. Raise it (0–600 s) if things start too early. This is the *one* knob for overall delay; to slow a single step, use that step's post-step delay.
 
+### When the startup list goes wrong
+
+Two things exist for the case where the list does something you didn't want.
+
+**You get told when a step fails at boot.** The run always writes `clockwork.run.log` next to your config (tray → **View last startup log**), but at login nobody is watching the screen, so a failure now also raises a card: "12 steps, 3 failed". A clean run stays silent — the card only appears when something failed, the run hit the step budget, or it was stopped. This is the run you are least able to watch and the one most worth reporting.
+
+**You can stop the list from running at all.** A step that grabs focus, locks the screen or signs you out turns every login into the same ambush, and fixing it requires getting in first. Two ways out, for two different situations:
+
+- **Hold Shift while logging in.** Use this when you're already locked out — it's the only input you still have. It skips the list for that boot only; the next one runs as usual.
+- **Create an empty file named `clockwork.disable-startup` next to `clockwork.settings.json`.** Use this when you can still get to the desktop and just want the list to stop running — while you debug one step, or for a day you don't want the usual dozen apps. It keeps working until you delete it, and it says so in the card each boot, naming the exact path.
+
+Either way the app still starts into the tray as usual, so **Rerun startup list** is right there when you want to test a fix.
+
 ### Stop anytime
 
-Three ways, all doing exactly the same thing: the **stop button** at the right end of the window's tab bar, tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running (startup list / action group / single step) stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately. The run log records "manually stopped". If the hotkey is taken by another app and fails to register, a tray toast warns you (use the button or the tray menu's Stop as a fallback).
+Three ways, all doing exactly the same thing: the **stop button** at the right end of the window's tab bar, tray → **Stop running actions**, or the global **panic hotkey** (set on the Settings tab; default `Ctrl+Alt+Q`). Whatever is running (startup list / action / single step) stops after the current action; long waits (startup delay, waiting for a window) are interrupted immediately. The run log records "manually stopped". If the hotkey is taken by another app and fails to register, a tray toast warns you (use the button or the tray menu's Stop as a fallback).
 
 > The stop button **only exists while something is actually running** — that is the point: its presence tells you something is running, and its disappearance tells you the stop went through. Hover it for the current panic hotkey.
 
-> **To stop just one action group**, press **that group's own hotkey** a second time (see "Action groups → the hotkey is a toggle"). The panic hotkey is the master switch: it stops the startup list and every running group at once.
+> **To stop just one action**, press **that group's own hotkey** a second time (see "Actions → the hotkey is a toggle"). The panic hotkey is the master switch: it stops the startup list and every running group at once.
 > This only works for groups that have a hotkey bound. A group started as a scheduled task's silent group, as an On-Yes action, or as a nested reference has no per-run cancel of its own unless you also give it a hotkey — for those the panic hotkey is the only way out. If you want an unattended long-running group to be stoppable, bind it a hotkey of its own.
 
 > To "wait until the network / desktop is ready" instead of sitting out a fixed delay, tick **Wait until the system is ready** on the Settings tab (it used to be the json-only `startupWaitForReady`): it goes as soon as both are ready, waits at most 90 s, and the fixed delay above is then added on top. When the list runs too early for your apps, this beats simply raising the delay.
 
 ## Scheduled tasks
 
-- Each task either **pops a reminder** (text / speech / on-Yes action) or **silently runs an action group**.
+- Each task either **pops a reminder** (text / speech / on-Yes action) or **silently runs an action**.
 - **Trigger:** timed, **at login** (with "only within N minutes of boot" counting as login — 10 min by default for new tasks), or one of the 7 **events** below.
 - **Recurrence:** by weekday / every-N-days / monthly; the reminder can be read aloud.
 
 ### Event triggers
 
-These don't watch the clock, they watch the machine — the task fires the moment the event happens, and does exactly what a timed task does (reminder / speech / on-Yes action / silent action group).
+These don't watch the clock, they watch the machine — the task fires the moment the event happens, and does exactly what a timed task does (reminder / speech / on-Yes action / silent action).
 
 | Event | When it happens |
 | --- | --- |
 | **When idle** | No keyboard or mouse for N minutes (10 by default). **Fires once per absence**; the count restarts when you come back. |
+| **After continuous use** | The mirror of idle: you have been at it for N minutes without a break (30 by default) — the "stand up and stretch" reminder. **Fires once per streak**; a full minute away from the keyboard restarts the count. |
 | **On unlock / on lock** | The moment you hit Win+L, and the moment you come back. Switching users and remote connects don't count — that's a different thing. |
 | **On wake from sleep** | Coming back from lid-close or sleep. Good for the tidy-up work: reconnect the VPN, remount a share. |
 | **When plugged in / unplugged** | The instant the charger goes in or out. *Unplugged → switch to power saving* is the classic. |
 | **On low battery** | On battery and the charge drops below N% (20 by default). **Fires once per drop**; it re-arms after charging back above the threshold or plugging in. |
+| **On display change** | A monitor plugged in or unplugged, a resolution change, a switch of projection mode. Pair it with the **display mode** system command and docking becomes one routine. It reports "something changed", not which way — a dock and an undock look the same here, so gate the two directions with a process or path condition on the steps. |
+| **On network connected / lost** | The machine has usable network again, or just lost it. This is the precise trigger for the reconnect chores that "on wake from sleep" only approximates — remount the share once the network is actually up, not 200 ms after the lid opens. |
+| **On USB drive inserted** | A volume arrived. Backup-on-plug without polling for the drive letter. A multi-partition stick fires once, not once per partition. |
 
 - **Weekday limits still apply** ("clock in on unlock, weekdays only") — the weekday row stays visible in the editor.
 - **Grace** and **catch-up** are meaningless for events and are hidden: an event fires as it happens, and if the machine was off it simply never happened, so there is nothing to make up.
 - **Snooze, nagging and interval runs all work as usual** — everything that follows a reminder going off is shared with timed tasks.
 - **Pause reminders (do not disturb)** suppresses events too, same as timed tasks.
-- Idle and battery are **polled** (they ride the reminder timer, 30 s by default), so they can be up to half a minute late; lock / unlock / wake / power changes are pushed by Windows and are immediate.
+- Idle, continuous use and battery are **polled** (they ride the reminder timer, 30 s by default), so they can be up to half a minute late; lock / unlock / wake / power changes, display changes, network changes and USB arrivals are pushed by Windows and are immediate.
+- **A reminder will not interrupt a fullscreen game or a presentation.** When Windows reports that the screen is busy — an exclusive-fullscreen game, a fullscreen app, projection mode — a reminder that would put something on screen quietly waits 5 minutes and tries again, for as long as that lasts. Nothing is dropped and nothing is capped: you see it when you come out. Two deliberate exceptions still come through, because for them "don't interrupt" is the wrong answer: **silent actions** (they never put anything on screen, so there is nothing to interrupt) and the tray's **quick reminder** (you set that timer by hand a few minutes ago — "you said 5 minutes" outranks the courtesy). This is separate from **Pause reminders**, which is yours to switch on and off; Windows Focus Assist is deliberately *not* wired in, because two invisible do-not-disturbs that can't see each other is the hardest kind of silence to diagnose.
 - **Interval runs**: "every N minutes until HH:mm" (empty = end of day). Distinct from "nag until confirmed" — nagging stops on confirmation, interval runs keep going. Intervals never cross midnight; the next day starts fresh from the task's base time.
 - **Skip today**: right-click the row → **Skip today** (**click it again to undo**). Once skipped the time column reads “22:00 · skipped today” — you do it in the menu and see it on the row, so there is nothing to remember. And the rest of today is written off for that reminder — in-flight nags, interval rounds and snoozes included — while tomorrow runs as usual. All three trigger kinds (timed / at login / event) answer the same way. It is safer than unticking: unticking has no expiry, and one you forget to re-tick is a reminder that fails silently forever. The skip is persisted, so a restart does not undo it.
 - **Quick reminder**: tray right-click → **Quick reminder** → 5 / 15 / 25 / 30 / 60 minutes. It is accurate to within one tick (30 s by default) and never fires early; while reminders are paused it says so plainly instead of pretending the timer is armed. Creates a one-shot reminder on the spot — **it shows up in the list on this page**, so you can delete it if you change your mind — with a sound and a card that stays until you dismiss it, and **deletes itself once it has fired** — a scratch timer should not leave a dead row in your config. For any other length, just add a normal reminder on this page. If its minute lands during do-not-disturb or sleep it fires late rather than being dropped; if a whole day passed and it never fired, the next start clears it out instead of leaving a dead row.
 - **Run once**: pick "Once" and a date. After it completes, the entry unticks itself but stays in the list — set a new date and re-enable to reuse.
-- **Sound**: one **Sound** dropdown in the editor, four choices — **Silent / Chime / Read aloud / Chime + read aloud**. The chime is the system "Asterisk" sound, there only to make you look up; read-aloud speaks the whole message. Pick both and the chime lands first, before the speech starts (otherwise the ding sits on top of the first word). A card neither steals focus nor sits on top, so when you are looking at another screen the sound is often the only part you notice. It follows your Windows sound scheme, so a silent scheme stays silent, and silent action groups never make a sound (that is what "silent" means). Fresh samples ship with the chime on; reminders you already had keep their current setting.
+- **Sound**: one **Sound** dropdown in the editor, four choices — **Silent / Chime / Read aloud / Chime + read aloud**. The chime is the system "Asterisk" sound, there only to make you look up; read-aloud speaks the whole message. Pick both and the chime lands first, before the speech starts (otherwise the ding sits on top of the first word). A card neither steals focus nor sits on top, so when you are looking at another screen the sound is often the only part you notice. It follows your Windows sound scheme, so a silent scheme stays silent, and silent actions never make a sound (that is what "silent" means). Fresh samples ship with the chime on; reminders you already had keep their current setting.
 - Reminders with **no On-Yes action** slide in as a **reminder card** in the corner (non-intrusive). How long it shows is set by the **auto-close** seconds — **0 = stays until you dismiss it**, so nothing is missed if you're away. Repeat-nagging reminders still use a dialog (so you can stop the nagging with one click).
-- Reminders **with** an On-Yes action (run program / open file / URL / run action group) pop a top-most **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5 / 10 / 15 / 30 / 60 min). Enter = **Yes** as always; for the first 0.6 s after the dialog appears, **Yes** doesn't respond — a dialog that steals focus mid-typing can't run the action on an in-flight space bar or Enter.
+- Reminders **with** an On-Yes action (run program / open file / URL / run action) pop a top-most **Yes / No** dialog with a **Snooze** button (default 10 min, ▾ menu 5 / 10 / 15 / 30 / 60 min). Enter = **Yes** as always; for the first 0.6 s after the dialog appears, **Yes** doesn't respond — a dialog that steals focus mid-typing can't run the action on an in-flight space bar or Enter.
 - **An unanswered dialog gets out of the way.** The dialog is modal, so leaving it up would block every later reminder. A dialog with no auto-close stays up for at most 1 minute; when it times out unanswered it turns into an automatic **"snooze 10 minutes"** and comes back later — nothing is blocked, nothing is silently lost (the auto-snooze is persisted like a hand-clicked one, surviving restarts; it expires at midnight, except reminders with **catch up if missed** enabled, which re-fire once the next day). Repeat-nagging reminders keep nagging on your configured cadence instead. After **6 rounds** with no answer, the dialog stops re-popping and degrades into a **persistent corner card** waiting for your return — re-interrupting an empty desk is pointless. Note the card has no Yes/No buttons: once degraded, the On-Yes action no longer runs. Hand-clicked snoozes don't count toward those 6 rounds and reset the streak — you were there, so the clock starts over. The cap counts **rounds, not elapsed time**: with the defaults six rounds is about an hour, but if you set a long auto-close (say 1800 s) each round also holds the dialog up for that long, stretching the total several-fold.
 - **Repeat fires of one reminder share a single card** (`×N` at the top right), so the corner never fills up. Cards you dismissed, evicted, or that auto-closed — and dialog-form reminders too (unanswered ones marked in the warning color) — can be reviewed and re-shown from **tray right-click → Recent** (session-only; cleared on restart).
 - **Advanced:** auto-close · repeat-nagging (re-pop every N minutes until a deadline; a blank deadline caps it at 20 nags) · post-trigger delay + random jitter · grace (catch a fire missed by a brief shutdown/sleep) · **catch up if missed** (re-fire once after hibernation/shutdown skipped it) · an **anchor date** for every-N-days (the **…** button picks it; left blank it is pinned to today on save, and every N days counts from there).
 - **State persistence:** "fired today" and "snoozed until" are saved to `clockwork.state.json`, surviving restarts — a snooze carries across a restart and the same reminder never double-fires in a day. Interval progress is persisted the same way, so restarting mid-day keeps the day's remaining rounds.
 - **Midnight and long-standby edges all resolve to "fires exactly once":** a late reminder (say 23:59) that actually pops after midnight is still recorded against **the day it was due**, so it fires again the next day instead of degrading to every-other-day; a nag chain that slept past its own deadline ends there rather than reviving the next morning and nagging for hours; and an absurd future timestamp left behind by a wrong system clock (VM snapshot restore, dead CMOS battery) is discarded as junk instead of silencing that reminder forever with no way back but deleting the state file.
-- **Do-Not-Disturb:** tray → **Pause reminders ▸** → 1 / 2 / 4 hours. Everything (including silent groups) is suppressed and auto-resumes when the time is up; you can also **Resume** early. Anything missed follows the normal grace / catch-up rules.
-- **Silent action group:** run a group on time with **no popup**. Selecting a task and clicking **Run** runs it once — note that for a silent task, Run **actually executes** the group.
+- **Do-Not-Disturb:** tray → **Pause reminders ▸** → 1 / 2 / 4 / 8 hours, or **until the end of today** (the one entry you never have to do arithmetic for — away all day, recording, in meetings). Everything (including silent groups) is suppressed and auto-resumes when the time is up; you can also **Resume** early. Anything missed follows the normal grace / catch-up rules.
+- **Silent action:** run a group on time with **no popup**. Selecting a task and clicking **Run** runs it once — note that for a silent task, Run **actually executes** the group.
 - **What the list columns say:** a task triggered **at login** shows **Every login** in the period column (it never consults a weekday/monthly recurrence, so the editor hides that block too), and a **silent** task shows the group it runs in the text column instead of an empty cell.
 - **Duplicate** clones the selected task right below it (same text and settings, its own schedule state) — handy for "same task, second time of day": duplicate, then just change the time.
 
-## Action groups
+## Actions
 
-- **Add ▾** starts a group from a **built-in template** (Focus / Meeting / Back to normal / Wrap-up / Bedtime / Stepping away / Sitting too long) — tweak the process names and save.
+- **Add** opens an empty action straight away. To start from something that already works, use **From a template…** next to it: pick a **built-in template** (Focus mode / Meeting mode / Back to normal / End of day / Bedtime / Stepping away / Time for a break / Quick search), tweak the process names and save.
   - **Back to normal is the way out.** Muting notifications and muting the mic are stateful — they don't undo themselves. Focus and Meeting each switch something off, so keep a *Back to normal* around (a hotkey suits it well) to switch them all back on.
 - The list shows each group's **step summary** and **hotkey** columns (an empty group's summary reads **(empty)**).
 - A group runs **only one copy at a time** (repeat triggers are skipped — except its hotkey, see "the hotkey is a toggle" below).
-- Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**. You can also select a row on the Action groups tab and hit **Run** to fire it once by hand.
-- **Show in tray menu** (in the group editor; **off by default for new groups**): once you have a few groups the tray menu turns into a long strip, and most groups are triggered by a hotkey, a reminder or another group anyway — they don't need a row. A hidden group still works everywhere else: hotkeys, reminders, references and the **Run** button on the Action groups tab are all unaffected; it just isn't listed in the tray. Groups that existed before this option was added keep showing, so nothing disappears on upgrade.
+- Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**. You can also select a row on the Actions tab and hit **Run** to fire it once by hand.
+- **Show in tray menu** (in the group editor; **off by default for new groups**): once you have a few groups the tray menu turns into a long strip, and most groups are triggered by a hotkey, a reminder or another group anyway — they don't need a row. A hidden group still works everywhere else: hotkeys, reminders, references and the **Run** button on the Actions tab are all unaffected; it just isn't listed in the tray. Groups that existed before this option was added keep showing, so nothing disappears on upgrade.
 - **Global hotkey:** in the group editor, click the hotkey box and press a combo (e.g. `Ctrl+Alt+F`) to run the group from any app — no menu needed. Esc cancels, Del clears. Changes apply live (no restart). A **disabled** group releases its combo so another group can use it. Refused with a notice: **system-reserved** combos (Alt+F4, Alt+Tab, Ctrl+Shift+Esc…), a combo already bound to **another enabled group** or the **panic hotkey**, or one **already taken by another app** (use a different combo).
 - **The hotkey is a toggle — press it again to cancel.** Pressing the same hotkey while the group is still running cancels **that run**: the remaining steps and rounds are dropped and a tray toast confirms it. The cancel is scoped to that one run — **the startup list and other groups keep going** (use the panic hotkey to stop everything). What that means in practice:
   - Most groups finish in a few hundred milliseconds, so a second press then simply **runs it again** — cancelling only matters for groups that are still running (ones with delays or repeat rounds).
@@ -168,16 +194,144 @@ The group editor has two run buttons that act on **whatever is currently in the 
 
 While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; closing the group editor also stops the run. Confirmation dialogs (e.g. from a message step) pop up in front of the editor window instead of behind it.
 
+### Chaining steps into one action
+
+**Steps that produce a value have a "save answer as" field, and later steps refer to it as `{name}` in any text they send out.** That is the whole rule.
+
+Three kinds produce a value: **user input**, **user choice** and **get the selected text**. The places that can *read* one are the text you send somewhere: the address of *open URL*, the body of *send text*, and the text argument of a system command. Program paths and arguments are **not** substituted — that is an injection surface.
+
+So "translate whatever I selected" is two steps:
+
+1. **Get the selected text**
+2. **Open URL** `https://www.deepl.com/translator#auto/en/{clipboard}`
+
+And "ask me what to search, then search it" is also two:
+
+1. **User input**, question "Search for what?", saved as `query`
+2. **Open URL** `https://www.bing.com/search?q={query}`
+
+Bind that to a gesture or a panel tile and one flick gets you a box; one Enter gets you the results.
+
+A few things worth knowing:
+
+- **`{clipboard}` is the one built-in name.** It reads the real clipboard right now, so no step has to produce it first — whatever another app just copied counts.
+- **Names ignore case and surrounding spaces** (`{ query }` and `{query}` are the same one).
+- **A misspelled name stays visible**: an unknown name is left in the text as-is, so you can see at a glance which word didn't take. A name that exists but is *empty* becomes an empty string — that isn't a typo, it's a step that genuinely got nothing.
+- **The scope is one run.** A single trigger (including any actions it references) shares one set of variables, and they're gone when it finishes. No global variables, nothing saved to disk, nothing shared between actions.
+- **Everything is a string.** No types, no expressions.
+- **The startup list can't ask.** It runs unattended, so a question step there is skipped and logged — a box blocking your whole startup list at login is nobody's idea of a feature.
+
+### Triggering a group from outside
+
+Anything that can start a program can now run a group:
+
+```
+Clockwork.exe --run-group "Focus"
+Clockwork.exe --run-group=Focus
+```
+
+The name is matched case-insensitively with surrounding spaces trimmed, and a group **id** works too. Quote names containing spaces, as with any other command line.
+
+Point Task Scheduler, a desktop shortcut, a Stream Deck button or an AutoHotkey binding at it. If Clockwork is already in the tray the request is handed to that copy and the launched process exits immediately — it does **not** pop the settings window, which would be a strange side effect for a group meant to run silently at 3 a.m. If nothing is running yet, that process becomes the tray instance and runs the group itself, then stays resident like a normal launch.
+
+You get told when it doesn't work: an unknown name or a switched-off group raises a card naming it, rather than failing silently and leaving you to debug a command line that was fine all along. The forwarding process also exits with a non-zero code if it could not deliver the request, so a script can check.
+
+## Quick panel
+
+A tile grid at your mouse, one press away — for when the tray icon is a long way from where your hand already is.
+
+- **Press the panel hotkey** (default `Ctrl+Alt+Space`, set on the **Settings** tab — in that box, Esc cancels and **Del clears it**, leaving the middle-button hold and the tray entry as the ways in) and the panel appears at the pointer. Press it again, press **Esc**, or click anywhere else to dismiss it.
+- **A page is a thing you make, not a side job of some action.** Hit the **+** at the end of the left rail in the **panel manager** and a card drops in with its name ready to type, **in whichever category you were looking at**; the **+** at the end of the top row makes a category instead — just the category, no page with it, so its rail starts empty and you add the first page yourself. click an empty slot to put something on it. A page's name, category and app binding are all edited in place on its header — there is no separate settings window.
+  - **Pages and actions are two different things.** An action is a run of operations plus how it fires (hotkey, tray, referenced elsewhere); a page is a screenful of tiles plus when it shows (category, app). They share no properties, so they no longer share a stored object — configs from older versions are moved across on first launch, and you get a card listing what changed.
+  - **Every step kind works as a tile** — launch program, open URL, send keys, mouse, send text, volume, window action, system command, run action, delay, message, and the rest. A tile runs that one operation the same way the **Run** button next to a step does.
+  - **Want a tile that runs a whole action?** Add a **Run action** step pointing at it — that is what the step kind is for. So a whole routine ("Focus", "Wrap up") and a single operation (lock screen, mute) sit side by side on the same page. A tile with no icon of its own borrows the icon of the action it points at.
+  - Page order is set by dragging tabs; tile order by dragging tiles.
+- **Switched-off tiles are greyed, not missing** — so "it's disabled" and "it's gone" stay distinguishable.
+- **Then the handful you reach for anyway**, below a divider so they never get confused with your own actions: rerun the startup list, stop running actions, pause/resume reminders, open the window.
+- **Mouse or keyboard.** Click a tile, or arrow to it and press Enter — focus starts on the first tile, so you never have to touch the mouse to use it.
+- **It closes before it runs.** Actions that bring a window to the front or send keystrokes need the foreground back first; leaving a topmost panel in the way would mean keys landing on the panel and the window you just raised being covered by it.
+- **Or hold the middle mouse button.** Tick it on the **Settings** tab and a press of ~350 ms (adjustable) opens the panel — no keyboard at all, and the panel appears exactly where your hand already is.
+  - **A normal middle click keeps working.** At the moment the button goes down there is no way to know yet whether it will be a click or a hold, so the press is held back and, if you let go early, a real middle click is sent in its place. Opening a link in a new tab, pasting, autoscroll — all unchanged.
+  - **Middle-drag still works too**: move while holding and it's treated as a drag, the held-back press is handed straight to the app underneath, and the panel stays away.
+  - **The panel opens when you release**, not the instant the threshold passes. You can't click tiles while holding a button down, so opening on release means the panel is up and your pointer is already next to it.
+  - **Off by default**, because it installs a global mouse hook — a thing worth switching on knowingly rather than inheriting from an update. If Windows refuses to install the hook (security software, group policy), you get a card saying so instead of a feature that silently isn't there.
+  - Raise the hold time if ordinary clicks start opening the panel; lower it if holding feels sluggish. It clamps to 150–2000 ms — below that, a slightly slow click would register as a hold and middle-clicking would get unreliable.
+- **The tray menu has an entry too**, so clearing the hotkey turns off the shortcut, not the feature.
+- **To turn off the feature itself**, untick **Use the quick panel** on the **Settings** tab. Hotkey, middle-button hold and
+  the tray entry all go with it, and — the point of the switch — no mouse hook is installed at all.
+- **The panel opens centred on the pointer** — every tile is the same short distance away, rather than the far corner being three times further than the near one. Near a screen edge it slides back just enough to stay fully on the monitor your pointer is on, mixed-DPI multi-monitor setups included.
+- **Tiles are an icon over a label.** The icon says what kind of thing it is at a glance — launch, keys, volume, window, system command — which a label that narrow cannot. Icons come from the font Windows already ships, so they cost nothing in download size and stay sharp at any scaling.
+
+### Pages
+
+Pages follow content, not a tile count: **each one is a page you made and named yourself.** So you flip between "Handy" and "Dev", not "2 of 4". Only when a page overflows is it continued onto a second screen under the same name — that is a capacity problem, not a content one.
+
+**Two rows — the top one picks a category, the left one lists that category's pages.** A category is a name you give
+a batch of pages (*Coding*, *Winding down*). Pages have none by default, so everything sits under *Uncategorised*,
+which is what most people will see forever. A page lives in exactly one place — the left row — so there is never a
+question of which row a page is on.
+
+- **With one category the top row is not drawn**, and with one page in the current category neither is the left one
+  (a tab would just repeat the name). The panel manager's appearance strip has a tick for each, to force one out of
+  sight when you do have several.
+- **The dots in the waist answer a different question.** A page that does not fit is split into screens, and the dots
+  say which screen you are on. Tabs answer *which page*, dots answer *which screen* — only when both rows are off do
+  the dots fall back to meaning pages, so that turning the tabs off does not take page-flipping with it.
+- **Both rows hide while you search**: results come from every page, so a highlighted tab would claim you are
+  searching inside one.
+- The panel manager shows the same two rows (same styles). **Putting a page in a category** has three routes, take
+  whichever is nearest: drag its tab **onto a category tab**, or click the button in its heading that names its
+  current category. The **+** at the end of the top row makes a new category **with a page already in it** (an empty
+  category opens onto nothing), puts it last in the row, and lets you name it on the spot. **Double-click a category
+  tab** to rename it; that rewrites the category name on every page in it, because a category is not a record of its
+  own, it emerges from the pages. The manager always keeps its category row, even with only *Uncategorised* on it,
+  because that + is the only way to make a category.
+- **Both rows sort freely**: drag a page tab to reorder pages, drag a category tab to reorder categories (the whole
+  category travels, and the order inside it is kept). Categorising a page also slides it to the end of that category's
+  run — without that the two categories' pages interleave, and since category order is *whose first page comes first*,
+  a later drag inside one category could reorder the categories: you drag a page and a category moves.
+- **Right-click a tab** (or the page heading): rename, or **remove from the panel**. Removing only takes the page off
+  the panel — the action stays on the *Actions* page, where hotkeys and schedules still reach it. Deleting
+  it for real still happens only there, and shows you the reference count first.
+
+**A group can also belong to one app.** In the panel manager every page heading says which app it is bound to — a faint *Any app* by default; click it to change or to unbind. (It is the same field as **Only on this app** in the group editor.) Give it a process name and the group appears on the panel *only while that app is the one you were using when you opened it*.
+
+**This is a separate thing from the category.** A category is a name you group pages under; the app binding is *when the page should appear* — a page can sit in *Coding* and be bound to Code at the same time. Nor is the binding a layer of filtering inside the manager: every page is always on the rows, bound ones included, because you have to see a page to change what it is bound to. The filtering happens only when the panel is actually opened.
+
+This is what makes the panel worth opening in the first place: pop it over your editor and you get your dev actions; pop it over the file manager and you get file actions. The matching page sorts to the front and the panel opens on it, so the right actions are already under the cursor — no page turning. With no match for the current app, the panel opens on the general page exactly as it would without the feature.
+
+- **The app is read the instant you summon the panel**, before it appears — the panel takes the foreground itself, so a moment later the answer would always be "Clockwork".
+- **Don't confuse this with a step's process condition.** *Only on this app* asks "which app are you using right now" and decides whether the group is **shown**; a step's *process condition* asks "is that program running at all" and decides whether the step **executes**. The second can be true in the background while you work in something else.
+- Scene tiles also sort ahead of global ones on the general page.
+- If the foreground app can't be read (a restricted process, no foreground window), scene groups stay hidden rather than appearing in the wrong place.
+
+- **Turn pages** with the mouse wheel, **PageUp / PageDown**, or by clicking a segment of the index. Arrow keys are left alone for moving between tiles — if they did both, reaching the end of a row would have two meanings.
+- **The index across the top is a graduated scale, one segment per page**, with the current one in brass. It replaces a numeric page counter: a scale that shows position already answers "which page, out of how many". The page name sits next to it.
+- Pages wrap, so rolling the wheel past the last one comes back to the first.
+- A page with more tiles than fit **scrolls inside the page** — that's a capacity problem, not a reason to invent a second page.
+- With only one page the index and the page name disappear entirely; there is nothing to navigate.
+
+### Making it look how you want
+
+On the **Settings** tab, under **Quick panel**:
+
+- **Layout — read it as `columns × top rows + bottom rows`** (4 × 3 + 4 by default). The well is split into two bands with a hairline between them. They mean nothing different from each other; the split is rhythm. A single 7-row slab of squares reads as a wall, while 3 + 4 gives the eye a place to land, the same reason a keyboard has rows. Set bottom rows to **0** for one band.
+  - Columns × total rows is also **the page capacity** — 28 tiles by default. Anything past that continues onto the next page under the same name.
+  - The bands are limits, not reserved space: with five actions the bottom band isn't drawn at all, so a small panel stays small.
+- **Tile size** (compact / normal / roomy) — compact at 8 across gives you a dense keypad; roomy at 3 gives you big targets for a touchscreen.
+- **Icons only** — drops the labels and shrinks the tiles to near-square, so far more actions fit on one screen. The names stay in the tooltip, so this hides them until you need them rather than throwing them away.
+- **Show built-in controls** — the rerun / stop / do-not-disturb / open-window row along the bottom. Turn it off if you reach those from the tray and would rather have the space.
+
 ## Loops
 
 - **Repeat a whole group**: set "Repeat whole group / delay between rounds" in the group editor.
-- **Loop a subset of steps**: extract those steps into their own action group, then reference it with a "group" step and set its repeat count.
+- **Loop a subset of steps**: extract those steps into their own action, then reference it with a "group" step and set its repeat count.
 - Three repeat knobs multiply: per-step repeat × reference-step repeat × whole-group rounds.
 - Groups can nest group references; saving validates cycles among action-group **step** references (A→B→A is rejected with the chain shown). A cycle formed through a message step's "on Yes → run group" target is not checked at save time, but is caught at run time by re-entry protection (skipped with a warning, never spinning).
 - **Answering "No" to a message step stops everything**: the rest of that group **and its remaining rounds**, and if the group was reached through a reference from another group, that caller's remaining iterations too. So when you loop a subsequence the recommended way (sub-group referenced ×N), declining once is enough — the same dialog will not chase you N times.
 - A referenced group that is **missing** (deleted, or no group picked when the step was created), **disabled**, or **already running** (including a cycle) is never silently skipped: missing and re-entrant are reported as warnings, disabled as a plain notice (you turned it off yourself — that is not a fault). Re-entry also stops that reference's remaining iterations, so one notice never repeats N times.
 - **A step inside a group that ran but didn't take now speaks up too.** A missing script file, an uninstalled program, a window that couldn't be found — these raise a tray notice and a line in `clockwork.error.log`, and the group carries on. This path used to be completely silent: the same step in the startup list showed a "⚠", while hotkeys and silent scheduled groups — the unattended path — said nothing at all. Repeated failures of the same step merge into one notice with a count instead of stacking up.
-- Safety fuse: a single run executes at most **5000 steps** — every execution of a normal step counts as one, and so does every "action group" reference iteration (otherwise a chain of nothing but references, with empty leaf groups, would slip past the fuse). Past that it stops and says so in the run log. The stop hotkey works at any time.
+- Safety fuse: a single run executes at most **5000 steps** — every execution of a normal step counts as one, and so does every "action" reference iteration (otherwise a chain of nothing but references, with empty leaf groups, would slip past the fuse). Past that it stops and says so in the run log. The stop hotkey works at any time.
 
 ## System startup items
 
@@ -219,28 +373,131 @@ While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; clo
   - **Searching turns folding off**: folding exists to keep the default browse view quiet, and typing a query says exactly what you want — otherwise typing a port number that was folded away (and really is listening) would return nothing.
   - It does **not** bypass the view: it narrows whatever the current tier left. Tick "Show all ports" to reach system services; search will not pull them back.
 
+## Mouse gestures
+
+Hold the **right button**, draw a stroke, release, and the matching action runs. Open the manager from the **polyline icon at the right end of the main window's tab strip**, or from the quick panel's title row.
+
+- **A gesture is one action plus one stroke.** The action is an ordinary step, any of the ten kinds; to run a whole action, point a **Run action** step at it. So actions that only ever exist as a gesture — paste, lock screen — need no group of their own. The most common ones — copy, paste, search the selected text, back and forward, play-pause and track skip, volume up and down, minimize / maximize / toggle-on-top / close the current window — are already there under **Add ▾ → Common**: pick one, draw a stroke, done.
+- **You can see what you are drawing — and the line brightens the moment it is recognised.** The moment the stroke starts, a line follows the pointer on screen and vanishes when you release. **As soon as what you have drawn matches a gesture, that line turns bright and thickens**, so you know it has locked on before you let go. It goes dark again as the stroke grows past the match and lights up again when it matches something else: draw ↑ and Copy lights up, continue into ↑↓ and it goes dark, and it returns as Search. Colour and weight only — no flash, no popup, no text: the line is already where your eyes are. The line is **click-through and never takes focus**: whatever sits under the pointer keeps receiving your input, so *Minimize current window* and friends still mean the window you were actually using, not the line.
+- **Eight directions**: ← ↑ → ↓ and the four diagonals ↖ ↗ ↙ ↘. A stroke is stored as a direction string (`L U R D` for the axes, numpad-shaped `7 9 1 3` for the diagonals) and shown as arrows.
+- **Drawing roughly is fine.** The eight sectors are not equal: 56° each for the axes, 34° each for the diagonals. Axes are the default intent and diagonals are deliberate, so the tolerance goes to the axes — a horizontal off by 28° still reads as "→", while a deliberate 45° diagonal still has 17° of margin either side. A line drawn right on a boundary still won't flip back and forth: the alternating short legs it produces get absorbed into the longest one (see the next point).
+- **Two legs give two directions.** Direction is measured per *leg*, not over a sliding window: the segment at a corner spans both legs and is itself diagonal, so using it would invent an extra direction. Instead the stroke is sampled finely, split into legs, legs shorter than the minimum are absorbed into their longer neighbour, and each surviving leg is re-measured end to end.
+- **Ten samples ship with a fresh install, ready to use.** Gestures differ from the sample startup list and the
+  sample reminders, which arrive switched off: those open programs and interrupt you with popups, while a gesture
+  happens only when you deliberately draw one — before that it does nothing.
+
+  **The cost, stated up front:** one enabled gesture is enough to take over the right button. The press is held back
+  until you either let go or **hold still for 0.2 s**, so **right-drag needs a short pause first** — press, wait a
+  beat, then drag (dragging a file with the right button in Explorer, rotating in a 3D app, right-drag scrolling).
+  The pause is what tells the two apart: a gesture starts moving the instant you press it, so a press that doesn't
+  move isn't one, and the button goes back to the system. To leave the right button untouched altogether, flip the
+  master switch below; to drop a single gesture, untick it in the manager.
+
+  | Stroke | Action | | Stroke | Action |
+  |---|---|---|---|---|
+  | ↑ | Copy | | ↙ | Minimise the current window |
+  | ↓ | Paste | | ↗ | Maximise the current window |
+  | ← | Back | | ↖ | Toggle current window on top |
+  | → | Forward | | ↘ | Close the current window |
+  | ↑↓ | Search the selected text | | →↓ | Jump to the bottom |
+
+  The four axial strokes carry the four most-used actions, and they are also the easiest to draw (an axial sector is
+  56°, a diagonal only 34°). **The four diagonals are the window set**, and the direction is the meaning: pull down
+  to stow, push up to fill, pin to the top-left, sweep out to the bottom-right. On top is a toggle, so one gesture
+  both pins and releases.
+
+  Close sits on a diagonal deliberately: a diagonal sector is only 34° wide, so a sloppy stroke simply misses. For an
+  action that closes your window, **being hard to draw by accident is the property you want** — the 56° of latitude
+  an axial stroke gets belongs to the harmless actions.
+
+  **Both two-stroke gestures are axial, not diagonal.** "Search the selected text" used to be ∧ (↗↘). Measured, that
+  only reads as ↗↘ when both legs land between 40° and 60° *and* are drawn cleanly: draw a caret the way people
+  actually draw one, at 65–80°, and both legs fall into the ↑ and ↓ sectors — it reads ↑↓ every time, and a little
+  curvature adds one or two more directions at the apex. A diagonal sector is only 34° wide to begin with; across two
+  legs plus an apex, the usable window is almost nothing. ↑↓ is solid from 80° to 90° at any curvature — **recognise
+  the shape the hand is already drawing rather than forcing the hand to 45°**. This is what comparable tools do:
+  their default sets are all axial combinations (WGestures ships four directions, with eight as an option).
+
+  Two-stroke gestures have one built-in quirk: too short a second leg reads as the first stroke alone. A dropped
+  second leg on ↑↓ runs Copy, which is harmless — that's why it isn't ↓↑, where the same slip would run Paste and
+  change your content.
+
+  A single diagonal (the four window ones) is far more reliable than a diagonal pair, but still wants to be drawn
+  **at the corner of the screen**: drawn sloppily, the usable window is roughly 40°–50°, beyond which it lands on the
+  neighbouring axial direction.
+- **Master switch: Use mouse gestures** — on the **Settings** tab, and in the gesture manager's title row. Turn it off and the right button is not
+  watched at all — one switch instead of unticking every gesture and ticking them all back afterwards. Right-drag
+  works without it (just pause first), so reach for this when you want the button left strictly alone: a program that
+  does its own thing with a held right button, or another gesture tool doing the drawing. It takes effect
+  immediately, no restart.
+- **With no gestures the right button is untouched.** The global mouse hook is only installed while the master switch
+  is on *and* at least one enabled gesture exists.
+- **Draw it twice and it runs twice.** The Run buttons carry a double-fire guard (the toast takes a second to appear, so an impatient double-click would run the step twice); **gestures skip that guard** — a gesture takes a second of deliberate drawing, so drawing it twice is deliberate, and toggling on-top with ↖ (pin, then release) is exactly that. The guard is silent when it bites, which on a gesture would read as "I drew it twice and the second one vanished".
+- **A successful gesture is silent; only failures report.** Eight of the ten shipped gestures have a visible effect (text appears, the window minimises, the browser opens) — a card saying so would repeat something you just watched happen, dozens of times a day. But **failures must speak**: a failed gesture is otherwise completely silent (a window held open by an unsaved-changes dialog, a search with nothing actually selected), leaving only "I drew it and nothing happened". So the three outcomes stay distinguishable: **not bound** — the pill at the end of your stroke shows what you drew; **ran fine** — nothing, the action itself is the answer; **failed** — a card naming the step and why.
+  (The **▶ Run** buttons in the editors keep their receipt: there you are testing a step, usually with nothing visible on screen, and that card is the only result.)
+- **Drew something that matches nothing: nothing happens — but it tells you what you drew, where you drew it.** Replaying a right-click would pop a context menu at the end of your stroke, which is worse than no response; staying silent would fold "not bound", "drawn crookedly" and "the action failed" into one indistinguishable "nothing happened". So a small pill appears at the end of the stroke with what you actually drew (`↑↓`, say) and fades after 0.9s — **not a notification card**: a gesture is a flick, its feedback shouldn't outweigh it or land a screen's width away from your hand. **Release without drawing** and a real right-click is replayed — the context menu appears on button-up anyway, so you don't notice. **Hold still without drawing** and after 0.2 s the press itself is handed back, so the menu arrives while your finger is still down instead of waiting for you to let go.
+- **When it's bound to an action, drawing it again stops it** — the same as triggering a group by hotkey, so there's one rule to learn.
+- **You record it the way you use it.** The canvas in the manager runs the same quantiser as the live hook, so what you draw is what gets stored; the list thumbnails are the real strokes, because you recognise a gesture by its shape, not by reading its name.
+- Two gestures can't share a stroke (it's refused on the spot, naming the one that has it) — otherwise which one runs would depend on list order.
+
+> **Right-button drag-and-drop needs a short pause while gestures are listening** — press, hold still for about 0.2 s, then drag (a file in Explorer, the camera in a 3D app). Comparable tools work the same way, and it only applies once you have at least one gesture.
+
+### Prefer another gesture tool? Point it at Clockwork
+
+Clockwork's gestures aren't an all-or-nothing choice. **Actions can already be triggered from outside** (see
+[Triggering a group from outside](#triggering-a-group-from-outside)), so a dedicated gesture tool can own the
+*drawing* while the actions stay here:
+
+1. **Turn off the master switch** on the gesture manager's title row — the right button goes back to normal at once
+   and no hook is installed.
+2. Draw the gestures you want in WGestures / StrokesPlus.net / Quicker.
+3. Set that gesture's action to run:
+
+   ```
+   Clockwork.exe --run-group "Focus"
+   ```
+
+The request is handed to the resident tray instance, and the process you just started exits immediately — **no window
+appears**.
+
+Two things come with it: those tools have spent far longer than we have on stroke recognition, and **the right button
+is never touched at all** — no hook, so right-drag needs no pause and nothing can go wrong with a program that has its
+own ideas about a held right button. Most of them also offer per-application exclusion lists, whereas the trade-off
+here is "simple, with the cost stated up front".
+
+The other way round holds too: the built-in gestures are enough on their own — ten samples work out of the box, with
+no gesture tool to install first.
+
 ## Settings
 
-Two sections, ordered by when you'd reach for them.
+Three sections, ordered by when you'd reach for them.
 
 **Startup**
 
 - **Start at login** — the master switch of this section, so it comes first: ticking it registers a scheduled task with admin rights (so boot brings no UAC prompts), unticking removes it. If the change needs elevation, Clockwork relaunches itself to do it; if it fails, the box springs back rather than claiming a state that isn't real.
-- **Startup delay** (0–600 s) — waits this long after logon before running the list, so it misses the logon storm. **Only applies when Start at login is on**; a manual *Re-run startup list* is unaffected.
+- **Startup delay** (0–600 s) — waits this long after login before running the list, so it misses the login storm. **Only applies when Start at login is on**; a manual *Re-run startup list* is unaffected.
 - **Wait until the system is ready** (desktop / network) — goes as soon as both are ready, waits at most 90 s, then the fixed delay above is added on top. Better than simply raising the delay when the list runs too early for your apps.
 - **Start minimized to tray** (opening manually goes straight to the tray).
 
-**General**
+**General** — app-wide things; the first two are both "how you summon it globally".
 
 - **Panic hotkey** — click the box and press your shortcut; Esc cancels, Del clears; default `Ctrl+Alt+Q`.
+- **Mouse gestures** — the way in is the **polyline icon at the right end of the main window's tab strip** (*Manage gestures…*), not a row on this page; the quick panel's title row has one too. With no enabled gesture the right button behaves exactly as usual.
 - **UI language** — Simplified Chinese, English, 日本語 and 15 more (18 total); switching restarts the app to apply.
+- **Theme** — Dark / Light / Follow system; switching restarts the app to apply. "Follow system" reads the **app** mode in Windows settings (not the system mode), matching File Explorer.
 - **Export settings** — saves a copy of `clockwork.settings.json` wherever you choose (default name `clockwork.settings.backup.json`). Use it to back up before a big change, or to move your setup to another PC.
-- **Import settings** — replaces **all** current config (startup list / scheduled tasks / action groups / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Task state (`clockwork.state.json`) is not touched.
+- **Import settings** — replaces **all** current config (startup list / scheduled tasks / actions / gestures / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Task state (`clockwork.state.json`) is not touched.
 - **A config file that can't be read is never overwritten.** Hand-edit the json and miss a comma, or lose power mid-save, and the app starts on defaults, tells you so, and saves your file aside as `clockwork.settings.json.bad`. The original is not clobbered by the defaults — fix it and restart to recover. Even if you miss the notice, rebuild everything by hand and save, that `.bad` copy is still there.
+
+**Quick panel** — six settings, all of which affect only that one overlay; ordered "how you summon it, then how it looks". Two for summoning, four for appearance; details under **Quick panel** above.
+
+- **Quick panel hotkey** — same box behaviour as the panic hotkey; default `Ctrl+Alt+Space`. Clearing it leaves the tray menu entry, so the panel is still reachable. If the combo is already taken by another program, registration fails with a card naming it — pick another; the panic hotkey is registered first and wins any clash.
+- **Hold the middle mouse button to open the panel** — off by default, with the hold time next to it (350 ms, clamps to 150–2000). Details and the passthrough rules are under **Quick panel** above.
+- **Layout / tile size / icons only / show built-in controls** — see **Tune it to taste** above.
 
 ## Tips
 
-- Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Re-run startup list** for that.
+- Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Rerun startup list** for that.
 - **The side buttons follow the selection** — with no row selected, **Edit / Delete / Up / Down / Run** are greyed out, since they only ever act on the selected row. **Add** always works. The right-click menu's **Duplicate** (plus **Skip today** on the Scheduled tasks page) behaves the same way: with nothing selected, or when you right-click the header or empty space, the menu simply does not open — a menu that acts somewhere else is worse than no menu.
 - **Nothing is cut off silently** — in all four lists, a cell too wide for its column ends in "…"; hover it to read the whole thing.
 - **Deleting always asks for confirmation** — list rows, steps inside the group editor, and system startup items alike. The dialog names what you're about to delete, so you can catch a wrong selection before it's gone.
@@ -248,4 +505,4 @@ Two sections, ordered by when you'd reach for them.
 - **Where those files live:** on first run, next to `Clockwork.exe` when that folder is writable (the normal portable case); if it isn't — e.g. the exe sits under `C:\Program Files` — both files go to `%APPDATA%\Clockwork\`. **After that the app follows wherever the config already is, rather than re-testing writability each launch** — otherwise a double-click (not elevated) and autostart (elevated) would pick different copies on the same machine, showing up as "my settings vanished after reopening as administrator" or "autostart runs a list I never configured". Export always copies whichever one is actually in use, so you never have to hunt for it.
 - When filling paths / processes / dates you don't have to type by hand: **the … button at the end of a row** opens the matching picker (file, searchable process list, date), and **Capture** records a shortcut by pressing it. The process picker and the system-startup list both have a search/filter box.
 - **Launch it normally** (double-click / tray / scheduled task). Some sandbox / reduced-privilege launchers (e.g. Lucy) block low-level calls, so send-keys / mouse / window actions / activate-if-running / send-text-to-process / volume may not work (you'll get a clear notice; plain "launch program" is unaffected).
-- Global hotkeys can **run action groups** (set per group, above). Arbitrary key remapping / text expansion is still out of scope — that's AutoHotkey's strength (an `.ahk` step needs AutoHotkey installed).
+- Global hotkeys can **run actions** (set per group, above). Arbitrary key remapping / text expansion is still out of scope — that's AutoHotkey's strength (an `.ahk` step needs AutoHotkey installed).
