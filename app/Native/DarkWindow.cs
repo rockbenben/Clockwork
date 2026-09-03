@@ -2,6 +2,8 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
+// UseWindowsForms 把 WinForms 也加进了隐式全局 using，Application 两边都有。
+using Application = System.Windows.Application;
 
 namespace Clockwork.Native;
 
@@ -30,6 +32,27 @@ public static class DarkWindow
     private const int DWMWA_USE_IMMERSIVE_DARK_MODE_PRE20H1 = 19;    // 20H1 之前同一开关的旧编号——那些系统上 20 会被拒绝（返回错误码，不抛），不兜就是深色应用配白标题栏
     private const int DWMWA_CLOAK = 13;
 
+    /// <summary>当前是不是深色主题。App 在启动与切换主题时写这里；
+    /// 窗口标题栏由系统画，跟不上我们的调色板，只能显式告诉 DWM 该画哪一种。</summary>
+    public static bool Dark { get; set; } = true;
+
+    private static void SetTitleBar(nint hwnd, bool dark)
+    {
+        int on = dark ? 1 : 0;
+        if (Set(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, on) != 0)
+            Set(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE_PRE20H1, on);
+    }
+
+    /// <summary>切换主题后，把已经开着的窗口的标题栏也改过来——不然浅色界面顶着一条黑标题栏。</summary>
+    public static void RefreshTitleBars()
+    {
+        foreach (Window w in Application.Current.Windows)
+        {
+            var h = new WindowInteropHelper(w).Handle;
+            if (h != 0) SetTitleBar(h, Dark);
+        }
+    }
+
     public static void Apply(Window window)
     {
         nint Handle() => new WindowInteropHelper(window).Handle;
@@ -39,8 +62,7 @@ public static class DarkWindow
         {
             var hwnd = Handle();
             if (hwnd == 0) return;
-            if (Set(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, 1) != 0)
-                Set(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE_PRE20H1, 1);
+            SetTitleBar(hwnd, Dark);
             Set(hwnd, DWMWA_CLOAK, 1);
         };
 

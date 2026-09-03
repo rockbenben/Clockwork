@@ -4,44 +4,41 @@
                     xmlns:loc="clr-namespace:Clockwork.I18n">
 
     <!-- ============ Clockwork · Blued steel & brass ============ -->
-    <!-- 蓝钢暗色 + 黄铜强调。取自「擒纵机构」定位：安静的仪器，只在关键处发亮。 -->
+    <!-- 蓝钢暗色 + 强调色强调。取自「擒纵机构」定位：安静的仪器，只在关键处发亮。 -->
 
-    <!-- palette -->
-    <Color x:Key="Ink">#12161D</Color>
-    <Color x:Key="Slate">#1A212B</Color>
-    <Color x:Key="Steel">#232C38</Color>
-    <Color x:Key="Line">#2E3947</Color>
-    <Color x:Key="Paper">#ECE6D8</Color>
-    <Color x:Key="Muted">#8B95A3</Color>
-    <Color x:Key="Faint">#5B6472</Color>
-    <Color x:Key="Brass">#E0A23C</Color>
-    <Color x:Key="BrassDeep">#B87A2A</Color>
-    <Color x:Key="Filament">#F5A65A</Color>
-    <Color x:Key="Clay">#C15A46</Color>
+    <!-- 颜色不在这儿：它们在 Palette.Dark.xaml / Palette.Light.xaml，由 App 在启动时选一份合进来。
+         下面这些画笔用 DynamicResource 指过去，于是**换掉那份字典就是换主题**——
+         用 StaticResource 的话，样式在解析时就把画笔实例连同颜色一起定死了，之后再换字典也不会变。 -->
+    <SolidColorBrush x:Key="BrushInk"       Color="{DynamicResource Ink}"/>
+    <SolidColorBrush x:Key="BrushSlate"     Color="{DynamicResource Slate}"/>
+    <SolidColorBrush x:Key="BrushSteel"     Color="{DynamicResource Steel}"/>
+    <SolidColorBrush x:Key="BrushLine"      Color="{DynamicResource Line}"/>
+    <SolidColorBrush x:Key="BrushPaper"     Color="{DynamicResource Paper}"/>
+    <SolidColorBrush x:Key="BrushMuted"     Color="{DynamicResource Muted}"/>
+    <SolidColorBrush x:Key="BrushFaint"     Color="{DynamicResource Faint}"/>
+    <SolidColorBrush x:Key="BrushAccent"     Color="{DynamicResource Accent}"/>
+    <SolidColorBrush x:Key="BrushAccentDeep" Color="{DynamicResource AccentDeep}"/>
+    <!-- 强调色有两种用法，画笔就得有两把：BrushAccent 当填充（上面压深色字），
+         BrushAccentText 当文字。深色下两者同色，浅色下后者压深，否则奶白纸上的强调色字读不出来
+         （实测 #C88418 在 #F3EEE1 上只有 3.3:1，远不够）。 -->
+    <SolidColorBrush x:Key="BrushAccentText"  Color="{DynamicResource AccentText}"/>
+    <SolidColorBrush x:Key="BrushAccentHover" Color="{DynamicResource AccentHover}"/>
+    <SolidColorBrush x:Key="BrushDanger"      Color="{DynamicResource Danger}"/>
+    <!-- 只给擒纵轨用（TickAccent）。它是界面上唯一不用强调色的有色元素，理由见 Palette.Dark.xaml。 -->
+    <SolidColorBrush x:Key="BrushBrass"       Color="{DynamicResource Brass}"/>
+    <SolidColorBrush x:Key="BrushAccentTint" Color="{DynamicResource Accent}" Opacity="0.12"/>
+    <SolidColorBrush x:Key="BrushDangerTint"  Color="{DynamicResource Danger}"  Opacity="0.18"/>
 
-    <SolidColorBrush x:Key="BrushInk"       Color="{StaticResource Ink}"/>
-    <SolidColorBrush x:Key="BrushSlate"     Color="{StaticResource Slate}"/>
-    <SolidColorBrush x:Key="BrushSteel"     Color="{StaticResource Steel}"/>
-    <SolidColorBrush x:Key="BrushLine"      Color="{StaticResource Line}"/>
-    <SolidColorBrush x:Key="BrushPaper"     Color="{StaticResource Paper}"/>
-    <SolidColorBrush x:Key="BrushMuted"     Color="{StaticResource Muted}"/>
-    <SolidColorBrush x:Key="BrushFaint"     Color="{StaticResource Faint}"/>
-    <SolidColorBrush x:Key="BrushBrass"     Color="{StaticResource Brass}"/>
-    <SolidColorBrush x:Key="BrushBrassDeep" Color="{StaticResource BrassDeep}"/>
-    <SolidColorBrush x:Key="BrushFilament"  Color="{StaticResource Filament}"/>
-    <SolidColorBrush x:Key="BrushClay"      Color="{StaticResource Clay}"/>
-    <SolidColorBrush x:Key="BrushBrassTint" Color="{StaticResource Brass}" Opacity="0.12"/>
-    <SolidColorBrush x:Key="BrushClayTint"  Color="{StaticResource Clay}"  Opacity="0.18"/>
-
-    <LinearGradientBrush x:Key="BrassGrad" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="{StaticResource Brass}" Offset="0"/>
-        <GradientStop Color="{StaticResource BrassDeep}" Offset="1"/>
+    <LinearGradientBrush x:Key="AccentGrad" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{DynamicResource Accent}" Offset="0"/>
+        <GradientStop Color="{DynamicResource AccentDeep}" Offset="1"/>
     </LinearGradientBrush>
 
     <!-- ============ 擒纵刻度（竖向） ============ -->
-    <!-- 一格 = 6px 齿 + 4px 齿隙，与下方 TabItem 选中下划线同一节拍——横着是「当前在这一页」，
-         竖着是「这张界面还剩多少时间」。提醒卡片/弹窗左缘的轨用它；不涉及时间的对话框用实心细轨。
-         见 Views/EscapementRail.cs。 -->
+    <!-- 一格 = 6px 齿 + 4px 齿隙。**这里的分段是信息**：一格就是一个时间单位，能数出还剩几格。
+         提醒卡片 / 弹窗左缘的轨用它；不涉及时间的对话框用实心细轨。
+         标签页选中下划线与面板翻页指示曾经也用这个节拍，后来都改成了实心——
+         那两处的分段什么都不表示，读起来只像渲染瑕疵。见 Views/EscapementRail.cs。 -->
     <DrawingBrush x:Key="TickSteel" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
         <DrawingBrush.Drawing>
             <GeometryDrawing Brush="{StaticResource BrushSteel}">
@@ -49,16 +46,17 @@
             </GeometryDrawing>
         </DrawingBrush.Drawing>
     </DrawingBrush>
-    <DrawingBrush x:Key="TickBrass" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
+    <!-- 点亮的格子用黄铜而不是强调色：与应用图标同一种材质，而这条轨就是图标那个隐喻本身。 -->
+    <DrawingBrush x:Key="TickAccent" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
         <DrawingBrush.Drawing>
             <GeometryDrawing Brush="{StaticResource BrushBrass}">
                 <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,3,6"/></GeometryDrawing.Geometry>
             </GeometryDrawing>
         </DrawingBrush.Drawing>
     </DrawingBrush>
-    <DrawingBrush x:Key="TickClay" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
+    <DrawingBrush x:Key="TickDanger" TileMode="Tile" Viewport="0,0,3,10" ViewportUnits="Absolute" Stretch="None">
         <DrawingBrush.Drawing>
-            <GeometryDrawing Brush="{StaticResource BrushClay}">
+            <GeometryDrawing Brush="{StaticResource BrushDanger}">
                 <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,3,6"/></GeometryDrawing.Geometry>
             </GeometryDrawing>
         </DrawingBrush.Drawing>
@@ -172,7 +170,7 @@
                                             <TextBlock Grid.Column="0" Text="{Binding Header, RelativeSource={RelativeSource AncestorType=Expander}}"
                                                        TextWrapping="Wrap" FontSize="12.5" Foreground="{StaticResource BrushMuted}"/>
                                             <TextBlock x:Name="Chevron" Grid.Column="1" Text="▸" FontSize="11" Margin="8,1,2,0"
-                                                       VerticalAlignment="Top" Foreground="{StaticResource BrushBrass}"/>
+                                                       VerticalAlignment="Top" Foreground="{StaticResource BrushAccentText}"/>
                                         </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
@@ -180,7 +178,7 @@
                                             <Setter TargetName="Chevron" Property="Text" Value="▾"/>
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Chevron" Property="Foreground" Value="{StaticResource BrushBrassDeep}"/>
+                                            <Setter TargetName="Chevron" Property="Foreground" Value="{StaticResource BrushAccentDeep}"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -245,14 +243,14 @@
                                 BorderThickness="1" CornerRadius="8" SnapsToDevicePixels="True">
                             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                         </Border>
-                        <!-- 键盘焦点环：内嵌 2px 黄铜环，不改变布局(不像加边框那样把内容挤动 1px)。
+                        <!-- 键盘焦点环：内嵌 2px 强调色环，不改变布局(不像加边框那样把内容挤动 1px)。
                              暗色自绘模板下系统默认的虚线焦点框几乎不可见——没有它，"焦点默认落在稍后"就等于没落。 -->
-                        <Border x:Name="ring" CornerRadius="8" BorderBrush="{StaticResource BrushBrass}" BorderThickness="2"
+                        <Border x:Name="ring" CornerRadius="8" BorderBrush="{StaticResource BrushAccent}" BorderThickness="2"
                                 Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccentDeep}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSlate}"/>
@@ -270,8 +268,8 @@
     </Style>
 
     <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Foreground" Value="#231708"/>
-        <Setter Property="Background" Value="{StaticResource BrassGrad}"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="Background" Value="{StaticResource AccentGrad}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -280,13 +278,13 @@
                         <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
                             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                         </Border>
-                        <!-- 主按钮本身就是黄铜，焦点环改用刻字深棕(同其文字色)，读作铜面上的一道刻痕。 -->
-                        <Border x:Name="ring" CornerRadius="8" BorderBrush="#231708" BorderThickness="2"
+                        <!-- 主按钮本身就是实心强调色，焦点环走白色（与按钮上的文字同色），在蓝底上读得最清。 -->
+                        <Border x:Name="ring" CornerRadius="8" BorderBrush="#FFFFFF" BorderThickness="2"
                                 Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushFilament}"/></Trigger>
-                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrassDeep}"/></Trigger>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentHover}"/></Trigger>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentDeep}"/></Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="ring" Property="Visibility" Value="Visible"/></Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Opacity" Value="0.45"/></Trigger>
                     </ControlTemplate.Triggers>
@@ -297,7 +295,7 @@
 
     <!-- 破坏性按钮：只把文字换成 clay，保留和同列其它按钮一样的钢底＋描边。
          原来还抽掉了底色和描边——在一竖排包着框的按钮里，「删除」变成一条悬空的文字，
-         把列的节奏戳了个洞。降调一次就够（不给黄铜），不必降两次。 -->
+         把列的节奏戳了个洞。降调一次就够（不给强调色），不必降两次。 -->
     <!-- 打开选择器的那类按钮（浏览… / 选择… / 选日期）只画一个「…」，不带文字。
          带文字的版本在别的语言里会把整行撑破：中文「浏览…」三个字，德语是 Durchsuchen…、俄语 Обзор…。
          而这些按钮都排在一行的最右端，那一行又是水平 StackPanel——它给子元素的可用宽度是无限，
@@ -313,13 +311,13 @@
         <Setter Property="Padding" Value="0"/>
     </Style>
     <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Foreground" Value="{StaticResource BrushClay}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushDanger}"/>
     </Style>
 
     <Style x:Key="RunButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Foreground" Value="{StaticResource BrushBrass}"/>
-        <Setter Property="Background" Value="{StaticResource BrushBrassTint}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushAccentText}"/>
+        <Setter Property="Background" Value="{StaticResource BrushAccentTint}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushAccentDeep}"/>
     </Style>
 
     <!-- 纯图形的方形小按钮（急停）：内容是图形不是字符串，所以要把默认 Button 的 ContentTemplate 拆掉——
@@ -327,18 +325,78 @@
          悬停改 Background 而不是像默认按钮那样只描边：这是个危险动作，手放上去要看得出来。
          默认模板里 bd 的 Background 就是 {TemplateBinding Background}，故样式触发器能直接接管；
          按下态由模板自身的 TargetName 触发器接手(Slate)，两者不冲突。 -->
+    <!-- 动作格：图标在上、文字在下，扁平无边框。尺寸由代码按「紧凑/标准/宽松」档位设置，
+         所以这里不写 Width/Height——写了会覆盖掉用户选的档位。
+         刻意不继承全局 Button 样式：那一套是给「确定 / 取消」这类实心按钮做的（钢底 + 边框），
+         一屏铺十几个下来全是框，视觉噪音盖过内容本身。这里反过来——常态完全透明，
+         只有指到的那一格亮起来，眼睛跟着指针走。 -->
+    <Style x:Key="Tile" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="Button">
+            <Grid>
+                <Border x:Name="bd" Background="Transparent" CornerRadius="7" SnapsToDevicePixels="True"/>
+                <!-- 焦点环独立一层：加边框会把内容挤动 1px，而暗色自绘模板下
+                 系统默认的虚线焦点框几乎看不见——没有它，「焦点默认落在第一格」等于没落。 -->
+                <Border x:Name="ring" CornerRadius="7" BorderBrush="{StaticResource BrushAccent}" BorderThickness="1.5"
+                    Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
+                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="ring" Property="Visibility" Value="Visible"/>
+                </Trigger>
+                <!-- 停用：整格压暗而不是隐藏（「它被关掉了」和「它没了」得分得清），
+                 同时收掉手型光标——一个点不动的格子不该看着像能点。 -->
+                <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.35"/>
+                <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 标签条右端那两颗管理器按钮。与 IconDangerButton 同尺寸同形状，只是不带危险语义：
+         它们是入口，不是动作，所以描边用普通的 Line、悬停才提亮。
+         纯图标按钮必须有 ToolTip 与 AutomationProperties.Name（调用方给），图形本身不可读。 -->
+    <Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
+        <Setter Property="ContentTemplate" Value="{x:Null}"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="Margin" Value="0,0,6,0"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="IconDangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Foreground" Value="{StaticResource BrushClay}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushDanger}"/>
         <!-- clay 描边不是装饰：没有轮廓时，深色底上一块实心暖色只会被读成状态指示灯而不是可点的控件
              （真机比对过实心方块/实心八边形/空心八边形等七版，差别就在这道边上）。 -->
-        <Setter Property="BorderBrush" Value="{StaticResource BrushClay}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushDanger}"/>
         <Setter Property="ContentTemplate" Value="{x:Null}"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="Width" Value="32"/>
         <Setter Property="Height" Value="28"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource BrushClayTint}"/>
+                <Setter Property="Background" Value="{StaticResource BrushDangerTint}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -358,7 +416,7 @@
     <!-- ============ TextBox ============ -->
     <Style TargetType="TextBox">
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
-        <Setter Property="CaretBrush" Value="{StaticResource BrushBrass}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource BrushAccent}"/>
         <Setter Property="Background" Value="{StaticResource BrushInk}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
@@ -376,7 +434,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -413,19 +471,20 @@
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                         <Border x:Name="box" Grid.Column="0" Width="18" Height="18" CornerRadius="5" VerticalAlignment="Center"
                                 Background="Transparent" BorderBrush="{StaticResource BrushFaint}" BorderThickness="2">
-                            <Path x:Name="tick" Data="M 3,8 L 7,12 L 14,4" Stroke="#231708" StrokeThickness="2"
+                            <Path x:Name="tick" Data="M 3,8 L 7,12 L 14,4" Stroke="{StaticResource BrushPaper}" StrokeThickness="2"
                                   StrokeStartLineCap="Round" StrokeEndLineCap="Round" Visibility="Collapsed"/>
                         </Border>
                         <ContentPresenter Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center"/>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <!-- 勾上**不填强调色**：启动清单里几乎每行都勾着，一列强调色方块比内容还响。
+                             改成中性描边 + 正文色的勾——勾本身就说清了「开着」，不需要一块色斑来喊。 -->
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="box" Property="Background" Value="{StaticResource BrushBrass}"/>
-                            <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource BrushMuted}"/>
                             <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.4"/>
@@ -436,10 +495,14 @@
         </Setter>
     </Style>
 
-    <!-- ============ RadioButton (brass dot) ============ -->
+    <!-- ============ RadioButton ============ -->
     <!-- 没有这份样式时，两颗单选钮会退回 WPF 自带的浅色模板：未选中＝一颗实心白点、选中＝白圈套暗心，
          在暗底上恰好读反——真机比对过，「静默运行动作组」看着比「弹窗提醒」更像被选中的那个。
-         与 CheckBox 同一套语汇（黄铜填充 + 刻字深棕），只把方框换成圆点。 -->
+         与 CheckBox 同一套语汇（中性环 + 正文色的点），只把方框换成圆点。
+         选中态不用强调色，理由同 CheckBox：点本身已经说清「选的是这个」。
+         这也顺带解开一处撞车——原来 hover / 聚焦 / 选中都把环染成强调色，
+         鼠标扫过没选的那一项，它看着就跟选中的一样，只差中间那个点。
+         现在环的颜色只表示「鼠标/焦点在这儿」，选中与否一律由点来说。 -->
     <Style TargetType="RadioButton">
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
@@ -451,20 +514,20 @@
                     <StackPanel Orientation="Horizontal" Background="Transparent">
                         <Grid Width="18" Height="18" VerticalAlignment="Center">
                             <Ellipse x:Name="ring" Stroke="{StaticResource BrushFaint}" StrokeThickness="2" Fill="Transparent"/>
-                            <Ellipse x:Name="dot" Width="8" Height="8" Fill="{StaticResource BrushBrass}" Visibility="Collapsed"/>
+                            <Ellipse x:Name="dot" Width="8" Height="8" Fill="{StaticResource BrushPaper}" Visibility="Collapsed"/>
                         </Grid>
                         <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushMuted}"/>
                             <Setter TargetName="dot" Property="Visibility" Value="Visible"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushAccent}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushAccent}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.4"/>
@@ -511,7 +574,65 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/></Trigger>
-                        <Trigger Property="IsSelected" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrassTint}"/></Trigger>
+                        <Trigger Property="IsSelected" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ 面板的两条导航栏 ============ -->
+    <!-- 页签（左栏）：一页一条。选中态由代码涂（底色 + 左缘那条强调色竖杠 + 亮一档的字），
+         因为条目是按当前分类现建的，写不成静态触发器。左缘留 2px 边就是给那条竖杠的位置——
+         未选中时它是透明的，所以选中与否不会让文字左右挪动。 -->
+    <Style x:Key="PanelPageTab" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource BrushMuted}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="2,0,0,0"/>
+        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0,4,4,0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 分类（上栏）：选中态是强调色文字 + 下划线。同页签，涂色在代码里。 -->
+    <Style x:Key="PanelTopTab" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource BrushMuted}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0,0,0,2"/>
+        <Setter Property="Padding" Value="9,4"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -537,11 +658,11 @@
                     <ControlTemplate.Triggers>
                         <!-- 非本月的日子退到 faint：网格边缘的补位，不该跟本月同样响 -->
                         <Trigger Property="IsInactive" Value="True"><Setter Property="Foreground" Value="{StaticResource BrushFaint}"/></Trigger>
-                        <Trigger Property="IsToday" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/><Setter TargetName="bd" Property="BorderThickness" Value="1"/></Trigger>
+                        <Trigger Property="IsToday" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccentDeep}"/><Setter TargetName="bd" Property="BorderThickness" Value="1"/></Trigger>
                         <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/></Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrass}"/>
-                            <Setter Property="Foreground" Value="#231708"/>
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccent}"/>
+                            <Setter Property="Foreground" Value="#FFFFFF"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
                     </ControlTemplate.Triggers>
@@ -627,7 +748,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrassTint}"/>
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -669,7 +790,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccentDeep}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -677,7 +798,7 @@
         </Setter>
     </Style>
 
-    <!-- ============ TabControl / TabItem (escapement tick underline) ============ -->
+    <!-- ============ TabControl / TabItem ============ -->
     <Style TargetType="TabControl">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -729,21 +850,17 @@
                         <Border Padding="14,10">
                             <ContentPresenter x:Name="hdr" ContentSource="Header" HorizontalAlignment="Center"/>
                         </Border>
-                        <!-- 宽度绑到标题本身而不是标签格子：不折行时两者相等（Padding 14 与原来的 Margin 14 正好抵消），
+                        <!-- 选中指示：3px 实心圆头条。原来是 6px 齿 + 4px 隙的平铺虚线（旧标识留下的节拍），
+                             1:1 下读起来像渲染瑕疵或一条点线分隔符，不像「这个标签是选中的」；
+                             3px 而非 2px，是因为标签字号 15，2px 压不住。
+
+                             宽度绑到标题本身而不是标签格子：不折行时两者相等（Padding 14 与原来的 Margin 14 正好抵消），
                              一旦标签条放不下而折成两行，TabPanel 会把每个标签拉伸填满行宽，
-                             黑铜虚线跟着拉到文字的两三倍长（俄语 @820 实测：「Порты」下面的线长达 180px）。 -->
-                        <Border x:Name="tick" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Visibility="Collapsed"
-                                Width="{Binding ActualWidth, ElementName=hdr}">
-                            <Border.Background>
-                                <DrawingBrush TileMode="Tile" Viewport="0,0,10,2" ViewportUnits="Absolute" Stretch="None">
-                                    <DrawingBrush.Drawing>
-                                        <GeometryDrawing Brush="{StaticResource BrushBrass}">
-                                            <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,6,2"/></GeometryDrawing.Geometry>
-                                        </GeometryDrawing>
-                                    </DrawingBrush.Drawing>
-                                </DrawingBrush>
-                            </Border.Background>
-                        </Border>
+                             这条线会跟着拉到文字的两三倍长（俄语 @820 实测：「Порты」下面的线长达 180px）。 -->
+                        <Border x:Name="tick" Height="3" CornerRadius="1.5" VerticalAlignment="Bottom"
+                                HorizontalAlignment="Center" Visibility="Collapsed"
+                                Background="{StaticResource BrushAccent}"
+                                Width="{Binding ActualWidth, ElementName=hdr}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -823,7 +940,7 @@
                 <Setter Property="Background" Value="{StaticResource BrushSteel}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource BrushBrassTint}"/>
+                <Setter Property="Background" Value="{StaticResource BrushAccentTint}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -885,7 +1002,7 @@
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
                             <Setter TargetName="Grip" Property="Opacity" Value="1"/>
-                            <Setter TargetName="Grip" Property="Foreground" Value="{StaticResource BrushBrass}"/>
+                            <Setter TargetName="Grip" Property="Foreground" Value="{StaticResource BrushAccentText}"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -916,7 +1033,11 @@
         <Setter Property="ClipToBounds" Value="True"/>
     </Style>
 
-    <!-- ============ escapement rail cell (启动清单左缘：启用=黄铜、未启用=钢) ============ -->
+    <!-- ============ 启动清单左缘的顺序轨（启用=亮、未启用=暗） ============ -->
+    <!-- 原来是「启用=强调色」。方向反了：**启用才是常态**——没人会把启动项全关掉——
+         于是强调色落在每一行上，一整列发亮，而它旁边的勾选框也是强调色，一行亮两处。
+         真正有信息的类型徽标和摘要反倒是灰的，屏幕上最响的成了最不用看的。
+         强调色的职责是「只在关键处发亮」，这里改用**明暗**区分开关，把它还给选中行、主按钮、当前标签。 -->
     <!-- 轨道列须去掉默认单元格内边距（12,9），否则 24px 窄列会被内边距吃光、轨道不可见。 -->
     <Style x:Key="RailCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
         <Setter Property="Padding" Value="0"/>
@@ -929,9 +1050,9 @@
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Enabled}" Value="True">
-                <Setter TargetName="spine" Property="Fill" Value="{StaticResource BrushBrass}"/>
-                <Setter TargetName="node" Property="Stroke" Value="{StaticResource BrushBrass}"/>
-                <Setter TargetName="node" Property="Fill" Value="{StaticResource BrushBrass}"/>
+                <Setter TargetName="spine" Property="Fill" Value="{StaticResource BrushMuted}"/>
+                <Setter TargetName="node" Property="Stroke" Value="{StaticResource BrushMuted}"/>
+                <Setter TargetName="node" Property="Fill" Value="{StaticResource BrushMuted}"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -978,7 +1099,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Role" Value="SubmenuHeader"><Setter TargetName="arrow" Property="Visibility" Value="Visible"/></Trigger>
-                        <Trigger Property="IsHighlighted" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrassTint}"/></Trigger>
+                        <Trigger Property="IsHighlighted" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/></Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter Property="Foreground" Value="{StaticResource BrushFaint}"/></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -1046,9 +1167,9 @@
         <Setter Property="Margin" Value="0,0,14,0"/>
     </Style>
 
-    <!-- 急停键捕捉框：只读、点击后按下快捷键即捕捉；获焦时黄铜边框提示「就绪」 -->
+    <!-- 急停键捕捉框：只读、点击后按下快捷键即捕捉；获焦时强调色边框提示「就绪」 -->
     <Style x:Key="HotkeyCapture" TargetType="TextBox">
-        <Setter Property="Foreground" Value="{StaticResource BrushBrass}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushAccentText}"/>
         <Setter Property="Background" Value="{StaticResource BrushInk}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontMono}"/>
@@ -1067,11 +1188,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrass}"/>
-                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushBrassTint}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushBrassDeep}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccentDeep}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

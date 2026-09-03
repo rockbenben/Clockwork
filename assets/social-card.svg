@@ -1,53 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- 这张卡在 X / Discord / GitHub 链接预览里的真实宽度是 360–500px，不是 1200px。
+       实测：按 1200 设计时，24px 的说明文字到 360px 只剩 7.2px —— 四行说明和页脚全是灰糊，
+       只有大标题活着。所以这一版按**投递尺寸**排：源文件里小于 40px 的字一律不承担信息，
+       能被读到的只有品牌、标题、四个触发词。说明文字全部删掉——读不出的说明只贡献噪点。 -->
   <defs>
-    <linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#161C26"/><stop offset="0.6" stop-color="#12161D"/><stop offset="1" stop-color="#0E1219"/></linearGradient>
-    <radialGradient id="cglow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#E0A23C" stop-opacity="0.16"/><stop offset="1" stop-color="#E0A23C" stop-opacity="0"/></radialGradient>
+    <linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#191919"/><stop offset="0.6" stop-color="#101010"/><stop offset="1" stop-color="#0B0B0B"/></linearGradient>
+    <radialGradient id="cglow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#E8C170" stop-opacity="0.13"/><stop offset="1" stop-color="#E8C170" stop-opacity="0"/></radialGradient>
+    <linearGradient id="brass" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#EBBE66"/><stop offset="1" stop-color="#C08C2E"/></linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#cbg)"/>
-  <circle cx="980" cy="300" r="250" fill="url(#cglow)"/>
-  <!-- ambient meshing escape wheels -->
-  <g>
-    <path d="M980.00,166.00 L980.00,132.00 L1031.28,176.20 L1044.29,144.79 L1074.75,205.25 L1098.79,181.21 L1103.80,248.72 L1135.21,235.71 L1114.00,300.00 L1148.00,300.00 L1103.80,351.28 L1135.21,364.29 L1074.75,394.75 L1098.79,418.79 L1031.28,423.80 L1044.29,455.21 L980.00,434.00 L980.00,468.00 L928.72,423.80 L915.71,455.21 L885.25,394.75 L861.21,418.79 L856.20,351.28 L824.79,364.29 L846.00,300.00 L812.00,300.00 L856.20,248.72 L824.79,235.71 L885.25,205.25 L861.21,181.21 L928.72,176.20 L915.71,144.79 Z" fill="#E0A23C" fill-opacity="0.20"/>
-    <circle cx="980" cy="300" r="96" fill="#12161D"/>
-    <circle cx="980" cy="300" r="96" fill="none" stroke="#B87A2A" stroke-opacity="0.5" stroke-width="2"/>
-    <line x1="980" y1="300" x2="980" y2="224" stroke="#B87A2A" stroke-opacity="0.7" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="980" cy="300" r="14" fill="#F5A65A"/>
-    <path d="M1112.00,104.00 L1112.00,90.00 L1133.38,109.27 L1139.88,96.87 L1149.86,123.87 L1161.38,115.92 L1157.66,144.46 L1171.56,142.77 L1155.01,166.31 L1168.10,171.28 L1142.50,184.43 L1151.79,194.91 L1123.01,194.66 L1126.36,208.26 L1100.99,194.66 L1097.64,208.26 L1081.50,184.43 L1072.21,194.91 L1068.99,166.31 L1055.90,171.28 L1066.34,144.46 L1052.44,142.77 L1074.14,123.87 L1062.62,115.92 L1090.62,109.27 L1084.12,96.87 Z" fill="#E0A23C" fill-opacity="0.14"/>
-    <circle cx="1112" cy="150" r="34" fill="#12161D"/><circle cx="1112" cy="150" r="6" fill="#B87A2A"/>
+  <circle cx="1140" cy="380" r="330" fill="url(#cglow)"/>
+
+  <!-- 擒纵轮放大到出血。图形比文字耐缩放得多，所以视觉识别交给它。
+       裁掉一部分而不是整轮塞进角落：残缺的机械读作「里面那台机器比画框还大」，
+       而一个完整的小轮子只读作一个图标。这是这一版唯一冒的险。
+       裁的位置刻意让**齿**而不是轮毂占据可见部分：一只完整的轮毂会把它读成钟面。
+       **这里用的就是 logo.svg 那条路径本身**（同一份齿形，轴毂同样是填色而不是镂空），不是另画一个近似的：
+       卡片和标识必须是同一个东西，而两份手抄的几何迟早会漂。 -->
+  <g transform="translate(1140,380) scale(2.96) translate(-128,-128)" opacity="0.18">
+    <path d="M128.00,30.92 L168.71,12.06 L165.15,38.31 L209.98,36.47 L196.64,59.36 L238.77,74.81 L217.69,90.85 L250.69,121.25 L225.08,128.00 L243.94,168.71 L217.69,165.15 L219.53,209.98 L196.64,196.64 L181.19,238.77 L165.15,217.69 L134.75,250.69 L128.00,225.08 L87.29,243.94 L90.85,217.69 L46.02,219.53 L59.36,196.64 L17.23,181.19 L38.31,165.15 L5.31,134.75 L30.92,128.00 L12.06,87.29 L38.31,90.85 L36.47,46.02 L59.36,59.36 L74.81,17.23 L90.85,38.31 L121.25,5.31 Z" fill="#D9A544"/>
   </g>
-  <!-- brand lockup: escape-wheel glyph + wordmark -->
-  <g transform="translate(70,64)">
+
+  <!-- 品牌 -->
+  <g transform="translate(70,92)">
     <g transform="translate(0,-4) scale(0.18)">
-      <path fill-rule="evenodd" d="M128.00,44.00 L128.00,24.00 L162.17,51.26 L170.30,32.99 L190.42,71.79 L205.29,58.41 L207.89,102.04 L226.91,95.86 L211.54,136.78 L231.43,138.87 L200.75,170.00 L218.07,180.00 L177.37,195.96 L189.13,212.14 L145.46,210.16 L149.62,229.73 L110.54,210.16 L106.38,229.73 L78.63,195.96 L66.87,212.14 L55.25,170.00 L37.93,180.00 L44.46,136.78 L24.57,138.87 L48.11,102.04 L29.09,95.86 L65.58,71.79 L50.71,58.41 L93.83,51.26 L85.70,32.99 Z M186,128 a58,58 0 1,0 -116,0 a58,58 0 1,0 116,0 Z" fill="#E0A23C"/>
-      <path d="M109.20,11.51 L146.80,11.51 L142.98,35.20 L113.02,35.20 Z" fill="#B87A2A"/>
-      <circle cx="128" cy="128" r="9" fill="#F5A65A"/>
+      <path d="M128.00,30.92 L168.71,12.06 L165.15,38.31 L209.98,36.47 L196.64,59.36 L238.77,74.81 L217.69,90.85 L250.69,121.25 L225.08,128.00 L243.94,168.71 L217.69,165.15 L219.53,209.98 L196.64,196.64 L181.19,238.77 L165.15,217.69 L134.75,250.69 L128.00,225.08 L87.29,243.94 L90.85,217.69 L46.02,219.53 L59.36,196.64 L17.23,181.19 L38.31,165.15 L5.31,134.75 L30.92,128.00 L12.06,87.29 L38.31,90.85 L36.47,46.02 L59.36,59.36 L74.81,17.23 L90.85,38.31 L121.25,5.31 Z" fill="url(#brass)"/>
+      <circle cx="128" cy="128" r="30.72" fill="#7A5115"/>
+      <circle cx="128" cy="128" r="9.34" fill="#F2DCA6"/>
     </g>
-    <text x="60" y="30" font-family="Bahnschrift, DIN, sans-serif" font-weight="600" font-size="38" fill="#ECE6D8" letter-spacing="0.5">Clockwork</text>
-    <text x="272" y="29" font-family="Consolas, monospace" font-size="14" fill="#8B95A3" letter-spacing="3">WINDOWS 托盘自动化</text>
+    <text x="60" y="30" font-family="Bahnschrift, DIN, sans-serif" font-weight="600" font-size="40" fill="#EAEAEA" letter-spacing="0.5">Clockwork</text>
   </g>
-  <!-- hero -->
-  <text x="70" y="210" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="62" fill="#ECE6D8" letter-spacing="1">电脑上重复的事，</text>
-  <text x="70" y="284" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="62" fill="#ECE6D8" letter-spacing="1">自动<tspan fill="#E0A23C">帮你做</tspan></text>
-  <text x="70" y="336" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#8B95A3">开机自动开好软件 · 按时提醒 · 一键完成一串操作</text>
-  <!-- escapement rail with 3 rows -->
+
+  <!-- 承诺。两行，字号从 62 提到 72：它是唯一在 360px 下仍然舒服的东西，值得占更多地方。 -->
+  <text x="70" y="268" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="72" fill="#EAEAEA" letter-spacing="1">电脑上重复的事，</text>
+  <text x="70" y="356" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="72" fill="#EAEAEA" letter-spacing="1">自动<tspan fill="#E8C170">帮你做</tspan></text>
+
+  <!-- 四种开始方式。横排在一条轨上：四个位置属于同一套机构，正如轮上的四颗齿。
+       只留词，不留说明——四个词本身就说清了「它会在什么时候自己动」。 -->
   <g>
-    <line x1="96" y1="384" x2="96" y2="556" stroke="#2E3947" stroke-width="2"/>
-    <line x1="96" y1="384" x2="96" y2="470" stroke="#E0A23C" stroke-width="2"/>
-    <path d="M88,398 L100,404 L88,410 Z" fill="#E0A23C"/><circle cx="96" cy="404" r="7" fill="#12161D" stroke="#E0A23C" stroke-width="2"/>
-    <rect x="126" y="382" width="72" height="44" rx="9" fill="#251d10" stroke="#B87A2A" stroke-opacity="0.5"/>
-    <text x="162" y="410" font-family="Bahnschrift, sans-serif" font-weight="700" font-size="21" fill="#E0A23C" text-anchor="middle">开机</text>
-    <text x="222" y="411" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#C9CFD7">自动打开常用软件、整理好桌面</text>
-    <path d="M88,464 L100,470 L88,476 Z" fill="#E0A23C"/><circle cx="96" cy="470" r="7" fill="#12161D" stroke="#E0A23C" stroke-width="2"/>
-    <rect x="126" y="448" width="72" height="44" rx="9" fill="#251d10" stroke="#B87A2A" stroke-opacity="0.5"/>
-    <text x="162" y="476" font-family="Bahnschrift, sans-serif" font-weight="700" font-size="21" fill="#E0A23C" text-anchor="middle">到点</text>
-    <text x="222" y="477" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#C9CFD7">按时提醒你，或静默跑一串动作</text>
-    <path d="M88,530 L100,536 L88,542 Z" fill="#5B6472"/><circle cx="96" cy="536" r="7" fill="#12161D" stroke="#5B6472" stroke-width="2"/>
-    <rect x="126" y="514" width="72" height="44" rx="9" fill="none" stroke="#2E3947"/>
-    <text x="162" y="542" font-family="Bahnschrift, sans-serif" font-weight="700" font-size="21" fill="#8B95A3" text-anchor="middle">一键</text>
-    <text x="222" y="543" font-family="Microsoft YaHei, sans-serif" font-size="24" fill="#C9CFD7">专注 / 会议 / 收工，一步到位</text>
+    <line x1="70" y1="452" x2="606" y2="452" stroke="#B5842F" stroke-opacity="0.45" stroke-width="2"/>
+    <rect x="70" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="128" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">开机</text>
+    <rect x="210" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="268" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">到点</text>
+    <rect x="350" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="408" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">一键</text>
+    <rect x="490" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="548" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">手势</text>
   </g>
-  <!-- footer -->
-  <line x1="70" y1="582" x2="1130" y2="582" stroke="#2E3947" stroke-opacity="0.7"/>
-  <text x="70" y="612" font-family="Consolas, monospace" font-size="16" fill="#8B95A3" letter-spacing="1">365 开源计划 · #020</text>
-  <text x="1130" y="612" font-family="Microsoft YaHei, sans-serif" font-size="18" fill="#C9CFD7" text-anchor="end">启动清单 · 定时任务 · 系统启动项 · 动作组</text>
+
+  <!-- 页脚：全尺寸下才读的信息，刻意压低对比，缩小时读作一条安静的横线而不是一团糊字。 -->
+  <line x1="70" y1="556" x2="1130" y2="556" stroke="#353535" stroke-opacity="0.7"/>
+  <text x="70" y="590" font-family="Consolas, monospace" font-size="18" fill="#7C7C7C" letter-spacing="1">365 开源计划 · #020</text>
+  <text x="1130" y="590" font-family="Microsoft YaHei, sans-serif" font-size="20" fill="#9E9E9E" text-anchor="end">一个 exe · 不用安装 · 不联网</text>
 </svg>

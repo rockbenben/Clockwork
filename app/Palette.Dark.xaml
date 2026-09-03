@@ -1,0 +1,54 @@
+<!-- 深色调色板：**零色度中性 + 单一强调色**。
+     两条判断，理由都是量出来的，不靠任何比喻：
+
+     一、中性灰做到色度 0。上一版沿用 GitHub Primer 的灰（#0D1117 等），实测色度 10–12——
+         也就是整个界面本来就淡淡地蓝着，强调色再蓝就被自己的背景稀释了。
+         这一版七个中性值色度全部为 0。于是全屏唯一带色相的东西只有强调色，
+         同样 0.5% 的覆盖率，它比原来醒目，却不必更亮更吵。
+
+     二、强调色深浅两套不是同一个色号调明暗，而是各自按「压得住 / 读得出」定的：
+         浅色偏深（白纸上太亮会发飘，也压不住白字），深色偏亮（深底上太深读不出）。
+         色相两边一致（216°），所以切主题时它仍是同一个颜色，只是换了一档。
+
+     键名说的是**角色**，不是颜色本身，两套主题共用同一批键：
+       Ink    画布：窗口的底，以及输入框的底（比卡片更深，凹进去的地方）
+       Slate  卡片 / 面板
+       Steel  抬起来的控件（按钮底）
+       Line   所有边框与分隔
+       Paper  正文     Muted 次要文字     Faint 更次一级
+       Accent 强调色填充（主按钮、选中条、刻度）——上面压白字
+       AccentHover 悬停       AccentDeep 渐变深端 / 按下态
+       AccentText 强调色当文字用时的那一档（深底上要更亮才读得清）
+       Danger 危险（当**文字**用，见 Theme.xaml 的 DangerButton）
+       Brass  擒纵轨点亮的那几格——唯一不属于强调色的有色元素，例外理由见下第三条
+
+     对比度都量过（相对 Ink #101010）：
+       Paper 15.8:1   Muted 7.1:1   Faint 4.6:1   AccentText 6.8:1   Danger 5.1:1
+       白字压 Accent 5.7:1，压 AccentHover 4.7:1——悬停也没掉到 4.5 以下，
+       这一条上一版没验：按钮悬停变亮的那一瞬间，白字可能就虚了。
+       Brass 相对 Slate 7.9:1、相对轨底 Steel 7.0:1。
+
+     三、Brass 是第一条的唯一例外。擒纵轨（Views/EscapementRail.cs）点亮的格子用黄铜，
+         与应用图标同一种材质——那条轨就是图标那个隐喻本身（擒纵轮的齿），
+         而且它只有 3px 宽，色相破例的代价小于「图标和界面各说各话」。
+         界面强调色不跟着换：黄铜托不住白字（白字压 #C08C2E 只有 3.0:1），
+         而主按钮、选中态、选中日全是白字压强调色。
+         代价记在这：警告态的轨是 Danger 红，与黄铜只差色相不差明度（1.7:1）。
+         原来的蓝对红也是 1.5:1，明度上本来就没分开；但黄铜（40°）比蓝（216°）离红近，
+         警告轨不如以前跳。真要更分得开，得给警告轨换节拍或加宽，不是换颜色能解决的。 -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="Ink">#101010</Color>
+    <Color x:Key="Slate">#191919</Color>
+    <Color x:Key="Steel">#242424</Color>
+    <Color x:Key="Line">#353535</Color>
+    <Color x:Key="Paper">#EAEAEA</Color>
+    <Color x:Key="Muted">#9E9E9E</Color>
+    <Color x:Key="Faint">#7C7C7C</Color>
+    <Color x:Key="Accent">#3466B2</Color>
+    <Color x:Key="AccentHover">#3C74C6</Color>
+    <Color x:Key="AccentDeep">#264B82</Color>
+    <Color x:Key="AccentText">#759CD7</Color>
+    <Color x:Key="Danger">#E5534B</Color>
+    <Color x:Key="Brass">#D9A544</Color>
+</ResourceDictionary>

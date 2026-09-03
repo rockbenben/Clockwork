@@ -8,10 +8,12 @@ using Size = System.Windows.Size;
 
 namespace Clockwork.Views;
 
-// 擒纵刻度轨：提醒卡片 / 提醒弹窗左缘那条黄铜轨，同时就是这张界面的「余量表」。
+// 擒纵刻度轨：提醒卡片 / 提醒弹窗左缘那条强调色轨，同时就是这张界面的「余量表」。
 //
-// 齿距沿用 Theme.xaml 里 TabItem 选中下划线的刻度节拍（6px 齿 + 4px 齿隙）——横着是「当前在这一页」，
-// 竖着是「这张界面还剩多久」。所以它读起来是 Clockwork 本来就有的擒纵语汇，不是一条通用进度条。
+// 6px 齿 + 4px 齿隙。**这里的离散是信息，不是装饰**：一格就是一个时间单位，格数可数。
+// 标签页的选中下划线曾经也用这个节拍，后来改成了实心条——那儿的虚线什么都不表示，
+// 读起来只像渲染瑕疵；而这条轨上，「能数出还剩几格」正是它要说的事，所以它保持分段。
+// 同理它也不做平滑过渡：擒纵机构的本职就是把连续的力矩放成可数的离散格，会滑的钟不是钟。
 //
 // 两种状态，各说一件真事：
 //   走时(durationMs>0) —— 点亮的齿自下而上逐格回收，格数=剩余时间。一格一格地跳，不做平滑过渡：
@@ -85,7 +87,7 @@ public sealed class EscapementRail : Grid
         _ticks = Math.Max(1, (int)(ActualHeight / Pitch));   // 向下取整：只数装得下的整齿
         _shown = -1;   // 几何变了，强制按新高度重画（Paint 的去重比较只看格数）
         _track.Fill = Brush("TickSteel");
-        _lit.Fill = Brush(_warn ? "TickClay" : "TickBrass");
+        _lit.Fill = Brush(_warn ? "TickDanger" : "TickAccent");
 
         if (_durationMs <= 0) { Stop(); Paint(_ticks); return; }   // 常驻：满格不动
         Paint(Remaining());
