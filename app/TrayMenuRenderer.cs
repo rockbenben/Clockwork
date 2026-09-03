@@ -3,16 +3,38 @@ using System.Windows.Forms;
 
 namespace Clockwork;
 
-// 托盘暗色仪表盘配色（对齐 Theme.xaml）。渲染器与 TrayIcon 共用同一份，避免两处各写 #12161D 等值日后漂移。
+// 托盘菜单的配色。**从当前生效的调色板现读**，不再各写一份。
+//
+// 托盘菜单是 WinForms 画的，用不了 WPF 的资源系统，所以这里原先把 Theme.xaml 里那几个值抄了一遍。
+// 抄的那份在换主题时立刻变成谎言：实测切到浅色之后，整个应用是白的，右下角弹出来的菜单
+// 还是深色配旧黄铜——而且旧黄铜在新配色里根本已经不存在了。
+//
+// 现在按键名去 Application.Resources 里取。取不到就退回深色的一组硬编码值：
+// 托盘菜单可能在资源还没搭好时就被建出来（开机自启那条路），那时宁可用一组固定的深色，
+// 也不该抛异常把托盘图标整个弄没。
 internal static class TrayPalette
 {
-    public static readonly Color Ink   = ColorTranslator.FromHtml("#12161D");
-    public static readonly Color Steel = ColorTranslator.FromHtml("#232C38");
-    public static readonly Color Line  = ColorTranslator.FromHtml("#2E3947");
-    public static readonly Color Paper = ColorTranslator.FromHtml("#ECE6D8");
-    public static readonly Color Muted = ColorTranslator.FromHtml("#8B95A3");
-    public static readonly Color Faint = ColorTranslator.FromHtml("#5B6472");
-    public static readonly Color Brass = ColorTranslator.FromHtml("#E0A23C");
+    // 兜底值必须与 Palette.Dark.xaml 一致。它平时用不上（正常路径读实时资源），
+    // 但一旦生效——资源没加载完、或主题切换的空档——托盘菜单就会是另一套配色，
+    // 而托盘菜单恰恰常常和主窗口同时出现在屏幕上，两套灰并排摆着一眼就看得出。
+    public static Color Ink   => Get("Ink",   0x10, 0x10, 0x10);
+    public static Color Steel => Get("Steel", 0x24, 0x24, 0x24);
+    public static Color Line  => Get("Line",  0x35, 0x35, 0x35);
+    public static Color Paper => Get("Paper", 0xEA, 0xEA, 0xEA);
+    public static Color Muted => Get("Muted", 0x9E, 0x9E, 0x9E);
+    public static Color Faint => Get("Faint", 0x7C, 0x7C, 0x7C);
+    public static Color Accent => Get("Accent", 0x34, 0x66, 0xB2);
+
+    private static Color Get(string key, int r, int g, int b)
+    {
+        try
+        {
+            if (System.Windows.Application.Current?.TryFindResource(key) is System.Windows.Media.Color c)
+                return Color.FromArgb(c.A, c.R, c.G, c.B);
+        }
+        catch { }
+        return Color.FromArgb(255, r, g, b);
+    }
 }
 
 // 托盘菜单字形（Segoe MDL2 Assets 码位）：统一的线性图标族，笔画一致。
@@ -89,7 +111,7 @@ internal static class TrayMenu
 }
 
 // 托盘右键菜单渲染器：把系统浅色菜单改造成 Clockwork 暗色仪表盘——
-// 字形列 + 悬停「黄铜刻度条」(signature) + 刻字式区段小标题。
+// 字形列 + 悬停「强调色刻度条」(signature) + 刻字式区段小标题。
 internal sealed class TrayMenuRenderer : ToolStripRenderer
 {
     // 图标字体：进程级单例（渲染器随托盘存活到退出），GDI 句柄由进程结束时回收，不在此显式释放——
@@ -131,7 +153,7 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
         var b = new Rectangle(Point.Empty, e.Item.Size);
         using (var br = new SolidBrush(TrayPalette.Steel))
             e.Graphics.FillRectangle(br, new Rectangle(b.Left + 3, b.Top + 1, b.Width - 6, b.Height - 2));
-        using var bar = new SolidBrush(TrayPalette.Brass);   // signature：左侧黄铜刻度条
+        using var bar = new SolidBrush(TrayPalette.Accent);   // signature：左侧强调色刻度条
         e.Graphics.FillRectangle(bar, new Rectangle(b.Left + 3, b.Top + 5, 2, b.Height - 10));
     }
 
@@ -155,7 +177,7 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
         bool on = e.Item.Enabled;
         if (_hasGlyphFont && e.Item.Tag is TrayMeta { Glyph.Length: > 0 } meta)
         {
-            var glyphColor = e.Item.Selected && on ? TrayPalette.Brass : (on ? TrayPalette.Muted : TrayPalette.Faint);
+            var glyphColor = e.Item.Selected && on ? TrayPalette.Accent : (on ? TrayPalette.Muted : TrayPalette.Faint);
             var gr = new Rectangle(b.Left + 3, b.Top, TrayMenu.GlyphCol - 3, b.Height);
             TextRenderer.DrawText(g, meta.Glyph, _glyph, gr, glyphColor,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
@@ -166,11 +188,11 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
             TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
     }
 
-    // 子菜单箭头：基类按系统色绘制，在暗底上突兀。与字形列同一套配色（悬停转黄铜）。
+    // 子菜单箭头：基类按系统色绘制，在暗底上突兀。与字形列同一套配色（悬停转强调色）。
     protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
     {
         bool on = e.Item?.Enabled ?? false;
-        e.ArrowColor = e.Item is { Selected: true } && on ? TrayPalette.Brass : (on ? TrayPalette.Muted : TrayPalette.Faint);
+        e.ArrowColor = e.Item is { Selected: true } && on ? TrayPalette.Accent : (on ? TrayPalette.Muted : TrayPalette.Faint);
         base.OnRenderArrow(e);
     }
 }

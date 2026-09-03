@@ -30,10 +30,11 @@ public partial class ReminderEditorWindow : Window
         FillCombo(TrigCombo, trigItems, r.Trigger);
         FillCombo(SModeCombo, new[] { (Strings.Get("Ed_SMode_Any"), "any"), (Strings.Get("Ed_SMode_Before"), "before"), (Strings.Get("Ed_SMode_After"), "after") }, r.StartupHourMode);
         FillCombo(RecurCombo, new[] { (Strings.Get("Ed_Rec_Daily"), "daily"), (Strings.Get("Ed_Rec_EveryN"), "everyNDays"), (Strings.Get("Ed_Rec_Monthly"), "monthly"), (Strings.Get("Ed_Rec_Once"), "once") }, r.RecurType);
-        var groupItems = new[] { (Strings.Get("Ed_Group_None"), "") }.Concat(groups.Select(g => (g.Name, g.Id))).ToArray();
-        FillCombo(SilentCombo, groupItems, r.SilentGroupId);
+
+        // 两个组下拉都走 FillGroupCombo：目标组被删时不静默改指（说明见该方法）。
+        FillGroupCombo(SilentCombo, groups, r.SilentGroupId, withNone: true);
         FillCombo(OnYesTypeCombo, new[] { (Strings.Get("Ed_OnYes_None"), "none"), (Strings.Get("Ed_OnYes_Run"), "run"), (Strings.Get("Ed_OnYes_Url"), "url"), (Strings.Get("Ed_OnYes_Group"), "group") }, r.OnYes.Type == "sound" ? "run" : r.OnYes.Type);
-        FillCombo(OnYesGroupCombo, groupItems, r.OnYes.Type == "group" ? r.OnYes.Target : "");
+        FillGroupCombo(OnYesGroupCombo, groups, r.OnYes.Type == "group" ? r.OnYes.Target : "", withNone: true);
 
         TimeBox.Text = r.Time;
         SHourBox.Text = r.StartupHour.ToString();
@@ -60,6 +61,7 @@ public partial class ReminderEditorWindow : Window
         LoadDays(r.Days, Day1, Day2, Day3, Day4, Day5, Day6, Day7);
         OnceDateBox.Text = r.OnceDate;
         IdleBox.Text = r.IdleMinutes.ToString();
+        BusyBox.Text = r.BusyMinutes.ToString();
         BatteryBox.Text = r.BatteryPercent.ToString();
         LoopMinBox.Text = r.IntervalMinutes.ToString();
         LoopUntilBox.Text = r.IntervalUntil;
@@ -139,6 +141,7 @@ public partial class ReminderEditorWindow : Window
         // 判据走共享谓词而不是就地写 == "time"：这次的整个 bug 类就是「编辑器藏了、运行期照旧过滤」的口径分家。
         Vis(PeriodRow, ReminderEvent.UsesRecurrence(t));
         Vis(IdleRow, t == "idle");
+        Vis(BusyRow, t == "busy");
         Vis(BatteryRow, t == "lowBattery");
         Vis(EventDaysRow, ev);
     }
@@ -277,6 +280,7 @@ public partial class ReminderEditorWindow : Window
             IntervalUntil = DurationText.FormatTimeHHmm(LoopUntilBox.Text),
             OnceDate = onceDate,
             IdleMinutes = ParseOr(IdleBox.Text, 10, min: 1),
+            BusyMinutes = ParseOr(BusyBox.Text, 30, min: 1),
             BatteryPercent = ParseOr(BatteryBox.Text, 20, min: 1, max: 100),
             Enabled = _original.Enabled,   // 保留启用/禁用态：编辑提醒不应把用户关掉的提醒又打开
         };

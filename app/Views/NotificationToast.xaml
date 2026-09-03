@@ -4,7 +4,7 @@
         xmlns:v="clr-namespace:Clockwork.Views"
         WindowStartupLocation="Manual" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         ShowInTaskbar="False" ShowActivated="False" Topmost="True" ResizeMode="NoResize"
-        SizeToContent="Height" Width="356" Cursor="Hand">
+        SizeToContent="Height" MaxHeight="392" Width="356" Cursor="Hand">
     <!-- 品牌化非模态通知卡片：擒纵蓝钢面板 + 左缘刻度轨 + 品牌标记 + 仪表眉标 + 正文。
          屏幕右下角堆叠、不抢焦点，替代原来的系统托盘气泡，与提醒弹窗视觉一致。
          MinHeight：短消息（「已保存」）不缩成一小块——堆叠起来才有节奏，刻度轨也才有足够格数可读。 -->
@@ -24,8 +24,8 @@
                 <Image Grid.Column="0" Source="/logo-256.png" Width="26" Height="26" VerticalAlignment="Top"
                        RenderOptions.BitmapScalingMode="HighQuality" Margin="0,1,13,0"/>
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <!-- 仪表眉标：时刻(读数，纸白) · 来源(语境，钢灰) · ×N(未处理次数，黄铜——这一行唯一的警示位)。
-                         黄铜留给刻度轨和这个计数，眉标本身退到钢灰，面板上只亮该亮的地方。 -->
+                    <!-- 仪表眉标：时刻(读数，纸白) · 来源(语境，钢灰) · ×N(未处理次数，强调色——这一行唯一的警示位)。
+                         强调色留给刻度轨和这个计数，眉标本身退到钢灰，面板上只亮该亮的地方。 -->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -39,7 +39,7 @@
                                    Foreground="{StaticResource BrushMuted}" TextTrimming="CharacterEllipsis"
                                    VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="2" x:Name="CountText" FontFamily="{StaticResource FontMono}" FontSize="11.5"
-                                   Foreground="{StaticResource BrushBrass}" VerticalAlignment="Center"
+                                   Foreground="{StaticResource BrushAccentText}" VerticalAlignment="Center"
                                    Margin="8,0,0,0" Visibility="Collapsed"/>
                     </Grid>
                     <TextBlock x:Name="MsgText" FontSize="14" Foreground="{StaticResource BrushPaper}"

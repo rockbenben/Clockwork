@@ -7,7 +7,7 @@ namespace Clockwork;
 
 // 托盘图标与右键菜单。WPF 无原生托盘，用 WinForms NotifyIcon。
 // 菜单每次打开前重建：动作组增删 / 勿扰剩余时间 / 恢复项的出现与消失即时反映。
-// 外观（暗色仪表盘：字形列 + 悬停黄铜刻度 + 区段小标题）见 TrayMenuRenderer。
+// 外观（暗色仪表盘：字形列 + 悬停强调色刻度 + 区段小标题）见 TrayMenuRenderer。
 public sealed class TrayIcon : IDisposable
 {
     private readonly WinForms.NotifyIcon _icon;
@@ -50,6 +50,14 @@ public sealed class TrayIcon : IDisposable
         DisposeItems(menu.Items);
         menu.Items.Clear();
         menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Show"), TrayGlyph.Window, (s, e) => app.ShowMain()));
+        // 快捷面板也留一个菜单入口：热键可以被用户清空、也可能被别的程序占掉注册不上，
+        // 那时功能不该跟着一起消失——菜单是它永远够得着的那条路。
+        // 面板在光标处弹出，而此刻光标正好在托盘菜单上，于是它就出现在手边，位置反而正合适。
+        //
+        // 但总开关关掉时这一项要收掉：那是「我不用这个功能」，而不是「热键没注册上」。
+        // 留着一个点了什么都不发生的菜单项，比没有这一项更糟。
+        if (app.PanelEnabled)
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Panel"), TrayGlyph.Run, (s, e) => app.TogglePanel()));
 
         // 启动清单区（小标题复用「我的启动清单」标签页名，已多语言）
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Launch")));
@@ -73,15 +81,20 @@ public sealed class TrayIcon : IDisposable
             }
         }
 
-        // 提醒区——勿扰折成子菜单：1/2/4 小时是低频操作，占 3 行不值当（动作组段则保持扁平，
+        // 提醒区——勿扰折成子菜单：1/2/4/8 小时加「到今天结束」共五行，而它们都是低频操作，摊平不值当（动作组段则保持扁平，
         // 「运行：某组」是托盘最高频的动作，不能埋进 hover）。生效期间追加「恢复提醒（剩 N 分钟）」。
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Reminder")));
         var dnd = TrayMenu.SubMenu(Strings.Get("Tray_DndMenu"), TrayGlyph.Dnd, menu.Renderer, menu.Font);
-        foreach (int h in new[] { 1, 2, 4 })
+        // 加了 8 小时：4 小时到「今天结束」之间原本是空的，而「一个工作日别吵我」正落在那儿。
+        foreach (int h in new[] { 1, 2, 4, 8 })
         {
             int hh = h;
             dnd.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Tray_Hours", hh), TrayGlyph.Dnd, (s, e) => app.PauseReminders(hh)));
         }
+        // 「到今天结束」摆在小时档之后：它是这一列里唯一不用算的那一项，
+        // 也是真实场景里最常说的那一句（今天在出差 / 在录屏 / 在开会）。到点自动失效，不必记得回来开。
+        dnd.DropDownItems.Add(TrayMenu.Item(Strings.Get("Tray_DndEndOfDay"), TrayGlyph.Dnd,
+                                            (s, e) => app.PauseRemindersUntilEndOfDay()));
         menu.Items.Add(dnd);
         // 快速提醒——同样折成子菜单。它和勿扰是一对：一个让接下来安静，一个在接下来某刻叫你。
         // 五个档位覆盖绝大多数临场需求（煮面 / 番茄 / 会议前），要别的时长就去定时任务里建一条。
@@ -92,9 +105,10 @@ public sealed class TrayIcon : IDisposable
             quick.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Unit_Minutes", mm), TrayGlyph.Log, (s, e) => app.QuickReminder(mm)));
         }
         menu.Items.Add(quick);
+        // 文案走 App.DndResumeLabel（面板腰带那一项用的是同一份）：一小时以内按分钟、超过按小时。
+        // 各写一份的话，加了 8 小时和「到今天结束」两档之后，这里会说「剩 480 分钟」而那边说「剩 8 小时」。
         if (app.DndRemaining is TimeSpan left)
-            menu.Items.Add(TrayMenu.Item(Strings.Lf("Tray_DndResume", (int)Math.Ceiling(left.TotalMinutes)), TrayGlyph.Run,
-                (s, e) => app.ResumeReminders()));
+            menu.Items.Add(TrayMenu.Item(app.DndResumeLabel(left), TrayGlyph.Run, (s, e) => app.ResumeReminders()));
 
         // 最近通知区——回看被点掉 / 被挤掉 / 已自动消失的卡片；点一条把它重新弹出来。
         // 会话级：重启即空，所以没通知时整区不出现（不留一个常年空着的小标题）。

@@ -9,14 +9,25 @@ public class ReminderEventTests
     private static readonly DateTime Sat = new(2026, 7, 18, 12, 0, 0);   // 周六
 
     [Fact]
-    public void All_seven_ids_are_events_and_the_old_two_are_not()
+    public void Every_id_is_an_event_and_the_two_non_events_are_not()
     {
-        Assert.Equal(7, ReminderEvent.All.Length);
+        // 逐个点名而不是只对个数：个数对得上但少了某一项、多了个拼错的 id，是同样的 12。
+        // 每加一个事件都要来这里补一行——这正是想要的，它逼着人顺带确认另外三处
+        //（resx 的 Ed_Trig_*、App 里的触发来源、编辑器里的参数行）也补齐了。
+        Assert.Equal(
+            new[] { "idle", "busy", "unlock", "lock", "resume", "acPlugged", "acUnplugged", "lowBattery",
+                    "display", "netUp", "netDown", "usb" },
+            ReminderEvent.All);
         Assert.All(ReminderEvent.All, id => Assert.True(ReminderEvent.IsEvent(id)));
         Assert.False(ReminderEvent.IsEvent("time"));
         Assert.False(ReminderEvent.IsEvent("startup"));
         Assert.False(ReminderEvent.IsEvent(null));
     }
+
+    // 事件都不看周期（每 N 天 / 每月 / 仅一次）——新增的四个也一样，别让它们从这条规矩里漏出去。
+    [Fact]
+    public void No_event_uses_recurrence()
+        => Assert.All(ReminderEvent.All, id => Assert.False(ReminderEvent.UsesRecurrence(id)));
 
     [Fact]
     public void ShouldFire_needs_enabled_and_a_matching_trigger()
@@ -52,6 +63,37 @@ public class ReminderEventTests
     [Fact]
     public void IdleMinutes_below_one_is_clamped_to_one()
         => Assert.True(ReminderEvent.IdleDue(new Reminder { IdleMinutes = 0 }, 1, false));
+
+    // 连续使用是空闲的镜像，形状必须一模一样：够时长才响、一轮只响一次、下界夹到 1。
+    [Fact]
+    public void BusyDue_fires_once_per_streak()
+    {
+        var r = new Reminder { Trigger = "busy", BusyMinutes = 30 };
+        Assert.False(ReminderEvent.BusyDue(r, 29, alreadyFired: false));
+        Assert.True(ReminderEvent.BusyDue(r, 30, alreadyFired: false));
+        Assert.True(ReminderEvent.BusyDue(r, 120, alreadyFired: false));
+        // 这一轮已经提醒过：再坐多久也不重复催（复位由调用方在人离开满一分钟时做）
+        Assert.False(ReminderEvent.BusyDue(r, 120, alreadyFired: true));
+    }
+
+    [Fact]
+    public void BusyMinutes_below_one_is_clamped_to_one()
+        => Assert.True(ReminderEvent.BusyDue(new Reminder { BusyMinutes = 0 }, 1, false));
+
+    // idle 与 busy 读的是同一个空闲计数，所以同一时刻两者必须给出相反的答案——
+    // 都为真意味着「人走了」和「人一直在」同时成立，那是这两个触发最容易写反的地方。
+    [Fact]
+    public void Idle_and_busy_never_both_fire_at_the_same_moment()
+    {
+        var idle = new Reminder { Trigger = "idle", IdleMinutes = 10 };
+        var busy = new Reminder { Trigger = "busy", BusyMinutes = 30 };
+        // 离开 10 分钟：空闲成立；此时 busy 的连续使用计数必然已被调用方清零（传 0）
+        Assert.True(ReminderEvent.IdleDue(idle, 10, false));
+        Assert.False(ReminderEvent.BusyDue(busy, 0, false));
+        // 连续用了 30 分钟：空闲时长必然是 0
+        Assert.True(ReminderEvent.BusyDue(busy, 30, false));
+        Assert.False(ReminderEvent.IdleDue(idle, 0, false));
+    }
 
     [Fact]
     public void LowBattery_only_on_battery_and_only_below_threshold()

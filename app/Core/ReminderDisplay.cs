@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Clockwork.I18n;
 
 namespace Clockwork.Core;
@@ -11,6 +11,7 @@ public static class ReminderDisplay
     public static string EventLabel(Reminder r) => r.Trigger switch
     {
         "idle" => Strings.Lf("Time_Idle", r.IdleMinutes),
+        "busy" => Strings.Lf("Time_Busy", r.BusyMinutes),
         "lowBattery" => Strings.Lf("Time_LowBattery", r.BatteryPercent),
         _ => Strings.Get("Ed_Trig_" + char.ToUpperInvariant(r.Trigger[0]) + r.Trigger.Substring(1)),
     };
@@ -53,7 +54,12 @@ public static class ReminderDisplay
         }
         return r.RecurType switch
         {
-            "everyNDays" => Strings.Lf("Period_EveryNDays", r.IntervalDays),
+            // 每 1 天就是每天。「每1天」在每种语言里都别扭，英文更直接错成 "Every 1 days"；
+            // 而这一档确实走得到：编辑器里那个间隔是自由输入框，引擎侧只把 <1 夹到 1（ReminderEngine）。
+            // 在这里收口而不是去改 18 份译文：措辞问题的根子是「1 不该走这个模板」。
+            "everyNDays" => r.IntervalDays <= 1
+                ? Strings.Get("Days_EveryDay")
+                : Strings.Lf("Period_EveryNDays", r.IntervalDays),
             "monthly" => Strings.Lf("Period_Monthly", r.MonthlyDay),
             "once" => Strings.Lf("Period_Once", r.OnceDate ?? "").Trim(),   // 无日期=今天：只显示「仅一次」
             _ => StepDisplay.DaysLabel(r.Days),
@@ -85,8 +91,11 @@ public static class ReminderDisplay
         if (!string.IsNullOrWhiteSpace(r.SilentGroupId))
         {
             var g = groups == null ? null : ActionGroupResolver.Resolve(groups, r.SilentGroupId);
-            return Strings.Lf("Sum_RunGroup", g?.Name is { Length: > 0 } n ? n : Strings.Get("Sum_Group_None"));
+            return Strings.Lf("Sum_RunGroup", g?.Name is { Length: > 0 } n ? n : Strings.Get("Sum_Unset"));
         }
-        return StepHelpers.Ellipsis(Regex.Replace(r.Message ?? "", @"\r?\n", " "));
+        // 空消息同样不许留白：提醒编辑器不强制填正文，而一条没有正文、也没绑静默组的提醒
+        // 在列表里就是一整行空白——看起来像坏了，而不是像「还没写」。与步骤那边同一条规矩、同一个占位。
+        var text = StepHelpers.Ellipsis(Regex.Replace(r.Message ?? "", @"\r?\n", " "));
+        return string.IsNullOrWhiteSpace(text) ? Strings.Get("Sum_Unset") : text;
     }
 }

@@ -9,8 +9,16 @@ namespace Clockwork.Core;
 public static class ReminderEvent
 {
     // 触发 id → 编辑器下拉与列表文案的 resx 键后缀（Ed_Trig_* / 见 ReminderDisplay）。顺序即下拉顺序。
+    // 下拉按「什么在发生变化」分组排：人（空闲/连续使用）→ 会话（解锁/锁屏/唤醒）→ 电源 → 外设与网络。
+    // 重排是安全的：FillCombo 按值选中而不是按下标，老配置切到新版本不会串项。
+    //
+    // 三类事件的来源各不相同，加新项前先想清楚归哪一类，否则会在错的地方找不到通知：
+    //   · 订阅类（unlock/lock/resume/display）—— Windows 主动广播，WireSystemEvents 里订阅；
+    //   · 消息类（usb）—— 广播到顶层窗口的 WM_，在 HotkeyHook 里接（本程序已有一个常驻窗口句柄）；
+    //   · 轮询类（idle/busy/lowBattery/acPlugged/acUnplugged）—— 没有通知可订，搭提醒计时器的班车。
     public static readonly string[] All =
-        { "idle", "unlock", "lock", "resume", "acPlugged", "acUnplugged", "lowBattery" };
+        { "idle", "busy", "unlock", "lock", "resume", "acPlugged", "acUnplugged", "lowBattery",
+          "display", "netUp", "netDown", "usb" };
 
     public static bool IsEvent(string? trigger) => Array.IndexOf(All, trigger ?? "") >= 0;
 
@@ -41,6 +49,16 @@ public static class ReminderEvent
     // 保证「一次离开只触发一次」——否则每个 tick 都满足条件，会一直响下去。
     public static bool IdleDue(Reminder r, int idleMinutes, bool alreadyFired)
         => !alreadyFired && idleMinutes >= (r.IdleMinutes < 1 ? 1 : r.IdleMinutes);
+
+    // 「连续使用」是空闲的镜像：用满 BusyMinutes 分钟触发一次，人离开满一分钟后由调用方复位、重新计时。
+    // 与 IdleDue 共用同一个「一轮只触发一次」的形状——两者读的是同一个 GetLastInputInfo，
+    // 判据分家的话，「久坐提醒」和「离开提醒」会在同一次离席上给出互相矛盾的答案。
+    //
+    // 复位的粒度是一分钟，因为 IdleTime.Minutes() 就只有分钟精度（空闲事件一直用的也是它）。
+    // ponytail: 离开多久算「歇过了」写死一分钟，没做成可配项——真有人嫌 55 秒的走神不该清零，
+    // 再加一个 BusyResetMinutes 字段即可，判据已经收在这一个谓词里。
+    public static bool BusyDue(Reminder r, int busyMinutes, bool alreadyFired)
+        => !alreadyFired && busyMinutes >= (r.BusyMinutes < 1 ? 1 : r.BusyMinutes);
 
     // 「电量偏低」同理：跌破阈值触发一次，充回阈值以上才复位。percent<0 = 读不到电量（台式机）→ 永不触发。
     public static bool LowBatteryDue(Reminder r, int percent, bool onAc, bool alreadyFired)
