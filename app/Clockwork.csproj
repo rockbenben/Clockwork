@@ -26,8 +26,14 @@
     <NoWarn>$(NoWarn);WFO0003</NoWarn>
     <!-- 版本号不用手动维护：本地构建从最近的 git tag 取（见文件末尾的 VersionFromGitTag），
          正式发版由 CI 用 -p:Version=<tag 去 v> 覆盖。下面这个值只是两者都不适用时的兜底
-         ——比如从源码 zip 构建、目录里没有 .git。 -->
-    <VersionFallback>3.0.0</VersionFallback>
+         ——比如从源码 zip 构建、目录里没有 .git。
+         **它必须是一个永远不等于真实版本号的哨兵值。** 下面 VersionFromGitTag 的守卫条件是
+         `Version == VersionFallback`，它拿「相等」当作「没人从外部传值」的信号。曾经这里写的是
+         下一个要发的版本号（3.0.0），于是 `-p:Version=3.0.0` 恰好与它相等、被误判成「没人传」，
+         target 照跑、git describe 取到上一个 tag 把它顶掉——实测得到一个标着 2.7.1 的 exe。
+         写成 0.0.0-dev 之后那句守卫才真的成立；而真没有 tag 时报一个明显的 dev 号码，
+         也比报一个已经过期的发布号码诚实。 -->
+    <VersionFallback>0.0.0-dev</VersionFallback>
     <Version>$(VersionFallback)</Version>
     <Product>Clockwork</Product>
     <Company>rockbenben</Company>
@@ -51,7 +57,9 @@
 
     Condition 是承重件，不是保险：target 内部的 PropertyGroup 会覆盖命令行传入的全局属性
     （已实测），少了这道判断，CI 的 -p:Version=<tag> 会被顶掉，打 v2.6.0 的 tag 反而发出
-    标着上一版号码的 exe。Version 只有在没人从外部传值时才等于 VersionFallback。
+    标着上一版号码的 exe。Version 只有在没人从外部传值时才等于 VersionFallback
+    ——而这一句成立的前提是 VersionFallback 是个哨兵值（见它的声明处）；
+    写成一个真实版本号的那一版，恰好发那个版本时守卫就失效了。
     git describe 失败（无 git、无 tag、源码 zip）就保留兜底值；版本号是门面，不该让构建失败。
 
     IgnoreExitCode 而非 ContinueOnError：后者只是把失败降级成警告，仍会留下
