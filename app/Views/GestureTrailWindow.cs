@@ -1,0 +1,264 @@
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Shapes;
+// UseWindowsForms 的全局 using 让这几个类型撞名，显式钉到 WPF（同 Pickers.cs / StepMenu.cs 的惯例）。
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
+
+namespace Clockwork.Views;
+
+/// <summary>画手势时**看得见**的那条笔迹：一个铺满当前屏、点不着、不抢焦点的覆盖窗。</summary>
+//
+// 没有它的时候，画手势是这样的：按住右键划一道，屏幕上什么都没发生，松手才知道自己画的是什么。
+// 画错了不知道错在哪，画对了也没有「画对了」的感觉——手势这类操作的全部信心都来自即时反馈。
+// 管理器里的笔迹缩略图（GestureGlyph）回答的是「我配了什么」，这条线回答的是「我现在画到哪了」，
+// 两件事，缺一件都不够。
+//
+// 三条硬约束，任何一条破了都会造成比「没有笔迹」严重得多的问题：
+//
+//   1. **绝不能抢前台。** 「最小化当前窗口」这类动作读的就是 GetForegroundWindow——
+//      覆盖窗一旦拿到前台，用户的动作会全部落到这个透明窗上（并被自家进程的守卫拒掉）。
+//      ShowActivated=false 只管 Show 那一下，WS_EX_NOACTIVATE 才管住后续每一次点击。
+//   2. **绝不能吃鼠标事件。** WS_EX_TRANSPARENT 让命中测试穿过去。少了它，
+//      手势画到一半，指针下面的程序就再也收不到鼠标了。
+//   3. **绝不能在钩子回调里画。** 低级鼠标钩子有 LowLevelHooksTimeout（默认 300ms）的预算，
+//      超了整个钩子会被系统摘掉。所以坐标一律由 MouseHook 经 _post 派发过来（同 Fire 那条路）。
+//
+// 只铺**手势起点所在的那一块屏**，不铺整个虚拟桌面：跨屏画手势基本不存在，
+// 而单屏意味着只有一个 DPI 系数要换算（混合 DPI 下 WPF 给整窗一个系数，跨屏的点会偏），
+// 顺带把分层窗口每帧要刷的面积压到最小。
+public sealed class GestureTrailWindow : Window
+{
+    private const int GWL_EXSTYLE = -20;
+    private const int WS_EX_TRANSPARENT = 0x20, WS_EX_TOOLWINDOW = 0x80, WS_EX_NOACTIVATE = 0x08000000;
+    private const uint SWP_NOACTIVATE = 0x0010, SWP_NOZORDER = 0x0004;
+    private const int MONITOR_DEFAULTTONEAREST = 2, MDT_EFFECTIVE_DPI = 0;
+
+    [DllImport("user32.dll", SetLastError = true)] private static extern int GetWindowLong(IntPtr h, int i);
+    [DllImport("user32.dll", SetLastError = true)] private static extern int SetWindowLong(IntPtr h, int i, int v);
+    [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr h, IntPtr after, int x, int y, int cx, int cy, uint flags);
+    [DllImport("user32.dll")] private static extern IntPtr MonitorFromPoint(POINT p, int flags);
+    [DllImport("user32.dll")] private static extern bool GetMonitorInfo(IntPtr mon, ref MONITORINFO mi);
+    [DllImport("shcore.dll")] private static extern int GetDpiForMonitor(IntPtr mon, int type, out uint x, out uint y);
+
+    [StructLayout(LayoutKind.Sequential)] private struct POINT { public int X, Y; }
+    [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
+    [StructLayout(LayoutKind.Sequential)] private struct MONITORINFO { public int cbSize; public RECT rcMonitor, rcWork; public uint dwFlags; }
+
+    // 一条线画两遍：底下一层半透明的黑当描边，上面一层强调色当线芯。
+    // 覆盖窗压在**任意**背景上——白文档、深色 IDE、花花的壁纸——单一颜色总有一种底色让它读不出来。
+    // 描边不解决「配色好看」，解决的是「任何底色上都还看得见」。
+    private readonly Polyline _halo = Stroke(new SolidColorBrush(Color.FromArgb(0x59, 0, 0, 0)), 8);
+    private readonly Polyline _core;
+    private readonly Brush _idleBrush, _armedBrush;
+    private bool _armed;
+
+    // 画完没匹配上时，就地显示「你画的是什么」的那颗小药丸。
+    //
+    // 从前这句话走的是通知卡（ShowToast）——一张带标题、带图标、从屏幕角落滑进来的卡片，
+    // 只为说一句「↑↓ 没绑动作」。份量和事情完全不匹配：手势本来是个一划而过的操作，
+    // 反馈却比操作本身还重，而且出现在离你手 1500 像素远的另一个角落。
+    // 挪到笔迹这扇窗上：它已经点得穿、不抢焦点、按起点那块屏摆好了，是现成的、最轻的那块地方。
+    // 就地显示还顺带答了「我画到哪了」——你在哪收的笔，答案就出在哪。
+    private readonly TextBlock _noteText = new()
+    {
+        FontSize = 20,
+        FontWeight = FontWeights.SemiBold,
+        Foreground = new SolidColorBrush(Color.FromRgb(0xE8, 0xEA, 0xED)),
+    };
+
+    private readonly Border _note;
+    private readonly System.Windows.Threading.DispatcherTimer _noteTimer = new();
+
+    private bool _placed;
+    private double _scale = 1;
+    private int _originX, _originY, _spanX, _spanY;   // 覆盖窗在屏幕上的物理像素矩形
+    private Point _last;                              // 收笔那一点（DIP，窗内坐标）：药丸摆这儿
+    private bool _hasLast;                            // 这一笔到底有没有点——(0,0) 是合法坐标，不能拿它当哨兵
+
+    private static Polyline Stroke(Brush b, double t) => new()
+    {
+        Stroke = b,
+        StrokeThickness = t,
+        StrokeLineJoin = PenLineJoin.Round,
+        StrokeStartLineCap = PenLineCap.Round,
+        StrokeEndLineCap = PenLineCap.Round,
+    };
+
+    public GestureTrailWindow()
+    {
+        WindowStyle = WindowStyle.None;
+        AllowsTransparency = true;          // 必须在 Show 之前设，且要求 WindowStyle=None
+        Background = System.Windows.Media.Brushes.Transparent;
+        ShowInTaskbar = false;
+        ShowActivated = false;
+        Topmost = true;
+        IsHitTestVisible = false;
+        ResizeMode = ResizeMode.NoResize;
+        WindowStartupLocation = WindowStartupLocation.Manual;
+        // 笔迹与管理器里的缩略图同色：屏幕上画出来的那条线，和列表里存下来的那条，是同一样东西。
+        _idleBrush = (Brush)(System.Windows.Application.Current?.TryFindResource("BrushAccentText")
+                             ?? new SolidColorBrush(Color.FromRgb(0x75, 0x9C, 0xD7)));
+        // 命中色不从主题里取：主题色是给界面用的，而这条线压在**任意**程序的窗口上，
+        // 要的是「和未命中那一档一眼分得开」。同一个蓝往亮里推到近白，比换一个色相稳——
+        // 换色相（比如绿）在花壁纸和深色 IDE 上各是一种观感，而提亮在任何底色上都是同一个信号。
+        _armedBrush = new SolidColorBrush(Color.FromRgb(0xE6, 0xEF, 0xFF));
+        _core = Stroke(_idleBrush, 4);
+        // 药丸自己压一层半透明的黑底——同笔迹描边一个理由：覆盖窗压在任意背景上，
+        // 白文档和深色 IDE 上都得读得出来。不用主题色，这不是要好看，是要在任何底色上可读。
+        _note = new Border
+        {
+            Background = new SolidColorBrush(Color.FromArgb(0xD8, 0x1C, 0x1E, 0x22)),
+            CornerRadius = new CornerRadius(8),
+            Padding = new Thickness(12, 6, 12, 6),
+            Child = _noteText,
+            Visibility = Visibility.Collapsed,
+        };
+        _noteTimer.Tick += (_, _) => { _noteTimer.Stop(); HideNote(); if (_core.Points.Count == 0) Hide(); };
+
+        var canvas = new Canvas();
+        canvas.Children.Add(_halo);
+        canvas.Children.Add(_core);
+        canvas.Children.Add(_note);
+        Content = canvas;
+    }
+
+    /// <summary>就地说一句「你画的是这个」。<paramref name="text"/> 为空则什么都不做。</summary>
+    //
+    // 紧跟在 Finish 之后调用（MouseHook 先派 trailEnd 再派 unmatched，同一条 UI 队列，顺序有保证），
+    // 所以这儿要负责把窗口重新显出来——Finish 已经把它藏了。
+    public void Note(string? text, int ms = 900)
+    {
+        if (string.IsNullOrEmpty(text) || !_hasLast) return;
+        _noteText.Text = text;
+        _note.Visibility = Visibility.Visible;
+        // 摆在收笔点的右下方一点，别正好压在指针下面挡住你要看的东西。
+        _note.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        Canvas.SetLeft(_note, _last.X + 14);
+        Canvas.SetTop(_note, _last.Y + 14);
+        if (!IsVisible) { Show(); Reposition(); }
+        _noteTimer.Interval = TimeSpan.FromMilliseconds(ms);
+        _noteTimer.Stop();
+        _noteTimer.Start();
+    }
+
+    // 点亮 / 熄灭。会来回切：画出 ↑ 命中「复制」，继续往下画成 ↑↓ 就该灭掉，再成为「搜索」时重新亮起——
+    // 命中是**此刻这一串**的属性，不是一旦点亮就锁住的状态。
+    private void SetArmed(bool on)
+    {
+        if (_armed == on) return;
+        _armed = on;
+        _core.Stroke = on ? _armedBrush : _idleBrush;
+        _core.StrokeThickness = on ? 5.5 : 4;
+        _halo.StrokeThickness = on ? 10 : 8;   // 描边跟着加粗，任何底色上都还托得住线芯
+    }
+
+    private void HideNote()
+    {
+        _note.Visibility = Visibility.Collapsed;
+        _noteText.Text = "";
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        var h = new WindowInteropHelper(this).Handle;
+        if (h == IntPtr.Zero) return;
+        // TRANSPARENT=点得穿，NOACTIVATE=永远不抢焦点，TOOLWINDOW=不进 Alt+Tab。
+        SetWindowLong(h, GWL_EXSTYLE, GetWindowLong(h, GWL_EXSTYLE) | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW);
+    }
+
+    /// <summary>笔迹又到了一个点（钩子给的物理像素）。一笔的第一个点顺带把窗口摆到那块屏上。</summary>
+    //
+    // 第二个点到位才真正显示：右键**点一下**（没画）只会有起点这一个点，
+    // 那时闪出一条线，等于把「右键菜单」变成「屏幕上闪一下再出菜单」。
+    /// <param name="armed">画到此刻已经命中某条手势了吗——命中就把笔迹点亮，松手之前就看得见。</param>
+    public void Point(int px, int py, bool armed = false)
+    {
+        // **命中就变色。** 从前这条线从头到尾一个样，画对没画对只有松手才知道；
+        // 而手势最缺的正是「按下去之前的确认」。Quicker 的手册把这一条写在触发说明里：
+        // 「识别到手势后（线条变色）松开鼠标即可立即触发」——它是那套体验里最值钱的一半。
+        //
+        // 只换颜色和粗细，不加第二种反馈（不闪、不弹、不出字）：这条线本来就在你眼睛正看的地方，
+        // 变亮一档就够；再加东西只会把「一划而过」变成一场演出。
+        SetArmed(armed);
+        if (!_placed)
+        {
+            if (!CoverMonitorOf(px, py)) return;   // 摆不了就整笔都不画，别拿旧的原点画到错的地方去
+            _placed = true;
+        }
+        // 新的一笔开始：上一笔的药丸立刻收掉，别让它挂在这一笔的旁边。
+        if (_noteTimer.IsEnabled) { _noteTimer.Stop(); HideNote(); }
+        double x = (px - _originX) / _scale, y = (py - _originY) / _scale;
+        _last = new Point(x, y);
+        _hasLast = true;
+        _halo.Points.Add(new Point(x, y));
+        _core.Points.Add(new Point(x, y));
+        if (IsVisible || _core.Points.Count < 2) return;   // 不写 ==2：那一下万一没显示成，后面就再也不试了
+        Show();
+        // 显示之后再摆一次。位置是直接用 SetWindowPos 写进 HWND 的，WPF 那边的 Left/Top 仍是「未设」，
+        // 它在显示流程里若按自己那份记账同步一次窗口，这条笔迹就会跑到屏幕的另一个角落去。
+        // 再写一遍是幂等的，而赌 WPF 不同步不是。
+        Reposition();
+    }
+
+    /// <summary>收笔。藏起来而不是关掉：下一次手势马上就要用，重建一扇分层窗口不便宜。</summary>
+    public void Finish()
+    {
+        _placed = false;
+        SetArmed(false);   // 复位，否则下一笔起手就是亮的（还什么都没画呢）
+        _halo.Points.Clear();
+        _core.Points.Clear();
+        // **`_hasLast` / `_last` 故意不清。** 紧跟着的 Note() 靠它们把「你画的是这个」
+        // 摆在收笔点旁边（见 Note 的注释：MouseHook 先派 trailEnd 再派 unmatched）。
+        // 在这里清掉它们，Note 会直接 return，那句提示永远不再出现。
+        // 没有遗留风险：unmatched 只在 drawn.Length > 0 时发，也就是本笔确实有点。
+        // （已经被当成「忘了重置」提过一次。）
+        // 无条件 Hide：同 Show 那处的理由反过来——手很快时 Finish 可能赶在布局跑完之前到，
+        // 那一刻 IsVisible 还是 false，带条件就跳过了，于是一扇铺满全屏的透明窗会一直留在最上层。
+        //
+        // 药丸还亮着时不藏窗：紧随其后的 Note() 会把它显回来，中间那一藏一显会闪一下。
+        // （Note 走的是另一条 post，两次渲染之间真的有机会插进去一帧。）
+        if (_noteTimer.IsEnabled) return;
+        Hide();
+    }
+
+    // 摆到起点所在那块屏上，全程物理像素（同 QuickPanelWindow.PlaceAtCursor 的做法与理由）。
+    // 任何一步取不到信息就当没有笔迹——少一条线是小事，摆错位置糊住半个屏幕不是。
+    private bool CoverMonitorOf(int px, int py)
+    {
+        try
+        {
+            var h = new WindowInteropHelper(this).EnsureHandle();
+            var mon = MonitorFromPoint(new POINT { X = px, Y = py }, MONITOR_DEFAULTTONEAREST);
+            if (mon == IntPtr.Zero) return false;
+            var mi = new MONITORINFO { cbSize = Marshal.SizeOf<MONITORINFO>() };
+            if (!GetMonitorInfo(mon, ref mi)) return false;
+            _scale = GetDpiForMonitor(mon, MDT_EFFECTIVE_DPI, out uint dpiX, out _) == 0 && dpiX > 0 ? dpiX / 96.0 : 1.0;
+            _originX = mi.rcMonitor.Left;
+            _originY = mi.rcMonitor.Top;
+            // 铺满整块屏（不是工作区）：手势可以画到任务栏上面去。
+            _spanX = mi.rcMonitor.Right - _originX;
+            _spanY = mi.rcMonitor.Bottom - _originY;
+            Reposition();
+            return true;
+        }
+        catch { return false; }
+    }
+
+    private void Reposition()
+    {
+        try
+        {
+            var h = new WindowInteropHelper(this).Handle;
+            if (h != IntPtr.Zero && _spanX > 0 && _spanY > 0)
+                SetWindowPos(h, IntPtr.Zero, _originX, _originY, _spanX, _spanY, SWP_NOACTIVATE | SWP_NOZORDER);
+        }
+        catch { }
+    }
+}
