@@ -1,0 +1,116 @@
+<Window x:Class="Clockwork.Views.PanelManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:Clockwork.I18n"
+        Title="{loc:Loc Panel_Manager}" Width="880" SizeToContent="Height" MaxHeight="392" MinWidth="720" MinHeight="360"
+        WindowStartupLocation="CenterOwner" Background="{StaticResource BrushInk}">
+    <!-- 面板管理器：**它就是面板本身，只是可以编辑**。
+         同样的两条页签栏、同样的分带、同样尺寸的格子——所以「这儿看到什么样，
+         呼出来就是什么样」不是一句承诺，是同一套画法跑了两遍。
+         页签解决了「哪个动作放哪一页」：所有页的名字始终在眼前，
+         而要挪，就把格子拖到那一页的页签上。
+
+         **「只在哪个程序上出现」不是一个导航维度**，是每一页自己的一个字段（默认任何程序），
+         摆在那一页的页眉上。它曾经是窗口顶上一整条筛选栏，于是绑给别的程序的页
+         在别的场景里整批看不见——「我那一页去哪了」只能靠想起自己给它绑过程序。
+
+         与主窗口的三个列表页刻意不同：那边是「一行一条、看得清参数」的表格，
+         这里是「所见即所得的格子」，因为要判断的是版面而不是字段。
+         真要改某一格的参数，点它就打开的还是主界面那个步骤编辑器——两套界面，一套编辑器。 -->
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>      <!-- 两条页签栏 + 当前那一页 -->
+            <RowDefinition Height="Auto"/>   <!-- 外观控制条 -->
+            <RowDefinition Height="Auto"/>   <!-- 底栏 -->
+        </Grid.RowDefinitions>
+
+        <!-- ── 页：**长成面板的样子** ──
+             一条顶栏 + 一条左栏 + 当前那一页，位置与 QuickPanelWindow 一一对应，
+             连页签用的都是同两个样式（PanelTopTab / PanelPageTab）。
+
+             此前是把该场景下所有页的格子阵一次全铺出来、纵向滚。那个布局的理由是
+             「决定哪个动作放哪一页时得同时看见所有页」——可代价是这扇窗不再像面板：
+             四页就是四堵七行的格子墙，滚两屏才看得完，而面板上你一次只看见一页。
+             页签把这两件事同时办了：所有页的**名字**始终在眼前（归属一眼可见），
+             而格子只画当前这一页。要把一个动作挪到别页，拖到那一页的页签上放手即可。 -->
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- 顶栏压在最上面并跨满两列，左栏在它下面——与面板同一个几何关系。 -->
+            <!-- 与面板同一条基线（说明见 QuickPanelWindow.xaml）。 -->
+            <Border x:Name="TopTabRow" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,8"
+                    BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
+                <WrapPanel x:Name="TopTabBar" AutomationProperties.Name="{loc:Loc Panel_Category}"/>
+            </Border>
+            <ScrollViewer x:Name="RailScroll" Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled" Margin="0,0,10,0">
+                <StackPanel x:Name="PageRail" AutomationProperties.Name="{loc:Loc Panel_Pages}"/>
+            </ScrollViewer>
+            <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel x:Name="Pages"/>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ── 底：新增与关闭 ── -->
+        <!-- 面板的外观：**放在能看见它的地方**。
+             这四项（版面 / 格子尺寸 / 只显示图标 / 显示自带操作）原来在设置页，
+             而它们是纯视觉选择 —— 光看下拉判断不了，只能靠「改 → 关设置 → 按热键 → 看 → 再改」盲调。
+             这个窗口本来就是面板的所见即所得预览，改一下、预览重画、当场看到。
+
+             为什么不放进面板本身：面板刻意是一次性的（失焦即关、Esc 即关、点一格先关自己再执行），
+             放设置进去要给这三条关闭路径逐条开例外，而「面板一定会自己消失」这个保证
+             比就地调设置值钱得多 —— 它是浮在所有窗口之上的，关不掉才是真事故。
+             呼出方式（面板键、长按中键）留在设置页：那是记忆与冲突问题，不是看得见的问题。 -->
+        <Border Grid.Row="1" Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}"
+                BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,10,0,0">
+            <WrapPanel>
+                <TextBlock Text="{loc:Loc Settings_PanelLayout}" Style="{StaticResource FieldHint}" VerticalAlignment="Center"
+                           Margin="0,0,10,0" ToolTip="{loc:Loc Settings_PanelLayoutTip}"/>
+                <!-- 读作「4 列 × 上 3 行 + 下 4 行」：符号本身就是这个几何关系，且不需要翻译。 -->
+                <ComboBox x:Name="PanelColumnsCombo" Width="58" Height="28" SelectionChanged="Look_Changed"
+                          ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                          AutomationProperties.Name="{loc:Loc Settings_PanelColumns}"/>
+                <TextBlock Text="×" Style="{StaticResource FieldHint}" VerticalAlignment="Center" Margin="6,0"/>
+                <ComboBox x:Name="PanelTopRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
+                          ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                          AutomationProperties.Name="{loc:Loc Settings_PanelTopRows}"/>
+                <TextBlock Text="+" Style="{StaticResource FieldHint}" VerticalAlignment="Center" Margin="6,0"/>
+                <ComboBox x:Name="PanelBottomRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
+                          ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                          AutomationProperties.Name="{loc:Loc Settings_PanelBottomRows}"/>
+                <ComboBox x:Name="PanelTileSizeCombo" Width="100" Height="28" Margin="14,0,0,0" SelectionChanged="Look_Changed"
+                          AutomationProperties.Name="{loc:Loc Settings_PanelTileSize}"/>
+                <CheckBox x:Name="PanelIconOnlyChk" Content="{loc:Loc Settings_PanelIconOnly}" VerticalAlignment="Center" Margin="18,0,0,0"
+                          ToolTip="{loc:Loc Settings_PanelIconOnlyTip}" Click="Look_Changed"/>
+                <CheckBox x:Name="PanelShowOpsChk" Content="{loc:Loc Settings_PanelShowOps}" VerticalAlignment="Center" Margin="18,0,0,0" Click="Look_Changed"/>
+                <!-- 两条导航栏的开关。它们**空着本来就不画**（只有一页没有页签栏、只有一类没有分类栏），
+                     所以这两个勾的实际用途是「我知道有好几页，但我就是不想看见那条栏」。 -->
+                <CheckBox x:Name="PanelLeftTabsChk" Content="{loc:Loc Panel_ShowLeftTabs}" VerticalAlignment="Center" Margin="18,0,0,0"
+                          ToolTip="{loc:Loc Panel_BarsHint}" Click="Look_Changed"/>
+                <CheckBox x:Name="PanelTopTabsChk" Content="{loc:Loc Panel_ShowTopTabs}" VerticalAlignment="Center" Margin="18,0,0,0"
+                          ToolTip="{loc:Loc Panel_BarsHint}" Click="Look_Changed"/>
+            </WrapPanel>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <!-- 这里曾经有一颗「添加面板页」。两条栏各自末尾都有「+」之后它就是第二个入口了，
+                 而且在窗口另一头——你正看着左栏，按钮却在这儿。删掉。 -->
+            <!-- 直接放进 * 列，不套 WrapPanel：**WrapPanel 给子元素的可用宽度是无限的**，
+                 于是 TextWrapping 永不触发，只能靠 MaxWidth 兜——而 820 宽下 * 列减掉「关闭」
+                 就只剩 ~600，写死的 MaxWidth="700" 会让这句话钻到按钮底下（实测：末尾「右键页签…」
+                 被按钮压掉）。交给 * 列量宽度，换行才真的会发生。
+                 与端口 / 系统启动项两处页脚同一条处理，那边的注释记着同一个坑。
+                 这四句话不精简：它们教的全是拖拽手势——看界面看不出来的那一类，正该留在页脚。 -->
+            <TextBlock Grid.Column="0" Text="{loc:Loc Panel_ManagerHint}" Style="{StaticResource FieldHint}"
+                       TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,14,0"/>
+            <Button Grid.Column="1" Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32" Click="Close_Click"/>
+        </Grid>
+    </Grid>
+</Window>

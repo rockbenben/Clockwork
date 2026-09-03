@@ -1,0 +1,39 @@
+<Window x:Class="Clockwork.Views.IconPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:Clockwork.I18n"
+        Title="{loc:Loc Icon_Pick}" SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner" Background="{StaticResource BrushInk}"
+        ShowInTaskbar="False" ResizeMode="NoResize">
+    <!-- 挑图标是看着挑的，所以这个窗口只有一件事：把库铺开，点一下就选中。
+         没有搜索框——搜索要给每个图标配名字，那是 18 种语言乘一百多条，
+         而按主题排好的一屏，眼睛比搜索框快。
+
+         「用图片…」留在窗口里而不是另一颗并排的按钮：自定义图片和内置图标是同一个字段的
+         两种填法，让它们出现在同一个地方，而不是让人先猜该点哪颗按钮。 -->
+    <StackPanel Margin="18,16,18,14">
+        <TextBlock Text="{loc:Loc Icon_PickHint}" Style="{StaticResource FieldHint}"
+                   TextWrapping="Wrap" MaxWidth="520" Margin="0,0,0,10"/>
+
+        <!-- 凹槽：与面板的图标井同一种处理（内陷一格、比底色更深），
+             让这一片读起来是「收纳格」，而不是一堆浮在背景上的按钮。 -->
+        <Border Background="{StaticResource BrushInk}" BorderBrush="{StaticResource BrushLine}"
+                BorderThickness="1" CornerRadius="3" Padding="6">
+            <UniformGrid x:Name="Grid" Columns="16"/>
+        </Border>
+
+        <Grid Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="{loc:Loc Icon_UseImage}" Click="UseImage_Click" Margin="0,0,10,0"/>
+            <!-- 「不设」＝把字段清空，回到按类型自动取图标（运行程序会取那个程序自己的图标）。
+                 它不是「删除」，所以不用红色；但它是一条出路——没有它，填过图标的人没法反悔。 -->
+            <Button Grid.Column="1" Content="{loc:Loc Icon_None}" Click="Clear_Click"/>
+            <Button Grid.Column="3" Content="{loc:Loc Ed_Cancel}" Style="{StaticResource DialogButton}" IsCancel="True"/>
+        </Grid>
+    </StackPanel>
+</Window>

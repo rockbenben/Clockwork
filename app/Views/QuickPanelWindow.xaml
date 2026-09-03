@@ -1,0 +1,278 @@
+<Window x:Class="Clockwork.Views.QuickPanelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="Manual" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ShowInTaskbar="False" Topmost="True" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+    <!-- ════════ 快捷面板 ════════
+         设计定位：**机芯夹板**。整块面板是一片蓝钢夹板，动作格嵌在一个下沉的凹槽里，
+         底部一排自带操作留在夹板面上——凹槽里的东西会翻页，夹板上的东西永远不动。
+         这条分工本身就是信息：会动的是「你配的动作」，不动的是「随时够得着的开关」。
+
+         沿用 Theme.xaml 立下的规矩「安静的仪器，只在关键处发亮」：
+         全屏只允许强调色出现两处——当前页的那段刻度，和被指到 / 被聚焦的那一格。其余一律是钢。
+
+         翻页索引是本面板的签名件：一段擒纵刻度 = 一页，当前那段是强调色。
+         它同时**取代了数字页码**——一把显示位置的刻度尺已经把「第几页、共几页」说完了，
+         旁边再写一行 02/04 是同一件事说两遍（Theme.xaml 里那条「横着答在第几页」正是这个意思）。 -->
+    <Window.Resources>
+        <!-- 翻页时两个坑一起横移 10px。写成资源而不是给某个容器起名字：
+             切换条夹在两坑之间，若把位移挂在包住它们三个的那层容器上，切换条会跟着一起滑——
+             它是机壳上的刻度，不是页面的内容，滑动会让人以为它也换了一批。
+             同一个 TranslateTransform 实例挂在两个坑上（x:Shared 默认为真），一次动画两个坑同步。 -->
+        <TranslateTransform x:Key="PageSlide"/>
+        <!-- 动作格样式（Tile）已提到 Theme.xaml：面板管理器要用同一份。
+             它原本在这里，于是管理器只能拿默认按钮凑合 —— 而默认样式带 Padding 7,7，
+             格子里两行文字的第二行被挤掉半截（实测「休眠（存盘…」被切在括号中间）。
+             这个窗口和管理器必须长得一样，那就不能有两份样式。 -->
+
+        <!-- 自带操作：图标与文字**并排**，不是上下堆叠。这个区别是有意的——
+             凹槽里是堆叠的方格（你的动作），夹板上是横排的窄条（程序的开关），
+             一眼就能分出两类东西，不必靠一条分隔线去解释。 -->
+        <Style x:Key="RailButton" TargetType="Button">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Margin" Value="1,0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="bd" Background="Transparent" CornerRadius="5" SnapsToDevicePixels="True"/>
+                            <Border x:Name="ring" CornerRadius="5" BorderBrush="{StaticResource BrushAccent}" BorderThickness="1.5"
+                                    Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
+                            <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- 悬停时文字提亮到纸白：窄条常态是钢灰（比方格更退后一层），
+                                 指到才升到与方格同一亮度，说明「现在这个才是你要按的」。 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/>
+                                <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="ring" Property="Visibility" Value="Visible"/>
+                                <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- 夹板。外层 Margin 是留给投影的空间——AllowsTransparency 下投影画在窗口内部，
+         没有这圈余量就会被裁掉。 -->
+    <Border Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}" BorderThickness="1"
+            CornerRadius="11" Margin="14" Padding="7,6,7,7">
+        <Border.Effect>
+            <DropShadowEffect Color="#0A0D12" BlurRadius="28" ShadowDepth="6" Direction="270" Opacity="0.62"/>
+        </Border.Effect>
+        <StackPanel>
+            <!-- ── 表圈：夹板刻字 · 页名 · 翻页刻度 · 退出方式 ──
+                 「怎么让它消失」必须一直写在脸上：这个窗口没有标题栏也没有关闭按钮，
+                 提示藏进 hover 的话，第一次见到它的人只能乱按。 -->
+            <Grid Margin="3,0,3,6">
+                <!-- 两侧 *、中间 Auto：中间那一栏的中心**就是面板的中心**。
+                     反过来（两侧 Auto）时，中栏的中心取决于左右各多宽——左边刻字是固定的，
+                     右边「Esc 关闭」却逐语言长短不一（德语长一倍），页名会被推得离中心忽远忽近。 -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- 刻字而非标题：全大写、极小、最暗的一档。它的职责只是「认领这个面板是谁弹的」，
+                     不该和页名争注意力（热键误按时，知道是谁弹的比知道在第几页重要）。 -->
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="CLOCKWORK"
+                           FontFamily="{StaticResource FontDisplay}" FontSize="9.5"
+                           Foreground="{StaticResource BrushFaint}" VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"/>
+                <!-- 页名：这一页叫什么，是表圈上唯一会变的东西，所以给它正中间。
+                     多页时才出现——单页时它只是把组名重复一遍，占着位置不说新东西。
+                     MaxWidth 封住：页名是用户起的，可以任意长，不封顶时它会把面板顶宽，
+                     而面板的宽度该由格子阵说了算。 -->
+                <TextBlock Grid.Column="1" x:Name="PageTitle" VerticalAlignment="Center" MaxWidth="190"
+                           FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="11.5"
+                           Foreground="{StaticResource BrushPaper}" TextAlignment="Center"
+                           TextTrimming="CharacterEllipsis" Margin="10,0" Visibility="Collapsed"/>
+                <!-- 表圈右端：先是「管理面板」，再是「Esc 关闭」。
+                     顺序是有讲究的：**最角上那一格留给不可点的提示**。每一个窗口的右上角
+                     都住着关闭按钮，把一颗齿轮摆到那儿，冲着「关掉它」去点的手会打开管理器。
+                     齿轮退一格，角上仍是一句静止的话，误点就不存在了。
+
+                     这几颗原来都在腰栏里（先是齿轮，搬走后放大镜又原样接管了那个位置）。
+                     毛病不是「谁站在那儿」，而是**那条缝本来就不该站人**：单页又没到搜索阈值时，
+                     腰栏里只剩孤零零一个字形卡在两块凹坑之间那道 24px 的缝里，读作一个掉在那儿的东西。
+                     一排居中的点读得出「刻度」，一个停在一端的字形读不出任何东西。
+                     控件全部收到这儿之后，腰上只剩刻度，也就只在**真有几屏可翻**时才出现。 -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <!-- 找东西 / 管手势 / 管面板，都是「关于这个程序自己」的入口，不是你配的动作。 -->
+                    <StackPanel x:Name="HeaderOps" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock x:Name="HintText" VerticalAlignment="Center"
+                               FontSize="10.5" Foreground="{StaticResource BrushFaint}" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- ── 分类栏：把页分成几叠，点着切 ──
+                 只在**存在两个以上分类**时出现（PanelLayout.Categories 一条都没有就返回空表）。
+                 没人填分类的面板就完全看不到它——多一条空栏比少一个功能糟。
+                 标签由代码建：分类是从页上涌现出来的，没有固定条目可以写死在 XAML 里。 -->
+            <!-- 通栏基线：选中项底下那条强调色短线，说的是「这一页与下面的内容是连着的」。
+                 没有基线可坐，它读起来只是一个被划了线的词。带页签的界面几乎都画这条线。 -->
+            <Border x:Name="TopTabRow" Margin="1,0,1,6" Visibility="Collapsed"
+                    BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
+                <StackPanel x:Name="TopTabBar" Orientation="Horizontal"
+                            KeyboardNavigation.TabNavigation="Local"/>
+            </Border>
+
+            <!-- 内容区分两列：左边页签栏，右边凹槽。页签栏空着时那一列宽度为 0，
+                 版面与没有它时逐像素相同——这条是「默认不打扰」的底线。 -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ── 页签栏：一页一条，只有页名 ──
+                     不画页图标：那儿绝大多数时候是同一个默认字形，一列重复的记号不带任何信息，
+                     还占着宽度、还让这条栏和顶栏（本来就只有名字）长得不一样。
+                     它回答的是「哪一页」；「这一页的第几屏」交给腰上的圆点。
+                     这两件事以前挤在同一排圆点里，于是一个 24 格的页被切成三屏之后，
+                     那三个点看着和「三个不同的页」一模一样——页名才是人认路的东西。 -->
+                <ScrollViewer Grid.Column="0" x:Name="RailScroll" Visibility="Collapsed" MaxHeight="430"
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                              Focusable="False" Margin="0,0,6,0">
+                    <StackPanel x:Name="PageRail" KeyboardNavigation.TabNavigation="Local"/>
+                </ScrollViewer>
+
+            <!-- ── 凹槽：动作格嵌在夹板里，比夹板更暗一档，读作铣出来的一块沉台 ──
+                 一页装不下时在页内纵向滚动（那是容量问题，不该变成第二页）。
+                 MaxHeight 在代码里按当前屏幕工作区算；XAML 这个值只是拿不到屏幕信息时的兜底。 -->
+            <ScrollViewer Grid.Column="1" x:Name="Scroll" MaxHeight="430" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled" Focusable="False">
+                <!-- Contained：方向键在网格内部循环，不会跳到窗口外的什么地方去。
+                     翻页交给滚轮 / PageUp、PageDown / 点刻度——方向键留给格子间移动，
+                     两者抢同一组键的话，走到行尾到底是换行还是翻页就说不清了。 -->
+                <!-- ── 上下两截：**两个凹坑，中间露出夹板** ──
+                     不是一整块凹槽里画一条线。试过发丝线，也试过铣一道槽（槽底压暗 + 远壁受光），
+                     都不够：Ink 与更深一档只差八级灰，那道缝在眼里几乎不存在，一页七行仍读作一堵墙。
+                     真正把两截分开的是**两块面之间露出的那条底**——夹板本来就比凹坑亮一档，
+                     让它从两坑之间透出来，界就出来了，而且用的还是这套材料自己的语汇：
+                     一块夹板上铣两个坑，是这个界面从一开始就在讲的那件事。
+
+                     两条带没有语义差别，它们是**版面节奏**：一整块 7 行的方格阵读起来是一堵墙，
+                     切成 3 + 4 之后眼睛有了落点，找格子快得多（同键盘分区的道理）。
+                     行数在设置页可改，下带设 0 即退回单条带（那时下面这个坑整个收起来）。
+                     两条带是**上限**不是预留：上带没填满时下带也收起来，
+                     只有三个动作的面板不会底下空出四行、看着像没加载完。 -->
+                <StackPanel KeyboardNavigation.DirectionalNavigation="Contained">
+                    <!-- ── 搜索域 ──
+                         搜索一开始，它就是这个窗口的主角，所以它有自己的一条凹槽、占满整幅宽度，
+                         而不是挤在两坑之间那道 24px 的缝里（上一版就挤在那儿）。
+                         凹进去的是「可以往里放东西的」——这套材料里输入域本来就该长这样。
+
+                         左边放大镜说明这是什么，右边一个等宽读数说「命中 / 总数」。
+                         用等宽面是因为主题把 Cascadia Mono 专留给机器读数，而这正是一个读数；
+                         顺带数字变化时宽度不跳，输入框不会跟着抖。 -->
+                    <Border x:Name="SearchField" Visibility="Collapsed" Margin="0,0,0,6"
+                            Background="{StaticResource BrushInk}" BorderBrush="{StaticResource BrushLine}"
+                            BorderThickness="1" CornerRadius="8" Padding="9,0">
+                        <Grid Height="32">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                                       Foreground="{StaticResource BrushFaint}" VerticalAlignment="Center" Margin="0,0,9,0"/>
+                            <!-- 水印：WPF 的 TextBox 没有 placeholder，压一层字在后面；打了字就收起来。 -->
+                            <TextBlock Grid.Column="1" x:Name="SearchHint" VerticalAlignment="Center" FontSize="12.5"
+                                       Foreground="{StaticResource BrushFaint}" IsHitTestVisible="False"/>
+                            <TextBox Grid.Column="1" x:Name="SearchBox" BorderThickness="0" FontSize="12.5"
+                                     Background="Transparent" Foreground="{StaticResource BrushPaper}"
+                                     VerticalContentAlignment="Center" TextChanged="Search_Changed"/>
+                            <TextBlock Grid.Column="2" x:Name="SearchCount" FontFamily="{StaticResource FontMono}"
+                                       FontSize="10.5" Foreground="{StaticResource BrushFaint}"
+                                       VerticalAlignment="Center" Margin="9,0,0,0"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Background="{StaticResource BrushInk}" BorderBrush="{StaticResource BrushLine}"
+                            BorderThickness="1" CornerRadius="8" Padding="3"
+                            RenderTransform="{StaticResource PageSlide}">
+                        <StackPanel>
+                            <UniformGrid x:Name="Tiles"/>
+                            <!-- 空状态的那句话**不能**放进 Tiles：UniformGrid 会把每一列都撑到
+                                 最宽子元素的宽度，一句不换行的话乘以四列，面板会拉成一条 1600px 的横带
+                                （实测就是这么宽的）。它本来也不是一个格子——格子阵里只该有格子。 -->
+                            <!-- 空态：一句话 + 一颗**真按钮**。
+                                 原来只有那句话，而它写着「在下面的『管理面板』里加一页」——
+                                 「下面」指的是一颗没有标注的齿轮，而「管理面板」这四个字
+                                 在屏幕上一处都不出现。空屏幕该是一次邀请，不是一条指路；
+                                 按钮上的字与句子里那个名字一字不差，点它就到。 -->
+                            <StackPanel x:Name="EmptyBlock" Visibility="Collapsed" Margin="10,14,10,14">
+                                <TextBlock x:Name="EmptyNote" TextWrapping="Wrap"
+                                           Foreground="{StaticResource BrushMuted}"/>
+                                <Button x:Name="EmptyAction" Visibility="Collapsed" HorizontalAlignment="Left"
+                                        Margin="0,12,0,0" MinWidth="96" Height="30"
+                                        Style="{StaticResource PrimaryButton}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ── 腰：一把刻度，没有别的 ──
+                         位置本身在说话：上面是一页的上半截，下面是下半截，中间这条管的是「你在第几屏」。
+                         两坑之间那道缝本来就是分界（说明见上面那段），腰只是把刻度画在缝上。
+
+                         **这儿不放控件。** 一度放过「管理面板」，后来放过搜索——两次都是同一个结果：
+                         单屏时刻度不画，那条缝里就只剩一个停在右端的字形，读作掉在那儿的东西，
+                         而不是一条栏。一排居中的点才读得出「刻度」；一个字形读不出任何东西。
+                         面板自己的控件（找东西、管东西）因此全部收到表圈右端去了。
+
+                         Quicker 把这条叫腰栏，翻页指示与搜索都在那儿——分工借它，位置按本程序的实际情况定。
+                         它那把锁是用来冻结上下文自动切换的，而本面板是呼出的那一刻按前台程序算一次页、
+                         之后不再变，没有可冻结的东西，所以不抄那把锁——照搬一个理由不存在的控件，
+                         只会留下一颗按了没反应的按钮。 -->
+                    <StackPanel x:Name="Waist" Margin="0,1,0,0" Visibility="Collapsed">
+                        <StackPanel x:Name="PageIndex" Orientation="Horizontal"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- 单页时切换条整个收起来，这 6px 就是那道缝本身。 -->
+                    <Border x:Name="BandRule" Background="{StaticResource BrushInk}" BorderBrush="{StaticResource BrushLine}"
+                            BorderThickness="1" CornerRadius="8" Padding="3" Margin="0,6,0,0"
+                            RenderTransform="{StaticResource PageSlide}"
+                            Visibility="Collapsed">
+                        <UniformGrid x:Name="TilesBottom"/>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+            </Grid>
+
+            <!-- ── 夹板下沿：仪器自己的那排开关 ──
+                 只有图标，没有文字。这不是为了省地方，是为了**分清这两排东西是谁的**：
+                 凹坑里是你配的动作，每一格都写着你起的名字；夹板上是程序自己的开关，
+                 像机器面板上那几颗没有标注的按钮——认一次就记住，天天看见的东西不需要天天读一遍。
+                 名字退到悬停提示，与托盘菜单里那五条一字不差，两处对得上。
+
+                 顺带解决了原来的毛病：五条带文字的窄条在中文下折成两行、德语三行，
+                 一排「重新运行启动清单」比它上面整页动作还占眼睛。
+
+                 UniformGrid(Rows=1) 而非 WrapPanel：只剩图标就不存在放不下的问题了，
+                 等分反倒把它们排成一条均匀的开关带，而不是挤在左边的一小撮。
+
+                 **那条线**：上面这段话（凹坑里是你的动作、夹板上是机器的开关）此前一个字都没画出来——
+                 底下就是四个字形直接坐在窗口底色上，与上面那堵格子阵之间只隔着 8px 空白，
+                 读起来像是同一批东西的最后一行。补一条发丝线，界就出来了，
+                 而且宽度与凹坑对齐（同一个 GridWidth），不铺满整幅——它是夹板的下沿，不是窗口的下沿。 -->
+            <Border x:Name="OpsPlate" BorderBrush="{StaticResource BrushLine}" BorderThickness="0,1,0,0"
+                    Margin="1,8,1,0" Padding="0,8,0,0">
+                <UniformGrid x:Name="Ops" Rows="1"/>
+            </Border>
+        </StackPanel>
+    </Border>
+</Window>
