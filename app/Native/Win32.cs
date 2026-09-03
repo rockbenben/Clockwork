@@ -24,12 +24,205 @@ public static class Win32
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] public static extern IntPtr PostMessage(IntPtr h, uint msg, IntPtr w, IntPtr l);
     [DllImport("user32.dll")] public static extern short VkKeyScan(char ch);
+
+    // 放一个 .wav。走 winmm 的 PlaySound 而不是 System.Media.SoundPlayer：
+    // SoundPlayer.Play() 是异步的，而它把 wav 读进**托管内存**再让系统从那块内存播——
+    // 那块内存必须活到播完为止。于是 `using var p = new SoundPlayer(...); p.Play();` 这种写法
+    // 会在声音还没响完时就把它释放掉，表现是「有时候响、有时候只响半截」，且完全看运气。
+    // SND_FILENAME 让**系统自己去读那个文件**，这边一行代码都不用替它保命。
+    public const uint SND_ASYNC = 0x0001;      // 立刻返回，别把动作卡在这一步
+    public const uint SND_FILENAME = 0x00020000;
+    public const uint SND_NODEFAULT = 0x0002;  // 放不出来就安静地什么都不放，别退回系统的「哔」
+    [DllImport("winmm.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    public static extern bool PlaySound(string? name, IntPtr mod, uint flags);
+
+    // 「此刻 Shift 按着吗」——开机清单的逃生口用（见 App.SkipStartupReason）。
+    // 用 GetAsyncKeyState 而不是 WPF 的 Keyboard.Modifiers：后者读的是本线程输入队列的状态，
+    // 而这一次询问发生在进程刚起来、还没有任何窗口拿到输入焦点的时候，那时它一律返回 None。
+    [DllImport("user32.dll")] private static extern short GetAsyncKeyState(int vk);
+
+    [DllImport("user32.dll")] private static extern bool GetCursorPos(out POINT p);
+    [StructLayout(LayoutKind.Sequential)] private struct POINT { public int X, Y; }
+
+    [DllImport("advapi32.dll", SetLastError = true)] private static extern bool OpenProcessToken(IntPtr h, uint access, out IntPtr tok);
+    [DllImport("advapi32.dll", SetLastError = true)] private static extern bool GetTokenInformation(IntPtr tok, int cls, out uint info, uint len, out uint ret);
+    [DllImport("kernel32.dll")] private static extern IntPtr GetCurrentProcess();
+
+    [DllImport("kernel32.dll", SetLastError = true)] private static extern bool CloseHandle(IntPtr h);
+
+    /// <summary>本进程是不是提权运行的。</summary>
+    //
+    // 低级鼠标钩子在某些机器上收不到输入，而「有没有提权」是最先要排除的一格——
+    // 报出来比让用户去猜强。
+    public static bool IsElevated()
+    {
+        var tok = IntPtr.Zero;
+        try
+        {
+            if (!OpenProcessToken(GetCurrentProcess(), 0x0008, out tok)) return false;
+            bool ok = GetTokenInformation(tok, 20, out uint elevated, 4, out _);   // TokenElevation
+            return ok && elevated != 0;
+        }
+        catch { return false; }
+        // OpenProcessToken 拿到的是一个**真句柄**，得还。GetCurrentProcess 那个是伪句柄、不用还，
+        // 两者长得一样，是这一类泄漏的常见来路。
+        // 现在只有 --hookprobe 调一次、进程随即退出，所以泄漏一个句柄看不出影响——
+        // 但这个方法的名字听起来随时可以调，下一个调用点很可能在一个循环里。
+        finally { if (tok != IntPtr.Zero) try { CloseHandle(tok); } catch { } }
+    }
+
+    /// <summary>光标此刻在哪（物理像素）。取不到时返回 (0,0)。</summary>
+    //
+    // 用来给「鼠标钩子还活着吗」做旁证：钩子的心跳靠鼠标动才有，
+    // 光看心跳的话「久坐不动」和「钩子掉了」分不开。位置动过而心跳没动，才是真掉了。
+    public static (int X, int Y) CursorPos()
+    {
+        try { return GetCursorPos(out var p) ? (p.X, p.Y) : (0, 0); } catch { return (0, 0); }
+    }
+
+    /// <summary>主屏宽度（物理像素）。取不到时返回 0，调用方自己兜底。</summary>
+    //
+    // 手势的最小笔画长度按它算（见 GestureGate.MinLegForScreen）。用 GetSystemMetrics 而不是
+    // WPF 的 SystemParameters：后者给的是 DIP，而钩子喂进来的坐标是物理像素，两者在缩放屏上差一截。
+    // 取 SM_CXSCREEN（主屏）而不是 SM_CXVIRTUALSCREEN（所有屏之和）：接第二块屏不该让手势变难画。
+    public static int PrimaryScreenWidth()
+    {
+        try { return GetSystemMetrics(0); } catch { return 0; }   // SM_CXSCREEN
+    }
+
+    [DllImport("user32.dll")] private static extern int GetSystemMetrics(int index);
+
+    /// <summary>右键的**物理**键态。仅供 --hookprobe 诊断用——为什么，见下面。</summary>
+    //
+    // 曾经这段注释挂在 GetCursorPos 上，写的是「手势的状态机只认按下/抬起两条消息，
+    // 而抬起是可能丢的（抬手那一刻 UAC 安全桌面弹出来），这一问是权威的：它读的是
+    // 物理键态，不依赖有没有收到那条消息」。
+    //
+    // **在手势那条路上，那句话是错的，而且错得彻底。** 钩子为了判意图先把 WM_RBUTTONDOWN
+    // 吞掉了（return 1），那条消息就再没进入系统的输入处理——于是键态表里右键从头到尾
+    // 没按下过，这一问永远答「没按」。MouseHook 那边实测：吞掉之后的 486 次移动里，
+    // 答「按着」0 次。拿它当判据的那一版，每一笔手势都在第一次移动时被自己作废，
+    // 一个采样点都攒不下，屏幕上连轨迹都不会出现。
+    //
+    // 教训一句话：**吞了别人的消息，就不能再拿系统状态当自己的判据。**
+    // 手势那边改用自己收到按下的时刻（MouseHook 里的 _beatRDown），不依赖任何被我们动过的
+    // 系统状态。
+    //
+    // 它现在唯一的调用方正是 DevChecks 里那个探针（--hookprobe）：探针**故意**吞一次按下，
+    // 再数这一问的答案，为的就是把上面那个事实量出来。别把它用回判据里去。
+    public static bool RightButtonDown()
+    {
+        try { return (GetAsyncKeyState(0x02) & 0x8000) != 0; } catch { return false; }   // VK_RBUTTON
+    }
+    private const int VK_SHIFT = 0x10;
+
+    // 高位 = 此刻物理按下。取不到（受限令牌等）按「没按」处理：逃生口探测失败只该少一条退路，
+    // 绝不能反过来把正常开机误判成安全模式、让所有人的开机清单集体不跑。
+    public static bool ShiftHeld()
+    {
+        try { return (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0; } catch { return false; }
+    }
+
+    [DllImport("user32.dll")] private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool attach);
+    [DllImport("kernel32.dll")] private static extern uint GetCurrentThreadId();
+
+    /// <summary>把窗口硬提到前台。返回是否真的到了前台。</summary>
+    //
+    // 为什么不能只调 SetForegroundWindow：Windows 有前台锁，只有"刚响应了用户输入"的进程才准抢前台。
+    // 全局热键（WM_HOTKEY）算，所以热键呼出面板一路顺畅；而**低级鼠标钩子里的中键长按不算**——
+    // 那条路上 SetForegroundWindow 会被降级成任务栏闪烁，面板出现了却收不到键盘，
+    // 而且因为它从未激活过，「失焦即关」也永远不会触发，面板就一直挂在屏幕上。
+    //
+    // 通行解法是把自己的输入队列临时挂到当前前台线程上：挂上之后两个线程共享输入状态，
+    // 前台锁不再挡我们。用完立刻摘掉——长期挂着会让两个进程的键盘焦点互相干扰。
+    public static bool ForceForeground(IntPtr hwnd)
+    {
+        if (hwnd == IntPtr.Zero) return false;
+        try
+        {
+            if (SetForegroundWindow(hwnd) && GetForegroundWindow() == hwnd) return true;   // 有豁免时这一下就够
+            var fg = GetForegroundWindow();
+            if (fg == IntPtr.Zero) return false;
+            uint theirs = GetWindowThreadProcessId(fg, out _);
+            uint mine = GetCurrentThreadId();
+            if (theirs == 0 || theirs == mine) return false;
+            if (!AttachThreadInput(mine, theirs, true)) return false;
+            try
+            {
+                SetForegroundWindow(hwnd);
+                return GetForegroundWindow() == hwnd;
+            }
+            finally { AttachThreadInput(mine, theirs, false); }
+        }
+        catch { return false; }
+    }
+
+    /// <summary>此刻前台窗口所属进程的裸名（不含 .exe / 路径）。取不到返回空串。</summary>
+    //
+    // 给快捷面板的「场景页」用：面板要按你**呼出它的那一刻正在用哪个程序**来决定先显示哪一页。
+    // 时机是承重的——必须在面板窗口显示**之前**问，面板一显示就把前台抢走了，那时再问只会得到
+    // Clockwork 自己。调用点见 App.TogglePanel 的第一行。
+    //
+    // 全程兜住：进程可能在这两行之间退出（GetProcessById 抛 ArgumentException），
+    // 也可能因权限读不到名字。拿不到就当作「没有场景」，面板照常显示全局页——
+    // 一个读不到名字的前台窗口不该让面板开不出来。
+    /// <summary>前台窗口句柄；没有前台、或前台是 Clockwork 自己时返回 Zero。</summary>
+    //
+    // 「排除自己」不是洁癖：主窗口里点「运行这一步」试跑一条「关闭当前窗口」时前台正是主窗口，
+    // 不排除的话那一下关掉的是 Clockwork —— 用户按下的是「试一试」，得到的是程序消失。
+    public static IntPtr ForegroundWindowOfOthers()
+    {
+        var h = GetForegroundWindow();
+        if (h == IntPtr.Zero) return IntPtr.Zero;
+        GetWindowThreadProcessId(h, out uint pid);
+        return pid == (uint)Environment.ProcessId ? IntPtr.Zero : h;
+    }
+
+    public static string ForegroundProcessName()
+    {
+        try
+        {
+            var h = GetForegroundWindow();
+            if (h == IntPtr.Zero) return "";
+            GetWindowThreadProcessId(h, out uint pid);
+            if (pid == 0) return "";
+            using var p = Process.GetProcessById((int)pid);
+            return p.ProcessName ?? "";
+        }
+        catch { return ""; }
+    }
+
+    // 设备变更广播：U 盘等卷插入时 Windows 向所有顶层窗口发 WM_DEVICECHANGE，不需要事先注册。
+    // 只认「卷到达」（DBT_DEVTYP_VOLUME）——设备接口层的到达通知（打印机、摄像头、蓝牙适配器）
+    // 混进来会让「U 盘插入时」在插耳机时也跑，那不是这个触发承诺的事。
+    public const int WM_DEVICECHANGE = 0x0219;
+    public const int DBT_DEVICEARRIVAL = 0x8000;
+    public const int DBT_DEVTYP_VOLUME = 2;
+
+    // lParam 指向的 DEV_BROADCAST_HDR：前两个 int 是 size 与 devicetype，只需要后者。
+    // 结构体在别人的内存里，读越界会直接进程崩溃——故整体兜住，读不出来当成「不是卷」。
+    public static bool IsVolumeArrival(IntPtr lParam)
+    {
+        if (lParam == IntPtr.Zero) return false;
+        try { return Marshal.ReadInt32(lParam, 4) == DBT_DEVTYP_VOLUME; }
+        catch { return false; }
+    }
     // 窗口筛选用（见 WindowsForProcess）。GWL_EXSTYLE 是 32 位样式值，x64 上 GetWindowLong 即可，无需 Ptr 版。
     [DllImport("user32.dll")] public static extern IntPtr GetWindow(IntPtr h, uint cmd);
     [DllImport("user32.dll")] public static extern int GetWindowLong(IntPtr h, int index);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowTextLength(IntPtr h);
     public const uint GW_OWNER = 4;
     public const int GWL_EXSTYLE = -20;
+    /// <summary>剪贴板内容的版本号；每次有人写入就 +1。用来判断「刚才那次复制到底成没成」，
+    /// 不必先清空再看有没有东西——清空是破坏性的，而复制失败时那一下就白破坏了。</summary>
+    [DllImport("user32.dll")] public static extern uint GetClipboardSequenceNumber();
+
+    // 置顶用。HWND_TOPMOST/-1 与 HWND_NOTOPMOST/-2 是 SetWindowPos 的伪句柄，不是真窗口。
+    public const int WS_EX_TOPMOST = 0x8;
+    public static readonly IntPtr HWND_TOPMOST = new(-1), HWND_NOTOPMOST = new(-2);
+    public const uint SWP_NOSIZE = 0x1, SWP_NOMOVE = 0x2, SWP_NOACTIVATE = 0x10;
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool SetWindowPos(IntPtr h, IntPtr after, int x, int y, int cx, int cy, uint flags);
     public const int WS_EX_TOOLWINDOW = 0x80;
     [DllImport("user32.dll", SetLastError = true)] private static extern uint SendInput(uint n, INPUT[] inputs, int size);
 
@@ -170,6 +363,37 @@ public static class Win32
         for (int i = mods.Length - 1; i >= 0; i--) list.Add(MakeKey(mods[i], true));
         var arr = list.ToArray();
         return SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT)));
+    }
+
+    /// <summary>本程序自己注入的鼠标事件的签名，写在 dwExtraInfo 里。
+    /// 低级鼠标钩子（<see cref="MouseHook"/>）靠它认出自己补发的那些事件并原样放行——
+    /// 不认的话，「短按补发一次真中键」会被自己的钩子再吞一次，中键从此彻底点不出来。
+    /// 取一个不像句柄/指针的常数即可，别人用同一个值的概率可以忽略。</summary>
+    public static readonly IntPtr InjectTag = new(0x434C4B57);   // 'CLKW'
+
+    /// <summary>补发一次中键按下（拖拽救援）。带 <see cref="InjectTag"/> 签名。</summary>
+    public static uint SendMiddleDownTagged() => SendTagged(MOUSEEVENTF_MIDDLEDOWN);
+
+    /// <summary>补发一次中键抬起，给 <see cref="SendMiddleDownTagged"/> 收尾。带 <see cref="InjectTag"/> 签名。</summary>
+    public static uint SendMiddleUpTagged() => SendTagged(MOUSEEVENTF_MIDDLEUP);
+
+    /// <summary>补发一次右键按下（按住不动，把扣住的按下还给系统）。带 <see cref="InjectTag"/> 签名。</summary>
+    public static uint SendRightDownTagged() => SendTagged(MOUSEEVENTF_RIGHTDOWN);
+
+    /// <summary>补发一次右键抬起，给 <see cref="SendRightDownTagged"/> 收尾。带 <see cref="InjectTag"/> 签名。</summary>
+    public static uint SendRightUpTagged() => SendTagged(MOUSEEVENTF_RIGHTUP);
+
+    private static uint SendTagged(params uint[] flags)
+    {
+        var arr = new INPUT[flags.Length];
+        for (int i = 0; i < flags.Length; i++)
+            arr[i] = new INPUT
+            {
+                type = INPUT_MOUSE,
+                U = new InputUnion { mi = new MOUSEINPUT { dwFlags = flags[i], dwExtraInfo = InjectTag } },
+            };
+        try { return SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT))); }
+        catch { return 0; }
     }
 
     // 部分注入的善后：给每个键补发抬起事件，防止修饰键被卡在按下态。

@@ -103,7 +103,7 @@ public class StringsTests
         Assert.Equal("Close Window Weixin", StepDisplay.StepSummary(new LaunchStep { Kind = "window", Action = "close", Process = "Weixin" }));
         Assert.Equal("Mon Tue Wed Thu Fri", StepDisplay.DaysLabel(new List<int> { 1, 2, 3, 4, 5 }));
         Assert.Equal("Every 3 days", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "everyNDays", IntervalDays = 3 }));
-        Assert.Equal("At logon · before 8:00", ReminderDisplay.TimeLabel(new Reminder { Trigger = "startup", StartupHourMode = "before", StartupHour = 8 }));
+        Assert.Equal("At login · before 8:00", ReminderDisplay.TimeLabel(new Reminder { Trigger = "startup", StartupHourMode = "before", StartupHour = 8 }));
         Assert.Equal("Scheduled Task", StartupLabels.TypeLabel("ScheduledTask"));
         Assert.Equal("All users (needs admin)", StartupLabels.ScopeLabel("Machine", true));
     });

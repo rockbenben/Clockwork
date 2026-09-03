@@ -54,8 +54,23 @@ public static class WindowSizing
                 if (scale <= 0) return;
                 double workHeight = (mi.rcWork.Bottom - mi.rcWork.Top) / scale;
                 double cap = workHeight - margin;
-                // MinHeight 优先：窗口再怎么收也不能小到自己声明的可用下限之下（那是控件排得下的底线）。
-                if (cap < window.MinHeight) cap = window.MinHeight;
+                // 工作区比窗口自己声明的下限还矮时，**以屏幕为准**，把 MinHeight 一并压下去。
+                // 原来这里是「MinHeight 优先」，理由是「那是控件排得下的底线」——听着对，实际是错的：
+                // MinHeight 压不住 MaxHeight，窗口于是长出可用区，底下那一行（主窗口是页脚、
+                // 编辑器是「确定 / 取消」）落到任务栏底下，点都点不着。
+                // 实测：1366×768 @150% 的可用高度只有 464，当年主窗口 MinHeight 是 520——量出来就是 520。
+                // （那之后 MinHeight 已降到 420，见 MainWindow.xaml；这条仍然成立，只是不再由主窗口触发。）
+                // 挤一点还能滚，跑到屏幕外就彻底没法用了。
+                // cap 是「可用高 − 边距」，可用高在退化情形下会 ≤ 边距（虚拟/远程显示器给出的
+                // rcWork、显示器热插拔的中间态、调用方传了更大的 margin）。
+                //
+                // **那时什么都不做，直接放手。** 一度写成 `if (cap < 0) cap = 0;` 再照常赋值，
+                // 结果是 MinHeight = MaxHeight = Height = 0：窗口开出来一条缝，而且因为
+                // MaxHeight 在它整个生命里都是 0，用户拖也拖不回来——BrandDialog 也走这条路，
+                // 于是连崩溃提示都成了一条缝。不受限的窗口只是「可能太高」，还能用；
+                // 高度为 0 的窗口是彻底没法用的，比这个 helper 要防的那件事更糟。
+                if (cap <= 0) return;
+                if (cap < window.MinHeight) window.MinHeight = cap;
 
                 window.MaxHeight = cap;
                 if (!double.IsNaN(window.Height) && window.Height > cap) window.Height = cap;

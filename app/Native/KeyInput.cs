@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Clockwork.Core;
 using Clockwork.I18n;
 using WinKeys = System.Windows.Forms.Keys;
@@ -70,7 +70,7 @@ public static class KeyInput
     {
         var p = KeyCombo.ParseCombo(combo);
         if (string.IsNullOrWhiteSpace(p.Key))
-            return ActionResult.Warn(Strings.Lf("Warn_KeyNoMain", combo));
+            return ActionResult.Warn("Warn_KeyNoMain", combo);
 
         // 鼠标伪键（滚轮 / 点击 / 侧键）：走鼠标通道。修饰键仍按下面那套解析，Ctrl+WheelDown 因此免费可用。
         // 放在主键→虚拟键码解析之前——WheelDown 不是任何虚拟键，往下走只会得到「无法识别的键」。
@@ -86,18 +86,18 @@ public static class KeyInput
                 uint n = wheel
                     ? Win32.SendWheel(wmods, mi.Notches, mi.Horizontal)
                     : Win32.SendMouseButton(wmods, (int)mi.Button, mi.Clicks);
-                if (n == 0) return ActionResult.Warn(Strings.Lf("Warn_KeyRejected", combo));
+                if (n == 0) return ActionResult.Warn("Warn_KeyRejected", combo);
                 if (n < wexpected)
                 {
                     Win32.ReleaseKeys(wmods);   // 与键盘那条路同一套善后：别把修饰键卡在按下态
-                    return ActionResult.Warn(Strings.Lf("Warn_KeyPartial", combo, n, wexpected));
+                    return ActionResult.Warn("Warn_KeyPartial", combo, n, wexpected);
                 }
                 return ActionResult.Unver();
             }
             finally { InjectionLock.Exit(wgot); }
         }
         if (Regex.IsMatch(p.Key!, @"^\d\d+$"))
-            return ActionResult.Warn(Strings.Lf("Warn_KeyMultiDigit", p.Key!, combo));
+            return ActionResult.Warn("Warn_KeyMultiDigit", p.Key!, combo);
 
         bool needShift = false;
         ushort vk = (ushort)KeysVk(p.Key!);
@@ -106,11 +106,11 @@ public static class KeyInput
             if (p.Key!.Length == 1)
             {
                 short vs = Win32.VkKeyScan(p.Key[0]);
-                if (vs == -1) return ActionResult.Warn(Strings.Lf("Warn_KeyUnknown", p.Key!, combo));
+                if (vs == -1) return ActionResult.Warn("Warn_KeyUnknown", p.Key!, combo);
                 vk = (ushort)(vs & 0xFF);
                 if ((vs & 0x100) != 0) needShift = true;   // 该字符本身需要 Shift（如 '+'）
             }
-            else return ActionResult.Warn(Strings.Lf("Warn_KeyUnknown", p.Key!, combo));
+            else return ActionResult.Warn("Warn_KeyUnknown", p.Key!, combo);
         }
 
         var mods = ModifierVks(p, addShift: needShift);
@@ -121,14 +121,14 @@ public static class KeyInput
             uint sent = Win32.SendCombo(mods, vk);
             int expected = mods.Length * 2 + 2;
             if (sent == 0)
-                return ActionResult.Warn(Strings.Lf("Warn_KeyRejected", combo));
+                return ActionResult.Warn("Warn_KeyRejected", combo);
             if (sent < expected)
             {
                 // 部分注入：补发全部抬起事件善后（防修饰键卡在按下态），并如实报失败。
                 var all = new List<ushort> { vk };
                 all.AddRange(mods);
                 Win32.ReleaseKeys(all.ToArray());
-                return ActionResult.Warn(Strings.Lf("Warn_KeyPartial", combo, sent, expected));
+                return ActionResult.Warn("Warn_KeyPartial", combo, sent, expected);
             }
             return ActionResult.Unver();
         }
