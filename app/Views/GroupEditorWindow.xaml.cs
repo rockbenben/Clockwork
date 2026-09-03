@@ -16,8 +16,11 @@ public partial class GroupEditorWindow : Window
 {
     private readonly ActionGroup _original;
     private readonly IReadOnlyList<ActionGroup> _groups;
-    private readonly string _stopHotkey;   // 当前急停键（查重用：组热键不得与保命键相同）
+    // 本程序自己占着的功能键（键 → 它属于谁，查重时点名用）。**是一份清单而不是一个键**：
+    // 此前它只装得下急停键，于是快捷面板键加进来的那一轮谁也没想起要更新这里。
+    private readonly IReadOnlyList<(string Key, string Owner)> _functionHotkeys;
     private readonly ObservableCollection<StepRowVm> _rows = new();
+    private string _groupIcon = "";
 
     public ActionGroup? Result { get; private set; }
 
@@ -25,19 +28,22 @@ public partial class GroupEditorWindow : Window
     // 环引用由保存时 FindCycle DFS 拦（主防线），运行期重入集兜手改 json。
     private static readonly string[] Kinds = StepDisplay.StepKinds;
 
-    public GroupEditorWindow(ActionGroup group, IReadOnlyList<ActionGroup> groups, string stopHotkey)
+    public GroupEditorWindow(ActionGroup group, IReadOnlyList<ActionGroup> groups,
+                             IReadOnlyList<(string Key, string Owner)> functionHotkeys)
     {
         InitializeComponent();
         Native.DarkWindow.Apply(this);
         WindowSizing.FitToWorkArea(this);
         _original = group;
         _groups = groups;
-        _stopHotkey = stopHotkey;
+        _functionHotkeys = functionHotkeys;
         NameBox.Text = group.Name;
         GroupRepeatBox.Text = StepHelpers.ClampRepeat(group.Repeat).ToString();
         GroupRepeatDelayBox.Text = group.RepeatDelayMs.ToString();
         // 新建组 / 模板预填的组 ShowInTray 还是 null → 默认不勾（不进托盘）；已有组读盘时已被 Normalize 补过值。
         ShowInTrayChk.IsChecked = group.ShowInTray ?? false;
+        _groupIcon = group.Icon ?? "";
+        RefreshGroupIcon();
         _hotkey = group.Hotkey ?? "";
         // 全局热键「点击即录键」，与急停键/发送键统一走 KeyCaptureBox。只改工作副本 _hotkey，
         // 点「确定」才随 Result 落库——取消编辑不影响已有热键。
@@ -60,15 +66,25 @@ public partial class GroupEditorWindow : Window
 
     private int Sel => Steps.SelectedIndex;
 
+    private void BrowseGroupIcon_Click(object sender, RoutedEventArgs e)
+    { if (IconPickerWindow.Pick(this, _groupIcon) is string s) { _groupIcon = s; RefreshGroupIcon(); } }
+
+    private void RefreshGroupIcon()
+    {
+        IconVisual.Fill(GroupIconBtn, PanelIcon.Resolve(_groupIcon, null), 24,
+                        (System.Windows.Media.Brush)FindResource("BrushPaper"));
+        GroupIconBtn.ToolTip = _groupIcon.Length > 0 ? _groupIcon : Strings.Get("Icon_None");
+    }
+
     // 选组下拉排除本组：直环在挑选时就选不出来；间接环（A→B→A）由 Ok_Click 的 FindCycle 拦。
     private IReadOnlyList<ActionGroup> StepGroups => _groups.Where(g => g.Id != _original.Id).ToList();
 
     private void SAdd_Click(object sender, RoutedEventArgs e)
     {
         // 与启动清单同一份意图分节菜单（StepMenu），别在两处各排一版。
-        var menu = StepMenu.Build(k =>
+        var menu = StepMenu.Build((k, seed) =>
         {
-            var step = StepEditorWindow.Edit(this, null, k, StepGroups);
+            var step = StepEditorWindow.Edit(this, seed, k, StepGroups);
             if (step == null) return;
             int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
             _rows.Insert(pos, new StepRowVm(step, () => { }));
@@ -197,14 +213,13 @@ public partial class GroupEditorWindow : Window
     private void Ok_Click(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(NameBox.Text)) { BrandDialog.Warn(this, "Clockwork", Strings.Get("Val_GroupName")); return; }
-        // 热键查重：与其它「启用」组或急停键相同就地拦下（等注册失败才报，用户可能早已关掉编辑器）。
+        // 热键查重：与其它「启用」组、或本程序自己的功能键（急停 / 快捷面板）相同就地拦下
+        //（等注册失败才报，用户可能早已关掉编辑器；而那句失败提示还会把人指去查别的程序）。
         // 只算启用组——运行时禁用组不注册、主动让出组合（用户禁用 A 正是为了把键腾给 B），此处不能反着拦。
+        // 功能键则不分启停：它们一直注册着。
         if (!string.IsNullOrWhiteSpace(_hotkey))
         {
-            var other = _groups.FirstOrDefault(g => g.Id != _original.Id && g.Enabled
-                && string.Equals(g.Hotkey, _hotkey, StringComparison.OrdinalIgnoreCase));
-            string? owner = other != null ? other.Name
-                : string.Equals(_stopHotkey, _hotkey, StringComparison.OrdinalIgnoreCase) ? Strings.Get("Settings_StopHotkey") : null;
+            var owner = HotkeyConflict.OwnerOf(_hotkey, _groups, _original.Id, _functionHotkeys);
             if (owner != null) { BrandDialog.Warn(this, "Clockwork", Strings.Lf("Val_HotkeyDup", _hotkey, owner)); return; }
         }
         var candidate = new ActionGroup
@@ -213,9 +228,20 @@ public partial class GroupEditorWindow : Window
             Name = NameBox.Text.Trim(),
             Enabled = _original.Enabled,
             Hotkey = _hotkey,
+            // 手势不在本窗口编辑（归「鼠标手势」管理器），但必须原样带过去——
+            // 这里是整份重建 ActionGroup，漏一个字段就等于在保存时把它抹掉。
+            Gesture = _original.Gesture,
+            // Panel* 一串是历史字段（只有 ConfigStore 那次迁移读它们），仍原样带过去：
+            // 这里是整份重建 ActionGroup，漏一个字段就等于在保存时把它抹掉，
+            // 而一份还没迁移过就被编辑过的配置，迁移时会读到被抹平的值。
+            ShowInPanel = _original.ShowInPanel,
+            PanelTab = _original.PanelTab,
+            PanelExpand = _original.PanelExpand,
+            PanelForProcess = _original.PanelForProcess,
             Repeat = StepHelpers.ClampRepeat(ParseOr(GroupRepeatBox.Text, 1)),
             RepeatDelayMs = ParseOr(GroupRepeatDelayBox.Text, 0, min: 0),
             ShowInTray = ShowInTrayChk.IsChecked == true,
+            Icon = _groupIcon.Trim(),
             Steps = _rows.Select(r => r.Step).ToList(),
         };
         // 环引用校验：候选列表 = 其余组 + 本组编辑结果（新建组即追加），从本组出发 DFS。
@@ -245,9 +271,16 @@ public partial class GroupEditorWindow : Window
         return c;
     }
 
-    public static ActionGroup? Edit(Window owner, ActionGroup? group, IReadOnlyList<ActionGroup> groups, string stopHotkey)
+    public static ActionGroup? Edit(Window? owner, ActionGroup? group, IReadOnlyList<ActionGroup> groups,
+                                   IReadOnlyList<(string Key, string Owner)> functionHotkeys)
     {
-        var dlg = new GroupEditorWindow(group ?? new ActionGroup { Name = "" }, groups, stopHotkey) { Owner = owner };
+        var dlg = new GroupEditorWindow(group ?? new ActionGroup { Name = "" }, groups, functionHotkeys) { Owner = owner };
+        // owner 为 null 时必须自己找位置、自己保证看得见：这两个入口都能从**面板**进来
+        // （面板一格右键 → 编辑；主窗口收在托盘时 App 传的就是 null），而面板此刻已经自己关掉了。
+        // 不兜底的话，WindowStartupLocation=CenterOwner 没有 owner 可居中、Topmost 也没置，
+        // 于是模态开在任意位置、压在所有窗口后面 —— 用户看到面板消失、什么都没出现，
+        // 而一个模态框正拦着后续操作。BrandDialog 与面板管理器都已经这么兜了（同款说明见那两处）。
+        if (owner == null) { dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen; dlg.Topmost = true; }
         return dlg.ShowDialog() == true ? dlg.Result : null;
     }
 }

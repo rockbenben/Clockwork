@@ -34,7 +34,12 @@ public static class Pickers
 
     // 进程选择：列出所有带主窗口的进程（进程名 — 窗口标题），顶部搜索框实时过滤，双击或「确定」选中。
     // 返回裸进程名（窗口动作/发送文本按它找窗口）；取消 → null。
-    public static string? PickProcess(Window owner)
+    /// <param name="withCurrentWindow">列表顶上多一条「当前窗口」。</param>
+    //
+    // 「当前窗口」在配置里是一个记号（*），而记号是**打不出来的东西**：不看说明就不知道要敲那一下。
+    // 而这个字段旁边本来就有一个「选择…」按钮——把它放进那份清单，它就从「要背下来的写法」
+    // 变成了「点得到的选项」，与旁边那几十个进程名同一种交互。说明仍然留着，给手填的人。
+    public static string? PickProcess(Window owner, bool withCurrentWindow = false)
     {
         var procs = new List<(string Name, string Title)>();
         foreach (var p in Process.GetProcesses())
@@ -60,10 +65,18 @@ public static class Pickers
         void Fill()
         {
             var q = search.Text.Trim();
-            list.ItemsSource = procs
+            var rows = new List<ListBoxItem>();
+            // 「当前窗口」不参与搜索过滤：它不是一个进程，搜进程名的人不该把它筛掉，
+            // 而它排在最前，一眼就能看见。
+            // 不带 `q == ""`：那正是上面那句话说不该做的事。曾经带着，于是一打字它就消失，
+            // 而用户正是为了在长列表里缩范围才打字的——想起来要选「当前窗口」时得先把输入框清空。
+            // 它只有一行、钉在最前，留着的代价比那一趟清空小。
+            if (withCurrentWindow)
+                rows.Add(new ListBoxItem { Content = Strings.Get("Win_current"), Tag = Native.WindowManager.CurrentWindow });
+            rows.AddRange(procs
                 .Where(x => q == "" || x.Name.Contains(q, StringComparison.OrdinalIgnoreCase) || x.Title.Contains(q, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ListBoxItem { Content = x.Title == "" ? x.Name : $"{x.Name} — {x.Title}", Tag = x.Name })
-                .ToList();
+                .Select(x => new ListBoxItem { Content = x.Title == "" ? x.Name : $"{x.Name} — {x.Title}", Tag = x.Name }));
+            list.ItemsSource = rows;
         }
         search.TextChanged += (_, _) => Fill();
         Fill();

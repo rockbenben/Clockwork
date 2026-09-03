@@ -19,6 +19,15 @@ public class StepHelpersTests
     public void StepRepeat_message_step_always_once()
         => Assert.Equal(1, StepHelpers.StepRepeat(new LaunchStep { Kind = "message", Repeat = 3 }));
 
+    // 问句步骤也恒为 1。同一个问题连问三遍没意义，而答案写进同一个变量、每轮覆盖，
+    // 只有最后一个能留下。曾经只夹 message，于是编辑器露出重复行、摘要印「×N」，
+    // 而引擎那个分支没有循环——界面承诺了一件不会发生的事。
+    [Theory]
+    [InlineData("prompt")]
+    [InlineData("choice")]
+    public void StepRepeat_question_steps_always_once(string kind)
+        => Assert.Equal(1, StepHelpers.StepRepeat(new LaunchStep { Kind = kind, Repeat = 3 }));
+
     [Fact]
     public void StepRepeat_other_kinds_keep_their_count()
         => Assert.Equal(3, StepHelpers.StepRepeat(new LaunchStep { Kind = "keys", Repeat = 3 }));

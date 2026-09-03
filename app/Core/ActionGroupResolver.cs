@@ -1,9 +1,23 @@
-using Clockwork.I18n;
+﻿using Clockwork.I18n;
 
 namespace Clockwork.Core;
 
 // 「这次没跑」的原因 + 是否属正常配置状态（benign=true 走 Info 提示，false 走 Warn 提示）。
-public sealed record GroupSkip(string Reason, bool Benign);
+//
+// **存的是文案键与参数，不是渲染好的句子。** 同一个原因要以两种语言出现：气泡跟界面语言，
+// 而 clockwork.error.log 固定英文（那份是拿去贴 issue 的）。在这里就把它渲染定死，
+// 另一种语言之后再也拿不回来——键一旦丢了，只剩一句已经翻好的话。谁要哪一种谁自己渲染。
+//
+// Arg 只有一个而不是 object[]：三种原因里只有「目标已禁用」带一个组名。用数组会让 record
+// 的值相等退化成引用相等（数组不按内容比），而这个类型是当值用的。
+public sealed record GroupSkip(string Key, string? Arg, bool Benign)
+{
+    /// <summary>按当前界面语言渲染（气泡用）。</summary>
+    public string Text() => Arg == null ? Strings.Get(Key) : Strings.Lf(Key, Arg);
+
+    /// <summary>固定英文渲染（错误日志用）。</summary>
+    public string TextEn() => Strings.InEnglish(Text);
+}
 
 // 解析并分类嵌套组引用（RunGroupStep）的目标。Skip 为 null 表示目标可用（Group 非空，照常跑）；
 // 否则 Group 为 null，Skip 带上具体原因与良性标记，调用方原样转发给 OnStepSkipped。
@@ -30,14 +44,14 @@ public static class ActionGroupResolver
     public static GroupTarget ResolveForRun(IEnumerable<ActionGroup>? groups, string id)
     {
         var target = Resolve(groups, id);
-        if (target == null) return new GroupTarget(null, new GroupSkip(Strings.Get("Skip_GroupNotFound"), false));
-        if (!target.Enabled) return new GroupTarget(null, new GroupSkip(Strings.Lf("Skip_GroupDisabled", target.Name), true));
+        if (target == null) return new GroupTarget(null, new GroupSkip("Skip_GroupNotFound", null, false));
+        if (!target.Enabled) return new GroupTarget(null, new GroupSkip("Skip_GroupDisabled", target.Name, true));
         return new GroupTarget(target, null);
     }
 
     // 重入（环引用/已在运行）：RunGroup 返回 Skipped 后才知道，与 ResolveForRun 分开——
     // 这是跑之后才能判定的第三种「这次没跑」，不是解析阶段的结论。真问题（空转），不良性。
-    public static GroupSkip Reentrant() => new(Strings.Get("Skip_GroupReentrant"), false);
+    public static GroupSkip Reentrant() => new("Skip_GroupReentrant", null, false);
 
     // 从 startId 出发沿 group 步骤引用走图，找「回到 startId」的环：找到返回组名路径（首尾同名），无环 null。
     // 只报含 startId 的环——别的环在保存那些组时自会被各自的校验拦下，这里报了反而指不到当前编辑对象。

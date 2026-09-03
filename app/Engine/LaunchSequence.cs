@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using Clockwork.I18n;
 using Clockwork.Core;
 
 namespace Clockwork.Engine;
@@ -23,13 +24,14 @@ public static class LaunchSequence
             if (config.Settings.StartupWaitForReady)
             {
                 var r = ReadyGate.WaitSystemReady();
-                bootNote = $"就绪门控：等待 {r.WaitedMs / 1000.0:F1}s（Shell={r.Shell} 网络={r.Net}）{(!r.Ready ? "，超时仍未就绪，照常放行" : "")}";
+                bootNote = Strings.Lf("Log_ReadyGate", (r.WaitedMs / 1000.0).ToString("F1"), r.Shell, r.Net)
+                           + (r.Ready ? "" : Strings.Get("Log_ReadyTimeout"));
             }
             // 诚实固定延时（主杠杆）：可被急停打断。手改配置可能写入越界值，消费侧 clamp 到 [0,600] 与设置页一致。
             int preDelay = StepHelpers.ClampStartupDelay(config.Settings.StartupDelaySeconds);
             if (preDelay > 0)
             {
-                bootNote = Join(bootNote, $"开机延迟：{preDelay}s");
+                bootNote = Join(bootNote, Strings.Lf("Log_BootDelay", preDelay));
                 if (!StopSignal.InterruptibleSleep(preDelay * 1000L)) stopped = true;
             }
         }
@@ -46,7 +48,7 @@ public static class LaunchSequence
         bool Consume()
         {
             if (budgetLeft > 0) { budgetLeft--; return true; }
-            if (!budgetOut) { budgetOut = true; fail++; lines.Add($"[{Ts(now)}] ⚠ 单次运行已达 {RunBudget.MaxRunSteps} 步上限，剩余步骤未执行"); }
+            if (!budgetOut) { budgetOut = true; fail++; lines.Add($"[{Ts(now)}] ⚠ " + Strings.Lf("Log_BudgetHit", RunBudget.MaxRunSteps)); }
             return false;
         }
 
@@ -58,7 +60,7 @@ public static class LaunchSequence
             {
                 if (!Consume()) { stopped = true; break; }
                 var rr = stepMark(s);
-                var sfx = rep > 1 ? $"（第 {i}/{rep} 次）" : "";
+                var sfx = rep > 1 ? Strings.Lf("Log_Nth", i, rep) : "";
                 lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(s)}{sfx}  {rr.Mark}");
                 fail += rr.Fail; unver += rr.Unver; total++;
                 if (StopSignal.IsRequested) stopped = true;
@@ -82,7 +84,7 @@ public static class LaunchSequence
             if (!ActionGroupRunner.TryEnterRunning(g.Id))
             {
                 // 记一笔失败：这一步没执行，清单没做到它承诺的事，用户该在回执里看到「N 步失败/警告」。
-                lines.Add($"[{Ts(now)}] {pad}动作组「{g.Name}」已在运行（由别处触发），本次跳过");
+                lines.Add($"[{Ts(now)}] {pad}" + Strings.Lf("Log_GroupBusy", g.Name));
                 fail++; total++;
                 return false;
             }
@@ -108,16 +110,16 @@ public static class LaunchSequence
                     if (sub.Kind == "group")
                     {
                         var ng = ActionGroupResolver.Resolve(config.ActionGroups, sub.GroupId);
-                        if (ng == null) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  ⚠ 找不到动作组"); fail++; total++; continue; }
-                        if (!ng.Enabled) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  · 动作组「{ng.Name}」已禁用，跳过"); continue; }
-                        if (pathIds.Contains(ng.Id)) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  ⚠ 环引用，已跳过"); fail++; total++; continue; }
+                        if (ng == null) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  ⚠ " + Strings.Get("Log_GroupMissing")); fail++; total++; continue; }
+                        if (!ng.Enabled) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  · " + Strings.Lf("Log_GroupDisabled", ng.Name)); continue; }
+                        if (pathIds.Contains(ng.Id)) { lines.Add($"[{Ts(now)}] {pad}{StepDisplay.StepSummary(sub)}  ⚠ " + Strings.Get("Log_GroupCycle")); fail++; total++; continue; }
                         int rep = StepHelpers.StepRepeat(sub);
                         for (int i = 1; i <= rep && !stopped; i++)
                         {
                             // 引用迭代自身也计一步（与 ActionGroupRunner 同步）：叶子组只含 group/message 步骤时
                             // 普通步骤一次都不计费，999^depth 的展开能绕过整个预算——而开机路径上用户还没有窗口可按急停。
                             if (!Consume()) { stopped = true; break; }
-                            var hdr = rep > 1 ? $"运行动作组：{ng.Name}（第 {i}/{rep} 次）" : $"运行动作组：{ng.Name}";
+                            var hdr = Strings.Lf("Log_RunGroup", ng.Name) + (rep > 1 ? Strings.Lf("Log_Nth", i, rep) : "");
                             lines.Add($"[{Ts(now)}] {pad}{hdr}");
                             pathIds.Add(ng.Id);
                             bool ranSub = RunGroupInline(ng, depth + 1, pathIds);
@@ -144,15 +146,15 @@ public static class LaunchSequence
             if (step.Kind == "group")
             {
                 var g = ActionGroupResolver.Resolve(config.ActionGroups, step.GroupId);
-                if (g == null) { lines.Add($"[{Ts(now)}] {StepDisplay.StepSummary(step)}  ⚠ 找不到动作组"); fail++; total++; }
-                else if (!g.Enabled) { lines.Add($"[{Ts(now)}] {StepDisplay.StepSummary(step)}  · 动作组「{g.Name}」已禁用，跳过"); }
+                if (g == null) { lines.Add($"[{Ts(now)}] {StepDisplay.StepSummary(step)}  ⚠ " + Strings.Get("Log_GroupMissing")); fail++; total++; }
+                else if (!g.Enabled) { lines.Add($"[{Ts(now)}] {StepDisplay.StepSummary(step)}  · " + Strings.Lf("Log_GroupDisabled", g.Name)); }
                 else
                 {
                     int rep = StepHelpers.StepRepeat(step);
                     for (int gi = 1; gi <= rep && !stopped; gi++)
                     {
                         if (!Consume()) { stopped = true; break; }   // 顶层引用迭代同样计费，理由同组内
-                        var hdr = rep > 1 ? $"运行动作组：{g.Name}（第 {gi}/{rep} 次）" : $"运行动作组：{g.Name}";
+                        var hdr = Strings.Lf("Log_RunGroup", g.Name) + (rep > 1 ? Strings.Lf("Log_Nth", gi, rep) : "");
                         lines.Add($"[{Ts(now)}] {hdr}");
                         if (!RunGroupInline(g, 1, new HashSet<string> { g.Id })) break;   // 同上：收掉剩余轮次
                         if (!stopped && gi < rep && step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
@@ -163,7 +165,7 @@ public static class LaunchSequence
             if (!stopped && step.DelayMs > 0 && !StopSignal.InterruptibleSleep(step.DelayMs)) stopped = true;
         }
 
-        if (stopped && !budgetOut) lines.Add($"[{Ts(now)}] ⏹ 已手动停止，后续步骤未执行");
+        if (stopped && !budgetOut) lines.Add($"[{Ts(now)}] ⏹ " + Strings.Get("Log_Stopped"));
         return new LaunchRunResult(new LaunchSummary(total, fail, unver, stopped, budgetOut), lines, bootNote);
     }
 
@@ -177,14 +179,23 @@ public static class LaunchSequence
         var bootHdr = string.IsNullOrEmpty(r.BootNote) ? "" : r.BootNote + "\r\n";
         // 截停与手动急停是两回事：截停时 Stopped 也为 true（循环因此提前退出），但真相是撞了步数上限，
         // 不是用户按了急停/托盘「停止」——两者都占位时优先说更具体、更真实的截停（复用正文预算行的措辞）。
-        var stopHdr = s.Truncated ? $"⏹ 本次运行已达 {RunBudget.MaxRunSteps} 步上限，剩余步骤未执行\r\n"
-            : s.Stopped ? "⏹ 本次运行被手动停止（急停键 / 托盘「停止」）\r\n" : "";
+        var stopHdr = s.Truncated ? "⏹ " + Strings.Lf("Log_BudgetHit", RunBudget.MaxRunSteps) + "\r\n"
+            : s.Stopped ? "⏹ " + Strings.Get("Log_HdrStopped") + "\r\n" : "";
         var sb = new StringBuilder();
-        sb.Append("Clockwork · 上次启动清单运行日志\r\n");
-        sb.Append($"时间：{when:yyyy-MM-dd HH:mm:ss}\r\n");
+        sb.Append("Clockwork · " + Strings.Get("Log_Title") + "\r\n");
+        // **这里的日期故意不钉 InvariantCulture。** 这份日志是给用户看的
+        // （托盘「查看上次启动日志」）且**全本地化**，见 App.ApplyMouseHook 那边的对照注释：
+        // 固定英文的是 clockwork.error.log（那份是拿去贴 issue 的）。泰国用户在一份为他
+        // 本地化的日志里看到泰历年份是对的，德语看到 "1,5" 也是对的。
+        //
+        // DurationText.DatePattern 那条「一律公历」的作用域是**配置里的日期**，
+        // 理由是它们要被解析回去（泰历年份会让提醒永不到期）。本文件没有任何消费者
+        // 解析它（只有 WriteAllText 写、托盘用 shell 打开），所以那条规矩在这里不适用。
+        // 已经被当成缺陷提过一次，留这段免得反复。
+        sb.Append(Strings.Lf("Log_When", when.ToString("yyyy-MM-dd HH:mm:ss")) + "\r\n");
         sb.Append(bootHdr).Append(stopHdr);
-        sb.Append($"共 {s.Total} 步：{s.Fail} 步失败/警告、{s.Unverified} 步已发送但无法校验、其余成功\r\n");
-        sb.Append("（~ 表示按键/热键类动作已注入，但目标是否响应无法确认）\r\n");
+        sb.Append(Strings.Lf("Log_Summary", s.Total, s.Fail, s.Unverified) + "\r\n");
+        sb.Append(Strings.Get("Log_UnverNote") + "\r\n");
         sb.Append(new string('=', 40)).Append("\r\n");
         sb.Append(string.Join("\r\n", r.LogLines));
         try { File.WriteAllText(path, sb.ToString(), new UTF8Encoding(false)); } catch { }

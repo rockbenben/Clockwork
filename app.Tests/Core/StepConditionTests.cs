@@ -105,6 +105,35 @@ public class StepConditionTests
     public void IfProcess_without_a_name_is_no_constraint()
         => Assert.True(StepCondition.IsSatisfied(new LaunchStep { IfProcessMode = "running", IfProcess = " " }, 12, 3, 0, Env(procRunning: false)));
 
+    // **归一之后才空**的也算没配完。守卫从前看的是原始字段，于是这些写法能穿过去，
+    // 而 ToProcessName 把它们塌成空串，Process.GetProcessesByName("") 又**匹配全部进程**——
+    // 「运行中」恒成立、「未运行」恒不成立，且条件不成立的步骤是静默跳过，日志里连一行都没有。
+    // ConfigStore.Normalize 不规范化 IfProcess（只有编辑器规范化），所以手改 json 或导入都到得了这里。
+    [Theory]
+    [InlineData(@"C:\Program Files\App\")]   // 以分隔符结尾：目录部分被剥掉之后什么都不剩
+    [InlineData(".exe")]                      // 只有扩展名
+    [InlineData(@"D:\tools\.exe")]
+    public void IfProcess_that_normalizes_to_empty_is_no_constraint(string raw)
+    {
+        // 探针恒答「没在运行」。守卫要是漏了，"notRunning" 这一条会因为空名匹配全部进程而恒不成立。
+        var notRunning = new LaunchStep { IfProcessMode = "notRunning", IfProcess = raw };
+        Assert.True(StepCondition.IsSatisfied(notRunning, 12, 3, 0, Env(procRunning: false)));
+
+        // 反向也要放行：没配完就是不限，而不是「恒成立」。
+        var running = new LaunchStep { IfProcessMode = "running", IfProcess = raw };
+        Assert.True(StepCondition.IsSatisfied(running, 12, 3, 0, Env(procRunning: false)));
+    }
+
+    // 探针压根不该被叫到——空名传下去就是「匹配全部进程」。
+    [Fact]
+    public void IfProcess_that_normalizes_to_empty_never_reaches_the_probe()
+    {
+        bool probed = false;
+        var env = new StepEnv(_ => { probed = true; return false; }, () => true, _ => false);
+        StepCondition.IsSatisfied(new LaunchStep { IfProcessMode = "running", IfProcess = ".exe" }, 12, 3, 0, env);
+        Assert.False(probed);
+    }
+
     // 进程名要过同一套归一（去目录 + 去 .exe），否则填完整路径的条件永远不成立。
     [Fact]
     public void IfProcess_normalizes_the_name_before_probing()

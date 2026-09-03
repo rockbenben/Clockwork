@@ -1,4 +1,5 @@
-using System.Linq;
+﻿using System.Linq;
+using System.Globalization;
 using Clockwork.Core;
 using Xunit;
 
@@ -66,7 +67,7 @@ public class ActionGroupResolverTests
         Assert.Null(target.Group);
         Assert.NotNull(target.Skip);
         Assert.False(target.Skip!.Benign);
-        Assert.False(string.IsNullOrEmpty(target.Skip.Reason));
+        Assert.False(string.IsNullOrEmpty(target.Skip.Text()));
     }
 
     [Fact]
@@ -101,7 +102,7 @@ public class ActionGroupResolverTests
         Assert.Null(target.Group);
         Assert.NotNull(target.Skip);
         Assert.True(target.Skip!.Benign);
-        Assert.Contains("组A", target.Skip.Reason);   // Lf 用 {0} 填组名——这是用它的全部意义所在
+        Assert.Contains("组A", target.Skip.Text());   // Lf 用 {0} 填组名——这是用它的全部意义所在
     }
 
     [Fact]
@@ -118,7 +119,41 @@ public class ActionGroupResolverTests
     {
         var skip = ActionGroupResolver.Reentrant();
         Assert.False(skip.Benign);
-        Assert.False(string.IsNullOrEmpty(skip.Reason));
+        Assert.False(string.IsNullOrEmpty(skip.Text()));
+    }
+
+    // GroupSkip 存的是键而不是渲染好的句子，为的就是同一个原因能出两种语言：
+    // 气泡跟界面语言、clockwork.error.log 固定英文。这两条盯的是「英文那一份真的是英文」
+    // 和「渲染完文化被还原」——后者错了会静默把整个界面切成英文。
+    [Fact]
+    public void TextEn_is_english_even_when_the_ui_is_chinese()
+    {
+        var save = CultureInfo.CurrentUICulture;
+        try
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("zh-CN");
+            var skip = ActionGroupResolver.Reentrant();
+            var zh = skip.Text();
+            var en = skip.TextEn();
+            Assert.NotEqual(zh, en);
+            Assert.Contains("重入", zh);            // 界面那一份跟 UI 文化，此处是中文
+            Assert.DoesNotContain("重入", en);      // 英文那一份不该带中文
+            Assert.StartsWith("Action re-entered", en);
+        }
+        finally { CultureInfo.CurrentUICulture = save; }
+    }
+
+    [Fact]
+    public void TextEn_restores_the_ui_culture()
+    {
+        var save = CultureInfo.CurrentUICulture;
+        try
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("zh-CN");
+            ActionGroupResolver.Reentrant().TextEn();
+            Assert.Equal("zh-CN", CultureInfo.CurrentUICulture.Name);
+        }
+        finally { CultureInfo.CurrentUICulture = save; }
     }
 
     [Fact]
@@ -128,6 +163,6 @@ public class ActionGroupResolverTests
         var groups = new List<ActionGroup> { new ActionGroup { Id = "a", Name = "组A", Enabled = false } };
         var notFound = ActionGroupResolver.ResolveForRun(groups, "zzz");
         var disabled = ActionGroupResolver.ResolveForRun(groups, "a");
-        Assert.NotEqual(notFound.Skip!.Reason, disabled.Skip!.Reason);
+        Assert.NotEqual(notFound.Skip!.Text(), disabled.Skip!.Text());
     }
 }

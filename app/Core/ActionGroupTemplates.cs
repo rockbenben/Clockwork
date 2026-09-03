@@ -15,7 +15,7 @@ public static class ActionGroupTemplates
     {
         // 专注：IM 用「最小化」而不是「关闭」——关掉会漏消息，现实中没人这么用。
         // 关通知排在最前：先把打断源掐掉，再收拾屏幕，顺序反了的话收拾到一半照样会被弹窗打断。
-        // 它是有状态的开关（改注册表，不会自己恢复），所以「恢复常态」那个模板必须存在、且要配一条回来。
+        // 它是有状态的开关（改注册表，不会自己恢复），所以「恢复正常」那个模板必须存在、且要配一条回来。
         new ActionGroup { Name = Strings.Get("Tpl_Focus"), Steps = new()
         {
             new LaunchStep { Kind = "system", Command = "notificationsOff" },
@@ -38,7 +38,7 @@ public static class ActionGroupTemplates
             new LaunchStep { Kind = "system", Command = "showDesktop" },
             new LaunchStep { Kind = "volume", Action = "set", Level = 70 },
         } },
-        // 恢复常态：专注 / 会议关掉的东西，这里一次开回来。
+        // 恢复正常：专注 / 会议关掉的东西，这里一次开回来。
         // 通知 / 麦克风静音都是有状态的开关——只给「关」不给「开」，用户第二天会以为通知坏了。
         // 亮度放最后且给 80 而不是 100：100 在多数笔记本上刺眼，80 是「回到正常工作亮度」
         // （模板里没有调暗的组，但亮度命令在，手动调暗过的人需要这个回程）。
@@ -50,7 +50,6 @@ public static class ActionGroupTemplates
             new LaunchStep { Kind = "system", Command = "brightness", Level = 80 },
         } },
         // 收工：确认闸门在最前（答「否」整组中止），锁屏必须在最后。
-        // 不含「清空回收站」——不可逆动作不该塞进默认模板。
         new ActionGroup { Name = Strings.Get("Tpl_EndOfDay"), Steps = new()
         {
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_EndOfDayMsg"), Confirm = true },
@@ -81,5 +80,22 @@ public static class ActionGroupTemplates
         {
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_SedentaryMsg") },
         } },
+        // 唯一演示「步骤之间传值」的模板：问一句 → 拿答案去搜。两步，但它是整套变量机制
+        // 在界面上**唯一**看得见的入口——「输出到变量」那一行不打开编辑器根本遇不到，
+        // 而没人会去猜一个自己没见过的花括号语法。绑一条手势就是随手一划弹框搜东西。
+        //
+        // 变量名从文案表取，再拼进地址里：两处写死的话，翻译改了名字而地址没改，
+        // 这个模板在那种语言下就静默失效——地址栏里留着一个换不掉的 {关键词}。
+        SearchTemplate(),
     };
+
+    private static ActionGroup SearchTemplate()
+    {
+        var v = Strings.Get("Tpl_SearchVar");
+        return new ActionGroup { Name = Strings.Get("Tpl_Search"), Steps = new()
+        {
+            new LaunchStep { Kind = "prompt", Message = Strings.Get("Tpl_SearchAsk"), OutputVar = v },
+            new LaunchStep { Kind = "url", Target = string.Format(StepDisplay.DefaultSearchUrl, "{" + v + "}") },
+        } };
+    }
 }

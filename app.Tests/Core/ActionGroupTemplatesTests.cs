@@ -9,15 +9,15 @@ public class ActionGroupTemplatesTests
     public void Every_template_has_a_name_steps_and_is_enabled()
     {
         var all = ActionGroupTemplates.All();
-        Assert.Equal(7, all.Count);
+        Assert.Equal(8, all.Count);
         Assert.All(all, g => Assert.False(string.IsNullOrWhiteSpace(g.Name)));
         Assert.All(all, g => Assert.NotEmpty(g.Steps));
         Assert.All(all, g => Assert.True(g.Enabled));
     }
 
     // 关通知 / 麦克风静音 / 扬声器静音都是有状态的开关：改完不会自己恢复。模板里每出现一个「关」，
-    // 「恢复常态」里就必须有对应的「开」，否则用户第二天会以为通知坏了。
-    // 这条测试就是那个出口的看门人——「恢复常态」被删或被改瘦，它立刻红。
+    // 「恢复正常」里就必须有对应的「开」，否则用户第二天会以为通知坏了。
+    // 这条测试就是那个出口的看门人——「恢复正常」被删或被改瘦，它立刻红。
     [Fact]
     public void Every_stateful_switch_turned_off_has_a_way_back()
     {
@@ -31,7 +31,7 @@ public class ActionGroupTemplatesTests
         };
         foreach (var (off, on, what) in offOn)
             if (all.SelectMany(g => g.Steps).Any(off))
-                Assert.True(restore.Steps.Any(on), $"模板里有人关掉了{what}，「恢复常态」却没有把它开回来");
+                Assert.True(restore.Steps.Any(on), $"模板里有人关掉了{what}，「恢复正常」却没有把它开回来");
     }
 
     [Fact]
@@ -63,6 +63,31 @@ public class ActionGroupTemplatesTests
 
         Assert.DoesNotContain(meeting.Steps, s => s.Kind == "volume" && s.Action == "mute");
         Assert.Contains(meeting.Steps, s => s.Kind == "volume" && s.Action == "set");
+    }
+
+    // 搜索模板是唯一演示「步骤之间传值」的模板。**变量名与地址里那个花括号必须对得上**——
+    // 两处分开写死的话，某种语言的译名一改，那个模板在那种语言下就静默失效：
+    // 地址栏里留着一个换不掉的 {关键词}，而没有任何东西会报错。
+    [Fact]
+    public void Search_template_wires_its_variable_into_the_url()
+    {
+        var g = ActionGroupTemplates.All()
+            .Single(x => x.Name == Clockwork.I18n.Strings.Get("Tpl_Search"));
+
+        var ask = Assert.Single(g.Steps.Where(s => s.Kind == "prompt"));
+        var open = Assert.Single(g.Steps.Where(s => s.Kind == "url"));
+        Assert.False(string.IsNullOrWhiteSpace(ask.OutputVar));
+        Assert.Contains("{" + ask.OutputVar + "}", open.Target);
+        // 而且那个占位真的能被替换掉——名字里有空格之类的写法也得走得通（好几种语言的译名就是两个词）。
+        var filled = StepPlaceholder.Apply(open.Target, null, urlEncode: true, Vars(ask.OutputVar, "猫"));
+        Assert.DoesNotContain("{", filled);
+    }
+
+    private static RunVars Vars(string name, string value)
+    {
+        var v = new RunVars();
+        v.Set(name, value);
+        return v;
     }
 
     // 久坐模板是唯一演示「整组循环」的模板：没有它，Repeat/RepeatDelayMs 这对能力在模板里零曝光。

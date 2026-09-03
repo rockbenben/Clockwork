@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 
 namespace Clockwork.Core;
@@ -56,9 +56,18 @@ public static class StepCondition
         if (days.Count > 0 && !days.Contains(currentIsoDay)) return false;
 
         var probe = env ?? StepEnv.Live;
-        if (s.IfProcessMode is "running" or "notRunning" && !string.IsNullOrWhiteSpace(s.IfProcess))
+        // **守卫要看规范化之后的名字，不是原始字段。** ToProcessName 会把
+        // 「C:\Program Files\App\」这种以分隔符结尾的路径、以及一个裸的 ".exe" 都塌成空串，
+        // 而 Process.GetProcessesByName("") **匹配全部进程**（实测这台机器 467 个 = 全部）。
+        // 于是原始字段非空、规范化后为空的配置（手改 json、或从别处导入——ConfigStore.Normalize
+        // 不规范化 IfProcess，只有编辑器规范化）会让「运行中」恒成立、「未运行」恒不成立，
+        // 而条件不成立的步骤是静默跳过、日志里连一行都没有，用户没有任何线索可查。
+        // 同一批改动给隔壁 WindowManager 补过同样的空名守卫（那边注释记着实测误匹配 19 个窗口），
+        // 这里漏了：ToProcessName 的 12 个调用点里只有那一处防了空结果。
+        var ifProc = StepHelpers.ToProcessName(s.IfProcess);
+        if (s.IfProcessMode is "running" or "notRunning" && !string.IsNullOrWhiteSpace(ifProc))
         {
-            bool running = probe.ProcessRunning(StepHelpers.ToProcessName(s.IfProcess));
+            bool running = probe.ProcessRunning(ifProc);
             if (running != (s.IfProcessMode == "running")) return false;
         }
         if (s.IfPower is "ac" or "battery")

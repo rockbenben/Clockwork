@@ -1,5 +1,9 @@
 using System.Windows;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
+using Clockwork.Core;
+using Clockwork.I18n;
 using CheckBox = System.Windows.Controls.CheckBox;
 
 namespace Clockwork.Views;
@@ -22,6 +26,25 @@ internal static class EditorUi
             if (items[i].Val == selected) sel = i;
         }
         cb.SelectedIndex = items.Length > 0 ? sel : -1;
+    }
+
+    /// <summary>动作组下拉。与普通 FillCombo 的区别只有一条，但很要命：
+    /// **目标组已被删除时不静默改指**。FillCombo 找不到 selected 会落回第一项，
+    /// 于是一条指向已删除组的步骤/提醒，只要被打开看一眼再保存，就会悄悄改成指向别的组
+    /// （或在提醒那边变成「无」）——界面上不会有任何提示，是无声的数据损坏。
+    /// 这里给失联的目标单列一项、带上原 id：保存下来仍是原来那个 id，什么都不会被改掉，
+    /// 而用户看得见「这个目标不见了」。
+    /// 枚举类下拉不需要这一层——那种落回第一项是合理的规范化；这里落回的是**另一个对象**。</summary>
+    /// <param name="withNone">是否提供「（无）」。提醒可以不绑组（有意义），
+    /// 而 group 步骤不指向任何组只会在运行期报坏配置，故步骤编辑器不给这一项。</param>
+    public static void FillGroupCombo(ComboBox cb, IReadOnlyList<ActionGroup> groups, string selected, bool withNone)
+    {
+        var items = new List<(string Label, string Val)>();
+        if (withNone) items.Add((Strings.Get("Ed_Group_None"), ""));
+        items.AddRange(groups.Select(g => (g.Name, g.Id)));
+        if (!string.IsNullOrEmpty(selected) && !items.Any(i => i.Val == selected))
+            items.Insert(withNone ? 1 : 0, (Strings.Get("Ed_GroupMissing"), selected));
+        FillCombo(cb, items.ToArray(), selected);
     }
 
     // 整数解析：解析失败或越界回退 fallback。

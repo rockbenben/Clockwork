@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Clockwork.Engine;
 using Clockwork.Core;
@@ -221,12 +221,12 @@ public class ActionGroupRunnerTests
         {
             Hour = 10, IsoDay = 3,
             OnStepError = (s, _) => errors.Add(s.Label),
-            OnStepSkipped = (s, reason, benign) => skipped.Add((s.Label, reason, benign)),
+            OnStepSkipped = (s, skip) => skipped.Add((s.Label, skip.Text(), skip.Benign)),
             RunGroupStep = s =>
             {
                 calls++;
                 var r = ActionGroupRunner.RunGroup(g, deps);
-                if (r == GroupRunResult.Skipped) deps.OnStepSkipped(s, "动作组重入（环引用或已在运行），已跳过", false);
+                if (r == GroupRunResult.Skipped) deps.OnStepSkipped(s, ActionGroupResolver.Reentrant());
                 return r;
             },
         };
@@ -257,11 +257,11 @@ public class ActionGroupRunnerTests
             Hour = 10, IsoDay = 3,
             RunStep = s => ran.Add(s.Label),
             OnStepError = (s, _) => errors.Add(s.Label),
-            OnStepSkipped = (s, reason, benign) => skipped.Add((reason, benign)),
+            OnStepSkipped = (s, skip) => skipped.Add((skip.Text(), skip.Benign)),
             RunGroupStep = s =>
             {
                 calls++;
-                deps.OnStepSkipped(s, $"动作组「{disabledTarget.Id}」已禁用，跳过", true);
+                deps.OnStepSkipped(s, new GroupSkip("Skip_GroupDisabled", disabledTarget.Id, true));
                 return GroupRunResult.Skipped;
             },
         };

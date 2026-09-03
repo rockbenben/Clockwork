@@ -1,4 +1,4 @@
-using Clockwork.Engine;
+﻿using Clockwork.Engine;
 using Clockwork.Core;
 using Xunit;
 
@@ -8,7 +8,17 @@ public class StepMarkTests
 
     [Fact] public void MarkOf_ok() { var m = StepRunner.MarkOf(ActionResult.Empty); Assert.Equal("✓", m.Mark); Assert.Equal(0, m.Fail); }
     [Fact] public void MarkOf_unverified() { var m = StepRunner.MarkOf(ActionResult.Unver()); Assert.Equal("~ 已发送（未校验）", m.Mark); Assert.Equal(1, m.Unver); }
-    [Fact] public void MarkOf_warning() { var m = StepRunner.MarkOf(ActionResult.Warn("坏了")); Assert.Equal("⚠ 坏了", m.Mark); Assert.Equal(1, m.Fail); }
+    // 实参必须是 resx 键、不是渲染好的句子。这里从前写的是 Warn("坏了")——它一直是绿的，
+    // 因为 Strings.Get 取不到时原样返回键名，于是「把句子当键传」这种误用看起来完全正常。
+    // Warn 改成 (key, args) 之后那种写法照样编译得过，只有这条断言换成走真键才盯得住。
+    [Fact]
+    public void MarkOf_warning()
+    {
+        var m = StepRunner.MarkOf(ActionResult.Warn("Warn_AskNoUi"));
+        Assert.Equal("⚠ " + Clockwork.I18n.Strings.Get("Warn_AskNoUi"), m.Mark);
+        Assert.NotEqual("⚠ Warn_AskNoUi", m.Mark);   // 键真的被翻出来了，不是原样回落
+        Assert.Equal(1, m.Fail);
+    }
 
     [Fact]
     public void Aggregate_all_ok()

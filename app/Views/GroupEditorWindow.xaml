@@ -12,12 +12,23 @@
          注意别让任何元素 ColumnSpan 跨过共享列（设置页实测会把布局转成无限循环），这里没有。 -->
     <Grid Margin="18,16,18,16" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>   <!-- 名称 + 热键 -->
-            <RowDefinition Height="Auto"/>   <!-- 说明 -->
-            <RowDefinition Height="Auto"/>   <!-- 「步骤」小标题 + 添加 -->
-            <RowDefinition Height="*"/>      <!-- 步骤序列（主体）-->
-            <RowDefinition Height="Auto"/>   <!-- 确定 / 取消 -->
+            <RowDefinition Height="*"/>      <!-- 主体：整体可滚 -->
+            <RowDefinition Height="Auto"/>   <!-- 确定 / 取消：钉在底部，任何高度下都点得着 -->
         </Grid.RowDefinitions>
+
+        <!-- 主体套一层滚动条。**这不是保险，是量出来的**：
+             1366×768 @150% 的可用高度只有 464，而这个窗口光表头就吃掉 270 上下——
+             实测那一档下步骤表被压到只剩一行表头，一条步骤都看不见，也就没法编。
+             整体可滚之后，窗口再矮也只是要滚一下，而不是有一块内容从此够不着。
+             「确定 / 取消」留在外面：它们是任何高度下都必须点得着的东西，不该跟着内容滚走。 -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>   <!-- 名称 + 热键 -->
+                <RowDefinition Height="Auto"/>   <!-- 说明 -->
+                <RowDefinition Height="Auto"/>   <!-- 「步骤」小标题 + 添加 -->
+                <RowDefinition Height="*"/>      <!-- 步骤序列（主体）-->
+            </Grid.RowDefinitions>
 
         <!-- ===== 表头：名称 + 全局热键 ===== -->
         <Grid Grid.Row="0">
@@ -38,19 +49,42 @@
                            Margin="12,0,0,0" TextWrapping="Wrap"/>
             </Grid>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Ed_GroupRepeat}" Style="{StaticResource FieldLabel}"/>
+            <!-- 顶对齐，不居中：右边那块在德语下会折成三行，而这个标签只有一行。
+                 居中的话它落在第二行旁边——也就是紧挨着两个复选框，而它标的是第一行那个次数框。
+                 实测德语 820 宽下就是这个样子：标签比它自己的输入框低了三十几像素。 -->
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Ed_GroupRepeat}" Style="{StaticResource FieldLabel}"
+                       VerticalAlignment="Top" Margin="0,14,0,0"/>
             <!-- WrapPanel 而非横向 StackPanel：正是本文件上面那条注释说的坑——横向 StackPanel
                  给子元素无限可用宽度，排不下不会换行、直接被右缘裁掉。
                  实测德语 820 宽下最后那个复选框被切成「Im Infobereich-Menü anzeig」。
-                 换行的单位是整个控件，不会把标签从字中间断开。 -->
+
+                 **换行的单位是「一组」，不是「一个控件」。** 每个标签连同它的输入框各自包在一个
+                 横向 StackPanel 里，断点只可能落在组与组之间。散着放的时候实测德语下
+                 「仅在此程序上显示」这个标签留在了上一行的行尾，而它的输入框折到了下一行——
+                 被裁掉半个词看得出是被裁了，拆成两行却看着像两个不相干的东西。 -->
             <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0,8,0,0">
-                <TextBox x:Name="GroupRepeatBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeat}" Width="60" Height="28" Margin="0,0,0,6"/>
-                <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,6"/>
-                <!-- 单位并入 Ed_GroupRepeatDelay 文案（各语言自带 ms 缩写，同 Ed_DelayMs）：写死的 "ms" 阿拉伯语/俄语用户会看到一截拉丁字母 -->
-                <TextBox x:Name="GroupRepeatDelayBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeatDelay}" Width="80" Height="28" Margin="0,0,0,6"/>
-                <!-- 托盘显示开关与「整组重复」同排：都是"这个组怎么被用"的属性，不占额外一行；
+                <!-- 「重复 N 轮，每轮间隔 M 毫秒」是一句话，中间断开就不成话了。
+                     单位并入 Ed_GroupRepeatDelay 文案（各语言自带 ms 缩写，同 Ed_DelayMs）：
+                     写死的 "ms" 阿拉伯语/俄语用户会看到一截拉丁字母。 -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                    <TextBox x:Name="GroupRepeatBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeat}" Width="60" Height="28"/>
+                    <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,0"/>
+                    <TextBox x:Name="GroupRepeatDelayBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeatDelay}" Width="80" Height="28"/>
+                </StackPanel>
+                <!-- 托盘显示开关与「整组重复」同排：都是「这个组怎么被用」的属性，不占额外一行；
                      窄到放不下时它整个掉到下一行，而不是被裁掉半个词。 -->
                 <CheckBox x:Name="ShowInTrayChk" Content="{loc:Loc Ed_GroupShowInTray}" VerticalAlignment="Center" Margin="24,0,0,6"/>
+                <!-- 这里曾经还有「作为面板的一页」和「仅在此程序上显示」两项。它们随着
+                     面板页独立成实体一起搬走了：一个动作不再会「是」一页，页有自己的名字、
+                     分类和场景，全在面板管理器的页眉上就地改。 -->
+                <!-- 本组被别处引用时（group 步骤）用的图标。设一次，所有指向它的格子都跟着。
+                     显示图标本身，不显示码位——原值退到 ToolTip 里。 -->
+                <StackPanel Orientation="Horizontal" Margin="24,0,0,6">
+                    <TextBlock Text="{loc:Loc Ed_Icon}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <Button x:Name="GroupIconBtn" Width="46" Height="38"
+                            ContentTemplate="{x:Null}" ToolTip="{loc:Loc Icon_Pick}"
+                            AutomationProperties.Name="{loc:Loc Icon_Pick}" Click="BrowseGroupIcon_Click"/>
+                </StackPanel>
             </WrapPanel>
         </Grid>
 
@@ -68,8 +102,8 @@
                     HorizontalAlignment="Stretch" Height="30" Padding="4,0" Margin="14,0,0,0" Click="SAdd_Click"/>
         </Grid>
 
-        <!-- ===== 步骤序列：黄铜轨 · 类型徽标 · 摘要 · 延时（与启动清单同一套仪表化列表）===== -->
-        <Grid Grid.Row="3">
+        <!-- ===== 步骤序列：强调色轨 · 类型徽标 · 摘要 · 延时（与启动清单同一套仪表化列表）===== -->
+        <Grid Grid.Row="3" MinHeight="132">   <!-- 至少露出三行步骤：再少就只剩表头，看不出这一组在干什么 -->
             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" SharedSizeGroup="StepRail"/></Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Style="{StaticResource ListPanel}">
@@ -124,9 +158,11 @@
             </StackPanel>
             </ScrollViewer>
         </Grid>
+        </Grid>
+        </ScrollViewer>
 
         <!-- ===== 确定 / 取消 ===== -->
-        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
             <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource DialogPrimaryButton}" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
             <Button Content="{loc:Loc Ed_Cancel}" Style="{StaticResource DialogButton}" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>

@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using Clockwork.Core;
 
 namespace Clockwork.Engine;
@@ -25,6 +25,13 @@ public sealed class GroupDeps
     // 注意别改回「调用即忘」的写法——那正是「脚本不存在」这类告警在动作组路径上一个都到不了用户面前的原因。
     public Action<LaunchStep> RunStep { get; init; } = _ => { };
     public Func<LaunchStep, MsgResult> ShowMessage { get; init; } = _ => MsgResult.Ok;  // message 步骤弹窗
+    // 问句步骤（用户输入 / 用户选择）：弹框问一句，返回用户给的那段文字；**null = 取消**。
+    // 与 ShowMessage 分开是因为返回的东西不同（那个返回是/否，这个返回一段值），
+    // 而取消的语义相同：都当作「这组别做了」，中止整组并向上传染。
+    public Func<LaunchStep, string?> AskUser { get; init; } = _ => null;
+    // 这一次运行的变量表。整条嵌套链共用一份（同 Budget / Cancel）——
+    // 子动作问来的值，父动作后面的步骤要引用得到，那才叫「一次运行里的变量」。
+    public RunVars Vars { get; init; } = new();
     public Action<LaunchStep> RunOnYes { get; init; } = _ => { };          // message 点是→onYes
     public Action<string> Speak { get; init; } = _ => { };                 // message 播报
     // 组内嵌套「group」步骤：跑引用的组。返回结局而非 void——中止/跳过都要能让上层的引用轮次收手。
@@ -34,7 +41,9 @@ public sealed class GroupDeps
     // benign=是否「良性」——true 表示这是正常配置状态（如目标组本就被人为禁用），不该被当成故障；false 表示
     // 值得关注（坏配置/环引用空转）。与 OnStepError 分开是因为三种情况都不是异常，套用「异常：」措辞是在
     // 给用户一个不存在的故障去查。
-    public Action<LaunchStep, string, bool> OnStepSkipped { get; init; } = (_, _, _) => { };
+    // 传 GroupSkip 而不是渲染好的字符串 + benign：原因要在气泡里按界面语言、在错误日志里按英文
+    // 各渲染一次，只递一个 string 就等于在这条边上把语言定死了（见 Core/ActionGroupResolver 的说明）。
+    public Action<LaunchStep, GroupSkip> OnStepSkipped { get; init; } = (_, _) => { };
     public RunBudget Budget { get; init; } = new();                        // 单次顶层运行共享的步数预算（嵌套引用经同一 deps 传递）
     // 单次顶层运行的取消闸（同 Budget，一次触发一份、经同一 deps 传给整条嵌套链）。动作组热键按第二次
     // 时置位——它取消的是「这一次运行」，不是全局急停：别的组和开机启动清单不该被一个组的热键带走。
@@ -126,6 +135,20 @@ public static class ActionGroupRunner
                         if (deps.Cancel.IsStopped) { stopped = true; break; }
                         if (res == MsgResult.Yes) deps.RunOnYes(step);
                         else if (res == MsgResult.No) { stopped = true; aborted = true; break; }   // 否/关闭 → 中止整组剩余步骤（含后续轮次），并让上层一并收手
+                        if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
+                    }
+                    // 问句步骤：问一句，把答案写进变量，后面的步骤用 {名字} 引用。
+                    // 形状照抄上面那个 message 分支——它们是同一类东西（都要跳 UI 线程、都会挂住整组、
+                    // 取消都意味着「这组别做了」），照抄比另起一套更不容易漏掉那几处取消检查。
+                    else if (step.Kind is "prompt" or "choice")
+                    {
+                        if (!deps.Budget.TryConsume()) { stopped = true; break; }
+                        var answer = deps.AskUser(step);
+                        // 弹框是模态、要等用户点掉才返回，其间取消/急停完全可能已经按下。查在写变量之前：
+                        // 用户按取消的意思是「这组别做了」，那么这个答案连记下来都没有意义。
+                        if (deps.Cancel.IsStopped) { stopped = true; break; }
+                        if (answer == null) { stopped = true; aborted = true; break; }   // 取消 → 同 message 答「否」
+                        deps.Vars.Set(step.OutputVar, answer);
                         if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
                     }
                     else if (step.Kind == "group")

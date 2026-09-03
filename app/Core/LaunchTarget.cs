@@ -73,6 +73,44 @@ public static class LaunchTarget
         return "";   // .ps1/.bat/.lnk/文档 等：进程名无法可靠推导，交给手填
     }
 
+    /// <summary>目标 → 给人看的名字（去路径、去扩展名）。步骤没起名时用它顶上。</summary>
+    //
+    // 与 TargetProcessName 是两件事，别合并：那个推的是**进程名**，用来判「已经在跑了吗」，
+    // 所以对 .lnk / 文档 / 脚本一律返回空——推不准的宁可不说。而这里只是找一个能读的名字，
+    // 没有「推错就出事」那一层，尽力而为即可。
+    //
+    // 为什么需要它：没起名的「运行程序」步骤在列表里显示的是整条 Target，而那一列是右侧截断的——
+    //   C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\repo-radar.lnk
+    // 截出来是「C:\Users\Administrator\AppData\Roaming\Microsoft\Wind…」，**能区分它的那一截恰好被切掉**，
+    // 一屏开始菜单快捷方式长得一模一样。取叶子名就是 repo-radar，正是用户心里叫它的那个名字。
+    //
+    // 扩展名一律去掉：.lnk / .exe 是纯噪声，而文档的扩展名虽然有点信息，为它单开一张白名单
+    // 不值得——真要看是什么文件，双击进编辑器，那儿有完整路径。
+    // 网址原样返回：它本身就是可读的，砍成一个词反而把信息丢了。
+    public static string DisplayName(string? target)
+    {
+        var t = NormalizeTarget(target);
+        if (t.Length == 0) return "";
+        // 协议判据要的是「冒号」而不是「://」：mailto:、ms-settings:、steam: 这些都没有斜杠，
+        // 漏判的后果是拿路径规则去切它——实测 mailto:someone@example.com 被剥成
+        // mailto:someone@example（".com" 被当成扩展名）。
+        // 而 `+` 不是 `*` 是承重的：它要求冒号前至少两个字符，于是盘符 C:\ 只有一个字符、落不进这一档。
+        if (Regex.IsMatch(t, @"^[a-z][a-z0-9+.-]+:", RegexOptions.IgnoreCase)) return t;
+        try
+        {
+            // 去掉尾部分隔符，否则「打开文件夹 D:\Work\」取到的叶子是空串
+            var trimmed = t.TrimEnd('\\', '/');
+            if (trimmed.Length == 0) return t;
+            var stem = Path.GetFileNameWithoutExtension(trimmed);
+            if (stem.Length > 0) return stem;
+            // 走到这儿只剩两种：盘根（D:\）、或整个名字都是扩展名（.gitignore）。
+            // 前者带回原样，后者带回叶子——都比返回空串强，空串在列表里就是一行没有内容的行。
+            var leaf = Path.GetFileName(trimmed);
+            return leaf.Length > 0 ? leaf : t;
+        }
+        catch { return t; }   // 路径里有非法字符：原样给出去，让用户自己看出哪里写错了
+    }
+
     // 目标框里粘进来的写法规范化。三件事都对应真实的粘贴来源，任何一条不做，路径「看着对」却会失配：
     //   去首尾空白 —— 从聊天窗口/文档里复制常带尾随空格或换行；
     //   去成对引号 —— 资源管理器 Shift+右键「复制文件地址」给的就是带引号的；
@@ -91,17 +129,26 @@ public static class LaunchTarget
     // 备用路径解析：目标是完整路径且不存在时，返回 altTargets(每行一条) 里第一个存在的候选；都不存在则返回原目标。
     // 目标非完整路径(裸程序名/网址/文档关联)时原样返回。
     // 「存在」= 文件或目录（对齐旧 PS 版 Test-Path 语义）：打开文件夹的步骤（双机 D:\Work / E:\Work）目录候选也要能匹配。
-    public static string ResolveLaunchTarget(string target, string altTargets)
+    /// <param name="blocking">true = 真去问磁盘（启动前必须如此）；
+    /// false = 走 <see cref="PathProbe"/> 的不阻塞版本，供**取图标**这条跑在 UI 线程上的路使用。</param>
+    //
+    // 分成两档不是洁癖：这个方法做的是 File.Exists / Directory.Exists，而取图标那条路
+    // 全在 UI 线程上（面板每次呼出、管理器每次重画、三个编辑器的预览）。路径是用户填的，
+    // 可以指向一个已断开的网络盘——那一次探测会卡满 SMB 超时，而 UI 线程同时是低级鼠标钩子的泵，
+    // 占住超过 300ms 就会让 Windows 把钩子静默卸掉（IconLoader 为此早已改成一秒都不等）。
+    // 真要启动程序时仍走 blocking：那发生在工作线程上，等得起，而且那时必须是真答案。
+    public static string ResolveLaunchTarget(string target, string altTargets, bool blocking = true)
     {
         var t = NormalizeTarget(target);
         bool rooted;
         try { rooted = Path.IsPathRooted(t); } catch { rooted = false; }
         if (!rooted) return t;                       // 裸程序名/网址/文档：不动
-        if (PathExists(t)) return t;                 // 主路径存在：用它
+        bool Exists(string p) => blocking ? PathExists(p) : PathProbe.ExistsOptimistic(p);
+        if (Exists(t)) return t;                     // 主路径存在：用它
         foreach (var line in (altTargets ?? "").Split('\n'))
         {
             var c = NormalizeTarget(line);
-            if (c != "" && PathExists(c)) return c;  // 第一个存在的备用路径
+            if (c != "" && Exists(c)) return c;      // 第一个存在的备用路径
         }
         return t;                                    // 都不存在：返回原目标（照常尝试/报错）
     }
@@ -147,15 +194,20 @@ public static class LaunchTarget
     // 反过来，PATH 里若有失效的映射盘或 UNC，File.Exists 会阻塞在 SMB 超时上（秒级到数十秒），
     // 而这正好发生在开机、网络栈还没起来的时候，所以更要靠前面的标准位置先命中、以及下面的结果缓存
     // ——否则开机清单里有 N 个无 BOM 中文脚本，就要把这套扫描连做 N 遍。
-    private static string? _pwsh;
-    private static bool _pwshProbed;
+    // 用 Lazy 而不是「一个结果字段 + 一个探过了标志」：那两个字段是**双检失败**的经典形状。
+    // 原来的写法先把 _pwshProbed 置真、再去跑上面说的那套可能阻塞几十秒的扫描，于是并发时：
+    // A 进来置真、卡在 File.Exists 的 SMB 超时里；B 看见「探过了」拿走仍是 null 的 _pwsh，
+    // 于是在一台**装了** pwsh 的机器上报「请安装 PowerShell 7 或给脚本加 BOM」。
+    // 并发是常态而不是理论：两个动作组各自在自己的 Task 上跑（WindowManager 那边的注释也提到
+    // 「两个动作组同时在跑」），各带一个无 BOM 的 .ps1 步骤就够了。
+    // 两个普通字段也没有 volatile，写入顺序本身都不保证。
+    //
+    // ExecutionAndPublication：后到的线程**等**第一个探完再拿结果，而不是各探一遍——
+    // 这正是原注释想要的「整个进程只探一次」，只有这个模式真的做到。
+    private static readonly Lazy<string?> _pwsh =
+        new(() => PwshCandidates().FirstOrDefault(File.Exists), LazyThreadSafetyMode.ExecutionAndPublication);
 
-    public static string? FindPwsh()
-    {
-        if (_pwshProbed) return _pwsh;
-        _pwshProbed = true;
-        return _pwsh = PwshCandidates().FirstOrDefault(File.Exists);
-    }
+    public static string? FindPwsh() => _pwsh.Value;
 
     private static IEnumerable<string> PwshCandidates()
     {

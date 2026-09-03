@@ -8,6 +8,23 @@ public enum MessageForm { Card, Info, Confirm }
 // Core 小工具纯函数（重复次数夹取 / 步骤重复 / 时间阈值 / 插入位 / 省略号 / 进程名）。多处共用同一口径，避免魔数散落。
 public static class StepHelpers
 {
+    /// <summary>「用户选择」的选项：一行一个，去掉空行与首尾空白。</summary>
+    //
+    // 一行一个而不是逗号分隔：选项里出现逗号是常态（「张三, 李四」是一个人名列表还是两个选项？），
+    // 而换行永远不会有歧义。编辑器那一档给的正是一个多行框，形状与写法对得上。
+    // 去重：两个一模一样的选项在列表里点哪个都一样，读起来像是坏了。
+    public static List<string> ChoiceOptions(string? text)
+    {
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        var list = new List<string>();
+        foreach (var line in (text ?? "").Split('\n'))
+        {
+            var t = line.Trim();
+            if (t.Length > 0 && seen.Add(t)) list.Add(t);
+        }
+        return list;
+    }
+
     // 重复次数夹取：<1→1，>999→999（防手写 json/输入框填出跑不完的序列）。
     public static int ClampRepeat(int n) => n < 1 ? 1 : (n > 999 ? 999 : n);
 
@@ -16,7 +33,11 @@ public static class StepHelpers
     //（「发送按键 ×3」改成「消息」→ repeat 仍是 3 → 每次运行连弹 3 张一模一样的卡片）。
     // 夹在这里而不是编辑器保存处，是因为本方法是所有读取方的唯一漏斗——启动清单、动作组、单步运行、
     // 列表摘要的「×N」后缀都走它，于是盘上已有的配置和手改的 json 立刻就对，不必等用户重新打开那一步保存一次。
-    public static int StepRepeat(LaunchStep s) => s.Kind == "message" ? 1 : ClampRepeat(s.Repeat);
+    // 问句步骤（prompt / choice）同理恒为 1：同一个问题连问三遍没有意义，
+    // 而答案写进同一个变量，每轮覆盖上一轮，只有最后一个能留下。
+    // 曾经只夹了 message，于是编辑器给问句步骤露出了重复行、摘要跟着印一个「×N」，
+    // 而 ActionGroupRunner 那个分支压根没有循环——界面承诺了一件引擎不做的事。
+    public static int StepRepeat(LaunchStep s) => s.Kind is "message" or "prompt" or "choice" ? 1 : ClampRepeat(s.Repeat);
 
     // 「仅 N 前」阈值的时/分（各自夹取）与「当天分钟数」。支持任意时刻（不再只整点）：时 0..23、分 0..59，
     // 越界回退 8:00（兼容旧配置只有 onlyBefore8 没有 beforeHour/beforeMinute——缺失即模型默认 8:00）。
@@ -32,7 +53,22 @@ public static class StepHelpers
     public static string AfterTimeLabel(LaunchStep s) => $"{AfterHour(s):D2}:{AfterMinute(s):D2}";
 
     // 开机延迟秒数夹取：0..600（10 分钟）。设置页与开机消费侧共用同一口径，避免魔数分家、UI 收了值而开机静默只等一半。
+    // 「等剪贴板变化」的超时秒数。借用 Level 字段（0-100 的通用数值位）而不是新加一个：
+    // 这个步骤只需要一个数，而模型里已经有一个没被它占用的数值位。
+    // 夹到 1..60：0 秒等于不等（那就别放这一步），60 秒以上不像等剪贴板，像挂住了。
+    public static int ClampWaitSeconds(int seconds) => seconds < 1 ? 5 : (seconds > 60 ? 60 : seconds);
+
     public static int ClampStartupDelay(int seconds) => Math.Clamp(seconds, 0, 600);
+
+    // 中键长按阀值夹取：150..2000 ms。同样设置页与消费侧共用。
+    //
+    // 必须夹在**消费侧**而不只夹在设置页：设置页那一句只在用户重新保存时跑，
+    // 而这个值还能从手改 / 导入的 json 直接进来（ConfigStore.Normalize 不夹任何数值）。
+    // 下界 150 不是审美：LongPressGate 自己的底线只有 50 ms，比任何人的一次中键点击
+    // （约 90 ms）都短——`"panelLongPressMs": 60` 这样的配置会让**每一次**中键点击都被
+    // 判成长按：按下已经被吞、抬起也被吞，面板弹出来，于是新标签页 / 粘贴 / 自动滚动
+    // 全系统失效，而用户看不出是这个程序干的。上界 2000：按到两秒还没反应，人早就以为坏了。
+    public static int ClampLongPressMs(int ms) => Math.Clamp(ms, 150, 2000);
 
     // 「插到第 index 项之后」的落点：index<0（无选中）或越界则追加到末尾。
     public static int InsertPosition(int index, int count) => (index >= 0 && index < count) ? index + 1 : count;

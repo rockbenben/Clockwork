@@ -1,10 +1,10 @@
 <Window x:Class="Clockwork.Views.BrandDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Clockwork" Width="440" SizeToContent="Height" ShowInTaskbar="False"
+        Title="Clockwork" Width="440" SizeToContent="Height" MaxHeight="392" ShowInTaskbar="False"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
-    <!-- 无系统标题栏的品牌卡片（避免 OS 标题与内部眉标重复）：左侧强调轨(黄铜=信息/问询, clay=警示) +
+    <!-- 无系统标题栏的品牌卡片（避免 OS 标题与内部眉标重复）：左侧强调轨(强调色=信息/问询, clay=警示) +
          眉标 + 正文 + 是/否或确定。Esc 取消。
          轨是「实心细轨」而非提醒那种刻度轨——刻度＝有钟在走，实心＝没有钟。本框没有倒计时、
          不会自己消失；同一套语汇里，它该安静地站着。
@@ -17,7 +17,7 @@
             <DropShadowEffect Color="#0A0D12" BlurRadius="22" ShadowDepth="5" Direction="270" Opacity="0.55"/>
         </Border.Effect>
         <Grid>
-            <Border x:Name="Rail" Width="2" Background="{StaticResource BrushBrass}" HorizontalAlignment="Left"
+            <Border x:Name="Rail" Width="2" Background="{StaticResource BrushAccent}" HorizontalAlignment="Left"
                     Margin="9,14,0,14"/>
             <Grid Margin="26,22,24,20">
                 <Grid.RowDefinitions>
@@ -33,8 +33,17 @@
                                Foreground="{StaticResource BrushMuted}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,22" Focusable="False">
-                    <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="15" Foreground="{StaticResource BrushPaper}"
-                               LineStackingStrategy="BlockLineHeight" LineHeight="23"/>
+                    <StackPanel>
+                        <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="15" Foreground="{StaticResource BrushPaper}"
+                                   LineStackingStrategy="BlockLineHeight" LineHeight="23"/>
+                        <!-- 问句步骤（用户输入 / 用户选择）才出现的两行。默认都不画——
+                             这张卡绝大多数时候只是说一句话，多一个空框会让人以为该填点什么。
+                             正文在上、答案在下：先读问题再作答，和纸上填表一个顺序。 -->
+                        <TextBox x:Name="AnswerBox" Height="30" Margin="0,14,0,0" Visibility="Collapsed"/>
+                        <!-- 选项列表限高：选项可以很多，而这张卡还要留得下按钮。超出就在列表里滚，
+                             不让整张卡长到屏幕外（同正文那个 ScrollViewer 的理由）。 -->
+                        <ListBox x:Name="AnswerList" MaxHeight="220" Margin="0,14,0,0" Visibility="Collapsed"/>
+                    </StackPanel>
                 </ScrollViewer>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button x:Name="YesBtn" Style="{StaticResource PrimaryButton}" MinWidth="88" Height="34" Margin="0,0,8,0" Click="Yes_Click"/>

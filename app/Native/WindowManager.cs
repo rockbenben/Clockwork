@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using Clockwork.Core;
 using Clockwork.I18n;
 using WinSendKeys = System.Windows.Forms.SendKeys;
@@ -19,6 +19,11 @@ public enum WindowOutcome
     NoWindow,       // 没找到目标窗口（进程未运行 / 窗口还没出来）
     Failed,         // 窗口找到了，但动作没生效（前台锁定、提权窗口拒收、应用弹框挡住关闭）
     UnknownAction,  // 动作名不认识（手改 json 写错）
+    // 动作名认得、但这个**目标**不开放它（「当前窗口」+ sendkey / activate）。
+    // 与 UnknownAction 分开是因为两句话要指向不同的东西：那一条该去查动作名拼错没有，
+    // 这一条该去换目标或换步骤类型。合成一格的话，编辑器里就点得出来的这个组合
+    // 会报「不认识的窗口动作：activate」——指着一个完全合法的动作说不认识。
+    NotForCurrentWindow,
     Cancelled,      // 急停或本次运行被取消——不是故障，静默
 }
 
@@ -27,7 +32,34 @@ public enum WindowOutcome
 public static class WindowManager
 {
     // 目标进程的可见顶层窗口句柄（先把进程标识归一为裸名，与编辑器保存口径一致）。
-    public static IntPtr[] Handles(string process) => Win32.WindowsForProcess(StepHelpers.ToProcessName(process));
+    /// <summary>进程名填这个 = 当前窗口。</summary>
+    //
+    // **为什么是一个记号而不是「留空」。** 留空曾经的含义是「匹配不到任何窗口」：
+    // GetProcessesByName("") 返回空数组，于是那一步什么也不做——而 close 在找不到窗口时
+    // 走的是幂等分支，记 ✓ 且**不告警**。旧编辑器保存 window 步骤时并不拦空进程名，
+    // 所以盘上完全可能躺着一条 {"kind":"window","action":"close","process":""} 的惰性步骤。
+    // 若把「留空」改判成「当前窗口」，那条步骤会在开机清单里去关掉用户当时正看着的窗口，
+    // 而且没有任何迁移能把它和「用户新配的当前窗口」区分开——两者在盘上一模一样。
+    // 所以当前窗口要有自己的写法：老配置的含义原样不动，新意图必须显式写出来。
+    public const string CurrentWindow = "*";
+
+    public static bool IsCurrentWindow(string? process) => (process ?? "").Trim() == CurrentWindow;
+
+    // 手势尤其需要「当前窗口」——右键划在哪个窗口上，动作就该落在哪个窗口，事先没有进程名可填。
+    //
+    // **空进程名一律不匹配任何窗口**，这一条要显式挡住，不能指望它「自然为空」：
+    // GetProcessesByName("") 并不是返回零个进程——名字读不出来的那些（受保护进程、
+    // 权限不足的）会match上，本机实测由此得到 **19 个真实窗口**。也就是说盘上一条
+    // {"kind":"window","action":"close","process":""} 的步骤，会去关掉那 19 个窗口，
+    // 而它看起来只是「有个字段没填」。旧编辑器又不拦空进程名，所以这条路是真实可达的。
+    public static IntPtr[] Handles(string process)
+    {
+        if (IsCurrentWindow(process))
+            return Win32.ForegroundWindowOfOthers() is var fg && fg != IntPtr.Zero ? new[] { fg } : Array.Empty<IntPtr>();
+        var name = StepHelpers.ToProcessName(process);
+        if (name.Length == 0) return Array.Empty<IntPtr>();
+        return Win32.WindowsForProcess(name);
+    }
 
     // 目标进程的某个窗口当前是否真的在前台。
     public static bool IsForeground(string process)
@@ -42,6 +74,8 @@ public static class WindowManager
     {
         var hs = Handles(process);
         if (hs.Length == 0) return false;
+        // 当前窗口本来就在前台：既不用抢，也别白等那两次 120ms——手势要的就是抬手即到。
+        if (IsCurrentWindow(process)) return true;
         // 最小化窗口 SetForegroundWindow 后仍最小化 → 先还原再置前台。
         if (Win32.IsIconic(hs[0])) { Win32.ShowWindow(hs[0], Win32.SW_RESTORE); Thread.Sleep(120); }
         Win32.SetForegroundWindow(hs[0]);
@@ -116,12 +150,49 @@ public static class WindowManager
         {
             if (WindowLogin(process, text, 8, literal: true, cancel)) return ActionResult.Unver();
             // 急停/取消返回 false 时不误报「未能带到最前」——那是用户停的。
-            if (!RunCancel.Stopped(cancel)) return ActionResult.Warn(Strings.Lf("Warn_TextSendFail", process));
+            if (!RunCancel.Stopped(cancel)) return ActionResult.Warn("Warn_TextSendFail", process);
             return ActionResult.Empty;
         }
         bool got = InjectionLock.Enter();
         try { Win32.SendUnicodeText(text); } finally { InjectionLock.Exit(got); }
         return ActionResult.Unver();
+    }
+
+    // 「恢复活动窗口」的基准：这一次运行**开始时**前台是哪个窗口。
+    //
+    // 为什么要一个基准，而不是「回到上一个前台」：这里几乎每个窗口动作都先 SetForeground(目标)
+    // 再动手，所以一组「最小化 Slack、最小化 Discord」跑完，焦点落在哪儿全看 Windows 的心情。
+    // 而用户想回去的是**他触发那一刻正在用的那个窗口**——那是运行开始前的前台，
+    // 不是中途被抢来抢去的任何一个。
+    //
+    // ponytail: 一个静态字段，同时跑两个动作组会互相覆盖。做成 per-run 上下文要把它一路穿过
+    // StepRunner / ActionGroupRunner 的签名；等真有人同时跑两组、两组还都用了这一步再说。
+    private static IntPtr _foregroundBaseline;
+
+    /// <summary>记下此刻的前台窗口，供之后的「恢复活动窗口」用。每次运行开始时在 UI 线程调一次。</summary>
+    //
+    // 走 ForegroundWindowOfOthers 而不是 GetForegroundWindow：前台是 Clockwork 自己时
+    //（在编辑器里点「运行这一步」试跑就是这种情况）没有可回去的地方，记下来只会让那一步
+    // 把编辑器又拽回前台——用户按的是「试一试」，得到的是窗口跳来跳去。
+    public static void MarkForegroundBaseline() => _foregroundBaseline = Win32.ForegroundWindowOfOthers();
+
+    // 回到基准那个窗口。最小化了的先还原——「恢复活动窗口」要的是能接着用，不是让它在任务栏上亮一下。
+    private static WindowOutcome RestoreForeground()
+    {
+        var h = _foregroundBaseline;
+        // 没有基准 = 触发那一刻前台就是 Clockwork 自己，或者压根没有前台窗口。
+        // 「没有可回去的地方」和「回去失败了」是两回事，措辞在 StepRunner 那边分开。
+        if (h == IntPtr.Zero || !Win32.IsWindowVisible(h)) return WindowOutcome.NoWindow;
+        bool got = InjectionLock.Enter();
+        try
+        {
+            if (Win32.IsIconic(h)) Win32.ShowWindow(h, Win32.SW_RESTORE);
+            Win32.SetForegroundWindow(h);
+        }
+        finally { InjectionLock.Exit(got); }
+        Thread.Sleep(120);
+        // 复核：SetForegroundWindow 常因前台锁定失败（同 SetForeground 那条），返回 true 不算数。
+        return Win32.GetForegroundWindow() == h ? WindowOutcome.Ok : WindowOutcome.Failed;
     }
 
     // 「做成了没有」的复核轮询步长。复核本身借用 WaitAppWindow（同文件、有单测的那一份轮询实现）：
@@ -137,13 +208,23 @@ public static class WindowManager
     // 「进程未运行」，把人指向完全错误的方向。故改成返回结局枚举，由引擎分别措辞。
     public static WindowOutcome WindowAction(string process, string op, string sendKey = "{ENTER}", int waitForWindowSeconds = 0, int postWindowDelaySeconds = 0, RunCancel? cancel = null)
     {
+        // 「恢复活动窗口」先接住：它不看 process（那个参数对它没有意义），
+        // 也不必等窗口出现——目标是一个早就记下来的句柄。
+        if (op == "restore") return RestoreForeground();
+        // 「当前窗口」只开放窗口状态那几个动作。
+        // activate 对当前窗口是空操作；而 sendkey 更不能开——它的安全性建立在
+        // 「抢到前台、200ms 后再复核一次焦点没被别人偷走」上，而「当前窗口」的复核
+        // 恒等于拿前台跟前台自己比，永远为真，那句复核就成了摆设，
+        // 于是那串按键（常常是密码）会打进任何一个碰巧抢走焦点的窗口。
+        // 要往当前窗口发键，用「发送按键」步骤——它本来就是干这个的。
+        if (IsCurrentWindow(process) && op is "sendkey" or "activate") return WindowOutcome.NotForCurrentWindow;
         if (op == "sendkey")
         {
             int to = waitForWindowSeconds > 0 ? waitForWindowSeconds : 8;
             if (WindowLogin(process, sendKey, to, cancel: cancel)) return WindowOutcome.Ok;
             return RunCancel.Stopped(cancel) ? WindowOutcome.Cancelled : WindowOutcome.Failed;
         }
-        if (op is not ("close" or "minimize" or "maximize" or "activate")) return WindowOutcome.UnknownAction;
+        if (op is not ("close" or "minimize" or "maximize" or "activate" or "topmost")) return WindowOutcome.UnknownAction;
 
         // 等窗口出现（N=0 只探一次=早退语义）。activate 也要等：慢启动窗口没出来就 activate=空跑。
         var w = WaitAppWindow(waitForWindowSeconds, 500, () => Handles(process).Length > 0, cancel: cancel);
@@ -181,6 +262,23 @@ public static class WindowManager
                     foreach (var h in hs) Win32.ShowWindow(h, Win32.SW_MAXIMIZE);
                     done = () => hs.Any(Win32.IsZoomed);
                     break;
+                // 置顶是**开关**：已经置顶就取消。手势和面板格子都是同一个入口反复触发的东西，
+                // 「再来一次」自然该是撤销；分成置顶/取消两条动作，等于让用户为一件事配两条手势。
+                //
+                // 这一支不抢前台，也不需要——SetWindowPos 改的是窗口的 Z 序层级，与焦点无关。
+                // 反倒是抢了前台更糟：你想钉住的往往是**副窗口**（参考文档、播放器），
+                // 抢一次前台就把你正在打字的那个窗口顶掉了。
+                case "topmost":
+                {
+                    bool on = (Win32.GetWindowLong(hs[0], Win32.GWL_EXSTYLE) & Win32.WS_EX_TOPMOST) != 0;
+                    var layer = on ? Win32.HWND_NOTOPMOST : Win32.HWND_TOPMOST;
+                    foreach (var h in hs)
+                        Win32.SetWindowPos(h, layer, 0, 0, 0, 0, Win32.SWP_NOMOVE | Win32.SWP_NOSIZE | Win32.SWP_NOACTIVATE);
+                    // 复核读的是样式位本身：SetWindowPos 返回 true 只说明调用没出错，
+                    // 提权窗口上这一下会「成功」却不生效（UIPI 拦在更下面）。
+                    done = () => ((Win32.GetWindowLong(hs[0], Win32.GWL_EXSTYLE) & Win32.WS_EX_TOPMOST) != 0) != on;
+                    break;
+                }
                 default:   // activate：SetForeground 自己已经复核过前台，不必再轮询
                     return SetForeground(process) ? WindowOutcome.Ok : WindowOutcome.Failed;
             }
