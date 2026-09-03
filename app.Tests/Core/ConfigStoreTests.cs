@@ -208,9 +208,13 @@ public class ConfigStoreTests : IDisposable
         Assert.Single(c.LaunchSteps);
         Assert.Equal("ok", c.LaunchSteps[0].Label);
         Assert.Single(c.Reminders);
-        Assert.Single(c.ActionGroups);
-        Assert.Single(c.ActionGroups[0].Steps);
-        Assert.Equal("system", c.ActionGroups[0].Steps[0].Kind);
+        // 按内容断言而不是按总数：这条测的是「null 元素被剔除」，而读入一份老配置还会顺带跑一次
+        // 面板模型迁移（它会追加一张动作页，见 PanelMigrationTests）。用总数钉住的话，
+        // 这条会因为一件与它无关的事而红。
+        Assert.DoesNotContain(c.ActionGroups, g => g is null);
+        var group = Assert.Single(c.ActionGroups, g => g.Name == "g");
+        Assert.Single(group.Steps);
+        Assert.Equal("system", group.Steps[0].Kind);
     }
 
     [Fact]
@@ -255,6 +259,106 @@ public class ConfigStoreTests : IDisposable
             Assert.Equal(100, back.RepeatDelayMs);
         }
         finally { File.Delete(path); }
+    }
+
+    // —— panelPages 为 null / 带 null 元素时不许崩 ——
+    //
+    // Normalize 是在 Read 的 try/catch **之外**调的，所以它一崩就直接违背这一段自己写的承诺：
+    // 「解析失败落回默认，绝不崩」。而 PanelPages 曾是唯一漏在那批空集合守卫之外的一张表，
+    // 偏偏 MigratePanelPages 里就有一句 cfg.PanelPages.Add(page)——启动即 NRE，导入配置同一条路。
+    // 触发条件是三件事凑齐：panelPages 为 null、panelSchema < 3、有一个组 showInPanel:true。
+    [Fact]
+    public void Normalize_survives_null_panel_pages_while_migrating()
+    {
+        var cfg = new RootConfig
+        {
+            PanelPages = null!,                                     // json 里写 "panelPages": null
+            ActionGroups = new() { new ActionGroup { Name = "要迁的组", ShowInPanel = true } },
+        };
+        cfg.Settings.PanelSchema = 0;                               // 迁移那道门还开着
+        ConfigStore.Normalize(cfg);                                 // 从前在这里 NRE
+        Assert.NotNull(cfg.PanelPages);
+        Assert.Single(cfg.PanelPages);                              // 那个组真的被迁成了一页
+    }
+
+    [Fact]
+    public void Normalize_survives_null_panel_pages_without_migrating()
+    {
+        var cfg = new RootConfig { PanelPages = null! };
+        cfg.Settings.PanelSchema = 3;                               // 迁移那道门已关，走的是另一条路
+        ConfigStore.Normalize(cfg);
+        Assert.NotNull(cfg.PanelPages);
+        Assert.Empty(cfg.PanelPages);
+    }
+
+    // "panelPages":[null]：下游按元素解引用即崩（PanelManagerWindow 删分类时数 p.Tab）。
+    [Fact]
+    public void Normalize_drops_null_panel_page_elements()
+    {
+        var cfg = new RootConfig { PanelPages = new() { null!, new PanelPage { Name = "留下" }, null! } };
+        bool normalized = ConfigStore.Normalize(cfg);
+        Assert.True(normalized);                                    // 清过了就得写回
+        Assert.Single(cfg.PanelPages);
+        Assert.Equal("留下", cfg.PanelPages[0].Name);
+    }
+
+    // 页里那张步骤表是第四份，Normalize 从前完全没管它。
+    [Fact]
+    public void Normalize_fills_panel_page_step_lists()
+    {
+        var cfg = new RootConfig { PanelPages = new() { new PanelPage { Name = "页", Steps = null! } } };
+        ConfigStore.Normalize(cfg);                                 // 从前在 SyncGroupStepLabels 那一趟 NRE
+        Assert.NotNull(cfg.PanelPages[0].Steps);
+    }
+
+    [Fact]
+    public void Normalize_drops_null_steps_and_fills_onyes_on_panel_pages()
+    {
+        var cfg = new RootConfig
+        {
+            PanelPages = new() { new PanelPage { Name = "页", Steps = new() { null!, new LaunchStep { Kind = "message", OnYes = null! } } } },
+        };
+        ConfigStore.Normalize(cfg);
+        Assert.Single(cfg.PanelPages[0].Steps);
+        Assert.NotNull(cfg.PanelPages[0].Steps[0].OnYes);           // 不补的话打开步骤编辑器就 NRE
+    }
+
+    // 迁移搬进来的那些步骤也要补 OnYes——它们被搬进 PanelPages 的同时那个组已从 ActionGroups 删掉，
+    // 于是「遍历 ActionGroups 补 OnYes」那一趟再也碰不到它们。
+    [Fact]
+    public void Normalize_fills_onyes_on_steps_moved_in_by_the_migration()
+    {
+        var cfg = new RootConfig
+        {
+            PanelPages = new(),
+            ActionGroups = new()
+            {
+                new ActionGroup
+                {
+                    Name = "只当页用", ShowInPanel = true,
+                    Steps = new() { new LaunchStep { Kind = "message", OnYes = null! } },
+                },
+            },
+        };
+        cfg.Settings.PanelSchema = 0;                               // 迁移那道门开着
+        ConfigStore.Normalize(cfg);
+        var moved = Assert.Single(cfg.PanelPages);
+        var step = Assert.Single(moved.Steps);
+        Assert.NotNull(step.OnYes);
+    }
+
+    // group 格子的 Label 是组名的缓存副本，改名后要跟着走——面板页这一份从前漏在 walk 之外。
+    [Fact]
+    public void Normalize_syncs_group_labels_on_panel_pages()
+    {
+        var target = new ActionGroup { Id = "g1", Name = "新名字" };
+        var cfg = new RootConfig
+        {
+            ActionGroups = new() { target },
+            PanelPages = new() { new PanelPage { Name = "页", Steps = new() { new LaunchStep { Kind = "group", GroupId = "g1", Label = "旧名字" } } } },
+        };
+        ConfigStore.Normalize(cfg);
+        Assert.Equal("新名字", cfg.PanelPages[0].Steps[0].Label);
     }
 
     // —— 「在托盘菜单显示」的迁移 ——

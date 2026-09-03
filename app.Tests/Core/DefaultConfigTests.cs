@@ -1,3 +1,4 @@
+using System.Linq;
 using Clockwork.Core;
 using Xunit;
 
@@ -9,7 +10,7 @@ public class DefaultConfigTests
         var c = RootConfig.Default();
         Assert.Equal(5, c.LaunchSteps.Count);           // 一个真实的早晨：5 步
         Assert.Equal(4, c.Reminders.Count);             // 工作日两条 + 每天一条 + 每月一条：4 条
-        Assert.Equal(2, c.ActionGroups.Count);          // 首启预置「离开一下」+「收工·下班」两个可运行的动作组
+        Assert.Equal(2, c.ActionGroups.Count);          // 首启预置「离开一下」+「下班」两个可运行的动作组
         Assert.Equal(30, c.Settings.TickSeconds);
         Assert.Equal("Ctrl+Alt+Q", c.Settings.StopHotkey);
     }
@@ -61,5 +62,49 @@ public class DefaultConfigTests
     {
         Assert.NotEqual(new Reminder().Id, new Reminder().Id);
         Assert.False(string.IsNullOrWhiteSpace(new Reminder().Id));
+    }
+
+    // ── 出厂那一页面板 ──
+    //
+    // 装完第一次呼出面板看到的就是它。三条要求，每一条都被真实地踩过或差点踩到。
+
+    // ① 每一格**装完就能按**：只放 Windows 自带的系统动作，不放「打开某某软件」——
+    //    那种格子在别人的机器上就是个死格（路径 / 进程名都是这台机器上才成立的）。
+    [Fact]
+    public void Every_default_tile_works_on_a_fresh_machine()
+    {
+        var page = Assert.Single(RootConfig.Default().PanelPages);
+        Assert.False(string.IsNullOrWhiteSpace(page.Name));
+        foreach (var s in page.Steps)
+        {
+            Assert.Contains(s.Kind, new[] { "system", "group" });
+            if (s.Kind == "system")
+            {
+                // 命令得是引擎认识的（下拉里有的），否则那一格点了什么都不会发生
+                Assert.Contains(s.Command, StepDisplay.SystemCommandMap().Select(kv => kv.Key));
+                Assert.True(string.IsNullOrEmpty(s.Target), "出厂格子不该带这台机器才有的路径");
+            }
+        }
+    }
+
+    // ② **不放通知开关**：它改注册表且不会自己恢复，新用户按一下之后可能好几天
+    //    都不知道通知去哪了。开箱内容不该替人做这种会留下痕迹、又不提示的事。
+    [Fact]
+    public void The_default_page_ships_no_sticky_switches()
+    {
+        var page = Assert.Single(RootConfig.Default().PanelPages);
+        Assert.DoesNotContain(page.Steps, s => s.Command is "notificationsOff" or "notificationsOn");
+    }
+
+    // ③ **每一格的图标各不相同**。面板的前提是「图标一眼说明这是哪一类东西」，
+    //    而系统命令这一整类共用一个齿轮（PanelIcon 按 Kind 取字形，看不见 Command）——
+    //    不逐格指定的话，首启那一页就是八个一模一样的齿轮，那句前提当场落空。
+    //    （码位本身是否存在于字体里由 GlyphCoverageTests 盯着。）
+    [Fact]
+    public void The_default_tiles_do_not_all_look_alike()
+    {
+        var sys = RootConfig.Default().PanelPages.Single().Steps.Where(s => s.Kind == "system").ToList();
+        Assert.All(sys, s => Assert.False(string.IsNullOrWhiteSpace(s.Icon), "系统格子没指图标，会退回统一的齿轮"));
+        Assert.Equal(sys.Count, sys.Select(s => s.Icon).Distinct().Count());
     }
 }
