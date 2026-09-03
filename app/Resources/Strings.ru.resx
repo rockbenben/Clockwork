@@ -15,7 +15,9 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Срабатывает по времени, при входе или по событиям (разблокировка, питание) — напоминание или тихая группа. Просто открыть программы при входе → Список запуска; вручную одним нажатием → Группы действий.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Соберите набор действий в группу и запускайте её в любой момент хоткеем / из трея; Список запуска и Задачи по расписанию могут ссылаться на неё. То, что нужно только при входе, проще записать прямо в Список запуска.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(пусто)</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>Установка/снятие флажка действует сразу (отключение, не удаление; обратимо). Элементы «нужен админ» требуют прав администратора. Системные / политики / однократные элементы только для чтения по умолчанию скрыты.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>Установка/снятие флажка действует сразу (отключение, не удаление; обратимо).</value></data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>Системные / политики / однократные элементы только для чтения по умолчанию скрыты.</value></data>
+  <data name="System_Count" xml:space="preserve"><value>{0} из {1} элементов</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Фильтр</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Показать системные / только для чтения</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Сканирование элементов автозагрузки…</value></data>
@@ -45,6 +47,23 @@
   <data name="Col_Source" xml:space="preserve"><value>Источник</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Область</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Горячая клавиша</value></data>
+  <data name="Gesture_Manager" xml:space="preserve"><value>Жесты мышью</value></data>
+  <data name="Gesture_Enabled" xml:space="preserve"><value>Включены</value></data>
+  <data name="Gesture_Rehook" xml:space="preserve"><value>Перецепить</value></data>
+  <data name="Gesture_RehookHint" xml:space="preserve"><value>Другая программа (драйвер мыши, AutoHotkey, ещё один жестовый инструмент) может стоять впереди и съедать правую кнопку — здесь всё выглядит исправным, а правая кнопка не приходит. Установленный последним перехват идёт первым, поэтому переустановка возвращает начало очереди.</value></data>
+  <data name="Gesture_WatchLive" xml:space="preserve"><value>Правая кнопка отслеживается</value></data>
+  <data name="Gesture_WatchOff" xml:space="preserve"><value>Правая кнопка не отслеживается</value></data>
+  <data name="Gesture_WatchFailed" xml:space="preserve"><value>Windows отклонила перехват</value></data>
+  <data name="Gesture_WatchStale" xml:space="preserve"><value>Перехват отвалился — переустанавливаю</value></data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>Перехват стоит, но ввод не приходит — попробуйте запустить от имени администратора</value></data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>Правую кнопку забирает другая программа (AutoHotkey, драйвер мыши…)</value></data>
+  <data name="Gesture_Hint" xml:space="preserve"><value>Удерживая правую кнопку, нарисуйте штрих — выполнится соответствующее действие. Если жестов нет, правая кнопка работает как обычно.</value></data>
+  <data name="Gesture_Track" xml:space="preserve"><value>Штрих</value></data>
+  <data name="Settings_GestureManage" xml:space="preserve"><value>Управление жестами…</value></data>
+  <data name="Settings_PanelManage" xml:space="preserve"><value>Управление панелью…</value></data>
+  <data name="Gesture_None" xml:space="preserve"><value>Жестов пока нет. Нажмите «Добавить», выберите действие и нарисуйте штрих справа.</value></data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>Удерживая левую кнопку, рисуйте здесь</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>Жест {0} уже занят группой «{1}»; нарисуйте другой штрих</value></data>
   <data name="Col_Port" xml:space="preserve"><value>Порт</value></data>
   <data name="Col_Process" xml:space="preserve"><value>Процесс</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -52,7 +71,9 @@
 
   <data name="Btn_Add" xml:space="preserve"><value>Добавить</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Добавить ▾</value></data>
+  <data name="Btn_FromTemplate" xml:space="preserve"><value>Из шаблона…</value></data>
   <data name="Btn_Edit" xml:space="preserve"><value>Изменить</value></data>
+  <data name="Btn_Rename" xml:space="preserve"><value>Переименовать</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>Удалить</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ Вверх</value></data>
   <data name="A11y_DragHandle" xml:space="preserve"><value>Перетащите для изменения порядка</value></data>
@@ -86,7 +107,61 @@
   <data name="Kind_volume" xml:space="preserve"><value>Громкость</value></data>
   <data name="Kind_window" xml:space="preserve"><value>Действие с окном</value></data>
   <data name="Kind_system" xml:space="preserve"><value>Системная команда</value></data>
-  <data name="Kind_group" xml:space="preserve"><value>Группа действий</value></data>
+  <data name="Kind_url" xml:space="preserve">
+    <value>Открытие веб-страницы</value>
+  </data>
+  <data name="Kind_copySelection" xml:space="preserve">
+    <value>Получение выделенного</value>
+  </data>
+  <data name="Kind_waitClipboard" xml:space="preserve">
+    <value>Ожидание буфера обмена</value>
+  </data>
+  <data name="Kind_prompt" xml:space="preserve"><value>Пользовательский ввод</value></data>
+  <data name="Kind_choice" xml:space="preserve"><value>Выбор пользователя</value></data>
+  <data name="Sum_OpenUrl" xml:space="preserve">
+    <value>Открыть {0}</value>
+  </data>
+  <data name="Sum_WaitClipboard" xml:space="preserve">
+    <value>Ожидание буфера обмена ({0}с)</value>
+  </data>
+  <data name="Warn_WaitClipboard" xml:space="preserve">
+    <value>Буфер обмена не изменился за {0}с; продолжаем дальше</value>
+  </data>
+  <data name="Warn_AskNoUi" xml:space="preserve"><value>На этом этапе необходимо задать вам вопрос, но на этом пути нет никого, кто мог бы это сделать (этот запуск проходит без участия человека). Пропущено.</value></data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>Этот шаг необратимо удаляет данные и требует подтверждения, а спросить на этом пути некого (этот запуск проходит без участия человека). Пропущено.</value></data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>Для этого шага не настроено ни одного параметра, поэтому выбирать не из чего. Пропущено.</value></data>
+  <data name="Ed_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Ed_WaitSeconds" xml:space="preserve">
+    <value>Ждать не более (с)</value>
+  </data>
+  <data name="Ed_UrlHint" xml:space="preserve">
+    <value>Поддерживает {clipboard}: при выполнении заменяется текстом из буфера обмена с URL-кодировкой. Используйте вместе с «Получение выделенного», чтобы искать именно то, что вы выделили.</value>
+  </data>
+  <data name="Ed_CopySelectionHint" xml:space="preserve">
+    <value>Нажимает клавишу копирования за вас и кладёт выделенный текст в буфер обмена. Последующие шаги читают его через {clipboard}.</value>
+  </data>
+  <data name="Ed_AskText" xml:space="preserve"><value>Вопрос</value></data>
+  <data name="Ed_AskDefault" xml:space="preserve"><value>Ответ по умолчанию</value></data>
+  <data name="Ed_Options" xml:space="preserve"><value>Параметры</value></data>
+  <data name="Ed_OptionsHint" xml:space="preserve"><value>По одному в каждой строке. Во время выполнения они отображаются в виде списка, и вы выбираете один из них.</value></data>
+  <data name="Ed_OutputVar" xml:space="preserve"><value>Сохранить ответ как</value></data>
+  <data name="Ed_OutputVarHint" xml:space="preserve"><value>В последующих шагах для ссылки на него используется {0}. Если оставить поле пустым, этот шаг ничего не выдает.</value></data>
+  <data name="Ed_OutputVarSample" xml:space="preserve"><value>имя</value></data>
+  <data name="Mig_PageMoved" xml:space="preserve">
+    <value>Страница панели «{0}» вынесена из действий в «Страницы панели». Плиток: {1}</value>
+  </data>
+  <data name="Mig_PageAndAction" xml:space="preserve">
+    <value>«{0}» — и страница панели, и действие (горячая клавиша или ссылка): действие сохранено, а на странице теперь одна плитка, которая на него указывает</value>
+  </data>
+  <data name="Mig_PageTrayDropped" xml:space="preserve">
+    <value>Страница панели «{0}» больше не появляется в меню трея (страница — не запускаемое действие)</value>
+  </data>
+  <data name="Mig_Title" xml:space="preserve">
+    <value>Страницы панели теперь отдельно</value>
+  </data>
+  <data name="Kind_group" xml:space="preserve"><value>Выполнить группу</value></data>
   <data name="Kind_message" xml:space="preserve"><value>Сообщение</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Задержка</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Отправка текста</value></data>
@@ -111,15 +186,26 @@
   <data name="Win_close" xml:space="preserve"><value>Закрыть окно</value></data>
   <data name="Win_minimize" xml:space="preserve"><value>Свернуть</value></data>
   <data name="Win_maximize" xml:space="preserve"><value>Развернуть</value></data>
+  <data name="Cmd_playPause" xml:space="preserve"><value>Воспроизвести / пауза</value></data>
+  <data name="Cmd_prevTrack" xml:space="preserve"><value>Предыдущий трек</value></data>
+  <data name="Cmd_nextTrack" xml:space="preserve"><value>Следующий трек</value></data>
+  <data name="Cmd_volUp" xml:space="preserve"><value>Громче</value></data>
+  <data name="Cmd_volDown" xml:space="preserve"><value>Тише</value></data>
+  <data name="Win_topmost" xml:space="preserve"><value>Переключить «поверх всех окон»</value></data>
+  <data name="Win_topmostFg" xml:space="preserve"><value>Переключить «поверх всех окон» (текущее)</value></data>
+  <data name="Ed_TopmostHint" xml:space="preserve"><value>Это относится к каждому окну отдельно: чтобы снова отключить эту функцию для какого-либо окна, сначала выведите это окно на передний план.</value></data>
   <data name="Win_activate" xml:space="preserve"><value>На передний план</value></data>
   <data name="Win_sendkey" xml:space="preserve"><value>На передний план и отправить клавиши</value></data>
+  <data name="Win_restore" xml:space="preserve"><value>Вернуться к предыдущему окну</value></data>
 
   <data name="Sum_SendKeys" xml:space="preserve"><value>Отправить {0}</value></data>
   <data name="Sum_Delay_Sec" xml:space="preserve"><value>Задержка {0}с</value></data>
   <data name="Sum_Delay_Ms" xml:space="preserve"><value>Задержка {0}мс</value></data>
   <data name="Sum_RunGroup" xml:space="preserve"><value>Выполнить группу: {0}</value></data>
-  <data name="Sum_Group_None" xml:space="preserve"><value>(не указано)</value></data>
+  <data name="Sum_Unset" xml:space="preserve"><value>(не указано)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Ввод {0}</value></data>
+  <data name="Sum_Ask" xml:space="preserve"><value>Вопрос: {0}</value></data>
+  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
   <data name="Sum_MsgCard" xml:space="preserve"><value>Карточка: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (только до {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
@@ -183,6 +269,7 @@
   <data name="Ed_WaitWin" xml:space="preserve"><value>Ждать окно (с)</value></data>
   <data name="Ed_PostDelay" xml:space="preserve"><value>После появления (с)</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>Имя процесса без .exe (напр. Weixin / msedge). Вывод на передний план / отправка клавиш требует фокуса и может не работать при запуске.</value></data>
+  <data name="Ed_RestoreHint" xml:space="preserve"><value>Восстанавливает окно, которое вы использовали в момент запуска этого действия. Для этого действия не нужно выбирать цель.</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>Команда</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>Текст</value></data>
   <data name="Ed_TextProcess" xml:space="preserve"><value>Целевой процесс</value></data>
@@ -212,11 +299,14 @@
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Запустить / открыть файл</value></data>
   <data name="Ed_OnYes_Url" xml:space="preserve"><value>Открыть URL</value></data>
   <data name="Ed_Group_None" xml:space="preserve"><value>(нет)</value></data>
+  <data name="Ed_GroupMissing" xml:space="preserve"><value>(цель удалена)</value></data>
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Не удалось отправить клавиши в «{0}»: окно не появилось или не удалось вывести на передний план (часто при запуске/в фоне)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Окно для «{0}» не найдено (процесс не запущен или не готов?); {1} без эффекта</value></data>
   <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Окно «{0}» найдено, но {1} не сработало (блокировка переднего плана, окно отказалось закрываться или запущено от имени администратора)</value></data>
+  <data name="Warn_RestoreFailed" xml:space="preserve"><value>Не удалось вернуться к предыдущему окну: окно на переднем плане заблокировано или его больше нет.</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Неизвестное действие с окном: {0}</value></data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>Текущее окно не допускает это действие ({0}): активировать его бессмысленно, а для нажатий используйте шаг «Отправить клавиши». Пропущено.</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Неизвестное действие громкости: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Неизвестный тип шага: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» пропущено: цель — сам Clockwork (во избежание цикла автозапуска)</value></data>
@@ -293,6 +383,7 @@
   <data name="Val_SilentNoGroup" xml:space="preserve"><value>Выбрано «Тихо выполнить группу действий», но группа ещё не выбрана</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Подтверждение</value></data>
+  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · Вопрос</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Вы уверены, что хотите выполнить «{0}»?</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Ошибка</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>В Clockwork произошла ошибка (записана в журнал; обычно можно продолжить):
@@ -323,6 +414,8 @@
   <data name="Sys_Takeover" xml:space="preserve"><value>Перенести в список запуска</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Удалить из системы</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Удалить «{0}»?</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>Удалить страницу «{0}»? При этом будут удалены все плитки {1}, расположенные на ней. Плитка, указывающая на действие, удаляет только эту ссылку; само действие остаётся.</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>Удалить категорию «{0}»? Содержащиеся в ней {1} страница(и) не будут удалены — они вернутся в категорию «{2}».</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Навсегда удалить элемент автозагрузки «{0}» из системы? Это действие нельзя отменить (чтобы просто отключить запуск, снимите флажок).</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>Освободить порт {0}? Будет завершено: {1} — вместе с дочерними процессами. Несохранённые данные пропадут.</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Этот процесс занимает также порт {0} — он освободится вместе с ним.</value></data>
@@ -330,6 +423,7 @@
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Не удалось удалить «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Файл назначения экспорта не может совпадать с самим файлом конфигурации — выберите другое имя или папку.</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>Текст отправляемых клавиш — не корректная последовательность: проверьте незакрытые фигурные скобки и неизвестные имена клавиш (напр. {ENTER}; литеральная { записывается как {{}, а } — как {}}).</value></data>
+  <data name="Val_SearchUrl" xml:space="preserve"><value>В адресе поиска нужен {0} — туда подставляется запрос. Без него шаг каждый раз открывает одну и ту же страницу.</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Наверстать пропущенное (после сна/выключения)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} мин</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>У сочетания «{0}» нет основной клавиши; не отправлено</value></data>
@@ -357,27 +451,51 @@
   <data name="Tray_ViewLog" xml:space="preserve"><value>Показать последний журнал запуска</value></data>
   <data name="Tray_History" xml:space="preserve"><value>Недавние</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Журнала запуска ещё нет (сначала запустите список запуска)</value></data>
+  <data name="Log_Title" xml:space="preserve"><value>Журнал последнего запуска списка</value></data>
+  <data name="Log_When" xml:space="preserve"><value>Время: {0}</value></data>
+  <data name="Log_Summary" xml:space="preserve"><value>Всего шагов: {0}. Из них {1} с ошибкой или предупреждением, {2} отправлены, но проверить нельзя, остальные успешно</value></data>
+  <data name="Log_UnverNote" xml:space="preserve"><value>(~ означает, что нажатие или горячая клавиша отправлены, но подтвердить реакцию цели нельзя)</value></data>
+  <data name="Log_ReadyGate" xml:space="preserve"><value>Проверка готовности: ожидание {0} с (оболочка={1} сеть={2})</value></data>
+  <data name="Log_ReadyTimeout" xml:space="preserve"><value>, истекло время, готовности так и нет — продолжено как обычно</value></data>
+  <data name="Log_BootDelay" xml:space="preserve"><value>Задержка при запуске: {0} с</value></data>
+  <data name="Log_BudgetHit" xml:space="preserve"><value>Этот запуск достиг предела в {0} шагов; оставшиеся шаги не выполнялись</value></data>
+  <data name="Log_Nth" xml:space="preserve"><value> ({0} из {1})</value></data>
+  <data name="Log_GroupBusy" xml:space="preserve"><value>Группа действий «{0}» уже выполняется (запущена в другом месте) — в этот раз пропущена</value></data>
+  <data name="Log_GroupMissing" xml:space="preserve"><value>Группа действий не найдена</value></data>
+  <data name="Log_GroupDisabled" xml:space="preserve"><value>Группа действий «{0}» отключена — пропущена</value></data>
+  <data name="Log_GroupCycle" xml:space="preserve"><value>Циклическая ссылка — пропущено</value></data>
+  <data name="Log_RunGroup" xml:space="preserve"><value>Запуск группы действий: {0}</value></data>
+  <data name="Log_Stopped" xml:space="preserve"><value>Остановлено вручную; последующие шаги не выполнялись</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>Этот запуск остановлен вручную (клавиша аварийной остановки или «Стоп» в трее)</value></data>
+  <data name="Err_JsonNull" xml:space="preserve"><value>Этот файл при разборе даёт пустоту — это не конфигурация.</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Не удалось очистить буфер обмена: {0}</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>«{0}» — это не файл формата .wav. На этом этапе воспроизводятся только файлы wav.</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>Звуковой файл не найден: «{0}»</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Не удалось очистить корзину: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Неизвестная системная команда: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Запустить: {0}</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Возобновить напоминания (осталось {0} мин)</value></data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>До конца дня</value></data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>Напоминания приостановлены до конца дня</value></data>
+  <data name="Tray_DndResumeHours" xml:space="preserve"><value>Возобновить напоминания (осталось {0} ч)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Приостановить напоминания</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} ч</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>Напоминания приостановлены на {0} ч</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>Напоминания возобновлены</value></data>
-  <data name="Menu_BlankGroup" xml:space="preserve"><value>Пустая группа</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>Фокус · Начать работу</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>Режим концентрации</value></data>
   <data name="Tpl_Meeting" xml:space="preserve"><value>Режим совещания</value></data>
-  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Завершение дня</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Конец дня</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Перед сном</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Отойти ненадолго</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Все сегодняшние задачи записаны?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Пора спать!</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>Перерыв от сидения · циклом</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>Напоминание о перерыве</value></data>
+  <data name="Tpl_Search" xml:space="preserve"><value>Быстрый поиск</value></data>
+  <data name="Tpl_SearchAsk" xml:space="preserve"><value>Что искать?</value></data>
+  <data name="Tpl_SearchVar" xml:space="preserve"><value>ключевое слово</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Встаньте и немного разомнитесь</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Отключить звук при запуске (пример · против автовоспроизведения)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>Открыть браузер (пример · укажите свой .exe)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Откройте браузер (пример · перейдите на страницу приложения, которым вы действительно пользуетесь)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Открыть сайт (пример · только по будням; почта или задачи)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Открыть мессенджер (пример · запускается свёрнутым в фоне)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Показать рабочий стол через Win+D (пример · отправка сочетания клавиш)</value></data>
@@ -429,6 +547,27 @@
   <data name="Vol_micMute" xml:space="preserve"><value>Выключить микрофон</value></data>
   <data name="Vol_micUnmute" xml:space="preserve"><value>Включить микрофон</value></data>
   <data name="Sys_setClipboard" xml:space="preserve"><value>Задать текст в буфере обмена</value></data>
+  <data name="Menu_SecCommon" xml:space="preserve"><value>Частые</value></data>
+  <data name="Cmd_copy" xml:space="preserve"><value>Копировать</value></data>
+  <data name="Cmd_paste" xml:space="preserve"><value>Вставить</value></data>
+  <data name="Cmd_back" xml:space="preserve"><value>Назад</value></data>
+  <data name="Cmd_forward" xml:space="preserve"><value>Вперёд</value></data>
+  <data name="Cmd_toBottom" xml:space="preserve"><value>В самый низ</value></data>
+  <data name="Win_current" xml:space="preserve"><value>Текущее окно</value></data>
+  <data name="Win_minimizeFg" xml:space="preserve"><value>Свернуть текущее окно</value></data>
+  <data name="Win_maximizeFg" xml:space="preserve"><value>Развернуть текущее окно</value></data>
+  <data name="Win_closeFg" xml:space="preserve"><value>Закрыть текущее окно</value></data>
+  <data name="Sys_searchSelection" xml:space="preserve"><value>Найти выделенный текст</value></data>
+  <data name="Sys_playSound" xml:space="preserve"><value>Воспроизвести звук (системный звук или файл .wav)</value></data>
+  <data name="Ed_SearchUrl" xml:space="preserve"><value>Адрес поиска</value></data>
+  <data name="Ed_SearchEngine" xml:space="preserve"><value>Поисковик</value></data>
+  <data name="Ed_SearchCustom" xml:space="preserve"><value>Другой…</value></data>
+  <data name="Err_NoSelection" xml:space="preserve"><value>Текст не выделен. Выделите то, что нужно найти, и выполните этот шаг снова.</value></data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>Сейчас нет окна, к которому это применить (впереди сам Clockwork или рабочий стол)</value></data>
+  <data name="Ed_ProcessHint" xml:space="preserve"><value>Введите * — это текущее окно, то самое, где вы были до жеста или открытия панели. Пустое поле означает, что шаг ничего не делает.</value></data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} — искомые слова; они экранируются автоматически.</value></data>
+  <data name="Ed_SoundFile" xml:space="preserve"><value>Звуковой файл</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Оставьте это поле пустым, чтобы использовать системный звук уведомления. Или укажите полный путь к файлу .wav.</value></data>
   <data name="Sys_brightness" xml:space="preserve"><value>Яркость экрана</value></data>
   <data name="Sys_notificationsOff" xml:space="preserve"><value>Отключить уведомления</value></data>
   <data name="Sys_notificationsOn" xml:space="preserve"><value>Включить уведомления</value></data>
@@ -501,4 +640,76 @@
   <data name="Adv_NagUntil" xml:space="preserve"><value>напоминает каждые {0} мин, пока не подтвердят, не позже {1}</value></data>
   <data name="Adv_Loop" xml:space="preserve"><value>выполняется каждые {0} мин до конца дня (подтверждение не останавливает)</value></data>
   <data name="Adv_LoopUntil" xml:space="preserve"><value>выполняется каждые {0} мин до {1} (подтверждение не останавливает)</value></data>
+  <data name="Ed_Trig_Busy" xml:space="preserve"><value>При непрерывной работе</value></data>
+  <data name="Ed_Trig_Display" xml:space="preserve"><value>При смене дисплея</value></data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>При подключении сети</value></data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>При потере сети</value></data>
+  <data name="Ed_Trig_Usb" xml:space="preserve"><value>При подключении USB-диска</value></data>
+  <data name="Time_Busy" xml:space="preserve"><value>{0} мин работы</value></data>
+  <data name="Ed_BusyMinutes" xml:space="preserve"><value>Минут работы</value></data>
+  <data name="Ed_BusyHint" xml:space="preserve"><value>Срабатывает один раз после указанного числа минут непрерывной работы; минута отсутствия сбрасывает отсчёт.</value></data>
+  <data name="Settings_PanelHotkey" xml:space="preserve"><value>Клавиша быстрой панели</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Открывает панель плиток у курсора, по одному действию на плитку. Esc — отмена, Del — очистить; после этого панель открывают средняя кнопка мыши или меню в области уведомлений.</value></data>
+  <data name="Tray_Panel" xml:space="preserve"><value>Открыть быструю панель</value></data>
+  <data name="Panel_Hint" xml:space="preserve"><value>Esc — закрыть</value></data>
+  <data name="Panel_Empty" xml:space="preserve"><value>Панель пуста. Здесь появятся действия, которые вы на неё положите.</value></data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>Список автозапуска пропущен. Удалите {0}, чтобы он снова запускался автоматически.</value></data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>Список автозапуска пропущен: при запуске была зажата клавиша Shift. Только на этот раз — следующая загрузка пройдёт как обычно.</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>Группа действий «{0}» не найдена — ничего не запущено.</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>Группа действий «{0}» отключена — ничего не запущено.</value></data>
+  <data name="Unit_Ms" xml:space="preserve"><value>мс</value></data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>Открывать панель долгим нажатием средней кнопки мыши</value></data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>Обычный щелчок средней кнопкой продолжает работать — короткое нажатие пересылается как есть. По умолчанию выключено, потому что нужен глобальный хук мыши.</value></data>
+  <data name="Settings_LongPressMs" xml:space="preserve"><value>Время удержания (мс)</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>Не удалось установить хук мыши, поэтому долгое нажатие средней кнопки отключено. Возможно, его заблокировала защитная программа или групповая политика; панель по-прежнему открывается клавишей или из меню области уведомлений.</value></data>
+  <data name="Settings_Panel" xml:space="preserve"><value>Быстрая панель</value></data>
+  <data name="Settings_UsePanel" xml:space="preserve"><value>Использовать быструю панель</value></data>
+  <data name="Settings_UsePanelTip" xml:space="preserve"><value>Если выключить, горячая клавиша вернётся другим программам, перехват средней кнопки не устанавливается, а пункт в трее скрывается. Страницы панели остаются — их по-прежнему можно приводить в порядок в «Управлении панелью».</value></data>
+  <data name="Settings_UseGestures" xml:space="preserve"><value>Использовать жесты мыши</value></data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>Если выключить, правая кнопка вообще не отслеживается и работает как обычно. Сами жесты рисуются в менеджере жестов, из боковой панели «Группы действий».</value></data>
+  <data name="Settings_PanelLayout" xml:space="preserve"><value>Раскладка</value></data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>Столбцы × строк сверху + строк снизу задаёт, сколько помещается на странице и какой ширины панель. Остальное уходит на следующую страницу; 0 снизу — одна полоса.</value></data>
+  <data name="Settings_PanelColumns" xml:space="preserve"><value>Плиток в ряду</value></data>
+  <data name="Settings_PanelTileSize" xml:space="preserve"><value>Размер плитки</value></data>
+  <data name="Size_compact" xml:space="preserve"><value>Компактно</value></data>
+  <data name="Size_normal" xml:space="preserve"><value>Обычно</value></data>
+  <data name="Size_roomy" xml:space="preserve"><value>Просторно</value></data>
+  <data name="Settings_PanelShowOps" xml:space="preserve"><value>Показывать встроенные кнопки</value></data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>Только значки</value></data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>Названия остаются во всплывающей подсказке, а на экран помещается гораздо больше действий.</value></data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>Только в этой программе</value></data>
+  <data name="Settings_PanelTopRows" xml:space="preserve"><value>Строк сверху</value></data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Строк снизу</value></data>
+  <data name="Ed_Icon" xml:space="preserve"><value>Значок панели</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>Оставьте пустым — заполнится само: «Запустить программу» берёт значок самой цели, остальное получает контурный значок по своему типу.</value></data>
+  <data name="Btn_Close" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Panel_Manager" xml:space="preserve"><value>Управление панелью</value></data>
+  <data name="Panel_Global" xml:space="preserve"><value>Любое приложение</value></data>
+  <data name="Panel_AddPage" xml:space="preserve"><value>Добавить страницу</value></data>
+  <data name="Panel_NewPage" xml:space="preserve"><value>Новая страница</value></data>
+  <data name="Panel_AddHere" xml:space="preserve"><value>Поместить сюда действие</value></data>
+  <data name="Panel_NoPages" xml:space="preserve"><value>Страниц пока нет. Нажмите значок «+» в конце панели вкладок, чтобы создать страницу; затем добавьте на неё действия.</value></data>
+  <data name="Panel_Uncategorized" xml:space="preserve"><value>Без категории</value></data>
+  <data name="Panel_NewCategory" xml:space="preserve"><value>Новая категория</value></data>
+  <data name="Panel_Category" xml:space="preserve"><value>Категория</value></data>
+  <data name="Panel_Pages" xml:space="preserve"><value>Страницы</value></data>
+  <data name="Panel_CategoryHint" xml:space="preserve"><value>К какой категории относится эта страница. В верхнем ряду по вкладке на категорию; выбранная показывает только свои страницы.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Сверху щёлкают категорию, слева — страницу. Двойной щелчок переименовывает, вкладки перетаскиваются для порядка, брошенная на категорию переносит туда страницу; плитка, брошенная на вкладку, переезжает на ту страницу. Правый щелчок по вкладке переименует или удалит её.</value></data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>Показывать вкладки слева</value></data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>Показывать ряд категорий</value></data>
+  <data name="Panel_BarsHint" xml:space="preserve"><value>Сверху выбирается категория, слева — её страницы. При одной категории верхний ряд не рисуется, при одной странице в текущей категории — и левый; эти галочки скрывают их и когда их больше. В диспетчере ряд категорий остаётся всегда: плюс на нём и создаёт категорию.</value></data>
+  <data name="Panel_SceneHint" xml:space="preserve"><value>Оставьте пустым — страница будет всегда. Укажите процесс, и она появится только если эта программа была впереди в момент открытия панели.</value></data>
+  <data name="Icon_Pick" xml:space="preserve"><value>Выбор значка</value></data>
+  <data name="Icon_PickHint" xml:space="preserve"><value>Кроме этих, можно взять своё изображение или любой exe и позаимствовать его значок.</value></data>
+  <data name="Icon_UseImage" xml:space="preserve"><value>Выбрать изображение…</value></data>
+  <data name="Icon_None" xml:space="preserve"><value>Оставить автоматически</value></data>
+  <data name="Panel_Search" xml:space="preserve"><value>Найти действие</value></data>
+  <data name="Panel_SearchNone" xml:space="preserve"><value>Ничего не совпало. Попробуйте другое слово или нажмите Esc, чтобы вернуться к панели.</value></data>
+  <data name="Panel_HintBack" xml:space="preserve"><value>Esc — назад</value></data>
+  <data name="Panel_SearchMore" xml:space="preserve"><value>Показаны первые {0} из {1} совпадений. Наберите ещё немного, чтобы сузить.</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Тема</value></data>
+  <data name="Theme_dark" xml:space="preserve"><value>Тёмная</value></data>
+  <data name="Theme_light" xml:space="preserve"><value>Светлая</value></data>
+  <data name="Theme_system" xml:space="preserve"><value>Как в Windows</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork сразу перезапустится, чтобы применить тему. «Как в Windows» следует режиму приложений Windows.</value></data>
 </root>

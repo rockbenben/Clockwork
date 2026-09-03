@@ -15,7 +15,9 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Scatta a un orario, all'accesso o su eventi come sblocco / alimentazione: promemoria o gruppo silenzioso. Solo aprire app all'accesso → Elenco di avvio; su richiesta → Gruppi di azioni.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Raggruppa una routine e lanciala quando vuoi con scorciatoia / tray; anche l'Elenco di avvio e le Attività pianificate possono richiamarla. Ciò che gira solo all'accesso è più semplice come passi dell'Elenco di avvio.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(vuoto)</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>Selezionare/deselezionare ha effetto immediato (disabilita, non elimina; reversibile). Le voci «richiede admin» necessitano di diritti di amministratore. Le voci di sistema / criterio / una tantum in sola lettura sono nascoste per impostazione predefinita.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>Selezionare/deselezionare ha effetto immediato (disabilita, non elimina; reversibile).</value></data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>Le voci di sistema / criterio / una tantum in sola lettura sono nascoste per impostazione predefinita.</value></data>
+  <data name="System_Count" xml:space="preserve"><value>{0} di {1} voci</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filtro</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Mostra voci di sistema / sola lettura</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Scansione voci di avvio…</value></data>
@@ -45,6 +47,23 @@
   <data name="Col_Source" xml:space="preserve"><value>Origine</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Ambito</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Scorciatoia</value></data>
+  <data name="Gesture_Manager" xml:space="preserve"><value>Gesti del mouse</value></data>
+  <data name="Gesture_Enabled" xml:space="preserve"><value>Attivi</value></data>
+  <data name="Gesture_Rehook" xml:space="preserve"><value>Riaggancia</value></data>
+  <data name="Gesture_RehookHint" xml:space="preserve"><value>Un altro programma (driver del mouse, AutoHotkey, un altro strumento di gesti) può stare davanti a noi e mangiarsi il tasto destro: qui sembra tutto a posto eppure nessun tasto destro arriva. L’hook installato per ultimo viene per primo, quindi reinstallarlo riprende la testa della coda.</value></data>
+  <data name="Gesture_WatchLive" xml:space="preserve"><value>Tasto destro sotto osservazione</value></data>
+  <data name="Gesture_WatchOff" xml:space="preserve"><value>Tasto destro non osservato</value></data>
+  <data name="Gesture_WatchFailed" xml:space="preserve"><value>Windows ha rifiutato l’hook</value></data>
+  <data name="Gesture_WatchStale" xml:space="preserve"><value>L’hook è morto: reinstallo</value></data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>Agganciato, ma non arriva nulla: prova a eseguirlo come amministratore</value></data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>Un altro programma si prende il tasto destro (AutoHotkey, un driver del mouse…)</value></data>
+  <data name="Gesture_Hint" xml:space="preserve"><value>Tieni premuto il tasto destro, disegna un tratto e parte l’azione corrispondente. Senza gesti, il tasto destro funziona come sempre.</value></data>
+  <data name="Gesture_Track" xml:space="preserve"><value>Tratto</value></data>
+  <data name="Settings_GestureManage" xml:space="preserve"><value>Gestisci gesti…</value></data>
+  <data name="Settings_PanelManage" xml:space="preserve"><value>Gestisci pannello…</value></data>
+  <data name="Gesture_None" xml:space="preserve"><value>Ancora nessun gesto. Fai clic su Aggiungi, scegli un’azione e disegna un tratto a destra.</value></data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>Tieni il sinistro e disegna qui</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>Il gesto {0} è già usato da «{1}»; disegna un altro tratto</value></data>
   <data name="Col_Port" xml:space="preserve"><value>Porta</value></data>
   <data name="Col_Process" xml:space="preserve"><value>Processo</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -52,7 +71,9 @@
 
   <data name="Btn_Add" xml:space="preserve"><value>Aggiungi</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Aggiungi ▾</value></data>
+  <data name="Btn_FromTemplate" xml:space="preserve"><value>Da un modello…</value></data>
   <data name="Btn_Edit" xml:space="preserve"><value>Modifica</value></data>
+  <data name="Btn_Rename" xml:space="preserve"><value>Rinomina</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>Elimina</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ Su</value></data>
   <data name="A11y_DragHandle" xml:space="preserve"><value>Trascina per riordinare</value></data>
@@ -86,7 +107,61 @@
   <data name="Kind_volume" xml:space="preserve"><value>Volume</value></data>
   <data name="Kind_window" xml:space="preserve"><value>Azione finestra</value></data>
   <data name="Kind_system" xml:space="preserve"><value>Comando di sistema</value></data>
-  <data name="Kind_group" xml:space="preserve"><value>Gruppo di azioni</value></data>
+  <data name="Kind_url" xml:space="preserve">
+    <value>Apri pagina web</value>
+  </data>
+  <data name="Kind_copySelection" xml:space="preserve">
+    <value>Prendi la selezione</value>
+  </data>
+  <data name="Kind_waitClipboard" xml:space="preserve">
+    <value>Attendi gli appunti</value>
+  </data>
+  <data name="Kind_prompt" xml:space="preserve"><value>Dati inseriti dall'utente</value></data>
+  <data name="Kind_choice" xml:space="preserve"><value>Scelta dell'utente</value></data>
+  <data name="Sum_OpenUrl" xml:space="preserve">
+    <value>Apri {0}</value>
+  </data>
+  <data name="Sum_WaitClipboard" xml:space="preserve">
+    <value>Attendi gli appunti ({0}s)</value>
+  </data>
+  <data name="Warn_WaitClipboard" xml:space="preserve">
+    <value>Gli appunti non sono cambiati entro {0}s; si prosegue comunque</value>
+  </data>
+  <data name="Warn_AskNoUi" xml:space="preserve"><value>Questo passaggio richiede un tuo intervento, ma su questo percorso non c’è nessuno a cui rivolgersi (questa esecuzione è automatica). Saltato.</value></data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>Questo passaggio elimina qualcosa in modo irreversibile e richiede prima la tua conferma, e su questo percorso non c'è nessuno a cui chiedere (questa esecuzione è automatica). Saltato.</value></data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>In questa fase non sono state configurate opzioni, quindi non c'è nulla da selezionare. Fase saltata.</value></data>
+  <data name="Ed_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Ed_WaitSeconds" xml:space="preserve">
+    <value>Attesa max (s)</value>
+  </data>
+  <data name="Ed_UrlHint" xml:space="preserve">
+    <value>Supporta {clipboard}: sostituito in esecuzione con il testo degli appunti, con escape per URL. Abbinalo a «Prendi la selezione» per cercare ciò che hai selezionato.</value>
+  </data>
+  <data name="Ed_CopySelectionHint" xml:space="preserve">
+    <value>Preme il tasto Copia al posto tuo e mette il testo selezionato negli appunti. I passaggi successivi lo recuperano con {clipboard}.</value>
+  </data>
+  <data name="Ed_AskText" xml:space="preserve"><value>Domanda</value></data>
+  <data name="Ed_AskDefault" xml:space="preserve"><value>Risposta predefinita</value></data>
+  <data name="Ed_Options" xml:space="preserve"><value>Opzioni</value></data>
+  <data name="Ed_OptionsHint" xml:space="preserve"><value>Uno per riga. Durante l'esecuzione vengono elencati e puoi sceglierne uno.</value></data>
+  <data name="Ed_OutputVar" xml:space="preserve"><value>Salva la risposta come</value></data>
+  <data name="Ed_OutputVarHint" xml:space="preserve"><value>I passaggi successivi utilizzano {0} per farvi riferimento. Se lasciato vuoto, questo passaggio non produce alcun risultato.</value></data>
+  <data name="Ed_OutputVarSample" xml:space="preserve"><value>nome</value></data>
+  <data name="Mig_PageMoved" xml:space="preserve">
+    <value>La pagina del pannello «{0}» è uscita dalle azioni e si trova nelle Pagine del pannello (riquadri: {1})</value>
+  </data>
+  <data name="Mig_PageAndAction" xml:space="preserve">
+    <value>«{0}» è sia pagina del pannello sia azione (scorciatoia o richiamata): l'azione resta e la pagina ora contiene un riquadro che la richiama</value>
+  </data>
+  <data name="Mig_PageTrayDropped" xml:space="preserve">
+    <value>La pagina del pannello «{0}» non compare più nel menu della barra (una pagina non è un'azione eseguibile)</value>
+  </data>
+  <data name="Mig_Title" xml:space="preserve">
+    <value>Le pagine del pannello ora sono separate</value>
+  </data>
+  <data name="Kind_group" xml:space="preserve"><value>Esegui gruppo</value></data>
   <data name="Kind_message" xml:space="preserve"><value>Messaggio</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Ritardo</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Invia testo</value></data>
@@ -111,15 +186,26 @@
   <data name="Win_close" xml:space="preserve"><value>Chiudi finestra</value></data>
   <data name="Win_minimize" xml:space="preserve"><value>Riduci a icona</value></data>
   <data name="Win_maximize" xml:space="preserve"><value>Ingrandisci</value></data>
+  <data name="Cmd_playPause" xml:space="preserve"><value>Riproduci / pausa</value></data>
+  <data name="Cmd_prevTrack" xml:space="preserve"><value>Traccia precedente</value></data>
+  <data name="Cmd_nextTrack" xml:space="preserve"><value>Traccia successiva</value></data>
+  <data name="Cmd_volUp" xml:space="preserve"><value>Alza il volume</value></data>
+  <data name="Cmd_volDown" xml:space="preserve"><value>Abbassa il volume</value></data>
+  <data name="Win_topmost" xml:space="preserve"><value>Attiva/disattiva finestra in primo piano</value></data>
+  <data name="Win_topmostFg" xml:space="preserve"><value>Attiva/disattiva finestra corrente in primo piano</value></data>
+  <data name="Ed_TopmostHint" xml:space="preserve"><value>Questo vale per ogni finestra singolarmente: per disattivarla nuovamente in una finestra, occorre prima portare quella finestra in primo piano.</value></data>
   <data name="Win_activate" xml:space="preserve"><value>Porta in primo piano</value></data>
   <data name="Win_sendkey" xml:space="preserve"><value>In primo piano e invia tasti</value></data>
+  <data name="Win_restore" xml:space="preserve"><value>Torna alla finestra precedente</value></data>
 
   <data name="Sum_SendKeys" xml:space="preserve"><value>Invia {0}</value></data>
   <data name="Sum_Delay_Sec" xml:space="preserve"><value>Ritardo {0}s</value></data>
   <data name="Sum_Delay_Ms" xml:space="preserve"><value>Ritardo {0}ms</value></data>
   <data name="Sum_RunGroup" xml:space="preserve"><value>Esegui gruppo: {0}</value></data>
-  <data name="Sum_Group_None" xml:space="preserve"><value>(non specificato)</value></data>
+  <data name="Sum_Unset" xml:space="preserve"><value>(non specificato)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Digita {0}</value></data>
+  <data name="Sum_Ask" xml:space="preserve"><value>Domanda: {0}</value></data>
+  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
   <data name="Sum_MsgCard" xml:space="preserve"><value>Scheda: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (solo prima delle {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
@@ -183,6 +269,7 @@
   <data name="Ed_WaitWin" xml:space="preserve"><value>Attendi finestra (s)</value></data>
   <data name="Ed_PostDelay" xml:space="preserve"><value>Dopo comparsa (s)</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>Nome processo senza .exe (es. Weixin / msedge). Porta in primo piano / invia tasti richiede il focus e può non funzionare all'avvio.</value></data>
+  <data name="Ed_RestoreHint" xml:space="preserve"><value>Ripristina la finestra che stavi utilizzando quando è stata attivata questa azione. Per questa azione non è necessario selezionare alcuna destinazione.</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>Comando</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>Testo</value></data>
   <data name="Ed_TextProcess" xml:space="preserve"><value>Processo destinazione</value></data>
@@ -212,11 +299,14 @@
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Esegui / apri file</value></data>
   <data name="Ed_OnYes_Url" xml:space="preserve"><value>Apri URL</value></data>
   <data name="Ed_Group_None" xml:space="preserve"><value>(nessuno)</value></data>
+  <data name="Ed_GroupMissing" xml:space="preserve"><value>(destinazione eliminata)</value></data>
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Invio tasti a «{0}» non riuscito: finestra non comparsa o impossibile portarla in primo piano (comune all'avvio/in background)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Nessuna finestra trovata per «{0}» (processo non in esecuzione o non pronto?); {1} senza effetto</value></data>
   <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Finestra di «{0}» trovata, ma {1} non ha avuto effetto (blocco del primo piano, la finestra ha rifiutato di chiudersi, o è in esecuzione come amministratore)</value></data>
+  <data name="Warn_RestoreFailed" xml:space="preserve"><value>Impossibile tornare alla finestra precedente: la finestra in primo piano è bloccata oppure quella finestra non è più presente.</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Azione finestra sconosciuta: {0}</value></data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>La finestra corrente non consente questa azione ({0}): attivarla non fa nulla e per inviare tasti usa il passaggio «Invia tasti». Saltato.</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Azione volume sconosciuta: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Tipo di passo sconosciuto: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» saltato: la destinazione è Clockwork stesso (evita un ciclo di avvio automatico)</value></data>
@@ -293,6 +383,7 @@
   <data name="Val_SilentNoGroup" xml:space="preserve"><value>È selezionato «Esegui gruppo di azioni in silenzio» ma non è ancora stato scelto un gruppo</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Conferma</value></data>
+  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · Domanda</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Vuoi davvero eseguire «{0}»?</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Errore</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>Clockwork ha riscontrato un errore (registrato; di solito puoi continuare):
@@ -323,6 +414,8 @@ Registro: {1}</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Assumi nell'elenco di avvio</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Elimina dal sistema</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Eliminare «{0}»?</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>Elimina la pagina "{0}"? Le tessere {1} presenti su di essa verranno eliminate insieme ad essa. Una tessera che rimanda a un'azione rimuove solo quel riferimento; l'azione stessa rimane.</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>Elimina la categoria "{0}"? Le {1} pagine in essa contenute non verranno eliminate, ma torneranno alla categoria "{2}".</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Eliminare definitivamente l'elemento di avvio «{0}» dal sistema? L'operazione non può essere annullata (per impedirne solo l'avvio, deseleziona la casella).</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>Liberare la porta {0}? Verrà terminato {1}, insieme agli eventuali processi figli. Tutto ciò che non è salvato andrà perso.</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Quel processo occupa anche la porta {0}, che verrà liberata a sua volta.</value></data>
@@ -330,6 +423,7 @@ Registro: {1}</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Eliminazione di «{0}» non riuscita: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>La destinazione di esportazione non può essere il file di configurazione stesso: scegli un altro nome o percorso.</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>Il testo dei tasti da inviare non è una sequenza valida: controlla graffe non chiuse e nomi di tasti sconosciuti (es. {ENTER}; una { letterale si scrive {{} e una } letterale {}}).</value></data>
+  <data name="Val_SearchUrl" xml:space="preserve"><value>L’URL di ricerca deve contenere {0}: è lì che va il termine cercato. Senza, questo passaggio apre sempre la stessa pagina.</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Recupera se perso (dopo sospensione/spegnimento)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>La scorciatoia "{0}" non ha un tasto principale; non inviata</value></data>
@@ -357,27 +451,51 @@ Registro: {1}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Visualizza l'ultimo log di avvio</value></data>
   <data name="Tray_History" xml:space="preserve"><value>Recenti</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Nessun log di avvio (esegui prima l'elenco di avvio)</value></data>
+  <data name="Log_Title" xml:space="preserve"><value>Registro dell’ultima esecuzione dell’elenco di avvio</value></data>
+  <data name="Log_When" xml:space="preserve"><value>Ora: {0}</value></data>
+  <data name="Log_Summary" xml:space="preserve"><value>{0} passaggi in tutto: {1} falliti o con avviso, {2} inviati ma non verificabili, gli altri riusciti</value></data>
+  <data name="Log_UnverNote" xml:space="preserve"><value>(~ significa che un tasto o una scorciatoia è stata iniettata, ma non si può confermare se il bersaglio ha risposto)</value></data>
+  <data name="Log_ReadyGate" xml:space="preserve"><value>Controllo di prontezza: attesa di {0}s (shell={1} rete={2})</value></data>
+  <data name="Log_ReadyTimeout" xml:space="preserve"><value>, tempo scaduto senza essere pronto, si è proseguito comunque</value></data>
+  <data name="Log_BootDelay" xml:space="preserve"><value>Ritardo di avvio: {0}s</value></data>
+  <data name="Log_BudgetHit" xml:space="preserve"><value>Questa esecuzione ha raggiunto il tetto di {0} passaggi; i restanti non sono stati eseguiti</value></data>
+  <data name="Log_Nth" xml:space="preserve"><value> ({0} di {1})</value></data>
+  <data name="Log_GroupBusy" xml:space="preserve"><value>Il gruppo di azioni «{0}» è già in esecuzione (avviato altrove); saltato stavolta</value></data>
+  <data name="Log_GroupMissing" xml:space="preserve"><value>Gruppo di azioni non trovato</value></data>
+  <data name="Log_GroupDisabled" xml:space="preserve"><value>Il gruppo di azioni «{0}» è disattivato; saltato</value></data>
+  <data name="Log_GroupCycle" xml:space="preserve"><value>Riferimento circolare; saltato</value></data>
+  <data name="Log_RunGroup" xml:space="preserve"><value>Esegui gruppo di azioni: {0}</value></data>
+  <data name="Log_Stopped" xml:space="preserve"><value>Interrotto a mano; i passaggi successivi non sono stati eseguiti</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>Questa esecuzione è stata interrotta a mano (tasto di arresto o «Ferma» nella barra delle applicazioni)</value></data>
+  <data name="Err_JsonNull" xml:space="preserve"><value>Questo file non produce nulla all’analisi: non è una configurazione.</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Impossibile svuotare gli appunti: {0}</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>"{0}" non è un file .wav. Questa operazione riproduce solo file wav.</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>File audio non trovato: "{0}"</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Impossibile svuotare il cestino: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Comando di sistema sconosciuto: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Esegui: {0}</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Riprendi promemoria ({0} min rimanenti)</value></data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>Fino a fine giornata</value></data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>Promemoria in pausa fino a fine giornata</value></data>
+  <data name="Tray_DndResumeHours" xml:space="preserve"><value>Riprendi i promemoria ({0} h rimaste)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Sospendi promemoria</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} h</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>Promemoria sospesi per {0} h</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>Promemoria ripresi</value></data>
-  <data name="Menu_BlankGroup" xml:space="preserve"><value>Gruppo vuoto</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>Concentrazione · Inizio lavoro</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>Modalità concentrazione</value></data>
   <data name="Tpl_Meeting" xml:space="preserve"><value>Modalità riunione</value></data>
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>Fine giornata</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Prima di dormire</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Mi allontano un attimo</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Hai registrato tutte le attività di oggi?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>È ora di dormire!</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>Pausa dalla sedia · in ciclo</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>Promemoria pausa</value></data>
+  <data name="Tpl_Search" xml:space="preserve"><value>Ricerca rapida</value></data>
+  <data name="Tpl_SearchAsk" xml:space="preserve"><value>Cercare cosa?</value></data>
+  <data name="Tpl_SearchVar" xml:space="preserve"><value>parola chiave</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Alzati e muoviti un po'</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Muto all'avvio (esempio · evita riproduzioni automatiche)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>Apri il browser (esempio · punta al tuo .exe)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Apri il browser (esempio: vai su un'app che usi davvero)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Apri un sito web (esempio · solo nei giorni feriali; mail o to-do)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Apri l'app di chat (esempio · parte ridotta a icona in background)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Mostra il desktop con Win+D (esempio · invia una combinazione di tasti)</value></data>
@@ -429,6 +547,27 @@ Registro: {1}</value></data>
   <data name="Vol_micMute" xml:space="preserve"><value>Disattiva microfono</value></data>
   <data name="Vol_micUnmute" xml:space="preserve"><value>Riattiva microfono</value></data>
   <data name="Sys_setClipboard" xml:space="preserve"><value>Imposta testo negli appunti</value></data>
+  <data name="Menu_SecCommon" xml:space="preserve"><value>Comuni</value></data>
+  <data name="Cmd_copy" xml:space="preserve"><value>Copia</value></data>
+  <data name="Cmd_paste" xml:space="preserve"><value>Incolla</value></data>
+  <data name="Cmd_back" xml:space="preserve"><value>Indietro</value></data>
+  <data name="Cmd_forward" xml:space="preserve"><value>Avanti</value></data>
+  <data name="Cmd_toBottom" xml:space="preserve"><value>Vai in fondo</value></data>
+  <data name="Win_current" xml:space="preserve"><value>Finestra corrente</value></data>
+  <data name="Win_minimizeFg" xml:space="preserve"><value>Riduci a icona la finestra corrente</value></data>
+  <data name="Win_maximizeFg" xml:space="preserve"><value>Ingrandisci la finestra corrente</value></data>
+  <data name="Win_closeFg" xml:space="preserve"><value>Chiudi la finestra corrente</value></data>
+  <data name="Sys_searchSelection" xml:space="preserve"><value>Cerca il testo selezionato</value></data>
+  <data name="Sys_playSound" xml:space="preserve"><value>Riproduci un suono (suono di sistema o file .wav)</value></data>
+  <data name="Ed_SearchUrl" xml:space="preserve"><value>URL di ricerca</value></data>
+  <data name="Ed_SearchEngine" xml:space="preserve"><value>Motore di ricerca</value></data>
+  <data name="Ed_SearchCustom" xml:space="preserve"><value>Personalizzato…</value></data>
+  <data name="Err_NoSelection" xml:space="preserve"><value>Nessun testo selezionato. Seleziona che cosa cercare, poi esegui di nuovo questo passaggio.</value></data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>Al momento non c’è nessuna finestra su cui agire (in primo piano c’è Clockwork stesso o il desktop)</value></data>
+  <data name="Ed_ProcessHint" xml:space="preserve"><value>Scrivi * per la finestra corrente, quella in cui eri prima di tracciare il gesto o aprire il pannello. Lasciato vuoto, questo passaggio non fa nulla.</value></data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} rappresenta le parole cercate; vengono codificate automaticamente.</value></data>
+  <data name="Ed_SoundFile" xml:space="preserve"><value>File audio</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Lasciare questo campo vuoto per utilizzare il suono di notifica predefinito del sistema. Oppure specificare il percorso completo di un file .wav.</value></data>
   <data name="Sys_brightness" xml:space="preserve"><value>Luminosità schermo</value></data>
   <data name="Sys_notificationsOff" xml:space="preserve"><value>Disattiva le notifiche</value></data>
   <data name="Sys_notificationsOn" xml:space="preserve"><value>Attiva le notifiche</value></data>
@@ -501,4 +640,76 @@ Registro: {1}</value></data>
   <data name="Adv_NagUntil" xml:space="preserve"><value>insiste ogni {0} min finché non confermi, al più tardi fino alle {1}</value></data>
   <data name="Adv_Loop" xml:space="preserve"><value>gira ogni {0} min fino a fine giornata (confermare non lo ferma)</value></data>
   <data name="Adv_LoopUntil" xml:space="preserve"><value>gira ogni {0} min fino alle {1} (confermare non lo ferma)</value></data>
+  <data name="Ed_Trig_Busy" xml:space="preserve"><value>Dopo un uso continuato</value></data>
+  <data name="Ed_Trig_Display" xml:space="preserve"><value>Al cambio dello schermo</value></data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>Alla connessione di rete</value></data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>Alla perdita della rete</value></data>
+  <data name="Ed_Trig_Usb" xml:space="preserve"><value>All'inserimento di un'unità USB</value></data>
+  <data name="Time_Busy" xml:space="preserve"><value>{0} min di uso</value></data>
+  <data name="Ed_BusyMinutes" xml:space="preserve"><value>Minuti di uso</value></data>
+  <data name="Ed_BusyHint" xml:space="preserve"><value>Si attiva una volta dopo questi minuti di uso continuato; un minuto intero di assenza azzera il conteggio.</value></data>
+  <data name="Settings_PanelHotkey" xml:space="preserve"><value>Tasto del pannello rapido</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Apre un pannello a riquadri accanto al mouse, un'azione per riquadro. Esc annulla, Canc la cancella; restano il tasto centrale del mouse e il menu dell'area di notifica.</value></data>
+  <data name="Tray_Panel" xml:space="preserve"><value>Apri pannello rapido</value></data>
+  <data name="Panel_Hint" xml:space="preserve"><value>Esc per chiudere</value></data>
+  <data name="Panel_Empty" xml:space="preserve"><value>Il pannello è vuoto. Qui compariranno le azioni che ci metti.</value></data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>Elenco di avvio ignorato. Elimina {0} perché torni a partire da solo.</value></data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>Elenco di avvio ignorato perché Maiusc era premuto all'avvio. Solo per questa volta: al prossimo avvio tutto come sempre.</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>Nessun gruppo di azioni chiamato «{0}»: non è stato eseguito nulla.</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>Il gruppo di azioni «{0}» è disattivato: non è stato eseguito nulla.</value></data>
+  <data name="Unit_Ms" xml:space="preserve"><value>ms</value></data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>Tieni premuto il tasto centrale del mouse per aprire il pannello</value></data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>Il clic centrale normale continua a funzionare: una pressione breve viene inoltrata tale e quale. Disattivato per impostazione predefinita, perché richiede un hook globale del mouse.</value></data>
+  <data name="Settings_LongPressMs" xml:space="preserve"><value>Durata pressione (ms)</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>Non è stato possibile installare l'hook del mouse, quindi la pressione prolungata del tasto centrale è disattivata. Potrebbe averlo bloccato un antivirus o una policy di gruppo; il pannello si apre ancora con il tasto o dal menu dell'area di notifica.</value></data>
+  <data name="Settings_Panel" xml:space="preserve"><value>Pannello rapido</value></data>
+  <data name="Settings_UsePanel" xml:space="preserve"><value>Usa il pannello rapido</value></data>
+  <data name="Settings_UsePanelTip" xml:space="preserve"><value>Disattivandolo la scorciatoia torna agli altri programmi, il hook del tasto centrale non viene installato e la voce nella barra scompare. Le pagine del pannello restano: puoi ancora sistemarle in «Gestisci pannello».</value></data>
+  <data name="Settings_UseGestures" xml:space="preserve"><value>Usa i gesti del mouse</value></data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>Disattivandolo il tasto destro non viene osservato affatto e torna a funzionare normalmente. I gesti si disegnano nel gestore dei gesti, dalla barra laterale di «Gruppi di azioni».</value></data>
+  <data name="Settings_PanelLayout" xml:space="preserve"><value>Disposizione</value></data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>Colonne × righe in alto + righe in basso decide quanto entra in una pagina e quanto è largo il pannello. Il resto passa alla pagina successiva; metti 0 in basso per una sola fascia.</value></data>
+  <data name="Settings_PanelColumns" xml:space="preserve"><value>Riquadri per riga</value></data>
+  <data name="Settings_PanelTileSize" xml:space="preserve"><value>Dimensione riquadro</value></data>
+  <data name="Size_compact" xml:space="preserve"><value>Compatto</value></data>
+  <data name="Size_normal" xml:space="preserve"><value>Normale</value></data>
+  <data name="Size_roomy" xml:space="preserve"><value>Ampio</value></data>
+  <data name="Settings_PanelShowOps" xml:space="preserve"><value>Mostra i comandi integrati</value></data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>Solo icone</value></data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>I nomi restano nel tooltip e in una schermata entrano molte più azioni.</value></data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>Solo in questa app</value></data>
+  <data name="Settings_PanelTopRows" xml:space="preserve"><value>Righe in alto</value></data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Righe in basso</value></data>
+  <data name="Ed_Icon" xml:space="preserve"><value>Icona del pannello</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>Lasciato vuoto si riempie da sé: «Avvia un programma» prende l’icona della destinazione, tutto il resto riceve un’icona lineare in base al tipo.</value></data>
+  <data name="Btn_Close" xml:space="preserve"><value>Chiudi</value></data>
+  <data name="Panel_Manager" xml:space="preserve"><value>Gestisci pannello</value></data>
+  <data name="Panel_Global" xml:space="preserve"><value>Qualsiasi app</value></data>
+  <data name="Panel_AddPage" xml:space="preserve"><value>Aggiungi pagina</value></data>
+  <data name="Panel_NewPage" xml:space="preserve"><value>Nuova pagina</value></data>
+  <data name="Panel_AddHere" xml:space="preserve"><value>Metti un’azione qui</value></data>
+  <data name="Panel_NoPages" xml:space="preserve"><value>Non ci sono ancora pagine. Il simbolo “+” alla fine della barra delle schede crea una nuova pagina; a quel punto è possibile aggiungere delle azioni.</value></data>
+  <data name="Panel_Uncategorized" xml:space="preserve"><value>Senza categoria</value></data>
+  <data name="Panel_NewCategory" xml:space="preserve"><value>Nuova categoria</value></data>
+  <data name="Panel_Category" xml:space="preserve"><value>Categoria</value></data>
+  <data name="Panel_Pages" xml:space="preserve"><value>Pagine</value></data>
+  <data name="Panel_CategoryHint" xml:space="preserve"><value>A quale categoria appartiene questa pagina. La fila in alto ha una scheda per categoria; sceglierne una elenca solo le sue pagine.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Sopra clicchi una categoria, a sinistra una pagina. Doppio clic per rinominare, trascina le schede per riordinarle, lasciane una su una categoria per spostarci quella pagina; lascia una casella su una scheda per spostarla in quella pagina. Clic destro su una scheda per rinominarla o eliminarla.</value></data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>Mostra le schede a sinistra</value></data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>Mostra la fila delle categorie</value></data>
+  <data name="Panel_BarsHint" xml:space="preserve"><value>In alto scegli una categoria, a sinistra ci sono le sue pagine. Con una sola categoria la fila in alto non viene disegnata, e con una sola pagina nella categoria corrente nemmeno quella a sinistra: queste spunte le nascondono anche quando ce ne sono di più. Il gestore tiene sempre la sua fila di categorie: il + che porta serve a crearne una.</value></data>
+  <data name="Panel_SceneHint" xml:space="preserve"><value>Lascialo vuoto e la pagina c'è sempre. Indica un processo e comparirà solo se quell'app era in primo piano all'apertura del pannello.</value></data>
+  <data name="Icon_Pick" xml:space="preserve"><value>Scegli un’icona</value></data>
+  <data name="Icon_PickHint" xml:space="preserve"><value>Oltre a queste, puoi usare una tua immagine, o un exe qualsiasi per prenderne in prestito l’icona.</value></data>
+  <data name="Icon_UseImage" xml:space="preserve"><value>Usa un’immagine…</value></data>
+  <data name="Icon_None" xml:space="preserve"><value>Lascia automatico</value></data>
+  <data name="Panel_Search" xml:space="preserve"><value>Trova un’azione</value></data>
+  <data name="Panel_SearchNone" xml:space="preserve"><value>Nessuna azione corrisponde. Prova un’altra parola, oppure premi Esc per tornare al pannello.</value></data>
+  <data name="Panel_HintBack" xml:space="preserve"><value>Esc torna indietro</value></data>
+  <data name="Panel_SearchMore" xml:space="preserve"><value>Mostrati i primi {0} di {1} risultati. Scrivi ancora un po’ per restringere.</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Theme_dark" xml:space="preserve"><value>Scuro</value></data>
+  <data name="Theme_light" xml:space="preserve"><value>Chiaro</value></data>
+  <data name="Theme_system" xml:space="preserve"><value>Come Windows</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork si riavvia subito per applicare il tema. «Come Windows» segue la modalità app di Windows.</value></data>
 </root>

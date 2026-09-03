@@ -15,7 +15,9 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Terpicu pada waktu tertentu, saat masuk, atau peristiwa seperti buka kunci / daya — pengingat atau grup yang berjalan diam-diam. Hanya membuka aplikasi saat masuk → Daftar startup; sesuai permintaan → Grup aksi.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Kemas serangkaian aksi menjadi grup, jalankan kapan saja lewat pintasan / baki; Daftar startup dan Tugas terjadwal juga bisa merujuknya. Yang hanya berjalan saat masuk lebih sederhana ditulis langsung di Daftar startup.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(kosong)</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>Centang/hapus berlaku segera (menonaktifkan, bukan menghapus; bisa dikembalikan). Item «perlu admin» butuh hak administrator. Item sistem / kebijakan / sekali pakai read-only disembunyikan secara default.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>Centang/hapus berlaku segera (menonaktifkan, bukan menghapus; bisa dikembalikan).</value></data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>Item sistem / kebijakan / sekali pakai read-only disembunyikan secara default.</value></data>
+  <data name="System_Count" xml:space="preserve"><value>{0} dari {1} item</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Tampilkan item sistem / read-only</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Memindai entri startup…</value></data>
@@ -44,7 +46,24 @@
   <data name="Col_Command" xml:space="preserve"><value>Perintah</value></data>
   <data name="Col_Source" xml:space="preserve"><value>Sumber</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Lingkup</value></data>
-  <data name="Col_Hotkey" xml:space="preserve"><value>Tombol pintas</value></data>
+  <data name="Col_Hotkey" xml:space="preserve"><value>Pintasan</value></data>
+  <data name="Gesture_Manager" xml:space="preserve"><value>Gerakan mouse</value></data>
+  <data name="Gesture_Enabled" xml:space="preserve"><value>Aktif</value></data>
+  <data name="Gesture_Rehook" xml:space="preserve"><value>Pasang ulang</value></data>
+  <data name="Gesture_RehookHint" xml:space="preserve"><value>Program lain (driver tetikus, AutoHotkey, alat gestur lain) bisa berada di depan kita dan menelan tombol kanan — di sini semuanya tampak beres namun tombol kanan tak pernah sampai. Hook yang dipasang paling akhir dipanggil lebih dulu, jadi memasang ulang merebut kembali kepala antrean.</value></data>
+  <data name="Gesture_WatchLive" xml:space="preserve"><value>Tombol kanan sedang dipantau</value></data>
+  <data name="Gesture_WatchOff" xml:space="preserve"><value>Tombol kanan tidak dipantau</value></data>
+  <data name="Gesture_WatchFailed" xml:space="preserve"><value>Windows menolak hook</value></data>
+  <data name="Gesture_WatchStale" xml:space="preserve"><value>Hook mati — memasang ulang</value></data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>Hook terpasang tetapi tak ada masukan yang datang — coba jalankan sebagai administrator</value></data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>Program lain mengambil tombol kanan (AutoHotkey, driver tetikus…)</value></data>
+  <data name="Gesture_Hint" xml:space="preserve"><value>Tahan tombol kanan, gambar goresan, dan aksi yang cocok akan berjalan. Tanpa gerakan, tombol kanan bekerja seperti biasa.</value></data>
+  <data name="Gesture_Track" xml:space="preserve"><value>Goresan</value></data>
+  <data name="Settings_GestureManage" xml:space="preserve"><value>Kelola gerakan…</value></data>
+  <data name="Settings_PanelManage" xml:space="preserve"><value>Kelola panel…</value></data>
+  <data name="Gesture_None" xml:space="preserve"><value>Belum ada gerakan. Klik Tambah, pilih sebuah aksi, lalu gambar goresan di sebelah kanan.</value></data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>Tahan tombol kiri, gambar di sini</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>Gerakan {0} sudah dipakai oleh "{1}"; gambar goresan lain</value></data>
   <data name="Col_Port" xml:space="preserve"><value>Port</value></data>
   <data name="Col_Process" xml:space="preserve"><value>Proses</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -52,7 +71,9 @@
 
   <data name="Btn_Add" xml:space="preserve"><value>Tambah</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Tambah ▾</value></data>
+  <data name="Btn_FromTemplate" xml:space="preserve"><value>Dari sebuah templat…</value></data>
   <data name="Btn_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Btn_Rename" xml:space="preserve"><value>Ganti nama</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>Hapus</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ Naik</value></data>
   <data name="A11y_DragHandle" xml:space="preserve"><value>Seret untuk mengurutkan</value></data>
@@ -86,7 +107,61 @@
   <data name="Kind_volume" xml:space="preserve"><value>Volume</value></data>
   <data name="Kind_window" xml:space="preserve"><value>Aksi jendela</value></data>
   <data name="Kind_system" xml:space="preserve"><value>Perintah sistem</value></data>
-  <data name="Kind_group" xml:space="preserve"><value>Grup aksi</value></data>
+  <data name="Kind_url" xml:space="preserve">
+    <value>Buka halaman web</value>
+  </data>
+  <data name="Kind_copySelection" xml:space="preserve">
+    <value>Ambil teks terpilih</value>
+  </data>
+  <data name="Kind_waitClipboard" xml:space="preserve">
+    <value>Tunggu clipboard</value>
+  </data>
+  <data name="Kind_prompt" xml:space="preserve"><value>Masukan pengguna</value></data>
+  <data name="Kind_choice" xml:space="preserve"><value>Pilihan pengguna</value></data>
+  <data name="Sum_OpenUrl" xml:space="preserve">
+    <value>Buka {0}</value>
+  </data>
+  <data name="Sum_WaitClipboard" xml:space="preserve">
+    <value>Tunggu clipboard ({0}dtk)</value>
+  </data>
+  <data name="Warn_WaitClipboard" xml:space="preserve">
+    <value>Clipboard tidak berubah dalam {0} detik; tetap dilanjutkan</value>
+  </data>
+  <data name="Warn_AskNoUi" xml:space="preserve"><value>Langkah ini perlu menanyakan sesuatu kepada Anda, namun tidak ada siapa pun yang bisa ditanyai di jalur ini (proses ini berjalan secara otomatis). Dilewati.</value></data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>Langkah ini menghapus sesuatu secara permanen dan perlu konfirmasi Anda lebih dulu, dan tidak ada siapa pun untuk ditanya di jalur ini (proses ini berjalan secara otomatis). Dilewati.</value></data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>Langkah ini tidak memiliki opsi yang dikonfigurasi, sehingga tidak ada yang bisa dipilih. Langkah ini dilewati.</value></data>
+  <data name="Ed_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Ed_WaitSeconds" xml:space="preserve">
+    <value>Tunggu maks (dtk)</value>
+  </data>
+  <data name="Ed_UrlHint" xml:space="preserve">
+    <value>Mendukung {clipboard}: diganti saat dijalankan dengan teks di clipboard, sudah di-URL-escape. Pasangkan dengan «Ambil teks terpilih» untuk mencari apa pun yang Anda pilih.</value>
+  </data>
+  <data name="Ed_CopySelectionHint" xml:space="preserve">
+    <value>Menekan tombol salin untuk Anda dan menaruh teks terpilih di clipboard. Langkah berikutnya membacanya kembali dengan {clipboard}.</value>
+  </data>
+  <data name="Ed_AskText" xml:space="preserve"><value>Pertanyaan</value></data>
+  <data name="Ed_AskDefault" xml:space="preserve"><value>Jawaban default</value></data>
+  <data name="Ed_Options" xml:space="preserve"><value>Pilihan</value></data>
+  <data name="Ed_OptionsHint" xml:space="preserve"><value>Satu per baris. Saat program dijalankan, daftar ini akan ditampilkan dan Anda memilih salah satunya.</value></data>
+  <data name="Ed_OutputVar" xml:space="preserve"><value>Simpan jawaban sebagai</value></data>
+  <data name="Ed_OutputVarHint" xml:space="preserve"><value>Langkah-langkah selanjutnya menggunakan {0} untuk merujuk padanya. Biarkan kosong, dan langkah ini tidak akan menghasilkan apa pun.</value></data>
+  <data name="Ed_OutputVarSample" xml:space="preserve"><value>nama</value></data>
+  <data name="Mig_PageMoved" xml:space="preserve">
+    <value>Halaman panel "{0}" dipindahkan dari aksi Anda ke Halaman panel (kotak: {1})</value>
+  </data>
+  <data name="Mig_PageAndAction" xml:space="preserve">
+    <value>"{0}" sekaligus halaman panel dan aksi (pintasan/dirujuk): aksinya tetap, dan halaman itu sekarang berisi satu kotak yang menunjuk ke sana</value>
+  </data>
+  <data name="Mig_PageTrayDropped" xml:space="preserve">
+    <value>Halaman panel "{0}" tidak lagi muncul di menu baki (halaman bukan aksi yang bisa dijalankan)</value>
+  </data>
+  <data name="Mig_Title" xml:space="preserve">
+    <value>Halaman panel kini terpisah</value>
+  </data>
+  <data name="Kind_group" xml:space="preserve"><value>Jalankan grup aksi</value></data>
   <data name="Kind_message" xml:space="preserve"><value>Pesan</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Jeda</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Kirim teks</value></data>
@@ -111,15 +186,26 @@
   <data name="Win_close" xml:space="preserve"><value>Tutup jendela</value></data>
   <data name="Win_minimize" xml:space="preserve"><value>Minimalkan</value></data>
   <data name="Win_maximize" xml:space="preserve"><value>Maksimalkan</value></data>
+  <data name="Cmd_playPause" xml:space="preserve"><value>Putar / jeda</value></data>
+  <data name="Cmd_prevTrack" xml:space="preserve"><value>Lagu sebelumnya</value></data>
+  <data name="Cmd_nextTrack" xml:space="preserve"><value>Lagu berikutnya</value></data>
+  <data name="Cmd_volUp" xml:space="preserve"><value>Perbesar volume</value></data>
+  <data name="Cmd_volDown" xml:space="preserve"><value>Perkecil volume</value></data>
+  <data name="Win_topmost" xml:space="preserve"><value>Alihkan jendela di atas</value></data>
+  <data name="Win_topmostFg" xml:space="preserve"><value>Alihkan jendela saat ini di atas</value></data>
+  <data name="Ed_TopmostHint" xml:space="preserve"><value>Hal ini berlaku untuk setiap jendela secara terpisah: untuk menonaktifkannya kembali pada suatu jendela, pindahkan jendela tersebut ke depan terlebih dahulu.</value></data>
   <data name="Win_activate" xml:space="preserve"><value>Bawa ke depan</value></data>
   <data name="Win_sendkey" xml:space="preserve"><value>Ke depan dan kirim tombol</value></data>
+  <data name="Win_restore" xml:space="preserve"><value>Kembali ke jendela sebelumnya</value></data>
 
   <data name="Sum_SendKeys" xml:space="preserve"><value>Kirim {0}</value></data>
   <data name="Sum_Delay_Sec" xml:space="preserve"><value>Jeda {0}dtk</value></data>
   <data name="Sum_Delay_Ms" xml:space="preserve"><value>Jeda {0}ms</value></data>
   <data name="Sum_RunGroup" xml:space="preserve"><value>Jalankan grup: {0}</value></data>
-  <data name="Sum_Group_None" xml:space="preserve"><value>(tak ditentukan)</value></data>
+  <data name="Sum_Unset" xml:space="preserve"><value>(tak ditentukan)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>Ketik {0}</value></data>
+  <data name="Sum_Ask" xml:space="preserve"><value>Pertanyaan: {0}</value></data>
+  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
   <data name="Sum_MsgCard" xml:space="preserve"><value>Kartu: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (hanya sebelum {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
@@ -183,6 +269,7 @@
   <data name="Ed_WaitWin" xml:space="preserve"><value>Tunggu jendela (dtk)</value></data>
   <data name="Ed_PostDelay" xml:space="preserve"><value>Setelah muncul (dtk)</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>Nama proses tanpa .exe (mis. Weixin / msedge). Bawa ke depan / kirim tombol butuh fokus dan mungkin gagal saat startup.</value></data>
+  <data name="Ed_RestoreHint" xml:space="preserve"><value>Mengembalikan jendela yang sedang Anda gunakan saat tindakan ini dipicu. Tidak ada target yang perlu dipilih untuk tindakan ini.</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>Perintah</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>Teks</value></data>
   <data name="Ed_TextProcess" xml:space="preserve"><value>Proses target</value></data>
@@ -212,11 +299,14 @@
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Jalankan / buka file</value></data>
   <data name="Ed_OnYes_Url" xml:space="preserve"><value>Buka URL</value></data>
   <data name="Ed_Group_None" xml:space="preserve"><value>(tidak ada)</value></data>
+  <data name="Ed_GroupMissing" xml:space="preserve"><value>(target dihapus)</value></data>
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Gagal kirim tombol ke «{0}»: jendela tak muncul atau tak bisa dibawa ke depan (umum saat startup/latar)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Jendela «{0}» tak ditemukan (proses tak berjalan atau belum siap?); {1} tanpa efek</value></data>
   <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Jendela «{0}» ditemukan, tetapi {1} tidak berpengaruh (kunci latar depan, jendela menolak ditutup, atau berjalan sebagai administrator)</value></data>
+  <data name="Warn_RestoreFailed" xml:space="preserve"><value>Tidak dapat kembali ke jendela sebelumnya: jendela yang sedang aktif terkunci, atau jendela tersebut sudah tidak ada.</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Aksi jendela tidak dikenal: {0}</value></data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>Jendela saat ini tidak mengizinkan aksi ini ({0}): memunculkannya tidak berefek, dan untuk mengirim tombol pakai langkah "Kirim tombol". Dilewati.</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Aksi volume tak dikenal: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Jenis langkah tak dikenal: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» dilewati: target adalah Clockwork sendiri (menghindari loop startup otomatis)</value></data>
@@ -293,6 +383,7 @@
   <data name="Val_SilentNoGroup" xml:space="preserve"><value>«Jalankan grup aksi secara senyap» dipilih tetapi belum ada grup yang dipilih</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Konfirmasi</value></data>
+  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · Pertanyaan</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Yakin ingin menjalankan «{0}»?</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Kesalahan</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>Clockwork mengalami kesalahan (tercatat; biasanya aman dilanjutkan):
@@ -313,7 +404,7 @@ Log: {1}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Pengaturan</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Umum</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Periksa pembaruan</value></data>
-  <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
+  <data name="About_Series" xml:space="preserve"><value>Rencana 365 Open Source · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Memeriksa…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Anda menggunakan versi terbaru ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Versi baru {0} tersedia. Buka halaman unduh?</value></data>
@@ -323,6 +414,8 @@ Log: {1}</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Ambil alih ke daftar mulai</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Hapus dari sistem</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Hapus «{0}»?</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>Apakah Anda ingin menghapus halaman "{0}"? Ubin {1} yang ada di dalamnya akan ikut terhapus. Ubin yang mengarah ke suatu tindakan hanya akan menghapus referensi tersebut; tindakan itu sendiri tetap ada.</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>Apakah Anda ingin menghapus kategori "{0}"? Halaman {1} yang ada di dalamnya tidak akan dihapus — halaman-halaman tersebut akan dipindahkan kembali ke "{2}".</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Hapus permanen item startup «{0}» dari sistem? Tindakan ini tidak dapat dibatalkan (untuk sekadar mencegahnya berjalan saat mulai, hapus centangnya).</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>Bebaskan port {0}? Ini mengakhiri {1}, beserta proses anaknya. Apa pun yang belum disimpan akan hilang.</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Proses itu juga memakai port {0}, yang ikut dibebaskan.</value></data>
@@ -330,6 +423,7 @@ Log: {1}</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Gagal menghapus «{0}»: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Tujuan ekspor tidak boleh berkas konfigurasi itu sendiri — pilih nama atau lokasi lain.</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>Teks tombol yang dikirim bukan urutan tombol yang valid: periksa kurung kurawal yang belum ditutup dan nama tombol yang tidak dikenal (mis. {ENTER}; { literal ditulis {{} dan } literal ditulis {}}).</value></data>
+  <data name="Val_SearchUrl" xml:space="preserve"><value>URL pencarian harus memuat {0} — di situlah kata yang dicari ditempatkan. Tanpa itu, langkah ini membuka halaman yang sama terus.</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Kejar jika terlewat (setelah tidur/mati)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} mnt</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Pintasan "{0}" tidak memiliki tombol utama; tidak dikirim</value></data>
@@ -357,27 +451,51 @@ Log: {1}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Lihat log mulai terakhir</value></data>
   <data name="Tray_History" xml:space="preserve"><value>Terbaru</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Belum ada log mulai (jalankan daftar mulai sekali dulu)</value></data>
+  <data name="Log_Title" xml:space="preserve"><value>Log jalannya daftar startup terakhir</value></data>
+  <data name="Log_When" xml:space="preserve"><value>Waktu: {0}</value></data>
+  <data name="Log_Summary" xml:space="preserve"><value>Total {0} langkah: {1} gagal atau memberi peringatan, {2} terkirim tetapi tak dapat diperiksa, sisanya berhasil</value></data>
+  <data name="Log_UnverNote" xml:space="preserve"><value>(~ berarti penekanan tombol atau pintasan sudah dikirim, tetapi tak dapat dipastikan apakah sasaran menanggapi)</value></data>
+  <data name="Log_ReadyGate" xml:space="preserve"><value>Gerbang kesiapan: menunggu {0}s (shell={1} jaringan={2})</value></data>
+  <data name="Log_ReadyTimeout" xml:space="preserve"><value>, waktu habis dan tetap belum siap, tetap dilanjutkan</value></data>
+  <data name="Log_BootDelay" xml:space="preserve"><value>Tunda saat mulai: {0}s</value></data>
+  <data name="Log_BudgetHit" xml:space="preserve"><value>Jalannya ini mencapai batas {0} langkah; langkah sisanya tidak dijalankan</value></data>
+  <data name="Log_Nth" xml:space="preserve"><value> ({0} dari {1})</value></data>
+  <data name="Log_GroupBusy" xml:space="preserve"><value>Grup aksi “{0}” sudah berjalan (dipicu dari tempat lain); kali ini dilewati</value></data>
+  <data name="Log_GroupMissing" xml:space="preserve"><value>Grup aksi tidak ditemukan</value></data>
+  <data name="Log_GroupDisabled" xml:space="preserve"><value>Grup aksi “{0}” dimatikan; dilewati</value></data>
+  <data name="Log_GroupCycle" xml:space="preserve"><value>Referensi melingkar; dilewati</value></data>
+  <data name="Log_RunGroup" xml:space="preserve"><value>Jalankan grup aksi: {0}</value></data>
+  <data name="Log_Stopped" xml:space="preserve"><value>Dihentikan manual; langkah berikutnya tidak dijalankan</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>Jalannya ini dihentikan manual (tombol henti darurat atau “Hentikan” di baki)</value></data>
+  <data name="Err_JsonNull" xml:space="preserve"><value>Berkas ini diurai menjadi kosong — ini bukan berkas konfigurasi.</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Gagal mengosongkan papan klip: {0}</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>"{0}" bukanlah berkas .wav. Langkah ini hanya memutar berkas wav.</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>Berkas suara tidak ditemukan: "{0}"</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Gagal mengosongkan keranjang sampah: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Perintah sistem tidak dikenal: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Jalankan: {0}</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Lanjutkan pengingat (sisa {0} menit)</value></data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>Sampai hari ini berakhir</value></data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>Pengingat dijeda sampai hari ini berakhir</value></data>
+  <data name="Tray_DndResumeHours" xml:space="preserve"><value>Lanjutkan pengingat (sisa {0} jam)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Jeda pengingat</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} jam</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>Pengingat dijeda {0} jam</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>Pengingat dilanjutkan</value></data>
-  <data name="Menu_BlankGroup" xml:space="preserve"><value>Grup kosong</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>Fokus · Mulai bekerja</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>Mode fokus</value></data>
   <data name="Tpl_Meeting" xml:space="preserve"><value>Mode rapat</value></data>
-  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Selesai kerja</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Akhir hari</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Sebelum tidur</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Pergi sebentar</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Sudah mencatat semua tugas hari ini?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Waktunya tidur!</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>Pengingat duduk lama · berulang</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>Pengingat istirahat</value></data>
+  <data name="Tpl_Search" xml:space="preserve"><value>Pencarian cepat</value></data>
+  <data name="Tpl_SearchAsk" xml:space="preserve"><value>Mencari apa?</value></data>
+  <data name="Tpl_SearchVar" xml:space="preserve"><value>kata kunci</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Bangun dan gerak sebentar</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Bisukan saat mulai (contoh · cegah putar otomatis)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>Buka peramban (contoh · arahkan ke .exe milikmu)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Buka peramban Anda (contoh · arahkan ke aplikasi yang benar-benar Anda gunakan)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Buka situs favorit (contoh · hanya hari kerja; email atau daftar tugas)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Buka aplikasi chat (contoh · mulai terkecil di latar belakang)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Tampilkan desktop dengan Win+D (contoh · kirim kombinasi tombol)</value></data>
@@ -429,6 +547,27 @@ Log: {1}</value></data>
   <data name="Vol_micMute" xml:space="preserve"><value>Bisukan mikrofon</value></data>
   <data name="Vol_micUnmute" xml:space="preserve"><value>Aktifkan mikrofon</value></data>
   <data name="Sys_setClipboard" xml:space="preserve"><value>Setel teks papan klip</value></data>
+  <data name="Menu_SecCommon" xml:space="preserve"><value>Umum</value></data>
+  <data name="Cmd_copy" xml:space="preserve"><value>Salin</value></data>
+  <data name="Cmd_paste" xml:space="preserve"><value>Tempel</value></data>
+  <data name="Cmd_back" xml:space="preserve"><value>Kembali</value></data>
+  <data name="Cmd_forward" xml:space="preserve"><value>Maju</value></data>
+  <data name="Cmd_toBottom" xml:space="preserve"><value>Ke paling bawah</value></data>
+  <data name="Win_current" xml:space="preserve"><value>Jendela saat ini</value></data>
+  <data name="Win_minimizeFg" xml:space="preserve"><value>Minimalkan jendela saat ini</value></data>
+  <data name="Win_maximizeFg" xml:space="preserve"><value>Maksimalkan jendela saat ini</value></data>
+  <data name="Win_closeFg" xml:space="preserve"><value>Tutup jendela saat ini</value></data>
+  <data name="Sys_searchSelection" xml:space="preserve"><value>Cari teks yang dipilih</value></data>
+  <data name="Sys_playSound" xml:space="preserve"><value>Memutar suara (suara sistem atau berkas .wav)</value></data>
+  <data name="Ed_SearchUrl" xml:space="preserve"><value>URL pencarian</value></data>
+  <data name="Ed_SearchEngine" xml:space="preserve"><value>Mesin pencari</value></data>
+  <data name="Ed_SearchCustom" xml:space="preserve"><value>Kustom…</value></data>
+  <data name="Err_NoSelection" xml:space="preserve"><value>Tidak ada teks yang dipilih. Pilih dulu yang ingin dicari, lalu jalankan langkah ini.</value></data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>Saat ini tidak ada jendela untuk dikenai tindakan ini (yang di depan adalah Clockwork sendiri atau desktop)</value></data>
+  <data name="Ed_ProcessHint" xml:space="preserve"><value>Ketik * untuk jendela saat ini — yang sedang Anda pakai sebelum menggambar gestur atau membuka panel. Dibiarkan kosong, langkah ini tidak melakukan apa pun.</value></data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} mewakili kata yang dicari; teksnya di-escape otomatis.</value></data>
+  <data name="Ed_SoundFile" xml:space="preserve"><value>Berkas suara</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Biarkan kolom ini kosong untuk menggunakan suara notifikasi sistem. Atau masukkan jalur lengkap ke berkas .wav.</value></data>
   <data name="Sys_brightness" xml:space="preserve"><value>Kecerahan layar</value></data>
   <data name="Sys_notificationsOff" xml:space="preserve"><value>Matikan notifikasi</value></data>
   <data name="Sys_notificationsOn" xml:space="preserve"><value>Nyalakan notifikasi</value></data>
@@ -501,4 +640,76 @@ Log: {1}</value></data>
   <data name="Adv_NagUntil" xml:space="preserve"><value>mengingatkan tiap {0} mnt sampai dikonfirmasi, paling lambat {1}</value></data>
   <data name="Adv_Loop" xml:space="preserve"><value>berjalan tiap {0} mnt sampai akhir hari (konfirmasi tak menghentikannya)</value></data>
   <data name="Adv_LoopUntil" xml:space="preserve"><value>berjalan tiap {0} mnt sampai {1} (konfirmasi tak menghentikannya)</value></data>
+  <data name="Ed_Trig_Busy" xml:space="preserve"><value>Setelah penggunaan terus-menerus</value></data>
+  <data name="Ed_Trig_Display" xml:space="preserve"><value>Saat tampilan berubah</value></data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>Saat jaringan tersambung</value></data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>Saat jaringan terputus</value></data>
+  <data name="Ed_Trig_Usb" xml:space="preserve"><value>Saat drive USB dipasang</value></data>
+  <data name="Time_Busy" xml:space="preserve"><value>Dipakai {0} mnt</value></data>
+  <data name="Ed_BusyMinutes" xml:space="preserve"><value>Menit pemakaian</value></data>
+  <data name="Ed_BusyHint" xml:space="preserve"><value>Berbunyi sekali setelah pemakaian terus-menerus selama menit sebanyak ini; pergi selama satu menit penuh membuat hitungan dimulai lagi.</value></data>
+  <data name="Settings_PanelHotkey" xml:space="preserve"><value>Tombol panel cepat</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Membuka panel kotak di dekat kursor, satu tindakan per kotak. Esc batal, Del menghapus; setelah dihapus, tombol tengah mouse atau menu baki tetap bisa membukanya.</value></data>
+  <data name="Tray_Panel" xml:space="preserve"><value>Buka Panel Cepat</value></data>
+  <data name="Panel_Hint" xml:space="preserve"><value>Esc untuk menutup</value></data>
+  <data name="Panel_Empty" xml:space="preserve"><value>Panel masih kosong. Aksi yang Anda taruh di sini akan muncul di tempat ini.</value></data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>Daftar startup dilewati. Hapus {0} agar berjalan otomatis lagi.</value></data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>Daftar startup dilewati karena Shift ditahan saat aplikasi dijalankan. Hanya kali ini — boot berikutnya berjalan seperti biasa.</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>Tidak ada grup tindakan bernama "{0}" — tidak ada yang dijalankan.</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>Grup tindakan "{0}" dimatikan — tidak ada yang dijalankan.</value></data>
+  <data name="Unit_Ms" xml:space="preserve"><value>ms</value></data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>Tahan tombol tengah mouse untuk membuka panel</value></data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>Klik tengah biasa tetap berfungsi — tekanan singkat diteruskan apa adanya. Dimatikan secara bawaan, karena memerlukan hook mouse global.</value></data>
+  <data name="Settings_LongPressMs" xml:space="preserve"><value>Lama tekan (ms)</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>Hook mouse tidak bisa dipasang, jadi tahan tombol tengah dimatikan. Mungkin diblokir perangkat lunak keamanan atau kebijakan grup; panel tetap bisa dibuka dari pintasan atau menu baki.</value></data>
+  <data name="Settings_Panel" xml:space="preserve"><value>Panel cepat</value></data>
+  <data name="Settings_UsePanel" xml:space="preserve"><value>Gunakan panel cepat</value></data>
+  <data name="Settings_UsePanelTip" xml:space="preserve"><value>Kalau dimatikan, pintasan dikembalikan ke program lain, hook tombol tengah tidak dipasang, dan item di baki ikut hilang. Halaman panel Anda tetap ada — masih bisa dirapikan dari "Kelola panel…".</value></data>
+  <data name="Settings_UseGestures" xml:space="preserve"><value>Gunakan gestur mouse</value></data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>Kalau dimatikan, tombol kanan sama sekali tidak diawasi dan kembali normal. Gesturnya sendiri digambar di pengelola gestur, dari bilah sisi tab "Grup aksi".</value></data>
+  <data name="Settings_PanelLayout" xml:space="preserve"><value>Tata letak</value></data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>Kolom × baris atas + baris bawah menentukan berapa banyak yang muat dalam satu halaman dan selebar apa panelnya. Sisanya pindah ke halaman berikutnya; setel baris bawah ke 0 untuk satu pita saja.</value></data>
+  <data name="Settings_PanelColumns" xml:space="preserve"><value>Kotak per baris</value></data>
+  <data name="Settings_PanelTileSize" xml:space="preserve"><value>Ukuran kotak</value></data>
+  <data name="Size_compact" xml:space="preserve"><value>Ringkas</value></data>
+  <data name="Size_normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Size_roomy" xml:space="preserve"><value>Lega</value></data>
+  <data name="Settings_PanelShowOps" xml:space="preserve"><value>Tampilkan kontrol bawaan</value></data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>Hanya ikon</value></data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>Nama tetap ada di tooltip, dan jauh lebih banyak tindakan muat dalam satu layar.</value></data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>Hanya di aplikasi ini</value></data>
+  <data name="Settings_PanelTopRows" xml:space="preserve"><value>Baris atas</value></data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Baris bawah</value></data>
+  <data name="Ed_Icon" xml:space="preserve"><value>Ikon panel</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>Bila dibiarkan kosong akan terisi sendiri: «Jalankan program» memakai ikon sasarannya sendiri, sisanya mendapat ikon garis sesuai jenisnya.</value></data>
+  <data name="Btn_Close" xml:space="preserve"><value>Tutup</value></data>
+  <data name="Panel_Manager" xml:space="preserve"><value>Kelola panel</value></data>
+  <data name="Panel_Global" xml:space="preserve"><value>Aplikasi apa pun</value></data>
+  <data name="Panel_AddPage" xml:space="preserve"><value>Tambah halaman</value></data>
+  <data name="Panel_NewPage" xml:space="preserve"><value>Halaman baru</value></data>
+  <data name="Panel_AddHere" xml:space="preserve"><value>Taruh tindakan di sini</value></data>
+  <data name="Panel_NoPages" xml:space="preserve"><value>Belum ada halaman. Tanda + di ujung bilah tab halaman akan membuat satu halaman; kemudian tambahkan tindakan ke dalamnya.</value></data>
+  <data name="Panel_Uncategorized" xml:space="preserve"><value>Tanpa kategori</value></data>
+  <data name="Panel_NewCategory" xml:space="preserve"><value>Kategori baru</value></data>
+  <data name="Panel_Category" xml:space="preserve"><value>Kategori</value></data>
+  <data name="Panel_Pages" xml:space="preserve"><value>Halaman</value></data>
+  <data name="Panel_CategoryHint" xml:space="preserve"><value>Kategori halaman ini. Baris atas berisi satu tab per kategori; memilih satu hanya menampilkan halaman kategori itu.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Klik kategori di atas, halaman di kiri. Klik ganda untuk mengganti nama, seret tab untuk mengurutkan, jatuhkan satu di sebuah kategori untuk memindahkan halaman itu ke sana; jatuhkan petak di sebuah tab untuk memindahkannya ke halaman itu. Klik kanan tab untuk mengganti namanya atau menghapusnya.</value></data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>Tampilkan tab kiri</value></data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>Tampilkan baris kategori</value></data>
+  <data name="Panel_BarsHint" xml:space="preserve"><value>Di atas Anda memilih kategori, di kiri terdaftar halaman kategori itu. Bila kategorinya satu, baris atas tidak digambar; bila halaman di kategori kini hanya satu, baris kiri juga tidak — centang ini menyembunyikannya walau jumlahnya lebih. Jendela pengelola selalu menyimpan baris kategorinya: tanda + di situlah cara membuat kategori.</value></data>
+  <data name="Panel_SceneHint" xml:space="preserve"><value>Biarkan kosong maka halaman selalu ada. Isi nama proses maka ia hanya muncul bila aplikasi itu sedang di depan saat panel dibuka.</value></data>
+  <data name="Icon_Pick" xml:space="preserve"><value>Pilih ikon</value></data>
+  <data name="Icon_PickHint" xml:space="preserve"><value>Selain ini, Anda bisa memakai gambar sendiri, atau exe apa pun dan meminjam ikonnya.</value></data>
+  <data name="Icon_UseImage" xml:space="preserve"><value>Pakai gambar…</value></data>
+  <data name="Icon_None" xml:space="preserve"><value>Biarkan otomatis</value></data>
+  <data name="Panel_Search" xml:space="preserve"><value>Cari tindakan</value></data>
+  <data name="Panel_SearchNone" xml:space="preserve"><value>Tidak ada aksi yang cocok. Coba kata lain, atau tekan Esc untuk kembali ke panel.</value></data>
+  <data name="Panel_HintBack" xml:space="preserve"><value>Esc kembali</value></data>
+  <data name="Panel_SearchMore" xml:space="preserve"><value>Menampilkan {0} pertama dari {1} hasil. Ketik sedikit lagi untuk mempersempit.</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Theme_dark" xml:space="preserve"><value>Gelap</value></data>
+  <data name="Theme_light" xml:space="preserve"><value>Terang</value></data>
+  <data name="Theme_system" xml:space="preserve"><value>Ikuti Windows</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork langsung dimulai ulang untuk menerapkan tema. "Ikuti Windows" mengikuti mode aplikasi di Windows.</value></data>
 </root>

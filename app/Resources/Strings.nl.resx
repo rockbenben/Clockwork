@@ -15,7 +15,9 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>Gaat af op een tijdstip, bij aanmelden of bij gebeurtenissen zoals ontgrendelen / stroom — herinnering of stil draaiende groep. Alleen apps openen bij aanmelden → Opstartlijst; op afroep → Actiegroepen.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundel een routine en start die op elk moment via sneltoets / systeemvak; de Opstartlijst en Geplande taken kunnen ernaar verwijzen. Iets dat alleen bij aanmelden draait, is simpeler als gewone opstartlijst-stappen.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(leeg)</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>Aan-/uitvinken werkt direct (uitschakelen, niet verwijderen; omkeerbaar). Items «admin vereist» hebben beheerdersrechten nodig. Systeem- / beleid- / eenmalige alleen-lezen items zijn standaard verborgen.</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>Aan-/uitvinken werkt direct (uitschakelen, niet verwijderen; omkeerbaar).</value></data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>Systeem- / beleid- / eenmalige alleen-lezen items zijn standaard verborgen.</value></data>
+  <data name="System_Count" xml:space="preserve"><value>{0} van {1} items</value></data>
   <data name="System_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>Systeem- / alleen-lezen items tonen</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>Opstartitems scannen…</value></data>
@@ -45,6 +47,23 @@
   <data name="Col_Source" xml:space="preserve"><value>Bron</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>Bereik</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>Sneltoets</value></data>
+  <data name="Gesture_Manager" xml:space="preserve"><value>Muisgebaren</value></data>
+  <data name="Gesture_Enabled" xml:space="preserve"><value>Aan</value></data>
+  <data name="Gesture_Rehook" xml:space="preserve"><value>Opnieuw haken</value></data>
+  <data name="Gesture_RehookHint" xml:space="preserve"><value>Een ander programma (muisstuurprogramma, AutoHotkey, een ander gebarenhulpmiddel) kan vóór ons staan en de rechterknop opslokken — hier lijkt alles in orde en toch komt er geen rechterknop aan. De laatst geplaatste hook komt eerst, dus opnieuw plaatsen pakt de kop van de rij terug.</value></data>
+  <data name="Gesture_WatchLive" xml:space="preserve"><value>Rechterknop wordt gevolgd</value></data>
+  <data name="Gesture_WatchOff" xml:space="preserve"><value>Rechterknop niet gevolgd</value></data>
+  <data name="Gesture_WatchFailed" xml:space="preserve"><value>Windows weigerde de hook</value></data>
+  <data name="Gesture_WatchStale" xml:space="preserve"><value>De hook is dood — opnieuw instellen</value></data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>Gehaakt, maar er komt niets binnen — probeer als administrator uit te voeren</value></data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>Een ander programma pakt de rechterknop (AutoHotkey, een muisstuurprogramma…)</value></data>
+  <data name="Gesture_Hint" xml:space="preserve"><value>Houd de rechterknop ingedrukt, teken een streek en de bijbehorende actie wordt uitgevoerd. Zonder gebaren werkt de rechterknop gewoon.</value></data>
+  <data name="Gesture_Track" xml:space="preserve"><value>Streek</value></data>
+  <data name="Settings_GestureManage" xml:space="preserve"><value>Gebaren beheren…</value></data>
+  <data name="Settings_PanelManage" xml:space="preserve"><value>Paneel beheren…</value></data>
+  <data name="Gesture_None" xml:space="preserve"><value>Nog geen gebaren. Klik op Toevoegen, kies een actie en teken rechts een streek.</value></data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>Linkerknop vasthouden, teken hier</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>Gebaar {0} is al in gebruik door “{1}”; teken een andere streek</value></data>
   <data name="Col_Port" xml:space="preserve"><value>Poort</value></data>
   <data name="Col_Process" xml:space="preserve"><value>Proces</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -52,7 +71,9 @@
 
   <data name="Btn_Add" xml:space="preserve"><value>Toevoegen</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>Toevoegen ▾</value></data>
+  <data name="Btn_FromTemplate" xml:space="preserve"><value>Op basis van een sjabloon…</value></data>
   <data name="Btn_Edit" xml:space="preserve"><value>Bewerken</value></data>
+  <data name="Btn_Rename" xml:space="preserve"><value>Naam wijzigen</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>Verwijderen</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ Omhoog</value></data>
   <data name="A11y_DragHandle" xml:space="preserve"><value>Sleep om te herschikken</value></data>
@@ -86,7 +107,61 @@
   <data name="Kind_volume" xml:space="preserve"><value>Volume</value></data>
   <data name="Kind_window" xml:space="preserve"><value>Vensteractie</value></data>
   <data name="Kind_system" xml:space="preserve"><value>Systeemopdracht</value></data>
-  <data name="Kind_group" xml:space="preserve"><value>Actiegroep</value></data>
+  <data name="Kind_url" xml:space="preserve">
+    <value>Webpagina openen</value>
+  </data>
+  <data name="Kind_copySelection" xml:space="preserve">
+    <value>Selectie ophalen</value>
+  </data>
+  <data name="Kind_waitClipboard" xml:space="preserve">
+    <value>Wachten op klembord</value>
+  </data>
+  <data name="Kind_prompt" xml:space="preserve"><value>Gebruikersinvoer</value></data>
+  <data name="Kind_choice" xml:space="preserve"><value>Keuze van de gebruiker</value></data>
+  <data name="Sum_OpenUrl" xml:space="preserve">
+    <value>{0} openen</value>
+  </data>
+  <data name="Sum_WaitClipboard" xml:space="preserve">
+    <value>Wachten op klembord ({0}s)</value>
+  </data>
+  <data name="Warn_WaitClipboard" xml:space="preserve">
+    <value>Het klembord is binnen {0}s niet gewijzigd; er wordt toch doorgegaan</value>
+  </data>
+  <data name="Warn_AskNoUi" xml:space="preserve"><value>In deze stap moet je iets worden gevraagd, maar er is niemand om dat te vragen (deze uitvoering verloopt automatisch). Overgeslagen.</value></data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>Deze stap verwijdert iets onomkeerbaar en heeft eerst je bevestiging nodig, en op dit pad is er niemand om het aan te vragen (deze uitvoering verloopt automatisch). Overgeslagen.</value></data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>Voor deze stap zijn geen opties geconfigureerd, dus er valt niets te kiezen. Overgeslagen.</value></data>
+  <data name="Ed_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Ed_WaitSeconds" xml:space="preserve">
+    <value>Max. wachten (s)</value>
+  </data>
+  <data name="Ed_UrlHint" xml:space="preserve">
+    <value>Ondersteunt {clipboard}: wordt tijdens uitvoering vervangen door de tekst op het klembord, URL-escaped. Combineer het met «Selectie ophalen» om te zoeken op wat je hebt geselecteerd.</value>
+  </data>
+  <data name="Ed_CopySelectionHint" xml:space="preserve">
+    <value>Drukt de kopieertoets voor je in en zet de geselecteerde tekst op het klembord. Latere stappen halen die op met {clipboard}.</value>
+  </data>
+  <data name="Ed_AskText" xml:space="preserve"><value>Vraag</value></data>
+  <data name="Ed_AskDefault" xml:space="preserve"><value>Standaardantwoord</value></data>
+  <data name="Ed_Options" xml:space="preserve"><value>Opties</value></data>
+  <data name="Ed_OptionsHint" xml:space="preserve"><value>Eén per regel. Tijdens de uitvoering worden deze weergegeven en kies je er één uit.</value></data>
+  <data name="Ed_OutputVar" xml:space="preserve"><value>Antwoord opslaan als</value></data>
+  <data name="Ed_OutputVarHint" xml:space="preserve"><value>In latere stappen wordt {0} gebruikt om ernaar te verwijzen. Laat dit veld leeg en deze stap levert niets op.</value></data>
+  <data name="Ed_OutputVarSample" xml:space="preserve"><value>naam</value></data>
+  <data name="Mig_PageMoved" xml:space="preserve">
+    <value>Paneelpagina '{0}' is uit je acties naar Paneelpagina's verplaatst (tegels: {1})</value>
+  </data>
+  <data name="Mig_PageAndAction" xml:space="preserve">
+    <value>'{0}' is zowel paneelpagina als actie (sneltoets/aangeroepen): de actie blijft en de pagina bevat nu één tegel die ernaar verwijst</value>
+  </data>
+  <data name="Mig_PageTrayDropped" xml:space="preserve">
+    <value>Paneelpagina '{0}' staat niet meer in het systeemvakmenu (een pagina is geen uitvoerbare actie)</value>
+  </data>
+  <data name="Mig_Title" xml:space="preserve">
+    <value>Paneelpagina's staan nu los</value>
+  </data>
+  <data name="Kind_group" xml:space="preserve"><value>Actiegroep uitvoeren</value></data>
   <data name="Kind_message" xml:space="preserve"><value>Melding</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>Vertraging</value></data>
   <data name="Kind_text" xml:space="preserve"><value>Tekst sturen</value></data>
@@ -111,15 +186,26 @@
   <data name="Win_close" xml:space="preserve"><value>Venster sluiten</value></data>
   <data name="Win_minimize" xml:space="preserve"><value>Minimaliseren</value></data>
   <data name="Win_maximize" xml:space="preserve"><value>Maximaliseren</value></data>
+  <data name="Cmd_playPause" xml:space="preserve"><value>Afspelen / pauzeren</value></data>
+  <data name="Cmd_prevTrack" xml:space="preserve"><value>Vorig nummer</value></data>
+  <data name="Cmd_nextTrack" xml:space="preserve"><value>Volgend nummer</value></data>
+  <data name="Cmd_volUp" xml:space="preserve"><value>Volume omhoog</value></data>
+  <data name="Cmd_volDown" xml:space="preserve"><value>Volume omlaag</value></data>
+  <data name="Win_topmost" xml:space="preserve"><value>Venster bovenop in-/uitschakelen</value></data>
+  <data name="Win_topmostFg" xml:space="preserve"><value>Huidig venster bovenop in-/uitschakelen</value></data>
+  <data name="Ed_TopmostHint" xml:space="preserve"><value>Dit geldt voor elk venster afzonderlijk: als je deze functie voor een venster weer wilt uitschakelen, breng dat venster dan eerst naar de voorgrond.</value></data>
   <data name="Win_activate" xml:space="preserve"><value>Naar voren halen</value></data>
   <data name="Win_sendkey" xml:space="preserve"><value>Naar voren halen en toetsen sturen</value></data>
+  <data name="Win_restore" xml:space="preserve"><value>Terug naar het vorige venster</value></data>
 
   <data name="Sum_SendKeys" xml:space="preserve"><value>{0} sturen</value></data>
   <data name="Sum_Delay_Sec" xml:space="preserve"><value>{0}s vertraging</value></data>
   <data name="Sum_Delay_Ms" xml:space="preserve"><value>{0}ms vertraging</value></data>
   <data name="Sum_RunGroup" xml:space="preserve"><value>Groep uitvoeren: {0}</value></data>
-  <data name="Sum_Group_None" xml:space="preserve"><value>(niet opgegeven)</value></data>
+  <data name="Sum_Unset" xml:space="preserve"><value>(niet opgegeven)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>{0} typen</value></data>
+  <data name="Sum_Ask" xml:space="preserve"><value>Vraag: {0}</value></data>
+  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
   <data name="Sum_MsgCard" xml:space="preserve"><value>Kaart: {0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value> (alleen vóór {0})</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
@@ -183,6 +269,7 @@
   <data name="Ed_WaitWin" xml:space="preserve"><value>Wacht op venster (s)</value></data>
   <data name="Ed_PostDelay" xml:space="preserve"><value>Na verschijnen (s)</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>Procesnaam zonder .exe (bijv. Weixin / msedge). Naar voren halen / toetsen sturen vereist focus en werkt mogelijk niet bij opstart.</value></data>
+  <data name="Ed_RestoreHint" xml:space="preserve"><value>Hiermee wordt het venster weergegeven dat je gebruikte toen deze actie werd geactiveerd. Voor deze actie hoef je geen doel te selecteren.</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>Opdracht</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>Tekst</value></data>
   <data name="Ed_TextProcess" xml:space="preserve"><value>Doelproces</value></data>
@@ -212,11 +299,14 @@
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>Uitvoeren / bestand openen</value></data>
   <data name="Ed_OnYes_Url" xml:space="preserve"><value>URL openen</value></data>
   <data name="Ed_Group_None" xml:space="preserve"><value>(geen)</value></data>
+  <data name="Ed_GroupMissing" xml:space="preserve"><value>(doel verwijderd)</value></data>
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>Toetsen sturen naar «{0}» mislukt: venster verscheen niet of kon niet naar voren worden gehaald (vaak bij opstart/achtergrond)</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>Venster van «{0}» niet gevonden (proces draait niet of nog niet klaar?); {1} heeft geen effect</value></data>
   <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Venster van "{0}" gevonden, maar {1} had geen effect (voorgrondvergrendeling, venster weigerde te sluiten, of het draait als beheerder)</value></data>
+  <data name="Warn_RestoreFailed" xml:space="preserve"><value>Het lukte niet om terug te gaan naar het vorige venster: het venster op de voorgrond is vergrendeld of dat venster is verdwenen.</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Onbekende vensteractie: {0}</value></data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>Het huidige venster staat deze actie niet toe ({0}): activeren doet niets, en gebruik voor toetsaanslagen de stap 'Toetsen sturen'. Overgeslagen.</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Onbekende volumeactie: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Onbekend staptype: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» overgeslagen: doel is Clockwork zelf (opstartlus vermeden)</value></data>
@@ -293,6 +383,7 @@
   <data name="Val_SilentNoGroup" xml:space="preserve"><value>«Actiegroep stil uitvoeren» is geselecteerd, maar er is nog geen groep gekozen</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Bevestigen</value></data>
+  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · Vraag</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>Weet je zeker dat je «{0}» wilt uitvoeren?</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Fout</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>Clockwork liep tegen een fout aan (vastgelegd in log; meestal kun je doorgaan):
@@ -313,7 +404,7 @@ Log: {1}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Instellingen</value></data>
   <data name="Settings_General" xml:space="preserve"><value>Algemeen</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Controleren op updates</value></data>
-  <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
+  <data name="About_Series" xml:space="preserve"><value>365 Open Source-plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Controleren…</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Je hebt de nieuwste versie ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Nieuwe versie {0} beschikbaar. Naar download gaan?</value></data>
@@ -323,6 +414,8 @@ Log: {1}</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Overnemen naar startlijst</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Uit het systeem verwijderen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>«{0}» verwijderen?</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>De pagina "{0}" verwijderen? De {1} tegel(s) die erop staan, worden mee verwijderd. Een tegel die naar een actie verwijst, verwijdert alleen die verwijzing; de actie zelf blijft bestaan.</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>De categorie "{0}" verwijderen? De {1} pagina('s) die daarin staan, worden niet verwijderd — ze worden teruggeplaatst in "{2}".</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Opstartitem «{0}» definitief uit het systeem verwijderen? Dit kan niet ongedaan worden gemaakt (om alleen het opstarten te blokkeren, vink het uit).</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>Poort {0} vrijgeven? Dit beëindigt {1}, inclusief eventuele onderliggende processen. Niet-opgeslagen werk gaat verloren.</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Dat proces bezet ook poort {0}, die daarmee eveneens vrijkomt.</value></data>
@@ -330,6 +423,7 @@ Log: {1}</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Verwijderen van «{0}» mislukt: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Het exportdoel kan niet het configuratiebestand zelf zijn — kies een andere naam of locatie.</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>De te verzenden toetsen vormen geen geldige toetsreeks: controleer niet-gesloten accolades en onbekende toetsnamen (bv. {ENTER}; een letterlijke { schrijf je als {{} en een letterlijke } als {}}).</value></data>
+  <data name="Val_SearchUrl" xml:space="preserve"><value>De zoek-URL heeft {0} nodig — daar komt de zoekterm. Zonder dat opent deze stap elke keer dezelfde pagina.</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Inhalen indien gemist (na slaap/uit)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>Sneltoets "{0}" heeft geen hoofdtoets; niet verzonden</value></data>
@@ -357,27 +451,51 @@ Log: {1}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Laatste opstartlogboek bekijken</value></data>
   <data name="Tray_History" xml:space="preserve"><value>Recent</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Nog geen opstartlogboek (voer eerst de opstartlijst uit)</value></data>
+  <data name="Log_Title" xml:space="preserve"><value>Logboek van de laatste opstartlijstrun</value></data>
+  <data name="Log_When" xml:space="preserve"><value>Tijd: {0}</value></data>
+  <data name="Log_Summary" xml:space="preserve"><value>{0} stappen in totaal: {1} mislukt of met waarschuwing, {2} verzonden maar niet te verifiëren, de rest geslaagd</value></data>
+  <data name="Log_UnverNote" xml:space="preserve"><value>(~ betekent dat een toetsaanslag of sneltoets is verstuurd, maar of het doel reageerde is niet te bevestigen)</value></data>
+  <data name="Log_ReadyGate" xml:space="preserve"><value>Gereedheidscontrole: {0}s gewacht (shell={1} netwerk={2})</value></data>
+  <data name="Log_ReadyTimeout" xml:space="preserve"><value>, time-out zonder gereed te zijn, er is toch doorgegaan</value></data>
+  <data name="Log_BootDelay" xml:space="preserve"><value>Opstartvertraging: {0}s</value></data>
+  <data name="Log_BudgetHit" xml:space="preserve"><value>Deze run bereikte de bovengrens van {0} stappen; de resterende stappen zijn niet uitgevoerd</value></data>
+  <data name="Log_Nth" xml:space="preserve"><value> ({0} van {1})</value></data>
+  <data name="Log_GroupBusy" xml:space="preserve"><value>Actiegroep ‘{0}’ loopt al (elders gestart); deze keer overgeslagen</value></data>
+  <data name="Log_GroupMissing" xml:space="preserve"><value>Actiegroep niet gevonden</value></data>
+  <data name="Log_GroupDisabled" xml:space="preserve"><value>Actiegroep ‘{0}’ staat uit; overgeslagen</value></data>
+  <data name="Log_GroupCycle" xml:space="preserve"><value>Kringverwijzing; overgeslagen</value></data>
+  <data name="Log_RunGroup" xml:space="preserve"><value>Actiegroep uitvoeren: {0}</value></data>
+  <data name="Log_Stopped" xml:space="preserve"><value>Met de hand gestopt; de volgende stappen zijn niet uitgevoerd</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>Deze run is met de hand gestopt (noodstoptoets of ‘Stoppen’ in het systeemvak)</value></data>
+  <data name="Err_JsonNull" xml:space="preserve"><value>Dit bestand levert bij het inlezen niets op — het is geen configuratie.</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Klembord wissen mislukt: {0}</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>"{0}" is geen .wav-bestand. Deze stap speelt alleen wav-bestanden af.</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>Geluidsbestand niet gevonden: "{0}"</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Prullenbak legen mislukt: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Onbekende systeemopdracht: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Uitvoeren: {0}</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>Herinneringen hervatten (nog {0} min)</value></data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>Tot einde dag</value></data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>Herinneringen gepauzeerd tot het einde van de dag</value></data>
+  <data name="Tray_DndResumeHours" xml:space="preserve"><value>Herinneringen hervatten (nog {0} u)</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>Herinneringen pauzeren</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} u</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>Herinneringen {0} u gepauzeerd</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>Herinneringen hervat</value></data>
-  <data name="Menu_BlankGroup" xml:space="preserve"><value>Lege groep</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>Focus · Aan het werk</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>Focusmodus</value></data>
   <data name="Tpl_Meeting" xml:space="preserve"><value>Vergadermodus</value></data>
-  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Afronden · Einde werkdag</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Einde van de dag</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Bedtijd</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Even weg</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Alle taken van vandaag genoteerd?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Tijd om te slapen!</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>Zitpauze · herhaald</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>Pauzeherinnering</value></data>
+  <data name="Tpl_Search" xml:space="preserve"><value>Snel zoeken</value></data>
+  <data name="Tpl_SearchAsk" xml:space="preserve"><value>Zoeken naar wat?</value></data>
+  <data name="Tpl_SearchVar" xml:space="preserve"><value>trefwoord</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Sta op en beweeg even</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Dempen bij opstarten (voorbeeld · voorkomt automatisch afspelen)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>Browser openen (voorbeeld · wijs naar je eigen .exe)</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>Open je browser (voorbeeld · ga naar een app die je daadwerkelijk gebruikt)</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>Website openen (voorbeeld · alleen doordeweeks; je mail of to-do)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Chat-app openen (voorbeeld · start geminimaliseerd op de achtergrond)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Bureaublad tonen met Win+D (voorbeeld · toetsencombinatie sturen)</value></data>
@@ -429,6 +547,27 @@ Log: {1}</value></data>
   <data name="Vol_micMute" xml:space="preserve"><value>Microfoon dempen</value></data>
   <data name="Vol_micUnmute" xml:space="preserve"><value>Microfoondemping opheffen</value></data>
   <data name="Sys_setClipboard" xml:space="preserve"><value>Klembordtekst instellen</value></data>
+  <data name="Menu_SecCommon" xml:space="preserve"><value>Veelgebruikt</value></data>
+  <data name="Cmd_copy" xml:space="preserve"><value>Kopiëren</value></data>
+  <data name="Cmd_paste" xml:space="preserve"><value>Plakken</value></data>
+  <data name="Cmd_back" xml:space="preserve"><value>Terug</value></data>
+  <data name="Cmd_forward" xml:space="preserve"><value>Vooruit</value></data>
+  <data name="Cmd_toBottom" xml:space="preserve"><value>Naar het einde</value></data>
+  <data name="Win_current" xml:space="preserve"><value>Huidig venster</value></data>
+  <data name="Win_minimizeFg" xml:space="preserve"><value>Huidig venster minimaliseren</value></data>
+  <data name="Win_maximizeFg" xml:space="preserve"><value>Huidig venster maximaliseren</value></data>
+  <data name="Win_closeFg" xml:space="preserve"><value>Huidig venster sluiten</value></data>
+  <data name="Sys_searchSelection" xml:space="preserve"><value>Geselecteerde tekst zoeken</value></data>
+  <data name="Sys_playSound" xml:space="preserve"><value>Een geluid afspelen (systeemgeluid of een .wav-bestand)</value></data>
+  <data name="Ed_SearchUrl" xml:space="preserve"><value>Zoek-URL</value></data>
+  <data name="Ed_SearchEngine" xml:space="preserve"><value>Zoekmachine</value></data>
+  <data name="Ed_SearchCustom" xml:space="preserve"><value>Aangepast…</value></data>
+  <data name="Err_NoSelection" xml:space="preserve"><value>Er is geen tekst geselecteerd. Selecteer eerst waarnaar u wilt zoeken en voer deze stap opnieuw uit.</value></data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>Er is nu geen venster om op toe te passen (Clockwork zelf of het bureaublad staat op de voorgrond)</value></data>
+  <data name="Ed_ProcessHint" xml:space="preserve"><value>Typ * voor het huidige venster: dat waarin u zat voordat u het gebaar tekende of het paneel opende. Leeg gelaten doet deze stap niets.</value></data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} staat voor de gezochte woorden; ze worden automatisch gecodeerd.</value></data>
+  <data name="Ed_SoundFile" xml:space="preserve"><value>Geluidsbestand</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>Laat dit veld leeg voor het standaardmeldingsgeluid van het systeem. Of voer het volledige pad naar een .wav-bestand in.</value></data>
   <data name="Sys_brightness" xml:space="preserve"><value>Schermhelderheid</value></data>
   <data name="Sys_notificationsOff" xml:space="preserve"><value>Meldingen uitschakelen</value></data>
   <data name="Sys_notificationsOn" xml:space="preserve"><value>Meldingen inschakelen</value></data>
@@ -501,4 +640,76 @@ Log: {1}</value></data>
   <data name="Adv_NagUntil" xml:space="preserve"><value>herinnert elke {0} min tot bevestiging, uiterlijk tot {1}</value></data>
   <data name="Adv_Loop" xml:space="preserve"><value>draait elke {0} min tot einde van de dag (bevestigen stopt het niet)</value></data>
   <data name="Adv_LoopUntil" xml:space="preserve"><value>draait elke {0} min tot {1} (bevestigen stopt het niet)</value></data>
+  <data name="Ed_Trig_Busy" xml:space="preserve"><value>Bij aanhoudend gebruik</value></data>
+  <data name="Ed_Trig_Display" xml:space="preserve"><value>Bij weergavewijziging</value></data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>Bij netwerkverbinding</value></data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>Bij netwerkverlies</value></data>
+  <data name="Ed_Trig_Usb" xml:space="preserve"><value>Bij aansluiten van een USB-stick</value></data>
+  <data name="Time_Busy" xml:space="preserve"><value>{0} min gebruik</value></data>
+  <data name="Ed_BusyMinutes" xml:space="preserve"><value>Minuten gebruik</value></data>
+  <data name="Ed_BusyHint" xml:space="preserve"><value>Gaat één keer af na zoveel minuten aaneengesloten gebruik; een volle minuut weg zet de teller terug.</value></data>
+  <data name="Settings_PanelHotkey" xml:space="preserve"><value>Sneltoets snelpaneel</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Opent een tegelpaneel bij de cursor, één actie per tegel. Esc annuleert, Del wist het; daarna openen de middelste muisknop of het systeemvakmenu het paneel.</value></data>
+  <data name="Tray_Panel" xml:space="preserve"><value>Snelpaneel openen</value></data>
+  <data name="Panel_Hint" xml:space="preserve"><value>Esc om te sluiten</value></data>
+  <data name="Panel_Empty" xml:space="preserve"><value>Het paneel is leeg. Hier verschijnen de acties die u erop zet.</value></data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>Startlijst overgeslagen. Verwijder {0} om hem weer automatisch te laten lopen.</value></data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>Startlijst overgeslagen omdat Shift ingedrukt was bij het starten. Alleen deze keer — de volgende keer loopt hij gewoon.</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>Er is geen actiegroep met de naam '{0}' — er is niets uitgevoerd.</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>Actiegroep '{0}' staat uit — er is niets uitgevoerd.</value></data>
+  <data name="Unit_Ms" xml:space="preserve"><value>ms</value></data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>Middelste muisknop ingedrukt houden om het paneel te openen</value></data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>Een normale middelklik blijft werken — een korte druk wordt onveranderd doorgegeven. Standaard uit, omdat er een globale muis-hook voor nodig is.</value></data>
+  <data name="Settings_LongPressMs" xml:space="preserve"><value>Vasthoudtijd (ms)</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>De muis-hook kon niet worden geïnstalleerd, dus middelste knop vasthouden staat uit. Mogelijk heeft beveiligingssoftware of groepsbeleid het geblokkeerd; het paneel opent nog steeds via de sneltoets of het systeemvakmenu.</value></data>
+  <data name="Settings_Panel" xml:space="preserve"><value>Snelpaneel</value></data>
+  <data name="Settings_UsePanel" xml:space="preserve"><value>Snelpaneel gebruiken</value></data>
+  <data name="Settings_UsePanelTip" xml:space="preserve"><value>Uit: de sneltoets gaat terug naar andere programma's, de middelklik-hook wordt niet geplaatst en het item in het systeemvak verdwijnt. Je paneelpagina's blijven — je kunt ze nog ordenen via 'Paneel beheren'.</value></data>
+  <data name="Settings_UseGestures" xml:space="preserve"><value>Muisgebaren gebruiken</value></data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>Uit: de rechtermuisknop wordt helemaal niet in de gaten gehouden en doet weer gewoon wat hij hoort te doen. De gebaren zelf teken je in de gebarenbeheerder, via de zijbalk van 'Actiegroepen'.</value></data>
+  <data name="Settings_PanelLayout" xml:space="preserve"><value>Indeling</value></data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>Kolommen × bovenste rijen + onderste rijen bepaalt hoeveel er op één pagina past en hoe breed het paneel wordt. De rest gaat naar de volgende pagina; zet onderste op 0 voor één band.</value></data>
+  <data name="Settings_PanelColumns" xml:space="preserve"><value>Tegels per rij</value></data>
+  <data name="Settings_PanelTileSize" xml:space="preserve"><value>Tegelgrootte</value></data>
+  <data name="Size_compact" xml:space="preserve"><value>Compact</value></data>
+  <data name="Size_normal" xml:space="preserve"><value>Normaal</value></data>
+  <data name="Size_roomy" xml:space="preserve"><value>Ruim</value></data>
+  <data name="Settings_PanelShowOps" xml:space="preserve"><value>Ingebouwde knoppen tonen</value></data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>Alleen pictogrammen</value></data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>Namen blijven in de tooltip staan en er passen veel meer acties op één scherm.</value></data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>Alleen in deze app</value></data>
+  <data name="Settings_PanelTopRows" xml:space="preserve"><value>Bovenste rijen</value></data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Onderste rijen</value></data>
+  <data name="Ed_Icon" xml:space="preserve"><value>Paneelpictogram</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>Leeg gelaten vult het zichzelf in: ‘Programma uitvoeren’ neemt het pictogram van het doel over, al het andere krijgt een lijnpictogram naar zijn soort.</value></data>
+  <data name="Btn_Close" xml:space="preserve"><value>Sluiten</value></data>
+  <data name="Panel_Manager" xml:space="preserve"><value>Paneel beheren</value></data>
+  <data name="Panel_Global" xml:space="preserve"><value>Elke app</value></data>
+  <data name="Panel_AddPage" xml:space="preserve"><value>Pagina toevoegen</value></data>
+  <data name="Panel_NewPage" xml:space="preserve"><value>Nieuwe pagina</value></data>
+  <data name="Panel_AddHere" xml:space="preserve"><value>Hier een actie neerzetten</value></data>
+  <data name="Panel_NoPages" xml:space="preserve"><value>Er zijn nog geen pagina’s. Met de + aan het einde van de paginabalk maak je er een aan; voeg daar vervolgens acties aan toe.</value></data>
+  <data name="Panel_Uncategorized" xml:space="preserve"><value>Zonder categorie</value></data>
+  <data name="Panel_NewCategory" xml:space="preserve"><value>Nieuwe categorie</value></data>
+  <data name="Panel_Category" xml:space="preserve"><value>Categorie</value></data>
+  <data name="Panel_Pages" xml:space="preserve"><value>Pagina’s</value></data>
+  <data name="Panel_CategoryHint" xml:space="preserve"><value>Tot welke categorie deze pagina behoort. De bovenste rij heeft één tabblad per categorie; er een kiezen toont alleen die pagina’s.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Bovenaan klikt u een categorie, links een pagina. Dubbelklik om te hernoemen, sleep tabbladen om ze te ordenen en laat er een op een categorie los om die pagina daarheen te verplaatsen; laat een tegel op een tabblad los om die naar die pagina te verplaatsen. Rechtsklik op een tabblad om het te hernoemen of te verwijderen.</value></data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>Linkertabbladen tonen</value></data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>Categorierij tonen</value></data>
+  <data name="Panel_BarsHint" xml:space="preserve"><value>Bovenaan kiest u een categorie, links staan de pagina’s ervan. Bij één categorie wordt de bovenste rij niet getekend, en bij één pagina in de huidige categorie de linker evenmin; deze vinkjes verbergen ze ook als er meer zijn. Het beheervenster houdt zijn categorierij altijd: de + erop maakt een categorie.</value></data>
+  <data name="Panel_SceneHint" xml:space="preserve"><value>Laat je het leeg, dan is de pagina er altijd. Vul je een procesnaam in, dan verschijnt hij alleen als die app op de voorgrond stond toen je het paneel opende.</value></data>
+  <data name="Icon_Pick" xml:space="preserve"><value>Pictogram kiezen</value></data>
+  <data name="Icon_PickHint" xml:space="preserve"><value>Daarnaast kun je je eigen afbeelding gebruiken, of een willekeurige exe en daar het pictogram van lenen.</value></data>
+  <data name="Icon_UseImage" xml:space="preserve"><value>Afbeelding gebruiken…</value></data>
+  <data name="Icon_None" xml:space="preserve"><value>Automatisch laten</value></data>
+  <data name="Panel_Search" xml:space="preserve"><value>Een actie zoeken</value></data>
+  <data name="Panel_SearchNone" xml:space="preserve"><value>Geen enkele actie komt overeen. Probeer een ander woord, of druk op Esc om terug te gaan naar het paneel.</value></data>
+  <data name="Panel_HintBack" xml:space="preserve"><value>Esc gaat terug</value></data>
+  <data name="Panel_SearchMore" xml:space="preserve"><value>De eerste {0} van {1} treffers worden getoond. Typ nog wat meer om te verfijnen.</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Thema</value></data>
+  <data name="Theme_dark" xml:space="preserve"><value>Donker</value></data>
+  <data name="Theme_light" xml:space="preserve"><value>Licht</value></data>
+  <data name="Theme_system" xml:space="preserve"><value>Volg Windows</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork start meteen opnieuw om het thema toe te passen. “Volg Windows” volgt de app-modus in Windows.</value></data>
 </root>

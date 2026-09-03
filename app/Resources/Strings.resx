@@ -9,15 +9,17 @@
 
   <data name="Tab_Launch" xml:space="preserve"><value>我的启动清单</value></data>
   <data name="Tab_Reminder" xml:space="preserve"><value>定时任务</value></data>
-  <data name="Tab_Group" xml:space="preserve"><value>动作组</value></data>
+  <data name="Tab_Group" xml:space="preserve"><value>动作</value></data>
   <data name="Tab_System" xml:space="preserve"><value>系统启动项</value></data>
   <data name="Tab_Ports" xml:space="preserve"><value>端口</value></data>
 
-  <data name="Launch_Hint" xml:space="preserve"><value>只在登录时跑一次，从上到下依次执行 · 拖动行可调顺序。要按时间 / 事件触发 → 「定时任务」；要随时一键触发 → 「动作组」。</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>到点、登录或解锁 / 插拔电源等事件时，弹提醒或静默跑动作组。只想开机开软件 → 「我的启动清单」；想随手一键触发 → 「动作组」。</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>把一串动作打包成组，热键 / 托盘随时一键触发，也可被启动清单和定时任务引用。只在开机跑一次的，直接写进「我的启动清单」更省事。</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>只在登录时跑一次，从上到下依次执行 · 拖动行可调顺序。要按时间 / 事件触发 → 「定时任务」；要随时一键触发 → 「动作」。</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>到点、登录或解锁 / 插拔电源等事件时，弹提醒或静默跑一个动作。只想开机开软件 → 「我的启动清单」；想随手一键触发 → 「动作」。</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>把一串操作打包成一个动作，热键 / 托盘随时一键触发，也可被启动清单和定时任务引用。只在开机跑一次的，直接写进「我的启动清单」更省事。</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>勾选 / 取消即时生效（非删除，可恢复）；标「需管理员」的项需管理员身份。系统 / 策略 / 一次性等只读项默认隐藏。</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>勾选 / 取消即时生效（非删除，可恢复）。</value></data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>系统 / 策略 / 一次性等只读项默认隐藏。</value></data>
+  <data name="System_Count" xml:space="preserve"><value>{0} / {1} 项</value></data>
   <data name="System_Filter" xml:space="preserve"><value>过滤</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>显示系统 / 只读项</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>正在扫描开机自启项…</value></data>
@@ -47,6 +49,23 @@
   <data name="Col_Source" xml:space="preserve"><value>来源</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>范围</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>热键</value></data>
+  <data name="Gesture_Manager" xml:space="preserve"><value>鼠标手势</value></data>
+  <data name="Gesture_Enabled" xml:space="preserve"><value>启用</value></data>
+  <data name="Gesture_Rehook" xml:space="preserve"><value>重新挂钩</value></data>
+  <data name="Gesture_RehookHint" xml:space="preserve"><value>别的程序（鼠标驱动、AutoHotkey、另一个手势软件）可能排在前面并吞掉右键，那时这儿一切正常却收不到右键。钩子链里后装的排在前面，重装一次就能抢回队首。</value></data>
+  <data name="Gesture_WatchLive" xml:space="preserve"><value>右键监听中</value></data>
+  <data name="Gesture_WatchOff" xml:space="preserve"><value>未监听右键</value></data>
+  <data name="Gesture_WatchFailed" xml:space="preserve"><value>装不上（Windows 拒绝）</value></data>
+  <data name="Gesture_WatchStale" xml:space="preserve"><value>监听已失效，重装一次</value></data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>装上了却收不到输入 —— 试试以管理员身份运行</value></data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>右键被别的程序截走了（AutoHotkey / 鼠标驱动之类）</value></data>
+  <data name="Gesture_Hint" xml:space="preserve"><value>按住右键画一条轨迹，就运行对应的动作。没有手势时，右键完全照常。</value></data>
+  <data name="Gesture_Track" xml:space="preserve"><value>轨迹</value></data>
+  <data name="Settings_GestureManage" xml:space="preserve"><value>管理手势…</value></data>
+  <data name="Settings_PanelManage" xml:space="preserve"><value>管理面板…</value></data>
+  <data name="Gesture_None" xml:space="preserve"><value>还没有手势。点「新增」挑一个动作，再在右边画一条轨迹。</value></data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>按住左键在此画</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>手势 {0} 已被「{1}」使用，请换一条轨迹</value></data>
   <data name="Col_Port" xml:space="preserve"><value>端口</value></data>
   <data name="Col_Process" xml:space="preserve"><value>进程</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -54,13 +73,15 @@
 
   <data name="Btn_Add" xml:space="preserve"><value>新增</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>新增 ▾</value></data>
+  <data name="Btn_FromTemplate" xml:space="preserve"><value>从模板…</value></data>
   <data name="Btn_Edit" xml:space="preserve"><value>编辑</value></data>
+  <data name="Btn_Rename" xml:space="preserve"><value>重命名</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>删除</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ 上移</value></data>
   <data name="A11y_DragHandle" xml:space="preserve"><value>拖动重排</value></data>
   <data name="Btn_Down" xml:space="preserve"><value>↓ 下移</value></data>
   <data name="Btn_RunStep" xml:space="preserve"><value>▶ 运行这一步</value></data>
-  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ 运行整组</value></data>
+  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ 运行整个动作</value></data>
   <data name="Btn_StopRun" xml:space="preserve"><value>■ 停止</value></data>
   <data name="Btn_Run" xml:space="preserve"><value>▶ 运行</value></data>
   <data name="Btn_Copy" xml:space="preserve"><value>复制</value></data>
@@ -90,7 +111,61 @@
   <data name="Kind_volume" xml:space="preserve"><value>音量</value></data>
   <data name="Kind_window" xml:space="preserve"><value>窗口动作</value></data>
   <data name="Kind_system" xml:space="preserve"><value>系统命令</value></data>
-  <data name="Kind_group" xml:space="preserve"><value>动作组</value></data>
+  <data name="Kind_url" xml:space="preserve">
+    <value>打开网址</value>
+  </data>
+  <data name="Kind_copySelection" xml:space="preserve">
+    <value>获取选中的文字</value>
+  </data>
+  <data name="Kind_waitClipboard" xml:space="preserve">
+    <value>等剪贴板变化</value>
+  </data>
+  <data name="Kind_prompt" xml:space="preserve"><value>用户输入</value></data>
+  <data name="Kind_choice" xml:space="preserve"><value>用户选择</value></data>
+  <data name="Sum_OpenUrl" xml:space="preserve">
+    <value>打开 {0}</value>
+  </data>
+  <data name="Sum_WaitClipboard" xml:space="preserve">
+    <value>等剪贴板变化（最多 {0} 秒）</value>
+  </data>
+  <data name="Warn_WaitClipboard" xml:space="preserve">
+    <value>等了 {0} 秒剪贴板没有变化，继续往下走</value>
+  </data>
+  <data name="Warn_AskNoUi" xml:space="preserve"><value>这一步要问你一句，而这条路上没有可以问的人（这次运行没有人在看着），已跳过</value></data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>这一步会不可逆地删掉东西，需要你先确认，而这条路上没有可以问的人（这次运行没有人在看着），已跳过</value></data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>这一步一个选项都没配，没有可挑的，已跳过</value></data>
+  <data name="Ed_Url" xml:space="preserve">
+    <value>网址</value>
+  </data>
+  <data name="Ed_UrlHint" xml:space="preserve">
+    <value>支持 {clipboard}：运行时换成剪贴板里的文字（自动转义）。配合「获取选中的文字」就是「选中什么搜什么」。</value>
+  </data>
+  <data name="Ed_WaitSeconds" xml:space="preserve">
+    <value>最多等（秒）</value>
+  </data>
+  <data name="Ed_CopySelectionHint" xml:space="preserve">
+    <value>替你按一次复制键，把选中的文字取到剪贴板。后面的步骤用 {clipboard} 取用。</value>
+  </data>
+  <data name="Ed_AskText" xml:space="preserve"><value>提示语</value></data>
+  <data name="Ed_AskDefault" xml:space="preserve"><value>默认值</value></data>
+  <data name="Ed_Options" xml:space="preserve"><value>选项</value></data>
+  <data name="Ed_OptionsHint" xml:space="preserve"><value>一行一个。运行到这一步时列出来让你挑一个。</value></data>
+  <data name="Ed_OutputVar" xml:space="preserve"><value>输出到变量</value></data>
+  <data name="Ed_OutputVarHint" xml:space="preserve"><value>后面的步骤用 {0} 引用它。留空 = 这一步不产出值。</value></data>
+  <data name="Ed_OutputVarSample" xml:space="preserve"><value>名字</value></data>
+  <data name="Mig_PageMoved" xml:space="preserve">
+    <value>面板页「{0}」已从动作列表搬到「面板页」（{1} 个格子）</value>
+  </data>
+  <data name="Mig_PageAndAction" xml:space="preserve">
+    <value>「{0}」既是面板页又被热键/引用当动作用：动作保留，面板页改为放一个指向它的格子</value>
+  </data>
+  <data name="Mig_PageTrayDropped" xml:space="preserve">
+    <value>面板页「{0}」不再出现在托盘菜单里（页不是可运行的动作）</value>
+  </data>
+  <data name="Mig_Title" xml:space="preserve">
+    <value>面板页已独立</value>
+  </data>
+  <data name="Kind_group" xml:space="preserve"><value>运行动作</value></data>
   <data name="Kind_message" xml:space="preserve"><value>消息</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>延时</value></data>
   <data name="Kind_text" xml:space="preserve"><value>发送文本</value></data>
@@ -115,15 +190,26 @@
   <data name="Win_close" xml:space="preserve"><value>关闭窗口</value></data>
   <data name="Win_minimize" xml:space="preserve"><value>最小化窗口</value></data>
   <data name="Win_maximize" xml:space="preserve"><value>最大化窗口</value></data>
+  <data name="Cmd_playPause" xml:space="preserve"><value>播放 / 暂停</value></data>
+  <data name="Cmd_prevTrack" xml:space="preserve"><value>上一曲</value></data>
+  <data name="Cmd_nextTrack" xml:space="preserve"><value>下一曲</value></data>
+  <data name="Cmd_volUp" xml:space="preserve"><value>音量调高</value></data>
+  <data name="Cmd_volDown" xml:space="preserve"><value>音量调低</value></data>
+  <data name="Win_topmost" xml:space="preserve"><value>切换窗口置顶</value></data>
+  <data name="Win_topmostFg" xml:space="preserve"><value>切换当前窗口置顶</value></data>
+  <data name="Ed_TopmostHint" xml:space="preserve"><value>按窗口分别记：要在某个窗口上取消置顶，先让那个窗口回到前台。</value></data>
   <data name="Win_activate" xml:space="preserve"><value>带到最前面</value></data>
   <data name="Win_sendkey" xml:space="preserve"><value>置前并发送按键</value></data>
+  <data name="Win_restore" xml:space="preserve"><value>回到刚才那个窗口</value></data>
 
   <data name="Sum_SendKeys" xml:space="preserve"><value>发送 {0}</value></data>
   <data name="Sum_Delay_Sec" xml:space="preserve"><value>延时 {0} 秒</value></data>
   <data name="Sum_Delay_Ms" xml:space="preserve"><value>延时 {0} 毫秒</value></data>
-  <data name="Sum_RunGroup" xml:space="preserve"><value>运行动作组：{0}</value></data>
-  <data name="Sum_Group_None" xml:space="preserve"><value>（未指定）</value></data>
+  <data name="Sum_RunGroup" xml:space="preserve"><value>运行动作：{0}</value></data>
+  <data name="Sum_Unset" xml:space="preserve"><value>（未指定）</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>输入 {0}</value></data>
+  <data name="Sum_Ask" xml:space="preserve"><value>问：{0}</value></data>
+  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
   <data name="Sum_MsgCard" xml:space="preserve"><value>卡片提示：{0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value>（仅{0}前）</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value>（{0}）</value></data>
@@ -187,6 +273,7 @@
   <data name="Ed_WaitWin" xml:space="preserve"><value>等窗口（秒）</value></data>
   <data name="Ed_PostDelay" xml:space="preserve"><value>出现后等（秒）</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>进程名不含 .exe（如 Weixin / msedge）。带到最前 / 发送按键需抢占前台，开机自启时可能不生效。</value></data>
+  <data name="Ed_RestoreHint" xml:space="preserve"><value>回到你触发这条动作那一刻正在用的那个窗口。这一档不用选目标。</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>命令</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>文本</value></data>
   <data name="Ed_TextProcess" xml:space="preserve"><value>目标进程</value></data>
@@ -198,12 +285,12 @@
   <data name="Snd_Sound" xml:space="preserve"><value>提示音（叮一声）</value></data>
   <data name="Snd_None" xml:space="preserve"><value>不出声</value></data>
   <data name="Ed_SoundMode" xml:space="preserve"><value>声音</value></data>
-  <data name="Ed_Confirm" xml:space="preserve"><value>是/否确认（是=继续，否=中止本组）</value></data>
+  <data name="Ed_Confirm" xml:space="preserve"><value>是/否确认（是=继续，否=中止这个动作）</value></data>
   <data name="Ed_OnYes" xml:space="preserve"><value>点是后</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈现方式</value></data>
   <data name="Present_Dialog" xml:space="preserve"><value>对话框（等你回应）</value></data>
   <data name="Present_Card" xml:space="preserve"><value>卡片（不打断）</value></data>
-  <data name="Ed_Group" xml:space="preserve"><value>动作组</value></data>
+  <data name="Ed_Group" xml:space="preserve"><value>动作</value></data>
   <data name="Ed_DelayMs" xml:space="preserve"><value>执行后延时（毫秒）</value></data>
   <data name="Ed_Repeat" xml:space="preserve"><value>重复次数</value></data>
   <data name="Ed_Note" xml:space="preserve"><value>用途说明</value></data>
@@ -216,11 +303,14 @@
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>运行 / 打开文件</value></data>
   <data name="Ed_OnYes_Url" xml:space="preserve"><value>开网页</value></data>
   <data name="Ed_Group_None" xml:space="preserve"><value>（无）</value></data>
+  <data name="Ed_GroupMissing" xml:space="preserve"><value>（目标已删除）</value></data>
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>未能向「{0}」发送按键：窗口没出现，或找到了却无法把它带到最前（后台/开机自启触发时常见）</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>没有找到「{0}」的窗口（进程未运行或尚未就绪？），{1} 未生效</value></data>
   <data name="Warn_WindowActionFailed" xml:space="preserve"><value>找到了「{0}」的窗口，但 {1} 没有生效（前台被锁定、窗口拒绝关闭，或它以管理员身份运行）</value></data>
+  <data name="Warn_RestoreFailed" xml:space="preserve"><value>没能回到刚才那个窗口（前台被锁定，或那个窗口已经关了）</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>未知窗口操作：{0}</value></data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>「当前窗口」不开放这个动作（{0}）：置前对它没有意义，发送按键要走「发送按键」步骤。已跳过</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>未知音量操作：{0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>未知步骤类型：{0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>跳过「{0}」：目标是Clockwork自身，避免开机自启动循环</value></data>
@@ -237,9 +327,9 @@
   <data name="Note_System" xml:space="preserve"><value>系统关键</value></data>
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
-  <data name="Ed_Title_Group" xml:space="preserve"><value>编辑动作组</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>动作组不会自己运行。可从托盘菜单、全局热键、启动清单里的「动作组」步骤或定时任务触发。</value></data>
-  <data name="Val_GroupName" xml:space="preserve"><value>请填写动作组名称。</value></data>
+  <data name="Ed_Title_Group" xml:space="preserve"><value>编辑动作</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>动作不会自己运行。可从托盘菜单、全局热键、启动清单里的「运行动作」步骤或定时任务触发。</value></data>
+  <data name="Val_GroupName" xml:space="preserve"><value>请填写动作名称。</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>编辑定时任务</value></data>
   <data name="Ed_Trigger" xml:space="preserve"><value>触发</value></data>
@@ -264,9 +354,9 @@
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>每月几号</value></data>
   <data name="Ed_OnceDate" xml:space="preserve"><value>日期</value></data>
   <data name="Ed_ActPopup" xml:space="preserve"><value>弹窗提醒</value></data>
-  <data name="Ed_ActSilent" xml:space="preserve"><value>静默运行动作组</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>运行动作组</value></data>
-  <data name="Ed_OnYes_Group" xml:space="preserve"><value>运行动作组</value></data>
+  <data name="Ed_ActSilent" xml:space="preserve"><value>静默运行动作</value></data>
+  <data name="Ed_SilentGroup" xml:space="preserve"><value>运行动作</value></data>
+  <data name="Ed_OnYes_Group" xml:space="preserve"><value>运行动作</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>自动关闭（秒）</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>没人点就自动关（0：卡片=不关，对话框=60 秒）</value></data>
   <data name="Toast_QuickSetDnd" xml:space="preserve"><value>已设 {0} 分钟后提醒，但正在勿扰中——要到勿扰结束才会响</value></data>
@@ -294,9 +384,10 @@
   <data name="Val_Anchor" xml:space="preserve"><value>起算日格式应为 yyyy-MM-dd（或留空）</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>日期需为 yyyy-MM-dd 格式</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>该日期已过，此任务保存后不会触发（改日期并重新勾选即可再用）</value></data>
-  <data name="Val_SilentNoGroup" xml:space="preserve"><value>选择了「静默运行动作组」但还没选具体的组</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>选择了「静默运行动作」但还没选具体的动作</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · 确认</value></data>
+  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · 请回答</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>确定要执行「{0}」吗？</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · 出错了</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>Clockwork 遇到一个错误（已记录到日志，通常可继续使用）：
@@ -327,6 +418,8 @@
   <data name="Sys_Takeover" xml:space="preserve"><value>接管到启动清单</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>从系统中删除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>确定要删除「{0}」吗？</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>删除页「{0}」？上面的 {1} 个格子会一起没了。指向动作的格子删掉的只是那个引用，动作本身还在。</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>删除分类「{0}」？里面的 {1} 张页不会被删掉，会回到「{2}」。</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>确定要从系统中彻底删除启动项「{0}」吗？此操作无法撤销（若只想阻止它开机启动，取消勾选即可）。</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>释放端口 {0}？将结束：{1}，连同子进程一并结束。未保存的内容会丢失。</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>该进程同时占着端口 {0}，也会一并释放。</value></data>
@@ -334,6 +427,7 @@
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」删除失败：{1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>导出目标不能是配置文件本身，请换一个文件名或位置。</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>发送按键内容不是有效的按键序列：请检查花括号是否闭合、键名是否正确（如 {ENTER}；字面 { 写作 {{}、字面 } 写作 {}}）。</value></data>
+  <data name="Val_SearchUrl" xml:space="preserve"><value>搜索地址里必须有 {0}——那是被搜的词该出现的位置。没有它，这一步每次都只会打开同一个页面。</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>错过必补（休眠/关机也补弹）</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} 分钟</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>热键「{0}」缺少主键，未发送</value></data>
@@ -343,45 +437,69 @@
   <data name="Warn_KeyPartial" xml:space="preserve"><value>热键「{0}」仅部分注入（{1}/{2}），已补发按键抬起，未生效</value></data>
   <data name="Warn_TextSendFail" xml:space="preserve"><value>发送文本：未能把「{0}」窗口带到最前，未发送</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>配置保存失败：{0}（改动暂存内存，重启后会丢失）</value></data>
-  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>提醒「{0}」引用的动作组不存在，本次未执行任何动作</value></data>
-  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>提醒「{0}」引用的动作组已禁用，本次未执行任何动作</value></data>
-  <data name="Skip_GroupNotFound" xml:space="preserve"><value>找不到动作组</value></data>
-  <data name="Skip_GroupDisabled" xml:space="preserve"><value>动作组「{0}」已禁用，跳过</value></data>
-  <data name="Skip_GroupReentrant" xml:space="preserve"><value>动作组重入（环引用或已在运行），已跳过</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>提醒「{0}」引用的动作不存在，本次未执行任何动作</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>提醒「{0}」引用的动作已禁用，本次未执行任何动作</value></data>
+  <data name="Skip_GroupNotFound" xml:space="preserve"><value>找不到动作</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>动作「{0}」已禁用，跳过</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>动作重入（环引用或已在运行），已跳过</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}，{1}</value></data>
-  <data name="Toast_GroupCancelled" xml:space="preserve"><value>已请求取消动作组「{0}」。</value></data>
-  <data name="Toast_GroupStarted" xml:space="preserve"><value>已启动动作组「{0}」。</value></data>
-  <data name="Toast_GroupBusy" xml:space="preserve"><value>动作组「{0}」正在运行中（由别处触发），这个键停不了它，请用急停键。</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>已请求取消动作「{0}」。</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>已启动动作「{0}」。</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>动作「{0}」正在运行中（由别处触发），这个键停不了它，请用急停键。</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>单次运行已达 5000 步上限，剩余步骤未执行（检查是否有过大的循环次数）</value></data>
-  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「点是后」要运行的动作组不存在，已跳过</value></data>
-  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「点是后」要运行的动作组已禁用，已跳过</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>「点是后」要运行的动作不存在，已跳过</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>「点是后」要运行的动作已禁用，已跳过</value></data>
   <data name="Warn_OnYesFailed" xml:space="preserve"><value>「点是后」没能执行：{0}</value></data>
   <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>计划任务项暂不支持接管；仅支持注册表 Run 键与启动文件夹项</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>启动清单运行中断：{0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>查看上次启动日志</value></data>
   <data name="Tray_History" xml:space="preserve"><value>最近通知</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>还没有启动日志（先跑一次启动清单）</value></data>
+  <data name="Log_Title" xml:space="preserve"><value>上次启动清单运行日志</value></data>
+  <data name="Log_When" xml:space="preserve"><value>时间：{0}</value></data>
+  <data name="Log_Summary" xml:space="preserve"><value>共 {0} 步：{1} 步失败/警告、{2} 步已发送但无法校验、其余成功</value></data>
+  <data name="Log_UnverNote" xml:space="preserve"><value>（~ 表示按键/热键类动作已注入，但目标是否响应无法确认）</value></data>
+  <data name="Log_ReadyGate" xml:space="preserve"><value>就绪门控：等待 {0}s（Shell={1} 网络={2}）</value></data>
+  <data name="Log_ReadyTimeout" xml:space="preserve"><value>，超时仍未就绪，照常放行</value></data>
+  <data name="Log_BootDelay" xml:space="preserve"><value>开机延迟：{0}s</value></data>
+  <data name="Log_BudgetHit" xml:space="preserve"><value>本次运行已达 {0} 步上限，剩余步骤未执行</value></data>
+  <data name="Log_Nth" xml:space="preserve"><value>（第 {0}/{1} 次）</value></data>
+  <data name="Log_GroupBusy" xml:space="preserve"><value>动作「{0}」已在运行（由别处触发），本次跳过</value></data>
+  <data name="Log_GroupMissing" xml:space="preserve"><value>找不到动作</value></data>
+  <data name="Log_GroupDisabled" xml:space="preserve"><value>动作「{0}」已禁用，跳过</value></data>
+  <data name="Log_GroupCycle" xml:space="preserve"><value>环引用，已跳过</value></data>
+  <data name="Log_RunGroup" xml:space="preserve"><value>运行动作：{0}</value></data>
+  <data name="Log_Stopped" xml:space="preserve"><value>已手动停止，后续步骤未执行</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>本次运行被手动停止（急停键 / 托盘「停止」）</value></data>
+  <data name="Err_JsonNull" xml:space="preserve"><value>这个文件解析出来是空的，不是一份配置。</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>清空剪贴板失败：{0}</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>「{0}」不是 .wav 文件。这一步只能放 wav。</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>找不到声音文件「{0}」。</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>清空回收站失败：{0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>未知系统命令：{0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>运行：{0}</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>恢复提醒（剩 {0} 分钟）</value></data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>到今天结束</value></data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>已暂停提醒到今天结束</value></data>
+  <data name="Tray_DndResumeHours" xml:space="preserve"><value>恢复提醒（剩 {0} 小时）</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>暂停提醒</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} 小时</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>已暂停提醒 {0} 小时</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>已恢复提醒</value></data>
-  <data name="Menu_BlankGroup" xml:space="preserve"><value>空白组</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>专注·开始工作</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>专注模式</value></data>
   <data name="Tpl_Meeting" xml:space="preserve"><value>会议模式</value></data>
-  <data name="Tpl_EndOfDay" xml:space="preserve"><value>收工·下班</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>下班</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>睡前</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>离开一下</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今天的任务都记录好了吗？</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>该睡觉了！</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>久坐提醒 · 循环</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>久坐提醒</value></data>
+  <data name="Tpl_Search" xml:space="preserve"><value>快速搜索</value></data>
+  <data name="Tpl_SearchAsk" xml:space="preserve"><value>搜什么？</value></data>
+  <data name="Tpl_SearchVar" xml:space="preserve"><value>关键词</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>起来动一动，走两步</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>开机先静音（示例·避免开机后网页自动外放）</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>打开浏览器（示例·换成你自己的 .exe）</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>打开浏览器（示例·换成你常用的软件）</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>打开常用网站（示例·仅工作日，换成你的邮箱 / 待办）</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>打开聊天软件（示例·最小化挂后台，换成你自己的）</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>回到桌面 Win+D（示例·发送组合键）</value></data>
@@ -390,7 +508,7 @@
   <data name="Smp_RemBills" xml:space="preserve"><value>检查这个月的账单 / 订阅扣费（示例·每月 1 号）</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>该睡觉了（示例）</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>此操作需要管理员权限。是否以管理员身份重新打开 Clockwork？</value></data>
-  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>动作组「{0}」正被 {1} 条提醒、{2} 个步骤引用。删除后这些引用将一并清除（提醒改为仅弹窗、引用它的步骤移除）。仍要删除吗？</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>动作「{0}」正被 {1} 条提醒、{2} 个步骤引用。删除后这些引用将一并清除（提醒改为仅弹窗、引用它的步骤移除）。仍要删除吗？</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>浏览…</value></data>
   <data name="Btn_Pick" xml:space="preserve"><value>选择…</value></data>
   <data name="Btn_Capture" xml:space="preserve"><value>捕获</value></data>
@@ -410,21 +528,21 @@
   <data name="Date_Pick" xml:space="preserve"><value>选择日期</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>捕获按键</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>全局热键</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>点击后按下组合键，随时一键运行本组；运行中再按一次即停下。Esc 取消，Del 清空。</value></data>
-  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>动作组「{0}」的热键 {1} 注册失败：可能已被其他程序或热键占用</value></data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>点击后按下组合键，随时一键运行这个动作；运行中再按一次即停下。Esc 取消，Del 清空。</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>动作「{0}」的热键 {1} 注册失败：可能已被其他程序或热键占用</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>热键 {0} 已被「{1}」使用，请换一个组合</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} 是系统保留组合（注册会劫走系统按键），不能用作热键</value></data>
-  <data name="Ed_GroupRepeat" xml:space="preserve"><value>整组重复次数</value></data>
+  <data name="Ed_GroupRepeat" xml:space="preserve"><value>整个动作重复次数</value></data>
   <data name="Ed_GroupShowInTray" xml:space="preserve"><value>在托盘菜单显示</value></data>
   <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>每轮间隔（毫秒）</value></data>
-  <data name="Val_GroupCycle" xml:space="preserve"><value>动作组存在环引用（{0}），请先解开引用链再保存</value></data>
+  <data name="Val_GroupCycle" xml:space="preserve"><value>动作存在环引用（{0}），请先解开引用链再保存</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>导出配置</value></data>
   <data name="Btn_ImportConfig" xml:space="preserve"><value>导入配置</value></data>
   <data name="Config_Exported" xml:space="preserve"><value>配置已导出到：{0}</value></data>
   <data name="Config_Imported" xml:space="preserve"><value>配置已导入，即将重启生效。</value></data>
   <data name="Config_ImportFail" xml:space="preserve"><value>导入失败：{0}</value></data>
-  <data name="Config_ImportConfirm" xml:space="preserve"><value>导入将覆盖当前所有配置（启动清单 / 提醒 / 动作组 / 设置）。确定继续？</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>导入将覆盖当前所有配置（启动清单 / 提醒 / 动作 / 设置）。确定继续？</value></data>
   <data name="Config_Filter" xml:space="preserve"><value>Clockwork 配置|*.json|所有文件|*.*</value></data>
   <data name="Config_ExportFail" xml:space="preserve"><value>导出失败：{0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value>（副本）</value></data>
@@ -432,6 +550,27 @@
   <data name="Vol_micMute" xml:space="preserve"><value>麦克风静音</value></data>
   <data name="Vol_micUnmute" xml:space="preserve"><value>麦克风取消静音</value></data>
   <data name="Sys_setClipboard" xml:space="preserve"><value>设置剪贴板文本</value></data>
+  <data name="Menu_SecCommon" xml:space="preserve"><value>常用</value></data>
+  <data name="Cmd_copy" xml:space="preserve"><value>复制</value></data>
+  <data name="Cmd_paste" xml:space="preserve"><value>粘贴</value></data>
+  <data name="Cmd_back" xml:space="preserve"><value>后退</value></data>
+  <data name="Cmd_forward" xml:space="preserve"><value>前进</value></data>
+  <data name="Cmd_toBottom" xml:space="preserve"><value>到最底部</value></data>
+  <data name="Win_current" xml:space="preserve"><value>当前窗口</value></data>
+  <data name="Win_minimizeFg" xml:space="preserve"><value>最小化当前窗口</value></data>
+  <data name="Win_maximizeFg" xml:space="preserve"><value>最大化当前窗口</value></data>
+  <data name="Win_closeFg" xml:space="preserve"><value>关闭当前窗口</value></data>
+  <data name="Sys_searchSelection" xml:space="preserve"><value>搜索选中的文字</value></data>
+  <data name="Sys_playSound" xml:space="preserve"><value>播放声音（提示音或 .wav 文件）</value></data>
+  <data name="Ed_SearchUrl" xml:space="preserve"><value>搜索地址</value></data>
+  <data name="Ed_SearchEngine" xml:space="preserve"><value>搜索引擎</value></data>
+  <data name="Ed_SearchCustom" xml:space="preserve"><value>自定义…</value></data>
+  <data name="Err_NoSelection" xml:space="preserve"><value>没有选中文字。先选中要搜的内容，再运行这一步。</value></data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>当前没有可操作的窗口（前台是 Clockwork 自己，或是桌面）</value></data>
+  <data name="Ed_ProcessHint" xml:space="preserve"><value>填 * 表示当前窗口——画手势、点面板之前你正在用的那个。留空则这一步什么都不做。</value></data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} 是被搜的词，会自动转义。</value></data>
+  <data name="Ed_SoundFile" xml:space="preserve"><value>声音文件</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>留空 = 系统提示音。也可以填一个 .wav 文件的完整路径。</value></data>
   <data name="Sys_brightness" xml:space="preserve"><value>屏幕亮度</value></data>
   <data name="Sys_notificationsOff" xml:space="preserve"><value>关闭通知（免打扰）</value></data>
   <data name="Sys_notificationsOn" xml:space="preserve"><value>打开通知</value></data>
@@ -483,7 +622,7 @@
   <data name="Picker_SearchApp" xml:space="preserve"><value>搜索程序名</value></data>
   <data name="Picker_MultiHint" xml:space="preserve"><value>可多选（按住 Ctrl / Shift）；确定后逐条加入清单，默认不勾选</value></data>
   <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>没有在开始菜单里找到任何程序快捷方式。</value></data>
-  <data name="Tpl_Restore" xml:space="preserve"><value>恢复常态</value></data>
+  <data name="Tpl_Restore" xml:space="preserve"><value>恢复正常</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>开机与启动</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>配置备份</value></data>
   <data name="Settings_BackupTip" xml:space="preserve"><value>导出为单个 json 文件；导入会覆盖当前全部配置。</value></data>
@@ -495,7 +634,7 @@
   <data name="Menu_SecSystem" xml:space="preserve"><value>系统与声音</value></data>
   <data name="Menu_SecFlow" xml:space="preserve"><value>流程</value></data>
   <data name="Ed_LoginSilentHint" xml:space="preserve"><value>开机开软件、要顺序和延迟 → 「我的启动清单」更顺手；要「仅开机 N 分钟内」「仅上午」这类门控 → 留在这里是对的。</value></data>
-  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>还没有动作组：先到「动作组」页从模板建一个，再回这里引用。</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>还没有动作：先到「动作」页新建一个，再回这里引用。</value></data>
   <data name="Ed_CondHeader" xml:space="preserve"><value>条件与重复：{0}</value></data>
   <data name="Ed_CondAlways" xml:space="preserve"><value>总是执行</value></data>
   <data name="Ed_AdvHeader" xml:space="preserve"><value>进阶：{0}</value></data>
@@ -504,4 +643,76 @@
   <data name="Adv_NagUntil" xml:space="preserve"><value>没确认就每 {0} 分钟再提醒，最多到 {1}</value></data>
   <data name="Adv_Loop" xml:space="preserve"><value>每 {0} 分钟跑一轮直到当天结束（确认也不停）</value></data>
   <data name="Adv_LoopUntil" xml:space="preserve"><value>每 {0} 分钟跑一轮直到 {1}（确认也不停）</value></data>
+  <data name="Ed_Trig_Busy" xml:space="preserve"><value>连续使用时</value></data>
+  <data name="Ed_Trig_Display" xml:space="preserve"><value>显示器变化时</value></data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>网络接通时</value></data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>网络断开时</value></data>
+  <data name="Ed_Trig_Usb" xml:space="preserve"><value>U 盘插入时</value></data>
+  <data name="Time_Busy" xml:space="preserve"><value>连续使用 {0} 分钟</value></data>
+  <data name="Ed_BusyMinutes" xml:space="preserve"><value>连续使用分钟</value></data>
+  <data name="Ed_BusyHint" xml:space="preserve"><value>连续用满这么多分钟提醒一次；离开满 1 分钟即重新计时</value></data>
+  <data name="Settings_PanelHotkey" xml:space="preserve"><value>快捷面板键</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>在鼠标处弹出面板，一格一个操作。Esc 取消，Del 清空；清空后仍可用中键长按或托盘菜单打开。</value></data>
+  <data name="Tray_Panel" xml:space="preserve"><value>打开快捷面板</value></data>
+  <data name="Panel_Hint" xml:space="preserve"><value>Esc 关闭</value></data>
+  <data name="Panel_Empty" xml:space="preserve"><value>面板还是空的。你放进去的动作会出现在这儿。</value></data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>启动清单已跳过：删掉 {0} 即可恢复自动运行</value></data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>启动清单已跳过：启动时按住了 Shift。仅本次有效，下次开机照常运行。</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>找不到动作「{0}」，未运行</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>动作「{0}」已停用，未运行</value></data>
+  <data name="Unit_Ms" xml:space="preserve"><value>毫秒</value></data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>长按鼠标中键唤出面板</value></data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>普通中键点击照常可用（短按会原样补发）。本功能需要全局鼠标钩子，故默认关闭。</value></data>
+  <data name="Settings_LongPressMs" xml:space="preserve"><value>长按时间（毫秒）</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>装不上鼠标钩子，中键长按未启用。可能被安全软件或组策略拦下了；面板仍可用热键或托盘菜单打开。</value></data>
+  <data name="Settings_Panel" xml:space="preserve"><value>快捷面板</value></data>
+  <data name="Settings_UsePanel" xml:space="preserve"><value>使用快捷面板</value></data>
+  <data name="Settings_UsePanelTip" xml:space="preserve"><value>关掉后热键让给别的程序、中键钩子不再装、托盘菜单里那一项也收起来。面板页的内容不动，仍可从「管理面板…」整理。</value></data>
+  <data name="Settings_UseGestures" xml:space="preserve"><value>使用鼠标手势</value></data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>关掉后完全不监听右键，右键恢复原样。手势本身在「动作」页侧栏的手势管理器里画。</value></data>
+  <data name="Settings_PanelLayout" xml:space="preserve"><value>版面</value></data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>列数 × 上带行数 + 下带行数，决定一页装多少、面板多宽。装不下的翻到下一页；下带设 0 即单条带。</value></data>
+  <data name="Settings_PanelColumns" xml:space="preserve"><value>每行格子数</value></data>
+  <data name="Settings_PanelTileSize" xml:space="preserve"><value>格子尺寸</value></data>
+  <data name="Size_compact" xml:space="preserve"><value>紧凑</value></data>
+  <data name="Size_normal" xml:space="preserve"><value>标准</value></data>
+  <data name="Size_roomy" xml:space="preserve"><value>宽松</value></data>
+  <data name="Settings_PanelShowOps" xml:space="preserve"><value>显示自带操作</value></data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>只显示图标</value></data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>名字仍在悬停提示里，一屏能放下的动作更多。</value></data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>仅在此程序上显示</value></data>
+  <data name="Settings_PanelTopRows" xml:space="preserve"><value>上带行数</value></data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>下带行数</value></data>
+  <data name="Ed_Icon" xml:space="preserve"><value>面板图标</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>留空即自动：「启动程序」用目标自己的图标，其余按类型用线描图标。</value></data>
+  <data name="Btn_Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="Panel_Manager" xml:space="preserve"><value>管理面板</value></data>
+  <data name="Panel_Global" xml:space="preserve"><value>任何程序</value></data>
+  <data name="Panel_AddPage" xml:space="preserve"><value>添加面板页</value></data>
+  <data name="Panel_NewPage" xml:space="preserve"><value>新页面</value></data>
+  <data name="Panel_AddHere" xml:space="preserve"><value>往这儿放一个动作</value></data>
+  <data name="Panel_NoPages" xml:space="preserve"><value>还没有页。用页签栏末尾那颗 + 新建一页，再往里放动作。</value></data>
+  <data name="Panel_Uncategorized" xml:space="preserve"><value>未分类</value></data>
+  <data name="Panel_NewCategory" xml:space="preserve"><value>新建分类</value></data>
+  <data name="Panel_Category" xml:space="preserve"><value>分类</value></data>
+  <data name="Panel_Pages" xml:space="preserve"><value>页</value></data>
+  <data name="Panel_CategoryHint" xml:space="preserve"><value>这一页归哪一类。顶栏一格一类，点了只列这一类里的页。</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>上边点分类，左边点页。双击改名，拖页签换先后，拖到分类上就归进那一类；格子拖到页签上就搬进那一页。右键页签可重命名或删除。</value></data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>显示左侧页签</value></data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>显示分类栏</value></data>
+  <data name="Panel_BarsHint" xml:space="preserve"><value>上边选分类，左边列这一类里的页。只有一类时不画分类栏，一类里只有一页时不画页签栏——这两个勾是用来在有好几个时也强制隐藏。管理器的分类栏一直都在，那颗「+」是新建分类的入口。</value></data>
+  <data name="Panel_SceneHint" xml:space="preserve"><value>留空 = 任何时候都在。填了进程名，则只在呼出面板那一刻前台是它时才出现。</value></data>
+  <data name="Icon_Pick" xml:space="preserve"><value>选择图标</value></data>
+  <data name="Icon_PickHint" xml:space="preserve"><value>除了这些，也可以用自己的图片，或任意 exe——借它的图标。</value></data>
+  <data name="Icon_UseImage" xml:space="preserve"><value>用图片…</value></data>
+  <data name="Icon_None" xml:space="preserve"><value>不设，自动</value></data>
+  <data name="Panel_Search" xml:space="preserve"><value>搜索动作</value></data>
+  <data name="Panel_SearchNone" xml:space="preserve"><value>没有匹配的动作。换个词试试，或按 Esc 回到面板。</value></data>
+  <data name="Panel_HintBack" xml:space="preserve"><value>Esc 返回</value></data>
+  <data name="Panel_SearchMore" xml:space="preserve"><value>只铺出前 {0} 个，共 {1} 个匹配。再打几个字缩小范围。</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>主题</value></data>
+  <data name="Theme_dark" xml:space="preserve"><value>深色</value></data>
+  <data name="Theme_light" xml:space="preserve"><value>浅色</value></data>
+  <data name="Theme_system" xml:space="preserve"><value>跟随系统</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork 立即重启以应用新主题。「跟随系统」读的是 Windows 的应用模式。</value></data>
 </root>

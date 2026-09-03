@@ -15,7 +15,9 @@
   <data name="Reminder_Hint" xml:space="preserve"><value>時刻・ログイン・ロック解除や電源などのイベントで、リマインダーを出すかグループをサイレント実行。ログイン時にアプリを開くだけなら → 起動リスト、手動ワンタップなら → アクショングループ。</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>一連の動作をグループにまとめ、ホットキー / トレイからいつでも実行。起動リストや定時タスクからも参照できます。ログイン時に一度だけなら、直接起動リストに書くほうが簡単です。</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>チェックの切り替えは即時反映（削除ではなく無効化、復元可）。「要管理者」の項目は管理者権限が必要。システム / ポリシー / 一回限りの読み取り専用項目は既定で非表示。</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>チェックの切り替えは即時反映（削除ではなく無効化、復元可）。</value></data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>システム / ポリシー / 一回限りの読み取り専用項目は既定で非表示。</value></data>
+  <data name="System_Count" xml:space="preserve"><value>{0} / {1} 項目</value></data>
   <data name="System_Filter" xml:space="preserve"><value>フィルター</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>システム / 読み取り専用を表示</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>自動起動項目をスキャン中…</value></data>
@@ -45,6 +47,23 @@
   <data name="Col_Source" xml:space="preserve"><value>ソース</value></data>
   <data name="Col_Scope" xml:space="preserve"><value>範囲</value></data>
   <data name="Col_Hotkey" xml:space="preserve"><value>ホットキー</value></data>
+  <data name="Gesture_Manager" xml:space="preserve"><value>マウスジェスチャー</value></data>
+  <data name="Gesture_Enabled" xml:space="preserve"><value>使う</value></data>
+  <data name="Gesture_Rehook" xml:space="preserve"><value>フックを付け直す</value></data>
+  <data name="Gesture_RehookHint" xml:space="preserve"><value>ほかのプログラム（マウスドライバ、AutoHotkey、別のジェスチャソフト）が前に並んで右ボタンを飲み込んでいることがあります。そのときここは正常に見えるのに右ボタンだけ届きません。フックは後から付けたものが先に呼ばれるので、付け直せば先頭を取り戻せます。</value></data>
+  <data name="Gesture_WatchLive" xml:space="preserve"><value>右ボタンを監視中</value></data>
+  <data name="Gesture_WatchOff" xml:space="preserve"><value>右ボタンは監視していません</value></data>
+  <data name="Gesture_WatchFailed" xml:space="preserve"><value>Windows がフックを拒否しました</value></data>
+  <data name="Gesture_WatchStale" xml:space="preserve"><value>フックが切れました。付け直します</value></data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>フックは付いていますが入力が届きません — 管理者として実行してみてください</value></data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>ほかのプログラムが右ボタンを持っていっています（AutoHotkey、マウスドライバなど）</value></data>
+  <data name="Gesture_Hint" xml:space="preserve"><value>右ボタンを押したまま軌跡を描くと、対応する動作を実行します。ジェスチャーがなければ右ボタンは通常どおりです。</value></data>
+  <data name="Gesture_Track" xml:space="preserve"><value>軌跡</value></data>
+  <data name="Settings_GestureManage" xml:space="preserve"><value>ジェスチャーの管理…</value></data>
+  <data name="Settings_PanelManage" xml:space="preserve"><value>パネルの管理…</value></data>
+  <data name="Gesture_None" xml:space="preserve"><value>ジェスチャーはまだありません。「追加」から動作を選び、右側に軌跡を描いてください。</value></data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>左ボタンを押したままここに描く</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>ジェスチャー {0} は「{1}」で使用中です。別の軌跡を描いてください</value></data>
   <data name="Col_Port" xml:space="preserve"><value>ポート</value></data>
   <data name="Col_Process" xml:space="preserve"><value>プロセス</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -52,7 +71,9 @@
 
   <data name="Btn_Add" xml:space="preserve"><value>追加</value></data>
   <data name="Btn_AddMenu" xml:space="preserve"><value>追加 ▾</value></data>
+  <data name="Btn_FromTemplate" xml:space="preserve"><value>テンプレートから…</value></data>
   <data name="Btn_Edit" xml:space="preserve"><value>編集</value></data>
+  <data name="Btn_Rename" xml:space="preserve"><value>名前の変更</value></data>
   <data name="Btn_Delete" xml:space="preserve"><value>削除</value></data>
   <data name="Btn_Up" xml:space="preserve"><value>↑ 上へ</value></data>
   <data name="A11y_DragHandle" xml:space="preserve"><value>ドラッグで並べ替え</value></data>
@@ -88,7 +109,61 @@
   <data name="Kind_volume" xml:space="preserve"><value>音量</value></data>
   <data name="Kind_window" xml:space="preserve"><value>ウィンドウ操作</value></data>
   <data name="Kind_system" xml:space="preserve"><value>システムコマンド</value></data>
-  <data name="Kind_group" xml:space="preserve"><value>アクショングループ</value></data>
+  <data name="Kind_url" xml:space="preserve">
+    <value>ウェブページを開く</value>
+  </data>
+  <data name="Kind_copySelection" xml:space="preserve">
+    <value>選択テキスト取得</value>
+  </data>
+  <data name="Kind_waitClipboard" xml:space="preserve">
+    <value>クリップボード待機</value>
+  </data>
+  <data name="Kind_prompt" xml:space="preserve"><value>ユーザー入力</value></data>
+  <data name="Kind_choice" xml:space="preserve"><value>ユーザーの選択</value></data>
+  <data name="Sum_OpenUrl" xml:space="preserve">
+    <value>{0} を開く</value>
+  </data>
+  <data name="Sum_WaitClipboard" xml:space="preserve">
+    <value>クリップボード待機（最大 {0} 秒）</value>
+  </data>
+  <data name="Warn_WaitClipboard" xml:space="preserve">
+    <value>{0} 秒待ってもクリップボードは変わりませんでした。そのまま続行します</value>
+  </data>
+  <data name="Warn_AskNoUi" xml:space="preserve"><value>この手順では何かを確認する必要がありますが、このパス上には確認できる人がいません（この実行は無人で行われます）。スキップしました。</value></data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>この手順は元に戻せない削除を行うため事前の確認が必要ですが、このパス上には確認できる人がいません（この実行は無人で行われます）。スキップしました。</value></data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>このステップには設定されたオプションがないため、選択できる項目はありません。スキップしました。</value></data>
+  <data name="Ed_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Ed_WaitSeconds" xml:space="preserve">
+    <value>最大待機(秒)</value>
+  </data>
+  <data name="Ed_UrlHint" xml:space="preserve">
+    <value>{clipboard} に対応：実行時にクリップボードのテキスト（URL エスケープ済み）に置き換わります。「選択テキスト取得」と組み合わせると、選択したものをそのまま検索できます。</value>
+  </data>
+  <data name="Ed_CopySelectionHint" xml:space="preserve">
+    <value>コピーキーを代わりに押して、選択したテキストをクリップボードに入れます。後続の手順は {clipboard} で読み出します。</value>
+  </data>
+  <data name="Ed_AskText" xml:space="preserve"><value>質問</value></data>
+  <data name="Ed_AskDefault" xml:space="preserve"><value>デフォルトの回答</value></data>
+  <data name="Ed_Options" xml:space="preserve"><value>オプション</value></data>
+  <data name="Ed_OptionsHint" xml:space="preserve"><value>1行につき1つずつ。実行時にこれらが一覧表示され、その中から1つを選択します。</value></data>
+  <data name="Ed_OutputVar" xml:space="preserve"><value>回答を次のように保存</value></data>
+  <data name="Ed_OutputVarHint" xml:space="preserve"><value>後の手順では、これを {0} で参照します。空欄のままにすると、この手順では何も生成されません。</value></data>
+  <data name="Ed_OutputVarSample" xml:space="preserve"><value>名前</value></data>
+  <data name="Mig_PageMoved" xml:space="preserve">
+    <value>パネルページ「{0}」をアクションからパネルページへ移しました（タイル {1} 個）</value>
+  </data>
+  <data name="Mig_PageAndAction" xml:space="preserve">
+    <value>「{0}」はパネルページでありアクション（ホットキー/参照あり）でもあります。アクションはそのまま残し、ページにはそれを指すタイルを 1 つ置きました</value>
+  </data>
+  <data name="Mig_PageTrayDropped" xml:space="preserve">
+    <value>パネルページ「{0}」はトレイメニューに表示されなくなりました（ページは実行できるアクションではありません）</value>
+  </data>
+  <data name="Mig_Title" xml:space="preserve">
+    <value>パネルページが独立しました</value>
+  </data>
+  <data name="Kind_group" xml:space="preserve"><value>動作グループを実行</value></data>
   <data name="Kind_message" xml:space="preserve"><value>メッセージ</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>待機</value></data>
   <data name="Kind_text" xml:space="preserve"><value>テキスト送信</value></data>
@@ -113,15 +188,26 @@
   <data name="Win_close" xml:space="preserve"><value>ウィンドウを閉じる</value></data>
   <data name="Win_minimize" xml:space="preserve"><value>最小化</value></data>
   <data name="Win_maximize" xml:space="preserve"><value>最大化</value></data>
+  <data name="Cmd_playPause" xml:space="preserve"><value>再生 / 一時停止</value></data>
+  <data name="Cmd_prevTrack" xml:space="preserve"><value>前の曲</value></data>
+  <data name="Cmd_nextTrack" xml:space="preserve"><value>次の曲</value></data>
+  <data name="Cmd_volUp" xml:space="preserve"><value>音量を上げる</value></data>
+  <data name="Cmd_volDown" xml:space="preserve"><value>音量を下げる</value></data>
+  <data name="Win_topmost" xml:space="preserve"><value>ウィンドウの最前面固定を切り替え</value></data>
+  <data name="Win_topmostFg" xml:space="preserve"><value>現在のウィンドウの最前面固定を切り替え</value></data>
+  <data name="Ed_TopmostHint" xml:space="preserve"><value>これは各ウィンドウごとに個別に適用されます。特定のウィンドウでこの機能を再び無効にするには、まずそのウィンドウを最前面に表示してください。</value></data>
   <data name="Win_activate" xml:space="preserve"><value>最前面へ</value></data>
   <data name="Win_sendkey" xml:space="preserve"><value>最前面にしてキー送信</value></data>
+  <data name="Win_restore" xml:space="preserve"><value>前のウィンドウに戻る</value></data>
 
   <data name="Sum_SendKeys" xml:space="preserve"><value>送信 {0}</value></data>
   <data name="Sum_Delay_Sec" xml:space="preserve"><value>待機 {0} 秒</value></data>
   <data name="Sum_Delay_Ms" xml:space="preserve"><value>待機 {0} ミリ秒</value></data>
   <data name="Sum_RunGroup" xml:space="preserve"><value>グループ実行：{0}</value></data>
-  <data name="Sum_Group_None" xml:space="preserve"><value>(未指定)</value></data>
+  <data name="Sum_Unset" xml:space="preserve"><value>(未指定)</value></data>
   <data name="Sum_Text" xml:space="preserve"><value>入力 {0}</value></data>
+  <data name="Sum_Ask" xml:space="preserve"><value>質問：{0}</value></data>
+  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
   <data name="Sum_MsgCard" xml:space="preserve"><value>カード通知：{0}</value></data>
   <data name="Sum_Before" xml:space="preserve"><value>（{0}前のみ）</value></data>
   <data name="Sum_DaysSuffix" xml:space="preserve"><value>（{0}）</value></data>
@@ -185,6 +271,7 @@
   <data name="Ed_WaitWin" xml:space="preserve"><value>ウィンドウ待機(秒)</value></data>
   <data name="Ed_PostDelay" xml:space="preserve"><value>出現後待機(秒)</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>プロセス名は .exe なし（例 Weixin / msedge）。最前面化 / キー送信はフォーカス取得が必要で、起動時は効かない場合があります。</value></data>
+  <data name="Ed_RestoreHint" xml:space="preserve"><value>このアクションが実行された時点で使用していたウィンドウを元に戻します。このアクションには選択する対象はありません。</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>コマンド</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>テキスト</value></data>
   <data name="Ed_TextProcess" xml:space="preserve"><value>対象プロセス</value></data>
@@ -214,11 +301,14 @@
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>実行 / ファイルを開く</value></data>
   <data name="Ed_OnYes_Url" xml:space="preserve"><value>URL を開く</value></data>
   <data name="Ed_Group_None" xml:space="preserve"><value>（なし）</value></data>
+  <data name="Ed_GroupMissing" xml:space="preserve"><value>（対象が削除済み）</value></data>
 
   <data name="Warn_SendKeyFail" xml:space="preserve"><value>「{0}」へのキー送信に失敗：ウィンドウが出現しない、または最前面にできませんでした（バックグラウンド/起動時に多い）</value></data>
   <data name="Warn_WindowNotFound" xml:space="preserve"><value>「{0}」のウィンドウが見つかりません（プロセス未実行/未準備？）。{1} は無効でした</value></data>
   <data name="Warn_WindowActionFailed" xml:space="preserve"><value>「{0}」のウィンドウは見つかりましたが、{1} が効きませんでした（フォアグラウンドロック、ウィンドウが閉じるのを拒否、または管理者として実行中）</value></data>
+  <data name="Warn_RestoreFailed" xml:space="preserve"><value>前のウィンドウに戻ることができませんでした：最前面のウィンドウがロックされているか、そのウィンドウが閉じられています。</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>不明なウィンドウ操作：{0}</value></data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>「現在のウィンドウ」はこの動作（{0}）を受け付けません：前面化は無意味で、キー送信は「キーを送る」手順を使ってください。スキップしました。</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>不明な音量アクション：{0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>不明なステップ種類：{0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>「{0}」をスキップ：ターゲットが Clockwork 自身のため（自動起動ループ回避）</value></data>
@@ -295,6 +385,7 @@
   <data name="Val_SilentNoGroup" xml:space="preserve"><value>「アクショングループを静かに実行」を選びましたが、まだグループが選択されていません</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · 確認</value></data>
+  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · 質問</value></data>
   <data name="Confirm_Destructive" xml:space="preserve"><value>「{0}」を実行してもよろしいですか？</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · エラー</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>Clockwork でエラーが発生しました（ログ記録済み、通常は続行可能）：
@@ -325,6 +416,8 @@
   <data name="Sys_Takeover" xml:space="preserve"><value>起動リストに取り込む</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>システムから削除</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>「{0}」を削除しますか？</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>ページ「{0}」を削除しますか？そのページにある{1}個のタイルも一緒に削除されます。アクションを指しているタイルを削除しても、その参照が削除されるだけで、アクション自体は残ります。</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>カテゴリ「{0}」を削除しますか？このカテゴリに含まれる {1} ページは削除されず、「{2}」に戻ります。</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>スタートアップ項目「{0}」をシステムから完全に削除しますか？この操作は元に戻せません（起動時の実行を止めるだけならチェックを外してください）。</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>ポート {0} を解放しますか？{1} を、子プロセスごと終了します。保存していない内容は失われます。</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>このプロセスはポート {0} も占有しており、それらも解放されます。</value></data>
@@ -332,6 +425,7 @@
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」の削除に失敗：{1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>エクスポート先に設定ファイル自身は指定できません。別の名前または場所を選んでください。</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>送信キーの内容が有効なキー列ではありません。波括弧の閉じ忘れやキー名の誤りを確認してください（例：{ENTER}。字面の { は {{}、} は {}} と書きます）。</value></data>
+  <data name="Val_SearchUrl" xml:space="preserve"><value>検索 URL には {0} が必要です。そこに検索語が入ります。無いと、この手順は毎回同じページを開くだけになります。</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>逃したら後で通知（スリープ/電源オフ後も）</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} 分</value></data>
   <data name="Warn_KeyNoMain" xml:space="preserve"><value>ホットキー「{0}」に主キーがありません。送信しませんでした</value></data>
@@ -359,27 +453,51 @@
   <data name="Tray_ViewLog" xml:space="preserve"><value>前回の起動ログを表示</value></data>
   <data name="Tray_History" xml:space="preserve"><value>最近の通知</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>起動ログはまだありません（先に起動リストを一度実行してください）</value></data>
+  <data name="Log_Title" xml:space="preserve"><value>前回の起動リスト実行ログ</value></data>
+  <data name="Log_When" xml:space="preserve"><value>時刻：{0}</value></data>
+  <data name="Log_Summary" xml:space="preserve"><value>全 {0} ステップ：{1} 件が失敗または警告、{2} 件は送信したが確認できず、残りは成功</value></data>
+  <data name="Log_UnverNote" xml:space="preserve"><value>（~ はキー入力やホットキーを送ったものの、相手が反応したかは確認できないことを示します）</value></data>
+  <data name="Log_ReadyGate" xml:space="preserve"><value>準備待ち：{0} 秒待機（シェル={1} ネットワーク={2}）</value></data>
+  <data name="Log_ReadyTimeout" xml:space="preserve"><value>（タイムアウトしても準備できず、そのまま続行）</value></data>
+  <data name="Log_BootDelay" xml:space="preserve"><value>起動遅延：{0} 秒</value></data>
+  <data name="Log_BudgetHit" xml:space="preserve"><value>今回の実行は {0} ステップの上限に達し、残りは実行していません</value></data>
+  <data name="Log_Nth" xml:space="preserve"><value>（{0}/{1} 回目）</value></data>
+  <data name="Log_GroupBusy" xml:space="preserve"><value>アクショングループ「{0}」は既に実行中（別の場所から起動）のため、今回はスキップしました</value></data>
+  <data name="Log_GroupMissing" xml:space="preserve"><value>アクショングループが見つかりません</value></data>
+  <data name="Log_GroupDisabled" xml:space="preserve"><value>アクショングループ「{0}」は無効のため、スキップしました</value></data>
+  <data name="Log_GroupCycle" xml:space="preserve"><value>循環参照のため、スキップしました</value></data>
+  <data name="Log_RunGroup" xml:space="preserve"><value>アクショングループを実行：{0}</value></data>
+  <data name="Log_Stopped" xml:space="preserve"><value>手動で停止したため、以降のステップは実行していません</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>今回の実行は手動で停止されました（緊急停止キー／トレイの「停止」）</value></data>
+  <data name="Err_JsonNull" xml:space="preserve"><value>このファイルは解析しても中身が空です。設定ファイルではありません。</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>クリップボードのクリアに失敗：{0}</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>「{0}」は .wav ファイルではありません。この手順では wav 形式のみを再生します。</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>音声ファイルが見つかりません：「{0}」</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>ごみ箱を空にできませんでした：{0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>不明なシステムコマンド：{0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>実行：{0}</value></data>
   <data name="Tray_DndResume" xml:space="preserve"><value>リマインダーを再開（残り {0} 分）</value></data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>今日の終わりまで</value></data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>今日の終わりまでリマインダーを停止しました</value></data>
+  <data name="Tray_DndResumeHours" xml:space="preserve"><value>リマインダーを再開（残り {0} 時間）</value></data>
   <data name="Tray_DndMenu" xml:space="preserve"><value>リマインダーを停止</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} 時間</value></data>
   <data name="Toast_DndOn" xml:space="preserve"><value>リマインダーを {0} 時間停止しました</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>リマインダーを再開しました</value></data>
-  <data name="Menu_BlankGroup" xml:space="preserve"><value>空のグループ</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>集中・仕事開始</value></data>
+  <data name="Tpl_Focus" xml:space="preserve"><value>集中モード</value></data>
   <data name="Tpl_Meeting" xml:space="preserve"><value>会議モード</value></data>
-  <data name="Tpl_EndOfDay" xml:space="preserve"><value>終業・退勤</value></data>
+  <data name="Tpl_EndOfDay" xml:space="preserve"><value>仕事終わり</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>就寝前</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>少し離席</value></data>
   <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>今日のタスクは全部記録しましたか？</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>寝る時間です！</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>座りすぎ通知 · 繰り返し</value></data>
+  <data name="Tpl_Sedentary" xml:space="preserve"><value>休憩リマインダー</value></data>
+  <data name="Tpl_Search" xml:space="preserve"><value>クイック検索</value></data>
+  <data name="Tpl_SearchAsk" xml:space="preserve"><value>何を検索しますか？</value></data>
+  <data name="Tpl_SearchVar" xml:space="preserve"><value>キーワード</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>立って少し体を動かしましょう</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>起動時にミュート（サンプル・ページの自動再生対策）</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>ブラウザーを開く（サンプル・自分の .exe に変更）</value></data>
+  <data name="Smp_OpenApp" xml:space="preserve"><value>ブラウザを開いてください（例：普段使っているアプリにアクセスしてみてください）</value></data>
   <data name="Smp_OpenSite" xml:space="preserve"><value>よく使うサイトを開く（サンプル・平日のみ、メールや ToDo に変更）</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>チャットアプリを開く（サンプル・最小化してバックグラウンドで常駐）</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D でデスクトップ表示（サンプル・キー操作を送信）</value></data>
@@ -430,6 +548,27 @@
   <data name="Vol_micMute" xml:space="preserve"><value>マイクをミュート</value></data>
   <data name="Vol_micUnmute" xml:space="preserve"><value>マイクのミュート解除</value></data>
   <data name="Sys_setClipboard" xml:space="preserve"><value>クリップボードに文字を設定</value></data>
+  <data name="Menu_SecCommon" xml:space="preserve"><value>よく使う</value></data>
+  <data name="Cmd_copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="Cmd_paste" xml:space="preserve"><value>貼り付け</value></data>
+  <data name="Cmd_back" xml:space="preserve"><value>戻る</value></data>
+  <data name="Cmd_forward" xml:space="preserve"><value>進む</value></data>
+  <data name="Cmd_toBottom" xml:space="preserve"><value>いちばん下へ</value></data>
+  <data name="Win_current" xml:space="preserve"><value>現在のウィンドウ</value></data>
+  <data name="Win_minimizeFg" xml:space="preserve"><value>現在のウィンドウを最小化</value></data>
+  <data name="Win_maximizeFg" xml:space="preserve"><value>現在のウィンドウを最大化</value></data>
+  <data name="Win_closeFg" xml:space="preserve"><value>現在のウィンドウを閉じる</value></data>
+  <data name="Sys_searchSelection" xml:space="preserve"><value>選択したテキストを検索</value></data>
+  <data name="Sys_playSound" xml:space="preserve"><value>音を再生（システム音または .wav ファイル）</value></data>
+  <data name="Ed_SearchUrl" xml:space="preserve"><value>検索 URL</value></data>
+  <data name="Ed_SearchEngine" xml:space="preserve"><value>検索エンジン</value></data>
+  <data name="Ed_SearchCustom" xml:space="preserve"><value>カスタム…</value></data>
+  <data name="Err_NoSelection" xml:space="preserve"><value>テキストが選択されていません。検索したい部分を選択してから、この手順を実行してください。</value></data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>操作できるウィンドウが今ありません（手前にあるのは Clockwork 自身かデスクトップです）</value></data>
+  <data name="Ed_ProcessHint" xml:space="preserve"><value>* と入力すると現在のウィンドウ、つまりジェスチャーを描く前・パネルを開く前に使っていたものになります。空のままだとこの手順は何もしません。</value></data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} は検索される語です（自動でエスケープされます）。</value></data>
+  <data name="Ed_SoundFile" xml:space="preserve"><value>音声ファイル</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>システムの通知音を使用する場合は、この欄を空欄のままにしてください。または、.wav ファイルのフルパスを指定してください。</value></data>
   <data name="Sys_brightness" xml:space="preserve"><value>画面の明るさ</value></data>
   <data name="Sys_notificationsOff" xml:space="preserve"><value>通知をオフにする</value></data>
   <data name="Sys_notificationsOn" xml:space="preserve"><value>通知をオンにする</value></data>
@@ -502,4 +641,76 @@
   <data name="Adv_NagUntil" xml:space="preserve"><value>確認するまで {0} 分ごとに再通知（{1} まで）</value></data>
   <data name="Adv_Loop" xml:space="preserve"><value>{0} 分ごとに実行、当日末まで（確認しても止まりません）</value></data>
   <data name="Adv_LoopUntil" xml:space="preserve"><value>{0} 分ごとに実行、{1} まで（確認しても止まりません）</value></data>
+  <data name="Ed_Trig_Busy" xml:space="preserve"><value>連続使用が続いたとき</value></data>
+  <data name="Ed_Trig_Display" xml:space="preserve"><value>ディスプレイが変わったとき</value></data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>ネットワークに接続したとき</value></data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>ネットワークが切れたとき</value></data>
+  <data name="Ed_Trig_Usb" xml:space="preserve"><value>USB ドライブを挿したとき</value></data>
+  <data name="Time_Busy" xml:space="preserve"><value>連続使用 {0} 分</value></data>
+  <data name="Ed_BusyMinutes" xml:space="preserve"><value>連続使用の分数</value></data>
+  <data name="Ed_BusyHint" xml:space="preserve"><value>この分数だけ続けて操作すると 1 回通知します。1 分以上離れると計測はリセットされます。</value></data>
+  <data name="Settings_PanelHotkey" xml:space="preserve"><value>クイックパネルのキー</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>マウスの位置にタイルパネルを出し、1 マス 1 操作です。Esc で取消、Del で解除。解除後も中ボタン長押しやトレイメニューから開けます。</value></data>
+  <data name="Tray_Panel" xml:space="preserve"><value>クイックパネルを開く</value></data>
+  <data name="Panel_Hint" xml:space="preserve"><value>Esc で閉じる</value></data>
+  <data name="Panel_Empty" xml:space="preserve"><value>パネルはまだ空です。ここに、置いた操作が並びます。</value></data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>起動リストをスキップしました。{0} を削除すると自動実行に戻ります。</value></data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>起動時に Shift が押されていたため、起動リストをスキップしました。今回だけで、次回は通常どおり実行します。</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>「{0}」という操作グループが見つかりません。何も実行していません。</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>操作グループ「{0}」は無効です。何も実行していません。</value></data>
+  <data name="Unit_Ms" xml:space="preserve"><value>ミリ秒</value></data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>マウス中ボタンの長押しでパネルを開く</value></data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>通常の中クリックはそのまま使えます（短押しは本物の中クリックとして送り直されます）。グローバルなマウスフックが必要なため、既定では無効です。</value></data>
+  <data name="Settings_LongPressMs" xml:space="preserve"><value>長押しの時間（ミリ秒）</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>マウスフックを設定できなかったため、中ボタンの長押しは無効です。セキュリティソフトやグループポリシーに阻まれた可能性があります。パネルはホットキーかトレイメニューから開けます。</value></data>
+  <data name="Settings_Panel" xml:space="preserve"><value>クイックパネル</value></data>
+  <data name="Settings_UsePanel" xml:space="preserve"><value>クイックパネルを使う</value></data>
+  <data name="Settings_UsePanelTip" xml:space="preserve"><value>オフにすると、ホットキーは他のアプリに戻り、中ボタンのフックは組み込まれず、トレイの項目も消えます。パネルページはそのまま残るので、「パネルの管理…」から整理できます。</value></data>
+  <data name="Settings_UseGestures" xml:space="preserve"><value>マウスジェスチャーを使う</value></data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>オフにすると右ボタンをまったく監視しないので、右クリックは元の動きに戻ります。ジェスチャー自体は「アクショングループ」タブのサイドバーにあるジェスチャー管理で描きます。</value></data>
+  <data name="Settings_PanelLayout" xml:space="preserve"><value>レイアウト</value></data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>列数 × 上段の行数 + 下段の行数で、1 ページに入る数とパネルの幅が決まります。入りきらない分は次のページへ。下段を 0 にすると 1 段になります。</value></data>
+  <data name="Settings_PanelColumns" xml:space="preserve"><value>1 行あたりのマス数</value></data>
+  <data name="Settings_PanelTileSize" xml:space="preserve"><value>マスの大きさ</value></data>
+  <data name="Size_compact" xml:space="preserve"><value>コンパクト</value></data>
+  <data name="Size_normal" xml:space="preserve"><value>標準</value></data>
+  <data name="Size_roomy" xml:space="preserve"><value>ゆったり</value></data>
+  <data name="Settings_PanelShowOps" xml:space="preserve"><value>標準の操作を表示</value></data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>アイコンのみ</value></data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>名前はツールチップに残り、一画面に入る動作がぐっと増えます。</value></data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>このアプリでのみ表示</value></data>
+  <data name="Settings_PanelTopRows" xml:space="preserve"><value>上段の行数</value></data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>下段の行数</value></data>
+  <data name="Ed_Icon" xml:space="preserve"><value>パネルのアイコン</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>空のままにすると自動で決まります。「プログラムを実行」は対象そのもののアイコンを、それ以外は種類に応じた線画アイコンを使います。</value></data>
+  <data name="Btn_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Panel_Manager" xml:space="preserve"><value>パネルを管理</value></data>
+  <data name="Panel_Global" xml:space="preserve"><value>すべてのアプリ</value></data>
+  <data name="Panel_AddPage" xml:space="preserve"><value>ページを追加</value></data>
+  <data name="Panel_NewPage" xml:space="preserve"><value>新しいページ</value></data>
+  <data name="Panel_AddHere" xml:space="preserve"><value>ここに操作を置く</value></data>
+  <data name="Panel_NoPages" xml:space="preserve"><value>まだページはありません。ページタブレールの末尾にある「+」をクリックするとページが作成されます。その後、そのページにアクションを追加してください。</value></data>
+  <data name="Panel_Uncategorized" xml:space="preserve"><value>未分類</value></data>
+  <data name="Panel_NewCategory" xml:space="preserve"><value>分類を追加</value></data>
+  <data name="Panel_Category" xml:space="preserve"><value>分類</value></data>
+  <data name="Panel_Pages" xml:space="preserve"><value>ページ</value></data>
+  <data name="Panel_CategoryHint" xml:space="preserve"><value>このページの分類。上の列は分類ごとに 1 タブで、選ぶとその分類のページだけが並びます。</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>上で分類を、左でページをクリックします。ダブルクリックで名前を変更、タブはドラッグで並べ替え、分類の上に落とせばそのページはその分類へ移ります。タイルをタブに落とすとそのページへ移ります。タブを右クリックすると名前の変更と削除ができます。</value></data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>左のタブを表示</value></data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>分類の列を表示</value></data>
+  <data name="Panel_BarsHint" xml:space="preserve"><value>上で分類を選び、左にその分類のページが並びます。分類がひとつなら上の列は描かれず、いまの分類にページがひとつなら左の列も描かれません。このチェックは複数あるときにも強制的に隠すためのものです。管理画面では分類の列が常に残ります——そこにある「+」が分類を作る入口です。</value></data>
+  <data name="Panel_SceneHint" xml:space="preserve"><value>空にすると常に出ます。プロセス名を入れると、パネルを呼び出した瞬間にそのアプリが前面だったときだけ出ます。</value></data>
+  <data name="Icon_Pick" xml:space="preserve"><value>アイコンを選ぶ</value></data>
+  <data name="Icon_PickHint" xml:space="preserve"><value>これら以外に、自分の画像や、任意の exe（そのアイコンを借ります）も使えます。</value></data>
+  <data name="Icon_UseImage" xml:space="preserve"><value>画像を使う…</value></data>
+  <data name="Icon_None" xml:space="preserve"><value>指定せず自動</value></data>
+  <data name="Panel_Search" xml:space="preserve"><value>操作を探す</value></data>
+  <data name="Panel_SearchNone" xml:space="preserve"><value>一致する操作がありません。別の言葉を試すか、Esc でパネルに戻ってください。</value></data>
+  <data name="Panel_HintBack" xml:space="preserve"><value>Esc で戻る</value></data>
+  <data name="Panel_SearchMore" xml:space="preserve"><value>{1} 件中、先頭の {0} 件だけ並べています。もう少し打つと絞り込めます。</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>テーマ</value></data>
+  <data name="Theme_dark" xml:space="preserve"><value>ダーク</value></data>
+  <data name="Theme_light" xml:space="preserve"><value>ライト</value></data>
+  <data name="Theme_system" xml:space="preserve"><value>Windows に合わせる</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>新しいテーマを反映するため Clockwork をすぐに再起動します。「Windows に合わせる」は Windows のアプリ モードを見ます。</value></data>
 </root>
