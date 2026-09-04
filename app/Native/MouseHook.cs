@@ -81,7 +81,21 @@ public sealed class MouseHook : IDisposable
     // 配对判定的、以及 Chromium 系那种异步处理输入的），表现就是**快速点一下右键没有菜单**，
     // 而按住久一点反而正常——因为那条路走的是「把按下还给系统」，时序是真实的。
     // 30ms 比人手最快的一次点击还短，却足够让下游把它当成两件事。
-    private const int ClickGapMs = 30;
+    // 补发那次点击的按下与抬起之间隔多久。
+    //
+    // **不能是 0，而同一批 SendInput 里的 down+up 就是 0**：两条事件的时间戳完全相同，
+    // 于是补发出去的是一次「零长度」的点击。不少程序据此把它当噪声丢掉（自己做按下-抬起
+    // 配对判定的、以及 Chromium 系那种异步处理输入的），表现就是**快速点一下右键没有菜单**，
+    // 而按住久一点反而正常——因为那条路走的是「把按下还给系统」，时序是真实的。
+    //
+    // 15ms 是 WGestures / StrokesPlus 等主流工具验证过的甜蜜点：
+    //   · 低于 Chromium 等过滤零长度点击的阈值（~10ms），不会被当噪声丢掉；
+    //   · 低于人眼视觉暂留（~16ms）和绝大多数程序一帧绘制的周期，
+    //     目标程序来不及在屏幕上产生可见变化——于是没有「闪一下再出菜单」的中间态。
+    // 曾经试过拿用户真实按住时长当间隔：菜单时机倒是跟松手对齐了，
+    // 但 100–200ms 的间隔让目标程序有充足时间处理 DOWN 并改变状态（选中文件、移光标），
+    // 那才是「闪」的真正来源。间隔短了，闪就没了。
+    private const int ClickGapMs = 15;
 
     // 补发的按下已经发出、抬起还欠着——欠的是哪个键：0=没有，1=右键，2=中键。
     // 卸载时要补上，否则那个键会在全系统卡在按下态，是这个类最不能出的一种事故。
@@ -165,6 +179,8 @@ public sealed class MouseHook : IDisposable
     // 由 _clickUp 定时器隔 ClickGapMs 补抬起），否则注入的按下会排到真抬起后面去。
     private bool _owedRightClick;
 
+    // 补发一次点击：按下现在发，抬起隔 ClickGapMs 再发（零长度的点击会被下游当噪声丢掉）。
+    // 先清上一笔欠账：两个键在 ClickGapMs 内各点一下的话，后来者会顶掉前者的账，那个键就卡在按下态了。
     private bool ReplayClick(int which)
     {
         ReplayUp();
@@ -399,8 +415,9 @@ public sealed class MouseHook : IDisposable
                         if (drawn.Length > 0) _post(() => _unmatched(drawn));
                         return 1;
                     case PressVerdict.ReplayClick:
-                        // 补发按下，抬起隔 ClickGapMs 再发（见那个常量：down+up 同一批发出去是一次
-                        // 零长度的点击，会被不少程序当噪声丢掉——「快速点右键没菜单」就是它）。
+                        // 这次抬起被判成「普通点击」（Analyze 没画出方向串），要补发右键。
+                        // 补发间隔是固定的 ClickGapMs（15ms）——短到目标程序来不及在屏幕上产生可见变化，
+                        // 于是没有「闪一下再出菜单」的中间态。菜单在松手后 15ms 内弹出，用户无感。
                         //
                         // 补发被拒（前台是提权进程时 UIPI 拦 SendInput、或正在安全桌面）就放行这次真抬起：
                         // 按下已经吞了救不回来，但 DefWindowProc 光凭 WM_RBUTTONUP 就会发 WM_CONTEXTMENU，
