@@ -31,10 +31,8 @@ namespace Clockwork.Core;
 // 「短腿并入邻居」同时替掉了早先那个迟滞：画在扇区边界上的直线会切出一串交替的短腿，
 // 它们逐个被吸收进最长的那条，最终仍是一个方向——不必再单设一条迟滞规则。
 //
-// 判定协议与 LongPressGate 同构——先吞按下、抬起时回头定性，四条出口：
+// 判定协议与 LongPressGate 同构——先吞按下、抬起时回头定性，三条出口：
 //   没动就抬起          → ReplayClick 补发真右键。上下文菜单本来就出在 button-up，用户无感。
-//   按住不动到点        → ReleaseIfStill：把按下还给系统，此后原样放行。按住的点击不必等松手才有反应，
-//                         右键拖拽也由此可用（先停一下再拖）。
 //   画出的串匹配某个组  → Fire。
 //   画了但没匹配        → Swallow，什么都不发生。补发点击会在轨迹终点弹一个莫名的菜单，更糟。
 //   （移动本身一律 Pass：光标位移吞不掉也不必吞，下游没收到按下，移动对它无意义。）
@@ -231,23 +229,6 @@ public sealed class GestureGate
         if (dx * dx + dy * dy < (long)_stepPx * _stepPx) return PressVerdict.Pass;
         if (_pts.Count < MaxPoints) _pts.Add((x, y));
         return PressVerdict.Pass;
-    }
-
-    /// <summary>按住没动：把右键还给系统。到点时还停在起点（一个采样点都没攒下）就放弃这一笔，
-    /// 返回 true——调用方该补发一次真右键**按下**，此后的移动与抬起原样放行（抬起走 <see cref="OnRightUp"/> 的
-    /// 「不在 pending」早退）。已经画开了、或早已抬起，返回 false，什么都不动。</summary>
-    //
-    // 这是「先吞按下、抬起再定性」那套协议的第四条出口。没有它，下游要等到松手才知道有过一次按下：
-    // 按住 300ms 再松的普通右键，菜单和高亮全都晚 300ms 才出，用起来就是「右键变慢了」；
-    // 而右键拖拽（资源管理器右键拖文件、3D 里右键旋转）在监听期间彻底没有。
-    // 手势的第一下移动紧跟着按下（按与划是同一个动作），所以「按住不动」就是「这不是手势」——
-    // StrokesPlus / WGestures 都拿这个当判据。代价：先停一下再画的手势会变成一次右键拖拽。
-    public bool ReleaseIfStill()
-    {
-        if (!_pending || _pts.Count > 1) return false;
-        _pending = false;
-        _pts.Clear();
-        return true;
     }
 
     public PressVerdict OnRightUp()

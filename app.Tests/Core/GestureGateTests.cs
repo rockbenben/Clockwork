@@ -64,48 +64,6 @@ public class GestureGateTests
         Assert.InRange(g.PointCount, 2, 40);             // MinLeg=40 → StepPx=10，约 20 个点
     }
 
-    // ── 按住不动：把右键还给系统 ──
-
-    // 按下后没动，到点就该还回去：之后的移动与抬起原样放行（Pass），不再补发点击——
-    // 补发的话下游会收到两次按下（还回去的那次 + 补发的那次）。
-    [Fact]
-    public void Holding_still_releases_the_button_and_the_up_passes_through()
-    {
-        var g = New("R");
-        g.OnRightDown(100, 100);
-        g.OnMove(102, 101);                       // 手抖，不够一个采样点
-        Assert.True(g.ReleaseIfStill());
-        Assert.False(g.Pending);
-        Assert.Equal(PressVerdict.Pass, g.OnMove(200, 100));   // 之后的拖动是系统的事
-        Assert.Equal(0, g.PointCount);                          // 也不该再画笔迹
-        Assert.Equal(PressVerdict.Pass, g.OnRightUp());
-    }
-
-    // 已经画开了就不能还：那是一笔手势，到点只是手慢，抬起照常定性。
-    [Fact]
-    public void Hold_timeout_does_not_interrupt_a_stroke_in_progress()
-    {
-        string got = "";
-        var g = new GestureGate(p => { got = p; return true; }, MinLeg);
-        g.OnRightDown(0, 0);
-        for (int i = 10; i <= 60; i += 10) g.OnMove(i, 0);
-        Assert.False(g.ReleaseIfStill());
-        Assert.True(g.Pending);
-        for (int i = 70; i <= 120; i += 10) g.OnMove(i, 0);
-        Assert.Equal(PressVerdict.Fire, g.OnRightUp());
-        Assert.Equal("R", got);
-    }
-
-    // 抬起已经先到（补发过点击了），迟来的闹钟什么都不该做。
-    [Fact]
-    public void Hold_timeout_after_release_is_a_no_op()
-    {
-        var g = New("R");
-        g.OnRightDown(0, 0);
-        Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());
-        Assert.False(g.ReleaseIfStill());
-    }
-
     [Fact]
     public void Point_count_resets_with_the_stroke()
     {

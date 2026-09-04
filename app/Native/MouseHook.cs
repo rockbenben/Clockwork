@@ -73,15 +73,7 @@ public sealed class MouseHook : IDisposable
     private readonly System.Threading.Timer _alarm;
     private readonly int _holdMs;
 
-    // 右键的「按住不动就还回去」闹钟。同 _alarm 一个纪律：到点只把询问 post 回 UI 线程。
-    // 没有它，下游要等到松手才知道有过一次按下——按住 300ms 再松的普通右键，菜单和高亮全晚 300ms，
-    // 用起来就是「右键变慢了」；右键拖拽在监听期间也彻底没有。判据见 GestureGate.ReleaseIfStill。
-    private readonly System.Threading.Timer _hold;
     private readonly System.Threading.Timer _clickUp;
-    // ponytail: 写死 200ms。手势的第一下移动与按下是同一个动作，远在 200ms 之内；
-    // 真有人嫌它把「停一下再画」吃掉了，再进设置。
-    private const int HoldMs = 200;
-
     // 补发那次点击的按下与抬起之间隔多久。
     //
     // **不能是 0，而同一批 SendInput 里的 down+up 就是 0**：两条事件的时间戳完全相同，
@@ -98,7 +90,7 @@ public sealed class MouseHook : IDisposable
     //
     // 这一格是**诊断**，不是状态。被拒时本类没有可做的补救：那次真按下早在几十毫秒前就被吞掉了，
     // 此刻已经没有「放行真事件」这条路可选（ReplayClick 能 return false 让调用方放行，
-    // 是因为它就跑在回调里；ReleaseIfStill 是闹钟叫起来的，那班车早开走了）。
+    // 是因为它就跑在回调里）。
     // 也**不能**照 ReplayClick 记一笔 _clickUpDue：那笔账只由 _clickUp 闹钟或 Dispose 结清，
     // 而这里用户的手还按着、真正的抬起随后会自己来——记了账就会在卸载时多补一次抬起，
     // 正是上面那条注释说的「打断用户随后真按下去的那一下」。
@@ -141,8 +133,6 @@ public sealed class MouseHook : IDisposable
         // 从托盘退出。第三个 timer（_clickUp）不需要这层——它压根不走 _post，见下面那行注释。
         _alarm = new System.Threading.Timer(_ => { try { _post(FireIfDue); } catch { } }, null,
                                             System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-        _hold = new System.Threading.Timer(_ => { try { _post(ReleaseIfStill); } catch { } }, null,
-                                           System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         // 这一个不必回 UI 线程：只有一句 SendInput，微秒级，且不碰 gate 也不碰 UI。
         _clickUp = new System.Threading.Timer(_ => ReplayUp(), null,
                                               System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
@@ -190,22 +180,8 @@ public sealed class MouseHook : IDisposable
         if (_gate != null && _gate.PollFire(Environment.TickCount64)) _fire();
     }
 
-    // 右键按住不动到点了：让 gate 放弃这一笔，把扣住的那次按下还给系统（带签名，回到本钩子时原样放行），
-    // 此后的移动与抬起自然流到下游。只在 UI 线程上跑，与钩子回调同一条线程，gate 的读写不用锁——
-    // 抬起若已先到（补发过点击了），gate 早不在 pending，这里什么都不做。
-    private void ReleaseIfStill()
-    {
-        if (_gesture == null || !_gesture.ReleaseIfStill()) return;
-        // **返回值不能丢。** 前台是提权窗口时 UIPI 会把这一注入静默丢掉（返回 0），
-        // 于是下游从头到尾没收到过按下，用户随后真正的抬起变成一记孤儿——
-        // 表现就是「右键拖拽在某些程序上完全没反应」，而本程序这边一切正常、日志里一个字都没有。
-        // 记一笔，交给诊断行报出去（补救做不到，理由见 _injectRejected 那段）。
-        if (Win32.SendRightDownTagged() == 0) Interlocked.Increment(ref _injectRejected);
-        _trailEnd();   // 起点那一个点收掉（一个点本来也不显示）
-    }
-
     // 上弦 / 收弦。收弦不必等待回调结束——最坏是一次已经在路上的询问照常发生，
-    // 而 PollFire / ReleaseIfStill 本身就会因为 gate 已不在 pending 而什么都不做。
+    // 而 PollFire 本身会因为 gate 已不在 pending 而什么都不做。
     private static void Set(System.Threading.Timer t, int dueMs)
     {
         try { t.Change(dueMs, System.Threading.Timeout.Infinite); }
@@ -321,7 +297,6 @@ public sealed class MouseHook : IDisposable
         // 那个陈旧的按下时刻会让下一次抬起被算成一次超长的长按。
         Arm(false);
         try { _alarm.Dispose(); } catch { }
-        try { _hold.Dispose(); } catch { }
         ReplayUp();   // 欠着的抬起先补上，否则右键卡在按下态
         try { _clickUp.Dispose(); } catch { }
         // **扣着的那次真按下要还回去，不是清掉就算完。**
@@ -331,7 +306,6 @@ public sealed class MouseHook : IDisposable
         // DefWindowProc 凭它合成一个莫名其妙的右键菜单，自己做按下-抬起配对的程序则拖拽状态错乱。
         // 走到这里的路很日常：Windows 静默摘掉钩子 → 自愈重装（HealMouseHookIfDead），
         // 而用户此刻正按着右键画手势；托盘退出、每一次带键重装同理。
-        // ReleaseIfStill 对完全相同的局面做的就是这一件事（同样带签名，回到本钩子时原样放行）。
         if (_gesture?.Pending == true) Win32.SendRightDownTagged();
         // 中键只在 Pending 时还，**`_fired` 那一档故意不还**，与右键不对称是有理由的：
         // · `_fired` 意思是面板已经弹出来了，此刻注入一个中键按下很可能把它当场点掉
@@ -383,8 +357,6 @@ public sealed class MouseHook : IDisposable
                 else Volatile.Write(ref _beatRUp, Environment.TickCount64);
                 if (_gesture == null) return CallNextHookEx(_hook, code, wParam, lParam);
                 var gv = msg == WM_RBUTTONDOWN ? _gesture.OnRightDown(data.X, data.Y) : _gesture.OnRightUp();
-                // 按下上弦、抬起收弦：到点还没动就把按下还回去（ReleaseIfStill）。
-                Set(_hold, msg == WM_RBUTTONDOWN ? HoldMs : System.Threading.Timeout.Infinite);
                 // 屏幕上那条看得见的笔迹，起止都在这里派（一律走 _post，绝不在回调里碰 UI）。
                 //
                 // 按下：先收上一笔再落起点。多数时候上一笔早收了，那一下什么也不做；它堵的是
@@ -513,7 +485,6 @@ public sealed class MouseHook : IDisposable
                     // 加一个无配对的中键抬起——浏览器的中键自动滚动彻底失效，而那正是这一分支
                     // 存在的理由（见类头四条出口那段）。救不回来，但必须让它**可见**：
                     // 记进同一份账，诊断行的 injectRejected= 会把它报出去。
-                    // 右键那条孪生路径（ReleaseIfStill）一直是这么做的，这里漏了。
                     if (Win32.SendMiddleDownTagged() == 0) Interlocked.Increment(ref _injectRejected);
                     break;      // 补发按下后放行本次移动，拖拽继续
             }
