@@ -1144,8 +1144,15 @@ public partial class App : System.Windows.Application
     private void RunByGesture(string path)
     {
         var step = _config.Gestures.FirstOrDefault(s => s.Enabled && s.Gesture == path);
+        if (step == null) return;
+        // 面板若还开着，先关掉。中键面板是靠 ForceForeground 抢过前台的，而右键手势的按下被钩子吞掉、
+        // 不会激活光标下的窗口——于是面板会一直占着前台，动作里凡读前台的（「当前窗口」、发键、发文本）
+        // 全都落到 Clockwork 自己头上，被自家进程守卫拒掉，看起来就是「手势丢了焦点、没反应」。
+        // 每个面板格子在跑之前也是先 Dismiss()（见 QuickPanelWindow），手势这条路得照做。
+        // 关掉后前台回到触发手势时用户所在的窗口，紧接着的 MarkForegroundBaseline 才记得到正确目标。
+        _panel?.Dismiss();
         // 手势这一档：成功不弹回执、也不设防连点闸（两条理由都在 RunStepAsync 的 by 参数上）。
-        if (step != null) RunStep(step, by: StepTrigger.Gesture);
+        RunStep(step, by: StepTrigger.Gesture);
     }
 
     // 面板是开关：热键再按一次收起来。这一点必须做对——面板没有标题栏也没有关闭按钮，

@@ -55,10 +55,29 @@ public static class WindowManager
     public static IntPtr[] Handles(string process)
     {
         if (IsCurrentWindow(process))
-            return Win32.ForegroundWindowOfOthers() is var fg && fg != IntPtr.Zero ? new[] { fg } : Array.Empty<IntPtr>();
+        {
+            // **目标要用触发那一刻的前台，不能在这儿现读 GetForegroundWindow。**
+            // 手势/格子触发后动作在后台线程跑，读到这一句之前隔着 Task 调度、WaitAppWindow 轮询
+            // （可等好几秒）、post-window 延时，以及动作组里前面那些会抢前台的步骤；这期间弹出一个
+            // 通知、或前一步刚激活了别的程序，现读读到的就不是手势划在上面的那个窗口了——
+            // 「关闭/最小化当前窗口」落到错误窗口、或一个窗口都找不到，外面看就是「手势丢了焦点、没生效」。
+            // 触发时刻的前台在运行开始时已由 MarkForegroundBaseline 在 UI 线程记下（见 RunStepAsync 注释：
+            // 「等步骤自己去抢就晚了」）。它还有效就用它；句柄已废（窗口被关掉）才退回现读。
+            // 裁决抽成纯函数（ResolveCurrentWindowTarget），这条「丢焦点」逻辑是活交互、单测够不着 Win32。
+            var h = ResolveCurrentWindowTarget(_foregroundBaseline, Win32.IsWindowVisible, Win32.ForegroundWindowOfOthers);
+            return h != IntPtr.Zero ? new[] { h } : Array.Empty<IntPtr>();
+        }
         var name = StepHelpers.ToProcessName(process);
         if (name.Length == 0) return Array.Empty<IntPtr>();
         return Win32.WindowsForProcess(name);
+    }
+
+    // 「当前窗口」该落到哪个句柄：优先触发时刻记下的 baseline，它失效（窗口已关）才退回此刻现读的前台。
+    // 纯函数、探针可注入——baseline 与 live 不一致时取谁，是这个修复的全部承重点，必须有断言钉着。
+    internal static IntPtr ResolveCurrentWindowTarget(IntPtr baseline, Func<IntPtr, bool> stillVisible, Func<IntPtr> liveForegroundOfOthers)
+    {
+        if (baseline != IntPtr.Zero && stillVisible(baseline)) return baseline;
+        return liveForegroundOfOthers();
     }
 
     // 目标进程的某个窗口当前是否真的在前台。
