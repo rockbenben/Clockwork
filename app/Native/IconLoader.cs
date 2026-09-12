@@ -49,6 +49,26 @@ public static class IconLoader
     private static extern IntPtr SHGetFileInfo(string path, uint attrs, ref SHFILEINFO psfi, uint cb, uint flags);
 
     private const uint SHGFI_ICON = 0x000000100, SHGFI_LARGEICON = 0x000000000, SHGFI_USEFILEATTRIBUTES = 0x000000010;
+    private const uint FILE_ATTRIBUTE_DIRECTORY = 0x10;
+
+    [ComImport, Guid("bcc18b79-ba16-442f-80c4-8a59c30c463b"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    private interface IShellItemImageFactory
+    {
+        [PreserveSig] int GetImage(SIZE size, uint flags, out IntPtr hbmp);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct SIZE { public int cx, cy; }
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    private static extern int SHCreateItemFromParsingName(string path, IntPtr pbc, ref Guid riid, out IShellItemImageFactory? factory);
+
+    [DllImport("gdi32.dll")]
+    private static extern bool DeleteObject(IntPtr hObject);
+
+    // shell:AppsFolder\<AUMID>（开始菜单里的商店/UWP 应用）走 IShellItemImageFactory；
+    // 实测 SHGetFileInfo 对它要么失败、要么给通用空白字形。
+    private const uint SIIGBF_BIGGERSIZEOK = 0x01, SIIGBF_ICONONLY = 0x04;
 
     /// <summary>取路径对应的位图。**绝不阻塞**：缓存里有就给，没有就返回 null 并在后台去取，
     /// 取到后回 UI 线程调 <paramref name="onReady"/>（调用方借此把字形换成图标）。
@@ -106,10 +126,27 @@ public static class IconLoader
     {
         try
         {
-            if (!File.Exists(path) && !Directory.Exists(path)) return null;
+            // shell:AppsFolder\<AUMID> 这类 shell 虚拟目标不在文件系统上，先走 shell 映像工厂；
+            // 它在后台 MTA 线程上实测可用（SHGetFileInfo 对 AUMID 只会给通用字形）。
+            if (Core.PanelIcon.IsShellTarget(path))
+            {
+                var shellBmp = ShellItemImage(path);
+                if (shellBmp != null) return shellBmp;
+            }
+
+            bool isDir = Directory.Exists(path);
+            if (!File.Exists(path) && !isDir) return null;
             var bmp = Core.PanelIcon.IsImageFile(path) ? LoadImage(path) : null;
             // 图片解码失败也往下走一次系统图标：.ico 偶有 WPF 解不了的变体，而 shell 认得。
-            bmp ??= ExtractIcon(path) ?? ShellIcon(path);
+            bmp ??= ExtractIcon(path);
+            if (bmp == null)
+            {
+                // App 执行别名（%LOCALAPPDATA%\Microsoft\WindowsApps 下 0 字节的 wt.exe 等）：
+                // 本体是重解析点，直接取只给通用字形——解析出包里的真 exe 再取（见 AppExecutionAlias）。
+                var realExe = AppExecutionAlias.TryResolveRealExe(path);
+                if (realExe != null) bmp = ExtractIcon(realExe) ?? ShellIcon(realExe, isDir: false);
+            }
+            bmp ??= ShellIcon(path, isDir);
             if (bmp == null) return null;
             bmp.Freeze();   // 冻结后可跨线程、且 WPF 不再为它维护变更通知
             return bmp;
@@ -149,18 +186,49 @@ public static class IconLoader
     }
 
     // .lnk / 文档 / 文件夹：走 shell 的文件关联，拿它在资源管理器里的那个图标。
-    private static BitmapSource? ShellIcon(string path)
+    private static BitmapSource? ShellIcon(string path, bool isDir)
     {
         var info = new SHFILEINFO();
         try
         {
-            if (SHGetFileInfo(path, 0, ref info, (uint)Marshal.SizeOf<SHFILEINFO>(),
+            // **文件夹必须带 FILE_ATTRIBUTE_DIRECTORY。** 配着 SHGFI_USEFILEATTRIBUTES 时，shell 只按
+            // 传入的属性位推断图标：attrs=0 被当成「一个没有扩展名的文件」，返回的是空白文档字形——
+            // 这正是「文件夹一格空白」的来源（实测 C:\Windows：attrs=0 空白、DIRECTORY 正确黄文件夹）。
+            uint attrs = isDir ? FILE_ATTRIBUTE_DIRECTORY : 0;
+            if (SHGetFileInfo(path, attrs, ref info, (uint)Marshal.SizeOf<SHFILEINFO>(),
                               SHGFI_ICON | SHGFI_LARGEICON | SHGFI_USEFILEATTRIBUTES) == IntPtr.Zero) return null;
             if (info.hIcon == IntPtr.Zero) return null;
             try { return FromHIcon(info.hIcon); }
             finally { DestroyIcon(info.hIcon); }
         }
         catch { return null; }
+    }
+
+    // shell 虚拟目标（shell:AppsFolder\<AUMID> 等）：IShellItemImageFactory 是唯一从解析名直接拿到
+    // 商店应用图标的路。MTA 后台线程实测可用（Task.Run 正是 MTA）。
+    private static BitmapSource? ShellItemImage(string path)
+    {
+        IShellItemImageFactory? factory = null;
+        try
+        {
+            Guid iid = new("bcc18b79-ba16-442f-80c4-8a59c30c463b");
+            if (SHCreateItemFromParsingName(path, IntPtr.Zero, ref iid, out factory) != 0 || factory == null) return null;
+            if (factory.GetImage(new SIZE { cx = Px, cy = Px }, SIIGBF_ICONONLY | SIIGBF_BIGGERSIZEOK, out IntPtr hbmp) != 0
+                || hbmp == IntPtr.Zero) return null;
+            try
+            {
+                var bmp = Imaging.CreateBitmapSourceFromHBitmap(hbmp, IntPtr.Zero, System.Windows.Int32Rect.Empty,
+                                                                BitmapSizeOptions.FromEmptyOptions());
+                bmp?.Freeze();
+                return bmp;
+            }
+            finally { DeleteObject(hbmp); }
+        }
+        catch { return null; }
+        finally
+        {
+            if (factory != null) Marshal.ReleaseComObject(factory);
+        }
     }
 
     private static BitmapSource? FromHIcon(IntPtr hIcon)

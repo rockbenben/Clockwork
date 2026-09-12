@@ -45,7 +45,7 @@ public static class PanelIcon
 
     /// <param name="icon">用户填的图标（空=自动）。</param>
     /// <param name="stepKind">步骤类型；组的整格传 null。</param>
-    /// <param name="target">「运行程序」步骤的目标，用于自动取图标。</param>
+    /// <param name="target">「运行程序」/「打开文件或文件夹」步骤的目标，用于自动取图标。</param>
     /// <param name="altTargets">备用路径（多机路径不同时用），与 target 同口径解析。</param>
     public static PanelIconSpec Resolve(string? icon, string? stepKind, string? target = null, string? altTargets = null)
     {
@@ -73,9 +73,9 @@ public static class PanelIcon
             return new PanelIconSpec(PanelIconKind.Image, LaunchTarget.NormalizeTarget(custom), glyph);
         }
 
-        // 自动：只有「运行程序」有文件可取。其余类型（按键 / 音量 / 窗口……）本来就没有对应的文件，
-        // 硬去猜一个只会取到错的图标。
-        if (stepKind == "app")
+        // 自动：只有「运行程序」和「打开文件或文件夹」有文件可取。其余类型（按键 / 音量 / 窗口……）
+        // 本来就没有对应的文件，硬去猜一个只会取到错的图标。
+        if (stepKind is "app" or "path")
         {
             // blocking: false —— 这一句跑在 UI 线程上（面板每次呼出都会为每个「运行程序」格子走一遍），
             // 而它原本做的是同步的 File.Exists：一条断开的网络盘路径就能把整个界面卡住几十秒，
@@ -83,7 +83,9 @@ public static class PanelIcon
             // 猜错了无非是 IconLoader 取不到、回退线描字形，而那条路本身也是不阻塞的。
             var resolved = LaunchTarget.ResolveLaunchTarget(target ?? "", altTargets ?? "", blocking: false);
             // URL / 协议（https:、ms-settings:）没有本地文件，取不到图标——回退线描，别去碰网络。
-            if (resolved.Length > 0 && !IsUrlLike(resolved))
+            // 但 shell:AppsFolder\<AUMID>（商店应用、wt 这类别名解析后的 UWP 目标）是例外：
+            // 它也匹配协议正则，却能由 IShellItemImageFactory 直接出图，不能在这一层被挡掉。
+            if (resolved.Length > 0 && (IsShellTarget(resolved) || !IsUrlLike(resolved)))
                 return new PanelIconSpec(PanelIconKind.Image, resolved, glyph);
         }
         return new PanelIconSpec(PanelIconKind.Glyph, glyph, glyph);
@@ -91,4 +93,8 @@ public static class PanelIcon
 
     // 「协议开头」而不是「含冒号」：C:\ 也含冒号。要求冒号前至少两个字母，把盘符排除掉。
     private static bool IsUrlLike(string s) => Regex.IsMatch(s, @"^[a-zA-Z][a-zA-Z0-9+.\-]+:");
+
+    /// <summary>shell 虚拟目标（shell:AppsFolder\&lt;AUMID&gt; 等），由 IShellItemImageFactory 取图。</summary>
+    public static bool IsShellTarget(string? s) =>
+        !string.IsNullOrEmpty(s) && s.StartsWith("shell:", StringComparison.OrdinalIgnoreCase);
 }

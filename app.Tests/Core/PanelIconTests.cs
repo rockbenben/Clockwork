@@ -41,6 +41,18 @@ public class PanelIconTests
     public void A_drive_letter_is_not_mistaken_for_a_protocol()
         => Assert.Equal(PanelIconKind.Image, PanelIcon.Resolve(null, "app", @"C:\Windows\explorer.exe").Kind);
 
+    // shell:AppsFolder\<AUMID> 虽然长得像协议，却是商店应用的图标来源，
+    // 得放进 Image 通道由 IShellItemImageFactory 出图，而不是被 URL 规则挡回字形。
+    [Fact]
+    public void A_shell_appsfolder_aumid_goes_to_the_image_channel()
+    {
+        var spec = PanelIcon.Resolve(null, "app",
+            @"shell:AppsFolder\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App");
+        Assert.Equal(PanelIconKind.Image, spec.Kind);
+        Assert.StartsWith("shell:AppsFolder", spec.Value, System.StringComparison.OrdinalIgnoreCase);
+        Assert.True(PanelIcon.IsShellTarget(spec.Value));
+    }
+
     // 四位十六进制 = 直接指定一个 MDL2 码位，给「我就想换个字形」的人留的窄门。
     [Theory]
     [InlineData("E7C4")]
