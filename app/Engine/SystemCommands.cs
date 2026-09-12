@@ -55,42 +55,68 @@ public static class SystemCommands
     // 「使用 Ctrl+Insert 作为复制快捷键的进程」，理由逐字相同。区别是它让用户自己维护名单，
     // 这里先写死一份常见的：要真有人用冷门终端撞上了，再把它做成设置也不迟。
     //
+    // 现代终端：默认复制是 Ctrl+Shift+C。绝不能先发 Ctrl+Insert——WT 未绑定它时会作为未处理字符注入控制台，
+    // 导致当前已选中的文字选区被当场冲掉/取消，后续复制键全空，最终误判。
+    private static readonly string[] ModernTerminalProcesses =
+    {
+        "windowsterminal", "windowsterminalpreview", "wt",
+        "wezterm-gui", "alacritty", "tabby", "hyper", "warp", "ghostty",
+    };
+
+    // 传统控制台：认 Ctrl+Insert 作复制（DOS / CUA 时代老组合）；Win10+ conhost 也支持 Ctrl+Shift+C。
+    private static readonly string[] ClassicConsoleProcesses =
+    {
+        "cmd", "powershell", "pwsh", "conhost", "openconsole",
+        "mintty", "conemu", "conemu64", "putty", "kitty",
+        "fluentterminal", "terminus", "xshell", "securecrt", "mobaxterm",
+    };
+
     // **有意不收 Code / devenv 这类内嵌终端的宿主**：它们的前台进程名是编辑器本身，
     // 而在编辑器里 Ctrl+C 就是复制。按进程名分不开「焦点在编辑区还是在终端面板」，
     // 猜错的代价是编辑器里复制不了——比在终端里少一次中断更常见。
-    private static readonly string[] CtrlCInterruptsProcesses =
-    {
-        "cmd", "powershell", "pwsh", "conhost", "openconsole", "windowsterminal",
-        "mintty", "conemu", "conemu64", "wezterm-gui", "alacritty", "putty", "kitty",
-    };
 
     /// <summary>在这个进程的窗口上，「复制」该按哪几下——**按顺序试，第一下成了就不试第二下**。</summary>
     //
-    // 要两个而不是一个：「复制」在不同宿主上绑着不同的键，押中一个才有结果、押不中就只能报
-    // 「没有选中文字」——而那句话是错的，选中的东西一直在那儿。实测 Windows Terminal 的
-    // 默认表把 copy 同时绑在 ctrl+shift+c / ctrl+insert / enter 上，传统控制台只认 ctrl+insert，
-    // 普通程序只认 ctrl+c。
+    // 为什么终端里**绝不能**包含 Ctrl+C：
+    // 在所有控制台与终端中，Ctrl+C 是产生 SIGINT / 中断信号的控制键。
+    // 如果选区未取到（或用户未选中文字误按了一键直达热键），一旦回落到 Ctrl+C，
+    // 就会直接打断用户正在运行的命令（如编译、测试、npm install、服务器进程等）！
+    // 这不是「取不到文本」，而是造成了严重的破坏行为。
+    // 宁可报错「没有选中文字」，也绝对不能向任何终端窗口发送 Ctrl+C。
     //
-    // **顺序按伤害排，不按概率排**：终端那一档先发两个绝对安全的复制键，
-    // ctrl+c 排在**最后**——在传统控制台里它是中断，会把正在跑的命令打断。
-    //
-    // 但它必须在列表里，这是实测逼出来的：Windows Terminal 的**默认表里 ctrl+c 压根没绑 copy**
-    // （只有 ctrl+shift+c / ctrl+insert / enter），所以很多人自己把 ctrl+c 改成了复制——
-    // 而那种配置下，用户的 keybindings 会盖掉默认那几个，前两个键一个都不生效。
-    // 实测就撞上了这一种：两个安全键都发了，剪贴板纹丝不动，而用户说「我这用的是 ctrl+c」。
-    //
-    // 风险与收益的账：前两个键在**默认配置**下必定命中，所以 ctrl+c 根本轮不到；
-    // 只有「两个安全键都不认」的机器才会走到它，而那种机器上它多半正是被绑成复制的那一个。
-    // 代价是「终端里什么都没选中还画了这条手势」时会中断一次——那一下本来也取不到文字，
-    // 用户已经做错了一件事；而在此之前，这个功能对那类配置是**完全不可用**的。
+    // 顺序考量：
+    //   · 现代终端（Windows Terminal、Alacritty 等）：首选 Ctrl+Shift+C，次选 Ctrl+Insert。
+    //   · 传统控制台（CMD、PowerShell conhost 等）：首选 Ctrl+Insert，次选 Ctrl+Shift+C。
+    //   · 普通程序（浏览器、编辑器等）：首选 Ctrl+C，次选 Ctrl+Insert。
     public static string[] CopyKeysFor(string? foregroundProcess)
     {
-        var name = StepHelpers.ToProcessName(foregroundProcess ?? "");
-        foreach (var p in CtrlCInterruptsProcesses)
-            if (string.Equals(name, p, StringComparison.OrdinalIgnoreCase))
-                return new[] { "Ctrl+Insert", "Ctrl+Shift+C", "Ctrl+C" };
+        if (IsModernTerminal(foregroundProcess))
+            return new[] { "Ctrl+Shift+C", "Ctrl+Insert" };
+        if (IsClassicConsole(foregroundProcess))
+            return new[] { "Ctrl+Insert", "Ctrl+Shift+C" };
         return new[] { "Ctrl+C", "Ctrl+Insert" };
     }
+
+    private static bool IsModernTerminal(string? foregroundProcess)
+    {
+        var name = StepHelpers.ToProcessName(foregroundProcess ?? "");
+        foreach (var p in ModernTerminalProcesses)
+            if (string.Equals(name, p, StringComparison.OrdinalIgnoreCase)) return true;
+        return false;
+    }
+
+    private static bool IsClassicConsole(string? foregroundProcess)
+    {
+        var name = StepHelpers.ToProcessName(foregroundProcess ?? "");
+        foreach (var p in ClassicConsoleProcesses)
+            if (string.Equals(name, p, StringComparison.OrdinalIgnoreCase)) return true;
+        return false;
+    }
+
+    // 前台是不是终端或控制台进程。Esc 恢复阶梯只许它说不：
+    // cmd / PowerShell 里 Esc 会清空已输入但还没执行的命令行，终端进程绝不能补 Esc。
+    internal static bool IsTerminalProcess(string? foregroundProcess)
+        => IsModernTerminal(foregroundProcess) || IsClassicConsole(foregroundProcess);
 
     /// <summary>先试哪一下。（CopyKeysFor 的第一个）</summary>
     public static string CopyComboFor(string? foregroundProcess) => CopyKeysFor(foregroundProcess)[0];
@@ -112,6 +138,9 @@ public static class SystemCommands
     // 这台机器身上攒着好几轮实测（终端键序、注入被拒的判读、等待时长），复制一份出去必然漂。
     public static string CopySelectionToClipboard()
     {
+        // 发键前先等热键的修饰键物理松开（实测见 WaitForModifiersUp）——Alt 系一键直达键没这一等
+        // 必然把 Ctrl+C 发成 Ctrl+Alt+C。
+        WaitForModifiersUp();
         uint seq = Win32.GetClipboardSequenceNumber();
         // 进程名与键名记下来是为了**报错时能说清**：我们唯一知道的事实是「剪贴板没变」，
         // 而那至少有四种成因——没选中 / 那个程序不响应这个复制键 / 它压根不让复制 /
@@ -119,8 +148,34 @@ public static class SystemCommands
         // 押错时用户会一直去检查一件本来就没问题的事。
         var proc = Win32.ForegroundProcessName();
         var keys = CopyKeysFor(proc);
-        bool copied = false;
-        for (int k = 0; k < keys.Length && !copied; k++)
+        bool copied = SendCopyKeys(keys, seq);
+        // Esc 恢复阶梯——只在常规程序上走，终端名单内的进程不补 Esc（见 IsTerminalProcess）。
+        //
+        // 为什么需要它：一键直达若是 Alt 系热键，WM_HOTKEY 在主键按下时投递，而独 Alt 的**抬起**
+        // 会被 Chrome 这类程序解释成「聚焦菜单栏」。于是上面两键按下时键盘焦点已不在页面而在⋮菜单上，
+        // Ctrl+C、Ctrl+Insert 双双打进菜单，剪贴板纹丝不动。这是个时序竞态、短按也会撞上，
+        // 表现就是「经常报没有选中文字」。实测（探针，2026-09，Chrome 物理 Alt+`）：
+        //   · 竞态赢了：Ctrl+C 20ms 内复制成功；
+        //   · 焦点进了菜单：Ctrl+C 失败、Ctrl+Insert 多半成功（菜单不绑这个键，事件漏给渲染器）；
+        //   · 两个都失败：发一记 Esc 把焦点退回页面，60ms 后重发首选键**立即**复制成功；
+        //   · 真没选中文字：Esc 也救不回来，照实报错。
+        // Esc 的代价：关掉一个正开着的菜单/对话框——而那正是它要做的（Alt 本身刚把焦点挪进去）；
+        // 最坏代价由「只在两次复制都失败后才发」夹住：成功路径一个键都不会多发。
+        if (!copied && !IsTerminalProcess(proc))
+        {
+            KeyInput.SendKeyCombo("Esc");   // 警告不看：Esc 发不出去时，下面重试给出的报错才是用户该看的
+            Thread.Sleep(60);
+            copied = SendCopyKeys(new[] { keys[0] }, Win32.GetClipboardSequenceNumber(), firstWaitMs: 600, restWaitMs: 600);
+        }
+        if (!copied) throw new InvalidOperationException(NoSelection(proc, string.Join(" / ", keys) + " / Esc+" + keys[0]));
+        return ClipboardText();
+    }
+
+    // 依次发复制组合键，直到剪贴板版本号变化（返回 true）或全部试完（false）。
+    // 抽出来是因为 Esc 恢复阶梯要拿同一套「发送 → 拒收报错 → 轮询版本号」再走一遍，抄一份必然漂。
+    private static bool SendCopyKeys(string[] keys, uint seq, int firstWaitMs = 1000, int restWaitMs = 500)
+    {
+        for (int k = 0; k < keys.Length; k++)
         {
             // **这一下的结果不能扔。** SendKeyCombo 在 SendInput 被系统拒收时返回
             // Warn_KeyRejected（「前台是提权窗口/安全桌面时会这样」）——那句话就是答案本身：
@@ -132,10 +187,9 @@ public static class SystemCommands
             // 第一次给足 1 秒（Quicker 的故障排除文档专门列了「复杂网页 / PDF 阅读器响应慢」
             // 这一条，并为此把等待做成可调参数）；退一步那次只给 0.5 秒——走到那儿时
             // 第一个键已经明确没用，再等满一秒只是让报错来得更晚。
-            copied = WaitClipboardChange(seq, k == 0 ? 1000 : 500);
+            if (WaitClipboardChange(seq, k == 0 ? firstWaitMs : restWaitMs)) return true;
         }
-        if (!copied) throw new InvalidOperationException(NoSelection(proc, string.Join(" / ", keys)));
-        return ClipboardText();
+        return false;
     }
 
     /// <summary>剪贴板里此刻的文字（拿不到就是空串）。</summary>
@@ -188,6 +242,24 @@ public static class SystemCommands
         return Win32.GetClipboardSequenceNumber() != since;
     }
 
+    /// <summary>发键复制前，等用户热键里按着的修饰键全部物理松开；20ms 一跳、最多 <paramref name="timeoutMs"/>。</summary>
+    //
+    // 为什么必须等：RegisterHotKey 的 WM_HOTKEY 在主键按下的那一刻就投递，手通常还没松开修饰键；
+    // 一键直达跑在线程池上，几乎立刻 SendInput Ctrl+C——目标窗口实际收到的是「Ctrl+Alt+C」。
+    // 实测（探针，2026-09）：Alt+主键 的 WM_HOTKEY 到达时 GetAsyncKeyState(VK_MENU)=按下，
+    // +25ms 仍按着，此刻注入 Ctrl+C 剪贴板版本号不变；先轮询到松开再发，版本号正常变化。
+    // 用户连试 Alt+`、Ctrl+Alt+' 两个键都报「没有选中文字」，根因都在这，不是选错了键。
+    // （Ctrl 系和弦不受影响——注入的本来就是 Ctrl+C；但统一等这一下没有可观察代价。）
+    //
+    // 有上限：故意一直按着不松（或键卡住）时，到点照发——退回旧的失败模式，也不能让这一步永久挂死。
+    // held 可注入纯为单测；生产走 Win32.ModifierHeld，它探测失败时返回「没按」，这道门不增加延迟。
+    internal static void WaitForModifiersUp(Func<bool>? held = null, int timeoutMs = 1000, int tickMs = 20)
+    {
+        held ??= Win32.ModifierHeld;
+        for (int t = 0; t < timeoutMs && held(); t += tickMs)
+            Thread.Sleep(tickMs);
+    }
+
     // 「取不到选中的文字」——把已知的事实附在后面，别让这句话独自去猜成因。
     // 括号里两样都是标识符（进程名、键名），不进文案表：翻译它们没有意义，
     // 而它们恰恰是唯一能一眼定位的东西——比如看到「Code · Ctrl+C」就知道是内嵌终端那一档，
@@ -195,6 +267,29 @@ public static class SystemCommands
     private static string NoSelection(string? proc, string copyKey)
         => Strings.Get("Err_NoSelection")
            + (string.IsNullOrWhiteSpace(proc) ? $"（{copyKey}）" : $"（{proc} · {copyKey}）");
+
+    /// <summary>一键直达：取回选中文字，按内容类型交给系统（浏览器 / 关联程序 / 资源管理器 / BT / regedit）。</summary>
+    //
+    // RunAny 式「选中即开」：用户不选动作，只按一个键，是什么由 SmartOpen 判。
+    // 取不到选区时 CopySelectionToClipboard 自己会抛（带着进程名/复制键诊断），这里不重复说。
+    public static void QuickOpenSelection() => QuickOpenText(CopySelectionToClipboard());
+
+    // 单独留一个吃文本的入口：识别+打开这一段不依赖剪贴板，将来测试或别处复用都能直接喂。
+    public static void QuickOpenText(string text)
+    {
+        var target = SmartOpen.Classify(text);
+        if (target == null)
+        {
+            // 压成单行再截断：选区可能是好几行，原样塞进 toast 会断行；与搜索那条同一口径。
+            var oneLine = string.Join(" ", (text ?? "").Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+            throw new InvalidOperationException(
+                Strings.Lf("Err_QuickOpenUnrecognized", StepHelpers.Ellipsis(oneLine)));
+        }
+        // 注册表要走 LastKey 写入那套特殊流程（见 RegJump 上的实测说明），其余三类一律 ShellExecute：
+        // http/magnet 走协议关联，路径走「文件关联程序 / 资源管理器」，系统自己分得对。
+        if (target.Kind == QuickOpenKind.Registry) RegJump.Jump(target.Target);
+        else Start(target.Target, useShell: true);
+    }
 
     private static void Start(string file, string? args = null, bool useShell = false)
     {
@@ -276,6 +371,8 @@ public static class SystemCommands
                 Start(tpl.Replace("{0}", Uri.EscapeDataString(q)), useShell: true);
                 break;
             }
+            // 一键直达：选中文字 → 识别网址/路径/磁力/注册表 → 各走各路。无参数，识别规则全在 SmartOpen。
+            case "quickOpen": QuickOpenSelection(); break;
             case "clearClipboard":
                 // WinForms Clipboard 要求 STA 线程，而所有执行路径（开机序列/单步/动作组）都在 MTA 线程池上——
                 // 直接调必抛 ThreadStateException，故挪到专用 STA 线程同步执行。

@@ -6,6 +6,23 @@ namespace Clockwork.Native;
 // 急停键「按键捕捉」的纯逻辑：WPF 按键 → 可注册的组合键串。抽出来便于单测（避免依赖实时键盘状态）。
 public static class HotkeyCapture
 {
+    // 把 WPF 那颗「外层键」解成真正按下的键。三层包装，按优先级：
+    //   · Key.System          —— Alt 组合：主键藏在 SystemKey（Alt+` 时 e.Key=System、SystemKey=Oem3）；
+    //   · Key.ImeProcessed    —— **中文输入法把裸键吃掉时**：真值在 ImeProcessedKey。
+    //     实测（探针，2026-09，微软拼音）：中文 IME 开着时物理裸 ` 在 WPF 里报
+    //     e.Key=ImeProcessed、ImeProcessedKey=Oem3——旧代码只解 System 这一层，于是这个键在框里
+    //     永远录不进，低级钩子却看得见干净的 vk=0xC0（拦它的是 IME，不是 RunAny）。Alt 组合不受
+    //     IME 接管，仍走 System 那条。
+    //   · Key.DeadCharProcessed —— 死键（美式布局碰不上，欧陆布局的 ` ´ ¨ 组合重音会走这）：真值在 deadKey。
+    // 取不出真值（值为 None）时原样返回外层键——后续 BuildCombo 会判无效并 Ignore，行为与今天一致。
+    public static Key ResolveKey(Key reported, Key systemKey, Key imeProcessedKey, Key deadCharProcessedKey)
+    {
+        if (reported == Key.System) return systemKey == Key.None ? reported : systemKey;
+        if (reported == Key.ImeProcessed) return imeProcessedKey == Key.None ? reported : imeProcessedKey;
+        if (reported == Key.DeadCharProcessed) return deadCharProcessedKey == Key.None ? reported : deadCharProcessedKey;
+        return reported;
+    }
+
     // 是否为修饰键本身（含 Alt 时 e.Key=System）——捕捉时忽略、等主键。
     public static bool IsModifierKey(Key k)
         => k is Key.LeftCtrl or Key.RightCtrl or Key.LeftAlt or Key.RightAlt
@@ -27,6 +44,28 @@ public static class HotkeyCapture
         var name = k.ToString();
         if (string.IsNullOrEmpty(name)) return null;
         return TokenAlias.TryGetValue(name, out var alias) ? alias : name;
+    }
+
+    // 组合键串的**显示**形态：把 Oem3 这类 token 换成当前键盘布局下的真字符
+    // （美式布局下 Ctrl+Oem3 显示成 Ctrl+`，德语 QWERTZ 同一物理键显示成 Ctrl+^——字符随布局走，绝不写死）。
+    // 只供 UI 显示用：落盘/注册仍走原 token（KeyInput.ToHotkeyParams 解析它），所以「无法识别/注册失败」
+    // toast 里给用户看的那一份可以美化，但去重记账/配置存取必须继续用原值。
+    // 只替换系统给出**单字符名**的非修饰键；字母/数字结果与 token 相同，F1/Space/PageUp 等多字符名保留 token。
+    public static string PrettyCombo(string? combo)
+    {
+        if (string.IsNullOrEmpty(combo)) return combo ?? "";
+        var parts = combo.Split('+');
+        for (int i = 0; i < parts.Length; i++)
+        {
+            var p = parts[i].Trim();
+            if (p is "Ctrl" or "Alt" or "Shift" or "Win") continue;   // 修饰键段不动
+            if (Enum.TryParse<Key>(p, out var key))
+            {
+                var name = Win32.KeyNameChar((uint)KeyInterop.VirtualKeyFromKey(key));
+                if (name != null) parts[i] = name;
+            }
+        }
+        return string.Join("+", parts);
     }
 
     // 系统级保留组合：注册成功会把它从全系统劫走（如 Alt+F4 让所有程序关不了窗、Ctrl+Shift+Esc 打不开任务管理器）。
@@ -52,9 +91,11 @@ public static class HotkeyCapture
         return p != null && ReservedKeys.Contains((p.Modifiers, p.Vk));
     }
 
-    // 由修饰键 + 主键组出组合键串。要求至少一个修饰键（避免注册裸键把某键从全局劫走），
-    // 排除系统保留组合，且最终组合必须可被 RegisterHotKey 注册；否则返回 null（调用方忽略本次按键）。
-    public static string? BuildCombo(ModifierKeys mods, Key key)
+    // 由修饰键 + 主键组出组合键串。默认要求至少一个修饰键（注册裸键会把该键从全系统劫走——
+    // 任何程序里都打不出这个字符）；allowBare 仅供一键直达那一个框：它刻意要 RunAny 式的裸 `
+    // （Oem3）单键，代价用户已知悉。两种档都排除系统保留组合，且最终组合必须可被 RegisterHotKey
+    // 注册；否则返回 null（调用方忽略本次按键）。
+    public static string? BuildCombo(ModifierKeys mods, Key key, bool allowBare = false)
     {
         if (IsModifierKey(key)) return null;
         var tok = KeyToken(key);
@@ -64,7 +105,7 @@ public static class HotkeyCapture
         if (mods.HasFlag(ModifierKeys.Alt)) parts.Add("Alt");
         if (mods.HasFlag(ModifierKeys.Shift)) parts.Add("Shift");
         if (mods.HasFlag(ModifierKeys.Windows)) parts.Add("Win");
-        if (parts.Count == 0) return null;   // 至少一个修饰键
+        if (parts.Count == 0 && !allowBare) return null;   // 至少一个修饰键（裸键档除外）
         parts.Add(tok);
         var combo = string.Join("+", parts);
         if (IsReserved(combo)) return null;                             // 系统保留组合：拒绝
@@ -110,9 +151,12 @@ public static class HotkeyCapture
         return accept == null || accept(combo) ? combo : null;
     }
 
-    // 捕捉框有两种模式：Hotkey=全局热键（急停键/组热键，要修饰键、拒保留组合）；
-    // SendKeys=发送键（步骤里「发送按键」/「置前发送键」，允许裸键、按 accept 校验）。
-    public enum KeyCaptureMode { Hotkey, SendKeys }
+    // 捕捉框有三种模式：
+    //   Hotkey     = 全局热键（急停键/面板键/组热键，要修饰键、拒保留组合）；
+    //   HotkeyBare = 全局热键但允许零修饰键的主键——只给一键直达用：RunAny 式裸 `（Oem3），
+    //                注册后该字符在全系统都打不出来，急停/面板/组键不许走这一档；
+    //   SendKeys   = 发送键（步骤里「发送按键」/「置前发送键」，允许裸键、按 accept 校验）。
+    public enum KeyCaptureMode { Hotkey, HotkeyBare, SendKeys }
 
     // 捕捉框按键的统一决策：四个键框（急停键/组热键/组合键/发送键）共用同一状态机，不再各抄一份、也不再要「捕捉」按钮。
     public enum CaptureAction
@@ -141,12 +185,15 @@ public static class HotkeyCapture
         if (key == Key.Tab && bare) return CaptureAction.PassThrough;    // Tab/Shift+Tab：移动焦点（两模式都放行——裸 Tab 罕见作发送键）
         if (IsModifierKey(key)) return CaptureAction.Ignore;
         if (key == Key.Escape) return CaptureAction.Cancel;
-        if (mode == KeyCaptureMode.Hotkey)
+        if (mode is KeyCaptureMode.Hotkey or KeyCaptureMode.HotkeyBare)
         {
+            // 两档热键的清空/默认按钮/保留组合语义完全一样，唯一差别：HotkeyBare 允许裸主键
+            //（一键直达的裸 `，见 KeyCaptureMode 枚举注释）。
             if (key == Key.Enter && mods == ModifierKeys.None) return CaptureAction.PassThrough;  // 热键：裸 Enter 给默认按钮
             // 只有「裸」Delete/Backspace 才是清空；带修饰键的（如 Ctrl+Delete）是用户想录的组合，交给 BuildCombo。
+            // HotkeyBare 也保留这一条：清空框需要一个入口，而裸 Delete/Backspace 本就不该被全局劫走。
             if (key is Key.Delete or Key.Back && mods == ModifierKeys.None) return CaptureAction.Clear;
-            combo = BuildCombo(mods, key);
+            combo = BuildCombo(mods, key, allowBare: mode == KeyCaptureMode.HotkeyBare);
         }
         else   // SendKeys：裸键可录（含 Enter/Delete），accept 校验；无清空/默认按钮分支。
         {

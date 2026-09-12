@@ -714,6 +714,11 @@
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork сразу перезапустится, чтобы применить тему. «Как в Windows» следует режиму приложений Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Быстрое открытие (само определяет в выделенном тексте URL, путь к файлу, magnet-ссылку или раздел реестра)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Не удалось распознать выделенный текст: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>Редактор реестра уже запущен, и его не удалось закрыть автоматически; его окно выведено на передний план. Закройте его вручную и повторите попытку.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Горячая клавиша быстрого открытия</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Выделите текст в любом приложении и нажмите эту клавишу — URL, путь к файлу, magnet-ссылка или раздел реестра будут определены и открыты автоматически.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Чувствительность</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Высокая</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Обычная</value></data>

@@ -715,6 +715,11 @@
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork 立即重啟以套用新主題。「跟隨系統」讀的是 Windows 的應用程式模式。</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>一鍵直達（選取文字自動辨識網址 / 檔案路徑 / 磁力連結 / 登錄檔機碼）</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>無法辨識選取的內容：{0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>登錄編輯程式已在執行且無法自動關閉，已將它的視窗帶到最前面。請先手動關閉它，再試一次。</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>一鍵直達鍵</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>在任意程式裡選取文字後按此鍵，自動辨識並開啟網址、檔案路徑、磁力連結或登錄檔機碼。</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>靈敏度</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>高</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>標準</value></data>

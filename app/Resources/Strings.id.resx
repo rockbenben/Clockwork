@@ -714,6 +714,11 @@ Log: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork langsung dimulai ulang untuk menerapkan tema. "Ikuti Windows" mengikuti mode aplikasi di Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Buka Cepat (mendeteksi otomatis URL, jalur berkas, tautan magnet, atau kunci Registri pada teks yang dipilih)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Tidak dapat mengenali teks yang dipilih: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>Editor Registri sudah berjalan dan tidak dapat ditutup otomatis; jendelanya telah dibawa ke depan. Tutup secara manual lalu coba lagi.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Pintasan Buka Cepat</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Pilih teks di aplikasi apa pun lalu tekan tombol ini untuk otomatis mengenali dan membuka URL, jalur berkas, tautan magnet, atau kunci Registri.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Sensitivitas</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Tinggi</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>

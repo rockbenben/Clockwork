@@ -714,6 +714,11 @@ Protokoll: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork startet sofort neu, um das Design anzuwenden. „Wie Windows“ folgt dem App-Modus in den Windows-Einstellungen.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Schnell öffnen (erkennt im markierten Text automatisch eine URL, einen Dateipfad, Magnet-Link oder Registrierungsschlüssel)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Der ausgewählte Text konnte nicht erkannt werden: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>Der Registrierungseditor läuft bereits und konnte nicht automatisch geschlossen werden; sein Fenster wurde in den Vordergrund geholt. Schließen Sie ihn manuell und versuchen Sie es erneut.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Schnellöffnen-Hotkey</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Markieren Sie in einer beliebigen App Text und drücken Sie diese Taste, um eine URL, einen Dateipfad, einen Magnet-Link oder einen Registrierungsschlüssel automatisch zu erkennen und zu öffnen.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Empfindlichkeit</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Hoch</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>

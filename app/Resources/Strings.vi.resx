@@ -714,6 +714,11 @@ Nhật ký: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork khởi động lại ngay để áp dụng giao diện. "Theo Windows" đọc chế độ ứng dụng của Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Mở nhanh (tự động nhận ra URL, đường dẫn tệp, liên kết magnet hoặc khóa Registry trong văn bản đã chọn)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Không nhận ra văn bản đã chọn: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>Trình chỉnh sửa Registry đang chạy và không thể tự động đóng; cửa sổ của nó đã được đưa lên phía trước. Hãy đóng thủ công rồi thử lại.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Phím tắt Mở nhanh</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Chọn văn bản trong bất kỳ ứng dụng nào rồi nhấn phím này để tự động nhận biết và mở URL, đường dẫn tệp, liên kết magnet hoặc khóa Registry.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Độ nhạy</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Cao</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Vừa</value></data>

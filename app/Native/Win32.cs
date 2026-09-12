@@ -305,6 +305,21 @@ public static class Win32
     private const ushort VK_RETURN = 0x0D, VK_TAB = 0x09;
 
     [DllImport("user32.dll")] private static extern uint MapVirtualKey(uint code, uint mapType);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetKeyNameTextW(long lParam, System.Text.StringBuilder lpString, int nSize);
+
+    // VK → 这个键在**当前键盘布局**下的名字（实测 zh-CN/美式布局：VK 0xC0 拿回 "`"；
+    // 同一个物理键在德语 QWERTZ 上是死键 "^"——所以不能在代码里把 Oem3 写死成反引号）。
+    // 仅供录键框美化显示：只接受**恰好一个字符**的结果；多字符名（F1、PageUp、Space…）
+    // 或拿不到名字时返回 null，调用方回退到 WPF token（"Oem3"）。
+    public static string? KeyNameChar(uint vk)
+    {
+        uint scan = MapVirtualKey(vk, 0);
+        if (scan == 0) return null;
+        var sb = new System.Text.StringBuilder(16);
+        // lParam 的 16-23 位放扫描码；Oem 标点键都不是扩展键，无需置扩展位（bit24）。
+        return GetKeyNameTextW((long)(scan << 16), sb, sb.Capacity) == 1 ? sb.ToString() : null;
+    }
 
     // 需要 KEYEVENTF_EXTENDEDKEY 的键：方向键 / 导航键 / 右 Ctrl / 右 Alt / NumLock / PrintScreen / 小键盘除号。
     // 少这个标志时 Windows 不会替你补：只读 wParam 虚拟键的普通 Win32/WPF/WinForms 应用无所谓（所以日常

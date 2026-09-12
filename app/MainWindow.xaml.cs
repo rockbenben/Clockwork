@@ -226,6 +226,18 @@ public partial class MainWindow : Window
             () => _config.Settings.PanelHotkey,
             // 面板键没有对应的界面按钮要刷（面板是热键/托盘唤出的），保存后重注册就够
             combo => { _config.Settings.PanelHotkey = combo; _save?.Invoke(); });
+        // 一键直达刻意用 HotkeyBare：RunAny 式的裸 `（Oem3）也要能录——不带修饰键按下即开，
+        // 代价是这个字符在全系统打不出来，急停/面板/组键不许走这一档（见 HotkeyCapture 枚举注释）。
+        // 实测（探针，2026-09）：物理裸 ` 并不会被 RunAny 接走——真正让框录不到的是中文输入法，
+        // 它把裸键改写成 WPF 的 ImeProcessed；KeyCaptureBox 已关 IME 并用 ResolveKey 解包真值。
+        // allowTyping 退居纯兜底（奇怪钩子 / 远程桌面键事件变形时双击手输 Oem3）；
+        // RegisterHotKey 裸键抢得赢 RunAny——注册后 WM_HOTKEY 实测归 Clockwork。
+        Views.KeyCaptureBox.Attach(QuickOpenBox, HotkeyCapture.KeyCaptureMode.HotkeyBare,
+            combo => KeyInput.ToHotkeyParams(combo) != null && !HotkeyCapture.IsReserved(combo),
+            () => _config.Settings.QuickOpenHotkey,
+            // 同面板键：保存即重注册，清空 = 不绑定（RebindFunctionHotkey 认空串）
+            combo => { _config.Settings.QuickOpenHotkey = combo; _save?.Invoke(); },
+            allowTyping: true);
     }
 
     // 标签条右端的急停按钮：只在真有东西在跑时存在。
@@ -355,7 +367,7 @@ public partial class MainWindow : Window
                     Verb = "runas",           // 触发 UAC 提升
                     UseShellExecute = true,
                 };
-                var p = Process.Start(psi);
+                using var p = Process.Start(psi);
                 p?.WaitForExit();
                 return p?.ExitCode ?? -1;
             }
@@ -711,6 +723,7 @@ public partial class MainWindow : Window
             {
                 (_config.Settings.StopHotkey, Strings.Get("Settings_StopHotkey")),
                 (_config.Settings.PanelHotkey, Strings.Get("Settings_PanelHotkey")),
+                (_config.Settings.QuickOpenHotkey, Strings.Get("Settings_QuickOpenHotkey")),
             };
 
     private void AddGroupFrom(ActionGroup template)

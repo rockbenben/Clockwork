@@ -6,24 +6,31 @@ using TextBox = System.Windows.Controls.TextBox;
 namespace Clockwork.Views;
 
 // 通用「点击即录键」文本框：点击 → 提示「按下快捷键…」→ 按下组合 → 回填。
-// 四个键框统一走它——急停键 / 组热键（Hotkey 模式）、组合键 / 发送键（SendKeys 模式）——
-// 不再各写一份状态机、也不再要单独的「捕捉」按钮。
+// 键框统一走它——急停键 / 面板键 / 组热键（Hotkey 模式）、一键直达（HotkeyBare，允许裸键）、
+// 组合键 / 发送键（SendKeys 模式）——不再各写一份状态机、也不再要单独的「捕捉」按钮。
 internal static class KeyCaptureBox
 {
-    // box：目标文本框；mode：热键（要修饰键+拒保留）还是发送键（允许裸键+accept 校验）；
+    // box：目标文本框；mode：哪种热键档（Hotkey/HotkeyBare）还是发送键（允许裸键+accept 校验）；
     // accept：目的地可编码校验（SendKeys 用；不过则忽略、继续等）；get/set：读/写当前值
     //         （急停键写配置、组热键写工作副本、发送键写自身文本，各传各的）。
     // allowTyping：双击切到手输模式。给「发送」类的框用——Win+D / Win+E 这类被 Explorer 全局注册的组合，
     //         系统在应用拿到之前就吃掉了按键，任何应用都捕捉不到；而它们作为**发送**内容完全有效
     //         （SendKeyCombo 会真的发 LWIN），没有手输口就等于 UI 里永远录不进来。
-    //         热键框不需要：捕捉不到的那些同样注册不了（RegisterHotKey 会失败），给了也没用。
+    //         热键框一般不需要：捕捉不到的那些同样注册不了（RegisterHotKey 会失败），给了也没用。
+    //         一键直达框也开着：裸 ` 的正常入口是物理录制（IME 拦截已由下面关 IME + ResolveKey
+    //         两层处理掉），手输只作「装了奇怪钩子 / 远程桌面键事件变形」时的兜底——直接敲 token Oem3。
     public static void Attach(TextBox box, HotkeyCapture.KeyCaptureMode mode, System.Func<string, bool>? accept,
                               System.Func<string> get, System.Action<string> set, bool allowTyping = false)
     {
+        // 这是录键框，不是文本录入框：IME 没有任何用处，只会把裸键改写成 ImeProcessed
+        // （中文输入法开着时裸 ` 实测被它吃掉，见 HotkeyCapture.ResolveKey 注释）。直接对这个焦点目标
+        // 关掉 IME，让键以原貌进来；ResolveKey 那层解包是第二道保险（不同 IME 对这个开关的遵守程度不一）。
+        InputMethod.SetIsInputMethodEnabled(box, false);
+
         string prompt = Strings.Get("Hotkey_PressPrompt");
         // 内部记住「已提交值」：聚焦时 box.Text 变成提示文字，失焦复原不能再读 box.Text/get()，否则会把提示当成值。
         string committed = get();
-        box.Text = committed;
+        box.Text = HotkeyCapture.PrettyCombo(committed);   // 静止态显示美化名（Oem3→当前布局字符），编辑/落盘仍用 token
         bool typing = false;   // 手输模式：双击进入，期间不捕捉、按键照常落进文本框
 
         // 「双击可手输」的说明不在这里挂 tooltip：它和「哪些组合捕捉不到」是同一件事，
@@ -39,7 +46,7 @@ internal static class KeyCaptureBox
             }
             typing = false;
             box.IsReadOnly = true;
-            box.Text = committed;
+            box.Text = HotkeyCapture.PrettyCombo(committed);
         }
 
         box.GotKeyboardFocus += (_, _) =>
@@ -51,7 +58,7 @@ internal static class KeyCaptureBox
         box.LostKeyboardFocus += (_, _) =>
         {
             if (typing) EndTyping(commit: true);              // 手输后直接点走：按已输入的值提交（校验不过则复原）
-            else if (box.Text == prompt) box.Text = committed; // 未捕捉就离开：复原显示
+            else if (box.Text == prompt) box.Text = HotkeyCapture.PrettyCombo(committed); // 未捕捉就离开：复原显示
             App.Instance?.ResumeHotkeys();
         };
         if (allowTyping)
@@ -94,12 +101,13 @@ internal static class KeyCaptureBox
             if (horiz) wmods &= ~ModifierKeys.Shift;
             if (HotkeyCapture.BuildWheelCombo(wmods, e.Delta, mode, accept, horiz) is not string wc) return;
             e.Handled = true;
-            committed = wc; set(wc); box.Text = wc;
+            committed = wc; set(wc); box.Text = HotkeyCapture.PrettyCombo(wc);
             Keyboard.ClearFocus();
         };
         box.PreviewKeyDown += (_, e) =>
         {
-            var key0 = e.Key == Key.System ? e.SystemKey : e.Key;
+            // System=Alt 组合的主键；ImeProcessed=中文 IME 吃掉的裸键；DeadCharProcessed=死键。真值全在对应属性里。
+            var key0 = HotkeyCapture.ResolveKey(e.Key, e.SystemKey, e.ImeProcessedKey, e.DeadCharProcessedKey);
             if (typing)
             {
                 // 手输模式只认 Enter/Esc，其余按键照常落进文本框（不拦截）。
@@ -117,11 +125,11 @@ internal static class KeyCaptureBox
                 case HotkeyCapture.CaptureAction.PassThrough:            // 裸 Tab（热键模式还含裸 Enter）：放行给焦点导航/默认按钮
                     e.Handled = false; break;
                 case HotkeyCapture.CaptureAction.Cancel:                 // Esc：复原、退出捕捉
-                    box.Text = committed; Keyboard.ClearFocus(); break;
+                    box.Text = HotkeyCapture.PrettyCombo(committed); Keyboard.ClearFocus(); break;
                 case HotkeyCapture.CaptureAction.Clear:                  // 裸 Delete/Backspace（仅热键模式）：清空停用
                     committed = ""; set(""); box.Text = ""; Keyboard.ClearFocus(); break;
                 case HotkeyCapture.CaptureAction.Captured:
-                    committed = combo!; set(combo!); box.Text = combo; Keyboard.ClearFocus(); break;
+                    committed = combo!; set(combo!); box.Text = HotkeyCapture.PrettyCombo(combo!); Keyboard.ClearFocus(); break;
                 default: break;                                         // Ignore：继续等
             }
         };

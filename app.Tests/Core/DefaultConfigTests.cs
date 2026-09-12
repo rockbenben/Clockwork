@@ -13,6 +13,7 @@ public class DefaultConfigTests
         Assert.Equal(2, c.ActionGroups.Count);          // 首启预置「离开一下」+「下班」两个可运行的动作组
         Assert.Equal(30, c.Settings.TickSeconds);
         Assert.Equal("Ctrl+Alt+Q", c.Settings.StopHotkey);
+        Assert.Equal("Ctrl+Oem3", c.Settings.QuickOpenHotkey);   // 一键直达默认 Ctrl+`（Oem3=反引号）
     }
 
     // 样例是照着改的模板，不该在用户还没看过一眼时就替他动电脑：首启必须什么都不执行。

@@ -714,6 +714,11 @@ Günlük: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Yeni temayı uygulamak için Clockwork hemen yeniden başlar. "Windows ile aynı" Windows'un uygulama modunu izler.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Hızlı Aç (seçili metindeki URL, dosya yolu, magnet bağlantısı veya kayıt defteri anahtarını otomatik algılar)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Seçili metin tanınamadı: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>Kayıt Defteri Düzenleyicisi zaten çalışıyor ve otomatik kapatılamadı; penceresi öne getirildi. Elle kapatıp yeniden deneyin.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Hızlı Aç kısayol tuşu</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Herhangi bir uygulamada metin seçip bu tuşa bastığınızda URL, dosya yolu, magnet bağlantısı veya kayıt defteri anahtarı otomatik algılanıp açılır.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Hassasiyet</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Yüksek</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>

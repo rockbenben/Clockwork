@@ -717,6 +717,11 @@ Log: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork restarts right away to apply the new theme. "Match Windows" follows the app mode in Windows settings.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Quick Open (auto-detect a URL, file path, magnet link, or registry key from selected text)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Could not recognize the selected text: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>Registry Editor is already running and could not be closed automatically; its window has been brought to the front. Close it manually and try again.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Quick Open hotkey</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Select text in any app and press this key to auto-detect and open a URL, file path, magnet link, or registry key.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Sensitivity</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>High</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>

@@ -553,7 +553,19 @@
                                     <TextBlock Grid.Column="2" Text="{loc:Loc Settings_HotkeyCaptureTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="16,6,0,0"/>
                                 </Grid>
 
-
+                                <!-- 一键直达键（点击即录键）：与急停键同属全局功能键，挨着它放；
+                                     它不属于「快捷面板」那一节——按下去不开面板，是直接对选区下手。 -->
+                                <Grid Margin="0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="200" MaxWidth="330"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{loc:Loc Settings_QuickOpenHotkey}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top"/>
+                                    <TextBox VerticalAlignment="Top" Grid.Column="1" x:Name="QuickOpenBox" Width="190" Height="32" HorizontalAlignment="Left" Style="{StaticResource HotkeyCapture}"
+                                             AutomationProperties.Name="{loc:Loc Settings_QuickOpenHotkey}"/>
+                                    <TextBlock Grid.Column="2" Text="{loc:Loc Settings_QuickOpenHotkeyTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="16,6,0,0"/>
+                                </Grid>
 
                                 <!-- 语言 -->
                                 <Grid Margin="0,4">

@@ -714,6 +714,11 @@
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork จะเริ่มใหม่ทันทีเพื่อใช้ธีมใหม่ "ตาม Windows" จะอ่านโหมดแอปของ Windows</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>เปิดด่วน (ตรวจหา URL, พาธไฟล์, ลิงก์แม่เหล็ก หรือคีย์รีจิสทรีในข้อความที่เลือกโดยอัตโนมัติ)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>ไม่รู้จักข้อความที่เลือก: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>ตัวแก้ไขรีจิสทรีกำลังทำงานอยู่และปิดอัตโนมัติไม่ได้ ได้นำหน้าต่างมาไว้ด้านหน้าแล้ว โปรดปิดเองแล้วลองอีกครั้ง</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>ปุ่มลัดเปิดด่วน</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>เลือกข้อความในแอปใดก็ได้แล้วกดปุ่มนี้ ระบบจะตรวจและเปิด URL, พาธไฟล์, ลิงก์แม่เหล็ก หรือคีย์รีจิสทรีให้อัตโนมัติ</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>ความไว</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>สูง</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>ปกติ</value></data>

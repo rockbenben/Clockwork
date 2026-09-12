@@ -578,6 +578,7 @@ public partial class App : System.Windows.Application
     // —— 全局热键（急停 + 动作组） ——
     private const int HotkeyId = 0xB001;          // 急停
     private const int PanelHotkeyId = 0xB002;     // 快捷面板（与急停同属「功能键」，占固定号，不进组的槽位区间）
+    private const int QuickOpenHotkeyId = 0xB003; // 一键直达（选中即开）
     private const int GroupHotkeyBase = 0xB100;   // 动作组热键 id 区间起点
     private const int GroupSlotMax = 0xBFF0;      // RegisterHotKey 应用侧 id 上限 0xBFFF，留余量
     private nint _hotkeyHwnd;                     // 主窗口句柄，注册/注销共用
@@ -588,6 +589,7 @@ public partial class App : System.Windows.Application
     private HashSet<string> _hotkeyFails = new();                       // 上一轮注册失败的「组Id|键」：同一失败只 toast 一次，不随每次保存刷屏
     private string? _stopHotkeyFail;                                    // 急停键上次失败的组合：同一失败只 toast 一次（每次捕捉进出都会重注册）
     private string? _panelHotkeyFail;                                   // 面板键同上，各记各的：两个键失败的原因通常不同，去重不能共用一个格子
+    private string? _quickOpenHotkeyFail;                               // 一键直达键，同上各记各的
 
     // 供 Views 层取 App 实例（挂起/恢复热键等），唯一出处——别再各处手写 Application.Current as App。
     public static App? Instance => System.Windows.Application.Current as App;
@@ -613,6 +615,7 @@ public partial class App : System.Windows.Application
         // （TogglePanel 已经在开头返回了）。传空串走的正是 RebindFunctionHotkey 里「不注册」那条路。
         RebindFunctionHotkey(PanelHotkeyId, _config.Settings.PanelEnabled ? _config.Settings.PanelHotkey : "",
                              ref _panelHotkeyFail);
+        RebindFunctionHotkey(QuickOpenHotkeyId, _config.Settings.QuickOpenHotkey, ref _quickOpenHotkeyFail);
         RebindGroupHotkeys();
     }
 
@@ -625,6 +628,7 @@ public partial class App : System.Windows.Application
         if (_hotkeyHwnd == 0) return;
         try { HotKey.UnregisterHotKey(_hotkeyHwnd, HotkeyId); } catch { }
         try { HotKey.UnregisterHotKey(_hotkeyHwnd, PanelHotkeyId); } catch { }
+        try { HotKey.UnregisterHotKey(_hotkeyHwnd, QuickOpenHotkeyId); } catch { }
         UnregisterGroupHotkeys();
     }
 
@@ -647,7 +651,7 @@ public partial class App : System.Windows.Application
         if (p == null || HotkeyCapture.IsReserved(combo))
         {
             var msgKey = p == null ? "Hotkey_Unrecognized" : "Hotkey_Reserved";
-            if (lastFail != combo) ShowToast("Clockwork", Lf(msgKey, combo), Views.ToastLevel.Warn);
+            if (lastFail != combo) ShowToast("Clockwork", Lf(msgKey, HotkeyCapture.PrettyCombo(combo)), Views.ToastLevel.Warn);
             lastFail = combo;
             return;
         }
@@ -655,7 +659,7 @@ public partial class App : System.Windows.Application
         try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, id, p.Modifiers | HotKey.MOD_NOREPEAT, p.Vk); } catch { }
         if (!ok)
         {
-            if (lastFail != combo) ShowToast("Clockwork", Lf("Hotkey_RegisterFail", combo), Views.ToastLevel.Warn);
+            if (lastFail != combo) ShowToast("Clockwork", Lf("Hotkey_RegisterFail", HotkeyCapture.PrettyCombo(combo)), Views.ToastLevel.Warn);
             lastFail = combo;
             return;
         }
@@ -704,7 +708,8 @@ public partial class App : System.Windows.Application
                 var key = g.Id + "|" + g.Hotkey;
                 fails.Add(key);
                 if (!_hotkeyFails.Contains(key))
-                    WarnToast(reserved ? Lf("Hotkey_Reserved", g.Hotkey) : Lf("Hotkey_GroupRegisterFail", g.Name, g.Hotkey));
+                    WarnToast(reserved ? Lf("Hotkey_Reserved", HotkeyCapture.PrettyCombo(g.Hotkey))
+                                       : Lf("Hotkey_GroupRegisterFail", g.Name, HotkeyCapture.PrettyCombo(g.Hotkey)));
                 continue;
             }
             _groupHotkeyIds[slot] = g.Id;
@@ -750,6 +755,13 @@ public partial class App : System.Windows.Application
         else if (id == PanelHotkeyId)
         {
             TogglePanel();
+            handled = true;
+        }
+        else if (id == QuickOpenHotkeyId)
+        {
+            // 走单步执行的手势档：无单飞闸、成功静默，取不到选区/识别不了才 toast。
+            // 传 system 步骤而不是直接调 SystemCommands，为的是复用整条失败回执链（Mark→toast/日志）。
+            RunStepAsync(new LaunchStep { Kind = "system", Command = "quickOpen" }, by: StepTrigger.Gesture);
             handled = true;
         }
         else if (_groupHotkeyIds.TryGetValue(id, out var gid))
@@ -2400,8 +2412,11 @@ public partial class App : System.Windows.Application
         // 与 RebindGroupHotkeys 同一道 _hotkeysSuspended 闸：捕捉期间一律不动键，
         // 捕捉一定以 ResumeHotkeys 收尾，那里会按「急停先、组后」的次序统一重建。
         if (!_hotkeysSuspended)
+        {
             RebindFunctionHotkey(PanelHotkeyId, _config.Settings.PanelEnabled ? _config.Settings.PanelHotkey : "",
                                  ref _panelHotkeyFail);
+            RebindFunctionHotkey(QuickOpenHotkeyId, _config.Settings.QuickOpenHotkey, ref _quickOpenHotkeyFail);
+        }
     }
 
     // 导入配置：新配置已原子写入磁盘，本实例内存里的 _config 就此作废——它靠重开新实例重读生效。

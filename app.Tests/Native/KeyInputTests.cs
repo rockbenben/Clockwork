@@ -9,6 +9,7 @@ public class KeyInputTests
     [InlineData("F4", 115)]    // Keys.F4
     [InlineData("Enter", 13)]  // Keys.Enter
     [InlineData("esc", 27)]    // 别名→Escape
+    [InlineData("Oem3", 0xC0)]
     [InlineData("10", 0)]      // 多位数字拒绝
     [InlineData("", 0)]
     public void KeysVk_maps(string key, int vk) => Assert.Equal(vk, KeyInput.KeysVk(key));

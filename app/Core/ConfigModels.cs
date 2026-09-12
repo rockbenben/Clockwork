@@ -292,6 +292,17 @@ public sealed class AppSettings
 
     public string PanelHotkey { get; set; } = "Ctrl+Alt+Space";
 
+    // 一键直达热键（RunAny 式「选中即开」）：任意程序里选中文字，按一下自动识别
+    // 网址 / 文件文件夹路径 / 磁力链接 / 注册表路径并直达。空串 = 不绑定。
+    //
+    // 默认 Ctrl+Oem3（Oem3 是 Esc 下方、数字 1 左边那个反引号 ` 键）。选它的账：
+    //   · RunAny 自己默认就是裸 `——单键最快，但裸键必须**全局劫持**这个键，
+    //     用户在任何程序里都打不出反引号，写代码/Markdown 时是灾难，故这里坚持要一个修饰键；
+    //   · Ctrl+` 是 VS Code/终端「切换终端面板」的常用键，但那是**应用内**快捷键，
+    //     全局注册只在那些窗口前台时盖过它，代价可接受（JetBrains 系的 Quick Documentation 同理）；
+    //   · 不和本程序自己的急停 Ctrl+Alt+Q、面板 Ctrl+Alt+Space 撞车。
+    public string QuickOpenHotkey { get; set; } = "Ctrl+Oem3";
+
     // 长按鼠标中键唤出快捷面板。**默认关**——它要装一个全局低级鼠标钩子，
     // 而那个钩子必须先吞掉每一次中键按下（按下的当口还不知道是长按还是普通点击），
     // 判定为短按后再补发一次真实中键。这套机制正常时无感，出错时的样子是「全系统中键失灵」。

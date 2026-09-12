@@ -48,6 +48,19 @@ public class HotkeyCaptureTests
     public void BuildCombo_requires_a_modifier()
         => Assert.Null(HotkeyCapture.BuildCombo(ModifierKeys.None, Key.Q));   // 裸键不接受（防全局劫键）
 
+    // —— allowBare：只给一键直达的裸 `（Oem3）开口 ——
+    [Fact]
+    public void BuildCombo_allowBare_accepts_a_lone_main_key()
+        => Assert.Equal("Oem3", HotkeyCapture.BuildCombo(ModifierKeys.None, Key.Oem3, allowBare: true));
+
+    [Fact]
+    public void BuildCombo_allowBare_still_adds_modifiers_when_present()
+        => Assert.Equal("Ctrl+Oem3", HotkeyCapture.BuildCombo(ModifierKeys.Control, Key.Oem3, allowBare: true));
+
+    [Fact]
+    public void BuildCombo_allowBare_default_stays_strict()   // 不传参时旧行为不变：急停/面板/组键仍不许裸键
+        => Assert.Null(HotkeyCapture.BuildCombo(ModifierKeys.None, Key.Oem3));
+
     [Fact]
     public void BuildCombo_rejects_modifier_only()
         => Assert.Null(HotkeyCapture.BuildCombo(ModifierKeys.Control, Key.LeftShift));
@@ -136,6 +149,42 @@ public class HotkeyCaptureTests
     public void Capture_hotkey_ignores_incomplete_or_reserved(Key key, ModifierKeys mods)
         => Assert.Equal(HotkeyCapture.CaptureAction.Ignore, Hk(key, mods, out _));
 
+    // —— 捕捉状态机：HotkeyBare 模式（只给一键直达：裸 ` 也要录得进） ——
+    static HotkeyCapture.CaptureAction Hb(Key k, ModifierKeys m, out string? c)
+        => HotkeyCapture.ProcessCaptureKey(k, m, HotkeyCapture.KeyCaptureMode.HotkeyBare, null, out c);
+
+    [Fact]
+    public void Capture_hotkeybare_lone_oem3_is_captured()
+    {
+        var act = Hb(Key.Oem3, ModifierKeys.None, out var combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
+        Assert.Equal("Oem3", combo);   // 裸反引号：RegisterHotKey(0, OEM3)
+    }
+
+    [Fact]
+    public void Capture_hotkeybare_modified_combo_still_works()
+    {
+        var act = Hb(Key.Oem3, ModifierKeys.Control, out var combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
+        Assert.Equal("Ctrl+Oem3", combo);   // 带修饰键的照旧
+    }
+
+    [Fact]
+    public void Capture_hotkeybare_keeps_hotkey_semantics()
+    {
+        // 清空 / 取消 / 默认按钮 / 焦点导航与 Hotkey 档一致
+        Assert.Equal(HotkeyCapture.CaptureAction.Clear, Hb(Key.Delete, ModifierKeys.None, out _));
+        Assert.Equal(HotkeyCapture.CaptureAction.Cancel, Hb(Key.Escape, ModifierKeys.None, out _));
+        Assert.Equal(HotkeyCapture.CaptureAction.PassThrough, Hb(Key.Enter, ModifierKeys.None, out _));
+        Assert.Equal(HotkeyCapture.CaptureAction.PassThrough, Hb(Key.Tab, ModifierKeys.None, out _));
+        Assert.Equal(HotkeyCapture.CaptureAction.Ignore, Hb(Key.F4, ModifierKeys.Alt, out _));   // 保留组合仍拒
+    }
+
+    [Fact]
+    public void Capture_plain_hotkey_still_rejects_lone_oem3()
+        // 防回退：急停/面板/组键那三个框不允许裸键
+        => Assert.Equal(HotkeyCapture.CaptureAction.Ignore, Hk(Key.Oem3, ModifierKeys.None, out _));
+
     // —— 捕捉状态机：SendKeys 模式（步骤里的组合键 / 发送键） ——
     [Theory]
     [InlineData(Key.F5, ModifierKeys.None, "F5")]                       // 裸 F5：发送键允许，热键模式则拒
@@ -207,5 +256,52 @@ public class HotkeyCaptureTests
         act = HotkeyCapture.ProcessCaptureKey(Key.D, HotkeyCapture.WithWin(ModifierKeys.None, true),
             HotkeyCapture.KeyCaptureMode.SendKeys, _ => true, out combo);
         Assert.Equal("Win+D", combo);
+    }
+
+    [Fact]
+    public void ResolveKey_unwraps_alt_combo_main_key_from_System()
+    {
+        // Alt+`：reported=System、SystemKey=Oem3（旧代码唯一解的一层）
+        Assert.Equal(Key.Oem3, HotkeyCapture.ResolveKey(Key.System, Key.Oem3, Key.None, Key.None));
+    }
+
+    [Fact]
+    public void ResolveKey_unwraps_bare_key_eaten_by_chinese_ime()
+    {
+        // 中文 IME 开着时物理裸 `：e.Key=ImeProcessed，真值在 ImeProcessedKey=Oem3（探针实测）
+        Assert.Equal(Key.Oem3, HotkeyCapture.ResolveKey(Key.ImeProcessed, Key.None, Key.Oem3, Key.None));
+    }
+
+    [Fact]
+    public void ResolveKey_unwraps_dead_char_key()
+    {
+        // 欧陆布局的组合重音死键：DeadCharProcessed + DeadCharProcessedKey
+        Assert.Equal(Key.Oem3, HotkeyCapture.ResolveKey(Key.DeadCharProcessed, Key.None, Key.None, Key.Oem3));
+    }
+
+    [Fact]
+    public void ResolveKey_returns_reported_when_wrapper_has_no_real_key()
+    {
+        // 包装键却给不出真值：原样返回，交给后续 BuildCombo 判无效（行为不回退）
+        Assert.Equal(Key.ImeProcessed, HotkeyCapture.ResolveKey(Key.ImeProcessed, Key.None, Key.None, Key.None));
+        Assert.Equal(Key.System, HotkeyCapture.ResolveKey(Key.System, Key.None, Key.None, Key.None));
+    }
+
+    [Fact]
+    public void ResolveKey_passes_through_plain_keys_and_modifier_taps()
+    {
+        Assert.Equal(Key.A, HotkeyCapture.ResolveKey(Key.A, Key.None, Key.None, Key.None));
+        Assert.Equal(Key.Delete, HotkeyCapture.ResolveKey(Key.Delete, Key.None, Key.None, Key.None));
+    }
+
+    [Fact]
+    public void Ime_eaten_bare_oem3_is_captured_in_HotkeyBare_mode()
+    {
+        // 端到端的那一道：IME 报 ImeProcessed、解包出 Oem3 → HotkeyBare 录成裸键
+        var real = HotkeyCapture.ResolveKey(Key.ImeProcessed, Key.None, Key.Oem3, Key.None);
+        var act = HotkeyCapture.ProcessCaptureKey(real, ModifierKeys.None,
+            HotkeyCapture.KeyCaptureMode.HotkeyBare, null, out var combo);
+        Assert.Equal(HotkeyCapture.CaptureAction.Captured, act);
+        Assert.Equal("Oem3", combo);
     }
 }

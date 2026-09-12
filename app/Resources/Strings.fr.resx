@@ -714,6 +714,11 @@ Journal : {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork redémarre aussitôt pour appliquer le thème. « Suivre Windows » reprend le mode application de Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Ouverture rapide (détecte automatiquement dans le texte sélectionné une URL, un chemin de fichier, un lien magnet ou une clé de Registre)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Texte sélectionné non reconnu : {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>L’Éditeur du Registre est déjà ouvert et n’a pas pu être fermé automatiquement ; sa fenêtre a été amenée au premier plan. Fermez-le manuellement et réessayez.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Raccourci de l’ouverture rapide</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Sélectionnez du texte dans n’importe quelle application et appuyez sur ce raccourci pour détecter et ouvrir automatiquement une URL, un chemin de fichier, un lien magnet ou une clé de Registre.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Sensibilité</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Haute</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>

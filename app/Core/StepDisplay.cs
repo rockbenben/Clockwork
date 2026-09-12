@@ -13,7 +13,7 @@ public static class StepDisplay
     private static readonly string[] SysCmdIds =
     {
         "showDesktop", "lockScreen", "emptyRecycleBin", "openSettings", "screenshot", "clearClipboard",
-        "setClipboard", "searchSelection", "playSound", "taskManager",
+        "setClipboard", "searchSelection", "quickOpen", "playSound", "taskManager",
         "displayInternal", "displayClone", "displayExtend", "displayExternal",
         "notificationsOff", "notificationsOn", "brightness",
         "monitorOff", "sleep", "hibernate", "signOut", "restart", "shutdown",

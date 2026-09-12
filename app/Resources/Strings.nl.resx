@@ -714,6 +714,11 @@ Log: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork start meteen opnieuw om het thema toe te passen. “Volg Windows” volgt de app-modus in Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Snel openen (herkent automatisch een URL, bestandspad, magneetlink of registersleutel in geselecteerde tekst)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>De geselecteerde tekst werd niet herkend: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>De Register-editor is al actief en kon niet automatisch worden gesloten; het venster is naar de voorgrond gehaald. Sluit het handmatig en probeer het opnieuw.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Snelopenen-sneltoets</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Selecteer tekst in een willekeurige app en druk op deze toets om automatisch een URL, bestandspad, magneetlink of registersleutel te herkennen en te openen.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Gevoeligheid</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Hoog</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normaal</value></data>

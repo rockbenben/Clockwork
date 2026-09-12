@@ -714,6 +714,11 @@ Registro: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>O Clockwork reinicia na hora para aplicar o tema. "Acompanhar o Windows" segue o modo de aplicativo do Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Sys_quickOpen" xml:space="preserve"><value>Abertura rápida (detecta automaticamente no texto selecionado um URL, caminho de arquivo, link magnet ou chave do Registro)</value></data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Não foi possível reconhecer o texto selecionado: {0}</value></data>
+  <data name="Err_RegEditBusy" xml:space="preserve"><value>O Editor do Registro já está em execução e não pôde ser fechado automaticamente; a janela dele foi trazida para a frente. Feche-o manualmente e tente novamente.</value></data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Atalho da Abertura rápida</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Selecione texto em qualquer aplicativo e pressione esta tecla para reconhecer e abrir automaticamente um URL, caminho de arquivo, link magnet ou chave do Registro.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>Sensibilidade</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Alta</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>
