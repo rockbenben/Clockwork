@@ -714,6 +714,11 @@
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork จะเริ่มใหม่ทันทีเพื่อใช้ธีมใหม่ "ตาม Windows" จะอ่านโหมดแอปของ Windows</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>แทรกตัวแปร</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>พาธ</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>รองรับตัวแปรสภาพแวดล้อมเช่น %APPDATA% โดยจะขยายอัตโนมัติตอนทำงาน คลิก { } เพื่อแทรกโฟลเดอร์ที่ใช้บ่อย</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>เปิดไฟล์หรือโฟลเดอร์</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>เปิด {0}</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>เปิดด่วน (ตรวจหา URL, พาธไฟล์, ลิงก์แม่เหล็ก หรือคีย์รีจิสทรีในข้อความที่เลือกโดยอัตโนมัติ)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>ไม่รู้จักข้อความที่เลือก: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>ตัวแก้ไขรีจิสทรีกำลังทำงานอยู่และปิดอัตโนมัติไม่ได้ ได้นำหน้าต่างมาไว้ด้านหน้าแล้ว โปรดปิดเองแล้วลองอีกครั้ง</value></data>
@@ -730,4 +735,6 @@
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>หนา</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>เลือกแอป</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>เจสเจอร์จะทำงานเฉพาะเมื่อแอปนี้อยู่หน้าสุดเท่านั้น เว้นว่างไว้เพื่อให้ทำงานในทุกแอป</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>โฟลเดอร์ที่ใช้บ่อย</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>ตัวแปรสภาพแวดล้อม</value></data>
 </root>

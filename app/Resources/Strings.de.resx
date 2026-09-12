@@ -714,6 +714,11 @@ Protokoll: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork startet sofort neu, um das Design anzuwenden. „Wie Windows“ folgt dem App-Modus in den Windows-Einstellungen.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>Variable einfügen</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>Pfad</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>Unterstützt Umgebungsvariablen wie %APPDATA%, die zur Laufzeit automatisch expandiert werden. Klicken Sie auf { }, um einen häufigen Ordner einzufügen.</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>Datei oder Ordner öffnen</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>{0} öffnen</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>Schnell öffnen (erkennt im markierten Text automatisch eine URL, einen Dateipfad, Magnet-Link oder Registrierungsschlüssel)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Der ausgewählte Text konnte nicht erkannt werden: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>Der Registrierungseditor läuft bereits und konnte nicht automatisch geschlossen werden; sein Fenster wurde in den Vordergrund geholt. Schließen Sie ihn manuell und versuchen Sie es erneut.</value></data>
@@ -730,4 +735,6 @@ Protokoll: {1}</value></data>
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Dick</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>App wählen</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Die Geste wird nur ausgelöst, wenn diese App im Vordergrund ist. Leer lassen, damit sie in jeder App funktioniert.</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>Häufige Ordner</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>Umgebungsvariablen</value></data>
 </root>

@@ -64,6 +64,19 @@ public static class StepMenu
             mi.Click += (_, _) => pick(k, null);
             yield return mi;
         }
+        if (sectionKey == "Menu_SecOpen")
+        {
+            bool isZh = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+            var foldersMenu = new MenuItem { Header = Strings.Get("Var_SecFolders") };
+            foreach (var folder in PathVariables.GetCommonFolders(isZh))
+            {
+                var f = folder;
+                var item = new MenuItem { Header = f.Name, InputGestureText = f.Expression, ToolTip = f.Resolved };
+                item.Click += (_, _) => pick("path", new LaunchStep { Kind = "path", Target = f.Expression, Label = f.Name });
+                foldersMenu.Items.Add(item);
+            }
+            yield return foldersMenu;
+        }
     }
 
     /// <summary>「常用」里那一串菜单项，每次调用都是新的一份（一个 MenuItem 只能挂一个父级）。

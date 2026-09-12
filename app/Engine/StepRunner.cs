@@ -154,6 +154,21 @@ public static class StepRunner
                 try { Start(url); return ActionResult.Empty; }
                 catch (Exception ex) { return ActionResult.Warn("Warn_LaunchFail", StepHelpers.Ellipsis(url), ex.Message); }
             }
+            // 打开文件 / 文件夹：从「运行程序」拆出的一档，与「打开网址」完全对称——执行上仍是
+            // 同一条 ShellExecute 路（Start），拆出来的收益在模型侧：编辑器只剩一个路径框，
+            // 摘要写的是路径本身。文档交给关联程序、文件夹交给资源管理器、盘符/UNC/shell: 位置也都走它。
+            // 与 app 同一道口径：**不做占位替换**。在本地路径里做替换是注入面（见 url 支上那句注释）。
+            case "path":
+            {
+                var path = LaunchTarget.NormalizeTarget(s.Target);
+                if (path.Length == 0) return ActionResult.Warn("Warn_LaunchFail", "", new Strings.Ref("Sum_Unset"));
+                // 自指同拦：app / url 两支都有这一道。对着 Clockwork.exe 自己建一条「打开文件」
+                // 不会开第二份（单实例会把它引到弹出主窗口），但那与这一步承诺的事完全无关。
+                if (selfPaths != null && selfPaths.Count > 0 && LaunchTarget.IsSelfTarget(path, selfPaths))
+                    return ActionResult.Warn("Warn_SelfSkip", s.Label);
+                try { Start(path); return ActionResult.Empty; }
+                catch (Exception ex) { return ActionResult.Warn("Warn_LaunchFail", StepHelpers.Ellipsis(path), ex.Message); }
+            }
             // 取选中的文字：机器整个在 SystemCommands（版本号判定、终端键序、注入被拒的判读），
             // 与「搜索选中的文字」共用同一份——那台机器身上攒着好几轮实测，复制一份出去必然漂。
             // 顺带写进变量：配了「输出到变量」就把取到的文字也放一份进去，后面的步骤可以按名字引用。
@@ -276,7 +291,7 @@ public static class StepRunner
             };
             if (item.Elevated) psi.Verb = "runas";
 
-            var proc = Process.Start(psi);
+            using var proc = Process.Start(psi);
             // Start 不抛错只代表进程被拉起。秒退且退出码非 0=多半启动失败；拿不到进程对象(ShellExecute 开文档/URL)则跳过、保持 ✓。
             if (proc != null)
             {

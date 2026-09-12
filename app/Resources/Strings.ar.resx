@@ -714,6 +714,11 @@
   <data name="Settings_ThemeTip" xml:space="preserve"><value>يعيد Clockwork التشغيل فورًا لتطبيق المظهر. و«حسب Windows» يتبع وضع التطبيقات في إعدادات Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>إدراج متغير</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>المسار</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>يدعم متغيرات البيئة مثل %APPDATA%، وتُوسَّع تلقائيًا أثناء التشغيل. اضغط { } لإدراج مجلد شائع.</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>فتح ملف أو مجلد</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>فتح {0}</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>فتح سريع (يتعرّف تلقائيًا على رابط ويب أو مسار ملف أو رابط مغناطيسي أو مفتاح سجل من النص المحدد)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>تعذّر التعرّف على النص المحدد: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>محرر السجل يعمل بالفعل وتعذّر إغلاقه تلقائيًا؛ وقد أُحضرت نافذته إلى الأمام. أغلقه يدويًا ثم حاول مرة أخرى.</value></data>
@@ -730,4 +735,6 @@
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>سميك</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>اختيار تطبيق</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>لا تعمل الإيماءة إلا عندما يكون هذا التطبيق في المقدمة. اتركه فارغًا لتعمل في كل التطبيقات.</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>مجلدات شائعة</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>متغيرات البيئة</value></data>
 </root>

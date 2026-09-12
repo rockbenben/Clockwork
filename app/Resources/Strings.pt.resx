@@ -714,6 +714,11 @@ Registro: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>O Clockwork reinicia na hora para aplicar o tema. "Acompanhar o Windows" segue o modo de aplicativo do Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>Inserir variável</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>Caminho</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>Suporta variáveis de ambiente como %APPDATA%, expandidas automaticamente em tempo de execução. Clique em { } para inserir uma pasta comum.</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>Abrir arquivo ou pasta</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>Abrir {0}</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>Abertura rápida (detecta automaticamente no texto selecionado um URL, caminho de arquivo, link magnet ou chave do Registro)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Não foi possível reconhecer o texto selecionado: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>O Editor do Registro já está em execução e não pôde ser fechado automaticamente; a janela dele foi trazida para a frente. Feche-o manualmente e tente novamente.</value></data>
@@ -730,4 +735,6 @@ Registro: {1}</value></data>
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Grosso</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>Escolher app</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>O gesto só dispara quando este aplicativo está em primeiro plano. Deixe em branco para valer em todos os aplicativos.</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>Pastas comuns</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>Variáveis de ambiente</value></data>
 </root>

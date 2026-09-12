@@ -29,9 +29,11 @@ namespace Clockwork.Views;
 /// <param name="OnDelete">右键「删除」。同上。</param>
 /// <param name="Tip">悬停时说全的那句（「关闭窗口 Slack」）。为空则用 <paramref name="Label"/>——
 /// 格子上的标题是给眼睛扫的，短；ToolTip 是给「这到底是哪个」兜底的，可以长。</param>
+/// <param name="Search">搜索语料。为空就搜 <paramref name="Tip"/>。ToolTip 会把长路径截断，
+/// 搜索却要搜得到路径尾巴，所以这一份必须是不截断的全文（见 StepDisplay.StepSearchText）。</param>
 public sealed record PanelTile(string Label, PanelIconSpec Icon, Action Run, bool Enabled = true,
                                Action? OnEdit = null, Action? OnDelete = null, string? Tip = null,
-                               bool FillsEmptyPanel = false)
+                               string? Search = null, bool FillsEmptyPanel = false)
 {
     /// <summary>便捷构造：直接给一个字形字符。托盘那几个自带操作用它。</summary>
     public PanelTile(string label, string glyph, Action run, bool enabled = true, bool fillsEmptyPanel = false)
@@ -471,8 +473,8 @@ public partial class QuickPanelWindow : Window
     {
         var q = (query ?? "").Trim();
         // 匹配与排序在 Core.ActionSearch（可测）：空格分词、拼音首字母、按命中得有多直接排序。
-        // 这里只负责把结果铺出来。
-        _hits = ActionSearch.Rank(_pages.SelectMany(p => p.Tiles), q, t => t.Label, t => t.Tip);
+        // 这里只负责把结果铺出来。搜索走不截断的全文（Search），悬停那句截断过的 Tip 兜底。
+        _hits = ActionSearch.Rank(_pages.SelectMany(p => p.Tiles), q, t => t.Label, t => t.Search ?? t.Tip);
 
         // 铺出来的结果有上限。**这不是为了好看，是量出来的**：搜索时每敲一个键都会把结果整批重造，
         // 实测 50 格 23ms、200 格 30ms，到 500 格就是 531ms——打两个字卡一秒，搜索框直接不能用了。

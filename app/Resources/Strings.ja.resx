@@ -715,6 +715,11 @@
   <data name="Settings_ThemeTip" xml:space="preserve"><value>新しいテーマを反映するため Clockwork をすぐに再起動します。「Windows に合わせる」は Windows のアプリ モードを見ます。</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>変数を挿入</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>パス</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>%APPDATA% などの環境変数に対応し、実行時に自動展開されます。{ } をクリックするとよく使うフォルダーを挿入できます。</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>ファイルまたはフォルダーを開く</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>{0} を開く</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>クイックオープン（選択テキストから URL・ファイル パス・マグネットリンク・レジストリキーを自動判定）</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>選択したテキストを認識できませんでした: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>レジストリ エディターは既に起動中で、自動的に閉じられませんでした。ウィンドウを手前に表示しましたので、手動で閉じてからもう一度お試しください。</value></data>
@@ -731,4 +736,6 @@
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>太い</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>アプリを選択</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>このアプリが前面にあるときだけジェスチャーが発動します。すべてのアプリで有効にするには空欄のままにしてください。</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>よく使うフォルダー</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>環境変数</value></data>
 </root>

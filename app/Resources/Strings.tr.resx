@@ -714,6 +714,11 @@ Günlük: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Yeni temayı uygulamak için Clockwork hemen yeniden başlar. "Windows ile aynı" Windows'un uygulama modunu izler.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>Değişken ekle</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>Yol</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>%APPDATA% gibi ortam değişkenlerini destekler; çalışma anında otomatik olarak genişletilir. Sık kullanılan bir klasör eklemek için { } düğmesine tıklayın.</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>Dosya veya klasör aç</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>{0} aç</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>Hızlı Aç (seçili metindeki URL, dosya yolu, magnet bağlantısı veya kayıt defteri anahtarını otomatik algılar)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Seçili metin tanınamadı: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>Kayıt Defteri Düzenleyicisi zaten çalışıyor ve otomatik kapatılamadı; penceresi öne getirildi. Elle kapatıp yeniden deneyin.</value></data>
@@ -730,4 +735,6 @@ Günlük: {1}</value></data>
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Kalın</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>Uygulama seç</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Hareket yalnızca bu uygulama ön plandayken tetiklenir. Her uygulamada çalışması için boş bırakın.</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>Sık kullanılan klasörler</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>Ortam değişkenleri</value></data>
 </root>

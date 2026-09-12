@@ -1062,6 +1062,7 @@
         <Setter Property="Background" Value="{StaticResource BrushSlate}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+        <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContextMenu">
@@ -1084,14 +1085,22 @@
                 <ControlTemplate TargetType="MenuItem">
                     <Border x:Name="bd" Background="Transparent" CornerRadius="6" Padding="{TemplateBinding Padding}">
                         <Grid>
-                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemGesture"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
                             <ContentPresenter Grid.Column="0" ContentSource="Header" VerticalAlignment="Center"/>
-                            <Path Grid.Column="1" x:Name="arrow" Data="M 0,0 L 4,4 L 0,8 Z" Fill="{StaticResource BrushMuted}"
+                            <TextBlock Grid.Column="1" x:Name="gesture" Text="{TemplateBinding InputGestureText}"
+                                       Foreground="{StaticResource BrushMuted}" FontFamily="{StaticResource FontMono}" FontSize="12"
+                                       VerticalAlignment="Center" Margin="28,0,0,0"/>
+                            <Path Grid.Column="2" x:Name="arrow" Data="M 0,0 L 4,4 L 0,8 Z" Fill="{StaticResource BrushMuted}"
                                   VerticalAlignment="Center" Margin="12,0,0,0" Visibility="Collapsed"/>
                             <Popup x:Name="PART_Popup" Placement="Right" IsOpen="{TemplateBinding IsSubmenuOpen}"
                                    AllowsTransparency="True" Focusable="False">
                                 <Border Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}"
-                                        BorderThickness="1" CornerRadius="8" Padding="4" Margin="2,0,0,0">
+                                        BorderThickness="1" CornerRadius="8" Padding="4" Margin="2,0,0,0"
+                                        Grid.IsSharedSizeScope="True">
                                     <StackPanel IsItemsHost="True"/>
                                 </Border>
                             </Popup>
@@ -1100,8 +1109,39 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="Role" Value="SubmenuHeader"><Setter TargetName="arrow" Property="Visibility" Value="Visible"/></Trigger>
                         <Trigger Property="IsHighlighted" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/></Trigger>
-                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Foreground" Value="{StaticResource BrushFaint}"/></Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
+                            <Setter TargetName="gesture" Property="Foreground" Value="{StaticResource BrushFaint}"/>
+                        </Trigger>
+                        <Trigger Property="InputGestureText" Value="">
+                            <Setter TargetName="gesture" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="InputGestureText" Value="{x:Null}">
+                            <Setter TargetName="gesture" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ ContextMenu 区段小标题（不可点击、无悬停、紧凑字号与字色，同托盘菜单 TrayMenu.Header） ============ -->
+    <Style x:Key="MenuHeader" TargetType="MenuItem">
+        <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="12,8,12,3"/>
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsHitTestVisible" Value="False"/>
+        <Setter Property="Cursor" Value="Arrow"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter ContentSource="Header" VerticalAlignment="Center"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

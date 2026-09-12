@@ -714,6 +714,11 @@ Nhật ký: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork khởi động lại ngay để áp dụng giao diện. "Theo Windows" đọc chế độ ứng dụng của Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>Chèn biến</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>Đường dẫn</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>Hỗ trợ biến môi trường như %APPDATA%, tự được khai báo khi chạy. Nhấn { } để chèn thư mục thường dùng.</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>Mở tệp hoặc thư mục</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>Mở {0}</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>Mở nhanh (tự động nhận ra URL, đường dẫn tệp, liên kết magnet hoặc khóa Registry trong văn bản đã chọn)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Không nhận ra văn bản đã chọn: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>Trình chỉnh sửa Registry đang chạy và không thể tự động đóng; cửa sổ của nó đã được đưa lên phía trước. Hãy đóng thủ công rồi thử lại.</value></data>
@@ -730,4 +735,6 @@ Nhật ký: {1}</value></data>
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Đậm</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>Chọn ứng dụng</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Cử chỉ chỉ kích hoạt khi ứng dụng này ở nền trước. Để trống để dùng trong mọi ứng dụng.</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>Thư mục thường dùng</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>Biến môi trường</value></data>
 </root>

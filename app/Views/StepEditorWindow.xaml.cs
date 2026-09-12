@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Button = System.Windows.Controls.Button;
+using TextBox = System.Windows.Controls.TextBox;
 using Clockwork.Core;
 using Clockwork.I18n;
 using static Clockwork.Views.EditorUi;
@@ -67,7 +69,11 @@ public partial class StepEditorWindow : Window
         LoadStep(step);
         // 目标一变，自动取到的图标也变。跟着输入走，而不是只在打开时算一次——
         // 选完程序却看见上一个程序的图标，会让人以为图标是自己填死的。
-        TargetBox.TextChanged += (_, _) => RefreshIcon();
+        TargetBox.TextChanged += (_, _) => { RefreshIcon(); UpdatePathPreview(TargetBox, TargetPreview); };
+        // 与 TargetBox 同一条：路径框一变，自动取到的文件/文件夹图标也得跟着变。
+        PathBox.TextChanged += (_, _) => { RefreshIcon(); UpdatePathPreview(PathBox, PathPreview); };
+        WorkDirBox.TextChanged += (_, _) => UpdatePathPreview(WorkDirBox, WorkDirPreview);
+        IfPathBox.TextChanged += (_, _) => UpdatePathPreview(IfPathBox, IfPathPreview);
         // 说明行里带着当前变量名（「后面的步骤用 {关键词} 引用它」）。跟着输入实时变——
         // 只在打开时算一次的话，改完名字看到的还是旧名字，而那句话正是拿来照着抄的。
         OutputVarBox.TextChanged += (_, _) => ShowPanelForKind(ComboVal(KindCombo));
@@ -247,7 +253,8 @@ public partial class StepEditorWindow : Window
         LevelBox.Text = s.Level.ToString();
         ProcessBox.Text = s.Process; SendKeyBox.Text = s.SendKey; WaitWinBox.Text = s.WaitForWindowSeconds.ToString(); PostDelayBox.Text = s.PostWindowDelaySeconds.ToString();
         TextBox2.Text = s.Text; TextProcessBox.Text = s.Process;
-UrlBox.Text = s.Kind == "url" ? s.Target : "";
+        UrlBox.Text = s.Kind == "url" ? s.Target : "";
+        PathBox.Text = s.Kind == "path" ? s.Target : "";
         WaitSecondsBox.Text = StepHelpers.ClampWaitSeconds(s.Level).ToString();
         MessageBox2.Text = s.Message; SpeakChk.IsChecked = s.Speak; ConfirmChk.IsChecked = s.Confirm; OnYesTargetBox.Text = s.OnYes.Target;
         PopupSecondsBox.Text = s.PopupSeconds.ToString();
@@ -280,7 +287,7 @@ UrlBox.Text = s.Kind == "url" ? s.Target : "";
         Vis(PanMouse, kind == "mouse");
         Vis(PanWindow, kind == "window"); Vis(PanSystem, kind == "system"); Vis(PanText, kind == "text");
         Vis(PanMessage, kind == "message"); Vis(PanGroup, kind == "group");
-        Vis(PanUrl, kind == "url"); Vis(PanCopySelection, kind == "copySelection");
+        Vis(PanUrl, kind == "url"); Vis(PanPath, kind == "path"); Vis(PanCopySelection, kind == "copySelection");
         Vis(PanWaitClipboard, kind == "waitClipboard");
         Vis(PanPrompt, kind == "prompt"); Vis(PanChoice, kind == "choice");
         // 「输出到变量」跟着**会产出值的类型**走，不跟着单个面板走——三种类型共用这一行。
@@ -294,16 +301,20 @@ UrlBox.Text = s.Kind == "url" ? s.Target : "";
 
     private void KindCombo_Changed(object sender, SelectionChangedEventArgs e)
     {
-        // **「运行程序」与「打开网址」共用 Target 这一个字段**，只是各有一个输入框。
+        // **「运行程序」「打开网址」「打开文件或文件夹」三者共用 Target 这一个字段**，只是各有一个输入框。
         // 换类型时要把值搬过去，否则：一个 Kind="app"、Target="C:\Tools\backup.exe" 的步骤，
-        // UrlBox 载入时是空的（只有 url 类型才填），把类型改成「打开网址」再按确定，
-        // 保存那一支 `r.Target = UrlBox.Text.Trim()` 直接把路径写成空串——没有校验、没有提示、
-        // 没有备份，而本文件第 50 行的规矩是「打开再关上绝不能改变一个步骤」。
+        // UrlBox/PathBox 载入时是空的（只有对应类型才填），把类型改一下再按确定，
+        // 保存那一支直接把目标写成空串——没有校验、没有提示、没有备份，
+        // 而本文件开头的规矩是「打开再关上绝不能改变一个步骤」。
         // 搬而不是各自留一份：用户改类型的语义是「同一个东西换个说法」，不是「另填一个」。
-        // 只在对方为空时搬，免得把用户在新框里已经改过的内容冲掉。
+        // 只在目标框为空时从另两个框搬，免得把用户在新框里已经改过的内容冲掉。
         var kind = ComboVal(KindCombo);
-        if (kind == "url" && UrlBox.Text.Trim().Length == 0) UrlBox.Text = TargetBox.Text;
-        else if (kind == "app" && TargetBox.Text.Trim().Length == 0) TargetBox.Text = UrlBox.Text;
+        var dest = kind == "app" ? TargetBox : kind == "url" ? UrlBox : kind == "path" ? PathBox : null;
+        if (dest != null && dest.Text.Trim().Length == 0)
+        {
+            var source = new[] { TargetBox, UrlBox, PathBox }.FirstOrDefault(b => b != dest && b.Text.Trim().Length > 0);
+            if (source != null) dest.Text = source.Text;
+        }
         ShowPanelForKind(kind);
         RefreshIcon();   // 换了类型，自动取到的图标也就变了
     }
@@ -386,6 +397,8 @@ UrlBox.Text = s.Kind == "url" ? s.Target : "";
             // 网址存进 Target（与 app 同一个字段）：两者都是「要打开的东西」，
             // 而共用字段意味着把一条 app 步骤的类型改成「打开网址」时，填好的地址不会凭空消失。
             case "url": r.Target = UrlBox.Text.Trim(); break;
+            // 与 url 对称：路径也存进 Target 这个共用字段，三个「打开」类型互相改来改去都不丢值。
+            case "path": r.Target = PathBox.Text.Trim(); break;
             case "copySelection": break;   // 除了「输出到变量」（下面统一收）没有别的参数
             case "waitClipboard": r.Level = StepHelpers.ClampWaitSeconds(ParseOr(WaitSecondsBox.Text, 5)); break;
             // 动作存进 Action（与音量/窗口步骤同一个字段的用法），不为它新开配置字段。
@@ -455,9 +468,16 @@ UrlBox.Text = s.Kind == "url" ? s.Target : "";
     private void Cancel_Click(object sender, RoutedEventArgs e) => DialogResult = false;
 
     // —— 选择器（浏览/选择进程/捕获按键）：取消则不动原值 ——
-    private void BrowseTarget_Click(object sender, RoutedEventArgs e) { if (Pickers.BrowseFile(this) is string p) TargetBox.Text = p; }
-    private void BrowseWorkDir_Click(object sender, RoutedEventArgs e) { if (Pickers.BrowseFolder(this) is string p) WorkDirBox.Text = p; }
-    private void BrowseOnYes_Click(object sender, RoutedEventArgs e) { if (Pickers.BrowseFile(this) is string p) OnYesTargetBox.Text = p; }
+    private void BrowseTarget_Click(object sender, RoutedEventArgs e) { if (Pickers.BrowseFile(this) is string p) TargetBox.Text = PathVariables.ToPortable(p); }
+    // 「打开文件或文件夹」一个按钮覆盖两种：先弹文件框，取消了再弹文件夹框——
+    // 与条件里「路径存在」的浏览按钮同一个挑法（见 BrowseIfPath_Click）。
+    private void BrowsePath_Click(object sender, RoutedEventArgs e)
+    {
+        if (Pickers.BrowseFile(this) is string f) { PathBox.Text = PathVariables.ToPortable(f); return; }
+        if (Pickers.BrowseFolder(this) is string d) PathBox.Text = PathVariables.ToPortable(d);
+    }
+    private void BrowseWorkDir_Click(object sender, RoutedEventArgs e) { if (Pickers.BrowseFolder(this) is string p) WorkDirBox.Text = PathVariables.ToPortable(p); }
+    private void BrowseOnYes_Click(object sender, RoutedEventArgs e) { if (Pickers.BrowseFile(this) is string p) OnYesTargetBox.Text = PathVariables.ToPortable(p); }
     // 图标可以是一张图片，也可以是任意 exe（借它的图标）——所以用通用的文件选择器，
     // 不去限定「只能选图片」：「借 Chrome 的图标给我这个打开网址的步骤」是很自然的用法。
     private void BrowseIcon_Click(object sender, RoutedEventArgs e)
@@ -468,7 +488,11 @@ UrlBox.Text = s.Kind == "url" ? s.Target : "";
     private void RefreshIcon()
     {
         if (IconBtn == null) return;   // 构造途中控件还没建好，Load 会再叫一次
-        var spec = PanelIcon.Resolve(_icon, ComboVal(KindCombo), TargetBox.Text, AltTargetsBox.Text);
+        // 三个「打开」类型各有一个目标框：自动图标得从当前类型正在编辑的那个框取，
+        // 否则切到「打开文件或文件夹」后预览的还是 TargetBox 里上一个程序的图标。
+        var kind = ComboVal(KindCombo);
+        var autoTarget = kind switch { "url" => UrlBox.Text, "path" => PathBox.Text, _ => TargetBox.Text };
+        var spec = PanelIcon.Resolve(_icon, kind, autoTarget, kind == "app" ? AltTargetsBox.Text : "");
         IconVisual.Fill(IconBtn, spec, 24, (System.Windows.Media.Brush)FindResource("BrushPaper"));
         IconBtn.ToolTip = _icon.Length > 0 ? _icon : Strings.Get("Icon_None");
     }
@@ -484,8 +508,102 @@ UrlBox.Text = s.Kind == "url" ? s.Target : "";
     // 用户取消了再给文件夹框——一个按钮覆盖两种，比并排放两个按钮省事。
     private void BrowseIfPath_Click(object sender, RoutedEventArgs e)
     {
-        if (Pickers.BrowseFile(this) is string f) { IfPathBox.Text = f; return; }
-        if (Pickers.BrowseFolder(this) is string d) IfPathBox.Text = d;
+        if (Pickers.BrowseFile(this) is string f) { IfPathBox.Text = PathVariables.ToPortable(f); return; }
+        if (Pickers.BrowseFolder(this) is string d) IfPathBox.Text = PathVariables.ToPortable(d);
+    }
+
+    private void PickTargetVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(TargetBox, TargetVarBtn);
+    private void PickPathVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(PathBox, PathVarBtn);
+    private void PickWorkDirVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(WorkDirBox, WorkDirVarBtn);
+    private void PickIfPathVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(IfPathBox, IfPathVarBtn);
+
+    private void PickVar_Click(TextBox targetBox, Button anchorBtn)
+    {
+        var menu = new ContextMenu();
+        bool isZh = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+
+        var folders = PathVariables.GetCommonFolders(isZh);
+        var secFolders = new MenuItem { Header = Strings.Get("Var_SecFolders"), Style = (Style)FindResource("MenuHeader") };
+        menu.Items.Add(secFolders);
+
+        foreach (var item in folders)
+        {
+            var mi = new MenuItem
+            {
+                Header = item.Name,
+                InputGestureText = item.Expression,
+                ToolTip = item.Resolved
+            };
+            mi.Click += (_, _) => InsertVar(targetBox, item.Expression);
+            menu.Items.Add(mi);
+        }
+
+        menu.Items.Add(new Separator());
+
+        var secVars = new MenuItem { Header = Strings.Get("Var_SecEnv"), Style = (Style)FindResource("MenuHeader") };
+        menu.Items.Add(secVars);
+
+        var vars = PathVariables.GetSystemVariables(isZh);
+        foreach (var item in vars)
+        {
+            var mi = new MenuItem
+            {
+                Header = item.Name,
+                InputGestureText = item.Expression,
+                ToolTip = item.Resolved
+            };
+            mi.Click += (_, _) => InsertVar(targetBox, item.Expression);
+            menu.Items.Add(mi);
+        }
+
+        menu.PlacementTarget = anchorBtn;
+        menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+        menu.IsOpen = true;
+    }
+
+    private static void InsertVar(TextBox box, string text)
+    {
+        if (box.SelectionLength > 0)
+        {
+            box.SelectedText = text;
+        }
+        else if (box.Text.Trim().Length == 0)
+        {
+            box.Text = text;
+        }
+        else if (!text.Contains('\\'))
+        {
+            int idx = box.CaretIndex;
+            box.Text = box.Text.Insert(idx, text);
+            box.CaretIndex = idx + text.Length;
+        }
+        else
+        {
+            box.Text = text;
+        }
+        box.Focus();
+    }
+
+    private static void UpdatePathPreview(TextBox box, TextBlock preview)
+    {
+        var text = box.Text.Trim();
+        if (text.Contains('%'))
+        {
+            var resolved = PathVariables.Resolve(text, out bool hasUnresolved);
+            if (hasUnresolved)
+            {
+                preview.Text = "⚠️ " + resolved;
+                preview.Visibility = Visibility.Visible;
+                return;
+            }
+            if (resolved != text)
+            {
+                preview.Text = "🔍 " + resolved;
+                preview.Visibility = Visibility.Visible;
+                return;
+            }
+        }
+        preview.Visibility = Visibility.Collapsed;
     }
     // 打开编辑器，返回编辑后的新步骤（取消→null）。step 为 null=新建指定 kind。
     public static LaunchStep? Edit(Window? owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups)

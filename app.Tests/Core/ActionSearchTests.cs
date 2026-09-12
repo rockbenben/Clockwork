@@ -4,10 +4,11 @@ using Xunit;
 // 搜索的匹配与排序。每一条都对着一次真实的打字。
 public class ActionSearchTests
 {
-    private sealed record Item(string Name, string? Tip = null);
+    private sealed record Item(string Name, string? Tip = null, string? Search = null);
 
     private static string[] Run(string query, params Item[] items)
-        => ActionSearch.Rank(items, query, x => x.Name, x => x.Tip).Select(x => x.Name).ToArray();
+        // Search 为空才退回 Tip——与 QuickPanelWindow.ApplyFilter 同一条口径。
+        => ActionSearch.Rank(items, query, x => x.Name, x => x.Search ?? x.Tip).Select(x => x.Name).ToArray();
 
     private static readonly Item[] Panel =
     {
@@ -91,4 +92,15 @@ public class ActionSearchTests
     [Fact]
     public void Searches_the_tip_too()
         => Assert.Equal(new[] { "收工·下班" }, Run("记录", new Item("收工·下班", "今天的任务 / 复习都记录好了吗？"), new Item("截图")));
+
+    // 面板的 ToolTip（Tip）把长路径截断到 48 字，搜索语料（Search）却是不截断的全文：
+    // 用户只记得路径尾巴（…\Startup 下的某个名字）时，必须靠 Search 命中，而不是被截断的 Tip。
+    [Fact]
+    public void Untruncated_search_corpus_covers_the_path_tail()
+    {
+        var hit = new Item("启动项", "打开 C:\\ProgramData\\Microsoft\\Windows\\Star…",
+            "打开 C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\zz-tail-file.lnk");
+        Assert.Empty(Run("zz-tail-file", new Item("启动项", "打开 C:\\ProgramData\\Microsoft\\Windows\\Star…")));
+        Assert.Equal(new[] { "启动项" }, Run("zz-tail-file", hit));
+    }
 }

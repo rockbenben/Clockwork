@@ -714,6 +714,11 @@ Journal : {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork redémarre aussitôt pour appliquer le thème. « Suivre Windows » reprend le mode application de Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>Insérer une variable</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>Chemin</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>Prend en charge les variables d’environnement comme %APPDATA%, développées automatiquement à l’exécution. Cliquez sur { } pour insérer un dossier courant.</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>Ouvrir un fichier ou un dossier</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>Ouvrir {0}</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>Ouverture rapide (détecte automatiquement dans le texte sélectionné une URL, un chemin de fichier, un lien magnet ou une clé de Registre)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Texte sélectionné non reconnu : {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>L’Éditeur du Registre est déjà ouvert et n’a pas pu être fermé automatiquement ; sa fenêtre a été amenée au premier plan. Fermez-le manuellement et réessayez.</value></data>
@@ -730,4 +735,6 @@ Journal : {1}</value></data>
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Épais</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>Choisir une app</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Le geste ne se déclenche que lorsque cette application est au premier plan. Laissez vide pour qu’il agisse dans toutes les applications.</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>Dossiers courants</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>Variables d’environnement</value></data>
 </root>

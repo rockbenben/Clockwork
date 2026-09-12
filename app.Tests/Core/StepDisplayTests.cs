@@ -89,4 +89,39 @@ public class StepDisplayTests
     // 把它当转义处理掉，用户看到的就是一个和自己填的不一样的路径（E:\backup → E:ackup）。
     [Fact] public void Summary_path_condition_keeps_backslashes()
         => Assert.Equal(@"静音（存在 E:\backup）", StepDisplay.StepSummary(new LaunchStep { Kind = "volume", Action = "mute", IfPathExists = @"E:\backup" }));
+
+    // —— 搜索语料 StepSearchText：与显示用摘要同源，但不许截断 ——
+
+    [Fact]
+    public void SearchText_keeps_full_path_that_summary_truncates()
+    {
+        var step = new LaunchStep { Kind = "path", Target = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\zz-tail-item" };
+        const string tail = @"Programs\Startup\zz-tail-item";
+        Assert.Contains(tail, StepDisplay.StepSearchText(step));
+        // 守卫本身要先会红：显示用的摘要确实把这一截截掉了。
+        Assert.DoesNotContain("zz-tail-item", StepDisplay.StepSummary(step));
+    }
+
+    [Fact]
+    public void SearchText_app_step_carries_its_target_even_when_named()
+    {
+        var step = new LaunchStep { Kind = "app", Label = "终端", Target = @"C:\Windows\System32\wt.exe" };
+        Assert.Contains("wt.exe", StepDisplay.StepSearchText(step));
+        Assert.DoesNotContain("wt.exe", StepDisplay.StepSummary(step));   // 有名字时摘要只剩名字
+    }
+
+    [Fact]
+    public void SearchText_includes_the_note()
+    {
+        var step = new LaunchStep { Kind = "volume", Action = "mute", Note = "夜班专用" };
+        Assert.Contains("夜班专用", StepDisplay.StepSearchText(step));
+    }
+
+    [Fact]
+    public void SearchText_long_text_step_is_not_cut()
+    {
+        var step = new LaunchStep { Kind = "text", Text = new string('x', 80) + "TAILWORD" };
+        Assert.Contains("TAILWORD", StepDisplay.StepSearchText(step));
+        Assert.DoesNotContain("TAILWORD", StepDisplay.StepSummary(step));
+    }
 }

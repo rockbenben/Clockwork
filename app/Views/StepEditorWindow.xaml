@@ -41,10 +41,12 @@
                            TextWrapping="Wrap" Margin="118,0,0,4"/>
 
                 <StackPanel x:Name="PanApp">
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Target}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="TargetBox" AutomationProperties.Name="{loc:Loc Ed_Target}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseTarget_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Target}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="TargetBox" AutomationProperties.Name="{loc:Loc Ed_Target}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseTarget_Click"/><Button x:Name="TargetVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickTargetVar_Click"/></StackPanel>
+                    <TextBlock x:Name="TargetPreview" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4" Visibility="Collapsed"/>
                     <TextBlock Text="{loc:Loc Ed_AppHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Args}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ArgsBox" AutomationProperties.Name="{loc:Loc Ed_Args}" Width="380" Height="28"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WorkDir}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WorkDirBox" AutomationProperties.Name="{loc:Loc Ed_WorkDir}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseWorkDir_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WorkDir}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WorkDirBox" AutomationProperties.Name="{loc:Loc Ed_WorkDir}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseWorkDir_Click"/><Button x:Name="WorkDirVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickWorkDirVar_Click"/></StackPanel>
+                    <TextBlock x:Name="WorkDirPreview" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4" Visibility="Collapsed"/>
                     <CheckBox x:Name="ElevatedChk" Content="{loc:Loc Ed_Elevated}" Margin="118,3,0,3"/>
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WindowStyle}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="WinStyleCombo" AutomationProperties.Name="{loc:Loc Ed_WindowStyle}" Width="240" Height="28"/></StackPanel>
                     <CheckBox x:Name="ActivateChk" Content="{loc:Loc Ed_ActivateIfRunning}" Margin="118,3,0,3"/>
@@ -96,6 +98,14 @@
                 <StackPanel x:Name="PanUrl">
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Url}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="UrlBox" AutomationProperties.Name="{loc:Loc Ed_Url}" Width="380" Height="28"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_UrlHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- 打开文件或文件夹：与「打开网址」对称的一档——从「运行程序」拆出来，只剩一个路径框。
+                     浏览按钮文件、文件夹都能挑（先弹文件框，取消再弹文件夹框，与条件里「路径存在」同一个挑法）。 -->
+                <StackPanel x:Name="PanPath">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Path}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="PathBox" AutomationProperties.Name="{loc:Loc Ed_Path}" Width="300" Height="28"/><Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowsePath_Click"/><Button x:Name="PathVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickPathVar_Click"/></StackPanel>
+                    <TextBlock x:Name="PathPreview" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4" Visibility="Collapsed"/>
+                    <TextBlock Text="{loc:Loc Ed_PathHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
                 <StackPanel x:Name="PanCopySelection">
@@ -199,7 +209,9 @@
                     <TextBlock Text="{loc:Loc Ed_IfPath}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/>
                     <TextBox x:Name="IfPathBox" AutomationProperties.Name="{loc:Loc Ed_IfPath}" Width="300" Height="28"/>
                     <Button Style="{StaticResource PickerButton}" ToolTip="{loc:Loc Btn_Browse}" AutomationProperties.Name="{loc:Loc Btn_Browse}" Margin="8,0,0,0" Click="BrowseIfPath_Click"/>
+                    <Button x:Name="IfPathVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickIfPathVar_Click"/>
                 </StackPanel>
+                <TextBlock x:Name="IfPathPreview" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4" Visibility="Collapsed"/>
                 <TextBlock Text="{loc:Loc Ed_IfPathHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
                 </Expander>

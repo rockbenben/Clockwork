@@ -1246,7 +1246,8 @@ public partial class App : System.Windows.Application
                 p.Items.Select(it => new Views.PanelTile(it.Label, it.Icon, () => RunStep(it.Step), it.Enabled,
                                                          OnEdit: () => EditPanelItem(it),
                                                          OnDelete: () => DeletePanelItem(it),
-                                                         Tip: StepDisplay.StepSummary(it.Step))).ToList(),
+                                                         Tip: StepDisplay.StepSummary(it.Step),
+                                                         Search: StepDisplay.StepSearchText(it.Step))).ToList(),
                 AddStepTo(p), p.Tab, p.Screen))
             .ToList();
 

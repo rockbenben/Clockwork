@@ -60,7 +60,7 @@ public static class StepDisplay
 
     // 步骤类型 id 的规范顺序（步骤编辑器「类型」下拉用；标签一律经 StepKindLabel 本地化）。
     public static readonly string[] StepKinds =
-        { "app", "url", "keys", "mouse", "text", "volume", "window", "system", "group",
+        { "app", "url", "path", "keys", "mouse", "text", "volume", "window", "system", "group",
           "copySelection", "waitClipboard", "prompt", "choice", "delay", "message" };
 
     // 「新增 ▾」菜单的意图分节。十个机制名平铺时，新用户不知道「关掉微信」该点「窗口动作」还是
@@ -74,7 +74,7 @@ public static class StepDisplay
         // 功能一直都在，只是没人找得到。
         // 节标题借 Tab_Group（「动作组」，已 18 语），不为一个标题再造一条文案。
         ("Tab_Group", new[] { "group" }),
-        ("Menu_SecOpen", new[] { "app", "url" }),
+        ("Menu_SecOpen", new[] { "app", "url", "path" }),
         ("Menu_SecControl", new[] { "window", "keys", "mouse", "text" }),
         ("Menu_SecSystem", new[] { "volume", "system" }),
         // 「取选中的文字」「等剪贴板变化」归流程而不归系统：它们本身不做事，
@@ -272,6 +272,26 @@ public static class StepDisplay
 
     public static string StepSummary(LaunchStep s) => StepBase(s) + DecorationSummary(s);
 
+    /// <summary>给**搜索**用的完整语料：与 <see cref="StepSummary"/> 同源，但长路径 / 网址 / 长文本
+    /// 不截断，并补上 app 步骤的目标原文与用途说明。</summary>
+    //
+    // 显示和检索是两种相反的要求，必须分开：ToolTip 上那条要在窄处可读，所以路径截到 48 字；
+    // 但用户搜索时常常只记得路径尾巴那一段（…\Start Menu\Programs\Startup）、或者按目标文件名
+    // 找一个起了中文名的步骤（名字叫「终端」、目标是 wt.exe）。截掉的部分永远搜不到。
+    public static string StepSearchText(LaunchStep s)
+    {
+        var text = StepBase(s, full: true) + DecorationSummary(s);
+        // app 分支有 Label 时摘要里只剩名字，没 Label 时也只有叶子名——完整目标路径在任何情况下
+        // 都不进摘要，搜索却用得上（「wt」「WindowsApps」）。url / path 的目标已在不截断的主体里。
+        if (s.Kind == "app")
+        {
+            var target = NoNewline(LaunchTarget.NormalizeTarget(s.Target));
+            if (!string.IsNullOrWhiteSpace(target)) text += " " + target;
+        }
+        if (!string.IsNullOrWhiteSpace(s.Note)) text += " " + NoNewline(s.Note);
+        return text;
+    }
+
     /// <summary>格子/标题用的短文案：用户起的名字优先，没起名才用动作本身的描述，
     /// 且**不带**修饰段（×N、星期、条件后缀）。</summary>
     //
@@ -325,16 +345,18 @@ public static class StepDisplay
     /// <summary>动词后面的那个宾语：空就换成占位，别留下「关闭窗口 」这种半句话。</summary>
     private static string Arg(string? v) => string.IsNullOrWhiteSpace(v) ? Unset : v!;
 
-    private static string StepBase(LaunchStep s)
+    private static string StepBase(LaunchStep s, bool full = false)
     {
-        var text = StepBaseCore(s);
+        var text = StepBaseCore(s, full);
         // 兜底：任何一档算出空白都不许出去。上面各分支已尽量各自补齐，这一道拦的是
         // 「以后新加一种 kind 忘了补」以及未知 kind（手改坏了的 json、降级打开新版配置）。
         return string.IsNullOrWhiteSpace(text) ? Unset : text;
     }
 
-    private static string StepBaseCore(LaunchStep s)
+    private static string StepBaseCore(LaunchStep s, bool full)
     {
+        // 显示要短（Ellipsis 截断），搜索语料要全（原样保留）——同一个出口，由调用方选。
+        string Clip(string v, int max) => full ? v : StepHelpers.Ellipsis(v, max);
         return s.Kind switch
         {
             // 没起名就用目标的叶子名，不用整条路径：那一列是右侧截断的，而开始菜单里那种
@@ -354,7 +376,7 @@ public static class StepDisplay
             // 参数为空时退回纯标签：「播放声音」留空是**常态**（= 系统提示音），
             // 拼出来会是「播放声音：」后面跟一片空白，读着像是配漏了。
             "system" => ArgIsTheSubject(s.Command) && !string.IsNullOrWhiteSpace(s.Text)
-                ? Strings.Lf("Sum_SysArg", SystemCommandShortLabel(s.Command), StepHelpers.Ellipsis(NoNewline(s.Text)))
+                ? Strings.Lf("Sum_SysArg", SystemCommandShortLabel(s.Command), Clip(NoNewline(s.Text), 30))
                 : SystemCommandTakesLevel(s.Command)
                     ? Strings.Lf("Sum_SysArg", SystemCommandShortLabel(s.Command), s.Level + "%")
                     : SystemCommandShortLabel(s.Command),
@@ -368,9 +390,12 @@ public static class StepDisplay
             "message" => StepHelpers.MessageFormOf(s) == MessageForm.Card
                 ? Strings.Lf("Sum_MsgCard", Arg(NoNewline(s.Message)))
                 : Arg(NoNewline(s.Message)),
-            "text" => Strings.Lf("Sum_Text", Arg(StepHelpers.Ellipsis(NoNewline(s.Text)))),
+            "text" => Strings.Lf("Sum_Text", Arg(Clip(NoNewline(s.Text), 30))),
             // 网址原样显示（截断）。它本来就可读，砍成域名反而丢了「打开的到底是哪一页」。
-            "url" => Strings.Lf("Sum_OpenUrl", Arg(StepHelpers.Ellipsis(NoNewline(s.Target), 48))),
+            "url" => Strings.Lf("Sum_OpenUrl", Arg(Clip(NoNewline(s.Target), 48))),
+            // 路径与网址同一条口径：原样显示（截断 + 规范化掉引号/环境变量）。
+            // D:\Work 和 E:\Work 的区别全在前缀上，像 app 那样只取叶子名就分不开了。
+            "path" => Strings.Lf("Sum_OpenPath", Arg(Clip(NoNewline(LaunchTarget.NormalizeTarget(s.Target)), 48))),
             "copySelection" => Strings.Get("Kind_copySelection"),
             "waitClipboard" => Strings.Lf("Sum_WaitClipboard", StepHelpers.ClampWaitSeconds(s.Level)),
             _ => s.Kind,

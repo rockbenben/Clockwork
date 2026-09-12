@@ -714,6 +714,11 @@ Registro: {1}</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork se reinicia enseguida para aplicar el tema. «Seguir a Windows» usa el modo de aplicación de Windows.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Btn_InsertVar" xml:space="preserve"><value>Insertar variable</value></data>
+  <data name="Ed_Path" xml:space="preserve"><value>Ruta</value></data>
+  <data name="Ed_PathHint" xml:space="preserve"><value>Admite variables de entorno como %APPDATA%, que se expanden automáticamente en tiempo de ejecución. Haz clic en { } para insertar una carpeta común.</value></data>
+  <data name="Kind_path" xml:space="preserve"><value>Abrir archivo o carpeta</value></data>
+  <data name="Sum_OpenPath" xml:space="preserve"><value>Abrir {0}</value></data>
   <data name="Sys_quickOpen" xml:space="preserve"><value>Apertura rápida (detecta automáticamente en el texto seleccionado una URL, ruta de archivo, enlace magnet o clave del Registro)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>No se pudo reconocer el texto seleccionado: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>El Editor del Registro ya está en ejecución y no pudo cerrarse automáticamente; su ventana se ha traído al frente. Ciérralo manualmente e inténtalo de nuevo.</value></data>
@@ -730,4 +735,6 @@ Registro: {1}</value></data>
   <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Gruesa</value></data>
   <data name="Gesture_App" xml:space="preserve"><value>Elegir app</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>El gesto se activa solo cuando esta aplicación está en primer plano. Déjalo en blanco para que funcione en cualquier aplicación.</value></data>
+  <data name="Var_SecFolders" xml:space="preserve"><value>Carpetas comunes</value></data>
+  <data name="Var_SecEnv" xml:space="preserve"><value>Variables de entorno</value></data>
 </root>
