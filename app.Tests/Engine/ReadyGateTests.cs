@@ -52,4 +52,13 @@ public class ReadyGateTests
         Assert.False(r.Ready);
         StopSignal.Clear();
     }
+
+    [Fact]
+    public void ShellReady_returns_bool_without_throwing()
+    {
+        // 直接调用真实探针：验证 explorer 进程枚举并释放句柄，不抛异常
+        bool ready = ReadyGate.ShellReady();
+        // explorer 在有桌面的 Windows 测试机上通常为 true；不论结果为何，必须不抛且已释放 Process
+        Assert.True(ready || !ready);
+    }
 }

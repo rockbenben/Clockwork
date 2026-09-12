@@ -37,9 +37,14 @@ public static class ReadyGate
     public static ReadyResult WaitSystemReady(int timeoutSeconds = 90, bool requireNetwork = true)
         => WaitSystemReady(timeoutSeconds, requireNetwork, 500, ShellReady, NetworkReady, ms => Thread.Sleep(ms));
 
-    private static bool ShellReady()
+    internal static bool ShellReady()
     {
-        try { return Process.GetProcessesByName("explorer").Any(p => p.MainWindowHandle != IntPtr.Zero); }
+        try
+        {
+            var ps = Process.GetProcessesByName("explorer");
+            try { return ps.Any(p => p.MainWindowHandle != IntPtr.Zero); }
+            finally { foreach (var p in ps) p.Dispose(); }
+        }
         catch { return true; }
     }
 

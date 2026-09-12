@@ -99,6 +99,12 @@ public partial class ReminderPopupWindow : Window
         menu.IsOpen = true;
     }
 
+    protected override void OnClosed(EventArgs e)
+    {
+        Finish("");
+        base.OnClosed(e);
+    }
+
     // 在 UI 线程弹出并等待。返回 (Action, SnoozeMinutes)。
     // 刻意不设 Owner：本窗不请自来。Win32 里被拥有窗口永远压在 owner 之上，所以一旦认主窗为 owner，
     // 弹窗被激活时系统会把整条 owner 链一起提到前台——用户正在别的应用里干活，只要主界面没收进托盘就会被
