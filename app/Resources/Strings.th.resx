@@ -712,4 +712,17 @@
   <data name="Theme_light" xml:space="preserve"><value>สว่าง</value></data>
   <data name="Theme_system" xml:space="preserve"><value>ตาม Windows</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork จะเริ่มใหม่ทันทีเพื่อใช้ธีมใหม่ "ตาม Windows" จะอ่านโหมดแอปของ Windows</value></data>
+
+  <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Gesture_Sensitivity" xml:space="preserve"><value>ความไว</value></data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>สูง</value></data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>ปกติ</value></data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>ต่ำ</value></data>
+  <data name="Gesture_Trail" xml:space="preserve"><value>รอยปากกา</value></data>
+  <data name="Gesture_Trail_Off" xml:space="preserve"><value>ปิด</value></data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>บาง</value></data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>ปกติ</value></data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>หนา</value></data>
+  <data name="Gesture_App" xml:space="preserve"><value>เลือกแอป</value></data>
+  <data name="Gesture_AppHint" xml:space="preserve"><value>เจสเจอร์จะทำงานเฉพาะเมื่อแอปนี้อยู่หน้าสุดเท่านั้น เว้นว่างไว้เพื่อให้ทำงานในทุกแอป</value></data>
 </root>

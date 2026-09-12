@@ -712,4 +712,17 @@
   <data name="Theme_light" xml:space="preserve"><value>밝음</value></data>
   <data name="Theme_system" xml:space="preserve"><value>Windows 따르기</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>새 테마를 적용하려고 Clockwork가 곧바로 다시 시작합니다. "Windows 따르기"는 Windows의 앱 모드를 봅니다.</value></data>
+
+  <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Gesture_Sensitivity" xml:space="preserve"><value>민감도</value></data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>높음</value></data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>보통</value></data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>낮음</value></data>
+  <data name="Gesture_Trail" xml:space="preserve"><value>펜 자국</value></data>
+  <data name="Gesture_Trail_Off" xml:space="preserve"><value>끔</value></data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>가늘게</value></data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>보통</value></data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>굵게</value></data>
+  <data name="Gesture_App" xml:space="preserve"><value>앱 선택</value></data>
+  <data name="Gesture_AppHint" xml:space="preserve"><value>이 앱이 앞에 있을 때만 제스처가 실행됩니다. 모든 앱에서 사용하려면 비워 두세요.</value></data>
 </root>

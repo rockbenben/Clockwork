@@ -42,6 +42,9 @@ public sealed class LaunchStep
     // 而「跑一整个组」用 group 类型的步骤指过去就是了，那本来就是那个步骤类型的用途
     //（与面板同一条规矩，见 ActionGroup.PanelExpand 上那段说明）。
     public string Gesture { get; set; } = "";
+    // 分应用手势：只在指定进程（裸名/带.exe均可）上划该手势才触发。空=全局通用。
+    // 匹配时优先命中当前鼠标所在窗口的进程，未命中时再回退到全局手势。
+    public string ForProcess { get; set; } = "";
     // volume/window 共用 action；时间条件「仅 N 点前」
     public string Action { get; set; } = "";
     public int Level { get; set; } = 50;
@@ -341,6 +344,10 @@ public sealed class AppSettings
     //
     // 默认 true：老配置里没有这个键，反序列化落到这个初始值上，行为与从前一致。
     public bool GesturesEnabled { get; set; } = true;
+    // 鼠标手势灵敏度："low"（长笔画，防误触）| "normal"（默认 2.5% 屏宽）| "high"（短笔画，省力）。
+    public string GestureSensitivity { get; set; } = "normal";
+    // 鼠标手势轨迹宽度/显示方式："off"（不显笔迹）| "thin"（细）| "normal"（标准）| "thick"（粗）。
+    public string GestureTrailWidth { get; set; } = "normal";
 
     public int PanelSchema { get; set; }
     public string Language { get; set; } = "";   // 空=跟随系统显示语言（App 启动时解析成具体 code 并落盘）

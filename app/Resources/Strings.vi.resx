@@ -712,4 +712,17 @@ Nhật ký: {1}</value></data>
   <data name="Theme_light" xml:space="preserve"><value>Sáng</value></data>
   <data name="Theme_system" xml:space="preserve"><value>Theo Windows</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork khởi động lại ngay để áp dụng giao diện. "Theo Windows" đọc chế độ ứng dụng của Windows.</value></data>
+
+  <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Gesture_Sensitivity" xml:space="preserve"><value>Độ nhạy</value></data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Cao</value></data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Vừa</value></data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>Thấp</value></data>
+  <data name="Gesture_Trail" xml:space="preserve"><value>Nét bút</value></data>
+  <data name="Gesture_Trail_Off" xml:space="preserve"><value>Tắt</value></data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>Mảnh</value></data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>Vừa</value></data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Đậm</value></data>
+  <data name="Gesture_App" xml:space="preserve"><value>Chọn ứng dụng</value></data>
+  <data name="Gesture_AppHint" xml:space="preserve"><value>Cử chỉ chỉ kích hoạt khi ứng dụng này ở nền trước. Để trống để dùng trong mọi ứng dụng.</value></data>
 </root>

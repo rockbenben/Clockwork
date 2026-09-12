@@ -779,7 +779,7 @@ public partial class App : System.Windows.Application
     // 每个在途运行都占着一个线程池线程阻塞，线程注入延迟在争用时可达约 1 秒，人手连按完全够得着。
     // 落进空窗的第二次按键会判成「没在跑」而再派一次，那一次随即被运行集判重入跳过（不会跑两遍），
     // 代价只是这一次按键白按。要根治得把登记提到派发线程上做两段式握手，收益不抵复杂度，暂留。
-    private void ToggleGroupByHotkey(ActionGroup g)
+    private void ToggleGroupByHotkey(ActionGroup g, IntPtr gestureOrigin = default)
     {
         var key = "grouptoggle:" + g.Id;
         if (ActionGroupRunner.RequestCancel(g.Id))
@@ -795,7 +795,7 @@ public partial class App : System.Windows.Application
             ShowToast("Clockwork", Lf("Toast_GroupBusy", g.Name), Views.ToastLevel.Info, key: key);
             return;
         }
-        RunGroupAsync(g);
+        RunGroupAsync(g, gestureOrigin: gestureOrigin);
         ShowToast("Clockwork", Lf("Toast_GroupStarted", g.Name), Views.ToastLevel.Info, key: key);
     }
 
@@ -999,10 +999,9 @@ public partial class App : System.Windows.Application
     // 再装一次全局钩子是没必要的抖动，而钩子重装的瞬间正按着的中键会丢掉状态。
     private void ApplyMouseHook()
     {
-        // **必须在 UI 线程上装。** 低级钩子的回调是投递到**装它那个线程**的消息队列上的，
-        // 装在没有消息泵的线程上时 SetWindowsHookEx 照样返回一个有效句柄，而回调永远不会被叫到——
-        // 于是「装上了」和「能用」在代码里完全分不出来，界面上更看不出来。
-        // MouseHook.Install 的注释一直写着这条前提，但那只是一句话：这个方法还从 SaveConfig 末尾被调，
+        // **必须在 UI 线程上跑这个方法**——但原因已经不是钩子本身：MouseHook 现在自带专用
+        // 钩子线程装钩（见 MouseHook 类头第 1 条，回调存活不再受 WPF/DWM 卡顿影响）。真正要求
+        // UI 线程的是下面那扇 WPF 笔迹窗（_trail）的创建。这个方法还从 SaveConfig 末尾被调，
         // 而 SaveConfig 有若干调用点（跑完动作、提醒到点自行停用），并不都在 UI 线程上。
         // 与其逐个去审那些调用点、并指望以后加的每一个也记得，不如在入口处一次夹住。
         if (!Dispatcher.CheckAccess()) { Dispatcher.Invoke(ApplyMouseHook); return; }
@@ -1042,15 +1041,20 @@ public partial class App : System.Windows.Application
         // 没改成逐屏查：那要在右键按下那一刻拿光标去 MonitorFromPoint，而那是钩子回调里的
         // 300ms 硬预算上又多一次 P/Invoke，换来的是副屏上略微好一点的手感。让用户按主屏
         // 调一次更划得来。（选 SM_CXSCREEN 而不是 SM_CXVIRTUALSCREEN 的理由见 PrimaryScreenWidth。）
-        int minLeg = wantGesture ? GestureGate.MinLegForScreen(Win32.PrimaryScreenWidth()) : 0;
+        int minLeg = wantGesture ? GestureGate.MinLegForScreen(Win32.PrimaryScreenWidth(), _config.Settings.GestureSensitivity) : 0;
+        if (wantGesture && _trail != null) _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
         if (_mouseHook != null && _mouseHookMs == ms && _mouseHookGesture == wantGesture
             && _mouseHookMinLeg == minLeg) return;   // 已经是想要的状态
         _mouseHook?.Dispose();
         var gesture = wantGesture
-            ? new GestureGate(p => _config.Gestures.Any(s => s.Enabled && s.Gesture == p), minLeg)
+            ? new GestureGate((p, proc) => GestureGate.Match(_config.Gestures, p, proc) != null, minLeg)
             : null;
         // 覆盖窗跟着 gate 走：装了手势才建，卸了就关——没配手势的人不该多出一扇窗，哪怕它是隐藏的。
-        if (wantGesture) _trail ??= new Views.GestureTrailWindow();
+        if (wantGesture)
+        {
+            _trail ??= new Views.GestureTrailWindow();
+            _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
+        }
         else CloseTrail();
         _mouseHook = new Native.MouseHook(ms, TogglePanel, a => Dispatcher.BeginInvoke(a), gesture, RunByGesture,
             trailPoint: (x, y, armed) => _trail?.Point(x, y, armed), trailEnd: () => _trail?.Finish(),
@@ -1141,18 +1145,20 @@ public partial class App : System.Windows.Application
     private void GestureUnmatched(string path)
         => _trail?.Note(GestureGate.Arrows(path));
 
-    private void RunByGesture(string path)
+    private void RunByGesture(string path, IntPtr origin)
     {
-        var step = _config.Gestures.FirstOrDefault(s => s.Enabled && s.Gesture == path);
+        var proc = Win32.ProcessNameForWindow(origin);
+        var step = GestureGate.Match(_config.Gestures, path, proc);
         if (step == null) return;
         // 面板若还开着，先关掉。中键面板是靠 ForceForeground 抢过前台的，而右键手势的按下被钩子吞掉、
         // 不会激活光标下的窗口——于是面板会一直占着前台，动作里凡读前台的（「当前窗口」、发键、发文本）
         // 全都落到 Clockwork 自己头上，被自家进程守卫拒掉，看起来就是「手势丢了焦点、没反应」。
         // 每个面板格子在跑之前也是先 Dismiss()（见 QuickPanelWindow），手势这条路得照做。
-        // 关掉后前台回到触发手势时用户所在的窗口，紧接着的 MarkForegroundBaseline 才记得到正确目标。
         _panel?.Dismiss();
+        // origin 是起笔点所在的窗口（MouseHook 在按下那一刻解析）：窗口管理类「当前窗口」打它，
+        // 而不是前台窗——在后台窗口上起笔时这两者不是同一个（见 Win32.WindowAtPoint）。
         // 手势这一档：成功不弹回执、也不设防连点闸（两条理由都在 RunStepAsync 的 by 参数上）。
-        RunStep(step, by: StepTrigger.Gesture);
+        RunStep(step, by: StepTrigger.Gesture, gestureOrigin: origin);
     }
 
     // 面板是开关：热键再按一次收起来。这一点必须做对——面板没有标题栏也没有关闭按钮，
@@ -1194,7 +1200,8 @@ public partial class App : System.Windows.Application
     //
     // 整组运行有「再触发即停」的语义（热键与手势都是这么做的，18 种语言的说明也都这么写），
     // 走单步执行会丢掉这个停法——而一个跑了一半停不下来的组，正是急停键存在的理由。
-    private void RunStep(LaunchStep step, Window? owner = null, StepTrigger by = StepTrigger.Button)
+    private void RunStep(LaunchStep step, Window? owner = null, StepTrigger by = StepTrigger.Button,
+                         IntPtr gestureOrigin = default)
     {
         if (step.Kind == "group")
         {
@@ -1214,10 +1221,10 @@ public partial class App : System.Windows.Application
                 return;
             }
             var g = target.Group;
-            if (g is { Enabled: true }) ToggleGroupByHotkey(g);
+            if (g is { Enabled: true }) ToggleGroupByHotkey(g, gestureOrigin);
             return;
         }
-        RunStepAsync(step, owner, by);
+        RunStepAsync(step, owner, by, gestureOrigin);
     }
 
     private List<Views.PanelTilePage> BuildPanelPages(string? foreground = null, int capacity = 0)
@@ -2021,7 +2028,8 @@ public partial class App : System.Windows.Application
     //   （↖ 切换置顶正是这种用法：钉住、再放开）。而闸一旦拦下就是直接 return、什么都不说，
     //   于是连着画两次「最小化」时第二次无声消失——正是这个功能里最难自查的那种表现。
     //   注入本身已由 InjectionLock 串行化，手势这一档不需要再加一道。
-    public void RunStepAsync(LaunchStep step, Window? owner = null, StepTrigger by = StepTrigger.Button)
+    public void RunStepAsync(LaunchStep step, Window? owner = null, StepTrigger by = StepTrigger.Button,
+                             IntPtr gestureOrigin = default)
     {
         bool quiet = by == StepTrigger.Gesture;
         // 消息步骤：在 UI 线程弹窗（是/否闸门 + 可选朗读/onYes），不走后台执行——否则会被当作未知类型告警。
@@ -2051,7 +2059,8 @@ public partial class App : System.Windows.Application
         bool guard = by == StepTrigger.Button;
         if (guard && Interlocked.Exchange(ref _stepRunning, 1) == 1) return;
         // 在 UI 线程、派后台之前记：这一刻前台还是用户那个窗口，等步骤自己去抢就晚了。
-        Native.WindowManager.MarkForegroundBaseline();
+        // 手势触发额外带起笔窗口（gestureOrigin），窗口管理类「当前窗口」优先打它。
+        Native.WindowManager.MarkRunBaseline(gestureOrigin);
         var selfPaths = new[] { _exePath };
         Task.Run(() =>
         {
@@ -2073,7 +2082,8 @@ public partial class App : System.Windows.Application
     // 竞态窗口：本方法把 Task 派下去就返回，EnterTopLevel 的登记要等后台线程真正跑到那一行才发生——
     // 派发与登记之间有个空窗，不是「几微秒」那种可以忽略的窗口（ToggleGroupByHotkey 的连按去重正是
     // 撞在这个窗口上，那边有更完整的说明）。落进空窗期间查「是否已顶层在跑」，看到的还是登记前的状态。
-    public RunCancel RunGroupAsync(ActionGroup group, Window? owner = null, Action? onDone = null, bool unattended = false)
+    public RunCancel RunGroupAsync(ActionGroup group, Window? owner = null, Action? onDone = null,
+                                   bool unattended = false, IntPtr gestureOrigin = default)
     {
         // 快照与 deps 都在调用线程（UI）上先建好，不把活对象带进后台：
         //   · SnapshotForRun 复制步骤列表——后台 foreach 组步骤时，UI 线程若在改同一个组（删除守卫的
@@ -2083,8 +2093,9 @@ public partial class App : System.Windows.Application
         //     UI 线程改写从「理论风险」变成「必然发生」，这份注释因此从历史说明升级成不可删的强制约束。
         //   · BuildGroupDeps 同理在 UI 线程取 _config.ActionGroups 的快照，道理一样（见其内部注释）。
         var snap = group.SnapshotForRun();
-        // 同 RunStepAsync：在 UI 线程、派后台之前记下前台，供组里的「恢复活动窗口」用。
-        Native.WindowManager.MarkForegroundBaseline();
+        // 同 RunStepAsync：在 UI 线程、派后台之前记下前台，供组里的「恢复活动窗口」用；
+        // 手势触发额外带起笔窗口，组里的「当前窗口」窗口动作优先打它。
+        Native.WindowManager.MarkRunBaseline(gestureOrigin);
         var deps = BuildGroupDeps(owner, unattended);
         Task.Run(() =>
         {

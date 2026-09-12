@@ -712,4 +712,17 @@ Registro: {1}</value></data>
   <data name="Theme_light" xml:space="preserve"><value>Chiaro</value></data>
   <data name="Theme_system" xml:space="preserve"><value>Come Windows</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork si riavvia subito per applicare il tema. «Come Windows» segue la modalità app di Windows.</value></data>
+
+  <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Gesture_Sensitivity" xml:space="preserve"><value>Sensibilità</value></data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Alta</value></data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normale</value></data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>Bassa</value></data>
+  <data name="Gesture_Trail" xml:space="preserve"><value>Scia</value></data>
+  <data name="Gesture_Trail_Off" xml:space="preserve"><value>No</value></data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>Fine</value></data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>Normale</value></data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Spessa</value></data>
+  <data name="Gesture_App" xml:space="preserve"><value>Scegli app</value></data>
+  <data name="Gesture_AppHint" xml:space="preserve"><value>Il gesto si attiva solo quando questa app è in primo piano. Lascia vuoto per funzionare in ogni app.</value></data>
 </root>

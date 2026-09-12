@@ -36,6 +36,7 @@ public partial class GestureManagerWindow : Window
     // 那样在这块板子上根本画不出第二个方向。这里的坐标也是 DIP 不是物理像素，与缩放无关。
     private readonly GestureGate _draw = new(_ => true, 40);
     private bool _loading;
+    private bool _loadingSettings;
 
     public GestureManagerWindow(RootConfig config, System.Action save)
     {
@@ -55,6 +56,7 @@ public partial class GestureManagerWindow : Window
         WindowSizing.FitToWorkArea(this);
         GesturesOnChk.IsChecked = _config.Settings.GesturesEnabled;
         PaintWatchState();
+        PopulateSettings();
         Reload(null);
     }
 
@@ -140,6 +142,27 @@ public partial class GestureManagerWindow : Window
             VerticalAlignment = System.Windows.VerticalAlignment.Center,
             TextTrimming = System.Windows.TextTrimming.CharacterEllipsis,
         });
+        var proc = StepHelpers.ToProcessName(r.Step.ForProcess ?? "");
+        if (proc.Length > 0)
+        {
+            var badge = new Border
+            {
+                Background = (System.Windows.Media.Brush)FindResource("BrushInk"),
+                BorderBrush = (System.Windows.Media.Brush)FindResource("BrushLine"),
+                BorderThickness = new System.Windows.Thickness(1),
+                CornerRadius = new System.Windows.CornerRadius(3),
+                Padding = new System.Windows.Thickness(5, 1, 5, 1),
+                Margin = new System.Windows.Thickness(8, 0, 0, 0),
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                Child = new TextBlock
+                {
+                    Text = proc,
+                    FontSize = 10.5,
+                    Foreground = (System.Windows.Media.Brush)FindResource("BrushPaperMuted"),
+                }
+            };
+            line.Children.Add(badge);
+        }
         return line;
     }
 
@@ -169,8 +192,21 @@ public partial class GestureManagerWindow : Window
         bool has = Current != null;
         EditBtn.IsEnabled = has;
         DelBtn.IsEnabled = has;
+        AppBtn.IsEnabled = has;
         GestureCanvas.IsEnabled = has;
         GestureCanvas.Opacity = has ? 1.0 : 0.45;
+
+        if (Current is { } step)
+        {
+            var proc = StepHelpers.ToProcessName(step.ForProcess ?? "");
+            AppBtn.Content = proc.Length > 0 ? proc : Strings.Get("Panel_Global");
+            AppBtn.ToolTip = Strings.Get("Gesture_AppHint");
+        }
+        else
+        {
+            AppBtn.Content = Strings.Get("Gesture_App");
+            AppBtn.ToolTip = null;
+        }
     }
 
     private void Bound_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -217,6 +253,50 @@ public partial class GestureManagerWindow : Window
         Commit(null);
     }
 
+    private void App_Click(object sender, RoutedEventArgs e)
+    {
+        if (Current is not { } step) return;
+        var proc = StepHelpers.ToProcessName(step.ForProcess ?? "");
+        var menu = new ContextMenu { PlacementTarget = AppBtn };
+        var any = new MenuItem { Header = Strings.Get("Panel_Global"), IsEnabled = proc.Length > 0 };
+        any.Click += (_, _) =>
+        {
+            if (CheckDuplicate(step, step.Gesture, "")) return;
+            step.ForProcess = "";
+            Commit(step);
+        };
+        menu.Items.Add(any);
+        var pick = new MenuItem { Header = Strings.Get("Gesture_App") + "…" };
+        pick.Click += (_, _) =>
+        {
+            if (Pickers.PickProcess(this) is not string picked) return;
+            var newProc = picked.Trim();
+            if (CheckDuplicate(step, step.Gesture, newProc)) return;
+            step.ForProcess = newProc;
+            Commit(step);
+        };
+        menu.Items.Add(pick);
+        menu.IsOpen = true;
+    }
+
+    private bool CheckDuplicate(LaunchStep step, string path, string forProcess)
+    {
+        if (string.IsNullOrEmpty(path)) return false;
+        var norm = GestureGate.Normalize(path);
+        if (string.IsNullOrEmpty(norm)) return false;
+        var stepProc = StepHelpers.ToProcessName(forProcess);
+        var owner = Steps.FirstOrDefault(x => !ReferenceEquals(x, step)
+            && string.Equals(GestureGate.Normalize(x.Gesture), norm, System.StringComparison.Ordinal)
+            && string.Equals(StepHelpers.ToProcessName(x.ForProcess ?? ""), stepProc, System.StringComparison.OrdinalIgnoreCase));
+        if (owner != null)
+        {
+            BrandDialog.Warn(this, "Clockwork",
+                Strings.Lf("Val_GestureDup", GestureGate.Arrows(norm), StepDisplay.StepSummary(owner)));
+            return true;
+        }
+        return false;
+    }
+
     // —— 画布 ——（左键按住画，松开即定串）
     private void GestureCanvas_Down(object sender, MouseButtonEventArgs e)
     {
@@ -243,18 +323,8 @@ public partial class GestureManagerWindow : Window
         GestureTrail.Points.Clear();
         if (verdict != PressVerdict.Fire || Current is not { } step) { PaintGesture(); return; }
 
-        // 查重：两条手势同一条轨迹，跑哪个只能看列表顺序——用户没法预期。
-        //
-        // **这里不看启用与否，和动作热键那道查重刻意不同**（那边只算启用的组，好让「禁用 A 把键腾给 B」
-        // 走得通）。差别的理由是失败时说不说话：热键撞了会在注册时点名报错，手势撞了**什么都不会发生**
-        // ——运行期只是 FirstOrDefault 取第一条启用的，另一条从此按了没反应。
-        // 没有兜底的那一侧，就得在编辑期拦死。
-        var owner = Steps.FirstOrDefault(x => !ReferenceEquals(x, step)
-            && string.Equals(x.Gesture, _draw.Path, System.StringComparison.Ordinal));
-        if (owner != null)
+        if (CheckDuplicate(step, _draw.Path, step.ForProcess))
         {
-            BrandDialog.Warn(this, "Clockwork",
-                Strings.Lf("Val_GestureDup", GestureGate.Arrows(_draw.Path), StepDisplay.StepSummary(owner)));
             PaintGesture();
             return;
         }
@@ -293,6 +363,48 @@ public partial class GestureManagerWindow : Window
         // 「那取消置顶呢」的时候，所以那句说明得出现在这儿，不能只留在步骤编辑器里。
         TopmostHint.Visibility = Current is { Kind: "window", Action: "topmost" }
             ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void PopulateSettings()
+    {
+        _loadingSettings = true;
+        SensitivityCbo.Items.Clear();
+        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_High"), Tag = "high" });
+        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_Normal"), Tag = "normal" });
+        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_Low"), Tag = "low" });
+        var currentSens = _config.Settings.GestureSensitivity;
+        SensitivityCbo.SelectedItem = SensitivityCbo.Items.Cast<ComboBoxItem>().FirstOrDefault(x => (string)x.Tag == currentSens)
+            ?? SensitivityCbo.Items[1];
+
+        TrailWidthCbo.Items.Clear();
+        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Off"), Tag = "off" });
+        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thin"), Tag = "thin" });
+        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Normal"), Tag = "normal" });
+        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thick"), Tag = "thick" });
+        var currentTrail = _config.Settings.GestureTrailWidth;
+        TrailWidthCbo.SelectedItem = TrailWidthCbo.Items.Cast<ComboBoxItem>().FirstOrDefault(x => (string)x.Tag == currentTrail)
+            ?? TrailWidthCbo.Items[2];
+        _loadingSettings = false;
+    }
+
+    private void Sensitivity_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loadingSettings) return;
+        if (SensitivityCbo.SelectedItem is ComboBoxItem item && item.Tag is string sens)
+        {
+            _config.Settings.GestureSensitivity = sens;
+            _save();
+        }
+    }
+
+    private void TrailWidth_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loadingSettings) return;
+        if (TrailWidthCbo.SelectedItem is ComboBoxItem item && item.Tag is string trail)
+        {
+            _config.Settings.GestureTrailWidth = trail;
+            _save();
+        }
     }
 
     private void Close_Click(object sender, RoutedEventArgs e) => Close();

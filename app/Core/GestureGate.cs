@@ -80,6 +80,32 @@ public sealed class GestureGate
         => masterOn && gestures != null
         && gestures.Any(s => s != null && s.Enabled && !string.IsNullOrEmpty(Normalize(s.Gesture)));
 
+    /// <summary>按手势路径与当前目标进程匹配步骤。优先命中特定应用绑定的手势，未命中时回退到全局手势。</summary>
+    public static LaunchStep? Match(IEnumerable<LaunchStep>? gestures, string path, string? targetProcess = null)
+    {
+        if (gestures == null || string.IsNullOrEmpty(path)) return null;
+        var norm = Normalize(path);
+        if (string.IsNullOrEmpty(norm)) return null;
+        var target = StepHelpers.ToProcessName(targetProcess ?? "");
+        LaunchStep? fallback = null;
+        foreach (var s in gestures)
+        {
+            if (s == null || !s.Enabled) continue;
+            if (Normalize(s.Gesture) != norm) continue;
+            var proc = StepHelpers.ToProcessName(s.ForProcess ?? "");
+            if (proc.Length > 0)
+            {
+                if (target.Length > 0 && string.Equals(proc, target, StringComparison.OrdinalIgnoreCase))
+                    return s;
+            }
+            else if (fallback == null)
+            {
+                fallback = s;
+            }
+        }
+        return fallback;
+    }
+
     // 扇区中心角与半宽（度，屏幕坐标 y 向下：0=→ 90=↓ 180=← -90=↑）。
     // 半宽是可调的旋钮而不是写死的 45：轴向宽、斜角窄，理由见类头注释。
     private const double AxisHalf = 28, DiagHalf = 17;   // 4*56 + 4*34 = 360，恰好铺满
@@ -109,9 +135,12 @@ public sealed class GestureGate
         return null;
     }
 
-    private readonly Func<string, bool> _matches;
+    private readonly Func<string, string?, bool> _matches;
     private readonly int _minLegPx;
     private readonly int _stepPx;
+
+    /// <summary>当前正在画手势时光标所在窗口的进程名（由钩子在按下时记录），供 LiveMatch 与抬起判定时使用。</summary>
+    public string? ContextProcess { get; set; }
 
     private bool _pending;
     private readonly List<(int X, int Y)> _pts = new();
@@ -148,24 +177,35 @@ public sealed class GestureGate
 
     /// <summary>这块屏上一条笔画至少该多长（物理像素）。屏幕越大，手势就该画得越大。</summary>
     //
-    // **固定 40px 是错的，而且错在最难受的那一头**：它比同类工具都小，于是右键点一下时
-    // 手上那点位移就够格成一条腿——菜单被吞掉，还弹一句「你画的 → 没绑任何东西」。
-    //
-    // 取屏幕宽度的 2.5%，是抄 WGestures 的（Win32MousePathTracker2 里
-    // `EffectiveMove = 屏幕宽度 * 0.025f`，方向只在每走满这么远时才记一次）：
-    // 1920→48，2560→64，3840→96。moosegesture 用的是固定 60px，同一个量级。
+    // 取屏幕宽度的比例（可由 sensitivity 调节）：
+    //   high   —— 1.5%，保底 30px（笔画更短，省力/小手势）
+    //   normal —— 2.5%，保底 40px（默认，参考 WGestures 2.5%）
+    //   low    —— 3.5%，保底 50px（笔画更长，防手抖误触）
+    // 1920: high=30, normal=48, low=67
+    // 2560: high=38, normal=64, low=89
+    // 3840: high=57, normal=96, low=134
     // 按屏幕算而不是按 DPI 算，因为要跟着的是「这一划在屏幕上占多大比例」——
     // 手势是相对屏幕比划的，4K 屏上一道 48px 的笔画短得像手抖。
-    //
-    // 下限仍是 40：那是从前的值，谁也不该在换屏之后发现手势比以前更容易误触。
-    // 不设上限——WGestures 也不设；屏幕真有那么宽，那一划本来就该那么长。
-    public static int MinLegForScreen(int screenWidthPx)
-        => screenWidthPx <= 0 ? 40 : Math.Max(40, screenWidthPx * 25 / 1000);
+    public static int MinLegForScreen(int screenWidthPx, string? sensitivity = "normal")
+    {
+        var (permille, minFloor) = (sensitivity?.Trim().ToLowerInvariant()) switch
+        {
+            "high" => (15, 30),
+            "low" => (35, 50),
+            _ => (25, 40),
+        };
+        return screenWidthPx <= 0 ? minFloor : Math.Max(minFloor, screenWidthPx * permille / 1000);
+    }
 
-    /// <param name="matches">画出的方向串是否命中某个已配置的手势（由调用方对着配置查）。</param>
+    public GestureGate(Func<string, bool> matches, int minLegPx = 40)
+        : this((p, _) => matches(p), minLegPx)
+    {
+    }
+
+    /// <param name="matches">画出的方向串是否命中某个已配置的手势（由调用方对着配置查，支持传入上下文进程名）。</param>
     /// <param name="minLegPx">一条腿至少这么长才算数。短于它的（拐角混合、手抖）并入邻居。
     /// 采样间隔取它的四分之一：采样越细，拐角的混合占的比重越小。</param>
-    public GestureGate(Func<string, bool> matches, int minLegPx = 40)
+    public GestureGate(Func<string, string?, bool> matches, int minLegPx = 40)
     {
         _matches = matches;
         _minLegPx = minLegPx < 12 ? 12 : minLegPx;
@@ -198,17 +238,18 @@ public sealed class GestureGate
     //
     // 会随着继续画而变回 false：画出 ↑ 命中「复制」，继续往下画成 ↑↓ 就该灭掉、
     // 再成为「搜索」时重新亮起。命中是**此刻这一串**的属性，不是一个一旦点亮就锁住的状态。
-    public bool LiveMatch()
+    public bool LiveMatch(string? targetProcess = null)
     {
         if (!_pending || _pts.Count < 2) return false;
         var p = Analyze();
-        return p.Length > 0 && _matches(p);
+        return p.Length > 0 && _matches(p, targetProcess ?? ContextProcess);
     }
 
     public PressVerdict OnRightDown(int x, int y)
     {
         // 重复按下（上一次的抬起被丢了）：按新的重新起算，与 LongPressGate 同理。
         _pending = true;
+        ContextProcess = null;
         // **Path 必须一起清掉。** 它描述的是「刚画完的那一笔」，一旦活得比那一笔久就会骗人：
         // 上层对 Swallow 这一档读它去报「你画的 X 没绑动作」，而按下本身也返回 Swallow，
         // 于是右键**点一下**都会拿上一笔的残留再弹一次提示。调阈值治不了——那串不是这次画的。
@@ -231,7 +272,7 @@ public sealed class GestureGate
         return PressVerdict.Pass;
     }
 
-    public PressVerdict OnRightUp()
+    public PressVerdict OnRightUp(string? targetProcess = null)
     {
         if (!_pending) return PressVerdict.Pass;
         _pending = false;
@@ -241,7 +282,7 @@ public sealed class GestureGate
         // 此前这一档是彻底的沉默，而沉默把三件事混成一件——功能没开、笔画画歪了、
         // 动作跑失败了，看起来都是「按了没反应」，可这三件事的补救完全不同。
         Path = p;
-        return _matches(p) ? PressVerdict.Fire : PressVerdict.Swallow;
+        return _matches(p, targetProcess ?? ContextProcess) ? PressVerdict.Fire : PressVerdict.Swallow;
     }
 
     // 采样点 → 方向串：切腿、吸收短腿、剩下的就是答案。
@@ -376,7 +417,7 @@ public sealed class GestureGate
         (char D, double Len, int S, int E) a, (char D, double Len, int S, int E) b)
         => (a.D, a.Len + b.Len, Math.Min(a.S, b.S), Math.Max(a.E, b.E));
 
-    public void Reset() { _pending = false; Path = ""; _pts.Clear(); }
+    public void Reset() { _pending = false; ContextProcess = null; Path = ""; _pts.Clear(); }
 
     // 两个角之间的最短夹角（度），处理 ±180 的绕回。
     private static double Delta(double a, double center)

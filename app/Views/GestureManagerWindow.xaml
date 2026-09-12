@@ -83,7 +83,8 @@
                         MinWidth="96" Margin="0,0,8,0" Click="Add_Click"/>
                 <Button x:Name="EditBtn" Content="{loc:Loc Btn_Edit}" MinWidth="80" Margin="0,0,8,0" Click="Edit_Click"/>
                 <Button x:Name="DelBtn" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}"
-                        MinWidth="80" Click="Del_Click"/>
+                        MinWidth="80" Margin="0,0,8,0" Click="Del_Click"/>
+                <Button x:Name="AppBtn" MinWidth="96" Click="App_Click"/>
             </WrapPanel>
 
             <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Width="196" Margin="14,0,0,0">
@@ -95,8 +96,8 @@
                         MouseLeftButtonUp="GestureCanvas_Up" MouseLeave="GestureCanvas_Leave">
                     <Grid>
                         <TextBlock x:Name="GestureWatermark" Text="{loc:Loc Ed_GestureDrawHere}" Foreground="{DynamicResource BrushFaint}"
-                                   FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   TextWrapping="Wrap" TextAlignment="Center" Margin="8,0"/>
+                                    FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    TextWrapping="Wrap" TextAlignment="Center" Margin="8,0"/>
                         <ContentControl x:Name="GestureShape" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Polyline x:Name="GestureTrail" Stroke="{DynamicResource BrushAccentText}" StrokeThickness="2"
                                   StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
@@ -111,7 +112,15 @@
             </StackPanel>
         </Grid>
 
-        <Button Grid.Row="3" Content="{loc:Loc Btn_Close}" HorizontalAlignment="Right" Width="96"
-                Margin="0,14,0,0" IsCancel="True" Click="Close_Click"/>
+        <Grid Grid.Row="3" Margin="0,14,0,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{loc:Loc Gesture_Sensitivity}" VerticalAlignment="Center" Margin="0,0,6,0" Style="{StaticResource FieldHint}"/>
+                <ComboBox x:Name="SensitivityCbo" Width="110" SelectionChanged="Sensitivity_Changed" Margin="0,0,16,0"/>
+                <TextBlock Text="{loc:Loc Gesture_Trail}" VerticalAlignment="Center" Margin="0,0,6,0" Style="{StaticResource FieldHint}"/>
+                <ComboBox x:Name="TrailWidthCbo" Width="90" SelectionChanged="TrailWidth_Changed"/>
+            </StackPanel>
+            <Button Content="{loc:Loc Btn_Close}" HorizontalAlignment="Right" Width="96"
+                    IsCancel="True" Click="Close_Click"/>
+        </Grid>
     </Grid>
 </Window>

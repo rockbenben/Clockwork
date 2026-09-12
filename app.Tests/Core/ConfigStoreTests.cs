@@ -408,4 +408,30 @@ public class ConfigStoreTests : IDisposable
     [Fact]
     public void Default_preset_groups_are_shown_in_tray()
         => Assert.All(RootConfig.Default().ActionGroups, g => Assert.True(g.ShowInTray));
+
+    [Fact]
+    public void GestureSettings_and_LaunchStep_ForProcess_roundtrips()
+    {
+        var path = Path.Combine(Path.GetTempPath(), "cw_cfg_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var cfg = RootConfig.Default();
+            cfg.Settings.GestureSensitivity = "high";
+            cfg.Settings.GestureTrailWidth = "thick";
+            cfg.Gestures.Add(new LaunchStep
+            {
+                Gesture = "RD",
+                ForProcess = "chrome.exe",
+                Label = "Chrome Test",
+            });
+            ConfigStore.Write(cfg, path);
+            var back = ConfigStore.Read(path);
+            Assert.Equal("high", back.Settings.GestureSensitivity);
+            Assert.Equal("thick", back.Settings.GestureTrailWidth);
+            var step = Assert.Single(back.Gestures, g => g.ForProcess == "chrome.exe");
+            Assert.Equal("RD", step.Gesture);
+            Assert.Equal("chrome.exe", step.ForProcess);
+        }
+        finally { File.Delete(path); }
+    }
 }

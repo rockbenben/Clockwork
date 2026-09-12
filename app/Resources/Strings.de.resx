@@ -712,4 +712,17 @@ Protokoll: {1}</value></data>
   <data name="Theme_light" xml:space="preserve"><value>Hell</value></data>
   <data name="Theme_system" xml:space="preserve"><value>Wie Windows</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork startet sofort neu, um das Design anzuwenden. „Wie Windows“ folgt dem App-Modus in den Windows-Einstellungen.</value></data>
+
+  <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Gesture_Sensitivity" xml:space="preserve"><value>Empfindlichkeit</value></data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Hoch</value></data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>Niedrig</value></data>
+  <data name="Gesture_Trail" xml:space="preserve"><value>Bahn</value></data>
+  <data name="Gesture_Trail_Off" xml:space="preserve"><value>Aus</value></data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>Dünn</value></data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Dick</value></data>
+  <data name="Gesture_App" xml:space="preserve"><value>App wählen</value></data>
+  <data name="Gesture_AppHint" xml:space="preserve"><value>Die Geste wird nur ausgelöst, wenn diese App im Vordergrund ist. Leer lassen, damit sie in jeder App funktioniert.</value></data>
 </root>

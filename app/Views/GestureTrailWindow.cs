@@ -57,6 +57,9 @@ public sealed class GestureTrailWindow : Window
     private readonly Polyline _core;
     private readonly Brush _idleBrush, _armedBrush;
     private bool _armed;
+    private double _coreIdle = 4, _coreArmed = 5.5;
+    private double _haloIdle = 8, _haloArmed = 10;
+    private bool _disabled;
 
     // 画完没匹配上时，就地显示「你画的是什么」的那颗小药丸。
     //
@@ -80,6 +83,7 @@ public sealed class GestureTrailWindow : Window
     private int _originX, _originY, _spanX, _spanY;   // 覆盖窗在屏幕上的物理像素矩形
     private Point _last;                              // 收笔那一点（DIP，窗内坐标）：药丸摆这儿
     private bool _hasLast;                            // 这一笔到底有没有点——(0,0) 是合法坐标，不能拿它当哨兵
+    private System.Windows.Threading.DispatcherOperation? _reveal;   // ShowGated 排的「淡回不透明」
 
     private static Polyline Stroke(Brush b, double t) => new()
     {
@@ -119,6 +123,7 @@ public sealed class GestureTrailWindow : Window
             Child = _noteText,
             Visibility = Visibility.Collapsed,
         };
+        // 药丸到时收掉药丸，窗也一起藏——收笔后窗本就该藏着（见 Finish）。藏→显的旧帧问题在 ShowGated 治。
         _noteTimer.Tick += (_, _) => { _noteTimer.Stop(); HideNote(); if (_core.Points.Count == 0) Hide(); };
 
         var canvas = new Canvas();
@@ -131,7 +136,7 @@ public sealed class GestureTrailWindow : Window
     /// <summary>就地说一句「你画的是这个」。<paramref name="text"/> 为空则什么都不做。</summary>
     //
     // 紧跟在 Finish 之后调用（MouseHook 先派 trailEnd 再派 unmatched，同一条 UI 队列，顺序有保证），
-    // 所以这儿要负责把窗口重新显出来——Finish 已经把它藏了。
+    // 所以这儿要负责把窗重新显出来——Finish 刚把它藏了。显走 ShowGated：藏→显那帧别贴上一笔的旧位图。
     public void Note(string? text, int ms = 900)
     {
         if (string.IsNullOrEmpty(text) || !_hasLast) return;
@@ -141,10 +146,38 @@ public sealed class GestureTrailWindow : Window
         _note.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
         Canvas.SetLeft(_note, _last.X + 14);
         Canvas.SetTop(_note, _last.Y + 14);
-        if (!IsVisible) { Show(); Reposition(); }
+        if (!IsVisible) ShowGated();
         _noteTimer.Interval = TimeSpan.FromMilliseconds(ms);
         _noteTimer.Stop();
         _noteTimer.Start();
+    }
+
+    /// <summary>应用笔迹宽度与样式："off"（不显轨迹）| "thin"（细）| "normal"（默认标准）| "thick"（粗）。</summary>
+    public void ApplyStyle(string? widthMode)
+    {
+        switch ((widthMode ?? "").Trim().ToLowerInvariant())
+        {
+            case "off":
+                _disabled = true;
+                break;
+            case "thin":
+                _disabled = false;
+                _coreIdle = 2.5; _coreArmed = 3.5;
+                _haloIdle = 5; _haloArmed = 7;
+                break;
+            case "thick":
+                _disabled = false;
+                _coreIdle = 6; _coreArmed = 8.5;
+                _haloIdle = 12; _haloArmed = 15;
+                break;
+            default: // "normal"
+                _disabled = false;
+                _coreIdle = 4; _coreArmed = 5.5;
+                _haloIdle = 8; _haloArmed = 10;
+                break;
+        }
+        _core.StrokeThickness = _armed ? _coreArmed : _coreIdle;
+        _halo.StrokeThickness = _armed ? _haloArmed : _haloIdle;
     }
 
     // 点亮 / 熄灭。会来回切：画出 ↑ 命中「复制」，继续往下画成 ↑↓ 就该灭掉，再成为「搜索」时重新亮起——
@@ -154,14 +187,41 @@ public sealed class GestureTrailWindow : Window
         if (_armed == on) return;
         _armed = on;
         _core.Stroke = on ? _armedBrush : _idleBrush;
-        _core.StrokeThickness = on ? 5.5 : 4;
-        _halo.StrokeThickness = on ? 10 : 8;   // 描边跟着加粗，任何底色上都还托得住线芯
+        _core.StrokeThickness = on ? _coreArmed : _coreIdle;
+        _halo.StrokeThickness = on ? _haloArmed : _haloIdle;   // 描边跟着加粗，任何底色上都还托得住线芯
     }
 
     private void HideNote()
     {
         _note.Visibility = Visibility.Collapsed;
         _noteText.Text = "";
+    }
+
+    /// <summary>显示窗口，但先把整窗 <see cref="UIElement.Opacity"/> 压到 0、下一轮调度再淡回 1。</summary>
+    //
+    // 藏→重显那一帧，DWM 会先把这扇窗**上次合成的位图**（上一笔那条线）重新顶到屏上，WPF 随后才
+    // 按清空后的内容重绘——外面看就是「新手势开头先残留上一笔的形状」。压成全透明，那一帧旧位图
+    // 哪怕被顶出来也是不可见的；等这一轮 Show/渲染过去（Background 档，排在渲染之后）再淡回。
+    // 淡回（改 Opacity）本身会让 WPF 按**当前**可视树（新笔迹 / 药丸，旧线早已 Clear）重新合成一帧，
+    // 所以淡回后屏上只会是新东西。最坏情况也只是新线晚一帧（约十几毫秒）出现，绝不会是上一笔。
+    //
+    // 不用「窗常驻不藏」来躲这一帧：那扇窗铺满整屏、压在最上层，即便点得穿、不抢焦，鼠标滚轮这类
+    // 不走命中测试的输入仍会落到它头上被 WPF 吞掉（实测常驻后底下程序滑轮失效）。所以才要笔一收就藏、
+    // 重显时再用这个闸门挡住旧帧。
+    private void ShowGated()
+    {
+        _reveal?.Abort();
+        Opacity = 0;
+        Show();
+        // 显示之后再摆一次：位置是直接用 SetWindowPos 写进 HWND 的，WPF 的 Left/Top 仍是「未设」，
+        // 它在显示流程里若按自己那份记账同步一次窗口，笔迹就会跑到屏幕另一个角落。再写一遍是幂等的。
+        Reposition();
+        _reveal = Dispatcher.BeginInvoke(new Action(() =>
+        {
+            _reveal = null;
+            // 排队这档之前窗已被 Finish / 药丸定时器藏回去了：别碰它，下次 ShowGated 会重新压 0 再显。
+            if (IsVisible) Opacity = 1;
+        }), System.Windows.Threading.DispatcherPriority.Background);
     }
 
     protected override void OnSourceInitialized(EventArgs e)
@@ -197,17 +257,27 @@ public sealed class GestureTrailWindow : Window
         double x = (px - _originX) / _scale, y = (py - _originY) / _scale;
         _last = new Point(x, y);
         _hasLast = true;
+        if (_disabled) return;
         _halo.Points.Add(new Point(x, y));
         _core.Points.Add(new Point(x, y));
         if (IsVisible || _core.Points.Count < 2) return;   // 不写 ==2：那一下万一没显示成，后面就再也不试了
-        Show();
-        // 显示之后再摆一次。位置是直接用 SetWindowPos 写进 HWND 的，WPF 那边的 Left/Top 仍是「未设」，
-        // 它在显示流程里若按自己那份记账同步一次窗口，这条笔迹就会跑到屏幕的另一个角落去。
-        // 再写一遍是幂等的，而赌 WPF 不同步不是。
-        Reposition();
+        // 重显走 ShowGated（含 Show + 重定位）：藏→显那一帧先整窗全透明，别把上一笔的旧位图顶到屏上。
+        ShowGated();
     }
 
-    /// <summary>收笔。藏起来而不是关掉：下一次手势马上就要用，重建一扇分层窗口不便宜。</summary>
+    /// <summary>收笔：清掉这条线，把窗藏起来——铺满整屏的覆盖窗不能在两笔之间常驻。</summary>
+    //
+    // **必须 Hide。** 窗只要亮着，哪怕全透明、点得穿（WS_EX_TRANSPARENT）、不抢焦（NOACTIVATE），
+    // 它仍是一块压在所有窗口上的整屏分层窗：鼠标滚轮这类**不走命中测试**的输入会落到它头上、被
+    // WPF 静默吞掉，底下的程序再也滚不动（实测：改成常驻后「点窗口后滑轮失效」，手势输入也跟着乱）。
+    // 所以笔一收就藏，只在按住右键拖的那几百毫秒里亮着——那时你本来也不会去滚。
+    //
+    // **藏→下一笔再显的旧帧问题，在 Show 那一头治（见 ShowGated）。** 重显那一帧 DWM 会先贴上
+    // 这扇窗上次合成的位图（上一笔那条线）；清点点发生在隐藏期间、那帧没被合成出去。ShowGated
+    // 显之前先把整窗 Opacity 压 0，旧位图顶出来也是全透明；渲染过一轮再淡回，淡回触发 WPF 按
+    // **当前**内容（新笔迹 / 药丸）重新合成，上一笔永远到不了屏上。
+    //
+    // 不 Close：手势一笔接一笔，重建分层窗口不便宜。真不用了（关手势 / 钩子卸载）由 App.CloseTrail 关。
     public void Finish()
     {
         _placed = false;
@@ -219,12 +289,9 @@ public sealed class GestureTrailWindow : Window
         // 在这里清掉它们，Note 会直接 return，那句提示永远不再出现。
         // 没有遗留风险：unmatched 只在 drawn.Length > 0 时发，也就是本笔确实有点。
         // （已经被当成「忘了重置」提过一次。）
-        // 无条件 Hide：同 Show 那处的理由反过来——手很快时 Finish 可能赶在布局跑完之前到，
-        // 那一刻 IsVisible 还是 false，带条件就跳过了，于是一扇铺满全屏的透明窗会一直留在最上层。
         //
-        // 药丸还亮着时不藏窗：紧随其后的 Note() 会把它显回来，中间那一藏一显会闪一下。
-        // （Note 走的是另一条 post，两次渲染之间真的有机会插进去一帧。）
-        if (_noteTimer.IsEnabled) return;
+        // 无条件 Hide：手很快时 Finish 可能赶在布局跑完之前到，带 IsVisible 条件会跳过，
+        // 于是铺满全屏的透明窗一直留在最上层。藏完若 Note 要亮药丸，由 Note 走 ShowGated 再显。
         Hide();
     }
 
@@ -245,6 +312,16 @@ public sealed class GestureTrailWindow : Window
             // 铺满整块屏（不是工作区）：手势可以画到任务栏上面去。
             _spanX = mi.rcMonitor.Right - _originX;
             _spanY = mi.rcMonitor.Bottom - _originY;
+            // **WPF 自己那份 Left/Top/Width/Height 也必须一起设。** 位置一直是靠 Reposition 的
+            // SetWindowPos 写进 HWND 的，而那是在窗还**隐藏**时做的；等到第二个采样点调 Show()，
+            // WPF 发现自己的 Left/Top 从没被设过（NaN + Manual），就按系统默认位置把窗建出来——
+            // 覆盖掉隐藏时的定位——闪一帧在屏幕默认角落，Show 之后的 Reposition 才把它挪回来。
+            // 外面看就是「先弹个位置错的轨迹、迅速又跳对」。把 DIP 坐标喂给 WPF，Show 直接建在对的
+            // 屏上，那一帧不再错；SetWindowPos 仍留着，在混合 DPI 下按物理像素兜底（同 QuickPanelWindow）。
+            Left = _originX / _scale;
+            Top = _originY / _scale;
+            Width = _spanX / _scale;
+            Height = _spanY / _scale;
             Reposition();
             return true;
         }

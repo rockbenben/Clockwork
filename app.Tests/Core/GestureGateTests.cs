@@ -463,12 +463,46 @@ public class GestureBindingTests
     [Fact]
     public void Rebuilding_a_step_must_carry_the_gesture()
     {
-        var original = new Clockwork.Core.LaunchStep { Kind = "system", Command = "lockScreen", Gesture = "R3D", Enabled = false };
+        var original = new Clockwork.Core.LaunchStep { Kind = "system", Command = "lockScreen", Gesture = "R3D", ForProcess = "chrome.exe", Enabled = false };
         var rebuilt = new Clockwork.Core.LaunchStep { Kind = original.Kind, Command = original.Command };
         rebuilt.Enabled = original.Enabled;
         rebuilt.Gesture = original.Gesture;      // StepEditorWindow 里那一行
+        rebuilt.ForProcess = original.ForProcess;
         Assert.Equal("R3D", rebuilt.Gesture);
+        Assert.Equal("chrome.exe", rebuilt.ForProcess);
         Assert.False(rebuilt.Enabled);
+    }
+
+    [Fact]
+    public void Duplicate_gesture_detection_allows_same_stroke_for_different_apps()
+    {
+        var chrome = new LaunchStep { Gesture = "D", ForProcess = "chrome.exe" };
+        var notepad = new LaunchStep { Gesture = "D", ForProcess = "notepad.exe" };
+        var global = new LaunchStep { Gesture = "D", ForProcess = "" };
+        var list = new List<LaunchStep> { chrome, notepad, global };
+
+        // 同为 chrome 则冲突
+        Assert.True(IsDuplicate(list, null, "D", "chrome"));
+        Assert.True(IsDuplicate(list, null, "D", "CHROME.EXE"));
+
+        // chrome 自身排除自己时不冲突
+        Assert.False(IsDuplicate(list, chrome, "D", "chrome.exe"));
+
+        // msedge 与现有条目不冲突
+        Assert.False(IsDuplicate(list, null, "D", "msedge.exe"));
+
+        // 全局已有，再次添加全局则冲突
+        Assert.True(IsDuplicate(list, null, "D", ""));
+    }
+
+    private static bool IsDuplicate(List<LaunchStep> steps, LaunchStep? current, string path, string forProcess)
+    {
+        var norm = GestureGate.Normalize(path);
+        if (string.IsNullOrEmpty(norm)) return false;
+        var stepProc = StepHelpers.ToProcessName(forProcess);
+        return steps.Any(x => !ReferenceEquals(x, current)
+            && string.Equals(GestureGate.Normalize(x.Gesture), norm, StringComparison.Ordinal)
+            && string.Equals(StepHelpers.ToProcessName(x.ForProcess ?? ""), stepProc, StringComparison.OrdinalIgnoreCase));
     }
 
     // 运行快照逐字段抄：漏了手势会让「跑起来的那一份」与配置不一致。
@@ -533,5 +567,87 @@ public class GestureBindingTests
         g.OnRightDown(100, 100);
         Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());
         Assert.Equal("", g.Path);
+    }
+
+    // ── 分应用手势匹配优先级 ──
+    [Fact]
+    public void Match_prioritizes_app_specific_over_global()
+    {
+        var chrome = new LaunchStep { Gesture = "D", ForProcess = "chrome", Label = "Chrome Close Tab" };
+        var global = new LaunchStep { Gesture = "D", ForProcess = "", Label = "Global Minimize" };
+        var gestures = new List<LaunchStep> { global, chrome };
+
+        // 在 Chrome 上匹配：优先命中特定应用的步骤
+        var matchChrome = GestureGate.Match(gestures, "D", "chrome.exe");
+        Assert.Same(chrome, matchChrome);
+
+        // 在 Notepad 上匹配：无 Notepad 专用手势，回退到全局手势
+        var matchNotepad = GestureGate.Match(gestures, "D", "notepad");
+        Assert.Same(global, matchNotepad);
+
+        // 无进程上下文时回退到全局手势
+        var matchNone = GestureGate.Match(gestures, "D", null);
+        Assert.Same(global, matchNone);
+    }
+
+    [Fact]
+    public void Match_returns_null_when_app_specific_does_not_match_and_no_global()
+    {
+        var chrome = new LaunchStep { Gesture = "D", ForProcess = "chrome.exe", Label = "Chrome Only" };
+        var gestures = new List<LaunchStep> { chrome };
+
+        Assert.Null(GestureGate.Match(gestures, "D", "notepad.exe"));
+        Assert.Null(GestureGate.Match(gestures, "D", ""));
+    }
+
+    [Fact]
+    public void Match_ignores_casing_and_exe_extension()
+    {
+        var step = new LaunchStep { Gesture = "RD", ForProcess = "Code.EXE", Label = "VSCode Command" };
+        var gestures = new List<LaunchStep> { step };
+
+        Assert.Same(step, GestureGate.Match(gestures, "RD", "code"));
+        Assert.Same(step, GestureGate.Match(gestures, "rd", "CODE.EXE")); // 大小写规范化后同为 RD
+        Assert.Same(step, GestureGate.Match(gestures, "→↓", "code"));     // 箭头规范化后同为 RD
+    }
+
+    // ── 灵敏度微调 ──
+    [Fact]
+    public void MinLegForScreen_respects_sensitivity_levels()
+    {
+        // 1920 宽屏幕测试
+        Assert.Equal(30, GestureGate.MinLegForScreen(1920, "high"));   // 1.5% -> 28.8, 保底 30
+        Assert.Equal(48, GestureGate.MinLegForScreen(1920, "normal")); // 2.5% -> 48, 保底 40
+        Assert.Equal(67, GestureGate.MinLegForScreen(1920, "low"));    // 3.5% -> 67.2, 保底 50
+
+        // 默认与未知输入回退到 normal
+        Assert.Equal(48, GestureGate.MinLegForScreen(1920, null));
+        Assert.Equal(48, GestureGate.MinLegForScreen(1920, "unknown"));
+
+        // 4K 屏幕 (3840)
+        Assert.Equal(57, GestureGate.MinLegForScreen(3840, "high"));   // 3840 * 15 / 1000 = 57
+        Assert.Equal(96, GestureGate.MinLegForScreen(3840, "normal")); // 3840 * 25 / 1000 = 96
+        Assert.Equal(134, GestureGate.MinLegForScreen(3840, "low"));   // 3840 * 35 / 1000 = 134
+    }
+
+    // ── 上下文进程传入 GestureGate ──
+    [Fact]
+    public void GestureGate_with_context_process_evaluates_matcher()
+    {
+        var g = new GestureGate((path, proc) => path == "D" && proc == "chrome", 40);
+        g.OnRightDown(100, 100);
+        g.ContextProcess = "chrome";
+        for (int y = 100; y <= 200; y += 5) g.OnMove(100, y);
+
+        Assert.True(g.LiveMatch());
+        Assert.Equal(PressVerdict.Fire, g.OnRightUp());
+
+        // 换另一个进程
+        g.OnRightDown(100, 100);
+        g.ContextProcess = "notepad";
+        for (int y = 100; y <= 200; y += 5) g.OnMove(100, y);
+
+        Assert.False(g.LiveMatch());
+        Assert.Equal(PressVerdict.Swallow, g.OnRightUp());
     }
 }

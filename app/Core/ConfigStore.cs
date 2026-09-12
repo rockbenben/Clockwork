@@ -98,6 +98,10 @@ public static class ConfigStore
         cfg.LaunchSteps = OrDefault(cfg.LaunchSteps, def.LaunchSteps);
         cfg.Reminders = OrDefault(cfg.Reminders, def.Reminders);
         cfg.Settings = OrDefault(cfg.Settings, def.Settings);
+        var sens = (cfg.Settings.GestureSensitivity ?? "").Trim().ToLowerInvariant();
+        if (sens is not ("low" or "normal" or "high")) { cfg.Settings.GestureSensitivity = "normal"; normalized = true; }
+        var trail = (cfg.Settings.GestureTrailWidth ?? "").Trim().ToLowerInvariant();
+        if (trail is not ("off" or "thin" or "normal" or "thick")) { cfg.Settings.GestureTrailWidth = "normal"; normalized = true; }
         cfg.ActionGroups = OrDefault(cfg.ActionGroups, def.ActionGroups);
         // PanelPages 也在这里补，**不能留给下面的 FillPanelPageDefaults**。
         // 那个方法末尾确实有一句 `cfg.PanelPages ??= new()`，但它排在 MigratePanelPages 之后，
@@ -170,6 +174,7 @@ public static class ConfigStore
         normalized |= cfg.Gestures.RemoveAll(s => s is null) > 0;
         foreach (var st in cfg.Gestures)
         {
+            st.ForProcess ??= "";
             st.OnYes ??= new(); normalized |= NormalizeOnYes(st.OnYes);
             // 手改 json 塞进来的坏轨迹在这里洗成规范形，别让钩子对着垃圾比对。
             //

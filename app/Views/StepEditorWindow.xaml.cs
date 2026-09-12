@@ -370,6 +370,7 @@ UrlBox.Text = s.Kind == "url" ? s.Target : "";
         // 同理保留手势：本方法是**整份重建** LaunchStep，漏一个字段就等于保存时把它抹掉。
         // 手势在「鼠标手势」管理器里绑，这里只负责别把它弄丢——改一下动作参数就丢掉轨迹是静默数据丢失。
         r.Gesture = _original.Gesture;
+        r.ForProcess = _original.ForProcess;
 
         switch (kind)
         {

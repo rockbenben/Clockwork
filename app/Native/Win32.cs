@@ -24,6 +24,11 @@ public static class Win32
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] public static extern IntPtr PostMessage(IntPtr h, uint msg, IntPtr w, IntPtr l);
     [DllImport("user32.dll")] public static extern short VkKeyScan(char ch);
+    // 取某点所在的窗口。注意：(a) 参数是 POINT **按值**传，不是指针；
+    // (b) 它跳过 WS_EX_TRANSPARENT 的窗（命中测试穿透的那些），所以手势的笔迹覆盖窗不会被当成目标。
+    [DllImport("user32.dll")] private static extern IntPtr WindowFromPoint(POINT pt);
+    [DllImport("user32.dll")] private static extern IntPtr GetAncestor(IntPtr h, uint gaFlags);
+    private const uint GA_ROOT = 2;   // 顶层根窗口
 
     // 放一个 .wav。走 winmm 的 PlaySound 而不是 System.Media.SoundPlayer：
     // SoundPlayer.Play() 是异步的，而它把 wav 读进**托管内存**再让系统从那块内存播——
@@ -114,13 +119,39 @@ public static class Win32
     {
         try { return (GetAsyncKeyState(0x02) & 0x8000) != 0; } catch { return false; }   // VK_RBUTTON
     }
-    private const int VK_SHIFT = 0x10;
+    private const int VK_SHIFT = 0x10, VK_CONTROL = 0x11, VK_MENU = 0x12;
+    private const int VK_LWIN = 0x5B, VK_RWIN = 0x5C;   // Win 键没有通用 VK，左右各问一次
 
     // 高位 = 此刻物理按下。取不到（受限令牌等）按「没按」处理：逃生口探测失败只该少一条退路，
     // 绝不能反过来把正常开机误判成安全模式、让所有人的开机清单集体不跑。
     public static bool ShiftHeld()
     {
         try { return (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0; } catch { return false; }
+    }
+
+    /// <summary>此刻有修饰键（Ctrl / Shift / Alt / Win 任一）物理按着吗。</summary>
+    //
+    // 给鼠标钩子让路用：修饰键 + 右键是**别的工具的手势地盘**——WindowShuffle 的 Ctrl+右键拖窗、
+    // Explorer 的 Shift+右键扩展菜单那一类。钩子在右键按下这一刻问到「有」就整笔放行，
+    // 不扣按下、不补点击（低级钩子 return 1 会截断整条钩子链，补发的注入事件又会被对方按防回环丢掉）。
+    //
+    // 读的是**键盘**物理态——我们从不吞键盘，所以这一问不受 RightButtonDown 上面那条
+    // 「吞了消息就别拿系统键态当自己的判据」约束：那条说的是被我们自己 return 1 吞掉的**鼠标右键**，
+    // 键态表里那次按下从未发生；键盘消息我们一条都没动过。
+    //
+    // 取不到按「没按」处理，与 ShiftHeld 同一个方向：探测失败只该少一条豁免，
+    // 不能反过来把不带修饰键的右键也全部放行、让手势功能整个消失。
+    public static bool ModifierHeld()
+    {
+        try
+        {
+            return (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0
+                || (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0
+                || (GetAsyncKeyState(VK_MENU) & 0x8000) != 0
+                || (GetAsyncKeyState(VK_LWIN) & 0x8000) != 0
+                || (GetAsyncKeyState(VK_RWIN) & 0x8000) != 0;
+        }
+        catch { return false; }
     }
 
     [DllImport("user32.dll")] private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool attach);
@@ -178,11 +209,33 @@ public static class Win32
         return pid == (uint)Environment.ProcessId ? IntPtr.Zero : h;
     }
 
-    public static string ForegroundProcessName()
+    /// <summary>屏幕上某点（物理像素）所在的**顶层**窗口；落在本进程自己的窗上、或取不到时返回 Zero。</summary>
+    //
+    // 手势「当前窗口」该打谁的第一答案：右键划在哪个窗口上，就该动哪个窗口——不是前台窗口。
+    // 右键按下被低级钩子吞掉（return 1），Windows 不会去激活光标下的窗；在一个**后台**窗口上起笔时，
+    // 前台仍是原先那个活动窗。拿 GetForegroundWindow 当目标，关/最小化就会落到你正用着的那个窗上。
+    //
+    // WindowFromPoint 直接跳过 WS_EX_TRANSPARENT 的窗（命中穿透），笔迹覆盖窗天然不会中；
+    // 再 GetAncestor(GA_ROOT) 取顶层（拿到的常是子窗/客户区里的控件，窗口动作要的是顶层框）。
+    // 本进程那扇窗（面板/编辑器）也排除掉，口径与 ForegroundWindowOfOthers 一致。
+    public static IntPtr WindowAtPoint(int x, int y)
     {
         try
         {
-            var h = GetForegroundWindow();
+            var h = WindowFromPoint(new POINT { X = x, Y = y });
+            if (h == IntPtr.Zero) return IntPtr.Zero;
+            h = GetAncestor(h, GA_ROOT);
+            if (h == IntPtr.Zero) return IntPtr.Zero;
+            GetWindowThreadProcessId(h, out uint pid);
+            return pid == (uint)Environment.ProcessId ? IntPtr.Zero : h;
+        }
+        catch { return IntPtr.Zero; }
+    }
+
+    public static string ProcessNameForWindow(IntPtr h)
+    {
+        try
+        {
             if (h == IntPtr.Zero) return "";
             GetWindowThreadProcessId(h, out uint pid);
             if (pid == 0) return "";
@@ -191,6 +244,8 @@ public static class Win32
         }
         catch { return ""; }
     }
+
+    public static string ForegroundProcessName() => ProcessNameForWindow(GetForegroundWindow());
 
     // 设备变更广播：U 盘等卷插入时 Windows 向所有顶层窗口发 WM_DEVICECHANGE，不需要事先注册。
     // 只认「卷到达」（DBT_DEVTYP_VOLUME）——设备接口层的到达通知（打印机、摄像头、蓝牙适配器）

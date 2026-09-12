@@ -712,4 +712,17 @@ Log: {1}</value></data>
   <data name="Theme_light" xml:space="preserve"><value>Terang</value></data>
   <data name="Theme_system" xml:space="preserve"><value>Ikuti Windows</value></data>
   <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork langsung dimulai ulang untuk menerapkan tema. "Ikuti Windows" mengikuti mode aplikasi di Windows.</value></data>
+
+  <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
+  <data name="Gesture_Sensitivity" xml:space="preserve"><value>Sensitivitas</value></data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Tinggi</value></data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>Rendah</value></data>
+  <data name="Gesture_Trail" xml:space="preserve"><value>Jejak</value></data>
+  <data name="Gesture_Trail_Off" xml:space="preserve"><value>Nonaktif</value></data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>Tipis</value></data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Tebal</value></data>
+  <data name="Gesture_App" xml:space="preserve"><value>Pilih aplikasi</value></data>
+  <data name="Gesture_AppHint" xml:space="preserve"><value>Gerakan hanya terpicu saat aplikasi ini berada di latar depan. Biarkan kosong agar berlaku di semua aplikasi.</value></data>
 </root>

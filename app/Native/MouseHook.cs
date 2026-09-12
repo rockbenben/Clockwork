@@ -10,7 +10,12 @@ namespace Clockwork.Native;
 // 三条硬约束，写在最前面，因为每一条踩下去都是很难自查的故障：
 //
 // 1) **必须装在有消息循环的线程上**。WH_MOUSE_LL 的回调是靠给安装线程投消息驱动的，
-//    装在后台线程上会「装得上、永不回调」。故 Install 只允许从 UI 线程调。
+//    装在没有泵的线程上会「装得上、永不回调」。本类**自带一条专用钩子线程**（Install 时启动，
+//    里面就是一个 GetMessage 泵），不挂在 WPF UI 线程上——这是刻意的：UI 线程同时负责
+//    全屏笔迹分层窗的合成提交，DWM/GPU 一旦卡顿（黑屏看门狗那类故障），WPF 派发随之停摆，
+//    钩子若装在那条线程上，回调必超 LowLevelHooksTimeout、被 Windows 静默摘掉，已被吞掉的
+//    右键/中键再没人补发，于是「显示抖一下」被放大成「全系统鼠标死掉」。独立泵让钩子的存活
+//    与显示管线彻底脱钩。gate 的读写因此只发生在钩子线程上；要碰 UI 一律经 _post。
 //
 // 2) **回调里绝不做慢活**。Windows 有个 LowLevelHooksTimeout（默认 300 毫秒）：回调超时
 //    系统就**静默**把这个钩子踢掉，之后既没有回调也没有报错，表现为「用了一会儿突然失灵」。
@@ -42,6 +47,26 @@ public sealed class MouseHook : IDisposable
     private static extern bool UnhookWindowsHookEx(IntPtr hook);
     [DllImport("user32.dll")]
     private static extern IntPtr CallNextHookEx(IntPtr hook, int code, IntPtr wParam, IntPtr lParam);
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool PostThreadMessage(uint threadId, uint msg, IntPtr wParam, IntPtr lParam);
+    [DllImport("user32.dll")]
+    private static extern int GetMessage(out MSG msg, IntPtr hwnd, uint min, uint max);
+    [DllImport("kernel32.dll")]
+    private static extern uint GetCurrentThreadId();
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MSG
+    {
+        public IntPtr Hwnd;
+        public uint Message;
+        public IntPtr WParam, LParam;
+        public uint Time;
+        public int PtX, PtY;
+    }
+
+    // 投给钩子线程泵的私有消息：中键长按闹钟到点，回钩子线程问 gate 要不要弹面板。
+    private const uint WM_POLLDUE = 0x8001;   // WM_APP + 1
+    private const uint WM_QUIT = 0x0012;
 
     private readonly LongPressGate? _gate;
     private readonly GestureGate? _gesture;
@@ -56,10 +81,25 @@ public sealed class MouseHook : IDisposable
     // 而没有这道兜底的话，丢失的抬起要挂到下一次右键才收得掉。
     private const long GestureStaleMs = 5000;
     private readonly Action _fire;
-    private readonly Action<string> _fireGesture;
+    private readonly Action<string, IntPtr> _fireGesture;
+    // 这一笔手势**起笔点**所在的顶层窗口（右键按下那一刻解析）。手势的「当前窗口」动作要打的是它，
+    // 不是 GetForegroundWindow——按下被本钩子吞掉、系统不会激活光标下的窗，在后台窗口上起笔时
+    // 前台仍是另一个窗（见 Win32.WindowAtPoint 的注释）。一笔手势串行，单字段即可。
+    private IntPtr _gestureOrigin;
     private readonly Action<int, int, bool> _trailPoint;   // 第三个参数：画到此刻已经命中了吗（笔迹据此变色）
     private readonly Action _trailEnd;
     private readonly Action<Action> _post;
+    private readonly Func<bool> _modifierHeld;
+
+    // ── 笔迹回调合帧 ──
+    // 不把每个采样点都 post 一条重绘：high 灵敏度 + 高刷屏一笔能产生几百个采样点，每个都让
+    // UI 线程对一块**整屏大小**的分层窗重合成一次（4K ≈ 33MB/帧）。只记最新一点，且 UI 队列里
+    // 同一时刻最多挂着一个 drain；drain 跑起来先放号再画，期间的新点会再排一个。于是空闲时
+    // 每点照常一画，爆发时自动塌缩成「每轮只画最新位置」，队列永不被重绘塞满。
+    private readonly object _trailLock = new();
+    private int _trailX, _trailY;
+    private bool _trailArmed;
+    private int _trailQueued;
 
     // 委托必须由本对象持有：SetWindowsHookEx 只存了个裸函数指针，GC 不知道它被引用着。
     // 只传一个 lambda 进去、不留字段的话，下一次 GC 之后回调地址就是野指针——进程直接崩，
@@ -67,9 +107,17 @@ public sealed class MouseHook : IDisposable
     private readonly HookProc _proc;
     private IntPtr _hook;
 
+    // ── 专用钩子线程（见类头第 1 条）──
+    // Install 之前一直是 null：单测反射驱动 Callback、不调 Install，构造函数绝不能偷偷开线程。
+    private Thread? _thread;
+    private uint _threadId;                                  // 原生线程 ID（PostThreadMessage 要的不是托管 ID）
+    private readonly ManualResetEventSlim _installed = new(false);
+    private int _installResult;                              // 1=成功 0=SetWindowsHookEx 失败 -1=抛异常
+    private int _disposePosted;                              // 防重复拆除（Dispose 可能从多条路进来）
+
     // 到点的闹钟：按满时长就弹面板，不等抬起。按下时上弦，抬起 / 判成拖拽 / 卸载时收掉。
-    // 回调在线程池线程上来，但它只做一件事——把询问 post 回 UI 线程，于是 gate 的所有读写
-    // 仍然只发生在 UI 线程上，不必加锁。
+    // 回调在线程池线程上来，但它只做一件事——往钩子线程投一条 WM_POLLDUE（见 PollDue），
+    // gate 的所有读写只发生在钩子线程上，不必加锁。
     private readonly System.Threading.Timer _alarm;
     private readonly int _holdMs;
 
@@ -115,17 +163,19 @@ public sealed class MouseHook : IDisposable
     /// <param name="fire">判定为长按时要做的事（唤出面板）。会经 <paramref name="post"/> 派发，不在回调里直接跑。</param>
     /// <param name="post">把动作投到 UI 队列的方式（App 传 Dispatcher.BeginInvoke）。</param>
     /// <param name="gesture">右键手势的判定器；null 表示不监听右键——没配手势时右键必须一根毫毛都不动。</param>
-    /// <param name="fireGesture">手势命中时要做的事，参数是方向串。同 fire，经 post 派发。</param>
+    /// <param name="fireGesture">手势命中时要做的事，参数是方向串与起笔点所在的顶层窗口句柄（取不到为 Zero）。
+    /// 同 fire，经 post 派发；句柄在按下那一刻解析，动作里的「当前窗口」打它而不是前台窗口。</param>
     /// <param name="trailPoint">屏幕上那条笔迹又画到了哪（物理像素），以及**画到此刻是否已经命中**。
     /// 同样经 post——低级钩子回调里有 LowLevelHooksTimeout 的预算，绝不在这里碰 UI。
     /// 命中与否在回调线程上算完（GestureGate.LiveMatch，纯计算、微秒级）再把结论捎过去：
     /// 把 gate 的内部状态交给 UI 线程去读，会撞上「钩子线程正往里加采样点」的竞态。</param>
     /// <param name="trailEnd">笔迹收笔（抬起、或钩子卸载）。</param>
     /// <param name="unmatched">画出来了却没绑任何东西时报一声，参数是画出来的方向串。</param>
+    /// <param name="modifierHeld">修饰键按住判定（单测注入用，生产留空查物理键态）。</param>
     public MouseHook(int holdMs, Action fire, Action<Action> post,
-                     GestureGate? gesture = null, Action<string>? fireGesture = null,
+                     GestureGate? gesture = null, Action<string, IntPtr>? fireGesture = null,
                      Action<int, int, bool>? trailPoint = null, Action? trailEnd = null,
-                     Action<string>? unmatched = null)
+                     Action<string>? unmatched = null, Func<bool>? modifierHeld = null)
     {
         _trailPoint = trailPoint ?? ((_, _, _) => { });
         _trailEnd = trailEnd ?? (() => { });
@@ -134,18 +184,22 @@ public sealed class MouseHook : IDisposable
         _unmatched = unmatched ?? (_ => { });
         _holdMs = holdMs;
         _fire = fire;
-        _fireGesture = fireGesture ?? (_ => { });
+        _fireGesture = fireGesture ?? ((_, _) => { });
         _post = post;
         _proc = Callback;
+        _modifierHeld = modifierHeld ?? Win32.ModifierHeld;
         // 建成停着的（Infinite）：按下时才上弦。
         //
-        // **两个回调都要把 _post 兜住。** _post 是 Dispatcher.BeginInvoke，调度器正在关闭时它会抛，
+        // 闹钟到点只往钩子线程投一条 WM_POLLDUE：PollFire 改 gate 状态，必须与 Callback 同线程
+        //（旧实现装在 UI 线程上时它是 post 回 UI 的）；真要弹面板再由钩子线程 _post 给 UI。
+        //
+        // **回调要把投递兜住。** 调度器关闭 / 钩子线程已退出时 PostThreadMessage 会失败，
         // 而这里是线程池线程——逃出去的异常没人接，直接终结进程，且 clockwork.error.log 里一个字都没有。
         // Timer.Dispose 挡不住这一下：它不取消**已经派发出去**的那次回调，本类的 Set() 里那句
         // `catch (ObjectDisposedException)` 承认的正是同一个竞态。
         // 触发窗口很窄但很日常：中键按住（上了 _alarm 的弦）或右键按下（上了 _hold 的弦）的那一瞬
         // 从托盘退出。第三个 timer（_clickUp）不需要这层——它压根不走 _post，见下面那行注释。
-        _alarm = new System.Threading.Timer(_ => { try { _post(FireIfDue); } catch { } }, null,
+        _alarm = new System.Threading.Timer(_ => PollDue(), null,
                                             System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         // 这一个不必回 UI 线程：只有一句 SendInput，微秒级，且不碰 gate 也不碰 UI。
         _clickUp = new System.Threading.Timer(_ => ReplayUp(), null,
@@ -190,10 +244,21 @@ public sealed class MouseHook : IDisposable
         return true;
     }
 
-    // 闹钟响了：问 gate 是不是真该弹（中途抬起 / 拖走的话它会说不该）。只在 UI 线程上跑。
+    // 线程池闹钟到点：把询问投回钩子线程。PollFire 改 gate 状态，与 Callback 争用不得，
+    // 而定时器回调跑在线程池线程上。钩子线程还没起来（单测直接驱动 Callback 的场景）时
+    // 退回旧路：经 _post 执行——测试里的假 post 同步跑，生产里没有 Install 就不会有闹钟上弦。
+    private void PollDue()
+    {
+        uint id = _threadId;
+        if (id != 0) { try { PostThreadMessage(id, WM_POLLDUE, IntPtr.Zero, IntPtr.Zero); } catch { } }
+        else { try { _post(FireIfDue); } catch { } }
+    }
+
+    // 闹钟响了：问 gate 是不是真该弹（中途抬起 / 拖走的话它会说不该）。只在钩子线程上跑；
+    // 要弹的动作本身仍经 _post 交给 UI——回调/泵线程绝不直接碰 UI（类头第 2 条）。
     private void FireIfDue()
     {
-        if (_gate != null && _gate.PollFire(Environment.TickCount64)) _fire();
+        if (_gate != null && _gate.PollFire(Environment.TickCount64)) { try { _post(_fire); } catch { } }
     }
 
     // 上弦 / 收弦。收弦不必等待回调结束——最坏是一次已经在路上的询问照常发生，
@@ -205,6 +270,28 @@ public sealed class MouseHook : IDisposable
     }
 
     private void Arm(bool on) => Set(_alarm, on ? _holdMs : System.Threading.Timeout.Infinite);
+
+    // 笔迹采样点合帧（见字段处注释）。Callback（钩子线程）调用，只更新最新值、至多排一个 drain。
+    private void ScheduleTrail(int x, int y, bool armed)
+    {
+        lock (_trailLock) { _trailX = x; _trailY = y; _trailArmed = armed; }
+        if (Interlocked.Exchange(ref _trailQueued, 1) == 0)
+        {
+            // _post 在调度器关闭时会抛：把号放回去，免得标志永远卡在 1、下一笔一笔都画不出来。
+            try { _post(DrainTrail); }
+            catch { Volatile.Write(ref _trailQueued, 0); }
+        }
+    }
+
+    // UI 线程执行：先放号再取快照——放号后到取数之间进来的新点会再排一个 drain，最新坐标丢不了。
+    private void DrainTrail()
+    {
+        Volatile.Write(ref _trailQueued, 0);
+        int x, y;
+        bool armed;
+        lock (_trailLock) { x = _trailX; y = _trailY; armed = _trailArmed; }
+        _trailPoint(x, y, armed);
+    }
 
     /// <summary>距离回调最后一次被叫到过了多久（毫秒）。从没被叫到过时返回 long.MaxValue。</summary>
     //
@@ -253,8 +340,8 @@ public sealed class MouseHook : IDisposable
         ? long.MaxValue
         : Environment.TickCount64 - Volatile.Read(ref _beat);
 
-    /// <summary>装钩子。返回是否成功——失败时调用方该如实告知用户，而不是让功能静默不存在。
-    /// 必须从 UI 线程调（见类头注释第 1 条）。</summary>
+    /// <summary>装钩子（在专用钩子线程上装并返回结果）。返回是否成功——失败时调用方该如实告知用户，
+    /// 而不是让功能静默不存在。可从任意线程调（见类头注释第 1 条）。</summary>
     // ── 只给 --hookprobe 用的裸接口 ──
     // 探针要的是「一句 SetWindowsHookEx 加一个计数器」，不能带上本类的任何状态机；
     // 而那三个 P/Invoke 声明就在这个文件里，再抄一份到别处只会多一处会漂移的声明。
@@ -295,19 +382,96 @@ public sealed class MouseHook : IDisposable
 
     public bool Install()
     {
-        if (_hook != IntPtr.Zero) return true;
-        // 模块句柄传 0：WH_MOUSE_LL 是全局低级钩子，回调跑在本进程内，不需要注入 DLL，
-        // 因此也不需要真实的模块句柄（这一点与需要注入的 WH_MOUSE 不同）。
+        // 幂等：线程已经起来了就等它的安装报告，别起第二个泵抢同一套状态。
+        // 失败的尝试会收掉线程并把 _thread 置空，允许重试。
+        var existing = _thread;
+        if (existing != null)
+        {
+            _installed.Wait(5000);
+            return _installResult == 1;
+        }
+        _installResult = 0;
+        LastError = 0;
+        _installed.Reset();
+        var t = new Thread(HookThreadRun) { Name = "Clockwork.MouseHook", IsBackground = true };
+        _thread = t;
+        t.Start();
+        if (!_installed.Wait(5000))
+        {
+            // 起线程 / 装钩没有任何正当理由超过 5 秒；等不到也别把上层吊在这儿，按失败报。
+            try { PostThreadMessage(_threadId, WM_QUIT, IntPtr.Zero, IntPtr.Zero); } catch { }
+            t.Join(1000);
+            _thread = null;
+            LastError = -1;
+            return false;
+        }
+        if (_installResult != 1) { t.Join(1000); _thread = null; }
+        return _installResult == 1;
+    }
+
+    // 专用钩子线程的一生：在本线程装钩（LL 回调只认装它那个线程的消息泵）→ 报告安装结果 →
+    // 泵消息，WM_POLLDUE 问长按 gate，WM_QUIT 退出 → 在本线程 Teardown。
+    private void HookThreadRun()
+    {
         try
         {
-            _hook = SetWindowsHookEx(WH_MOUSE_LL, _proc, IntPtr.Zero, 0);
-            LastError = _hook == IntPtr.Zero ? Marshal.GetLastWin32Error() : 0;
+            _threadId = GetCurrentThreadId();   // PostThreadMessage 要的是原生 ID，不是托管线程 ID
+            // 模块句柄传 0：WH_MOUSE_LL 是全局低级钩子，回调跑在本进程内，不需要注入 DLL，
+            // 因此也不需要真实的模块句柄（这一点与需要注入的 WH_MOUSE 不同）。
+            try
+            {
+                Volatile.Write(ref _hook, SetWindowsHookEx(WH_MOUSE_LL, _proc, IntPtr.Zero, 0));
+                LastError = _hook == IntPtr.Zero ? Marshal.GetLastWin32Error() : 0;
+                _installResult = _hook != IntPtr.Zero ? 1 : 0;
+            }
+            catch { Volatile.Write(ref _hook, IntPtr.Zero); LastError = -1; _installResult = -1; }
+            _installed.Set();
+            if (_installResult != 1) { return; }
+            // LL 钩子的回调由系统在本线程取消息时**同步**派发；不需要 DispatchMessage。
+            while (true)
+            {
+                int r = GetMessage(out MSG msg, IntPtr.Zero, 0, 0);
+                if (r <= 0) break;   // WM_QUIT → 0；出错 → -1，都走统一拆除
+                if (msg.Message == WM_POLLDUE) FireIfDue();
+            }
         }
-        catch { _hook = IntPtr.Zero; LastError = -1; }
-        return _hook != IntPtr.Zero;
+        catch
+        {
+            // 泵线程绝不能把异常漏到线程顶：Install 那边还在等安装信号。
+            _installResult = -1;
+            LastError = -1;
+            Volatile.Write(ref _hook, IntPtr.Zero);
+            try { _installed.Set(); } catch { }
+        }
+        finally
+        {
+            try { Teardown(); } catch { }
+            _threadId = 0;
+        }
     }
 
     public void Dispose()
+    {
+        var t = _thread;
+        // 没装过钩子（单测反射驱动 Callback、或 Install 失败后 App 的收尾）：没有泵可通知，
+        // 就地做同一份托管/注入清理。
+        if (t == null) { Teardown(); return; }
+        // 正常路径只走一次：自愈 / 手动重钩 / 退出可能先后碰到同一对象。
+        if (Interlocked.Exchange(ref _disposePosted, 1) == 1) return;
+        try { PostThreadMessage(_threadId, WM_QUIT, IntPtr.Zero, IntPtr.Zero); } catch { }
+        if (t.Join(1000)) { _thread = null; return; }
+        // 钩子线程不肯走（理论上不该：回调里全是微秒级的活）也不能跳过摘钩——调用方紧接着
+        // 会把本对象置空，_proc 是系统手里那个裸指针唯一的托管根，野指针回调会随机崩进程。
+        var h = Volatile.Read(ref _hook);
+        if (h != IntPtr.Zero) try { UnhookWindowsHookEx(h); } catch { }
+        Volatile.Write(ref _hook, IntPtr.Zero);
+        t.Join(1000);
+        _thread = null;
+    }
+
+    // 有序拆除。生产里只在钩子线程上跑（与 Callback 天然串行——旧实现装在 UI 线程时靠
+    // 「都在 UI 线程」白拿这个保证）；没装过钩子时由 Dispose 在调用线程直接跑。两条路互斥。
+    private void Teardown()
     {
         // 卸载前收弦并清掉扣着的那次按下：留着它没有意义，而且万一钩子又被装回来，
         // 那个陈旧的按下时刻会让下一次抬起被算成一次超长的长按。
@@ -334,16 +498,13 @@ public sealed class MouseHook : IDisposable
         _gesture?.Reset();
         _owedRightClick = false;   // 这笔账随钩子一起作废：上面已经无条件还过了
         // 钩子卸载时手可能还按着：那条线不收笔就会一直挂在屏幕上。
-        // **必须兜住**：它排在摘钩子**之前**，而 _post 在调度器关闭时会抛（同上面两个 timer 回调）。
-        // 抛出去就跳过了下面的 UnhookWindowsHookEx、_hook 也不会清零，而调用方紧接着把
-        // _mouseHook 置空（App.xaml.cs 三处）——本对象从此可回收，而它的 _proc 字段是
-        // Windows 那个裸函数指针**唯一的**托管根。类头写着这之后会发生什么：
-        // 「下一次 GC 之后回调地址就是野指针——进程会死，而且死在一次随机的鼠标移动上」。
-        // 本方法里其它每一个原生 / timer 调用都是各自单独包着的，只有这一句漏了。
+        // **必须兜住**：_post 在调度器关闭时会抛，抛出去会打断后面的摘钩；本对象紧接着会被
+        // 置空，而 _proc 是系统那个裸函数指针**唯一的**托管根，野指针回调会死在随机的鼠标移动上。
         try { _post(_trailEnd); } catch { }
-        if (_hook == IntPtr.Zero) return;
-        try { UnhookWindowsHookEx(_hook); } catch { }
-        _hook = IntPtr.Zero;
+        var h = Volatile.Read(ref _hook);
+        if (h != IntPtr.Zero) try { UnhookWindowsHookEx(h); } catch { }
+        Volatile.Write(ref _hook, IntPtr.Zero);
+        try { _installed.Dispose(); } catch { }
     }
 
     private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)
@@ -372,7 +533,26 @@ public sealed class MouseHook : IDisposable
                 if (msg == WM_RBUTTONDOWN) Volatile.Write(ref _beatRDown, Environment.TickCount64);
                 else Volatile.Write(ref _beatRUp, Environment.TickCount64);
                 if (_gesture == null) return CallNextHookEx(_hook, code, wParam, lParam);
+                // 修饰键（Ctrl/Shift/Alt/Win）按着的右键是**别人的组合手势**——WindowShuffle 的
+                // Ctrl+右键拖窗、Explorer 的 Shift+右键扩展菜单那一类。按下这一刻就整笔放行：
+                // 低级钩子后装先调、return 1 截断整条链，扣下这个按下，排在后面的工具连按下都收不到，
+                // 而我们补发的是注入事件，对方按防回环会把它丢掉——它的手势就此消失。
+                // 只问按下这一刻：起笔之后才按修饰键救不回已吞的按下，也没有工具这么起手；
+                // gate 没起笔，后续的 move/up 天然全部 Pass。
+                // 问的是键盘物理态，我们从不吞键盘——不犯「吞了消息还拿系统键态当判据」那条（见 Win32.ModifierHeld）。
+                if (msg == WM_RBUTTONDOWN && _modifierHeld())
+                {
+                    // 旧欠账不在组合手势里还：超时兜底留下的那笔补发会在这里注入一个按下，
+                    // 而 Ctrl 还按着——它会变成一记 Ctrl+右键，正是我们要让路的那类东西。
+                    // 这笔账的安全结局本来就是「没人来领就永远不注入」（见 _owedRightClick 注释），作废即可。
+                    _owedRightClick = false;
+                    return CallNextHookEx(_hook, code, wParam, lParam);
+                }
+                // 起笔窗口在**按下那一刻**解析：此刻光标压着的窗就是这笔手势划在谁身上，
+                // 与轨迹起点同一坐标。微秒级 P/Invoke，留在这里安全（回调只做纯查询，不碰 UI）。
+                if (msg == WM_RBUTTONDOWN) _gestureOrigin = Win32.WindowAtPoint(data.X, data.Y);
                 var gv = msg == WM_RBUTTONDOWN ? _gesture.OnRightDown(data.X, data.Y) : _gesture.OnRightUp();
+                if (msg == WM_RBUTTONDOWN) _gesture.ContextProcess = Win32.ProcessNameForWindow(_gestureOrigin);
                 // 屏幕上那条看得见的笔迹，起止都在这里派（一律走 _post，绝不在回调里碰 UI）。
                 //
                 // 按下：先收上一笔再落起点。多数时候上一笔早收了，那一下什么也不做；它堵的是
@@ -399,7 +579,8 @@ public sealed class MouseHook : IDisposable
                 // （上面 gv 那一句），而这里一抛就会被最外层的 catch 接走、走到 CallNextHookEx——
                 // 于是一条已经记成 Swallow 的事件实际上 Pass 了下去，gate 的状态与真实发生的事分家。
                 // 笔迹画不画得出来是小事，裁决对不上号是大事。（定时器里那两处已经是这么写的。）
-                if (msg == WM_RBUTTONDOWN) { int dx = data.X, dy = data.Y; try { _post(() => { _trailEnd(); _trailPoint(dx, dy, false); }); } catch { } }
+                // 起点单独排一次 Finish 在前、起点 drain 在后：FIFO 保证旧笔先收、新笔才落第一点。
+                if (msg == WM_RBUTTONDOWN) { try { _post(_trailEnd); } catch { } ScheduleTrail(data.X, data.Y, false); }
                 else { try { _post(_trailEnd); } catch { } }
                 switch (gv)
                 {
@@ -426,7 +607,8 @@ public sealed class MouseHook : IDisposable
                         return 1;
                     case PressVerdict.Fire:
                         var path = _gesture.Path;
-                        _post(() => _fireGesture(path));   // 绝不在回调里跑动作（见类头注释第 2 条）
+                        var origin = _gestureOrigin;   // 快照进闭包：下一笔按下会覆写这个字段
+                        _post(() => _fireGesture(path, origin));   // 绝不在回调里跑动作（见类头注释第 2 条）
                         return 1;
                 }
                 return CallNextHookEx(_hook, code, wParam, lParam);
@@ -463,14 +645,19 @@ public sealed class MouseHook : IDisposable
                 // 划一道手势能有上千个移动消息，UI 队列会被这些重绘塞满。
                 if (_gesture.PointCount != before)
                 {
-                    // 命中与否在**这条线程**上算完再捎过去：LiveMatch 是纯计算（微秒级），
-                    // 而把 gate 的内部状态丢给 UI 线程去读会撞上「钩子线程正在往里加点」的竞态。
-                    int mx = data.X, my = data.Y;
-                    bool armed = _gesture.LiveMatch();
-                    _post(() => _trailPoint(mx, my, armed));
+                    // 命中与否在**钩子线程**上算完再捎过去：LiveMatch 是纯计算（微秒级），
+                    // gate 状态只在这条线程上读写，不存在竞态（旧实现里这条线程就是 UI 线程）。
+                    // 投递走合帧：一笔几百个采样点不会往 UI 队列塞几百次整屏分层窗重合成。
+                    ScheduleTrail(data.X, data.Y, _gesture.LiveMatch());
                 }
             }
             if (_gate == null) return CallNextHookEx(_hook, code, wParam, lParam);
+
+            // 中键长按同一条规矩：修饰键按着的中键是别人的组合（浏览器 Ctrl/Shift+中键开标签、
+            // 别的工具拿中键做的手势）。按下这一刻整笔放行——gate 不起笔、闹钟不上弦，
+            // 随后的移动/抬起天然全部 Pass，修饰键+中键拖拽也走原生路径。
+            if (msg == WM_MBUTTONDOWN && _modifierHeld())
+                return CallNextHookEx(_hook, code, wParam, lParam);
 
             var verdict = msg switch
             {

@@ -56,15 +56,14 @@ public static class WindowManager
     {
         if (IsCurrentWindow(process))
         {
-            // **目标要用触发那一刻的前台，不能在这儿现读 GetForegroundWindow。**
-            // 手势/格子触发后动作在后台线程跑，读到这一句之前隔着 Task 调度、WaitAppWindow 轮询
-            // （可等好几秒）、post-window 延时，以及动作组里前面那些会抢前台的步骤；这期间弹出一个
-            // 通知、或前一步刚激活了别的程序，现读读到的就不是手势划在上面的那个窗口了——
-            // 「关闭/最小化当前窗口」落到错误窗口、或一个窗口都找不到，外面看就是「手势丢了焦点、没生效」。
-            // 触发时刻的前台在运行开始时已由 MarkForegroundBaseline 在 UI 线程记下（见 RunStepAsync 注释：
-            // 「等步骤自己去抢就晚了」）。它还有效就用它；句柄已废（窗口被关掉）才退回现读。
-            // 裁决抽成纯函数（ResolveCurrentWindowTarget），这条「丢焦点」逻辑是活交互、单测够不着 Win32。
-            var h = ResolveCurrentWindowTarget(_foregroundBaseline, Win32.IsWindowVisible, Win32.ForegroundWindowOfOthers);
+            // **窗口管理类「当前窗口」打的是手势起笔那个窗，不是前台窗，更不能在这儿现读。**
+            // 右键按下被低级钩子吞掉、系统不会激活光标下的窗，在后台窗口上起笔时前台仍是另一个窗；
+            // 而动作在后台线程跑，读到这一句之前还隔着 Task 调度、WaitAppWindow 轮询、动作组里抢前台的
+            // 前一步。起笔窗口在按下那一刻解析（_gestureOrigin，见 Win32.WindowAtPoint），运行开始时
+            // 由 MarkRunBaseline 记下。它还有效就用它；失效（窗口被关）才退回触发时刻的前台 baseline，
+            // 再不行才现读。裁决抽成纯函数（ResolveCurrentWindowTarget），这条取舍是活交互、单测够不着 Win32。
+            var h = ResolveCurrentWindowTarget(_gestureOrigin, _foregroundBaseline,
+                                               Win32.IsWindowVisible, Win32.ForegroundWindowOfOthers);
             return h != IntPtr.Zero ? new[] { h } : Array.Empty<IntPtr>();
         }
         var name = StepHelpers.ToProcessName(process);
@@ -72,10 +71,13 @@ public static class WindowManager
         return Win32.WindowsForProcess(name);
     }
 
-    // 「当前窗口」该落到哪个句柄：优先触发时刻记下的 baseline，它失效（窗口已关）才退回此刻现读的前台。
-    // 纯函数、探针可注入——baseline 与 live 不一致时取谁，是这个修复的全部承重点，必须有断言钉着。
-    internal static IntPtr ResolveCurrentWindowTarget(IntPtr baseline, Func<IntPtr, bool> stillVisible, Func<IntPtr> liveForegroundOfOthers)
+    // 「当前窗口」该落到哪个句柄：起笔窗口（手势划在谁身上）优先，其次触发时刻记下的前台 baseline，
+    // 两者都失效（窗口已关 / 非手势触发没有起笔窗口）才退回此刻现读的前台。
+    // 纯函数、探针可注入——这三者不一致时取谁，是这个取舍的全部承重点，必须有断言钉着。
+    internal static IntPtr ResolveCurrentWindowTarget(IntPtr gestureOrigin, IntPtr baseline,
+                                                       Func<IntPtr, bool> stillVisible, Func<IntPtr> liveForegroundOfOthers)
     {
+        if (gestureOrigin != IntPtr.Zero && stillVisible(gestureOrigin)) return gestureOrigin;
         if (baseline != IntPtr.Zero && stillVisible(baseline)) return baseline;
         return liveForegroundOfOthers();
     }
@@ -187,13 +189,29 @@ public static class WindowManager
     // ponytail: 一个静态字段，同时跑两个动作组会互相覆盖。做成 per-run 上下文要把它一路穿过
     // StepRunner / ActionGroupRunner 的签名；等真有人同时跑两组、两组还都用了这一步再说。
     private static IntPtr _foregroundBaseline;
+    // 这一次运行若是**手势**触发，起笔点所在的顶层窗口；非手势触发为 Zero。
+    // 窗口管理类「当前窗口」优先打它（手势划在谁身上就动谁，而不是动前台那个窗——按下被钩子吞掉，
+    // 在后台窗口上起笔时前台仍是另一个窗）。与 _foregroundBaseline 一样是 per-run 的静态记账，
+    // 每次运行开始由 MarkRunBaseline 覆写，所以不会跨运行串味；同时跑两个手势仍会互相覆盖，
+    // 同 _foregroundBaseline 那条 ponytail 取舍，不另做 per-run 上下文。
+    private static IntPtr _gestureOrigin;
 
     /// <summary>记下此刻的前台窗口，供之后的「恢复活动窗口」用。每次运行开始时在 UI 线程调一次。</summary>
     //
     // 走 ForegroundWindowOfOthers 而不是 GetForegroundWindow：前台是 Clockwork 自己时
     //（在编辑器里点「运行这一步」试跑就是这种情况）没有可回去的地方，记下来只会让那一步
     // 把编辑器又拽回前台——用户按的是「试一试」，得到的是窗口跳来跳去。
-    public static void MarkForegroundBaseline() => _foregroundBaseline = Win32.ForegroundWindowOfOthers();
+    public static void MarkForegroundBaseline() => MarkRunBaseline(IntPtr.Zero);
+
+    /// <summary>运行开始时在 UI 线程记账：前台 baseline 始终记；手势触发额外记起笔窗口。</summary>
+    //
+    // 两个句柄在同一次调用里一起落定，免得「baseline 已更新、起笔窗口还是上一笔」的中间态。
+    // gestureOrigin 传 Zero 即退化成纯前台 baseline（面板格子 / 热键 / 开机清单这些没有起笔点的路）。
+    public static void MarkRunBaseline(IntPtr gestureOrigin)
+    {
+        _foregroundBaseline = Win32.ForegroundWindowOfOthers();
+        _gestureOrigin = gestureOrigin;
+    }
 
     // 回到基准那个窗口。最小化了的先还原——「恢复活动窗口」要的是能接着用，不是让它在任务栏上亮一下。
     private static WindowOutcome RestoreForeground()

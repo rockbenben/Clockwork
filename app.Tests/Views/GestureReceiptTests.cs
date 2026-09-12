@@ -22,9 +22,11 @@ public class GestureReceiptTests
     }
 
     // 手势那条路必须走 Gesture 这一档（成功安静 + 不防连点，两件事都挂在它上面）。
+    // 不锚到行尾的右括号：这一行还顺带传入手势起笔窗口（gestureOrigin:），多一个命名参数
+    // 不该让这条「走没走 Gesture 档」的守卫变红。
     [Fact]
     public void A_gesture_runs_as_a_gesture()
-        => Assert.Contains("RunStep(step, by: StepTrigger.Gesture)", AppSource("App.xaml.cs"));
+        => Assert.Contains("RunStep(step, by: StepTrigger.Gesture", AppSource("App.xaml.cs"));
 
     // **防连点闸只对按钮。** 它拦下时是直接 return、什么都不说，而手势要花一秒认真画出来——
     // 画两次就是故意要跑两次（↖ 切换置顶：钉住、再放开）。给手势设闸的表现是
