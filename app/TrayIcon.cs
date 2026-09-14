@@ -58,6 +58,11 @@ public sealed class TrayIcon : IDisposable
         // 留着一个点了什么都不发生的菜单项，比没有这一项更糟。
         if (app.PanelEnabled)
             menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Panel"), TrayGlyph.Run, (s, e) => app.TogglePanel()));
+        // 钩子被别的程序抢了链首（中键/手势按了没反应、心跳却正常，自愈不管这一种）时，
+        // 任何配置形态都够得着的手动入口——手势管理器里那颗按钮只在开着手势时才看得见。
+        // 文案复用 Gesture_Rehook（各语言已齐），字形用「刷新」。
+        if (app.MouseHookActive)
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_Rehook"), TrayGlyph.Rerun, (s, e) => app.RehookMouse()));
 
         // 启动清单区（小标题复用「我的启动清单」标签页名，已多语言）
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Launch")));

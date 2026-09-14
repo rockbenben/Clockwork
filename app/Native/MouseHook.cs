@@ -76,6 +76,15 @@ public sealed class MouseHook : IDisposable
     // 前面把按下吞了」的确凿指纹——手势类工具正是这么干的（吞掉按下去判断是不是手势，
     // 抬起时再放行或补发）。合成一格的话，这个唯一能自证的信号就没了。
     private long _beatRDown, _beatRUp;
+    // 中键同样分着记：中键是面板的触发键，「移动心跳正常、中键一次都没到」就是上游钩子吞键
+    // 或前台 UIPI 拦截的指纹，与全钩死寂不是一种病。
+    private long _beatMDown, _beatMUp;
+    // 面板到点唤出过几次（闹钟与回调内追赶轮询共用，见 PollFireAndPost）。
+    private int _middleFired;
+    // 长按被改判成「中键拖拽」的次数：按住后位移超出容差就归还按下、撤防闹钟、面板不再弹。
+    // 这格是症状「按住很久、松手也不弹」在生产里唯一能自证的指纹——它非零就说明物理事件
+    // 全都到了、是我们自己的抖动容差把这次按判成了拖拽，而不是被谁吞了。
+    private int _dragEscapes;
     // 一笔手势按住不放的上限。到点还没收到抬起，就当那条抬起丢了（安全桌面）并收笔。
     // 取 5 秒是「宽到不会误伤真手势、又短到不至于让笔迹挂很久」：真手势一两秒到头，
     // 而没有这道兜底的话，丢失的抬起要挂到下一次右键才收得掉。
@@ -128,13 +137,6 @@ public sealed class MouseHook : IDisposable
     // 于是补发出去的是一次「零长度」的点击。不少程序据此把它当噪声丢掉（自己做按下-抬起
     // 配对判定的、以及 Chromium 系那种异步处理输入的），表现就是**快速点一下右键没有菜单**，
     // 而按住久一点反而正常——因为那条路走的是「把按下还给系统」，时序是真实的。
-    // 30ms 比人手最快的一次点击还短，却足够让下游把它当成两件事。
-    // 补发那次点击的按下与抬起之间隔多久。
-    //
-    // **不能是 0，而同一批 SendInput 里的 down+up 就是 0**：两条事件的时间戳完全相同，
-    // 于是补发出去的是一次「零长度」的点击。不少程序据此把它当噪声丢掉（自己做按下-抬起
-    // 配对判定的、以及 Chromium 系那种异步处理输入的），表现就是**快速点一下右键没有菜单**，
-    // 而按住久一点反而正常——因为那条路走的是「把按下还给系统」，时序是真实的。
     //
     // 15ms 是 WGestures / StrokesPlus 等主流工具验证过的甜蜜点：
     //   · 低于 Chromium 等过滤零长度点击的阈值（~10ms），不会被当噪声丢掉；
@@ -172,14 +174,20 @@ public sealed class MouseHook : IDisposable
     /// <param name="trailEnd">笔迹收笔（抬起、或钩子卸载）。</param>
     /// <param name="unmatched">画出来了却没绑任何东西时报一声，参数是画出来的方向串。</param>
     /// <param name="modifierHeld">修饰键按住判定（单测注入用，生产留空查物理键态）。</param>
+    /// <param name="moveTolerancePhysical">按住期间位移超过多少**物理像素**判为拖拽（抖动容差）。
+    /// 0 = 用 gate 默认值 6——那是 100% 缩放下的手感；缩放屏必须由调用方按 DPI 换算后传进来
+    ///（见 App.ApplyMouseHook / Win32.PrimaryScale）。</param>
     public MouseHook(int holdMs, Action fire, Action<Action> post,
                      GestureGate? gesture = null, Action<string, IntPtr>? fireGesture = null,
                      Action<int, int, bool>? trailPoint = null, Action? trailEnd = null,
-                     Action<string>? unmatched = null, Func<bool>? modifierHeld = null)
+                     Action<string>? unmatched = null, Func<bool>? modifierHeld = null,
+                     int moveTolerancePhysical = 0)
     {
         _trailPoint = trailPoint ?? ((_, _, _) => { });
         _trailEnd = trailEnd ?? (() => { });
-        _gate = holdMs > 0 ? new LongPressGate(holdMs) : null;
+        _gate = holdMs > 0
+            ? new LongPressGate(holdMs, moveTolerancePhysical <= 0 ? 6 : moveTolerancePhysical)
+            : null;
         _gesture = gesture;
         _unmatched = unmatched ?? (_ => { });
         _holdMs = holdMs;
@@ -197,8 +205,8 @@ public sealed class MouseHook : IDisposable
         // 而这里是线程池线程——逃出去的异常没人接，直接终结进程，且 clockwork.error.log 里一个字都没有。
         // Timer.Dispose 挡不住这一下：它不取消**已经派发出去**的那次回调，本类的 Set() 里那句
         // `catch (ObjectDisposedException)` 承认的正是同一个竞态。
-        // 触发窗口很窄但很日常：中键按住（上了 _alarm 的弦）或右键按下（上了 _hold 的弦）的那一瞬
-        // 从托盘退出。第三个 timer（_clickUp）不需要这层——它压根不走 _post，见下面那行注释。
+        // 触发窗口很窄但很日常：中键按住（上了 _alarm 的弦）的那一瞬从托盘退出。
+        // 另一个 timer（_clickUp）不需要这层——它压根不走 _post，见下面那行注释。
         _alarm = new System.Threading.Timer(_ => PollDue(), null,
                                             System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         // 这一个不必回 UI 线程：只有一句 SendInput，微秒级，且不碰 gate 也不碰 UI。
@@ -256,9 +264,22 @@ public sealed class MouseHook : IDisposable
 
     // 闹钟响了：问 gate 是不是真该弹（中途抬起 / 拖走的话它会说不该）。只在钩子线程上跑；
     // 要弹的动作本身仍经 _post 交给 UI——回调/泵线程绝不直接碰 UI（类头第 2 条）。
-    private void FireIfDue()
+    private void FireIfDue() => PollFireAndPost(Environment.TickCount64);
+
+    // 到点询问 + 唤出的唯一入口，闹钟（WM_POLLDUE）与回调里的追赶轮询共用。
+    //
+    // **回调里也必须问一遍（追赶轮询）。** 闹钟那一跳是「线程池 Timer → PostThreadMessage →
+    // 钩子线程 GetMessage → Dispatcher」四级接力，任一级排队（开机线程池饥饿、按住时密集的
+    // 鼠标事件流）都会让「到点弹」迟到，手感就是「按很久不弹、松手才弹」——松手那条
+    // WM_MBUTTONUP 里还有 OnMiddleUp 的 Fire 裁决兜底，所以它总是恰好在松手时弹。
+    // 而按住期间 WM_MOUSEMOVE 每秒上百条，每条都在这里问一句（纯状态判定、微秒级、
+    // Pending 时才真算），闹钟投递再慢，面板也会在下一条输入事件上准点弹。
+    // 闹钟由此降级为「手完全不动、一条输入都没有」时的兜底。PollFire 只说一次 yes，两条路幂等。
+    private void PollFireAndPost(long nowMs)
     {
-        if (_gate != null && _gate.PollFire(Environment.TickCount64)) { try { _post(_fire); } catch { } }
+        if (_gate == null || !_gate.Pending || !_gate.PollFire(nowMs)) return;
+        Interlocked.Increment(ref _middleFired);
+        try { _post(_fire); } catch { }
     }
 
     // 上弦 / 收弦。收弦不必等待回调结束——最坏是一次已经在路上的询问照常发生，
@@ -335,6 +356,20 @@ public sealed class MouseHook : IDisposable
     // 实测（--hookprobe 注入 5 次按下+5 次抬起）：按下 0、抬起 5。
     // 这是这个功能唯一能自证的失败信号，值得单独有个名字。
     public bool RightDownSwallowed => EverRightUp && !EverRightDown;
+
+    /// <summary>收到过中键**按下**没有。中键是面板触发键：移动心跳正常但它一直不来，
+    /// 就是中键在钩子链上游被吞的指纹（与右键那一格同理）。</summary>
+    public bool EverMiddleDown => Volatile.Read(ref _beatMDown) != 0;
+
+    /// <summary>收到过中键**抬起**没有。</summary>
+    public bool EverMiddleUp => Volatile.Read(ref _beatMUp) != 0;
+
+    /// <summary>按满时长唤出面板的次数（闹钟与追赶轮询合计，一次长按只计一次）。</summary>
+    public int MiddleFireCount => Volatile.Read(ref _middleFired);
+
+    /// <summary>长按被改判成中键拖拽的次数（按住后位移超容差）。它非零就是「按住很久、
+    /// 松手也不弹」的直接指纹：物理事件全到了，是我们自己的抖动容差把它判成了拖拽。</summary>
+    public int MiddleDragEscapeCount => Volatile.Read(ref _dragEscapes);
 
     public long SinceBeatMs => Volatile.Read(ref _beat) == 0
         ? long.MaxValue
@@ -527,6 +562,14 @@ public sealed class MouseHook : IDisposable
             // 自己补发的那些：原样放行（见类头注释第 3 条）。
             if (data.DwExtraInfo == Win32.InjectTag) return CallNextHookEx(_hook, code, wParam, lParam);
 
+            // 中键按下/抬起分开记账（理由同右键的 _beatRDown/_beatRUp）：
+            // 移动心跳照常、中键却一次都没来，是中键在钩子链上游被吞的指纹。
+            if (msg == WM_MBUTTONDOWN) Volatile.Write(ref _beatMDown, Environment.TickCount64);
+            else if (msg == WM_MBUTTONUP) Volatile.Write(ref _beatMUp, Environment.TickCount64);
+
+            // 到点追赶：必须排在本事件 verdict 之前（见 PollFireAndPost 注释）。
+            PollFireAndPost(Environment.TickCount64);
+
             // —— 右键：手势 ——（gate 词汇与中键共用，但这边永远用不到 ReplayDownThenPass）
             if (msg is WM_RBUTTONDOWN or WM_RBUTTONUP)
             {
@@ -680,11 +723,15 @@ public sealed class MouseHook : IDisposable
                     if (!ReplayClick(2)) break;
                     return 1;   // 真事件吞掉，补发的那次代替它往下走
                 case PressVerdict.Fire:
-                    // 保留分支：现在弹面板走的是闹钟（PollFire），这里不会再命中。
+                    // 保留分支：弹面板走的是回调开头的追赶轮询与闹钟（PollFireAndPost），
+                    // 同一条 UP 被算 verdict 之前已经到点弹过、gate 转为 _fired，这里不会再命中。
                     // 留着是因为 PressVerdict 是公开枚举，漏一个分支等于默默放行。
                     _post(_fire);   // 绝不在回调里开窗口（见类头注释第 2 条）
                     return 1;
                 case PressVerdict.ReplayDownThenPass:
+                    // 这次长按被改判成了拖拽：记一笔——它非零就是「按住很久、松手也不弹面板」
+                    // 的自证指纹（见 _dragEscapes 字段注释）。
+                    Interlocked.Increment(ref _dragEscapes);
                     // 返回值不能丢：补发被 UIPI 拒掉时（前台是提权进程），下游会看到一串移动
                     // 加一个无配对的中键抬起——浏览器的中键自动滚动彻底失效，而那正是这一分支
                     // 存在的理由（见类头四条出口那段）。救不回来，但必须让它**可见**：

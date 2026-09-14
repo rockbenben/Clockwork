@@ -455,7 +455,18 @@ public partial class App : System.Windows.Application
         _main.Show();
         if (_main.WindowState == WindowState.Minimized) _main.WindowState = WindowState.Normal;
         _main.ShowInTaskbar = true;
-        _main.Activate();
+        // Activate 在前台锁拒绝时只闪任务栏、不抛异常。托盘点击通常附带前台权，失败少见，
+        // 但与面板 Popup 同一套补救：Activate 没拿到就 ForceForeground（AttachThreadInput），
+        // 再不行留一行一次性证据，别让「点了托盘主界面没上来」查无此案。
+        if (!_main.Activate() || !_main.IsActive)
+        {
+            var h = new System.Windows.Interop.WindowInteropHelper(_main).Handle;
+            if (!Native.Win32.ForceForeground(h) && !_mainFgWarned)
+            {
+                _mainFgWarned = true;
+                AppendErrorLog("main window shown but foreground not acquired");
+            }
+        }
     }
 
     public void ExitApp()
@@ -562,12 +573,18 @@ public partial class App : System.Windows.Application
                          : StepRunner.RunStepMark(s, boot ? null : a => ConfirmDestructive(a), selfPaths),
                     () => DateTime.Now);
                 LaunchSequence.WriteLog(Path.Combine(cfgDir, "clockwork.run.log"), result, DateTime.Now);
-                // 开机那一次以前被排除在回执之外（原写法 if (!boot)），本意大概是「登录时别吵」。
-                // 但 NotifyRunResult 成功时本来就一言不发，只在撞步数上限 / 被急停 / 有步骤失败时开口——
-                // 于是「排除开机」实际排掉的只有坏消息：12 步里 3 步失败，屏幕上一声不响，
-                // 真相躺在一个要用户自己想起来去翻的日志文件里。而这恰恰是最该被告知的一次运行:
-                // 手动重跑时人就在屏幕前，失败当场就看见了；开机那次没人看着，日志是唯一的证人。
-                Dispatcher.Invoke(() => NotifyRunResult(result));
+                Dispatcher.Invoke(() =>
+                {
+                    // 开机那一次以前被排除在回执之外（原写法 if (!boot)），本意大概是「登录时别吵」。
+                    // 但 NotifyRunResult 成功时本来就一言不发，只在撞步数上限 / 被急停 / 有步骤失败时开口——
+                    // 于是「排除开机」实际排掉的只有坏消息：12 步里 3 步失败，屏幕上一声不响，
+                    // 真相躺在一个要用户自己想起来去翻的日志文件里。而这恰恰是最该被告知的一次运行:
+                    // 手动重跑时人就在屏幕前，失败当场就看见了；开机那次没人看着，日志是唯一的证人。
+                    NotifyRunResult(result);
+                    // 开机这一趟跑完，清单里延迟启动、且装了低级钩子的工具（AHK / 启动器类）都已装钩，
+                    // 此刻重装一次把钩子链首抢回来（见 RehookMouseAfterBoot 的注释）。
+                    if (boot) RehookMouseAfterBoot();
+                });
             }
             // 没有 catch 时任何异常都让整个开机序列静默中止（无日志/无 toast/什么都没启动）——如实报出来。
             catch (Exception ex) { WarnToast(Lf("Warn_LaunchRunCrashed", ex.Message)); }
@@ -813,12 +830,16 @@ public partial class App : System.Windows.Application
 
     // —— 快捷面板 ——
     private Views.QuickPanelWindow? _panel;
+    private bool _panelFgWarned;       // 面板抢前台失败已记过一次：每次长按都失败也只留一行
+    private bool _mainFgWarned;        // 主窗口抢前台失败同一口径（ShowMain 只走托盘入口）
     private Native.MouseHook? _mouseHook;
     private int _mouseHookMs;          // 当前钩子是按哪个阈值装的：只有阈值真变了才重装（0=中键关着）
     private bool _mouseHookGesture;    // 当前钩子装没装手势那半
     // 当前那个 GestureGate 是按哪个最小笔画长度造的。GestureGate 不可变，所以换主屏 / 换分辨率
     // 之后必须整个重建——这一格就是「要不要重建」的判据（见 ApplyMouseHook 里那段）。
     private int _mouseHookMinLeg;
+    // 当前中键拖拽容差（物理像素）。按主屏 DPI 换算，缩放变了要跟着重装，理由同 _mouseHookMinLeg。
+    private int _mouseHookTolerance;
     // 画手势时屏幕上那条看得见的线。只在监听右键期间存在——没配手势的人不该多出一扇窗。
     private Views.GestureTrailWindow? _trail;
     private bool _mouseHookFailed;     // 装失败已经报过一次：别在每次保存配置时反复弹同一条
@@ -871,17 +892,24 @@ public partial class App : System.Windows.Application
     private bool _cursorSeen;   // 采过第一次没有——第一次只定基线，见 CursorWatchTick
     // 上一个钩子的账，在摘掉它之前抄下来。**只有自愈与手动「重新挂钩」这两条路会填它**，
     // 而 ApplyMouseHook 也正是拿「它有没有值」当作「这次重装值不值得记一行」的判据。
-    private string? _prevBeat, _prevRight;
+    private string? _prevBeat, _prevRight, _prevMiddle;
     private long _prevSince;
     private int _prevRejected;
+
+    // 摘钩前抄一份中键的账，格式与右键那段对称。fired 是到点唤出次数，
+    // dragEscapes 非零 = 「按住很久也不弹」其实是抖动容差把长按判成了拖拽。
+    private static string MiddleAccount(Native.MouseHook h)
+        => "middle " + (h.EverMiddleDown ? "down+" : "down-")
+          + (h.EverMiddleUp ? " up+" : " up-")
+          + $" fired={h.MiddleFireCount} dragEscapes={h.MiddleDragEscapeCount}";
 
     // 光标最后一次被观察到「变了位置」的时刻。判「钩子死了没有」全靠它。
     private long _cursorMovedAt;
     private System.Windows.Threading.DispatcherTimer? _cursorWatch;
 
-    /// <summary>按「此刻监听不监听手势」开关那个每秒采样光标的计时器。</summary>
+    /// <summary>按「此刻装没装鼠标钩子」开关那个每秒采样光标的计时器（手势与中键面板任一在听就要开）。</summary>
     //
-    // 只在真的监听手势时才跑：没配手势的人一次 GetCursorPos 都不会多花。
+    // 只在真的装了钩子时才跑：两样都关的人一次 GetCursorPos 都不会多花。
     private void ApplyCursorWatch(bool on)
     {
         if (on)
@@ -899,7 +927,7 @@ public partial class App : System.Windows.Application
         _cursorWatch = null;
     }
 
-    /// <summary>每秒看一眼光标。只在监听手势期间跑。</summary>
+    /// <summary>每秒看一眼光标。装了钩子（手势或中键面板）期间跑。</summary>
     //
     // 这是「钩子还活着吗」唯一站得住的判据，而它必须**采样得够密**。
     // 一度是搭在 30 秒的提醒计时器上：那时「光标动过」比的是相隔 30 秒的两次位置，
@@ -907,8 +935,8 @@ public partial class App : System.Windows.Application
     // 会被判成「钩子死了」，白摘白装一次，还把日志刷满、让状态行一直挂着「已失效」。
     // 实测日志里那几条「静默 6563ms / 9610ms / 14765ms」全是这么来的，一条真故障都没有。
     //
-    // 一秒一次 GetCursorPos 的代价可以忽略，而且只在真的监听手势时才开——
-    // 没配手势的人一次都不会跑到这儿。
+    // 一秒一次 GetCursorPos 的代价可以忽略，而且只在真的装了钩子（手势或中键面板）时才开——
+    // 两样都关的人一次都不会跑到这儿。
     private void CursorWatchTick()
     {
         var now = Native.Win32.CursorPos();
@@ -924,7 +952,9 @@ public partial class App : System.Windows.Application
 
     private void HealMouseHookIfDead()
     {
-        if (_mouseHook == null || !_mouseHookGesture) return;
+        // 手势与中键面板共用同一个钩子：只开中键面板（没配手势）时钩子一样会被静默摘掉，
+        // 这一档不能只给手势用户兜底。
+        if (_mouseHook == null) return;
         // **刚刚动过光标、却刚刚没有心跳**，才算死了。两个「刚刚」都以同一条时间轴度量：
         // 光标是每秒采一次的，所以「2 秒内动过」是可信的近况，而不是三十秒里的某一刻。
         // **从没跳过一次的钩子不算「死了」，压根别自愈。**
@@ -953,6 +983,7 @@ public partial class App : System.Windows.Application
         // 「收到过抬起、从没收到按下」只有一种成因——有人排在前面把按下吞了。
         _prevRight = (_mouseHook.EverRightDown ? "down+" : "down-")
                    + (_mouseHook.EverRightUp ? " up+" : " up-");
+        _prevMiddle = MiddleAccount(_mouseHook);
         _prevSince = _mouseHook.SinceBeatMs;
         _prevRejected = _mouseHook.InjectRejected;
         var wasGesture = _mouseHookGesture;
@@ -972,6 +1003,9 @@ public partial class App : System.Windows.Application
     // 自愈够不着这一格：被抢在前面时我们的钩子**活得好好的**（鼠标移动照收、心跳正常），
     // 只是右键先被人吞了，于是「掉了就重装」永远不触发，也就永远排在后面。
     // 那台机器上什么时候会有人插到前面，我们无从预知，所以这件事只能留给用户按。
+    /// <summary>鼠标钩子此刻装着没有（不区分手势还是中键面板）。托盘菜单据此决定要不要给「重新挂钩」入口。</summary>
+    internal bool MouseHookActive => _mouseHook != null;
+
     internal void RehookMouse()
     {
         if (!Dispatcher.CheckAccess()) { Dispatcher.Invoke(RehookMouse); return; }
@@ -982,6 +1016,7 @@ public partial class App : System.Windows.Application
             _prevBeat = _mouseHook.EverBeat ? "yes" : "no";
             _prevRight = (_mouseHook.EverRightDown ? "down+" : "down-")
                        + (_mouseHook.EverRightUp ? " up+" : " up-");
+            _prevMiddle = MiddleAccount(_mouseHook);
             _prevSince = _mouseHook.SinceBeatMs;
             _prevRejected = _mouseHook.InjectRejected;
         }
@@ -990,6 +1025,22 @@ public partial class App : System.Windows.Application
         _mouseHookMs = -1;               // 逼 ApplyMouseHook 走完整重装，别被「已经是想要的状态」挡回去
         _mouseHookFailed = false;        // 上一次装失败不该让这一次连报错都不报
         ApplyMouseHook();
+    }
+
+    /// <summary>开机清单跑完后重挂一次鼠标钩子抢回链首。</summary>
+    //
+    // 钩子链**后装的排在前面**：开机清单里延迟启动的 AHK / 启动器类工具在 Clockwork 之后装钩，
+    // 它们若吞中键，排在后面的我们连 MBUTTONDOWN 都收不到——开机首次唤出无效、之后又时好时坏，
+    // 这是主要嫌疑之一。自愈治不了这一种：中键被单独吞掉时移动心跳照常，不满足「全钩死寂」。
+    // 清单跑完意味着那些工具都已启动并装完钩子，此刻重装一次就把队首抢回来（同类工具 Quicker
+    // 专门有一条「重新挂钩键鼠」的命令，理由相同；我们把它自动化在唯一知道「开机启动结束了」的时刻）。
+    // 手动「重跑清单」（boot=false）不调：那时用户正在用机器，没必要白抖一次钩子。
+    private void RehookMouseAfterBoot()
+    {
+        if (!Dispatcher.CheckAccess()) { Dispatcher.Invoke(RehookMouseAfterBoot); return; }
+        // 没装（面板和手势都关着）或上一次装失败：别在开机后制造一次新的失败弹窗。
+        if (_mouseHook == null || _mouseHookFailed) return;
+        RehookMouse();
     }
 
     /// <summary>打开手势管理器。面板表圈上那颗按钮与主界面那颗走同一条路。</summary>
@@ -1054,9 +1105,16 @@ public partial class App : System.Windows.Application
         // 300ms 硬预算上又多一次 P/Invoke，换来的是副屏上略微好一点的手感。让用户按主屏
         // 调一次更划得来。（选 SM_CXSCREEN 而不是 SM_CXVIRTUALSCREEN 的理由见 PrimaryScreenWidth。）
         int minLeg = wantGesture ? GestureGate.MinLegForScreen(Win32.PrimaryScreenWidth(), _config.Settings.GestureSensitivity) : 0;
+        // 中键拖拽的抖动容差按主屏缩放换算成物理像素：低级钩子坐标是物理像素，gate 里那个 6
+        // 是逻辑像素的手感。不换算的话 150% 屏上只剩 4 物理像素（约 1mm），按下去那一下抖动
+        // 就把长按判成了拖拽，面板永远不弹（见 MouseHook._dragEscapes 注释）。
+        // 下界 6：100% 缩放时与旧行为一字不差。
+        int middleTolerance = wantPress
+            ? Math.Max(6, (int)Math.Round(6 * Win32.PrimaryScale()))
+            : 0;
         if (wantGesture && _trail != null) _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
         if (_mouseHook != null && _mouseHookMs == ms && _mouseHookGesture == wantGesture
-            && _mouseHookMinLeg == minLeg) return;   // 已经是想要的状态
+            && _mouseHookMinLeg == minLeg && _mouseHookTolerance == middleTolerance) return;   // 已经是想要的状态
         _mouseHook?.Dispose();
         var gesture = wantGesture
             ? new GestureGate((p, proc) => GestureGate.Match(_config.Gestures, p, proc) != null, minLeg)
@@ -1070,11 +1128,13 @@ public partial class App : System.Windows.Application
         else CloseTrail();
         _mouseHook = new Native.MouseHook(ms, TogglePanel, a => Dispatcher.BeginInvoke(a), gesture, RunByGesture,
             trailPoint: (x, y, armed) => _trail?.Point(x, y, armed), trailEnd: () => _trail?.Finish(),
-            unmatched: GestureUnmatched);
+            unmatched: GestureUnmatched, moveTolerancePhysical: middleTolerance);
         _mouseHookMs = ms;
         _mouseHookGesture = wantGesture;
         _mouseHookMinLeg = minLeg;
-        ApplyCursorWatch(wantGesture);   // 只有监听手势时才需要判「钩子还活着吗」
+        _mouseHookTolerance = middleTolerance;
+        // 手势与中键面板任一在监听，就要判「钩子还活着吗」：只勾中键面板的用户同样会被静默摘钩。
+        ApplyCursorWatch(wantGesture || wantPress);
         if (_mouseHook.Install())
         {
             _mouseHookFailed = false;
@@ -1096,12 +1156,13 @@ public partial class App : System.Windows.Application
             // 英文常量，不走 resx：这个文件是拿去贴 issue 的，读它的人未必读得懂用户那门语言，
             // 而 18 份译文里同一条线索会长出 18 种写法，grep 不到一起。用户要读的那份日志是
             // clockwork.run.log（托盘「查看上次启动日志」），那一份仍然全本地化。
-            AppendErrorLog($"mouse hook reinstalled: middleHoldMs={ms} gestures={wantGesture} "
+            AppendErrorLog($"mouse hook reinstalled: middleHoldMs={ms} middleTolerance={middleTolerance} gestures={wantGesture} "
                            + $"prevEverFired={_prevBeat} prevRightButton={_prevRight ?? "-"} "
+                           + $"prev{_prevMiddle ?? "-"} "
                            + $"silentFor={(_prevSince == long.MaxValue ? "never" : _prevSince + "ms")} "
                            // 发不出去 vs 收不到，是两种表现一样、修法完全相反的故障（见 MouseHook.InjectRejected）。
                            + $"injectRejected={_prevRejected}");
-            _prevBeat = _prevRight = null;   // 这份账只用一次，别让它污染下一条非自愈的记录
+            _prevBeat = _prevRight = _prevMiddle = null;   // 这份账只用一次，别让它污染下一条非自愈的记录
             return;
         }
         // 装不上（受限令牌、组策略、被安全软件拦）：如实说。静默失败的话，用户会以为
@@ -1115,7 +1176,7 @@ public partial class App : System.Windows.Application
         // **按不上也要按关掉那条路收尾**，与上面 `!wantPress && !wantGesture` 那个分支同一套。
         // 漏了不是漏一次：ApplyMouseHook 在每次 SaveConfig 末尾都会走到，而 `_mouseHook` 已经是 null
         // 让上面那个「已经是想要的状态」早退永远不成立——于是每保存一次就新建一个 MouseHook，
-        // 每个带三个 System.Threading.Timer，上一个连 Dispose 都没调就被丢了。
+        // 每个都带两个 System.Threading.Timer（_alarm、_clickUp），上一个连 Dispose 都没调就被丢了。
         // 轨迹窗与 1 Hz 的「钩子还活着吗」同理：前面刚建完 / 刚上弦，而自愈那一句一看 `_mouseHook == null`
         // 就立即返回，于是那个计时器永远转着、每秒一次 GetCursorPos，什么也不做。
         _mouseHook.Dispose();
@@ -1197,7 +1258,14 @@ public partial class App : System.Windows.Application
         // 漏掉任何一条，_panel 就会一直指着一个已经关掉的窗口，此后热键永远只走 Dismiss 分支，
         // 面板再也打不开——而这种状态重启前自己不会恢复。
         w.Closed += (_, _) => { if (ReferenceEquals(_panel, w)) _panel = null; };
-        w.Popup();
+        if (!w.Popup() && !_panelFgWarned)
+        {
+            // 中键长按这条路没有「刚响应用户输入」的前台锁豁免（见 QuickPanelWindow.Popup 注释）。
+            // 抢不到前台时面板仍然可见、可点（看门狗不关掉从未激活的窗），但收不到键盘、
+            // 也不会失焦即关——这是「开机首次唤出无效」的主要嫌疑路径，留一行证据，别让它只能靠猜。
+            _panelFgWarned = true;
+            AppendErrorLog("panel shown but foreground not acquired");
+        }
     }
 
     // 面板上「你自己的东西」那一片：摆哪些格子由 Core.PanelLayout（纯函数、有测试）决定，
@@ -1380,8 +1448,8 @@ public partial class App : System.Windows.Application
         int tick = _config.Settings.TickSeconds;
         if (tick < 5) tick = 30;
         _reminderTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(tick) };
-        // 顺带查一次鼠标钩子还活着没有。搭在这个已有的计时器上，不另起一个：
-        // 这件事不急（掉了之后早一秒晚一秒重装没区别），而多一个计时器就是多一份常驻开销。
+        // 鼠标钩子的死活不在这儿查：那是 1 秒一次的 _cursorWatch + HealMouseHookIfDead 的活
+        //（30 秒粒度判「光标动没动」会把看屏幕的人误判成钩子死了，见 CursorWatchTick 的实测记录）。
         _reminderTimer.Tick += (s, e) => ReminderTick();
         _reminderTimer.Start();
     }
@@ -2530,7 +2598,8 @@ public partial class App : System.Windows.Application
     private readonly LogDedup _dedup = new();
     private readonly object _logLock = new();
 
-    private void AppendErrorLog(string line)
+    // internal：Views 层的无主对话框抢前台失败（DialogForeground）也要在这份日志里留证据。
+    internal void AppendErrorLog(string line)
     {
         // 任何线程可调（UnobservedTaskException 从终结器线程进来），而这里既读改 _dedup 的状态、
         // 又对同一个文件先截断再追加——不夹一把锁，两个线程能把彼此的行写丢。

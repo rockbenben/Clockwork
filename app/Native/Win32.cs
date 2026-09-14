@@ -97,6 +97,32 @@ public static class Win32
 
     [DllImport("user32.dll")] private static extern int GetSystemMetrics(int index);
 
+    [DllImport("user32.dll")] private static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint flags);
+    [DllImport("shcore.dll")] private static extern int GetDpiForMonitor(IntPtr mon, int type, out uint dpiX, out uint dpiY);
+    private const uint MONITOR_DEFAULTTOPRIMARY = 1;
+    private const int MDT_EFFECTIVE_DPI = 0;
+
+    /// <summary>主屏的缩放系数（1.0 = 100%，1.5 = 150%）。取不到时回退 1.0。</summary>
+    //
+    // 中键长按的拖拽容差按它换算（见 MouseHook 构造函数 / App.ApplyMouseHook）：低级钩子喂进来的
+    // 坐标是物理像素，而「手抖几像素算抖动」的那个像素是逻辑像素——150% 屏上 6 物理像素只有
+    // 4 逻辑像素，约 1mm，按下去的那一下抖动就能把长按误判成中键拖拽，面板永远不弹。
+    // 本程序声明 PerMonitorV2（见 app.manifest），GetDpiForMonitor 拿到的就是主屏真实缩放。
+    // 取主屏而非逐屏，是 MouseHook 里同一笔已写明的取舍（GestureGate.MinLegForScreen 那段）：
+    // 钩子回调里不值得为副屏的手感多两次 P/Invoke。
+    public static double PrimaryScale()
+    {
+        try
+        {
+            var mon = MonitorFromWindow(IntPtr.Zero, MONITOR_DEFAULTTOPRIMARY);
+            if (mon != IntPtr.Zero
+                && GetDpiForMonitor(mon, MDT_EFFECTIVE_DPI, out uint dpiX, out _) == 0
+                && dpiX >= 96) return dpiX / 96.0;
+        }
+        catch { }
+        return 1.0;
+    }
+
     /// <summary>右键的**物理**键态。仅供 --hookprobe 诊断用——为什么，见下面。</summary>
     //
     // 曾经这段注释挂在 GetCursorPos 上，写的是「手势的状态机只认按下/抬起两条消息，

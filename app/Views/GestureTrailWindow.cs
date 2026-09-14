@@ -224,6 +224,16 @@ public sealed class GestureTrailWindow : Window
         }), System.Windows.Threading.DispatcherPriority.Background);
     }
 
+    protected override void OnClosed(EventArgs e)
+    {
+        // 必须停表：CloseTrail 关窗时药丸计时器可能还在 0.9 秒的弦上（Finish 不停它）。
+        // 不停的话 Tick 会落在已关闭的窗上——Finish 已清空 Points，Tick 里那句 Hide() 是必走分支，
+        // 对已关窗口调 Hide() 抛 InvalidOperationException。关手势 / 装钩失败那两条 CloseTrail
+        // 路径上应用还活着，这一下会冒到 UI 线程上。同 NotificationToast.OnClosed 的口径。
+        _noteTimer.Stop();
+        base.OnClosed(e);
+    }
+
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);

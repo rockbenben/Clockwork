@@ -88,6 +88,7 @@ public partial class QuickPanelWindow : Window
     private int _page;
     private bool _closing;
     private bool _menuOpen;   // 右键菜单挂着：此刻的失焦是菜单造成的，不是用户点了别处
+    private bool _everActivated;   // Show 后到底真激活过没有：被前台锁拒掉时的即刻 Deactivated 不能关窗
     private bool _searching;  // 搜索态：凹坑里铺的是搜索结果，不是某一页
     private bool _hasSearch;  // 这个面板装了搜索吗（动作够多才装，见 BuildWaist）
     private List<PanelTile> _hits = new();   // 当前搜索结果，按名次排好（回车跑第一个）
@@ -132,9 +133,15 @@ public partial class QuickPanelWindow : Window
         ShowPage(0, animate: false);
 
         SourceInitialized += (_, _) => PlaceAtCursor();
+        Activated += (_, _) => _everActivated = true;
         // 焦点离开就关：点了别处、Alt+Tab 走了，面板都该消失——一个浮在所有窗口最上面、
         // 又不在任务栏里的东西，留着就是块甩不掉的牛皮癣。
-        Deactivated += (_, _) => { if (!_menuOpen) Dismiss(); };
+        //
+        // 但**从未激活过的那记 Deactivated 不能关**：Show 那一下的激活若被前台锁拒绝
+        //（中键长按这条路没有「刚响应用户输入」的豁免，开机首次最容易踩），WPF 立刻给一记
+        // Deactivated，照关就是「面板闪一下就没了 / 完全没出现」。看门狗同一条规矩：
+        // 从没拿到过前台的面板自己不关（见 StartFocusWatch）。
+        Deactivated += (_, _) => { if (!_menuOpen && _everActivated) Dismiss(); };
     }
 
     // ── 翻页 ──
@@ -893,15 +900,21 @@ public partial class QuickPanelWindow : Window
     // Activate() 单独用不够：热键呼出时前台窗口属于别的进程，Windows 的前台锁会把这次激活降级成
     // 任务栏闪烁——面板出现了却收不到键盘，方向键和 Esc 全部失灵，只能用鼠标点掉。
     // SetForegroundWindow 走的是「本进程刚响应了一次全局热键」这条豁免路径，此刻调用是允许的。
-    public void Popup()
+    //
+    // 返回是否真的拿到了前台。中键长按那条路没有豁免，开机后第一次抢前台可能失败——
+    // 调用方据此留一行证据（见 App.TogglePanel），看门狗还会在第一个 250ms 补抢一次。
+    public bool Popup()
     {
         Show();
         // ForceForeground 而不是裸的 SetForegroundWindow：中键长按那条路没有前台锁豁免，
         // 抢不到前台的话面板既收不到键盘、也永远不会触发「失焦即关」（见 Win32.ForceForeground）。
-        try { Native.Win32.ForceForeground(new WindowInteropHelper(this).Handle); } catch { }
+        bool foreground;
+        try { foreground = Native.Win32.ForceForeground(new WindowInteropHelper(this).Handle); }
+        catch { foreground = false; }
         Activate();
         FocusFirstTile();
         StartFocusWatch();
+        return foreground || IsActive;
     }
 
     // 看门狗：定期确认自己还在前台，不在就关。
@@ -913,6 +926,7 @@ public partial class QuickPanelWindow : Window
     private void StartFocusWatch()
     {
         bool hadFocus = false;
+        bool retried = false;
         _focusWatch = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
         _focusWatch.Tick += (_, _) =>
         {
@@ -921,6 +935,15 @@ public partial class QuickPanelWindow : Window
             if (mine == 0) return;
             bool now = Native.Win32.GetForegroundWindow() == mine;
             if (now) { hadFocus = true; return; }
+            // 头一个 250ms 还没抢到前台：中键长按没有「刚响应用户输入」的豁免，
+            // 开机后第一次最容易失败，补抢一次——而不是任由它挂成一块收不到键盘的浮窗。
+            if (!hadFocus && !retried)
+            {
+                retried = true;
+                try { Native.Win32.ForceForeground(mine); } catch { }
+                Activate();
+                return;
+            }
             if (hadFocus) Dismiss();
         };
         _focusWatch.Start();

@@ -99,7 +99,10 @@ public static class WindowManager
         if (IsCurrentWindow(process)) return true;
         // 最小化窗口 SetForegroundWindow 后仍最小化 → 先还原再置前台。
         if (Win32.IsIconic(hs[0])) { Win32.ShowWindow(hs[0], Win32.SW_RESTORE); Thread.Sleep(120); }
-        Win32.SetForegroundWindow(hs[0]);
+        // 走 ForceForeground 而不是裸 SetForegroundWindow：这里的调用大量来自手势 / 热键动作组
+        // 与「已运行则激活」捷径，那些来源没有前台豁免，裸调只会被降级成任务栏闪烁。
+        // ForceForeground 在被拒时用 AttachThreadInput 挂到前台线程的输入队列上补救（同面板那条路）。
+        Win32.ForceForeground(hs[0]);
         Thread.Sleep(120);
         return IsForeground(process);
     }

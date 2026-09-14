@@ -115,6 +115,9 @@ public partial class ReminderPopupWindow : Window
     public static (string Action, int? Snooze) Show(string message, bool confirm, int autoDismissSeconds, int? timeoutSnoozeMinutes = null)
     {
         var dlg = new ReminderPopupWindow(message, confirm, autoDismissSeconds, timeoutSnoozeMinutes);
+        // 本窗永远无主、且由计时器触发（无前台豁免）：Topmost 只管看得见，键盘焦点得另抢，否则
+        // 框在最上层闪着、用户的打字落进背后的程序。自动关闭只兜「没人答」，兜不了「答给了别人」。
+        DialogForeground.Arm(dlg);
         dlg.ShowDialog();
         return (dlg.Action, dlg.SnoozeMinutes);
     }

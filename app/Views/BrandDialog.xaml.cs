@@ -129,7 +129,12 @@ public partial class BrandDialog : Window
         // --selftest 抳不到它：DevSelfTest 每一档都是 Click(d.YesBtn)，从没按过回车。
         dlg.YesBtn.IsDefault = true;
         if (owner != null && owner.IsVisible) { try { dlg.Owner = owner; } catch { } }
-        else { dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen; dlg.Topmost = true; }
+        else
+        {
+            dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dlg.Topmost = true;
+            DialogForeground.Arm(dlg);   // 不请自来（热键/手势/提醒）：Topmost 管看得见，前台得另抢
+        }
         return dlg;
     }
 
@@ -170,7 +175,12 @@ public partial class BrandDialog : Window
         // 主界面会跟着被拽出来（同 ReminderPopupWindow.Show 的说明）。可见性改由 Topmost 保证：
         // 没有它，无主的框会藏在用户当前窗口后面，用户看着「卡住了」而实际是有个框在等他。
         if (owner != null && owner.IsVisible) { try { dlg.Owner = owner; } catch { } }
-        else { dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen; dlg.Topmost = true; }
+        else
+        {
+            dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dlg.Topmost = true;
+            DialogForeground.Arm(dlg);   // 同 Make：无主即不请自来，键盘焦点不能留在背后的程序上
+        }
         dlg.ShowDialog();
         return dlg.Result;
     }

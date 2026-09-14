@@ -241,8 +241,13 @@ public static class StepRunner
             pn = StepHelpers.ToProcessName(pn);   // 统一进程名规范化（剥目录+.exe），与其余调用点一致
             if (!string.IsNullOrEmpty(pn) && WindowManager.Handles(pn).Length > 0)
             {
-                WindowManager.SetForeground(pn);
-                return ActionResult.Empty;
+                // 返回值必须消费：手势 / 热键 / 定时触发都没有前台豁免，SetForeground 被前台锁
+                // 降级（任务栏闪一下）时窗口根本没到前面。静默记成 ✓，用户看到的就是「按了没反应」
+                // ——与窗口动作那路（本文件 window 分支的 Warn_WindowActionFailed）同一个口径。
+                // {1} 与那路一样传裸操作名 "activate"。
+                return WindowManager.SetForeground(pn)
+                    ? ActionResult.Empty
+                    : ActionResult.Warn("Warn_WindowActionFailed", StepDisplay.WindowTarget(item), "activate");
             }
         }
 
