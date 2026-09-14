@@ -14,6 +14,12 @@ public class MouseHookCatchUpTests
     private const int WM_MBUTTONDOWN = 0x0207;
     private const int WM_MBUTTONUP = 0x0208;
 
+    // 故意取一个测试时间窗内绝不可能走到的超长阈值：到点感由下面拨 _downMs 人工制造，
+    // 不能让 MouseHook 里那只真实的 350ms 线程池闹钟参与。没装钩子线程时它到点会经假 post
+    // 直接补一次 fire——冷 runner 并行跑各类、测试线程在两条反射调用之间被挤出 250ms 以上时
+    //（GC / JIT），「不该提前弹」的断言就会被那只闹钟搅红（已用 Thread.Sleep 插桩实证）。
+    private const int HoldMs = 600_000;
+
     [StructLayout(LayoutKind.Sequential)]
     private struct MSLLHOOKSTRUCT { public int X, Y; public uint MouseData, Flags, Time; public IntPtr DwExtraInfo; }
 
@@ -27,7 +33,7 @@ public class MouseHookCatchUpTests
     private static Rig NewRig(int moveTolerancePhysical = 0)
     {
         var rig = new Rig();
-        rig.Hook = new MouseHook(350, () => rig.Fires++, a => a(), gesture: null,
+        rig.Hook = new MouseHook(HoldMs, () => rig.Fires++, a => a(), gesture: null,
                                  modifierHeld: () => false, moveTolerancePhysical: moveTolerancePhysical);
         return rig;
     }
@@ -63,7 +69,7 @@ public class MouseHookCatchUpTests
         using var rig = NewRig();
         var hook = rig.Hook;
         Assert.Equal(new IntPtr(1), Send(hook, WM_MBUTTONDOWN, 200, 200));
-        SetDownMsAgo(hook, 400);   // 已按满 350ms（闹钟那条路在本测试里不存在：没装泵）
+        SetDownMsAgo(hook, HoldMs + 50);   // 人工把按下时刻拨到阈值之前（真实闹钟不参与，见 HoldMs）
 
         Assert.NotEqual(new IntPtr(1), Send(hook, WM_MOUSEMOVE, 200, 200));   // 移动照常放行
         Assert.Equal(1, rig.Fires);
