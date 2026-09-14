@@ -35,7 +35,14 @@ jobs:
       # 适配器没加载好时，一个用例不跑却退出 0，绿灯骗人。它取代了原先那段手写解析 .trx 的脚本；
       # 让 xunit.v3 跑在 MTP 上的两个属性见测试工程的 csproj。实测双向：传 1 通过，传 99999 退出 1。
       - name: Test
-        run: dotnet test app.Tests/Clockwork.Tests.csproj --no-build -c Release -- --minimum-expected-tests 1
+        shell: pwsh
+        run: |
+          dotnet test app.Tests/Clockwork.Tests.csproj --no-build -c Release -- --minimum-expected-tests 1
+          if ($LASTEXITCODE -ne 0) {
+            Get-ChildItem app.Tests/bin/Release/net10.0-windows/TestResults/*.log |
+              ForEach-Object { "===== $($_.Name) ====="; Get-Content $_ }
+            exit 1
+          }
 
       # XAML 是懒加载的：某扇窗写错，不打开它就不报错，能一路带到发版。--smoke（app/DevChecks.cs）
       # 构造并布局每一个窗口、断言真的量出了尺寸，然后退出。成败以 marker 文件为准，退出码只在
