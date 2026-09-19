@@ -32,6 +32,13 @@ public partial class App : System.Windows.Application
     private string _cfgPath = "";
     private bool _configSuperseded;   // 导入已把新配置写盘：本实例内存里的 _config 从此作废，禁止回写（见 MarkConfigSuperseded）
     private string _statePath = "";   // clockwork.state.json：提醒耐久运行态
+
+    // 面板格子的点击统计（键是 LaunchStep.Id，见 Core.PanelUsageStore）。
+    private readonly Dictionary<string, Core.PanelUsageStore.TileUsage> _panelUsage = new();
+    private readonly object _usageLock = new();
+    private string _usagePath = "";
+    private DispatcherTimer? _panelUsageTimer;
+    private bool _panelUsageDirty;
     private string _exeDir = "";
     private string _exePath = "";
     private int _launchRunning;   // 0/1 并发守卫
@@ -287,6 +294,84 @@ public partial class App : System.Windows.Application
         // 从内存里摘掉就够了：列表 VM 稍后按 _config 建行，看不到这些死行；盘上那几行等下一次
         // 任何配置改动顺手带走，带不走也只是下次启动再清一遍，无害。
         _startupReminderIds = new HashSet<string>(_config.Reminders.Select(x => x.Id));
+
+        // 面板点击统计同一个位置载入：都是「配置之外的运行态」，同一段代码读盘。
+        _usagePath = Path.Combine(CfgDir, "clockwork.usage.json");
+        foreach (var kv in Core.PanelUsageStore.Load(_usagePath)) _panelUsage[kv.Key] = kv.Value;
+        // 顺带清掉已经删掉的格子：不清的话那份文件只增不减，行数会比面板上实际的格子多。
+        // 只认 PanelPages——统计的是面板格子，主清单与动作组里的步骤不进这份统计。
+        var liveIds = _config.PanelPages.SelectMany(p => p.Steps).Select(s => s.Id);
+        var pruned = Core.PanelUsageStore.PruneUnreferenced(_panelUsage, liveIds);
+        if (pruned > 0)
+        {
+            // 必须先置脏：PruneUnreferenced 只改内存字典，而 SaveUsage 头上有脏标记闸，
+            // 不置位的话这次落盘直接早退——墓碑键每次启动读回来、忘掉、再读回来，文件只增不减。
+            lock (_usageLock) _panelUsageDirty = true;
+            SaveUsage();
+        }
+    }
+
+    // 面板格子被点一下：计数 + 排队落盘。点的是「格子」而不是「步骤跑没跑通」——
+    // 被条件挡掉的点击同样是一次点击，问的始终是「我在用哪些格子」。
+    // 只从面板这一条路进来（BuildPanelPages 的唯一漏斗），手势与主清单不计。
+    private void RecordPanelClick(LaunchStep step)
+    {
+        if (!Core.PanelUsageStore.RecordClick(_panelUsage, step.Id, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())) return;
+        ScheduleUsageFlush();
+        RunStep(step);
+    }
+
+    // 落盘去抖：连点几十下只写一次盘。窗口是「点击即关」的，去抖比不写更重要——
+    // 一次点击的计时器还没跑完，窗口就关了，但那是进程退出前的最后一次落盘机会，
+    // 而 OnExit 会补一次同步写，所以去抖不会真的丢数据，只是把「每点一下写一次」压成「一次」。
+    private void ScheduleUsageFlush()
+    {
+        lock (_usageLock)
+        {
+            _panelUsageDirty = true;
+            if (_panelUsageTimer is null)
+            {
+                _panelUsageTimer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher)
+                {
+                    Interval = TimeSpan.FromMilliseconds(700),
+                };
+                _panelUsageTimer.Tick += (_, _) => { _panelUsageTimer.Stop(); SaveUsage(); };
+            }
+            _panelUsageTimer.Stop();   // 一次性的：Stop 再 Start 才能重新计时（连续点击=每次都从头等 700 毫秒）
+            _panelUsageTimer.Start();
+        }
+    }
+
+    // 单写者。点击在 UI 线程，OnExit 的收尾也在 UI 线程，所以 lock 的作用不是跨线程互斥，
+    // 而是**禁止同一线程重入**：计时器回调会 Stop 自己再调 SaveUsage，而 ScheduleUsageFlush 也
+    // 会 Stop 计时器——两处都进锁里做，才不会一个在写盘时另一个把计时器掐掉。
+    // 文件写本身是原子的（ConfigStore.TryWriteTextAtomic）。
+    private void SaveUsage()
+    {
+        lock (_usageLock)
+        {
+            if (!_panelUsageDirty || _usagePath.Length == 0) return;
+            _panelUsageTimer?.Stop();
+            // 写失败就留着脏标记：不重试队列（丢一次点击无可救药），但 OnExit 那一次还会再试。
+            if (Core.PanelUsageStore.Save(_usagePath, _panelUsage)) _panelUsageDirty = false;
+        }
+    }
+
+    // OnExit 用的同步收尾：把最后那次去抖没跑完的写入补上。
+    // 已经写过就无事可做（_panelUsageDirty 为假）。
+    private void FlushUsageNow() => SaveUsage();
+
+    // 面板管理器里的「清空点击统计」：只清这份统计，配置一根汗毛不碰——
+    // 不碰 _config 就不必付 SaveConfig 那笔热键重绑的代价。立即落盘，不等去抖。
+    private void ResetPanelUsage()
+    {
+        lock (_usageLock)
+        {
+            _panelUsage.Clear();
+            _panelUsageDirty = true;
+            _panelUsageTimer?.Stop();
+        }
+        SaveUsage();
     }
 
     // 换主题＝把整个资源栈重搭一遍（调色板 + Theme.xaml），而不是只替换调色板那一份。
@@ -461,11 +546,10 @@ public partial class App : System.Windows.Application
         if (!_main.Activate() || !_main.IsActive)
         {
             var h = new System.Windows.Interop.WindowInteropHelper(_main).Handle;
-            if (!Native.Win32.ForceForeground(h) && !_mainFgWarned)
-            {
-                _mainFgWarned = true;
+            // 失败每次都记：AppendErrorLog 自带 LogDedup，连续重复会收敛成一行，
+            // 不必再夹一次性开关（与 DialogForeground 同一口径）。
+            if (!Native.ForegroundNudge.Activate(h))
                 AppendErrorLog("main window shown but foreground not acquired");
-            }
         }
     }
 
@@ -485,9 +569,15 @@ public partial class App : System.Windows.Application
 
     // 所有退出路径（托盘退出/语言切换重启/提权重启）都过 Shutdown → 在此兜底：
     // 提醒状态的后台补写是 fire-and-forget，进程退出会带走未落盘的快照，退出前同步补写最后一份。
+    //
+    // 错误日志同理：AppendErrorLog 改成入队之后，最后那几行正躺在 _logQueue 里等写盘线程，
+    // 而写盘线程是 IsBackground——进程一走它就没了，队列跟着一起没。所以这里补一次同步排空。
+    // 它带 300ms 超时（见 LogFlushTimeoutMs），最坏情况是少写最后几行，绝不会让「点退出」变成「程序赖着不走」。
     protected override void OnExit(ExitEventArgs e)
     {
         ReminderStateStore.FlushPending();
+        FlushUsageNow();
+        FlushErrorLog();
         base.OnExit(e);
     }
 
@@ -830,8 +920,6 @@ public partial class App : System.Windows.Application
 
     // —— 快捷面板 ——
     private Views.QuickPanelWindow? _panel;
-    private bool _panelFgWarned;       // 面板抢前台失败已记过一次：每次长按都失败也只留一行
-    private bool _mainFgWarned;        // 主窗口抢前台失败同一口径（ShowMain 只走托盘入口）
     private Native.MouseHook? _mouseHook;
     private int _mouseHookMs;          // 当前钩子是按哪个阈值装的：只有阈值真变了才重装（0=中键关着）
     private bool _mouseHookGesture;    // 当前钩子装没装手势那半
@@ -843,6 +931,9 @@ public partial class App : System.Windows.Application
     // 画手势时屏幕上那条看得见的线。只在监听右键期间存在——没配手势的人不该多出一扇窗。
     private Views.GestureTrailWindow? _trail;
     private bool _mouseHookFailed;     // 装失败已经报过一次：别在每次保存配置时反复弹同一条
+    // 每次起一次安装就 +1，用来丢弃「已经在飞的那次」的结果（见 OnHookInstalled）。
+    // 只增不减、不做回绕——它是比较相等的号，不是计数器，int 溢出要 21 亿次重装。
+    private int _hookInstallToken;
 
     /// <summary>右键监听此刻是什么状态。手势管理器把它显示出来。</summary>
     //
@@ -871,9 +962,29 @@ public partial class App : System.Windows.Application
         }
     }
 
-    // 多久没有回调就算它已经掉了。取 4 秒：鼠标一动就有 WM_MOUSEMOVE，
-    // 而人从动鼠标到看这一行，中间隔不了这么久。
+    // 多久没有回调就算它已经掉了。**这格是给「状态行」看的**：鼠标一动就有 WM_MOUSEMOVE，
+    // 而人从动鼠标到看这一行，中间隔不了这么久，4 秒足够判「已经不在了」。
     private const long StaleBeatMs = 4000;
+
+    // 自愈**没有**「沉默多少秒算死」这种固定阈值了：判据改成在同一个 500ms 采样区间里对齐
+    // 「光标动了吗」与「钩子心跳新吗」两格信号（见 CursorWatchTick 与 HookWatch.ShouldHeal）。
+    // 这一格只留对齐用的余量：活着的钩子在「区间内有移动」时心跳必然落在区间内
+    //（SinceBeatMs ≤ 实测区间长度），余量只需盖住 DispatcherTimer 抖动与 TickCount64
+    // 约 15.6ms 的时钟粒度。**不盖系统卡顿**——卡顿时实测区间自己就变长，界跟着长，
+    // 不会把卡顿误判成死亡（HookWatchTests 里 A_long_sample_window_extends_the_freshness_bound
+    // 钉着这一条）。
+    //
+    // 旧版在这儿放过一个 1500ms 的固定沉默阈值，配上「光标 2000ms 内动过」的活动窗，
+    // 两扇窗错位，用户每次移动后停手 1.5~2 秒必被当成钩子死了。实测 clockwork.error.log，
+    // 2026-09-15 一天 518 行 reinstall、silentFor 有 512 行落在 1515–2000ms 贴着阈值成簇，
+    // prevEverFired 全是 yes——钩子一次都没死过。
+    private const long HealBeatSkewMs = 250;
+
+    // 两次自愈之间最短间隔。同区间对齐已经消掉了误报（停手的区间根本不检测），这条下限只是
+    // 保险：真碰上「装上几秒就被 Windows 摘掉」的环境，别让循环摘装的频率高于此——
+    // 每次摘装之间有个输入空窗，越频繁越可能正好压掉一次中键按下。
+    // 这条上限治不了病（钩子该死还是死），只保证病发时不额外推高摘装频率。
+    private const long HealMinGapMs = 3000;
 
     /// <summary>钩子掉了就重新装上。</summary>
     //
@@ -886,15 +997,41 @@ public partial class App : System.Windows.Application
     // 所以补一条退路：心跳停了就重装。摘掉再装是廉价的（一次 SetWindowsHookEx），
     // 而代价是零——真没掉的时候这个判断根本不会成立。
     //
-    // ponytail: 靠鼠标动才有心跳，所以「久坐不动」也会被判成掉了，那时会白重装一次。
-    //   无害（用户没在用鼠标），也就不为它单设一套「鼠标有没有在动」的旁路。
+    // ponytail: 靠鼠标动才有心跳，所以「久坐不动」在心跳这一格上与「钩子死了」无法区分。
+    //   现在的解法见 CursorWatchTick：只在**光标本采样区间真的动过**的区间里问心跳，
+    //   停手的区间不检测——久坐不再白重装，也不需要另设一条旁路。
     private (int X, int Y) _lastCursor;
     private bool _cursorSeen;   // 采过第一次没有——第一次只定基线，见 CursorWatchTick
-    // 上一个钩子的账，在摘掉它之前抄下来。**只有自愈与手动「重新挂钩」这两条路会填它**，
+    // 上一个钩子的账，在摘掉它之前抄下来。**只有自愈、手动「重新挂钩」、开机后抢链首这三条路会填它**，
     // 而 ApplyMouseHook 也正是拿「它有没有值」当作「这次重装值不值得记一行」的判据。
-    private string? _prevBeat, _prevRight, _prevMiddle;
+    private string? _prevBeat, _prevRight, _prevMiddle, _prevSource;
     private long _prevSince;
     private int _prevRejected;
+    // 上一个钩子装上以来，事件最长迟到了多久（见 MouseHook.UpstreamMaxMs）。与 _prevSince 一起读：
+    //   死寂大 + 迟到也大 → 钩子链被排在我们前面的工具堵住了（重装治不了，只能抢链首）；
+    //   死寂大 + 迟到不大 → 我们自己的钩子被系统摘了（LowLevelHooksTimeout，重装正是解药）。
+    private uint _prevUpstream;
+    // 上一个钩子**回调自身耗时**的峰值（见 MouseHook.CallbackMaxMs）。这一格和 _prevUpstream 是一对，
+    // 回答的是两个相反的问题：
+    //   upstreamMax 大 → **别人**堵了链（重装治不了）；
+    //   callbackMax 接近 300 → **我们自己**正在被摘（LowLevelHooksTimeout 是回调的预算，重装只是解药）。
+    //
+    // 为什么非要有这一格：`hook-callback` 那行 slow 日志的阈值是 500ms，而预算是 300ms ——
+    // 300~500ms 这一段正是「我们把自己搞死」的区间，却一声不响。摘掉之后 upstreamMax 还会
+    // 停在最后那个小值上，看着一切正常；只有这一格会把那段历史带出来。
+    private uint _prevCallbackMax;
+    // 自愈那一刻**在跑的那些「会装低级鼠标钩子」的程序**（见 Core.HookSuspects）。
+    //
+    // 上游延迟只能证明「链被堵了」，证明不了「谁堵的」——Windows 不给枚举别人钩子的 API，
+    // 唯一的旁证就是谁在场。这一格是整条诊断链的最后一环：`silentFor` 说死了多久、
+    // `upstreamMax` 说是被堵还是被摘、`suspects` 说当时谁在场（一家一家关掉去试）。
+    //
+    // **只在摘钩那一刻采一次**，而且它证明的是「在不在场」不是「有没有罪」：
+    // 在场不等于作案，名单外的工具堵了链这里一个字也不会有（理由全写在 Core.HookSuspects）。
+    private string? _prevSuspects;
+    // 上一次摘钩重装的时刻（TickCount64）：自愈和手动「重新挂钩」都写它。只供 HealMinGapMs 那条
+    // 下限用，不参与日志。0 表示「从没摘过」——TickCount64 从开机起算不会撞到 0，拿它当哨兵安全。
+    private long _lastHealAt;
 
     // 摘钩前抄一份中键的账，格式与右键那段对称。fired 是到点唤出次数，
     // dragEscapes 非零 = 「按住很久也不弹」其实是抖动容差把长按判成了拖拽。
@@ -903,11 +1040,12 @@ public partial class App : System.Windows.Application
           + (h.EverMiddleUp ? " up+" : " up-")
           + $" fired={h.MiddleFireCount} dragEscapes={h.MiddleDragEscapeCount}";
 
-    // 光标最后一次被观察到「变了位置」的时刻。判「钩子死了没有」全靠它。
-    private long _cursorMovedAt;
+    // 上一次采样的时刻（TickCount64）。量的是「本采样区间实测有多长」，
+    // 与心跳年龄同一条时间轴——同区间对齐判据的一半，见 CursorWatchTick。
+    private long _lastSampleAt;
     private System.Windows.Threading.DispatcherTimer? _cursorWatch;
 
-    /// <summary>按「此刻装没装鼠标钩子」开关那个每秒采样光标的计时器（手势与中键面板任一在听就要开）。</summary>
+    /// <summary>按「此刻装没装鼠标钩子」开关那个每半秒采样光标的计时器（手势与中键面板任一在听就要开）。</summary>
     //
     // 只在真的装了钩子时才跑：两样都关的人一次 GetCursorPos 都不会多花。
     private void ApplyCursorWatch(bool on)
@@ -916,10 +1054,10 @@ public partial class App : System.Windows.Application
         {
             if (_cursorWatch != null) return;
             _cursorWatch = new System.Windows.Threading.DispatcherTimer
-            { Interval = TimeSpan.FromSeconds(1) };
+            { Interval = TimeSpan.FromMilliseconds(500) };
             _cursorWatch.Tick += (_, _) => CursorWatchTick();
             _cursorWatch.Start();
-            _cursorMovedAt = 0;   // 刚开的这一轮不带上一轮的旧账
+            _lastSampleAt = 0;    // 刚开的这一轮不带上一轮的旧账
             _cursorSeen = false;  // 基线也要重新定，否则用的是上一轮关掉时的那个位置
             return;
         }
@@ -927,42 +1065,206 @@ public partial class App : System.Windows.Application
         _cursorWatch = null;
     }
 
-    /// <summary>每秒看一眼光标。装了钩子（手势或中键面板）期间跑。</summary>
+    // UI 线程卡顿仪表的拍长。250ms 而不是 500ms：幽灵化的阈值是 5 秒，而这里要的是
+    // 「卡了多久」这个数本身——拍得越密，解卡后第一拍测出来的时长越准（误差上限就是一拍）。
+    // 代价只是一次减法，比 _cursorWatch 那次 GetCursorPos 还便宜。
+    private const int StallTickMs = 250;
+    private System.Windows.Threading.DispatcherTimer? _stallWatch;
+
+    /// <summary>开关 UI 线程卡顿仪表。跟着全屏笔迹窗一起开——只有那时卡顿才不只是「本程序慢」。</summary>
     //
-    // 这是「钩子还活着吗」唯一站得住的判据，而它必须**采样得够密**。
+    // **只在会摆出全屏覆盖窗的那条路上开**，与 Win32.DisableWindowGhosting 同一格理由、同一份代价观：
+    // 没开手势的人一点没变。仪表本身不改任何行为，它只回答「卡了多久」，以及（配 Probe）
+    // 「卡的时候在做什么」——这两格正是前两次故障事后追查时唯一缺的东西（见 Core.UiStallWatch）。
+    //
+    // 不用另起线程去戳 UI 线程：DispatcherTimer 在 UI 线程被卡住时**自己不会走**，
+    // 所以解卡后第一拍的「实际间隔 − 名义间隔」就是卡顿时长。少一条线程、少一处竞态。
+    private void ApplyStallWatch(bool on)
+    {
+        if (on)
+        {
+            if (_stallWatch != null) return;
+            // 基线先定下来，否则第一次卡顿报出来的是「从开机到现在的全部 GC / 全部分配」，
+            // 那串数字很大、看着很像元凶，其实跟这一次卡顿没有关系。
+            _stallGc2 = GC.CollectionCount(2);
+            _stallAllocMb = GC.GetTotalAllocatedBytes(precise: false) / (1024 * 1024);
+            Core.UiStallWatch.Start(AppendErrorLog, Environment.TickCount64,
+                                    Environment.CurrentManagedThreadId,
+                                    context: StallContext);
+            _stallWatch = new System.Windows.Threading.DispatcherTimer
+            { Interval = TimeSpan.FromMilliseconds(StallTickMs) };
+            _stallWatch.Tick += (_, _) => Core.UiStallWatch.Tick(Environment.TickCount64, StallTickMs);
+            _stallWatch.Start();
+            return;
+        }
+        _stallWatch?.Stop();
+        _stallWatch = null;
+        Core.UiStallWatch.Stop();
+    }
+
+    private int _stallGc2;
+    private long _stallAllocMb;
+
+    // 「自上一行卡顿以来，笔迹窗有没有亮过」——**锁存，不是现读**。
+    //
+    // 为什么不能现读：卡顿行是在**解卡之后**才落笔的，而一笔手势只有几百毫秒、一次卡顿却有
+    // 4.6 秒（2026-09-18 那行就是），解卡那一刻窗早被 HideSoon 藏掉了，现读 IsVisible 必然
+    // 得到 hidden。于是**恰恰在「整屏覆盖窗就是元凶」的那种复现里，这一格会报成 hidden**，
+    // 把人往「与覆盖层无关」上引——一个只在关键场合说谎的字段比没有这个字段更糟。
+    // 锁存之后它答的是「这段时间里覆盖窗在不在屏幕上」，那才是要问的问题。
+    private bool _trailUpSinceStall;
+
+    /// <summary>卡顿那一行尾巴上的补充事实：这一段时间里整机在干什么。</summary>
+    //
+    // 为什么必须有：2026-09-18 那次复现里，日志只写下了 `ui thread stalled 4594ms`——
+    // **时长有了，名字没有**。而「我们自己的代码等在某处」和「一次阻塞式 GC 停了整个世界」
+    // 在只有时长时**长得一模一样**，却要走两条完全不同的修法。前者的指纹是某个 Probe 行，
+    // 后者没有名字，只能在整机计数上现形，所以这两格必须一起报。
+    //
+    // gc2 = 第 2 代回收次数增量（阻塞式、会停掉所有线程，包括钩子线程——而钩子回调超
+    // LowLevelHooksTimeout 会被 Windows 静默摘掉，正是那次日志里 `silentFor=937ms` 的来源）。
+    // alloc = 分配增量（MB）。整屏分层窗每帧要重新合成一遍 2560×1440 ≈ 14MB，
+    // 这个数暴涨就说明渲染压力是元凶。
+    // sinceBeat = 钩子距上次回调多久（- 表示没装钩子）——它和卡顿同时发生，才谈得上「同一次事件」。
+    //
+    // 这两个 API 都是常数级读取，不会给「刚解卡」的 UI 线程再添负担。
+    private string StallContext()
+    {
+        int gc2 = GC.CollectionCount(2);
+        long allocMb = GC.GetTotalAllocatedBytes(precise: false) / (1024 * 1024);
+        int dGc2 = gc2 - _stallGc2;
+        long dAllocMb = allocMb - _stallAllocMb;
+        _stallGc2 = gc2;
+        _stallAllocMb = allocMb;
+        long beat = _mouseHook?.SinceBeatMs ?? -1;
+        // 上游延迟与 sinceBeat 必须**同时**出现在这一行：单看任何一个都分不出
+        // 「链被排在前面的工具堵住」和「我们自己的钩子被系统摘掉」——而这台机器上
+        // Logi Options+ / PowerToys / 热键助手 三家都装着 WH_MOUSE_LL（见 MouseHook._upstreamMax）。
+        uint upstream = _mouseHook?.UpstreamMaxMs ?? 0;
+        // 与上一格成对：那个量别人堵了我们多久，这个量我们自己离被摘还有多远（见 MouseHook.CallbackMaxMs）。
+        // 卡顿行里两格一起报，才分得开「一次阻塞式 GC 停掉了整个世界（两个都会大）」
+        // 和「上游某个工具堵了链（只有 upstreamMax 大）」。
+        uint cbMax = _mouseHook?.CallbackMaxMs ?? 0;
+        // trailUp 用**锁存值**（见 _trailUpSinceStall）：问的是「这段时间里覆盖窗在不在屏幕上」，
+        // 不是「此刻在不在」——解卡那一刻它必然已经藏了，现读只会给出一个误导的 hidden。
+        // 名字从 trail= 改成 trailUp= 是承重的：语义变了，沿用旧名字会让读过旧日志的人
+        // 以为两者可比（旧的那一半几乎恒为 hidden）。
+        string trail = _trail == null ? "none" : (_trailUpSinceStall ? "up" : "never");
+        _trailUpSinceStall = false;   // 这一份账只用一次，同 _stallGc2 / _stallAllocMb
+        return $"gc2=+{dGc2} alloc=+{dAllocMb}MB sinceBeat={(beat < 0 ? "-" : beat + "ms")} "
+             + $"upstreamMax={(_mouseHook == null ? "-" : upstream + "ms")} "
+             + $"callbackMax={(_mouseHook == null ? "-" : cbMax + "ms")} trailUp={trail}";
+    }
+
+    /// <summary>每半秒看一眼光标。装了钩子（手势或中键面板）期间跑。</summary>
+    //
+    // 判据在这儿采，而且必须**采得够密、且两格信号在同一区间对齐**。
     // 一度是搭在 30 秒的提醒计时器上：那时「光标动过」比的是相隔 30 秒的两次位置，
     // 于是「10 秒前动过鼠标、之后停下来看屏幕」——一个再常见不过的状态——
     // 会被判成「钩子死了」，白摘白装一次，还把日志刷满、让状态行一直挂着「已失效」。
-    // 实测日志里那几条「静默 6563ms / 9610ms / 14765ms」全是这么来的，一条真故障都没有。
+    // 后来改成独立计时器，却又用过两扇各自计时的窗（活动 2000ms / 沉默 1500ms），
+    // 用户移动后停手 1.5~2 秒必落进重叠带：一天 518 行 reinstall 就是这么来的。
     //
-    // 一秒一次 GetCursorPos 的代价可以忽略，而且只在真的装了钩子（手势或中键面板）时才开——
+    // 现在每拍只回答一个问题：**这一个区间里光标动了吗？动了，那同一区间里心跳新不新？**
+    // 不保留跨区间的「活动窗」，停手的区间直接不检测，重叠带在数学上不存在。
+    //
+    // 半秒而不是 1 秒：钩子真在连续使用中被摘掉时，最坏要到第二个移动区间才认得出
+    //（死亡发生的那个区间里可能还留着死亡前的心跳），检测上界 ≈ 两个采样间隔。
+    // 代价仍是一次 GetCursorPos，而且只在真的装了钩子（手势或中键面板）时才开——
     // 两样都关的人一次都不会跑到这儿。
     private void CursorWatchTick()
     {
-        var now = Native.Win32.CursorPos();
-        // **第一次采样只用来定基线，不算「动过」。**
-        // _lastCursor 的初值是 (0,0)，而真实光标几乎不可能正好在那儿——不特判的话，
-        // 开启监视后的第一跳必然「不等于上次」，于是即使用户根本没碰鼠标也会被记成刚动过。
-        // 那一记会让接下来两秒里的自愈判据成立（钩子安安静静没心跳是因为鼠标没动，不是因为它死了），
-        // 于是每次启动都白白重装一次钩子、日志里多一行「静默 4141ms」——实测就是这么来的。
-        if (!_cursorSeen) { _cursorSeen = true; _lastCursor = now; }
-        else if (now != _lastCursor) { _lastCursor = now; _cursorMovedAt = Environment.TickCount64; }
-        HealMouseHookIfDead();
+        // 包一圈计时：这个 tick 里跑着自愈（摘钩 + 重装），而摘钩要 Join 钩子线程——
+        // **这是 UI 线程上唯一一条能卡满 2 秒、之前又完全没计时的路**。
+        // 2026-09-18 那次复现只留下 `ui thread stalled 4594ms`，没有名字；两种成因都落在这一带，
+        // 而 Probe 行是唯一能把它们分开的东西（见 Core.UiStallWatch 的注释）。
+        long t0 = Core.UiStallWatch.Begin();
+        try { CursorWatchTickCore(); }
+        finally { Core.UiStallWatch.End("cursor-watch", t0); }
     }
 
-    private void HealMouseHookIfDead()
+    private void CursorWatchTickCore()
+    {
+        // 时刻先取、只取这一次：区间长度和心跳年龄都得站在同一个瞬间上，否则又造出一扇错位的窗。
+        long nowMs = Environment.TickCount64;
+        var pos = Native.Win32.CursorPos();
+        // **第一次采样只用来定基线，不构成区间。**
+        // _lastCursor 的初值是 (0,0)，而真实光标几乎不可能正好在那儿——不特判的话，
+        // 开启监视后的第一跳必然「不等于上次」，于是即使用户根本没碰鼠标也会被记成刚动过。
+        if (!_cursorSeen) { _cursorSeen = true; _lastCursor = pos; _lastSampleAt = nowMs; return; }
+        bool moved = pos != _lastCursor;
+        long intervalMs = nowMs - _lastSampleAt;   // 实测长度：计时器迟到时它自己变长，新鲜度的界跟着长
+        _lastCursor = pos;
+        _lastSampleAt = nowMs;
+        HealMouseHookIfDead(moved, intervalMs);
+    }
+
+    // movedInSample / intervalMs 是**同一个** 500ms 采样区间的两面（见 CursorWatchTick）：
+    // 区间里光标确实动了、同一区间的心跳却老于区间长度，才是「移动发生了、回调没来」。
+    /// <summary>摘掉鼠标钩子，并给这次等待计时。<paramref name="why"/> 进日志名（heal / manual / off / reapply）。</summary>
+    //
+    // 为什么值得单独封一层：`MouseHook.Dispose()` 内部有**两次 `Join(1000)`**（等钩子线程退出），
+    // 而它是在 UI 线程上被调的。钩子线程正卡在回调里时（上游钩子链被堵住、或一次阻塞式 GC
+    // 停掉了所有线程），这两次 Join 会**双双等满 = UI 线程卡 2 秒**——而这恰恰发生在用户
+    // 已经在出问题的时候（自愈就是被钩子沉默触发的），于是「有点卡」被放大成「点不动」。
+    //
+    // 此前这里一个计时都没有，所以 2026-09-18 的日志里只有一句没有名字的
+    // `ui thread stalled 4594ms`。名字是承重的：它和 `hook-install-wait`（在后台线程上）
+    // 是**完全不同**的两条路，修法也不同，混在一起只能靠猜。
+    private void DisposeMouseHook(string why)
+    {
+        if (_mouseHook == null) return;
+        long t0 = Core.UiStallWatch.Begin();
+        try { _mouseHook.Dispose(); }
+        finally { Core.UiStallWatch.End("hook-dispose:" + why, t0); }
+        _mouseHook = null;
+    }
+
+    /// <summary>笔迹采样点到达（UI 线程，由钩子线程经 Dispatcher 派来）。包一圈计时。</summary>
+    //
+    // 为什么这两个也要计时：笔迹窗是 `AllowsTransparency=true` 的分层窗，而 WPF 对分层窗
+    // **走软件渲染**——每重画一帧要重新合成整块屏（2560×1440 ≈ 14MB）。所以「UI 线程被自己的
+    // 渲染按住」是一条完全有可能的路，而它此前和「自愈时 Join 钩子线程」一样，是**没有名字**的。
+    //
+    // **但「钩子每个采样点都会让它重画一次、一笔能来几百个点」是错的，别再照着估。**
+    // 采样点在 `MouseHook.ScheduleTrail` 里已经**合帧**（`Interlocked.Exchange(ref _trailQueued, 1)`，
+    // 至多排一个 drain），所以一笔的点数 ≈ 这一笔跨了多少个 UI 帧，而不是钩子收到多少个鼠标事件：
+    // 500ms 的一笔在 60Hz 上约 30 个点。14MB/帧 × 30 帧 ≈ 420MB/笔，摊到每帧约 1.4ms
+    //（按 10GB/s 的拷贝带宽），**够不上「把 UI 线程按住数秒」的量级**——渲染压力真有那么大时，
+    // 证据在卡顿行的 alloc= 增量里，不在这条注释里。
+    private void TrailPoint(int x, int y, bool armed)
+    {
+        // **先锁存再干活**：卡顿可能就发生在下面那句调用里面，而卡顿行是解卡之后才写的
+        //（见 _trailUpSinceStall）。放在前面，这一笔开头那一下就已经把「窗亮着」记下了。
+        _trailUpSinceStall |= _trail?.IsVisible == true;
+        long t0 = Core.UiStallWatch.Begin();
+        try { _trail?.Point(x, y, armed); }
+        finally { Core.UiStallWatch.End("trail-point", t0); }
+        // 再锁一次：第一个采样点不显窗（第 2 个才 Show），所以「本句把它点亮」也要算进来。
+        _trailUpSinceStall |= _trail?.IsVisible == true;
+    }
+
+    private void TrailEnd()
+    {
+        // 收笔这一刻窗还亮着（Finish 走的是推迟藏，见 GestureTrailWindow.HideSoon）——
+        // 这是「一笔确实把覆盖窗摆上过屏」最便宜的取证点。
+        _trailUpSinceStall |= _trail?.IsVisible == true;
+        long t0 = Core.UiStallWatch.Begin();
+        try { _trail?.Finish(); }
+        finally { Core.UiStallWatch.End("trail-finish", t0); }
+    }
+
+    private void HealMouseHookIfDead(bool movedInSample, long intervalMs)
     {
         // 手势与中键面板共用同一个钩子：只开中键面板（没配手势）时钩子一样会被静默摘掉，
         // 这一档不能只给手势用户兜底。
         if (_mouseHook == null) return;
-        // **刚刚动过光标、却刚刚没有心跳**，才算死了。两个「刚刚」都以同一条时间轴度量：
-        // 光标是每秒采一次的，所以「2 秒内动过」是可信的近况，而不是三十秒里的某一刻。
         // **从没跳过一次的钩子不算「死了」，压根别自愈。**
         //
         // SinceBeatMs 在从未收到输入时返回 long.MaxValue，于是一个**刚装上、还没被用过**的钩子
-        // 和一个真死了的钩子长得一模一样。加上第一次采样必然与初值不同、被算成「刚动过光标」，
-        // 每次启动都会稳定地空转重装——实测日志里那 3 行一簇（yes → no → no）就是它，
-        // 装到那个「试三次就放弃」的计数器封顶才停。85 行日志里 78 行是这么来的。
+        // 和一个真死了的钩子长得一模一样：用户第一次移动鼠标的那个区间，moved=true、心跳却是
+        // MaxValue，不挡这一格每次启动都会稳定地空转重装——实测日志里那 3 行一簇（yes → no → no）
+        // 就是它，装到那个「试三次就放弃」的计数器封顶才停。85 行日志里 78 行是这么来的。
         //
         // 而这个方向本来就是错的：「掉了就重装」只对**装对了、事后被摘掉**那一种有效
         //（Windows 因 LowLevelHooksTimeout 把它静默摘走）。一次输入都没收到过则是另一回事——
@@ -972,12 +1274,21 @@ public partial class App : System.Windows.Application
         // 于是判据从「试三次再放弃」改成「根本不试」：少了三次无谓的装卸，日志里那 3 行一簇没了，
         // 而真正的自愈（收到过输入、后来停了）一次都没少——那一档 EverBeat 恒为真。
         if (!_mouseHook.EverBeat) return;
-        bool movingNow = Environment.TickCount64 - _cursorMovedAt < 2000;
-        if (!movingNow || _mouseHook.SinceBeatMs <= StaleBeatMs) return;
+        // 三条守卫合起来才动手（区间内有移动、心跳老于本区间、距上次摘钩够久）：
+        // 抽成 HookWatch.ShouldHeal 就是要让每条都有断言盯着（挪错一条阈值、或把下限删掉，
+        // 都有测试变红）。状态行用的 StaleBeatMs 与此无关：那格取宽是给人看的，这里只要
+        // 同一个采样区间里的事实。
+        // _lastHealAt == 0 表示「从没自愈过」。TickCount64 从开机起算，实际不会撞到 0，拿它当哨兵是安全的；
+        // 不做这一步的话，开机不到 HealMinGapMs 就启动的程序，第一次真故障会被那条下限误挡住。
+        long sinceLastHeal = _lastHealAt == 0 ? long.MaxValue : Environment.TickCount64 - _lastHealAt;
+        if (!HookWatch.ShouldHeal(movedInSample, _mouseHook.SinceBeatMs, intervalMs,
+                                  sinceLastHeal, HealBeatSkewMs, HealMinGapMs))
+            return;
         // **先把上一个钩子的账记下来，再摘掉它。** 这两格（收到过输入吗、收到过右键吗）
         // 是判断「为什么没工作」的全部依据，而摘掉之后就再也问不到了——
         // 此前这里先置空再走 ApplyMouseHook，于是自愈这条路上日志永远是「-」：
         // 恰恰在唯一反复触发的那条路上，诊断是瞎的。
+        _prevSource = "heal";
         _prevBeat = _mouseHook.EverBeat ? "yes" : "no";
         // 按下与抬起**分开记**。合成一格（或）会把这个功能唯一能自证的信号抹掉：
         // 「收到过抬起、从没收到按下」只有一种成因——有人排在前面把按下吞了。
@@ -986,9 +1297,16 @@ public partial class App : System.Windows.Application
         _prevMiddle = MiddleAccount(_mouseHook);
         _prevSince = _mouseHook.SinceBeatMs;
         _prevRejected = _mouseHook.InjectRejected;
+        _prevUpstream = _mouseHook.UpstreamMaxMs;
+        // 与上一格成对：那个量别人堵了我们多久，这个量我们自己离被摘还有多远（见 _prevCallbackMax）。
+        _prevCallbackMax = _mouseHook.CallbackMaxMs;
+        // 顺手采一次在场名单（见 _prevSuspects）。放在**摘钩之前**与上面那几格同一理由：
+        // 这一格记的是「出事那一刻谁在跑」，而不是「我们查日志那一刻谁在跑」——
+        // 用户关掉某个工具之后再来看日志，两者就不是一回事了。
+        _prevSuspects = HookSuspects.Describe(HookSuspects.RunningProcessNames());
         var wasGesture = _mouseHookGesture;
-        _mouseHook.Dispose();
-        _mouseHook = null;
+        _lastHealAt = Environment.TickCount64;   // 记在真动手之前：万一重装又失败，下限仍得拦住立刻再摘一次
+        DisposeMouseHook("heal");
         _mouseHookMs = -1;                 // 逼 ApplyMouseHook 走完整的重装，别被那句「已经是想要的状态」挡回去
         _mouseHookGesture = !wasGesture;
         ApplyMouseHook();
@@ -1006,23 +1324,32 @@ public partial class App : System.Windows.Application
     /// <summary>鼠标钩子此刻装着没有（不区分手势还是中键面板）。托盘菜单据此决定要不要给「重新挂钩」入口。</summary>
     internal bool MouseHookActive => _mouseHook != null;
 
-    internal void RehookMouse()
+    // source 写进 error.log 的 source= 字段：自愈与手动摘钩的**表现完全一样**（都是一行
+    // reinstalled + 一份前任账），但成因与处理方式不同——手动那几行通常只是用户在排障时点的，
+    // 不该被当成故障。分不清的话，日志里每一次摘钩都要去问用户「你当时点了吗」。
+    internal void RehookMouse(string source = "manual")
     {
-        if (!Dispatcher.CheckAccess()) { Dispatcher.Invoke(RehookMouse); return; }
+        if (!Dispatcher.CheckAccess()) { Dispatcher.Invoke(() => RehookMouse(source)); return; }
         // 这条路也要记账。此前不记，于是日志里连按几下「重新挂钩」全是「上一个 = -」——
         // 而那几下恰恰是用户在排障时按的，最需要知道上一个钩子到底收到过什么。
         if (_mouseHook != null)
         {
+            _prevSource = source;
             _prevBeat = _mouseHook.EverBeat ? "yes" : "no";
             _prevRight = (_mouseHook.EverRightDown ? "down+" : "down-")
                        + (_mouseHook.EverRightUp ? " up+" : " up-");
             _prevMiddle = MiddleAccount(_mouseHook);
             _prevSince = _mouseHook.SinceBeatMs;
             _prevRejected = _mouseHook.InjectRejected;
+            _prevUpstream = _mouseHook.UpstreamMaxMs;
+            _prevCallbackMax = _mouseHook.CallbackMaxMs;   // 同上：与上一格成对
+            // 手动「重新挂钩」也记这一格：那几下恰恰是用户排障时按的，
+            // 而「他按的时候链上都有谁」正是他下一步要问的（见 _prevSuspects）。
+            _prevSuspects = HookSuspects.Describe(HookSuspects.RunningProcessNames());
         }
-        _mouseHook?.Dispose();
-        _mouseHook = null;
+        DisposeMouseHook("manual");
         _mouseHookMs = -1;               // 逼 ApplyMouseHook 走完整重装，别被「已经是想要的状态」挡回去
+        _lastHealAt = Environment.TickCount64;  // 手动摘钩也算摘钩：否则紧接着的真故障会立刻再摘一次
         _mouseHookFailed = false;        // 上一次装失败不该让这一次连报错都不报
         ApplyMouseHook();
     }
@@ -1040,7 +1367,7 @@ public partial class App : System.Windows.Application
         if (!Dispatcher.CheckAccess()) { Dispatcher.Invoke(RehookMouseAfterBoot); return; }
         // 没装（面板和手势都关着）或上一次装失败：别在开机后制造一次新的失败弹窗。
         if (_mouseHook == null || _mouseHookFailed) return;
-        RehookMouse();
+        RehookMouse("boot");
     }
 
     /// <summary>打开手势管理器。面板表圈上那颗按钮与主界面那颗走同一条路。</summary>
@@ -1083,8 +1410,11 @@ public partial class App : System.Windows.Application
         int ms = wantPress ? StepHelpers.ClampLongPressMs(_config.Settings.PanelLongPressMs) : 0;   // 0 = 钩子里不管中键
         if (!wantPress && !wantGesture)
         {
-            _mouseHook?.Dispose();
-            _mouseHook = null;
+            DisposeMouseHook("off");
+            // 号也要动：此刻可能有一次安装飞在半空（见 OnHookInstalled）。不动号的话，
+            // 它回来时会以为自己还算数，于是拿一个已经 Dispose 过的钩子去报成功/失败，
+            // 并把 `_mouseHook` 重新置回非 null——「关了手势却还挂着钩子」。
+            _hookInstallToken++;
             CloseTrail();
             ApplyCursorWatch(false);
             _mouseHookFailed = false;   // 关掉再开时允许重新报错
@@ -1115,19 +1445,29 @@ public partial class App : System.Windows.Application
         if (wantGesture && _trail != null) _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
         if (_mouseHook != null && _mouseHookMs == ms && _mouseHookGesture == wantGesture
             && _mouseHookMinLeg == minLeg && _mouseHookTolerance == middleTolerance) return;   // 已经是想要的状态
-        _mouseHook?.Dispose();
+        DisposeMouseHook("reapply");
         var gesture = wantGesture
             ? new GestureGate((p, proc) => GestureGate.Match(_config.Gestures, p, proc) != null, minLeg)
             : null;
         // 覆盖窗跟着 gate 走：装了手势才建，卸了就关——没配手势的人不该多出一扇窗，哪怕它是隐藏的。
         if (wantGesture)
         {
+            // **建这扇窗之前，先关掉本进程的窗口幽灵化。**
+            // 它铺满整块屏、又置顶：UI 线程一旦卡顿超过 5 秒被系统判成「未响应」，DWM 就会在它
+            // 上面盖一块自己的幽灵窗，而那块窗**点得中**——于是整个桌面点不动，唯一的解法是去杀
+            // dwm.exe（用户报的正是这个症状，来龙去脉见 Win32.DisableWindowGhosting 那段）。
+            // 放在这里而不是启动处：只有真会摆出全屏覆盖窗的人需要付那份代价（UI 线程真卡住时
+            // 不再有「未响应」的壳可拖可关），没开手势的人一点没变。不可逆，所以它自己保证只发一次。
+            Win32.DisableWindowGhosting();
+            // 卡顿仪表与覆盖窗同时开、同时关（见 ApplyStallWatch）：从这一刻起，UI 线程卡顿
+            // 才可能变成「整个桌面点不动」，也就从这一刻起值得记下卡了多久。
+            ApplyStallWatch(true);
             _trail ??= new Views.GestureTrailWindow();
             _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
         }
         else CloseTrail();
         _mouseHook = new Native.MouseHook(ms, TogglePanel, a => Dispatcher.BeginInvoke(a), gesture, RunByGesture,
-            trailPoint: (x, y, armed) => _trail?.Point(x, y, armed), trailEnd: () => _trail?.Finish(),
+            trailPoint: TrailPoint, trailEnd: TrailEnd,
             unmatched: GestureUnmatched, moveTolerancePhysical: middleTolerance);
         _mouseHookMs = ms;
         _mouseHookGesture = wantGesture;
@@ -1135,17 +1475,55 @@ public partial class App : System.Windows.Application
         _mouseHookTolerance = middleTolerance;
         // 手势与中键面板任一在监听，就要判「钩子还活着吗」：只勾中键面板的用户同样会被静默摘钩。
         ApplyCursorWatch(wantGesture || wantPress);
-        if (_mouseHook.Install())
+        // **安装这一步挪到后台线程去等，绝不在 UI 线程上等。**
+        //
+        // 原先这里是直接 `if (_mouseHook.Install())`，而 Install 内部是 `_installed.Wait(5000)`。
+        // 那个 5000 与系统的 `HungWindowTimeout` **一模一样**：一旦真等满，这一轮结束时 UI 线程
+        // 恰好被卡在幽灵化阈值上，同一轮里再多做一点点事就越线——于是 DWM 在全屏笔迹窗上盖一块
+        // 点得中的幽灵窗，整个桌面点不动（来龙去脉见 Core.UiStallWatch 与 MouseHook.Install 的注释）。
+        //
+        // 而 ApplyMouseHook 之所以被钉在 UI 线程上，理由是**建那扇 WPF 笔迹窗**（见本方法开头那段），
+        // 不是安装钩子。窗已经在上面建好了，安装没有任何理由再占着这条线程——它是纯粹的等待。
+        //
+        // 号（token）解决「结果回来时已经换人了」：改配置 / 自愈 / 手动重钩都可能在一次安装还在飞的
+        // 时候再起一次。那时旧结果必须整个丢掉——不丢的话，旧那次若报了失败，会拿新钩子当失败收尾
+        //（Dispose 掉一个已经装好的钩子、关掉笔迹窗、还弹一句「装不上」）。
+        //
+        // 用裸 Thread 而不是 Task.Run：这里要阻塞最多 5 秒，占着一个线程池线程不值当
+        //（线程池被占满时其他 Task 会排队），而安装本来就是个低频动作，一条专属线程最省事。
+        // 同 MouseHook 的钩子线程、ReminderActions 的播报线程：都是「一条线程只为一件慢事」。
+        var hook = _mouseHook;
+        int token = ++_hookInstallToken;
+        new System.Threading.Thread(() =>
+        {
+            bool ok;
+            try { ok = hook.Install(); } catch { ok = false; }
+            // 调度器正在关闭时 BeginInvoke 会抛：那是退出路径，本来也不需要这份结果。
+            try { Dispatcher.BeginInvoke(() => OnHookInstalled(hook, token, ok)); } catch { }
+        })
+        { IsBackground = true, Name = "Clockwork.HookInstall" }.Start();
+    }
+
+    /// <summary>安装结果回到 UI 线程才处理：成功只记日志，失败要收尾（Dispose / 关窗 / 弹气泡）。</summary>
+    //
+    // 两格都要对：号必须还是最新那一个，且 `_mouseHook` 必须还是本次安装的那个对象。
+    // 号是主判据（每一次改动 `_mouseHook` 的路都会动它）；引用那格是兜底——
+    // 号只增不减、又是 int，万一哪天有人加了条改 `_mouseHook` 的路却忘了动号，
+    // 这一格还能拦住「结果落在一个已经不存在的对象上」。两格都便宜，没必要只留一个。
+    private void OnHookInstalled(Native.MouseHook hook, int token, bool ok)
+    {
+        if (token != _hookInstallToken || !ReferenceEquals(hook, _mouseHook)) return;
+        if (ok)
         {
             _mouseHookFailed = false;
-            // **只在有「前任的账」时记一行，也就是只在自愈和手动「重新挂钩」之后。**
+            // **只在有「前任的账」时记一行，也就是只在自愈、手动「重新挂钩」、开机后抢链首之后。**
             //
             // 此前这里对**每一次**装上都记一行成功，于是：每次启动一行、每次改中键阈值或手势开关
             // （SaveConfig 末尾会调到这儿）再一行。它们全是「一切正常」，而这个文件是唯一的事后线索、
             // 又只有 128KB——用成功刷掉真故障的历史，恰恰废掉了它存在的理由。
             // 「装上了」这件事状态行已经在报（Deaf / Stale 两档），不必再往错误日志里记一笔。
             //
-            // 剩下这两条路值钱，因为它们各自在摘掉旧钩子**之前**抄了一份账（_prevBeat/_prevRight）：
+            // 剩下这几条路值钱，因为它们各自在摘掉旧钩子**之前**抄了一份账（_prevBeat/_prevRight）：
             //   收到过输入吗：一次都没有 = 装的那一刻就不对；有过、停了 = 被 Windows 摘的。两者修法完全不同。
             //   收到过右键吗（按下与抬起分开）：前者 yes 而后者 no，说明右键在到达钩子链之前就被
             //   别人拿走了（鼠标驱动改键、或别的程序的低级钩子吞了它）——那时本程序一切正常，
@@ -1156,13 +1534,31 @@ public partial class App : System.Windows.Application
             // 英文常量，不走 resx：这个文件是拿去贴 issue 的，读它的人未必读得懂用户那门语言，
             // 而 18 份译文里同一条线索会长出 18 种写法，grep 不到一起。用户要读的那份日志是
             // clockwork.run.log（托盘「查看上次启动日志」），那一份仍然全本地化。
-            AppendErrorLog($"mouse hook reinstalled: middleHoldMs={ms} middleTolerance={middleTolerance} gestures={wantGesture} "
+            // source 放最前：它是唯一的分支点，决定后面这些数字该往哪个方向读。
+            // heal = 看门狗判死了（可能真的被摘，也可能只是上游钩子卡了一下）；
+            // manual = 用户在排障时点的；boot = 开机抢链首的正常一次。
+            // 三个数值取自 `_mouseHook*` 那组字段而不是局部变量：安装结果现在是**异步**回来的，
+            // 局部变量早就不在作用域里了；而号与引用那两道闸保证了字段里此刻装的就是本次那套参数。
+            AppendErrorLog($"mouse hook reinstalled: source={_prevSource} middleHoldMs={_mouseHookMs} "
+                           + $"middleTolerance={_mouseHookTolerance} gestures={_mouseHookGesture} "
                            + $"prevEverFired={_prevBeat} prevRightButton={_prevRight ?? "-"} "
                            + $"prev{_prevMiddle ?? "-"} "
                            + $"silentFor={(_prevSince == long.MaxValue ? "never" : _prevSince + "ms")} "
                            // 发不出去 vs 收不到，是两种表现一样、修法完全相反的故障（见 MouseHook.InjectRejected）。
-                           + $"injectRejected={_prevRejected}");
-            _prevBeat = _prevRight = _prevMiddle = null;   // 这份账只用一次，别让它污染下一条非自愈的记录
+                           + $"injectRejected={_prevRejected} "
+                           // 与 silentFor 合看才分得开「链被上游堵」和「钩子被系统摘」（见 _prevUpstream）。
+                           // 只报峰值，所以它是**这一任钩子**的账，不是这一刻的瞬时值。
+                           + $"upstreamMax={_prevUpstream}ms "
+                           // 与 upstreamMax 成对，回答的是**相反**的那个问题：别人堵了我们多久 / 我们自己
+                           // 离被摘还有多远（LowLevelHooksTimeout 是回调的预算，本机实测 300ms）。
+                           // 这一格非零且接近 300，就说明「钩子被摘」是我们自己造成的，别再去查上游。
+                           + $"callbackMax={_prevCallbackMax}ms "
+                           // 链被堵时唯一拿得到的人证：那一刻谁在场（见 _prevSuspects）。
+                           // 只有 `upstreamMax` 大才有意义——那时是别人堵的，这一格是唯一的线索；
+                           // 而它只是候选，不是判决，所以写 `suspects=` 而不是 `culprit=`。
+                           + $"suspects={_prevSuspects ?? "-"}");
+            _prevBeat = _prevRight = _prevMiddle = _prevSource = null;   // 这份账只用一次，别让它污染下一条非自愈的记录
+            _prevSuspects = null;
             return;
         }
         // 装不上（受限令牌、组策略、被安全软件拦）：如实说。静默失败的话，用户会以为
@@ -1172,20 +1568,20 @@ public partial class App : System.Windows.Application
         // 气泡关掉就没了，于是唯一真正需要事后追查的那种故障，日志里一个字都没有。
         // 和气泡同受 _mouseHookFailed 夹一次：ApplyMouseHook 每次保存配置都会走到，
         // 不夹的话一个装不上的钩子会把日志按保存次数刷满——那正是这轮要修的毛病。
-        var win32 = _mouseHook.LastError;   // 先取错码，Dispose 之后就没人能问了
+        var win32 = hook.LastError;   // 先取错码，Dispose 之后就没人能问了
         // **按不上也要按关掉那条路收尾**，与上面 `!wantPress && !wantGesture` 那个分支同一套。
         // 漏了不是漏一次：ApplyMouseHook 在每次 SaveConfig 末尾都会走到，而 `_mouseHook` 已经是 null
         // 让上面那个「已经是想要的状态」早退永远不成立——于是每保存一次就新建一个 MouseHook，
         // 每个都带两个 System.Threading.Timer（_alarm、_clickUp），上一个连 Dispose 都没调就被丢了。
-        // 轨迹窗与 1 Hz 的「钩子还活着吗」同理：前面刚建完 / 刚上弦，而自愈那一句一看 `_mouseHook == null`
-        // 就立即返回，于是那个计时器永远转着、每秒一次 GetCursorPos，什么也不做。
-        _mouseHook.Dispose();
+        // 轨迹窗与 2 Hz 的「钩子还活着吗」同理：前面刚建完 / 刚上弦，而自愈那一句一看 `_mouseHook == null`
+        // 就立即返回，于是那个计时器永远转着、每半秒一次 GetCursorPos，什么也不做。
+        hook.Dispose();
         _mouseHook = null;
         CloseTrail();
         ApplyCursorWatch(false);
         if (!_mouseHookFailed)
         {
-            AppendErrorLog($"mouse hook install failed: middleHoldMs={ms} gestures={wantGesture} win32={win32}");
+            AppendErrorLog($"mouse hook install failed: middleHoldMs={_mouseHookMs} gestures={_mouseHookGesture} win32={win32}");
             WarnToast(Strings.Get("Warn_MouseHookFail"));
         }
         _mouseHookFailed = true;
@@ -1193,6 +1589,9 @@ public partial class App : System.Windows.Application
 
     private void CloseTrail()
     {
+        // 仪表跟着覆盖窗一起收。放在 null 早退**之前**：两者由 ApplyMouseHook 同时置位，
+        // 但收尾这条路有多个入口（关手势、装钩失败、退出），漏关一格就会留下一个空转的计时器。
+        ApplyStallWatch(false);
         if (_trail == null) return;
         _trail.Finish();
         _trail.Close();
@@ -1242,30 +1641,58 @@ public partial class App : System.Windows.Application
         // 总闸放在最前面。热键不注册、托盘那项不显示之后，理论上没人还能叫到这儿，
         // 但这个方法是 public 的（托盘、热键、中键钩子三条路都调它），闸门守在入口最省心。
         if (!_config.Settings.PanelEnabled) return;
-        if (_panel != null) { _panel.Dismiss(); return; }
+        if (_panel != null)
+        {
+            // 僵尸与活面板要分开答（判据见 Core.PanelFocus.DecideToggle）：
+            // 从未激活过的面板按「唤出」应该是救活它，而不是把用户看不见的面板关掉——
+            // 那正是「长按了没反应」的观感来源。代价是清掉一块僵尸要多按一下
+            //（先复活拿到焦点，再按一下才是收起），这是拿一次按键换「召唤不再落空」，
+            // 不要把这条当 bug 改回无脑 Dismiss。
+            if (PanelFocus.DecideToggle(_panel.EverActivated) == PanelToggleAction.Revive)
+            {
+                bool ok = _panel.Revive();
+                AppendErrorLog(ok ? "panel revived on toggle (foreground acquired)"
+                                  : "panel revive on toggle failed (foreground not acquired)");
+            }
+            else _panel.Dismiss();
+            return;
+        }
         // 前台进程必须**在建面板之前**问：面板一显示就把前台抢走了，那之后再问只会得到 Clockwork 自己。
         // 这是场景页整个功能的时序命门，别把它挪到下面去（见 Win32.ForegroundProcessName 的注释）。
-        var foreground = Win32.ForegroundProcessName();
-        var s = _config.Settings;
-        var look = new Views.PanelLook(s.PanelColumns, s.PanelTileSize, s.PanelIconOnly, s.PanelShowOps,
-                                       s.PanelTopRows, s.PanelBottomRows, s.PanelLeftTabs, s.PanelTopTabs);
-        // 一页的容量由两条带的行数×列数决定，装不下的自动续到下一页。
-        var capacity = PanelMetrics.PageCapacity(s.PanelTopRows, s.PanelBottomRows, s.PanelColumns);
-        var w = new Views.QuickPanelWindow(BuildPanelPages(foreground, capacity), BuildPanelOps(), look,
+        //
+        // **这一段要包一圈计时，别删。** 它是 `TogglePanel` 里唯一没有名字的部分（`Popup()` 的前台
+        // 等待另有 `foreground-wait`），而它有具体嫌疑：2026-09-18 有一次 **2547ms** 的 UI 线程卡顿，
+        // 同一秒落下的另一行是 `panel shown but foreground not acquired`。更要紧的是——
+        // 那次跑的是 `8de52b4`，那个提交里 `trail-point` / `cursor-watch` / `config-write` **一个都没有**
+        //（见 clockwork-build-deploy 的口径：判断「日志里没有某行」能不能当排除依据，先确认那个计时
+        // 本来就在出故障的那个提交里）。所以当时「没有具名慢调用」**不构成任何排除**，这一段始终没被查过。
+        // 它要在 UI 线程上同步建页、建动作格、建整扇窗，全是没被量过的活。
+        Views.QuickPanelWindow w;
+        long t0 = Core.UiStallWatch.Begin();
+        try
+        {
+            var foreground = Win32.ForegroundProcessName();
+            var s = _config.Settings;
+            var look = new Views.PanelLook(s.PanelColumns, s.PanelTileSize, s.PanelIconOnly, s.PanelShowOps,
+                                           s.PanelTopRows, s.PanelBottomRows, s.PanelLeftTabs, s.PanelTopTabs);
+            // 一页的容量由两条带的行数×列数决定，装不下的自动续到下一页。
+            var capacity = PanelMetrics.PageCapacity(s.PanelTopRows, s.PanelBottomRows, s.PanelColumns);
+            w = new Views.QuickPanelWindow(BuildPanelPages(foreground, capacity), BuildPanelOps(), look,
                                            BuildPanelWaistOps());
-        _panel = w;
+            _panel = w;
+        }
+        finally { Core.UiStallWatch.End("panel-build", t0); }
         // 清引用挂在 Closed 上而不是各处手动置 null：面板有三条关闭路径（热键再按 / Esc / 焦点离开），
         // 漏掉任何一条，_panel 就会一直指着一个已经关掉的窗口，此后热键永远只走 Dismiss 分支，
         // 面板再也打不开——而这种状态重启前自己不会恢复。
         w.Closed += (_, _) => { if (ReferenceEquals(_panel, w)) _panel = null; };
-        if (!w.Popup() && !_panelFgWarned)
-        {
-            // 中键长按这条路没有「刚响应用户输入」的前台锁豁免（见 QuickPanelWindow.Popup 注释）。
-            // 抢不到前台时面板仍然可见、可点（看门狗不关掉从未激活的窗），但收不到键盘、
-            // 也不会失焦即关——这是「开机首次唤出无效」的主要嫌疑路径，留一行证据，别让它只能靠猜。
-            _panelFgWarned = true;
+        // 失败每次都记（LogDedup 收敛连续重复，见 DialogForeground.cs 的同一口径）：
+        // 一次性开关会让复发无从查起——「时有时无」的故障最需要知道它复发了多少次。
+        // 中键长按这条路没有「刚响应用户输入」的前台锁豁免（见 QuickPanelWindow.Popup 注释）。
+        // 抢不到前台时看门狗会在额度窗口内逐拍补抢，仍不成面板仍可见、可点，
+        // 下一次「唤出」走上面的 Revive 分支救活它。
+        if (!w.Popup())
             AppendErrorLog("panel shown but foreground not acquired");
-        }
     }
 
     // 面板上「你自己的东西」那一片：摆哪些格子由 Core.PanelLayout（纯函数、有测试）决定，
@@ -1311,7 +1738,7 @@ public partial class App : System.Windows.Application
         => PanelLayout.BuildPages(_config.PanelPages, foreground, capacity, actions: _config.ActionGroups)
             .Select(p => new Views.PanelTilePage(
                 p.Title,
-                p.Items.Select(it => new Views.PanelTile(it.Label, it.Icon, () => RunStep(it.Step), it.Enabled,
+                p.Items.Select(it => new Views.PanelTile(it.Label, it.Icon, () => RecordPanelClick(it.Step), it.Enabled,
                                                          OnEdit: () => EditPanelItem(it),
                                                          OnDelete: () => DeletePanelItem(it),
                                                          Tip: StepDisplay.StepSummary(it.Step),
@@ -1335,7 +1762,7 @@ public partial class App : System.Windows.Application
     {
         _panel?.Dismiss();
         var owner = _main is { IsVisible: true } ? _main : null;
-        var w = new Views.PanelManagerWindow(_config, SaveConfig) { Owner = owner };
+        var w = new Views.PanelManagerWindow(_config, SaveConfig, _panelUsage, ResetPanelUsage) { Owner = owner };
         // 没有 Owner 时（主窗口还在托盘里）必须自己置顶，否则这扇窗会开在所有窗口后面，
         // 用户只看到面板消失、什么都没出来。
         if (owner == null) { w.WindowStartupLocation = WindowStartupLocation.CenterScreen; w.Topmost = true; }
@@ -1448,7 +1875,7 @@ public partial class App : System.Windows.Application
         int tick = _config.Settings.TickSeconds;
         if (tick < 5) tick = 30;
         _reminderTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(tick) };
-        // 鼠标钩子的死活不在这儿查：那是 1 秒一次的 _cursorWatch + HealMouseHookIfDead 的活
+        // 鼠标钩子的死活不在这儿查：那是半秒一次的 _cursorWatch + HealMouseHookIfDead 的活
         //（30 秒粒度判「光标动没动」会把看屏幕的人误判成钩子死了，见 CursorWatchTick 的实测记录）。
         _reminderTimer.Tick += (s, e) => ReminderTick();
         _reminderTimer.Start();
@@ -2463,6 +2890,17 @@ public partial class App : System.Windows.Application
     // 界面看着已保存、重启全回退是静默数据丢失，至少弹个警告让用户知道改动只在内存里。
     public void SaveConfig()
     {
+        // 整条保存路径计时（含末尾那次 ApplyMouseHook）。这条路上有三件在 UI 线程上跑、
+        // 又都可能以「秒」为单位的事：序列化 180KB 配置、走 ConfigStore 的带睡眠重试写盘
+        // （见那边的注释：本机有坚果云的过滤驱动与 GoodSync 在持句柄）、以及重建热键 + 重装钩子。
+        // 此前一句计时都没有，所以「保存配置时点不动」在日志里不留任何痕迹。
+        long t0 = Core.UiStallWatch.Begin();
+        try { SaveConfigCore(); }
+        finally { Core.UiStallWatch.End("config-save", t0); }
+    }
+
+    private void SaveConfigCore()
+    {
         if (_configSuperseded) return;   // 内存里的 _config 已作废，任何回写都是「无声还原」——见 MarkConfigSuperseded
         try { ConfigStore.Write(_config, _cfgPath); }
         // 写盘失败=界面看着已保存、重启全回退的静默数据丢失。这条不给它自动消失：常驻到用户点掉。
@@ -2596,53 +3034,147 @@ public partial class App : System.Windows.Application
 
     // 连续重复的行只记第一条，判据见 Core/LogDedup.cs（那里也解释了为什么要收敛）。
     private readonly LogDedup _dedup = new();
+
+    // **入队侧的内存锁。** 只护两样东西：_dedup 的账本、以及往 _logQueue 里放一行。
+    // 从前这把锁护的是「先截断再追加」那一整段文件操作，于是**后台线程在锁里等磁盘 I/O 时，
+    // UI 线程下一次记日志就得跟着一起等**——而 UI 线程被卡过 5 秒就是幽灵化
+    //（见 Core.UiStallWatch）。现在文件 I/O 全在专属写盘线程上，这把锁里再也没有 I/O。
     private readonly object _logLock = new();
+
+    // 待落盘的行（**已经带好时间戳与换行**——时间戳必须在事件发生那一刻取，
+    // 不能等写盘时再取，否则「排队等了 200ms」会写成「200ms 后才发生」）。
+    private readonly System.Collections.Concurrent.ConcurrentQueue<string> _logQueue = new();
+    private readonly System.Threading.SemaphoreSlim _logWork = new(0);
+    private Thread? _logWriter;
+    private readonly object _logStartLock = new();
+
+    // **只护「碰文件」那一段。** 有了它才有「单写者」：写盘线程与同步排空（崩溃 / 退出）
+    // 不会同时去截断同一个文件。
+    //
+    // 锁序固定为 `_logFileLock` → `_logLock`（截断之后要清 _dedup 的账本），**绝无反向**：
+    // 入队侧只拿 _logLock、永不碰 _logFileLock。加新代码时守住这个方向就不会有环。
+    private readonly object _logFileLock = new();
+
+    // 日志上限与截断判据见 ErrorLogMaxBytes。超过就砍前一半，只留最近的。
+    //
+    // 同步排空的两处超时。**它们存在的唯一理由是「退出/崩溃绝不能被一份写不动的日志吊住」**：
+    // 文件若落在已经断掉的网络盘上，写盘线程会卡在一次系统调用里很久，而这时
+    // OnExit 正等着拿 _logFileLock——没有超时就是「点了退出，程序赖着不走」。
+    // 取值只影响「卡住时等多久放弃」，不影响正常路径（正常路径里这把锁几乎总是空的）。
+    private const int LogFlushTimeoutMs = 300;      // 退出：宁可少写最后几行，也不能让退出挂住
+    private const int LogCrashTimeoutMs = 2000;     // 崩溃：异常堆栈是这份文件最值钱的一段，多等一会儿
 
     // internal：Views 层的无主对话框抢前台失败（DialogForeground）也要在这份日志里留证据。
     internal void AppendErrorLog(string line)
     {
-        // 任何线程可调（UnobservedTaskException 从终结器线程进来），而这里既读改 _dedup 的状态、
-        // 又对同一个文件先截断再追加——不夹一把锁，两个线程能把彼此的行写丢。
-        lock (_logLock)
+        // 任何线程可调（UnobservedTaskException 从终结器线程进来）。
+        //
+        // **这一段只做内存操作**：去重判据 + 入队。文件 I/O 全在 LogWriterLoop 那条线程上。
+        // 于是「后台线程正在写盘」再也不会让 UI 线程的这一次调用等——那正是它从同步改成入队的理由。
+        //
+        // 代价要说清（取舍，不是疏漏）：行落盘比从前晚一点点（正常是亚毫秒级，
+        // 写盘线程一被唤醒就排空），所以**硬杀进程（TerminateProcess / 断电）会带走队列里那几行**。
+        // 接受它，因为换来的是「UI 线程永不因日志而阻塞」；两条真正要紧的路各有同步兜底：
+        // 崩溃走 LogError（自己排空再写），正常退出走 OnExit → FlushErrorLog。
+        try
         {
-            var write = _dedup.Next(line);
-            if (write == null) return;
-            line = write;
-            try
+            EnsureLogWriter();
+            lock (_logLock)
             {
-                var path = ErrorLogPath;
-                var fi = new FileInfo(path);
-                if (fi.Exists && fi.Length > ErrorLogMaxBytes)
-                {
-                    var all = File.ReadAllText(path);
-                    int cut = all.IndexOf('\n', all.Length / 2);
-                    File.WriteAllText(path, cut < 0 ? "" : all[(cut + 1)..]);
-                    // 前一半被丢掉了，_dedup 记着的「上一行」可能已经不在文件里——
-                    // 那时再写「同上一行」就是指着一行读者看不到的话。清账，让下一条原样写出去。
-                    _dedup.Reset();
-                }
-                File.AppendAllText(path, $"[{Stamp()}] {line}\r\n");
+                var write = _dedup.Next(line);
+                if (write == null) return;
+                _logQueue.Enqueue($"[{Stamp()}] {write}\r\n");
             }
-            catch { }   // best-effort：写不进去不影响主流程
+            _logWork.Release();   // 出锁再放行：写盘线程醒来时这一行已经在队列里了
+        }
+        catch { }   // best-effort：写不进去不影响主流程
+    }
+
+    private void EnsureLogWriter()
+    {
+        if (_logWriter != null) return;
+        lock (_logStartLock)
+        {
+            if (_logWriter != null) return;
+            _logWriter = new Thread(LogWriterLoop) { IsBackground = true, Name = "Clockwork.ErrorLog" };
+            _logWriter.Start();
         }
     }
 
+    // 写盘线程的一生：等信号 → 把当时攒下的都排空。
+    // 一次信号排空一批，所以连着记十行只会唤醒一两次，而不是十次。
+    private void LogWriterLoop()
+    {
+        while (true)
+        {
+            try { _logWork.Wait(); } catch { return; }   // 信号量被拆（退出竞态）：收摊
+            TryDrainErrorLog(int.MaxValue);
+        }
+    }
+
+    // 把队列里攒下的行写出去。**调用方必须已持有 _logFileLock。**
+    // 拆出「已持锁」的版本是为了让 LogError 能在同一段临界区里先排空、再写自己的堆栈——
+    // 分成两次拿锁的话，中间会插进写盘线程，时间线就倒了。
+    private void DrainQueueLocked(string path)
+    {
+        var sb = new System.Text.StringBuilder();
+        while (_logQueue.TryDequeue(out var line)) sb.Append(line);
+        if (sb.Length == 0) return;
+        var fi = new FileInfo(path);
+        if (fi.Exists && fi.Length > ErrorLogMaxBytes)
+        {
+            var all = File.ReadAllText(path);
+            int cut = all.IndexOf('\n', all.Length / 2);
+            File.WriteAllText(path, cut < 0 ? "" : all[(cut + 1)..]);
+            // 前一半被丢掉了，_dedup 记着的「上一行」可能已经不在文件里——
+            // 那时再写「同上一行」就是指着一行读者看不到的话。清账，让下一条原样写出去。
+            // 这里要拿 _logLock（账本归入队侧所有），锁里只有内存操作，不会把入队侧拖住。
+            lock (_logLock) { _dedup.Reset(); }
+        }
+        File.AppendAllText(path, sb.ToString());
+    }
+
+    /// <summary>同步把队列排空。给崩溃（堆栈必须在进程死之前落盘）和退出（进程一走队列就没了）用。</summary>
+    //
+    // 带超时：拿不到锁就放弃，绝不无界等。理由见 LogFlushTimeoutMs 那段。
+    private bool TryDrainErrorLog(int timeoutMs)
+    {
+        if (!System.Threading.Monitor.TryEnter(_logFileLock, timeoutMs)) return false;
+        try { DrainQueueLocked(ErrorLogPath); return true; }
+        catch { return false; }   // best-effort
+        finally { System.Threading.Monitor.Exit(_logFileLock); }
+    }
+
+    // OnExit 用的同步收尾：把队列里最后那几行补上。
+    // 不调 EnsureLogWriter：这条路自己就能排空，没必要为了收尾再起一条线程。
+    private void FlushErrorLog() => TryDrainErrorLog(LogFlushTimeoutMs);
+
     // 崩溃日志额外空一行分隔（异常带多行堆栈，挤在一起没法读），故不走 AppendErrorLog。返回路径供崩溃框指路。
     // 不参与「连续重复只记一条」：每个堆栈各不相同，而崩溃从来不是刷屏的那一类。
-    // 但共用同一把锁——两处写的是同一个文件。
+    // 但共用同一个文件，也共用同一把文件锁——两处写的是同一份东西。
     private string LogError(Exception? ex)
     {
         var path = ErrorLogPath;
-        lock (_logLock)
+        // 带超时拿文件锁：崩溃路径绝不能被一份写不动的日志吊住（理由见 LogFlushTimeoutMs）。
+        // 拿不到也照写——那时已经在「文件系统不正常」的极端情形里了，追加一段小文本
+        // 仍然是让堆栈留在磁盘上的唯一机会，而少写它的代价比交错几行大得多。
+        bool locked = System.Threading.Monitor.TryEnter(_logFileLock, LogCrashTimeoutMs);
+        try
         {
+            // **先排空队列再写自己。** 队列里是崩溃之前刚发生的事，而这份文件的读法是
+            // 「从上往下就是时间线」；不先排空的话，堆栈会插在它们前面，时间线当场倒过来——
+            // 而倒过来的日志比没有更难读（会把人引向错误的方向）。
+            try { DrainQueueLocked(path); } catch { }
             // **写之前先清账。** 这一段堆栈插在 _dedup 的账本之外，它并不知道中间隔了东西。
             // 不清的话：先记了 L，崩一次，同样的 L 再来时被判成「与上一行相同」，
             // 日志里就成了「一整段堆栈 + 一句『同上一行，且一直在发生』」——那句标记指着一行
             // 跟它毫无关系的话，而 L 本身一次都没写进去。判据本来就是「隔了别的事件之后
             // 再出现的同一条是新事件」（见 Core/LogDedup.cs）。
-            _dedup.Reset();
+            lock (_logLock) { _dedup.Reset(); }
             try { File.AppendAllText(path, $"[{Stamp()}] {ex}\r\n\r\n"); } catch { }
         }
+        catch { }
+        finally { if (locked) System.Threading.Monitor.Exit(_logFileLock); }
         return path;
     }
 

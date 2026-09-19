@@ -19,7 +19,7 @@ namespace Clockwork.Views;
 // 管理器里的笔迹缩略图（GestureGlyph）回答的是「我配了什么」，这条线回答的是「我现在画到哪了」，
 // 两件事，缺一件都不够。
 //
-// 三条硬约束，任何一条破了都会造成比「没有笔迹」严重得多的问题：
+// 四条硬约束，任何一条破了都会造成比「没有笔迹」严重得多的问题：
 //
 //   1. **绝不能抢前台。** 「最小化当前窗口」这类动作读的就是 GetForegroundWindow——
 //      覆盖窗一旦拿到前台，用户的动作会全部落到这个透明窗上（并被自家进程的守卫拒掉）。
@@ -28,6 +28,9 @@ namespace Clockwork.Views;
 //      手势画到一半，指针下面的程序就再也收不到鼠标了。
 //   3. **绝不能在钩子回调里画。** 低级鼠标钩子有 LowLevelHooksTimeout（默认 300ms）的预算，
 //      超了整个钩子会被系统摘掉。所以坐标一律由 MouseHook 经 _post 派发过来（同 Fire 那条路）。
+//   4. **收笔之后绝不能立刻 Hide。** Hide 不擦分层窗那张位图，而重显时 DWM 贴的正是它——
+//      上一笔那条线会原样回到屏幕上（「画手势为什么还出现上一次的轨迹」就是这个）。收笔一律走
+//      HideSoon：先把清空后的画面合成出去，再藏。
 //
 // 只铺**手势起点所在的那一块屏**，不铺整个虚拟桌面：跨屏画手势基本不存在，
 // 而单屏意味着只有一个 DPI 系数要换算（混合 DPI 下 WPF 给整窗一个系数，跨屏的点会偏），
@@ -77,6 +80,17 @@ public sealed class GestureTrailWindow : Window
 
     private readonly Border _note;
     private readonly System.Windows.Threading.DispatcherTimer _noteTimer = new();
+    // 收笔之后**推迟**藏窗用的表。为什么要推迟，见 HideSoon——那是「上一笔的轨迹又回来了」
+    // 唯一的解，也是这扇窗上最容易被人顺手改回 `Hide()` 的一处。
+    private readonly System.Windows.Threading.DispatcherTimer _hideTimer = new();
+
+    // 收笔之后窗多留一会儿的时长：够让那张空位图真的合成出去。
+    //
+    // **不能是 0（0 就是现在这个 bug）**：Hide 不擦分层窗的位图，而空画面得先由渲染线程推一次；
+    // UI 线程这边没有任何「已经推出去了」的信号可等——CompositionTarget.Rendering 在渲染**之前**
+    // 触发，在那一刻 Hide 会把这帧整个取消掉。取 120ms：60Hz 上约 7 帧、120Hz 上约 14 帧，
+    // 正常负载下足够渲染线程把这一帧推出去；再长就纯粹是让那扇空窗多挂一会儿，而它只吃滚轮。
+    private const int HideDelayMs = 120;
 
     private bool _placed;
     private double _scale = 1;
@@ -123,8 +137,18 @@ public sealed class GestureTrailWindow : Window
             Child = _noteText,
             Visibility = Visibility.Collapsed,
         };
-        // 药丸到时收掉药丸，窗也一起藏——收笔后窗本就该藏着（见 Finish）。藏→显的旧帧问题在 ShowGated 治。
-        _noteTimer.Tick += (_, _) => { _noteTimer.Stop(); HideNote(); if (_core.Points.Count == 0) Hide(); };
+        // 药丸到时收掉药丸，窗也一起藏——收笔后窗本就该藏着（见 Finish）。藏之前先让空画面
+        // 合成出去，理由与收笔那条一模一样（见 HideSoon）：藏的那一刻位图里留的是什么，
+        // 下一笔开头贴到屏上的就是什么——药丸同样是「上一笔留下的东西」。
+        _noteTimer.Tick += (_, _) => { _noteTimer.Stop(); HideNote(); if (_core.Points.Count == 0) HideSoon(); };
+        _hideTimer.Interval = TimeSpan.FromMilliseconds(HideDelayMs);
+        // 到点再核一次：这 120ms 里可能已经开了新的一笔（那时 Point 会把它停掉），
+        // 也可能药丸又亮了起来（那是 _noteTimer 的活，它到点自己会走同一条路）。
+        _hideTimer.Tick += (_, _) =>
+        {
+            _hideTimer.Stop();
+            if (_core.Points.Count == 0 && !_noteTimer.IsEnabled) Hide();
+        };
 
         var canvas = new Canvas();
         canvas.Children.Add(_halo);
@@ -135,8 +159,9 @@ public sealed class GestureTrailWindow : Window
 
     /// <summary>就地说一句「你画的是这个」。<paramref name="text"/> 为空则什么都不做。</summary>
     //
-    // 紧跟在 Finish 之后调用（MouseHook 先派 trailEnd 再派 unmatched，同一条 UI 队列，顺序有保证），
-    // 所以这儿要负责把窗重新显出来——Finish 刚把它藏了。显走 ShowGated：藏→显那帧别贴上一笔的旧位图。
+    // 紧跟在 Finish 之后调用（MouseHook 先派 trailEnd 再派 unmatched，同一条 UI 队列，顺序有保证）。
+    // 那时窗通常还亮着——Finish 走的是「推迟藏」（见 HideSoon），120ms 还没到——所以这儿多半只是
+    // 把药丸摆上去；真已经被藏了（比如这一笔画得久、Finish 之后隔了一会儿才报），再由 ShowGated 显回来。
     public void Note(string? text, int ms = 900)
     {
         if (string.IsNullOrEmpty(text) || !_hasLast) return;
@@ -147,6 +172,9 @@ public sealed class GestureTrailWindow : Window
         Canvas.SetLeft(_note, _last.X + 14);
         Canvas.SetTop(_note, _last.Y + 14);
         if (!IsVisible) ShowGated();
+        // 收笔时排的那次「推迟藏窗」得撤掉：药丸要亮 0.9 秒，让它掐掉就等于没报。
+        // 0.9 秒后由 _noteTimer 走同一条推迟路藏窗，那时位图里已经是空画面了。
+        _hideTimer.Stop();
         _noteTimer.Interval = TimeSpan.FromMilliseconds(ms);
         _noteTimer.Stop();
         _noteTimer.Start();
@@ -205,6 +233,12 @@ public sealed class GestureTrailWindow : Window
     // 淡回（改 Opacity）本身会让 WPF 按**当前**可视树（新笔迹 / 药丸，旧线早已 Clear）重新合成一帧，
     // 所以淡回后屏上只会是新东西。最坏情况也只是新线晚一帧（约十几毫秒）出现，绝不会是上一笔。
     //
+    // **但这一手只是「赌赢的时候有用」，别把它当成保证。** Show() 贴的是**已经推上去的那张位图**，
+    // 而改 Opacity 只影响**之后**推的帧——两者谁先到，取决于渲染线程推送与 DWM 下一次合成谁跑在前面。
+    // 赌赢了，旧位图被一张全透明的帧盖掉，什么都看不见；赌输了，上一笔照样闪一下（用户报的
+    // 「画手势还出现上一次的手势轨迹」就是这一档）。**真正的保证在 HideSoon**：藏之前先让空画面
+    // 合成出去，位图里根本没有上一笔，贴出来也无所谓。这里留着是因为它代价为零、又能盖住少数情况。
+    //
     // 不用「窗常驻不藏」来躲这一帧：那扇窗铺满整屏、压在最上层，即便点得穿、不抢焦，鼠标滚轮这类
     // 不走命中测试的输入仍会落到它头上被 WPF 吞掉（实测常驻后底下程序滑轮失效）。所以才要笔一收就藏、
     // 重显时再用这个闸门挡住旧帧。
@@ -230,7 +264,10 @@ public sealed class GestureTrailWindow : Window
         // 不停的话 Tick 会落在已关闭的窗上——Finish 已清空 Points，Tick 里那句 Hide() 是必走分支，
         // 对已关窗口调 Hide() 抛 InvalidOperationException。关手势 / 装钩失败那两条 CloseTrail
         // 路径上应用还活着，这一下会冒到 UI 线程上。同 NotificationToast.OnClosed 的口径。
+        // 收笔那张「推迟藏窗」的表同理，而且更容易撞上：CloseTrail 里 Finish() 刚给它上了弦
+        //（Finish 与 Close 就是前后两行），紧接着窗就关了——不停的话 120ms 后那一跳正好落在死窗上。
         _noteTimer.Stop();
+        _hideTimer.Stop();
         base.OnClosed(e);
     }
 
@@ -257,6 +294,10 @@ public sealed class GestureTrailWindow : Window
         // 只换颜色和粗细，不加第二种反馈（不闪、不弹、不出字）：这条线本来就在你眼睛正看的地方，
         // 变亮一档就够；再加东西只会把「一划而过」变成一场演出。
         SetArmed(armed);
+        // 撤掉「推迟藏窗」（见 HideSoon）：这一笔正在画，窗得留着。不撤的话，上一笔收笔时排的
+        // 那一跳会在 120ms 后落到正在画的新笔迹上——线和窗一起消失，看着像手势画丢了。
+        // 放在最前面（连 _placed 那次摆位之前）：任何一个采样点都该算「正在画」。
+        _hideTimer.Stop();
         if (!_placed)
         {
             if (!CoverMonitorOf(px, py)) return;   // 摆不了就整笔都不画，别拿旧的原点画到错的地方去
@@ -282,10 +323,10 @@ public sealed class GestureTrailWindow : Window
     // WPF 静默吞掉，底下的程序再也滚不动（实测：改成常驻后「点窗口后滑轮失效」，手势输入也跟着乱）。
     // 所以笔一收就藏，只在按住右键拖的那几百毫秒里亮着——那时你本来也不会去滚。
     //
-    // **藏→下一笔再显的旧帧问题，在 Show 那一头治（见 ShowGated）。** 重显那一帧 DWM 会先贴上
-    // 这扇窗上次合成的位图（上一笔那条线）；清点点发生在隐藏期间、那帧没被合成出去。ShowGated
-    // 显之前先把整窗 Opacity 压 0，旧位图顶出来也是全透明；渲染过一轮再淡回，淡回触发 WPF 按
-    // **当前**内容（新笔迹 / 药丸）重新合成，上一笔永远到不了屏上。
+    // **藏→下一笔再显的旧帧问题，在「藏」这一头治（见 HideSoon），不在 Show 那一头。**
+    // 重显那一帧 DWM 会先贴上这扇窗上次合成的位图；Hide 不擦位图，所以只要位图里还留着上一笔，
+    // 它就会原样回到屏上。ShowGated 那套 Opacity 只是赌渲染线程比 DWM 快，赌输就照样闪一下——
+    // 真正的保证是「藏之前先让清空后的画面合成出去」，见 HideSoon。
     //
     // 不 Close：手势一笔接一笔，重建分层窗口不便宜。真不用了（关手势 / 钩子卸载）由 App.CloseTrail 关。
     public void Finish()
@@ -300,9 +341,27 @@ public sealed class GestureTrailWindow : Window
         // 没有遗留风险：unmatched 只在 drawn.Length > 0 时发，也就是本笔确实有点。
         // （已经被当成「忘了重置」提过一次。）
         //
-        // 无条件 Hide：手很快时 Finish 可能赶在布局跑完之前到，带 IsVisible 条件会跳过，
+        // 藏之前先把空画面推出去，见 HideSoon——**这一句就是「上一笔的轨迹又回来了」的开关**。
+        // 无条件走它（不判 IsVisible）：手很快时 Finish 可能赶在布局跑完之前到，带条件会跳过，
         // 于是铺满全屏的透明窗一直留在最上层。藏完若 Note 要亮药丸，由 Note 走 ShowGated 再显。
-        Hide();
+        HideSoon();
+    }
+
+    /// <summary>收笔之后把窗藏起来——但要先等这一帧空画面真的合成出去（见 <see cref="HideDelayMs"/>）。</summary>
+    //
+    // **这是「上一笔的轨迹又回来了」唯一的解，也是这扇窗上最容易被顺手改回 `Hide()` 的一处。**
+    //
+    // 藏起来的窗再显出来时，DWM 贴的是它**上次合成的那张位图**；Hide 不擦位图，所以上一笔那条线
+    // 一直躺在里面，直到有人把新的一帧推上去——而 Show() 贴的就是它，那一瞬躲不掉
+    //（ShowGated 那套 Opacity 只是赌渲染线程比 DWM 快，赌输就照样闪一下）。
+    // 于是把顺序倒过来：**先让空画面覆盖掉旧位图，再藏**。线在 Finish 那一刻就没了
+    //（Points 清空当场生效，屏上是它自己消失的），窗多留这一小会儿什么也看不见。
+    private void HideSoon()
+    {
+        // 药丸还亮着：它到点会走同一条路，而且那时位图里早就是空的了（药丸同样是「上一笔的东西」）。
+        if (_noteTimer.IsEnabled) return;
+        _hideTimer.Stop();
+        _hideTimer.Start();
     }
 
     // 摆到起点所在那块屏上，全程物理像素（同 QuickPanelWindow.PlaceAtCursor 的做法与理由）。

@@ -79,6 +79,32 @@ public sealed class MouseHook : IDisposable
     // 中键同样分着记：中键是面板的触发键，「移动心跳正常、中键一次都没到」就是上游钩子吞键
     // 或前台 UIPI 拦截的指纹，与全钩死寂不是一种病。
     private long _beatMDown, _beatMUp;
+    // **上游延迟的峰值**：这条事件在系统里生成（MSLLHOOKSTRUCT.time）到我们的回调被叫到，
+    // 中间隔了多久，取装上以来的最大值。
+    //
+    // 为什么这一格值得单独留：低级钩子是**按安装顺序串成一条链**的，系统要挨个叫过去才轮到我们。
+    // 于是「链上排在我们前面的那个堵住了」会表现成一串自相矛盾的现象——
+    //   · 光标照动（位置由 win32k 直接更新，根本不走钩子链）；
+    //   · 按钮却点不动（按钮事件必须走完整条链才投递到窗口）；
+    //   · 我们自己的钩子**活着**（心跳最终还是会来，只是迟到），于是「掉了就重装」那套自愈
+    //     看着像好了、其实什么都没治。
+    // 本机同时跑着 Logi Options+ / PowerToys / 热键助手，三家都装 WH_MOUSE_LL —— 这条路不是假想。
+    //
+    // 与 SinceBeatMs 分工：那一格量「多久没被叫到」（死寂），这一格量「叫到了、但迟到了多久」。
+    // 死寂 + 迟到都大 = 链被堵；死寂大而迟到不大 = 钩子真被系统摘掉了（LowLevelHooksTimeout）。
+    private uint _upstreamMax;
+    // **我们自己回调耗时的峰值**（进回调到出去，取装上以来的最大值）。
+    //
+    // 为什么必须与 _upstreamMax 成对：上游延迟回答「是不是**别人**堵了链」，这一格回答
+    // 「是不是**我们自己**要被摘了」。Windows 的 LowLevelHooksTimeout（本机实测 300ms，
+    // HKCU\Control Panel\Desktop）是**回调**的预算，超了就把钩子**静默摘掉**；
+    // 而摘掉之后上游延迟永远停在最后那个小值上，看着一切正常。
+    //
+    // 为什么不靠 `hook-callback` 那行 slow 日志就够：它的阈值是全局的 500ms，
+    // 而预算是 300ms —— **300~500ms 这一段恰好就是「我们正在把自己搞死」的区间，
+    // 却一声不响**。这一格没有阈值、也不会刷屏（一任钩子只有一个数），
+    // 只在自愈/重钩那一行报出来；那时它接近 300 就是铁证。
+    private uint _callbackMax;
     // 面板到点唤出过几次（闹钟与回调内追赶轮询共用，见 PollFireAndPost）。
     private int _middleFired;
     // 长按被改判成「中键拖拽」的次数：按住后位移超出容差就归还按下、撤防闹钟、面板不再弹。
@@ -350,6 +376,17 @@ public sealed class MouseHook : IDisposable
     // 前者要去查是谁排在前面，后者只需要把本程序也提权。分不开就只能猜。
     public int InjectRejected => Volatile.Read(ref _injectRejected);
 
+    /// <summary>这条钩子装上以来，事件从生成到被我们回调收到，最长迟到了多少毫秒。</summary>
+    //
+    // 迟到 = 链上排在我们前面的钩子（Logi Options+ / PowerToys / 热键助手 之流）拖住了链。
+    // 与 SinceBeatMs 合看才分得开两种病，见 _upstreamMax 字段处的注释。
+    // 0 表示「一次都没量到」——包括 time 字段为 0 的兜底情形（那时不记，免得报一个假的天文数字）。
+    public uint UpstreamMaxMs => Volatile.Read(ref _upstreamMax);
+
+    /// <summary>这任钩子**回调自身耗时**的峰值（毫秒）。与 <see cref="UpstreamMaxMs"/> 成对看：
+    /// 那个量别人堵了我们多久，这个量我们自己离被摘还有多远（见 _callbackMax 字段处的注释）。</summary>
+    public uint CallbackMaxMs => Volatile.Read(ref _callbackMax);
+
     /// <summary>右键按下被上游吞了：抬起收得到，按下一次都没有。</summary>
     //
     // 只有「有人排在我们前面拦截」会造成这个组合——鼠标本身不可能只发抬起不发按下。
@@ -417,13 +454,28 @@ public sealed class MouseHook : IDisposable
 
     public bool Install()
     {
+        // **这两处 `Wait(5000)` 是 UI 线程上最可疑的阻塞点，所以各包了一圈计时
+        //（见 Core.UiStallWatch；调用方 App.ApplyMouseHook 被 Dispatcher.Invoke 钉在 UI 线程上）。**
+        //
+        // 设计气味在**这个数本身**：5000ms 与系统默认的 `HungWindowTimeout` 一模一样。
+        // 也就是说「我们自己的超时」正好落在「系统判你未响应」那条线上——一旦真的等满，
+        // 这一轮结束时 UI 线程恰好被卡在阈值边界上，同一轮里再多做一点点事就越线，
+        // 于是 DWM 在全屏笔迹窗上盖一块点得中的幽灵窗（见 Win32.DisableWindowGhosting 那段）。
+        // 钩子线程一返回 SetWindowsHookEx 就发信号，所以常态下这里几乎立刻返回；
+        // 但全局 WH_MOUSE_LL 的 SetWindowsHookEx 恰恰是安全软件 / 组策略会拖住的那一个
+        //（本类 LastError 的注释就列了「被安全软件拦」这一档），而那条线程还要先付整条手势
+        // 路径的首次 JIT。日志里 `ui thread slow: hook-install-wait took ...ms (thread=ui)`
+        // 就是它真等过 5 秒的指纹。
+        //
         // 幂等：线程已经起来了就等它的安装报告，别起第二个泵抢同一套状态。
         // 失败的尝试会收掉线程并把 _thread 置空，允许重试。
         var existing = _thread;
         if (existing != null)
         {
-            _installed.Wait(5000);
-            return _installResult == 1;
+            long t0 = Core.UiStallWatch.Begin();
+            bool ok0 = WaitInstalled(5000);
+            Core.UiStallWatch.End("hook-install-wait", t0);
+            return ok0 && _installResult == 1;
         }
         _installResult = 0;
         LastError = 0;
@@ -431,8 +483,10 @@ public sealed class MouseHook : IDisposable
         var t = new Thread(HookThreadRun) { Name = "Clockwork.MouseHook", IsBackground = true };
         _thread = t;
         t.Start();
-        if (!_installed.Wait(5000))
+        long tw = Core.UiStallWatch.Begin();
+        if (!WaitInstalled(5000))
         {
+            Core.UiStallWatch.End("hook-install-wait", tw);
             // 起线程 / 装钩没有任何正当理由超过 5 秒；等不到也别把上层吊在这儿，按失败报。
             try { PostThreadMessage(_threadId, WM_QUIT, IntPtr.Zero, IntPtr.Zero); } catch { }
             t.Join(1000);
@@ -440,8 +494,22 @@ public sealed class MouseHook : IDisposable
             LastError = -1;
             return false;
         }
+        Core.UiStallWatch.End("hook-install-wait", tw);
         if (_installResult != 1) { t.Join(1000); _thread = null; }
         return _installResult == 1;
+    }
+
+    // 等安装报告，**并且接住「等的时候有人把钩子拆了」**。
+    //
+    // `Teardown()` 里有 `_installed.Dispose()`（钩子线程退出的必经之路），而 `ManualResetEventSlim`
+    // 被 Dispose 之后再 Wait 会抛 `ObjectDisposedException`。这条竞态原先不存在：Install 与 Dispose
+    // 都由 UI 线程串行调用，两者不可能重叠。**安装改成在后台线程上等之后（见 App.ApplyMouseHook）
+    // 它就成了必然而不是偶然**：改配置 / 自愈 / 手动重钩都可能在一次安装还在飞的时候
+    // `Dispose()` 掉那个对象。那时正确的答案是「这次安装没成」，而不是让异常冒到后台线程顶上。
+    private bool WaitInstalled(int ms)
+    {
+        try { return _installed.Wait(ms); }
+        catch (ObjectDisposedException) { return false; }
     }
 
     // 专用钩子线程的一生：在本线程装钩（LL 回调只认装它那个线程的消息泵）→ 报告安装结果 →
@@ -542,7 +610,35 @@ public sealed class MouseHook : IDisposable
         try { _installed.Dispose(); } catch { }
     }
 
+    /// <summary>回调本身也包一圈计时，再转给 <see cref="CallbackCore"/>。</summary>
+    //
+    // **这一格是唯一能把「钩子为什么沉默」分成两种病的东西。**
+    // 2026-09-18 的日志里有一行 `mouse hook reinstalled: source=heal ... silentFor=937ms`——
+    // 用户正在画手势、鼠标一直在动，而回调 937ms 一次都没被叫到。那有两种成因，修法相反：
+    //
+    //   · **我们的回调被堵了**（一次阻塞式 GC 停掉整个世界、或回调里某句 P/Invoke 卡住）：
+    //     这里会留下一行 `ui thread slow: hook-callback took ...ms (thread=bg)`。
+    //     thread=bg 是**对的**——回调跑在专用钩子线程上，不是 UI 线程（见类头第 1 条）。
+    //   · **回调压根没被叫到**（上游某条低级钩子链被堵住、或 Windows 已按 LowLevelHooksTimeout
+    //     把它静默摘掉）：一行都不会有，只有沉默。那时要查的是排在我们前面的那些工具。
+    //
+    // 两种病此前在日志里长得一模一样（都只有「沉默 937ms」），只能靠猜。
+    // 代价是每个鼠标事件多两次 TickCount64——常数级读取，与回调里那些 P/Invoke 比可以忽略。
     private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)
+    {
+        long t0 = Core.UiStallWatch.Begin();
+        try { return CallbackCore(code, wParam, lParam); }
+        finally
+        {
+            // 先记峰值再交给 slow 日志：那行的阈值是 500ms，而钩子的预算是 300ms，
+            // 中间那一段只有这一格抓得住（见 _callbackMax）。
+            uint ms = (uint)(Environment.TickCount64 - t0);
+            if (ms > _callbackMax) Volatile.Write(ref _callbackMax, ms);
+            Core.UiStallWatch.End("hook-callback", t0);
+        }
+    }
+
+    private IntPtr CallbackCore(int code, IntPtr wParam, IntPtr lParam)
     {
         // code < 0 是系统要求「别处理、直接往下传」的约定，必须照办。
         // 整个回调包一层 try：这里抛出去的异常会穿到系统的消息派发里，后果不可控；
@@ -561,6 +657,14 @@ public sealed class MouseHook : IDisposable
             var data = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
             // 自己补发的那些：原样放行（见类头注释第 3 条）。
             if (data.DwExtraInfo == Win32.InjectTag) return CallNextHookEx(_hook, code, wParam, lParam);
+
+            // 上游延迟：这条事件在系统里生成的时刻（MSLLHOOKSTRUCT.time）到此刻隔了多久。
+            // TickCount 与 time 都是 32 位、同样 49.7 天回绕，uint 减法天然正确，不必处理回绕。
+            // 只量物理事件（自己补发的那批上面已经放行掉了，量它会永远得到 0）；
+            // time==0 时作罢——那说明系统没填这一格，照算会得到一个假的天文数字。
+            // 为什么值得在每个回调里都算一次：见 _upstreamMax 字段处的注释。
+            uint upstream = unchecked((uint)Environment.TickCount - data.Time);
+            if (data.Time != 0 && upstream > _upstreamMax) Volatile.Write(ref _upstreamMax, upstream);
 
             // 中键按下/抬起分开记账（理由同右键的 _beatRDown/_beatRUp）：
             // 移动心跳照常、中键却一次都没来，是中键在钩子链上游被吞的指纹。

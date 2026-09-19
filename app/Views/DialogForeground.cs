@@ -23,7 +23,7 @@ internal static class DialogForeground
         {
             if (dlg.IsActive) return;
             var h = new WindowInteropHelper(dlg).Handle;
-            if (h != IntPtr.Zero) Clockwork.Native.Win32.ForceForeground(h);   // 被拒时它内部走 AttachThreadInput 补救
+            if (h != IntPtr.Zero) Clockwork.Native.ForegroundNudge.Activate(h);   // 走专属泵线程；被拒时它内部走 AttachThreadInput 补救
             if (!dlg.IsActive) dlg.Activate();
         }
 
@@ -43,7 +43,7 @@ internal static class DialogForeground
                 if (!dlg.IsVisible) return;
                 if (dlg.IsActive) return;
                 var h = new WindowInteropHelper(dlg).Handle;
-                if (h != IntPtr.Zero && Clockwork.Native.Win32.ForceForeground(h)) return;
+                if (h != IntPtr.Zero && Clockwork.Native.ForegroundNudge.Activate(h)) return;
                 App.Instance?.AppendErrorLog(
                     $"dialog shown but foreground not acquired: {dlg.GetType().Name}");
             };

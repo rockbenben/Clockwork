@@ -180,10 +180,49 @@ public static class Win32
         catch { return false; }
     }
 
+    // ── 窗口幽灵化（Ghost Window）──
+    //
+    // 一个窗口的线程超过 HungWindowTimeout（默认 5 秒）没去取消息，系统就认定它「未响应」，
+    // 由 **DWM** 在原窗口的位置上盖一块自己的窗——那块灰白壳就是幽灵窗。
+    //
+    // **幽灵窗点得中，而且不继承我们的样式。** 它不属于本进程，我们那份 WS_EX_TRANSPARENT
+    // 到不了它身上；实测证据是「某点上的窗口是谁」问回来的正是幽灵窗的句柄而不是原窗
+    //（未公开 API HungWindowFromGhostWindow 存在的全部理由就是把原窗从幽灵手里换回来）。
+    // 于是：本程序有一扇**铺满整块屏**的置顶覆盖窗（手势笔迹，见 Views.GestureTrailWindow）
+    // → UI 线程一旦卡顿超过 5 秒（卡多久都有可能：整机忙、GC、调试器断下、别的进程把输入队列堵住）
+    // → 一块铺满整块屏、点得中的幽灵窗压在最上层 → **整个桌面点不动**。
+    // 而那块窗属于 dwm.exe，我们既摘不掉也关不掉——用户能试出来的唯一解法就是杀掉 dwm.exe
+    //（用户报的正是这个：「偶尔手势操作会造成无法点击，关闭桌面窗口管理器才正常」）。
+    //
+    // 关掉本进程的幽灵化，这条路就整个不存在：任何一扇窗都不会再被 DWM 顶上一块点得中的壳。
+    // 代价（进程级、一次性、**不可逆**）：UI 线程真卡住时窗口只是卡着不动，不再有那块
+    // 「未响应」的壳可以拖走、可以关。那点安慰换掉的是一整台电脑点不动，而 Clockwork 本来就是
+    // 托盘程序，窗口不是它的主场。
+    [DllImport("user32.dll")] private static extern void DisableProcessWindowsGhosting();
+
+    private static int _ghostDisabled;
+
+    /// <summary>关掉本进程的窗口幽灵化。幂等、不可逆（理由见上面那段）。</summary>
+    //
+    // 只给「会摆出全屏覆盖窗」的那条路调（见 App.ApplyMouseHook 里建笔迹窗那一处），
+    // 没开手势的人一点没变。里面有闸是因为那句 P/Invoke 是单向的、而调用点每次保存配置都会走到：
+    // 让它自己保证「一辈子只真发出去一次」，调用点就不必替它记这笔账。
+    public static void DisableWindowGhosting()
+    {
+        if (System.Threading.Interlocked.Exchange(ref _ghostDisabled, 1) == 1) return;
+        try { DisableProcessWindowsGhosting(); } catch { }
+    }
+
     [DllImport("user32.dll")] private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool attach);
     [DllImport("kernel32.dll")] private static extern uint GetCurrentThreadId();
 
     /// <summary>把窗口硬提到前台。返回是否真的到了前台。</summary>
+    //
+    // **调用方一律走 <see cref="ForegroundNudge.Activate"/>，不要直接调这个方法。**
+    // 它内部会用 AttachThreadInput 挂输入队列，于是**调用线程必须有消息泵**；而「找一条有泵的线程」
+    // 这件事本身是有代价的（UI 线程有泵，但它是跨进程同步调用，会把 UI 线程按住甚至永久挂住）。
+    // ForegroundNudge 把这份代价收进了一条专属的牺牲线程，并且给调用方加了超时。
+    // 直接调它 = 把「哪条线程来承担」这个问题又交回给了每一个调用点。
     //
     // 为什么不能只调 SetForegroundWindow：Windows 有前台锁，只有"刚响应了用户输入"的进程才准抢前台。
     // 全局热键（WM_HOTKEY）算，所以热键呼出面板一路顺畅；而**低级鼠标钩子里的中键长按不算**——
@@ -192,9 +231,23 @@ public static class Win32
     //
     // 通行解法是把自己的输入队列临时挂到当前前台线程上：挂上之后两个线程共享输入状态，
     // 前台锁不再挡我们。用完立刻摘掉——长期挂着会让两个进程的键盘焦点互相干扰。
+    //
+    // **这一句是 UI 线程上最可疑的阻塞点，所以包了一圈计时（见 Core.UiStallWatch）。**
+    // 它是**跨进程同步**的：SetForegroundWindow 会向"失去激活的那个窗口"同步投递
+    // WM_ACTIVATE / WM_KILLFOCUS，而调用期间本线程正挂在**前台线程的输入队列**上。
+    // 于是目标程序忙（在加载、在渲染、或自己卡着）时，本线程就跟着一起等——从前调用方为了
+    // 让 AttachThreadInput 有消息泵可消化那些同步消息，专门把它切到了 **UI 线程**上
+    //（见 ForegroundNudge 的类头注释：那一步把 UI 线程变成了受害者）。
+    // 更坏的一档：SetForegroundWindow 干脆不返回时，下面 finally 那句 detach 永远不执行，
+    // 本线程就**永久挂在别人的输入队列上**，两边一起不泵——那条路正是
+    // WindowManager 注释里写的「前台线程跟着一起卡死，DWM 重启才能解开」。
+    // 现在它跑在 ForegroundNudge 那条牺牲线程上，所以最坏也只牺牲那一条。
+    // 日志里那行 `ui thread slow: foreground-nudge took ...ms (thread=bg)` 就是它的指纹
+    //（标 bg 是对的：它已经不在 UI 线程上了）。
     public static bool ForceForeground(IntPtr hwnd)
     {
         if (hwnd == IntPtr.Zero) return false;
+        long t0 = Core.UiStallWatch.Begin();
         try
         {
             if (SetForegroundWindow(hwnd) && GetForegroundWindow() == hwnd) return true;   // 有豁免时这一下就够
@@ -212,6 +265,7 @@ public static class Win32
             finally { AttachThreadInput(mine, theirs, false); }
         }
         catch { return false; }
+        finally { Core.UiStallWatch.End("foreground-nudge", t0); }
     }
 
     /// <summary>此刻前台窗口所属进程的裸名（不含 .exe / 路径）。取不到返回空串。</summary>

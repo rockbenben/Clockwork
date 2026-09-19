@@ -102,7 +102,22 @@ public static class WindowManager
         // 走 ForceForeground 而不是裸 SetForegroundWindow：这里的调用大量来自手势 / 热键动作组
         // 与「已运行则激活」捷径，那些来源没有前台豁免，裸调只会被降级成任务栏闪烁。
         // ForceForeground 在被拒时用 AttachThreadInput 挂到前台线程的输入队列上补救（同面板那条路）。
-        Win32.ForceForeground(hs[0]);
+        //
+        // **必须由一条有消息泵的线程来调。** ForceForeground 内部 AttachThreadInput 把调用线程的输入队列
+        // 与前台线程共享，挂上之后 SetForegroundWindow 内部投递的同步消息（WM_ACTIVATE / WM_KILLFOCUS
+        // 等）需要调用线程 pump 消息才能消化。本方法被 StepRunner 从 Task.Run 后台线程调用，
+        // 那条线程没有消息泵——挂上后那些同步消息无人接收，整条 attach 链死结，前台线程跟着一起卡死，
+        // DWM 重启才能解开（Raymond Chen 2008、Alois Kraus 2018 实证）。
+        //
+        // **这条要求现在由 ForegroundNudge 那条专属泵线程满足，不再是「切到 UI 线程」。**
+        // 原先这里写的是 `disp.Invoke(() => Win32.ForceForeground(hs[0]))`——把 UI 线程当成了那条泵。
+        // 泵是有了，代价却转移到了最不该承担它的地方：那是**跨进程同步**调用，目标程序一忙
+        //（在加载、在渲染、或自己卡着）UI 线程就跟着一起等；SetForegroundWindow 干脆不返回时，
+        // detach 那句永远不执行，UI 线程**永久挂在别人的输入队列上**。而 UI 线程卡过 5 秒，
+        // DWM 就会在全屏笔迹窗上盖一块点得中的幽灵窗，整个桌面点不动。
+        // 那 4 个原本就在 UI 线程上的调用点（App.ShowMain / DialogForeground / QuickPanelWindow /
+        // 看门狗）也一并走这条泵线程：它们要的是「抢到了吗」这个答案，不是「在 UI 线程上抢」。
+        ForegroundNudge.Activate(hs[0]);
         Thread.Sleep(120);
         return IsForeground(process);
     }

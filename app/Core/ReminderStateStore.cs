@@ -105,13 +105,31 @@ public static class ReminderStateStore
 
     // 同步补写最新快照（进程退出兜底 + durable Save 共用）：持 WriteLock 与 RetryLoop 串行——
     // 若后台正写旧份，这里等它写完再写新份，最终盘上必是最新快照。失败不清队，留给后续机会再试。
+    //
+    // **整段计时是承重的，别删。** 这是本类唯一一条能卡住 UI 线程的路：两个调用方
+    //（App.OnExit 与 Save(durable: true)，即「提醒到点预存」与「今天不再提醒」）都在 UI 线程上，
+    // 而后台的 RetryLoop 持的是**同一把** WriteLock、做的是一模一样的 5×100ms 重试写。
+    // 于是最坏情形是「等它把五次写完 + 自己再写五次」，而本程序的配置目录在 D:\Backup 下 ——
+    // 那棵树里有 GoodSync 的 `_gsdata_`（说明在同步范围内），机器上还跑着坚果云客户端与它的
+    // 文件系统过滤驱动（NutstoreDriverSvc）。ConfigStore 那句「瞬时占用（索引/杀软持句柄）」
+    // 在本机是实景：每一次 File.WriteAllText 都可能真的阻塞住，而不是毫秒级返回。
+    //
+    // **等锁那一格此前完全没有名字。** ConfigStore.WriteTextAtomic 只给写本身计时
+    //（config-write:attemptN），而「排队等后台那把锁」的时间落在它的计时窗之外 ——
+    // 于是这条路上最长的那一段在日志里一个字都不留，正是本文件这个项目一直在治的病。
     public static void FlushPending()
     {
         string? path, json;
         lock (RetryLock) { path = _retryPath; json = _retryJson; }
         if (path == null || json == null) return;
-        bool ok;
-        lock (WriteLock) ok = ConfigStore.TryWriteTextAtomic(path, json, attempts: 5, delayMs: 100);
+        bool ok = false;   // 初值只为编译器：写那条路不抛，抛了也不会走到下面的 if
+        long t0 = UiStallWatch.Begin();
+        try
+        {
+            lock (WriteLock) ok = ConfigStore.TryWriteTextAtomic(path, json, attempts: 5, delayMs: 100);
+        }
+        // finally 而不是 return 前一句：这条路同样是「出问题的那一次最需要记录」。
+        finally { UiStallWatch.End("reminder-flush", t0); }
         if (ok)
             lock (RetryLock) { if (ReferenceEquals(_retryJson, json)) _retryJson = null; }
     }

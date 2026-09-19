@@ -30,6 +30,9 @@ public partial class MainWindow : Window
     // 端口页的自动刷新。只在「停在本页 + 窗口可见」时跑：本程序常驻托盘，
     // 隐起来还轮询是纯浪费。扫一轮 3ms，所以 5 秒一次的成本约等于零。
     private System.Windows.Threading.DispatcherTimer? _portsTimer;
+    // 「一次扫描还在飞」的闸（见 LoadPorts）。用 int 而不是 bool：它在后台线程上被放开，
+    // 走 Interlocked 是为了让「读—改—写」这一步本身是原子的，不必再去想内存可见性。
+    private int _portsScanning;
 
     // 设计器/兜底无参构造。
     public MainWindow()
@@ -926,9 +929,43 @@ public partial class MainWindow : Window
         else if (!want && _portsTimer.IsEnabled) _portsTimer.Stop();
     }
 
-    // 同步就够：扫端口 + 读命令行/工作目录整轮实测 3ms。
-    // （曾用 WMI 读命令行要 413ms，不得不放后台；改成直读 PEB 后这层异步就多余了。）
-    private void LoadPorts() => _ports?.SetItems(PortReader.GetEntries());
+    // 扫端口整轮**实测** 3ms（本机），但**不能因此就同步跑在 UI 线程上**。
+    //
+    // 那 3ms 是本机 + 本地盘的数字，而这条路里有三样会随环境变慢的东西：
+    //   · `Process.GetProcesses()`：本机 200 来个进程，逐个开句柄；
+    //   · 逐 PID 读 PEB 拿命令行 / 工作目录；
+    //   · `LooksLikeProject` 沿工作目录**往上 6 层 × 10 个标记**做文件系统探测
+    //     （`Directory.Exists` / `File.Exists`）——工作目录落在网络盘、UNC 路径、
+    //     或 OneDrive / Dropbox / 备份客户端挂钩的目录上时，**一次探测就能等满超时**。
+    //     本仓库自己就住在 `D:\Backup\...\Documents\...` 这种典型会被同步客户端挂钩的位置。
+    //
+    // 而这条路上还挂着一个 **5 秒一拍**的定时器（见 _portsTimer）。UI 线程被卡过 5 秒
+    // = DWM 在全屏笔迹窗上盖幽灵窗 = 整个桌面点不动（见 Core.UiStallWatch）。
+    // 一次几毫秒的收益，不值得拿这个去赌；扫描放后台，结果回 UI 线程。
+    //
+    // `SetItems` 必须在 UI 线程上跑（它改的是 ObservableCollection，见 PortsVm）。
+    private void LoadPorts()
+    {
+        if (_ports == null) return;
+        // 单飞：5 秒一拍的定时器、用户点刷新、杀进程后重扫三条路会叠在一起，
+        // 而一次扫描慢的时候叠起来只会更慢（每个都再跑一遍 Process.GetProcesses + 文件探测）。
+        if (System.Threading.Interlocked.Exchange(ref _portsScanning, 1) == 1) return;
+        Task.Run(PortReader.GetEntries).ContinueWith(t =>
+        {
+            List<PortEntry> items;
+            try { items = t.Result; } catch { items = new List<PortEntry>(); }
+            try
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    System.Threading.Interlocked.Exchange(ref _portsScanning, 0);
+                    _ports?.SetItems(items);
+                });
+            }
+            // 调度器正在关闭（窗口都要没了）：把闸放开，别让它永久卡住这一页的刷新。
+            catch { System.Threading.Interlocked.Exchange(ref _portsScanning, 0); }
+        });
+    }
 
     private void PRefresh_Click(object sender, RoutedEventArgs e) => LoadPorts();
     private void PSearch_TextChanged(object sender, TextChangedEventArgs e) { if (_ports != null) _ports.Search = PSearch.Text; }
@@ -989,9 +1026,26 @@ public partial class MainWindow : Window
         var msg = Lf("Confirm_KillPort", row.PortText, row.OwnersText);
         if (row.SiblingPorts.Count > 0) msg += " " + Lf("Confirm_KillPortAlso", row.SiblingPortsText);
         if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), msg, Views.ToastLevel.Warn)) return;
-        var err = PortReader.FreePort(row.Item);
-        if (err != "") Views.BrandDialog.Warn(this, "Clockwork", Lf("Ports_KillFail", row.PortText, err));
-        LoadPorts();   // 成败都重扫：成功要让那行消失，失败要让人看见它还在
+        // **杀进程这一步也不能在 UI 线程上等。** FreePort 对**每个**占用者调 Kill，
+        // 而 Kill 里是 `p.WaitForExit(2000)`——一个端口被三个进程占着，最坏就是 6 秒，
+        // 正好越过幽灵化的 5 秒阈值（见 Core.UiStallWatch）。放后台，结果回 UI 线程再报。
+        // item / portText 先取出来：回调回来时 row 可能已经被 LoadPorts 换掉了。
+        var item = row.Item;
+        var portText = row.PortText;
+        Task.Run(() => PortReader.FreePort(item)).ContinueWith(t =>
+        {
+            string err;
+            try { err = t.Result; } catch (Exception ex) { err = ex.GetBaseException().Message; }
+            try
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    if (err != "") Views.BrandDialog.Warn(this, "Clockwork", Lf("Ports_KillFail", portText, err));
+                    LoadPorts();   // 成败都重扫：成功要让那行消失，失败要让人看见它还在
+                });
+            }
+            catch { }   // 调度器正在关闭：窗口都要没了，没人要这份结果
+        });
     }
 }
 
