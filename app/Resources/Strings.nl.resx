@@ -737,4 +737,8 @@ Log: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Het gebaar werkt alleen wanneer deze app op de voorgrond is. Laat leeg om het in elke app te laten werken.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Veelgebruikte mappen</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Omgevingsvariabelen</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} klikken</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Klikstatistieken wissen</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Zet de kliktellingen van de paneltegels op nul. Alleen de statistieken worden gewist; geen instelling of tegel wordt gewijzigd.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>De klikstatistieken van alle paneltegels wissen? Dit kan niet ongedaan worden gemaakt.</value></data>
 </root>

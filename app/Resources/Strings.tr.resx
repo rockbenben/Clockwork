@@ -737,4 +737,8 @@ Günlük: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Hareket yalnızca bu uygulama ön plandayken tetiklenir. Her uygulamada çalışması için boş bırakın.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Sık kullanılan klasörler</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Ortam değişkenleri</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} tıklama</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Tıklama istatistiklerini temizle</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Panel karolarının tıklama sayılarını sıfırlar. Yalnızca istatistikler temizlenir; hiçbir ayar veya karo değiştirilmez.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Tüm panel karolarının tıklama istatistikleri temizlensin mi? Bu işlem geri alınamaz.</value></data>
 </root>

@@ -382,6 +382,9 @@ public partial class StepEditorWindow : Window
         // 手势在「鼠标手势」管理器里绑，这里只负责别把它弄丢——改一下动作参数就丢掉轨迹是静默数据丢失。
         r.Gesture = _original.Gesture;
         r.ForProcess = _original.ForProcess;
+        // 身份也不能丢：这是面板点击统计（Core.PanelUsageStore）的键。丢一次就是重新发一个，
+        // 那个格子改个参数就变成「从未点过」，之前的计数直接归零、且不报错。
+        r.Id = _original.Id;
 
         switch (kind)
         {

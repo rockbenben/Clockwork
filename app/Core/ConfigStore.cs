@@ -35,26 +35,43 @@ public static class ConfigStore
     // 原子写文本的唯一实现：Write（配置）与 ReminderStateStore（运行态）共用，写策略只此一份。
     // 整个「写临时 + 替换」都在重试循环内：临时与目标都可能被瞬时占用（OneDrive/索引/杀软持句柄，文件常在 Documents 下）；
     // 且 File.Replace 出错时已消耗 tmp，只有每轮重写临时文件，下次重试才有源可用、不退化成 FileNotFound 误报。
+    //
+    // **计时是承重的，别删。** 这是全程序唯一一条「在调用线程上反复重试并 Thread.Sleep」的文件 I/O，
+    // 而调用线程常常就是 UI 线程（App.SaveConfig ← 设置页/托盘菜单）。最坏情形是
+    // attempts×（被持句柄时的一次阻塞）+ 4×delayMs，几秒的量级；而上面那句注释点名的
+    // 「同步盘/索引器/杀软持句柄」在本机是**实景**：跑着坚果云（带文件系统过滤驱动 NutstoreDriverSvc）
+    // 与 GoodSync，配置目录又在 D:\Backup 下。
+    // 此前它一句计时都没有，于是「保存配置把 UI 线程按住 4 秒」在日志里什么都不留 ——
+    // 而它与「一次阻塞式 GC」「渲染 pass 卡住」在只有时长时长得一模一样。
+    // 名字带上第几次才成功：`config-write:attempt1` 是常态，`attempt3` 就说明有人持着句柄。
     private static bool WriteTextAtomic(string path, string text, int attempts, int delayMs, bool throwOnFail)
     {
         var tmp = path + ".tmp";
         var enc = new UTF8Encoding(false); // 无 BOM
-        for (int i = 0; ; i++)
+        long t0 = UiStallWatch.Begin();
+        int attempt = 0;
+        try
         {
-            try
+            for (int i = 0; ; i++)
             {
-                File.WriteAllText(tmp, text, enc);
-                if (File.Exists(path)) File.Replace(tmp, path, null); // 第三参 null=不留备份
-                else File.Move(tmp, path);
-                return true;
-            }
-            catch
-            {
-                // 重试耗尽（持久占用）→ 清掉本轮临时文件（尽力）；目标文件保持原样、绝不损坏。
-                if (i >= attempts - 1) { try { File.Delete(tmp); } catch { } if (throwOnFail) throw; return false; }
-                if (delayMs > 0) Thread.Sleep(delayMs);
+                attempt = i + 1;
+                try
+                {
+                    File.WriteAllText(tmp, text, enc);
+                    if (File.Exists(path)) File.Replace(tmp, path, null); // 第三参 null=不留备份
+                    else File.Move(tmp, path);
+                    return true;
+                }
+                catch
+                {
+                    // 重试耗尽（持久占用）→ 清掉本轮临时文件（尽力）；目标文件保持原样、绝不损坏。
+                    if (i >= attempts - 1) { try { File.Delete(tmp); } catch { } if (throwOnFail) throw; return false; }
+                    if (delayMs > 0) Thread.Sleep(delayMs);
+                }
             }
         }
+        // finally 而不是 return 前一句：throwOnFail 那条路是**抛出**，写盘失败同样要留下时长与次数。
+        finally { UiStallWatch.End($"config-write:attempt{attempt}", t0); }
     }
 
     public static RootConfig Read(string path) => Read(path, out _);
@@ -243,7 +260,55 @@ public static class ConfigStore
         // 上面那批空表/空元素的守卫排在迁移之前，因为迁移之前就有人遍历它；这一层没人早用，放这儿。
         foreach (var p in cfg.PanelPages)
             foreach (var s in p.Steps) { s.OnYes ??= new(); normalized |= NormalizeOnYes(s.OnYes); }
+        // 步骤身份。必须排在**上面两趟都结束之后**：这两趟会把 ActionGroups 里的步骤整批搬进
+        // PanelPages（MigratePanelPages）并补 g.Steps ??= new()，在此之前跑就漏掉被搬走的那些。
+        normalized |= AssignStepIds(cfg);
         return normalized;
+    }
+
+    /// <summary>一次性迁移：给四个清单里的步骤补稳定 Id（PanelSchema 3 → 4）。</summary>
+    //
+    // Id 是面板点击统计（Core.PanelUsageStore）的键。没有它就只能用「页 + 位置」做键，而位置
+    // 在用户拖一格就变——面板管理器里拖排序是正常用法，不是一次性迁移。
+    //
+    // **「整批发号」由 schema 门控，单条修补（空白/重复 id）不门控。**
+    // LaunchStep.Id 带 `Guid.NewGuid()` 初始值：JSON 里没有 `id` 键的步骤反序列化完就已经
+    // 拿着一个全新的非空 Guid，「id 为空」永远为假——所以升级那一趟分不出新旧，只能把
+    // **所有** id 重发一遍。这趟只能跑一次（否则每次启动重发 id，统计永远攒不起来，且不报错），
+    // 门就是 PanelSchema < 4。这与上方手势迁移「清空本身就是已迁移」的写法不同：那边是清一个
+    // 有语义的字段，这里是给缺字段的对象发新值，缺不缺完全读不出来。
+    //
+    // 门关上之后，非空 id 是已经落盘的身份，**绝不重发**；但手写 json 造出的 "" 或重复 id
+    // 仍要随见随修（与提醒 id 同一口径）：空白 id 的格子永远攒不起点击统计，重复 id 让两个
+    // 格子共用同一份计数。这种修补不抬版本号——它不是结构迁移，任何版本上都不该留着。
+    private static bool AssignStepIds(RootConfig cfg)
+    {
+        bool bulk = cfg.Settings.PanelSchema < 4;
+        var seen = new HashSet<string>();
+        bool touched = false;
+        // 注意别写 bulk || ...：|| 会短路掉 seen.Add，批发那一趟账本里就一个 id 都不进，
+        // 去重随之失效。两件事分开算。
+        void Consider(LaunchStep s)
+        {
+            // Add 必须无条件跑：写进 || 链里会被 bulk 短路，批发那一趟账本一个 id 都不进。
+            bool blank = string.IsNullOrWhiteSpace(s.Id);
+            bool duplicate = !seen.Add(s.Id);
+            if (!(bulk || blank || duplicate)) return;
+            s.Id = Guid.NewGuid().ToString();
+            seen.Add(s.Id);
+            touched = true;
+        }
+        foreach (var list in new[] { cfg.LaunchSteps, cfg.Gestures })
+            foreach (var s in list) Consider(s);
+        foreach (var g in cfg.ActionGroups)
+            foreach (var s in g.Steps) Consider(s);
+        foreach (var p in cfg.PanelPages)
+            foreach (var s in p.Steps) Consider(s);
+        // 版本号只随「整批发号」抬、而且只在真抬了内容之后抬：与 FillPanelPageDefaults 同一规矩
+        // （版本号先行会让这次启动的迁移被自己关掉，数据卡在半路）。空配置（四个清单都空）
+        // 不抬：没有步骤就没有东西需要身份，下次启动再跑一遍空趟也无代价。
+        if (touched && bulk) cfg.Settings.PanelSchema = 4;
+        return touched;
     }
 
     /// <summary>把「作为面板的一页」这个字段补齐：没表过态（null）的一律当作不是页。</summary>

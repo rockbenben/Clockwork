@@ -737,4 +737,8 @@ Nhật ký: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Cử chỉ chỉ kích hoạt khi ứng dụng này ở nền trước. Để trống để dùng trong mọi ứng dụng.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Thư mục thường dùng</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Biến môi trường</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} lần nhấp</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Xóa thống kê nhấp</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Đặt lại số lần nhấp của các ô bảng điều khiển về không. Chỉ xóa thống kê; không thay đổi cài đặt hay ô nào.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Xóa thống kê nhấp của mọi ô trên bảng điều khiển? Hành động này không thể hoàn tác.</value></data>
 </root>

@@ -737,4 +737,8 @@ Registro: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>El gesto se activa solo cuando esta aplicación está en primer plano. Déjalo en blanco para que funcione en cualquier aplicación.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Carpetas comunes</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Variables de entorno</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} clics</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Borrar estadísticas de clics</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Restablece a cero el recuento de clics de los mosaicos. Solo se borran las estadísticas; no se modifica ninguna opción ni mosaico.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>¿Borrar las estadísticas de clics de todos los mosaicos del panel? Esta acción no se puede deshacer.</value></data>
 </root>

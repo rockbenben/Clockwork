@@ -737,4 +737,8 @@
   <data name="Gesture_AppHint" xml:space="preserve"><value>जेस्चर तभी चलता है जब यह ऐप अग्रभाग में हो। हर ऐप में चलाने के लिए इसे खाली छोड़ें।</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>सामान्य फ़ोल्डर</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>पर्यावरण चर</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} क्लिक</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>क्लिक आँकड़े रीसेट करें</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>पैनल टाइलों की क्लिक संख्या शून्य पर रीसेट होती है। केवल आँकड़े साफ़ होते हैं; कोई सेटिंग या टाइल नहीं बदलता।</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>सभी पैनल टाइलों के क्लिक आँकड़े साफ़ करें? इसे पूर्ववत नहीं किया जा सकता।</value></data>
 </root>

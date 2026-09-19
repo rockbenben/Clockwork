@@ -710,6 +710,10 @@
   <data name="Panel_SearchNone" xml:space="preserve"><value>没有匹配的动作。换个词试试，或按 Esc 回到面板。</value></data>
   <data name="Panel_HintBack" xml:space="preserve"><value>Esc 返回</value></data>
   <data name="Panel_SearchMore" xml:space="preserve"><value>只铺出前 {0} 个，共 {1} 个匹配。再打几个字缩小范围。</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>点击 {0} 次</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>清空点击统计</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>把面板格子的点击计数归零。只清统计，不动任何配置与格子。</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>清空所有面板格子的点击统计吗？这一步不能撤销。</value></data>
   <data name="Settings_Theme" xml:space="preserve"><value>主题</value></data>
   <data name="Theme_dark" xml:space="preserve"><value>深色</value></data>
   <data name="Theme_light" xml:space="preserve"><value>浅色</value></data>

@@ -737,4 +737,8 @@
   <data name="Gesture_AppHint" xml:space="preserve"><value>เจสเจอร์จะทำงานเฉพาะเมื่อแอปนี้อยู่หน้าสุดเท่านั้น เว้นว่างไว้เพื่อให้ทำงานในทุกแอป</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>โฟลเดอร์ที่ใช้บ่อย</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>ตัวแปรสภาพแวดล้อม</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} ครั้ง</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>ล้างสถิติการคลิก</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>รีเซ็ตจำนวนคลิกของไทล์แผงควบคุมเป็นศูนย์ ลบเฉพาะสถิติเท่านั้น จะไม่แตะต้องการตั้งค่าหรือไทล์ใด ๆ</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>ล้างสถิติการคลิกของไทล์ทั้งหมดบนแผงควบคุมหรือไม่ การกระทำนี้ไม่สามารถย้อนกลับได้</value></data>
 </root>

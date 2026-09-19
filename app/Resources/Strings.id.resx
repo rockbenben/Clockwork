@@ -737,4 +737,8 @@ Log: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Gerakan hanya terpicu saat aplikasi ini berada di latar depan. Biarkan kosong agar berlaku di semua aplikasi.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Folder umum</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Variabel lingkungan</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} klik</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Hapus statistik klik</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Menyetel ulang jumlah klik pet panel ke nol. Hanya statistik yang dihapus; pengaturan dan pet tidak diubah.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Hapus statistik klik untuk semua pet panel? Tindakan ini tidak dapat dibatalkan.</value></data>
 </root>

@@ -737,4 +737,8 @@ Registro: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>O gesto só dispara quando este aplicativo está em primeiro plano. Deixe em branco para valer em todos os aplicativos.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Pastas comuns</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Variáveis de ambiente</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} cliques</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Limpar estatísticas de cliques</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Zera a contagem de cliques dos blocos do painel. Apenas as estatísticas são limpas; nenhuma configuração ou bloco é alterado.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Limpar as estatísticas de cliques de todos os blocos do painel? Esta ação não pode ser desfeita.</value></data>
 </root>

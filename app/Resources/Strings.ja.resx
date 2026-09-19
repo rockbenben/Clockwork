@@ -738,4 +738,8 @@
   <data name="Gesture_AppHint" xml:space="preserve"><value>このアプリが前面にあるときだけジェスチャーが発動します。すべてのアプリで有効にするには空欄のままにしてください。</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>よく使うフォルダー</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>環境変数</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>クリック {0} 回</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>クリック統計を消去</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>パネルのタイルのクリック数をゼロに戻します。統計だけを消去し、設定やタイルには一切手を加えません。</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>すべてのパネルタイルのクリック統計を消去しますか？この操作は元に戻せません。</value></data>
 </root>

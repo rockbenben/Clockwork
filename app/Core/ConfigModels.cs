@@ -13,6 +13,12 @@ public sealed class OnYes
 
 public sealed class LaunchStep
 {
+    // 稳定身份：面板格子的点击统计按它做键（见 Core.PanelUsageStore）。改文案、改名、
+    // 拖位、删了重建同名格子都不会串统计。与 Reminder.Id 同一个道理。
+    // 只在新建步骤时发；盘上老配置没有这个键，由 ConfigStore.Normalize 的一次性迁移补，
+    // 迁移门是 PanelSchema < 4——不能用「id 为空」当判据：这个初始值让缺键的步骤
+    // 反序列化后带着一个全新的非空 Guid，空值检查永远不成立，id 就会每次重启都换一次。
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     public bool Enabled { get; set; } = true;
     public string Kind { get; set; } = "";
     public string Label { get; set; } = "";
@@ -397,7 +403,7 @@ public sealed class RootConfig
             Reminders = DefaultReminders(),
             // 首份配置直接写成当前模型，不留给迁移去改：写成老样子的话，每次读默认配置都会触发一次
             // 迁移改写，Read_clean_file_reports_no_normalization 会红——它红得对，说明首份配置不是规范形。
-            Settings = new AppSettings { PanelSchema = 3 },
+            Settings = new AppSettings { PanelSchema = 4 },
             ActionGroups = actions,
             PanelPages = DefaultPanelPages(actions),
             Gestures = DefaultGestures(),

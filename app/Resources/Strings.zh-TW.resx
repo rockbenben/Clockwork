@@ -738,4 +738,8 @@
   <data name="Gesture_AppHint" xml:space="preserve"><value>手勢只在此程式位於前景時觸發；留空則在所有程式中生效。</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>常用資料夾</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>系統環境變數</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>點擊 {0} 次</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>清空點擊統計</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>把面板格子的點擊計數歸零。只清統計，不動任何設定與格子。</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>清空所有面板格子的點擊統計嗎？此步驟無法復原。</value></data>
 </root>

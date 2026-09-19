@@ -740,4 +740,8 @@ Log: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>The gesture fires only when this app is in the foreground. Leave it blank to work in every app.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Common Folders</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Environment Variables</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} clicks</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Reset click stats</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Resets every panel tile's click count to zero. Only the statistics are cleared; no settings or tiles are changed.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Clear click statistics for all panel tiles? This cannot be undone.</value></data>
 </root>

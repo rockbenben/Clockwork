@@ -737,4 +737,8 @@ Registro: {1}</value></data>
   <data name="Gesture_AppHint" xml:space="preserve"><value>Il gesto si attiva solo quando questa app è in primo piano. Lascia vuoto per funzionare in ogni app.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>Cartelle comuni</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Variabili d’ambiente</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} clic</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>Azzera statistiche clic</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Azzera i conteggi dei clic di tutti i riquadri. Vengono cancellate solo le statistiche; nessuna impostazione o riquadro viene modificato.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Azzerare le statistiche dei clic di tutti i riquadri? Operazione non annullabile.</value></data>
 </root>

@@ -108,6 +108,11 @@
                  被按钮压掉）。交给 * 列量宽度，换行才真的会发生。
                  与端口 / 系统启动项两处页脚同一条处理，那边的注释记着同一个坑。
                  这四句话不精简：它们教的全是拖拽手势——看界面看不出来的那一类，正该留在页脚。 -->
+            <!-- 清空点击统计。只在有数据时出现（App 传进来的字典为空就是隐藏），
+                 不套进上面的 WrapPanel：它是这一个窗口的动作，不属于面板外观那条设置。 -->
+            <Button Grid.Column="0" x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32"
+                    MinWidth="104" Margin="0,0,12,0" HorizontalAlignment="Right"
+                    Click="ResetUsage_Click" Visibility="Collapsed" ToolTip="{loc:Loc Btn_ResetUsageTip}"/>
             <TextBlock Grid.Column="0" Text="{loc:Loc Panel_ManagerHint}" Style="{StaticResource FieldHint}"
                        TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,14,0"/>
             <Button Grid.Column="1" Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32" Click="Close_Click"/>

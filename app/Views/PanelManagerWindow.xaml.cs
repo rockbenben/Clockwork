@@ -59,6 +59,12 @@ public partial class PanelManagerWindow : Window
 
     private readonly RootConfig _config;
     private readonly Action _save;
+
+    // 面板格子的点击统计（键是步骤 Id）。两个可选参数，**默认值不改变任何现有调用点**——
+    // 没传就当作从未统计过：角标不画、悬停不追加、清空按钮不出现。
+    // 传的是**引用**不是拷贝：App 记一次点击，这边看到的立即是新数，不必来回同步。
+    private readonly IReadOnlyDictionary<string, PanelUsageStore.TileUsage>? _usage;
+    private readonly Action? _resetUsage;
     // 正在编的是哪一页。存**引用**不存下标：拖页签会重排页列表，下标会指到隔壁那一页去。
     // 它被删掉了的话，重画时自动退回第一页。
     private PanelPage? _open;
@@ -83,14 +89,36 @@ public partial class PanelManagerWindow : Window
     private Point? _dragFrom;
     private bool _dragging;   // 拖动中：抬起时的那次 Click 要吞掉，不然拖完还会顺手执行/打开编辑器
 
-    public PanelManagerWindow(RootConfig config, Action save)
+    public PanelManagerWindow(RootConfig config, Action save,
+        IReadOnlyDictionary<string, PanelUsageStore.TileUsage>? usage = null, Action? resetUsage = null)
     {
         InitializeComponent();
         Native.DarkWindow.Apply(this);
         WindowSizing.FitToWorkArea(this);
         _config = config;
         _save = save;
+        _usage = usage;
+        _resetUsage = resetUsage;
+        // 没数据就不给这颗按钮留一个只能点出「确定要清空吗」的位置。
+        ResetUsageBtn.Visibility = (_usage is { Count: > 0 } && _resetUsage != null)
+            ? Visibility.Visible : Visibility.Collapsed;
         LoadPanelLook();
+        RenderPages();
+    }
+
+    // 这个格子被点过几次。没有 = 从未统计过（角标不画）。
+    private long ClicksOf(LaunchStep step)
+        => _usage is not null && step.Id.Length > 0 && _usage.TryGetValue(step.Id, out var u) ? u.Clicks : 0;
+
+    // 清空：统计是辅助信息，但它是这份文件里唯一的不可再生的东西（点击历史没有第二个来源），
+    // 所以照 destructive 那一族的口径先问一句。确认完只动统计，配置一根汗毛不碰——
+    // 不碰 _config 也就不会触发动作组热键重绑那一串副作用。
+    private void ResetUsage_Click(object sender, RoutedEventArgs e)
+    {
+        if (_resetUsage == null) return;
+        if (!BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), Strings.Get("Confirm_ResetUsage"), ToastLevel.Warn)) return;
+        _resetUsage();
+        ResetUsageBtn.Visibility = Visibility.Collapsed;
         RenderPages();
     }
 
@@ -812,9 +840,14 @@ public partial class PanelManagerWindow : Window
     {
         var b = NewCell(it.Label, it.Enabled ? 1.0 : 0.4);
         b.Tag = new CellRef(it.Page, it.Step);
-        b.ToolTip = StepDisplay.StepSummary(it.Step);   // 标题是短的，悬停这句是全的
+        // 悬停这句是全的；有点过就追加点击数，没有就只留原来的句子（不留一个空尾巴）。
+        var clicks = ClicksOf(it.Step);
+        var tip = StepDisplay.StepSummary(it.Step);
+        if (clicks > 0) tip += $"  · {Strings.Lf("Panel_UsageCount", clicks)}";
+        b.ToolTip = tip;
         // 方框边长 = 字形字号 × 1.5，与真实面板同一条算法（见 QuickPanelWindow 那段说明）。
         SetCellIcon(b, it.Icon, System.Math.Round(Metrics.GlyphFont * 1.5));
+        SetClickBadge(b, clicks);
         // 拖完那一下抬起仍会触发 Click，_dragging 把它吞掉——否则拖一次就顺手打开了编辑器。
         b.Click += (_, _) => { if (!_dragging) EditStep(it.Page, it.Step); };
 
@@ -873,12 +906,16 @@ public partial class PanelManagerWindow : Window
                 Foreground = (Brush)FindResource("BrushPaper"),
             });
 
+        // 内容包一层 Grid：StackPanel 居中（与原来一模一样），右下角留一格给点击次数角标。
+        // **这层壳是有代价的**——SetCellIcon 原来假设 `Content` 就是那个 StackPanel，
+        // 内容一旦换壳它就在 guard 处静默返回，每格的图标全都不画，而且不报错。
+        // 所以壳与 guard 必须同一次改（见 SetCellIcon / CellStack）。
         var cell = new Button
         {
             // 与真实面板同一个样式（Theme.xaml 的 Tile）：它自带常态透明 / 悬停提亮 / 焦点环 / 停用压暗，
             // 而且 **Padding 为 0** —— 默认按钮样式的 7,7 会把两行标签的第二行挤掉半截。
             Style = (Style)FindResource("Tile"),
-            Content = stack,
+            Content = new Grid { Children = { stack } },
             Width = m.Width,
             Height = m.Height,
             Margin = new Thickness(PanelMetrics.TileGap),
@@ -897,10 +934,16 @@ public partial class PanelManagerWindow : Window
         return cell;
     }
 
+    // 格子里那个 StackPanel。内容外面套了一层 Grid（用来放右下角的点击次数角标），
+    // 所以不能直接 `cell.Content is StackPanel` 断言——那种写法在换壳后会于 guard 处静默返回，
+    // 于是**每一格的图标都不画**，且不抛异常、不进日志，只有人眼看见满屏空格。
+    private StackPanel? CellStack(Button cell)
+        => cell.Content is Grid g ? g.Children.OfType<StackPanel>().FirstOrDefault() : cell.Content as StackPanel;
+
     // 与面板同一条取图标的路（画法见 IconVisual，与三个编辑器里的预览块共用一份）。
     private void SetCellIcon(Button cell, PanelIconSpec spec, double size)
     {
-        if (cell.Content is not StackPanel sp || sp.Children.Count == 0) return;
+        if (CellStack(cell) is not { } sp || sp.Children.Count == 0) return;
         var box = new Grid { Height = size, Margin = new Thickness(0, 2, 0, 4) };
         box.Children.Add(IconVisual.Make(spec, size, (Brush)FindResource("BrushPaper")));
         // 先摘再插，不能直接给下标赋值：WPF 的 UIElementCollection 不允许覆盖一个已占用的位置
@@ -908,6 +951,34 @@ public partial class PanelManagerWindow : Window
         sp.Children.RemoveAt(0);
         sp.Children.Insert(0, box);
     }
+
+    // 右下角的点击次数角标：只在**面板管理器**里画（面板本身保持干净，统计是回顾用的，不是提示用的）。
+    // 没有计数就不建元素，而不是建好再折叠——空位（AddSlot）走同一个画法，不该凭空多出子节点。
+    private void SetClickBadge(Button cell, long clicks)
+    {
+        if (clicks <= 0) return;
+        var grid = cell.Content as Grid;
+        if (grid == null) return;
+        if (grid.Children.OfType<TextBlock>().Any(t => ReferenceEquals(t.Tag, ClickBadgeTag))) return;
+        grid.Children.Add(new TextBlock
+        {
+            Text = clicks > 999 ? "999+" : clicks.ToString(),
+            FontFamily = (FontFamily)FindResource("FontMono"),
+            // 字号跟格子档位走，但要有下限：紧凑档的 GlyphFont 才 18，等比 0.42 会小到读不出。
+            FontSize = System.Math.Max(9, System.Math.Round(Metrics.GlyphFont * 0.42)),
+            Foreground = (Brush)FindResource("BrushFaint"),
+            // 不能简写成 HorizontalAlignment.Right：本类继承自 Control，那个名字在成员里先解析成
+            // **这个窗口的实例属性** HorizontalAlignment，于是报「不能用实例引用访问成员」——
+            // 编译器不帮你想到枚举。
+            HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+            VerticalAlignment = System.Windows.VerticalAlignment.Bottom,
+            Margin = new Thickness(0, 0, 4, 2),
+            // 标记身份，重画这一格时才能识别旧的角标（NewCell 每次都新建，所以实际不会撞上）。
+            Tag = ClickBadgeTag,
+        });
+    }
+
+    private static readonly object ClickBadgeTag = new();
 
     // ── 拖动排序 ──
     //

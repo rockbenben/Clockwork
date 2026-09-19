@@ -737,4 +737,8 @@
   <data name="Gesture_AppHint" xml:space="preserve"><value>لا تعمل الإيماءة إلا عندما يكون هذا التطبيق في المقدمة. اتركه فارغًا لتعمل في كل التطبيقات.</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>مجلدات شائعة</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>متغيرات البيئة</value></data>
+  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} نقرات</value></data>
+  <data name="Btn_ResetUsage" xml:space="preserve"><value>مسح إحصاءات النقر</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>يُصفّر عدّادات النقر على جميع مربّعات اللوحة. يُمسَح الإحصاء فقط دون تغيير أي إعداد أو مربّع.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>هل تريد مسح إحصاءات النقر لجميع مربّعات اللوحة؟ لا يمكن التراجع عن هذه الخطوة.</value></data>
 </root>

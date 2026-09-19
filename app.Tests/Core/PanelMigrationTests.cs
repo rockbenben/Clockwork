@@ -71,7 +71,9 @@ public class PanelPageDefaultsTests
     {
         var cfg = Old(Legacy("专注"));
         Assert.True(ConfigStore.Normalize(cfg));
-        Assert.Equal(3, cfg.Settings.PanelSchema);
+        // 0 → 3（面板页默认值）之后又被步骤 id 迁移抬到 4：Legacy 组里带着一个步骤，
+        // 升级那一趟给四个清单里所有步骤发号。空配置才停在 3，见 StepIdMigrationTests。
+        Assert.Equal(4, cfg.Settings.PanelSchema);
         Assert.False(ConfigStore.Normalize(cfg));
     }
 
