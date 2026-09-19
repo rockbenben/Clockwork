@@ -14,6 +14,10 @@ TestResults/
 Thumbs.db
 desktop.ini
 .claude/
+# AI 助手的本地工作目录：跨会话记忆（memory/*.md）、计划草稿等。
+# 同 .claude/ 的口径——它是**这台机器上这个工作副本**的上下文，不是项目的一部分：
+# 里面会写进本机绝对路径、临时诊断结论、还没定下来的取舍，换个开发者就没有意义了。
+.workbuddy-ai/
 .vs/
 # 兜底 TEMP：仅当系统 %TEMP% 全部不可写时，才在应用目录下创建（极少见）
 .temp/
