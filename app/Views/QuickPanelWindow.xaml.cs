@@ -89,10 +89,14 @@ public partial class QuickPanelWindow : Window
     private bool _closing;
     private bool _menuOpen;   // 右键菜单挂着：此刻的失焦是菜单造成的，不是用户点了别处
     private bool _everActivated;   // Show 后到底真激活过没有：被前台锁拒掉时的即刻 Deactivated 不能关窗
+    private int _watchTick;        // 看门狗已走过的拍数（补抢额度）：提成字段是为了 Revive 能把它清零重满
     private bool _searching;  // 搜索态：凹坑里铺的是搜索结果，不是某一页
     private bool _hasSearch;  // 这个面板装了搜索吗（动作够多才装，见 BuildWaist）
     private List<PanelTile> _hits = new();   // 当前搜索结果，按名次排好（回车跑第一个）
     private DispatcherTimer? _focusWatch;
+
+    /// <summary>Show 之后到底真激活过没有。App.TogglePanel 靠它分辨僵尸与正常面板（见 PanelFocus.DecideToggle）。</summary>
+    public bool EverActivated => _everActivated;
 
     /// <param name="pages">用户自己的那些页：动作组、以及展开成单格的动作。</param>
     /// <param name="ops">夹板上那排自带操作：重跑清单 / 停止 / 勿扰 / 打开窗口。</param>
@@ -901,15 +905,18 @@ public partial class QuickPanelWindow : Window
     // 任务栏闪烁——面板出现了却收不到键盘，方向键和 Esc 全部失灵，只能用鼠标点掉。
     // SetForegroundWindow 走的是「本进程刚响应了一次全局热键」这条豁免路径，此刻调用是允许的。
     //
-    // 返回是否真的拿到了前台。中键长按那条路没有豁免，开机后第一次抢前台可能失败——
-    // 调用方据此留一行证据（见 App.TogglePanel），看门狗还会在第一个 250ms 补抢一次。
+    // 返回是否真的拿到了前台。中键长按那条路没有豁免，抢前台失败并不少见——
+    // 调用方据此留一行证据（见 App.TogglePanel），看门狗会在 ~2 秒的额度窗口内逐拍补抢
+    //（见 PanelFocus.MaxRetries）；仍不成则面板留着，下一次「唤出」走 Revive 分支救活它。
     public bool Popup()
     {
         Show();
         // ForceForeground 而不是裸的 SetForegroundWindow：中键长按那条路没有前台锁豁免，
         // 抢不到前台的话面板既收不到键盘、也永远不会触发「失焦即关」（见 Win32.ForceForeground）。
+        // 走 ForegroundNudge 的专属泵线程（带 1200ms 超时）：原先直接在 UI 线程上调，
+        // 目标程序一忙就会把 UI 线程按住——而面板自己就在 UI 线程上，卡的就是它。
         bool foreground;
-        try { foreground = Native.Win32.ForceForeground(new WindowInteropHelper(this).Handle); }
+        try { foreground = Native.ForegroundNudge.Activate(new WindowInteropHelper(this).Handle); }
         catch { foreground = false; }
         Activate();
         FocusFirstTile();
@@ -917,36 +924,67 @@ public partial class QuickPanelWindow : Window
         return foreground || IsActive;
     }
 
-    // 看门狗：定期确认自己还在前台，不在就关。
+    // 看门狗：定期确认自己还在前台，不在就按 PanelFocus.WatchTick 的裁决行事。
     //
     // Deactivated 事件是主路，这条是兜底——它专治「从来没激活过」那一类：那种情况下
     // Deactivated 一次都不会来，面板会一直挂在屏幕上，只能靠 Esc 或点格子才消失。
     // 只有**曾经拿到过前台**才允许它关窗：否则一个抢不到前台、但用鼠标仍然点得动的面板
-    // 会在 250 毫秒后自己消失，那比不关更糟。
+    // 会被关掉，那比不关更糟。
+    //
+    // 从未激活的那一类不再只补抢一次：旧版第一个 250ms 补抢一次就收手，而补抢那一下
+    // 同样没有前台豁免、同样可能被拒——面板照样挂成一块收不到键盘的浮窗。现在在整个
+    // 额度窗口里逐拍重试（PanelFocus.MaxRetries ≈ 2 秒），额度用尽记一行 GiveUp 就收手，
+    // 面板留在屏幕上（可见可点），下一次「唤出」经 TogglePanel 的 Revive 分支救活它。
+    // 判据本身在 Core.PanelFocus：分支挪错、额度被删，测试会红。
     private void StartFocusWatch()
     {
         bool hadFocus = false;
-        bool retried = false;
+        _watchTick = 0;
         _focusWatch = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
         _focusWatch.Tick += (_, _) =>
         {
-            if (_closing || _menuOpen) return;   // 右键菜单挂着时的失焦不算
+            if (_closing || _menuOpen) return;   // 右键菜单挂着时的失焦不算，也不吃补抢额度
             var mine = new WindowInteropHelper(this).Handle;
             if (mine == 0) return;
             bool now = Native.Win32.GetForegroundWindow() == mine;
-            if (now) { hadFocus = true; return; }
-            // 头一个 250ms 还没抢到前台：中键长按没有「刚响应用户输入」的豁免，
-            // 开机后第一次最容易失败，补抢一次——而不是任由它挂成一块收不到键盘的浮窗。
-            if (!hadFocus && !retried)
+            switch (PanelFocus.WatchTick(hadFocus, now, _everActivated, _watchTick))
             {
-                retried = true;
-                try { Native.Win32.ForceForeground(mine); } catch { }
-                Activate();
-                return;
+                case PanelWatchAction.None: break;
+                case PanelWatchAction.Retry:
+                    try { Native.ForegroundNudge.Activate(mine); } catch { }
+                    Activate();
+                    break;
+                case PanelWatchAction.Dismiss: Dismiss(); break;
+                case PanelWatchAction.GiveUp:
+                    // 只在这一拍记一次：额度用尽仍没抢到。面板留着（可见可点），
+                    // 再按一次「唤出」走 TogglePanel 的 Revive 分支，GiveUp 不是死局。
+                    App.Instance?.AppendErrorLog("panel gave up foreground retry (never activated)");
+                    break;
             }
-            if (hadFocus) Dismiss();
+            if (now) hadFocus = true;
+            _watchTick++;
         };
         _focusWatch.Start();
+    }
+
+    // 救活一块从未激活的面板：再抢一次前台，并把看门狗的补抢额度重新上满。
+    //
+    // 与 Popup 的区别：不 Show（窗本来就在）、不重新摆位——toggle 的语义是「还是那块面板」，
+    // 不是「再呼出一次」；要跟着光标跑是另一个决定，别顺手改。
+    // 看门狗计时器必然还活着（只有 Dismiss 停它，而这块面板从没被 Dismiss 过），
+    // 把 _watchTick 清零就等于重新拿满额度。
+    // 返回是否抢到了前台，App.TogglePanel 据此留日志。
+    public bool Revive()
+    {
+        if (_closing || _menuOpen) return false;   // 关闭中 / 右键菜单挂着时都不动
+        var hwnd = new WindowInteropHelper(this).Handle;
+        if (hwnd == 0) return false;
+        bool ok;
+        try { ok = Native.ForegroundNudge.Activate(hwnd); } catch { ok = false; }
+        Activate();
+        FocusFirstTile();
+        _watchTick = 0;   // 补抢额度重新上满；计时器还在，下一拍照常走 WatchTick
+        return ok || IsActive;
     }
 
     // 焦点落在第一个可用的格子：呼出后直接方向键 + 回车就能用，手不必先摸鼠标。
