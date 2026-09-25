@@ -48,13 +48,15 @@ public class PanelFocusLandingTests
         Assert.Contains("e.Handled = true;", body);
     }
 
-    // GiveUp 观察拍的接线守卫：裁决在 Core（有纯函数用例），但「僵尸态才观察、Revive 清零计数」
-    // 这两句活在窗口里，跑不了单测——它们断了没有症状，只会把修好的「失焦不关」放回来。
+    // GiveUp/半激活观察拍的接线守卫：裁决在 Core（有纯函数用例），但「没有哪一拍见过真前台才观察、
+    // Revive 清零计数」这两句活在窗口里，跑不了单测——它们断了没有症状，只会把修好的「失焦不关」放回来。
     [Fact]
     public void Zombie_watch_is_wired_to_the_giveup_state_and_reset_on_revive()
     {
         var src = Src("Views", "QuickPanelWindow.xaml.cs");
-        Assert.Contains("if (!_everActivated && _watchTick > PanelFocus.MaxRetries && !now)", src);
+        // 门必须是 hadFocus（OS 真相）而不是 _everActivated：半激活面板 ever=True，
+        // 用 ever 判它就永远落在所有关闭分支的缝里（见观察块注释里的部署日志指纹）。
+        Assert.Contains("if (!hadFocus && _watchTick > PanelFocus.MaxRetries && !now)", src);
         Assert.Contains("PanelFocus.ZombieShouldDismiss(otherFg, inside, _outsideTicks)", src);
         // 光标判定不了时按「还在用」处理：这一路的失败方向必须是不关。
         int a = src.IndexOf("private bool CursorInsidePanel()");

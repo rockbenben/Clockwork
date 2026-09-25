@@ -984,12 +984,19 @@ public partial class QuickPanelWindow : Window
                     App.Instance?.AppendErrorLog("panel gave up foreground retry (never activated)");
                     break;
             }
-            // GiveUp 观察拍：补抢全部失败、且这一拍仍不在前台的僵尸面板，若「前台属于别的程序 +
-            // 光标离开面板矩形且连续 8 拍（≈2 秒）没回来」三盏灯齐亮，就按「用户已经走开」收起——
-            // 僵尸收不到键盘，光标又不在矩形内，鼠标点格子这条用法也没了，留着就是「失焦不关」
-            // 的投诉本体。三盏灯各自的理由与失败方向都写在 Core.PanelFocus.ZombieShouldDismiss。
+            // 观察拍：任何一块**没有哪一拍真正见过前台**的面板（从未激活的僵尸、以及下面这种「半激活」），
+            // 若「前台属于别的程序 + 光标离开面板矩形且连续 8 拍（≈2 秒）没回来」三盏灯齐亮，
+            // 就按「用户已经走开」收起。三盏灯各自的理由与失败方向都写在 Core.PanelFocus.ZombieShouldDismiss。
+            //
+            // 判据从「!_everActivated」放宽到「!hadFocus」是因为实测抓到一个落在所有分支缝里的类别
+            //（部署日志 2026-09-26：连续 90+ 拍 now=False hadFocus=False ever=True，直到用户手动切窗才关）：
+            // ForegroundNudge 校验前台是在 AttachThreadInput 挂着的那一刻做的，detach 后系统把前台回滚——
+            // WPF 的 Activated 已发出（ever=True），但看门狗没有任何一拍见到真前台（hadFocus=False）。
+            // 于是 WatchTick 的 Dismiss（要 hadFocus）、Retry（要 !everActivated）、僵尸观察（要 !everActivated）
+            // 全都不认它，面板永久挂屏。hadFocus 是 OS 真相，把这一类比 everActivated 的口径宽，
+            // 而误伤半径没有变大：真在前台、或用户光标还停在面板上的，三盏灯先把它挡下。
             // _menuOpen 的门在拍子最顶上（挂着菜单不吃拍也不判），孤儿菜单场景天然被挡。
-            if (!_everActivated && _watchTick > PanelFocus.MaxRetries && !now)
+            if (!hadFocus && _watchTick > PanelFocus.MaxRetries && !now)
             {
                 bool inside = CursorInsidePanel();
                 _outsideTicks = inside ? 0 : _outsideTicks + 1;
@@ -1001,7 +1008,7 @@ public partial class QuickPanelWindow : Window
                     return;
                 }
             }
-            else if (_watchTick <= PanelFocus.MaxRetries || _everActivated) _outsideTicks = 0;
+            else _outsideTicks = 0;   // 不在观察窗口里（还在补抢额度内 / 见过真前台 / 这一拍就在前台）：计数清零
             // 诊断探针（「失焦不关」排查）：不在前台时每秒留一行三态快照。
             // 若面板还在屏幕上、你能打字，而这组行持续 now=False hadFocus=False ever=True——
             // 那就是「半激活」态：WPF 认为自己是激活的（AttachThreadInput 共享键盘），

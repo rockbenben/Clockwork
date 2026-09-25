@@ -63,7 +63,7 @@ public static class PanelFocus
     // 把光标带回来（格子就在眼前），前者会持续。拍数与补抢额度同量级，不是随手挑的。
     public const int ZombieDwellTicks = 8;
 
-    /// <summary>僵尸面板（从未激活、补抢已 GiveUp）的观察拍裁决：三盏灯**同时**亮才关。</summary>
+    /// <summary>「没有哪一拍见过真前台」的面板（从未激活的僵尸、detach 后被回滚的半激活）观察拍裁决：三盏灯**同时**亮才关。</summary>
     //
     //   1. foregroundIsOtherProcess —— 前台确实是别的程序的窗口。自家主窗/toast/提醒弹窗都不算：
     //      用户可能正对着这套自家 UI，「前台短暂不是面板」≠「用户走了」。
@@ -71,8 +71,10 @@ public static class PanelFocus
     //      手悬在格子上方」永不会被切；切的是「人明确走开」这一种姿势。
     //   3. consecutiveTicksOutside ≥ ZombieDwellTicks —— 离开要持续约 2 秒，单拍抖动不算数。
     //
-    // 成立即正确的原因：这块面板收不到键盘（从未激活），剩下的唯一用法是鼠标点格子——
-    // 光标持续留在面板之外，用法就没有了；此时「留着」才是问题（「失焦不关」的原始投诉），
+    // 成立即正确的原因：这块面板没有任何一拍真正持有过前台（调用方门是 hadFocus，不是 everActivated——
+    // 半激活的 Activated 是发过的，别拿它当证据），键盘实际落在前台那个程序上；
+    // 剩下的唯一用法是鼠标点格子——光标持续留在面板之外，用法就没有了；
+    // 此时「留着」才是问题（「失焦不关」的原始投诉，2026-09-26 部署日志坐实半激活一类同样如此），
     // 关掉是对的。Revive（DecideToggle 那条路）照旧先于一切：再按一次唤出仍是救活。
     public static bool ZombieShouldDismiss(bool foregroundIsOtherProcess, bool cursorInsidePanel, int consecutiveTicksOutside)
         => foregroundIsOtherProcess && !cursorInsidePanel && consecutiveTicksOutside >= ZombieDwellTicks;
