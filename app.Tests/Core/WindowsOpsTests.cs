@@ -14,7 +14,7 @@ public class WindowsOpsTests
     public void Play_sound_is_in_the_system_command_dropdown()
     {
         var map = StepDisplay.SystemCommandMap();
-        var item = Assert.Single(map.Where(kv => kv.Key == "playSound"));
+        var item = Assert.Single(map, kv => kv.Key == "playSound");
         Assert.NotEqual("Sys_playSound", item.Value);
         Assert.False(string.IsNullOrWhiteSpace(item.Value));
     }
@@ -60,7 +60,7 @@ public class WindowsOpsTests
     [Fact]
     public void Restore_is_in_the_window_action_dropdown()
     {
-        var item = Assert.Single(StepDisplay.WindowActionMap().Where(kv => kv.Key == "restore"));
+        var item = Assert.Single(StepDisplay.WindowActionMap(), kv => kv.Key == "restore");
         Assert.NotEqual("Win_restore", item.Value);
         Assert.False(string.IsNullOrWhiteSpace(item.Value));
     }

@@ -103,7 +103,7 @@ public class ComposedKeyTests
     public void The_family_is_not_empty(string prefix)
     {
         Assert.NotEmpty(IdsOf(prefix));
-        Assert.NotEmpty(NeutralKeys().Where(k => k.StartsWith(prefix, StringComparison.Ordinal)));
+        Assert.Contains(NeutralKeys(), k => k.StartsWith(prefix, StringComparison.Ordinal));
     }
 
     private static IEnumerable<string> NeutralKeys()

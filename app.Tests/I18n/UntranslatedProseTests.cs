@@ -73,9 +73,9 @@ public class UntranslatedProseTests
     public void The_prose_threshold_actually_excludes_labels()
     {
         var en = English();
-        Assert.NotEmpty(en.Where(kv =>
-            kv.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length < ProseWords));
-        Assert.NotEmpty(en.Where(kv =>
-            kv.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length >= ProseWords));
+        Assert.Contains(en, kv =>
+            kv.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length < ProseWords);
+        Assert.Contains(en, kv =>
+            kv.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length >= ProseWords);
     }
 }

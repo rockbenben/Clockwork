@@ -74,8 +74,8 @@ public class ActionGroupTemplatesTests
         var g = ActionGroupTemplates.All()
             .Single(x => x.Name == Clockwork.I18n.Strings.Get("Tpl_Search"));
 
-        var ask = Assert.Single(g.Steps.Where(s => s.Kind == "prompt"));
-        var open = Assert.Single(g.Steps.Where(s => s.Kind == "url"));
+        var ask = Assert.Single(g.Steps, s => s.Kind == "prompt");
+        var open = Assert.Single(g.Steps, s => s.Kind == "url");
         Assert.False(string.IsNullOrWhiteSpace(ask.OutputVar));
         Assert.Contains("{" + ask.OutputVar + "}", open.Target);
         // 而且那个占位真的能被替换掉——名字里有空格之类的写法也得走得通（好几种语言的译名就是两个词）。

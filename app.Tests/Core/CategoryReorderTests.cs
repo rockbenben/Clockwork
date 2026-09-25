@@ -160,7 +160,7 @@ public class CategoryReorderTests
         var gs = L(P("甲1", "Dev"), P("乙1", "乙"), P("甲2", "dev"));
         Assert.True(PanelReorder.MoveCategory(gs, "DEV", "乙"));
         Assert.Equal(new[] { "甲1", "甲2", "乙1" }, Names(gs));
-        Assert.Single(Cats(gs).Where(c => PanelLayout.SameCategory(c, "dev")));
+        Assert.Single(Cats(gs), c => PanelLayout.SameCategory(c, "dev"));
     }
 
     // 归到段尾时同理：认不出大小写不同的同类，就会把自己并到一个空段里去。
