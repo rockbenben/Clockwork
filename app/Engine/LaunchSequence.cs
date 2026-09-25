@@ -184,7 +184,7 @@ public static class LaunchSequence
         var sb = new StringBuilder();
         sb.Append("Clockwork · " + Strings.Get("Log_Title") + "\r\n");
         // **这里的日期故意不钉 InvariantCulture。** 这份日志是给用户看的
-        // （托盘「查看上次启动日志」）且**全本地化**，见 App.ApplyMouseHook 那边的对照注释：
+        // （托盘「查看上次启动日志」）且**全本地化**，见 GestureCoordinator 装钩日志（OnHookInstalled）那边的对照注释：
         // 固定英文的是 clockwork.error.log（那份是拿去贴 issue 的）。泰国用户在一份为他
         // 本地化的日志里看到泰历年份是对的，德语看到 "1,5" 也是对的。
         //

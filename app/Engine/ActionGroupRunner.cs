@@ -68,7 +68,7 @@ public static class ActionGroupRunner
     // 尾步全不执行，气泡还只报子组名，根本指不到被杀的那一个。键相同、含义不同，就得是两张表。
     private static readonly ConcurrentDictionary<string, RunCancel> _topRuns = new();
 
-    // 顶层运行的登记/注销，由派发方（App.RunGroupAsync）在后台任务里成对调用。
+    // 顶层运行的登记/注销，由派发方（RunOrchestrator.RunGroupAsync）在后台任务里成对调用。
     // 返回 false = 该 id 已有顶层运行占位（并发重复触发），调用方不必注销。
     public static bool EnterTopLevel(string groupId, RunCancel cancel) => _topRuns.TryAdd(groupId ?? "", cancel);
 

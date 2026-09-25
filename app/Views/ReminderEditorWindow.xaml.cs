@@ -114,7 +114,7 @@ public partial class ReminderEditorWindow : Window
 
     // 动作二选一：选哪边就只显示哪边的控件——填了不生效的假控件不出现（与「点是后」死控件同一条思路）。
     // MsgBox 是唯一的例外，两边都留：静默任务虽然不弹窗，这段文本仍是它**唯一的名字**——
-    // 引用的动作组被删/被禁用时，Warn_SilentGroupMissing/Disabled 拿它当标识（App.xaml.cs 的静默分支），
+    // 引用的动作组被删/被禁用时，Warn_SilentGroupMissing/Disabled 拿它当标识（ReminderScheduler 的静默分支），
     // 藏掉它就会让新建的静默任务留空，那条告警于是变成「提醒「」引用的动作组不存在」，
     // 而它恰恰在后台例程悄悄停摆时才出现——正是最需要认出是哪一条的时刻。
     private void UpdateAction()

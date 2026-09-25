@@ -147,7 +147,7 @@ public partial class App
         var deps = new GroupDeps
         {
             Vars = vars,
-            // 走**真的** App.AskUser：提示语的占位替换、选项切分、跳 UI 线程都在那一层，
+            // 走**真的** AskUser 链（App 门面 → RunOrchestrator）：提示语的占位替换、选项切分、跳 UI 线程都在那一层，
             // 绕开它就只测到了弹框自己。
             AskUser = s => Drive(d => After(d, 700, () => { d.AnswerBox.Text = answer; Click(d.YesBtn); }),
                                  waitGuard: false, () => AskUser(s, vars)),

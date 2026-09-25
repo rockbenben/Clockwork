@@ -465,9 +465,9 @@ public partial class App : System.Windows.Application
     // 所有退出路径（托盘退出/语言切换重启/提权重启）都过 Shutdown → 在此兜底：
     // 提醒状态的后台补写是 fire-and-forget，进程退出会带走未落盘的快照，退出前同步补写最后一份。
     //
-    // 错误日志同理：AppendErrorLog 改成入队之后，最后那几行正躺在 _logQueue 里等写盘线程，
+    // 错误日志同理：AppendErrorLog 改成入队之后，最后那几行正躺在 AppDiagnostics 的写盘队列里等写盘线程，
     // 而写盘线程是 IsBackground——进程一走它就没了，队列跟着一起没。所以这里补一次同步排空。
-    // 它带 300ms 超时（见 LogFlushTimeoutMs），最坏情况是少写最后几行，绝不会让「点退出」变成「程序赖着不走」。
+    // 它带 300ms 超时（见 AppDiagnostics 的 LogFlushTimeoutMs），最坏情况是少写最后几行，绝不会让「点退出」变成「程序赖着不走」。
     protected override void OnExit(ExitEventArgs e)
     {
         ReminderStateStore.FlushPending();

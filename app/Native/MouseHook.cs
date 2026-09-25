@@ -202,7 +202,7 @@ public sealed class MouseHook : IDisposable
     /// <param name="modifierHeld">修饰键按住判定（单测注入用，生产留空查物理键态）。</param>
     /// <param name="moveTolerancePhysical">按住期间位移超过多少**物理像素**判为拖拽（抖动容差）。
     /// 0 = 用 gate 默认值 6——那是 100% 缩放下的手感；缩放屏必须由调用方按 DPI 换算后传进来
-    ///（见 App.ApplyMouseHook / Win32.PrimaryScale）。</param>
+    ///（见 GestureCoordinator.ApplyMouseHook / Win32.PrimaryScale）。</param>
     public MouseHook(int holdMs, Action fire, Action<Action> post,
                      GestureGate? gesture = null, Action<string, IntPtr>? fireGesture = null,
                      Action<int, int, bool>? trailPoint = null, Action? trailEnd = null,
@@ -455,7 +455,7 @@ public sealed class MouseHook : IDisposable
     public bool Install()
     {
         // **这两处 `Wait(5000)` 是 UI 线程上最可疑的阻塞点，所以各包了一圈计时
-        //（见 Core.UiStallWatch；调用方 App.ApplyMouseHook 被 Dispatcher.Invoke 钉在 UI 线程上）。**
+        //（见 Core.UiStallWatch；调用方 GestureCoordinator.ApplyMouseHook 被 Dispatcher.Invoke 钉在 UI 线程上）。**
         //
         // 设计气味在**这个数本身**：5000ms 与系统默认的 `HungWindowTimeout` 一模一样。
         // 也就是说「我们自己的超时」正好落在「系统判你未响应」那条线上——一旦真的等满，
@@ -503,7 +503,7 @@ public sealed class MouseHook : IDisposable
     //
     // `Teardown()` 里有 `_installed.Dispose()`（钩子线程退出的必经之路），而 `ManualResetEventSlim`
     // 被 Dispose 之后再 Wait 会抛 `ObjectDisposedException`。这条竞态原先不存在：Install 与 Dispose
-    // 都由 UI 线程串行调用，两者不可能重叠。**安装改成在后台线程上等之后（见 App.ApplyMouseHook）
+    // 都由 UI 线程串行调用，两者不可能重叠。**安装改成在后台线程上等之后（见 GestureCoordinator.ApplyMouseHook）
     // 它就成了必然而不是偶然**：改配置 / 自愈 / 手动重钩都可能在一次安装还在飞的时候
     // `Dispose()` 掉那个对象。那时正确的答案是「这次安装没成」，而不是让异常冒到后台线程顶上。
     private bool WaitInstalled(int ms)

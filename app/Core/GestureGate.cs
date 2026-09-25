@@ -69,7 +69,7 @@ public sealed class GestureGate
     // 测不到。总开关的全部意义就是「关掉之后一根毫毛不动」，那件事没有断言盯着，
     // 就只是一个存得下 false 的字段。
     //
-    // 判的是 **Normalize 之后**的串，不是原串。钩子拿规范形去比对（App 里那句
+    // 判的是 **Normalize 之后**的串，不是原串。钩子拿规范形去比对（GestureCoordinator 里那句
     // `s.Gesture == p`，p 是 Analyze 出来的规范路径），而 ConfigStore **故意不把洗成空的那一类
     // 写回盘**（那是「这串不合法」的判定，不是修正）。于是手改 json 里一条 "R-D"
     // 会原样存着：拿原串判就是非空 → 装钩子，而它永远比不上任何规范路径。

@@ -24,7 +24,7 @@ public static class HookWatch
     /// <param name="cursorMovedInSample">本采样区间内光标位置是否变过。用户停着不动时
     ///   没有回调是**正常的**（没有输入就没有事件），那时重装是白摘白装、还把日志刷满。</param>
     /// <param name="silentSinceMs">回调最后一次被叫到距今多久。从未被叫到过时调用方自己先挡
-    ///   掉（那种情况重装一百次也一样，见 App 里 !EverBeat 那一段的长注释）。</param>
+    ///   掉（那种情况重装一百次也一样，见 GestureCoordinator 里 !EverBeat 那一段的长注释）。</param>
     /// <param name="observedSampleMs">本采样区间的**实测**长度（本次与上一次采样的墙钟差），
     ///   不是名义上的 500ms。系统卡顿时区间自己变长，新鲜度的界跟着变长，不会把卡顿误判成死亡。</param>
     /// <param name="msSinceLastHeal">距离上一次自愈摘钩过了多久。一个「装上几秒就被摘掉」的

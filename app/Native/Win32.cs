@@ -104,7 +104,7 @@ public static class Win32
 
     /// <summary>主屏的缩放系数（1.0 = 100%，1.5 = 150%）。取不到时回退 1.0。</summary>
     //
-    // 中键长按的拖拽容差按它换算（见 MouseHook 构造函数 / App.ApplyMouseHook）：低级钩子喂进来的
+    // 中键长按的拖拽容差按它换算（见 MouseHook 构造函数 / GestureCoordinator.ApplyMouseHook）：低级钩子喂进来的
     // 坐标是物理像素，而「手抖几像素算抖动」的那个像素是逻辑像素——150% 屏上 6 物理像素只有
     // 4 逻辑像素，约 1mm，按下去的那一下抖动就能把长按误判成中键拖拽，面板永远不弹。
     // 本程序声明 PerMonitorV2（见 app.manifest），GetDpiForMonitor 拿到的就是主屏真实缩放。
@@ -204,7 +204,7 @@ public static class Win32
 
     /// <summary>关掉本进程的窗口幽灵化。幂等、不可逆（理由见上面那段）。</summary>
     //
-    // 只给「会摆出全屏覆盖窗」的那条路调（见 App.ApplyMouseHook 里建笔迹窗那一处），
+    // 只给「会摆出全屏覆盖窗」的那条路调（见 GestureCoordinator.ApplyMouseHook 里建笔迹窗那一处），
     // 没开手势的人一点没变。里面有闸是因为那句 P/Invoke 是单向的、而调用点每次保存配置都会走到：
     // 让它自己保证「一辈子只真发出去一次」，调用点就不必替它记这笔账。
     public static void DisableWindowGhosting()

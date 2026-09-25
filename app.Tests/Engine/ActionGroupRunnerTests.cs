@@ -210,7 +210,7 @@ public class ActionGroupRunnerTests
     public void Reentrant_reference_reports_via_OnStepSkipped_not_OnStepError_and_stops_iterating()
     {
         // 重入注定持续整个循环（同一 id 还在调用栈上）：Repeat=999 的自引用以前会上报 999 次 + 空睡 999 次。
-        // 与生产代码（App.xaml.cs BuildGroupDeps 的 RunGroupStep）同款接线：重入不是异常，经 OnStepSkipped
+        // 与生产代码（RunOrchestrator.BuildGroupDeps 的 RunGroupStep）同款接线：重入不是异常，经 OnStepSkipped
         // 上报（benign=false——这是真问题，不是正常配置状态），OnStepError 保留给 RunStep 真正抛出的异常。
         var skipped = new List<(string Label, string Reason, bool Benign)>();
         var errors = new List<string>();
@@ -242,7 +242,7 @@ public class ActionGroupRunnerTests
     [Fact]
     public void Benign_skip_still_stops_reference_iterations_but_lets_group_continue()
     {
-        // 「目标组已禁用」（benign=true，与 App.xaml.cs BuildGroupDeps 的 RunGroupStep 同款接线：
+        // 「目标组已禁用」（benign=true，与 RunOrchestrator.BuildGroupDeps 的 RunGroupStep 同款接线：
         // 正常配置状态，不是故障）与「重入」共用同一条 Skipped 通路：ActionGroupRunner 只认 Skipped
         // 本身，不关心 benign 与否——收到就 break 掉这一步的 rep 循环，但不中止整组（这与「否」中止
         // 整组不同，是本次改动前后都成立的既有行为，这里锁定它对 benign 分支同样适用）。

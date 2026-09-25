@@ -28,7 +28,7 @@ public sealed class RunCancel
     // ms<=0：仅查当前状态。语义与 StopSignal.InterruptibleSleep 保持一致，调用点可直接替换。
     //
     // 只等自己这一个事件，不去 WaitAny 全局急停的内核句柄。急停要能立刻叫醒长睡眠（组的 RepeatDelayMs
-    // 允许几十分钟），但那件事由 App.RequestStop 主动「推」给每个在途闸（ActionGroupRunner.CancelAll）——
+    // 允许几十分钟），但那件事由 RunOrchestrator.RequestStop（App 门面同名转发）主动「推」给每个在途闸（ActionGroupRunner.CancelAll）——
     // 而不是每个闸自己去「拉」。理由是 ManualResetEventSlim 同时持有托管状态位和惰性内核事件，Set 先改位
     // 再置内核、Reset 先复位内核再清位，两者不原子：只要有人等内核句柄、别人读 IsSet，Request/Clear 交错
     // 就能留下「句柄恒置位、IsSet 为假」的永久分歧——此后每个带延时的组都在第一步静默截断还报 Completed，

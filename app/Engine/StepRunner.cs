@@ -195,12 +195,12 @@ public static class StepRunner
                     ? ActionResult.Empty
                     : ActionResult.Warn("Warn_WaitClipboard", secs);
             }
-            // 问句步骤走不到这里就该被接走了（交互路径各自拦下：App.RunStepAsync 与 ActionGroupRunner）。
+            // 问句步骤走不到这里就该被接走了（交互路径各自拦下：RunOrchestrator.RunStepAsync 与 ActionGroupRunner）。
             // 落到这儿说明这条执行路径上没有可以发问的界面——开机清单就是这种：登录时弹一个
             // 拦住整条清单的输入框，是个没人想要的结果。如实说一声，别记成 ✓。
             case "prompt" or "choice": return ActionResult.Warn("Warn_AskNoUi");
             case "delay": return ActionResult.Empty;   // 纯延时：动作由步尾统一 delayMs 完成
-            case "message": return ActionResult.Empty;  // 消息在启动/非交互路径静默跳过（交互「运行这一步」由 App.RunStepAsync 弹窗）；不报未知类型
+            case "message": return ActionResult.Empty;  // 消息在启动/非交互路径静默跳过（交互「运行这一步」由 RunOrchestrator.RunStepAsync 弹窗）；不报未知类型
             default: return ActionResult.Warn("Warn_UnknownKind", s.Kind);
         }
     }

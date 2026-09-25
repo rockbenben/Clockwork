@@ -16,7 +16,7 @@ namespace Clockwork.Core;
 //
 // 所以这里做两件事，都不改任何行为：
 //
-//   · **卡顿探测**：App 那边挂一个 250ms 的 DispatcherTimer。UI 线程被卡住时表不会走，
+//   · **卡顿探测**：GestureCoordinator 挂一个 250ms 的 DispatcherTimer。UI 线程被卡住时表不会走，
 //     于是「这一拍迟到了多久」就是「UI 线程被卡了多久」——不需要另起线程去戳它。
 //   · **可疑调用计时**：已知的两处 UI 线程阻塞点（前台抢占、钩子安装等待）用 Probe 包一圈，
 //     超过 500ms 就自己报一行。它们**在卡顿结束后才落笔**，所以那条日志里带的是自己的名字。
@@ -25,7 +25,7 @@ namespace Clockwork.Core;
 // 「ui thread stalled 4300ms」而不知道是谁；只有 Probe 的话，卡在别处（GC、别的进程）
 // 就一声不响。两条合起来才能把下一次复现钉到具体某一行。
 //
-// 不碰 WPF：Core 保持纯的（同 HookWatch / GestureGate 的纪律），计时器由 App 那边提供。
+// 不碰 WPF：Core 保持纯的（同 HookWatch / GestureGate 的纪律），计时器由 GestureCoordinator 那边提供。
 // 判据全是纯函数，阈值与边界都有断言盯着（UiStallWatchTests）。
 public static class UiStallWatch
 {
@@ -66,7 +66,7 @@ public static class UiStallWatch
 
     /// <summary>打开仪表。幂等：重复调只是把阈值与 sink 刷新一遍。</summary>
     //
-    // 调用方负责喂 Tick（见 App 那个 DispatcherTimer），这里不持有计时器——
+    // 调用方负责喂 Tick（见 GestureCoordinator 的卡顿仪表计时器），这里不持有计时器——
     // Core 不碰 WPF，测试也不必造一个 Dispatcher 出来。
     //
     // <paramref name="context"/>（可选）给卡顿那一行补上「卡的时候整机在干什么」。

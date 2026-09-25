@@ -49,7 +49,8 @@ The tallest tier does not give you a taller window: work-area height is the *ava
 | --- | --- |
 | `app/Core/` | Pure logic — no Win32, no UI. The cheapest thing to test, so put logic here when you can |
 | `app/Native/` | Win32 interop (hotkeys, window actions, volume, send-keys, mouse injection; also listening-port enumeration and reading another process's command line / working directory) |
-| `app/Engine/` | Execution: startup list, action groups, reminder scheduling, and the system-startup / listening-port readers |
+| `app/Engine/` | Execution: startup list, action groups, system commands, and the system-startup / listening-port readers |
+| `app/Services/` | App-domain collaborators, one per responsibility lifted out of the `App` god-class (diagnostics sink, hotkeys, gestures & mouse hook, quick panel, reminder scheduling, run orchestration, click statistics). They never reference `App`; cross-domain edges arrive as callbacks/delegates App wires at composition, and the App shell keeps same-name facades for Views and TrayIcon |
 | `app/ViewModels/` + `app/Views/` | WPF UI |
 | `app/I18n/` + `app/Resources/` | Localization. Neutral `Strings.resx` is the Chinese source; one `Strings.<code>.resx` satellite per language |
 | `app.Tests/` | xunit.v3 on Microsoft.Testing.Platform, mirroring the app layout: `Core/`, `Engine/`, `Native/`, `ViewModels/`, `Views/`, plus `I18n/` which enforces resx coverage across every language |

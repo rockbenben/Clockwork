@@ -3,7 +3,7 @@ namespace Clockwork.Core;
 // clockwork.error.log 的「连续重复行」收敛判据。
 //
 // 起因是**整组 Repeat**：一个坏步骤在 Repeat=200 的组里会出事 200 次，从前就照写 200 行一模一样的话。
-// 气泡早就按合并键叠加成一张卡了（见 App.LogGroupStep），日志却没有同样的收敛，于是一次跑动
+// 气泡早就按合并键叠加成一张卡了（见 RunOrchestrator.LogGroupStep），日志却没有同样的收敛，于是一次跑动
 // 就能吃掉 128KB 窗口的一大块，把之前几天的真线索顶出去。而这个文件是排障时唯一的事后线索。
 //
 // 「同一步反复失败」这件事，一条原文加一句标记就说清了；确切次数由 clockwork.run.log 逐步记着。

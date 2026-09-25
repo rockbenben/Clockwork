@@ -57,7 +57,7 @@ public class ActionGroupResolverTests
         Assert.Null(ActionGroupResolver.FindCycle(groups, "a"));
     }
 
-    // ResolveForRun：嵌套组引用（RunGroupStep）目标解析 + 分类。benign 决定 App.xaml.cs 里弹的是
+    // ResolveForRun：嵌套组引用（RunGroupStep）目标解析 + 分类。benign 决定 RunOrchestrator 里弹的是
     // 静默 Info 还是刺眼 Warn——这是本组测试要保护的关键位，不是顺带断言。
 
     [Fact]
