@@ -22,6 +22,17 @@ public static class ReminderEvent
 
     public static bool IsEvent(string? trigger) => Array.IndexOf(All, trigger ?? "") >= 0;
 
+    // 「轮询类」= 系统不广播、只能搭提醒计时器每轮现读的那些（对照上面 All 的注释：订阅类靠事件、
+    // 消息类靠 WM_，都不在此列）。判据集中到这里，调用方（ReminderScheduler.PollEnvironmentTriggers）
+    // 才能安全地问一句「这一堆提醒里有没有谁需要我去读空闲/电量」——没人需要就整段跳过，
+    // 省掉每轮两次系统调用；而这个跳过之所以安全，全因为下面这条穷尽性：Polled 恰好等于 All 里那五个
+    // 硬件态触发，一个不多一个不少（多列会把订阅类误当轮询、白读；漏列会让某个硬件提醒永远不响）。
+    public static readonly string[] Polled =
+        { "idle", "busy", "acPlugged", "acUnplugged", "lowBattery" };
+
+    /// <summary>这个触发是不是只能靠轮询检测（决定 PollEnvironmentTriggers 要不要跑）。</summary>
+    public static bool NeedsPoll(string? trigger) => Array.IndexOf(Polled, trigger ?? "") >= 0;
+
     // 这个触发类型是否受「周期」（recurType / 每 N 天 / 每月某号 / 仅一次 / 起算日）约束。
     // 只有「按时间」受约束——事件和「登录时」都不看周期，编辑器为此把整块周期 UI 对它们隐藏。
     // 各处历史上是写成 !IsEvent(...) 的，那等于默认「非事件即时间型」，把 startup 漏在了受约束的一侧：

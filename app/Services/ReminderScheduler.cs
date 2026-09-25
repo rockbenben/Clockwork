@@ -506,6 +506,18 @@ internal sealed class ReminderScheduler
     // 勿扰的语义是「期间发生的事件不算数」，基线不跟着走的话，勿扰里拔的电源会在勿扰结束后被误判成「刚拔」。
     private bool PollEnvironmentTriggers(DateTime now, bool fire = true)
     {
+        // 没有任何提醒用到轮询类触发（idle/busy/lowBattery/acPlugged/acUnplugged）——本方法的两次
+        // 系统调用（读空闲、读电源）白做，整段跳过。判据集中在 ReminderEvent.Polled（有穷尽性测试钉着），
+        // 不在这儿手列触发类型，免得加新硬件触发时漏列 → 那条提醒永远不响。
+        // 但先把两格跨调用的基线作废：它们只在下面这些分支里被读写，跳过期间不更新就是「陈旧」——
+        // 若不清零，用户日后第一次加「久坐 30 分钟」会用一个几小时前的起点当场判成久坐、误响一次。
+        // 清成 null 后新提醒的第一次真轮询重新落桩（busyMinutes 从 0 起算、电源首轮只记基线）。
+        if (!_config.Reminders.Any(r => ReminderEvent.NeedsPoll(r.Trigger)))
+        {
+            _busySinceTick = null;
+            _lastOnAc = null;
+            return false;
+        }
         bool changed = false;
         int idle = Native.IdleTime.Minutes();
         if (idle < 1) _idleFired.Clear();   // 人回来了：整体复位，下次离开重新算一轮
