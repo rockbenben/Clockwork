@@ -37,12 +37,12 @@ public partial class App : System.Windows.Application
     private bool _configSuperseded;   // 导入已把新配置写盘：本实例内存里的 _config 从此作废，禁止回写（见 MarkConfigSuperseded）
     private string _statePath = "";   // clockwork.state.json：提醒耐久运行态
 
-    // 面板格子的点击统计（键是 LaunchStep.Id，见 Core.PanelUsageStore）。
-    private readonly Dictionary<string, Core.PanelUsageStore.TileUsage> _panelUsage = new();
-    private readonly object _usageLock = new();
-    private string _usagePath = "";
-    private DispatcherTimer? _panelUsageTimer;
-    private bool _panelUsageDirty;
+    // 面板格子的点击统计（Services/PanelUsageTracker.cs；键是 LaunchStep.Id，见 Core.PanelUsageStore）。
+    private readonly Services.PanelUsageTracker _usage = new();
+    // 面板管理器要的活字典别名；守卫（PanelClickHookTests）按「_panelUsage, ResetPanelUsage」这段
+    // 传参文本钉住「管理器必须拿到统计与清空动作」，所以别名与下面那个转发方法名都是承重的。
+    private Dictionary<string, Core.PanelUsageStore.TileUsage> _panelUsage => _usage._panelUsage;
+    private void ResetPanelUsage() => _usage.ResetPanelUsage();
     private string _exeDir = "";
     private string _exePath = "";
     private int _launchRunning;   // 0/1 并发守卫
@@ -299,84 +299,22 @@ public partial class App : System.Windows.Application
         // 任何配置改动顺手带走，带不走也只是下次启动再清一遍，无害。
         _startupReminderIds = new HashSet<string>(_config.Reminders.Select(x => x.Id));
 
-        // 面板点击统计同一个位置载入：都是「配置之外的运行态」，同一段代码读盘。
-        _usagePath = Path.Combine(CfgDir, "clockwork.usage.json");
-        foreach (var kv in Core.PanelUsageStore.Load(_usagePath)) _panelUsage[kv.Key] = kv.Value;
-        // 顺带清掉已经删掉的格子：不清的话那份文件只增不减，行数会比面板上实际的格子多。
-        // 只认 PanelPages——统计的是面板格子，主清单与动作组里的步骤不进这份统计。
-        var liveIds = _config.PanelPages.SelectMany(p => p.Steps).Select(s => s.Id);
-        var pruned = Core.PanelUsageStore.PruneUnreferenced(_panelUsage, liveIds);
-        if (pruned > 0)
-        {
-            // 必须先置脏：PruneUnreferenced 只改内存字典，而 SaveUsage 头上有脏标记闸，
-            // 不置位的话这次落盘直接早退——墓碑键每次启动读回来、忘掉、再读回来，文件只增不减。
-            lock (_usageLock) _panelUsageDirty = true;
-            SaveUsage();
-        }
+        // 面板点击统计同一个位置载入：都是「配置之外的运行态」，同一段代码读盘
+        //（含墓碑键剪枝与置脏落盘，判据见 PanelUsageTracker.LoadFrom）。
+        _usage.LoadFrom(Path.Combine(CfgDir, "clockwork.usage.json"),
+                        _config.PanelPages.SelectMany(p => p.Steps).Select(s => s.Id));
     }
 
-    // 面板格子被点一下：计数 + 排队落盘。点的是「格子」而不是「步骤跑没跑通」——
-    // 被条件挡掉的点击同样是一次点击，问的始终是「我在用哪些格子」。
-    // 只从面板这一条路进来（BuildPanelPages 的唯一漏斗），手势与主清单不计。
+    // 面板格子被点一下：计数与「跑不跑」在同一个漏斗里发生（守卫见 PanelClickHookTests），
+    // 统计与去抖落盘的实现在 Services/PanelUsageTracker.cs。
     private void RecordPanelClick(LaunchStep step)
     {
-        if (!Core.PanelUsageStore.RecordClick(_panelUsage, step.Id, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())) return;
-        ScheduleUsageFlush();
+        if (!_usage.RecordClick(step.Id)) return;
         RunStep(step);
     }
 
-    // 落盘去抖：连点几十下只写一次盘。窗口是「点击即关」的，去抖比不写更重要——
-    // 一次点击的计时器还没跑完，窗口就关了，但那是进程退出前的最后一次落盘机会，
-    // 而 OnExit 会补一次同步写，所以去抖不会真的丢数据，只是把「每点一下写一次」压成「一次」。
-    private void ScheduleUsageFlush()
-    {
-        lock (_usageLock)
-        {
-            _panelUsageDirty = true;
-            if (_panelUsageTimer is null)
-            {
-                _panelUsageTimer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher)
-                {
-                    Interval = TimeSpan.FromMilliseconds(700),
-                };
-                _panelUsageTimer.Tick += (_, _) => { _panelUsageTimer.Stop(); SaveUsage(); };
-            }
-            _panelUsageTimer.Stop();   // 一次性的：Stop 再 Start 才能重新计时（连续点击=每次都从头等 700 毫秒）
-            _panelUsageTimer.Start();
-        }
-    }
-
-    // 单写者。点击在 UI 线程，OnExit 的收尾也在 UI 线程，所以 lock 的作用不是跨线程互斥，
-    // 而是**禁止同一线程重入**：计时器回调会 Stop 自己再调 SaveUsage，而 ScheduleUsageFlush 也
-    // 会 Stop 计时器——两处都进锁里做，才不会一个在写盘时另一个把计时器掐掉。
-    // 文件写本身是原子的（ConfigStore.TryWriteTextAtomic）。
-    private void SaveUsage()
-    {
-        lock (_usageLock)
-        {
-            if (!_panelUsageDirty || _usagePath.Length == 0) return;
-            _panelUsageTimer?.Stop();
-            // 写失败就留着脏标记：不重试队列（丢一次点击无可救药），但 OnExit 那一次还会再试。
-            if (Core.PanelUsageStore.Save(_usagePath, _panelUsage)) _panelUsageDirty = false;
-        }
-    }
-
-    // OnExit 用的同步收尾：把最后那次去抖没跑完的写入补上。
-    // 已经写过就无事可做（_panelUsageDirty 为假）。
-    private void FlushUsageNow() => SaveUsage();
-
-    // 面板管理器里的「清空点击统计」：只清这份统计，配置一根汗毛不碰——
-    // 不碰 _config 就不必付 SaveConfig 那笔热键重绑的代价。立即落盘，不等去抖。
-    private void ResetPanelUsage()
-    {
-        lock (_usageLock)
-        {
-            _panelUsage.Clear();
-            _panelUsageDirty = true;
-            _panelUsageTimer?.Stop();
-        }
-        SaveUsage();
-    }
+    // OnExit 用的同步收尾。
+    private void FlushUsageNow() => _usage.FlushUsageNow();
 
     // 换主题＝把整个资源栈重搭一遍（调色板 + Theme.xaml），而不是只替换调色板那一份。
     //

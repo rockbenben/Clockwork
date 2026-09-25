@@ -42,5 +42,5 @@ public class PanelClickHookTests
     // 「if (... > 0) SaveUsage()」那种不接返回值的写法会让剪枝空转：墓碑键每次启动读回来再忘，文件只增不减。
     [Fact]
     public void Startup_prune_is_captured_and_persisted()
-        => Assert.Contains("var pruned = Core.PanelUsageStore.PruneUnreferenced(_panelUsage, liveIds)", Source("App.xaml.cs"));
+        => Assert.Contains("var pruned = Core.PanelUsageStore.PruneUnreferenced(_panelUsage, liveIds)", Source("Services", "PanelUsageTracker.cs"));
 }
