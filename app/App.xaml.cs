@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -545,8 +544,6 @@ public partial class App : System.Windows.Application
     public void SuspendHotkeys() => _hotkeys.SuspendHotkeys();
 
 
-    // —— 快捷面板 ——
-    private Views.QuickPanelWindow? _panel;
     // —— 鼠标钩子 / 手势：实现整体在 Services/GestureCoordinator.cs，这里只留门面转发 ——
     internal bool MouseHookActive => _gesture.MouseHookActive;
     internal GestureWatchState GestureWatch => _gesture.GestureWatch;
