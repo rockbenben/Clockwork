@@ -648,8 +648,9 @@ public partial class QuickPanelWindow : Window
     // Esc 关闭；PageUp / PageDown 翻页。
     // 用 Preview 是因为按钮会先吃掉普通的 KeyDown（空格/回车走按钮自己的激活路径），
     // 而 Esc 必须在任何格子拿到它之前生效——它是这个窗口唯一的退出保证。
-    // 方向键有意不接管：那是格子之间移动用的（DirectionalNavigation），
-    // 两者抢同一组键的话，走到行尾到底是换行还是翻页就说不清了。
+    // 方向键在**焦点已进格子区后**不接管：那是格子之间移动用的（DirectionalNavigation），
+    // 两者抢同一组键的话，走到行尾到底是换行还是翻页就说不清了。焦点还在窗口上时接管
+    //（见下面的落格 case）——那时 DirectionalNavigation 根本没上弦，不接管才是「按了没反应」。
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
         switch (e.Key)
@@ -679,6 +680,16 @@ public partial class QuickPanelWindow : Window
             // ↓ 从输入框进结果区。进去之后方向键就是格子间移动（DirectionalNavigation），
             // 于是「打字缩小范围 → 方向键挑一个 → 回车」全程不用碰鼠标。
             case Key.Down when _searching:
+                FocusFirstTile();
+                e.Handled = true;
+                return;
+
+            // 唤出后焦点在窗口、没在任何格子上（见 Popup 里那句 Focus）：第一下方向键/Tab/回车
+            // 是「进格子区」的意图，落焦到第一格并**吃掉这一下**——回车只选不跑，
+            // 下一回车（此刻焦点已是 ButtonBase，这条 case 让位）才激活。没有这段，
+            // 窗口持焦时方向键无处可去（格子间的 DirectionalNavigation 要求焦点已在容器内）。
+            case Key.Down or Key.Up or Key.Left or Key.Right or Key.Tab or Key.Enter
+                when !_searching && Keyboard.FocusedElement is not System.Windows.Controls.Primitives.ButtonBase:
                 FocusFirstTile();
                 e.Handled = true;
                 return;
@@ -919,7 +930,11 @@ public partial class QuickPanelWindow : Window
         try { foreground = Native.ForegroundNudge.Activate(new WindowInteropHelper(this).Handle); }
         catch { foreground = false; }
         Activate();
-        FocusFirstTile();
+        // 焦点落在**窗口自己**，不落第一格：唤出热键是 Ctrl+Alt+Space——预焦点一格后，
+        // 按住不放/连击的 Space 会在面板刚开时激活第一格（出厂页第一格排得到「锁屏」）。
+        // 窗口持焦时按键照样进本窗口的 OnPreviewKeyDown：打字即搜（窗口级 Preview）与
+        // 第一下方向键落格（见落格 case）都不受影响。
+        Focus();
         StartFocusWatch();
         return foreground || IsActive;
     }
@@ -982,12 +997,12 @@ public partial class QuickPanelWindow : Window
         bool ok;
         try { ok = Native.ForegroundNudge.Activate(hwnd); } catch { ok = false; }
         Activate();
-        FocusFirstTile();
+        Focus();   // 与 Popup 同一口径：救活的是面板，不是替用户选中第一格
         _watchTick = 0;   // 补抢额度重新上满；计时器还在，下一拍照常走 WatchTick
         return ok || IsActive;
     }
 
-    // 焦点落在第一个可用的格子：呼出后直接方向键 + 回车就能用，手不必先摸鼠标。
+    // 焦点落在第一个可用的格子：落格键 / 翻页 / 搜索态按 ↓ 进来时用，手不必先摸鼠标。
     // 跨凹槽与窄条一起找，且跳过占位文字和压暗的格子——第一格正好是个停用的组时，
     // 焦点落在一个按下去没反应的按钮上，看着就像面板坏了。
     // 顺序就是优先级：**先上带、再下带，最后才是开关带**。
