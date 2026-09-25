@@ -343,6 +343,9 @@ public partial class App : System.Windows.Application
         _panelHub.ResyncMainGroups = () => _main?.ResyncGroups();
         _panelHub.RefreshMainGroupRows = () => _main?.RefreshGroupRows();
         _tray = new TrayIcon(this);
+        // 托盘状态灯的两个刷新源：运行闸（即时）与提醒 tick（30s 心跳，兜住勿扰到点自解）。
+        _runner.RunStateChanged += _tray.SyncTip;
+        _reminders.Tick += _tray.SyncTip;
     }
 
     private void StartEngines()
@@ -568,6 +571,8 @@ public partial class App : System.Windows.Application
 
     // —— 提醒：实现整体在 Services/ReminderScheduler.cs，这里只留门面转发。 ——
     public TimeSpan? DndRemaining => _reminders.DndRemaining;
+    // 勿扰恢复钟点（托盘状态灯用）；判空语义与 DndRemaining 同源。
+    public DateTime? DndUntil => _reminders.DndUntil;
     public void PauseReminders(int hours) => _reminders.PauseReminders(hours);
     public void PauseRemindersUntilEndOfDay() => _reminders.PauseRemindersUntilEndOfDay();
     public string DndResumeLabel(TimeSpan left) => _reminders.DndResumeLabel(left);

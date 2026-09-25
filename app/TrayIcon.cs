@@ -11,9 +11,11 @@ namespace Clockwork;
 public sealed class TrayIcon : IDisposable
 {
     private readonly WinForms.NotifyIcon _icon;
+    private readonly App _app;
 
     public TrayIcon(App app)
     {
+        _app = app;
         _icon = new WinForms.NotifyIcon { Visible = true, Text = "Clockwork" };
         // 从内嵌 WPF 资源读图标（不是磁盘文件）——单文件发布时 exe 旁没有 assets\logo.ico，
         // 按文件路径读会落空、托盘图标变成系统默认图，通知(Win10 把气泡渲染成 toast)也就没了应用图标。
@@ -33,13 +35,14 @@ public sealed class TrayIcon : IDisposable
             ShowImageMargin = false,
             ShowCheckMargin = false,
         };
-        menu.Opening += (s, e) => Rebuild(menu, app);
+        menu.Opening += (s, e) => { Rebuild(menu, app); SyncTip(); };
         Rebuild(menu, app);   // 初始也建一份：空菜单在部分系统上首次右键不弹
         _icon.ContextMenuStrip = menu;
+        _icon.Text = TrayTip.Build(app.IsRunning, app.DndUntil, DateTime.Now);
         _icon.DoubleClick += (s, e) => app.ShowMain();
     }
 
-    private static void Rebuild(WinForms.ContextMenuStrip menu, App app)
+    private void Rebuild(WinForms.ContextMenuStrip menu, App app)
     {
         // 清空前先释放上一轮的项：TrayMenu.SubMenu 会实体化 DropDown（一个 ToolStripDropDownMenu，是 Control），
         // 展开过一次就持有窗口句柄——只 Items.Clear() 不 Dispose 的话每次开菜单都漏一批 USER 对象，
@@ -94,12 +97,12 @@ public sealed class TrayIcon : IDisposable
         foreach (int h in new[] { 1, 2, 4, 8 })
         {
             int hh = h;
-            dnd.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Tray_Hours", hh), TrayGlyph.Dnd, (s, e) => app.PauseReminders(hh)));
+            dnd.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Tray_Hours", hh), TrayGlyph.Dnd, (s, e) => { app.PauseReminders(hh); SyncTip(); }));
         }
         // 「到今天结束」摆在小时档之后：它是这一列里唯一不用算的那一项，
         // 也是真实场景里最常说的那一句（今天在出差 / 在录屏 / 在开会）。到点自动失效，不必记得回来开。
         dnd.DropDownItems.Add(TrayMenu.Item(Strings.Get("Tray_DndEndOfDay"), TrayGlyph.Dnd,
-                                            (s, e) => app.PauseRemindersUntilEndOfDay()));
+                                            (s, e) => { app.PauseRemindersUntilEndOfDay(); SyncTip(); }));
         menu.Items.Add(dnd);
         // 快速提醒——同样折成子菜单。它和勿扰是一对：一个让接下来安静，一个在接下来某刻叫你。
         // 五个档位覆盖绝大多数临场需求（煮面 / 番茄 / 会议前），要别的时长就去定时任务里建一条。
@@ -113,7 +116,7 @@ public sealed class TrayIcon : IDisposable
         // 文案走 App.DndResumeLabel（面板腰带那一项用的是同一份）：一小时以内按分钟、超过按小时。
         // 各写一份的话，加了 8 小时和「到今天结束」两档之后，这里会说「剩 480 分钟」而那边说「剩 8 小时」。
         if (app.DndRemaining is TimeSpan left)
-            menu.Items.Add(TrayMenu.Item(app.DndResumeLabel(left), TrayGlyph.Run, (s, e) => app.ResumeReminders()));
+            menu.Items.Add(TrayMenu.Item(app.DndResumeLabel(left), TrayGlyph.Run, (s, e) => { app.ResumeReminders(); SyncTip(); }));
 
         // 最近通知区——回看被点掉 / 被挤掉 / 已自动消失的卡片；点一条把它重新弹出来。
         // 会话级：重启即空，所以没通知时整区不出现（不留一个常年空着的小标题）。
@@ -145,6 +148,14 @@ public sealed class TrayIcon : IDisposable
             if (it is WinForms.ToolStripMenuItem { HasDropDownItems: true } sub) DisposeItems(sub.DropDownItems);
             it.Dispose();
         }
+    }
+
+    // 状态灯刷新：运行/勿扰两个来源都汇到这里。只在变了时赋值——
+    // 提醒 tick 是 30 秒一次的常态，每拍都往 shell 发一条修改消息纯属白事。
+    public void SyncTip()
+    {
+        var t = TrayTip.Build(_app.IsRunning, _app.DndUntil, DateTime.Now);
+        if (_icon.Text != t) _icon.Text = t;
     }
 
     // 摘要压成单行：提醒/消息步骤的文本框允许多行，而 ToolStrip 菜单按单行测绘，

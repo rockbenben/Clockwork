@@ -118,6 +118,7 @@ internal sealed class ReminderScheduler
         // 弹窗 ShowDialog 是 UI 线程的嵌套消息循环，其间 DispatcherTimer 仍在走。无守卫会重入本方法、
         // 在已有模态弹窗上再叠一个。首个 tick 处理完（含所有到点提醒依次弹完）前，后续 tick 直接跳过。
         if (_reminderTickBusy) return;
+        Tick?.Invoke();   // 状态灯的拍：先于勿扰早退——tooltip 恰恰要在勿扰里也报剩余
         // 勿扰生效：本 tick 不触发任何东西（含静默组），到期自动恢复。但基线要照常刷——
         // 不刷的话，勿扰期间拔的电源会在勿扰结束后的第一个 tick 被当成「刚拔」补弹一次，
         // 与订阅类事件（锁屏/解锁/唤醒，勿扰期间直接不算）行为相反。勿扰的语义只有一条：期间发生的事件不算数。
@@ -649,6 +650,14 @@ internal sealed class ReminderScheduler
     // —— 勿扰（暂停提醒）——旧版同款：会话级、不落盘；生效期间提醒 tick 整体跳过（含静默组），
     // 到期自动恢复；期间错过的提醒按宽限/错过必补的正常规则处理。
     private DateTime? _dndUntil;
+
+    // 勿扰恢复时刻（过期视为无）。给托盘 tooltip 这类「要钟点而不是剩余量」的消费者；
+    // 借 DndRemaining 的 getter 顺手吃过期，两处永远不会各说各话。
+    public DateTime? DndUntil => DndRemaining == null ? null : _dndUntil;
+
+    /// <summary>每记 tick（默认 30s，UI 线程）。托盘 tooltip 这类状态灯靠它保持新鲜——
+    /// 勿扰的到点自动恢复没有事件可订，「点菜单/按热键」之外唯一的发生时刻就是这个拍。</summary>
+    public event Action? Tick;
 
     public TimeSpan? DndRemaining
     {
