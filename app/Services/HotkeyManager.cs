@@ -48,6 +48,9 @@ internal sealed class HotkeyManager
     private string? _stopHotkeyFail;                                    // 急停键上次失败的组合：同一失败只 toast 一次（每次捕捉进出都会重注册）
     private string? _panelHotkeyFail;                                   // 面板键同上，各记各的：两个键失败的原因通常不同，去重不能共用一个格子
     private string? _quickOpenHotkeyFail;                               // 一键直达键，同上各记各的
+    // 上一轮成功绑定后的组热键签名（判据与理由见 Core.HotkeyRebindGate）。
+    // 只在真跑完一轮重建后置位；任何注销路径都清空它，免得「挂起前绑过」冒充「现在还绑着」。
+    private string _groupHotkeySig = "";
 
     public void RegisterStopHotkey()
     {
@@ -143,6 +146,13 @@ internal sealed class HotkeyManager
     private void RebindGroupHotkeys()
     {
         if (_hotkeyHwnd == 0 || !HotKey.IsWindow(_hotkeyHwnd)) return;   // 句柄已销毁则跳过（同 RebindStopHotkey）
+        // 脏检查：组热键配置一字未动、当前注册仍挂着、且没有失败项等着重试 → 省掉整轮摘装。
+        // 「有失败就照旧重绑」是这条优化的边界：RegisterHotKey 失败后没有事件可等，
+        // 全靠每次保存无条件重建去抢回被别的程序占用的组合（判据见 Core.HotkeyRebindGate）。
+        var sig = HotkeyRebindGate.Signature(_config.ActionGroups
+            .Where(x => x.Enabled && !string.IsNullOrWhiteSpace(x.Hotkey))
+            .Select(x => (x.Id, x.Hotkey)));
+        if (HotkeyRebindGate.ShouldSkip(_groupHotkeySig, sig, _hotkeyFails.Count, _groupHotkeyIds.Count)) return;
         UnregisterGroupHotkeys();
         // 清掉已删除组的槽位映射：字典有界（≤当前组数），回绕后它们的号可安全复用。
         var liveIds = new HashSet<string>(_config.ActionGroups.Select(x => x.Id));
@@ -186,6 +196,9 @@ internal sealed class HotkeyManager
             _groupHotkeyIds[slot] = g.Id;
         }
         _hotkeyFails = fails;
+        // 记下的始终是「这一轮跑完后配置长什么样」——失败项已在上面挡住 ShouldSkip，
+        // 所以下一轮只要配置不变且仍有失败，registeredCount>0 && failCount>0 照样走重建去重试。
+        _groupHotkeySig = sig;
     }
 
     private void UnregisterGroupHotkeys()
