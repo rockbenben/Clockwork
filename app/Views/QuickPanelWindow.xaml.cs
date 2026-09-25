@@ -146,7 +146,12 @@ public partial class QuickPanelWindow : Window
         //（中键长按这条路没有「刚响应用户输入」的豁免，开机首次最容易踩），WPF 立刻给一记
         // Deactivated，照关就是「面板闪一下就没了 / 完全没出现」。看门狗同一条规矩：
         // 从没拿到过前台的面板自己不关（见 StartFocusWatch）。
-        Deactivated += (_, _) => { if (!_menuOpen && _everActivated) Dismiss(); };
+        Deactivated += (_, _) =>
+        {
+            // 诊断探针（「失焦不关」排查）：这行不出现 = 系统根本没把前台给别人（那一下其实点在了面板上）。
+            App.Instance?.AppendErrorLog($"panel Deactivated menu={_menuOpen} ever={_everActivated} closing={_closing}");
+            if (!_menuOpen && _everActivated) Dismiss("deactivated");
+        };
     }
 
     // ── 翻页 ──
@@ -900,9 +905,11 @@ public partial class QuickPanelWindow : Window
     // ── 显示与摆位 ──
 
     /// <summary>关闭并保证只关一次。Deactivated 在关闭过程中还会再来一次，不挡住就会重入 Close()。</summary>
-    public void Dismiss()
+    public void Dismiss(string origin = "explicit")
     {
         if (_closing) return;
+        // 诊断探针（「失焦不关」排查）：有这行而面板仍在 = Close() 本身出了问题；没有 = 压根没人调 Dismiss。
+        App.Instance?.AppendErrorLog($"panel dismiss({origin})");
         _closing = true;
         // 先停看门狗：关窗过程中它再跳一次没有意义，而 DispatcherTimer 不停会一直挂在
         // Dispatcher 的计时器表上，随窗口一起泄漏。
@@ -970,7 +977,7 @@ public partial class QuickPanelWindow : Window
                     try { Native.ForegroundNudge.Activate(mine); } catch { }
                     Activate();
                     break;
-                case PanelWatchAction.Dismiss: Dismiss(); break;
+                case PanelWatchAction.Dismiss: Dismiss("watch-focus-lost"); break;
                 case PanelWatchAction.GiveUp:
                     // 只在这一拍记一次：额度用尽仍没抢到。面板留着（可见可点），
                     // 再按一次「唤出」走 TogglePanel 的 Revive 分支，GiveUp 不是死局。
@@ -990,12 +997,17 @@ public partial class QuickPanelWindow : Window
                                && Native.Win32.ForegroundWindowOfOthers() != IntPtr.Zero;
                 if (PanelFocus.ZombieShouldDismiss(otherFg, inside, _outsideTicks))
                 {
-                    App.Instance?.AppendErrorLog("panel dismissed after give-up (never activated, user moved on)");
-                    Dismiss();
+                    Dismiss("watch-zombie-dwell");
                     return;
                 }
             }
             else if (_watchTick <= PanelFocus.MaxRetries || _everActivated) _outsideTicks = 0;
+            // 诊断探针（「失焦不关」排查）：不在前台时每秒留一行三态快照。
+            // 若面板还在屏幕上、你能打字，而这组行持续 now=False hadFocus=False ever=True——
+            // 那就是「半激活」态：WPF 认为自己是激活的（AttachThreadInput 共享键盘），
+            // 但 OS 前台句柄从来不属于本面板，于是 WatchTick 哪条关闭分支都走不到。
+            if (!now && _watchTick % 4 == 1)
+                App.Instance?.AppendErrorLog($"panel watch: tick={_watchTick} now={now} hadFocus={hadFocus} ever={_everActivated}");
             if (now) hadFocus = true;
             _watchTick++;
         };
