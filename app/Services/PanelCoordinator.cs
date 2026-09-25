@@ -288,7 +288,7 @@ internal sealed class PanelCoordinator
         // 画出来是一个光秃秃的圆环，一个与手势毫无关系的真图标。这才是挑错私用区码位的典型后果：
         // 不报错、不留白，而是理直气壮地画错。GlyphCoverageTests 能挡住的只是「码位根本不存在」
         // 那一半（渲染成方框），语义挑错那一半只有人眼能验——改完跑 `--shots` 看一眼 QuickPanel。
-        new(Strings.Get("Gesture_Manager"), char.ConvertFromUtf32(0xE962), OpenGestureManager),
+        new(Strings.Get("Gesture_Manager"), char.ConvertFromUtf32(0xE962), () => OpenGestureManager?.Invoke()),
         // fillsEmptyPanel：面板空着时那颗行动按钮指向这里——把面板填满的正是「管理面板」。
         // 显式标记而不是靠排在第几个：上面那条手势入口就是加在前面的，靠顺序的话它会把空态按钮劫走。
         new(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE713), OpenPanelManager, fillsEmptyPanel: true),

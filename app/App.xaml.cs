@@ -43,7 +43,6 @@ public partial class App : System.Windows.Application
     }
     private string _cfgPath = "";
     private bool _configSuperseded;   // 导入已把新配置写盘：本实例内存里的 _config 从此作废，禁止回写（见 MarkConfigSuperseded）
-    private string _statePath = "";   // clockwork.state.json：提醒耐久运行态
 
     // 面板格子的点击统计（Services/PanelUsageTracker.cs；键是 LaunchStep.Id，见 Core.PanelUsageStore）。
     private readonly Services.PanelUsageTracker _usage = new();
