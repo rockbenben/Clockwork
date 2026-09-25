@@ -190,7 +190,7 @@ public class OffUiThreadTests
     [Fact]
     public void The_error_log_is_written_off_the_calling_thread()
     {
-        var body = BodyOf(Source("App.xaml.cs"), "internal void AppendErrorLog(string line)");
+        var body = BodyOf(Source("Services", "AppDiagnostics.cs"), "internal void AppendErrorLog(string line)");
         Assert.Contains("_logQueue.Enqueue", body);
         // 一个都不许漏：这四样是「在调用方线程上碰磁盘」的全部入口。
         Assert.DoesNotContain("AppendAllText", body);
@@ -210,10 +210,10 @@ public class OffUiThreadTests
     [Fact]
     public void Log_lines_are_stamped_when_the_event_happens_not_when_they_reach_disk()
     {
-        var enqueue = BodyOf(Source("App.xaml.cs"), "internal void AppendErrorLog(string line)");
+        var enqueue = BodyOf(Source("Services", "AppDiagnostics.cs"), "internal void AppendErrorLog(string line)");
         Assert.Contains("Stamp()", enqueue);
 
-        var drain = BodyOf(Source("App.xaml.cs"), "private void DrainQueueLocked(string path)");
+        var drain = BodyOf(Source("Services", "AppDiagnostics.cs"), "private void DrainQueueLocked(string path)");
         Assert.DoesNotContain("Stamp()", drain);
     }
 
@@ -223,7 +223,7 @@ public class OffUiThreadTests
     [Fact]
     public void The_log_writer_thread_is_a_named_background_thread()
     {
-        var body = BodyOf(Source("App.xaml.cs"), "private void EnsureLogWriter()");
+        var body = BodyOf(Source("Services", "AppDiagnostics.cs"), "private void EnsureLogWriter()");
         Assert.Contains("IsBackground = true", body);
         Assert.Contains("Name = \"Clockwork.ErrorLog\"", body);
         // 双检：两个线程同时第一次记日志时不能起出两条写盘线程（那就不是单写者了）。
@@ -245,12 +245,12 @@ public class OffUiThreadTests
     [Fact]
     public void The_synchronous_log_drain_is_bounded()
     {
-        var body = BodyOf(Source("App.xaml.cs"), "private bool TryDrainErrorLog(int timeoutMs)");
+        var body = BodyOf(Source("Services", "AppDiagnostics.cs"), "private bool TryDrainErrorLog(int timeoutMs)");
         Assert.Contains("Monitor.TryEnter(_logFileLock, timeoutMs)", body);
         Assert.DoesNotContain("lock (_logFileLock)", body);
 
         // 崩溃路径同理：堆栈是这份文件最值钱的一段，但也不值一个永不退出的崩溃处理器。
-        var crash = BodyOf(Source("App.xaml.cs"), "private string LogError(Exception? ex)");
+        var crash = BodyOf(Source("Services", "AppDiagnostics.cs"), "internal string LogError(Exception? ex)");
         Assert.Contains("Monitor.TryEnter(_logFileLock, LogCrashTimeoutMs)", crash);
         Assert.DoesNotContain("lock (_logFileLock)", crash);
 
