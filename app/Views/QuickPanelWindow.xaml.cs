@@ -90,7 +90,7 @@ public partial class QuickPanelWindow : Window
     private bool _menuOpen;   // 右键菜单挂着：此刻的失焦是菜单造成的，不是用户点了别处
     private bool _everActivated;   // Show 后到底真激活过没有：被前台锁拒掉时的即刻 Deactivated 不能关窗
     private int _watchTick;        // 看门狗已走过的拍数（补抢额度）：提成字段是为了 Revive 能把它清零重满
-    private int _outsideTicks;     // GiveUp 观察拍里光标已连续离开面板矩形的拍数（回来即清零，判据见 PanelFocus.ZombieShouldDismiss）
+    private int _outsideTicks;     // 观察拍（没有任何一拍见过真前台的那类面板）里光标已连续离开面板矩形的拍数（回来即清零，判据见 PanelFocus.ZombieShouldDismiss）
     private bool _searching;  // 搜索态：凹坑里铺的是搜索结果，不是某一页
     private bool _hasSearch;  // 这个面板装了搜索吗（动作够多才装，见 BuildWaist）
     private List<PanelTile> _hits = new();   // 当前搜索结果，按名次排好（回车跑第一个）
@@ -146,12 +146,7 @@ public partial class QuickPanelWindow : Window
         //（中键长按这条路没有「刚响应用户输入」的豁免，开机首次最容易踩），WPF 立刻给一记
         // Deactivated，照关就是「面板闪一下就没了 / 完全没出现」。看门狗同一条规矩：
         // 从没拿到过前台的面板自己不关（见 StartFocusWatch）。
-        Deactivated += (_, _) =>
-        {
-            // 诊断探针（「失焦不关」排查）：这行不出现 = 系统根本没把前台给别人（那一下其实点在了面板上）。
-            App.Instance?.AppendErrorLog($"panel Deactivated menu={_menuOpen} ever={_everActivated} closing={_closing}");
-            if (!_menuOpen && _everActivated) Dismiss("deactivated");
-        };
+        Deactivated += (_, _) => { if (!_menuOpen && _everActivated) Dismiss(); };
     }
 
     // ── 翻页 ──
@@ -905,11 +900,9 @@ public partial class QuickPanelWindow : Window
     // ── 显示与摆位 ──
 
     /// <summary>关闭并保证只关一次。Deactivated 在关闭过程中还会再来一次，不挡住就会重入 Close()。</summary>
-    public void Dismiss(string origin = "explicit")
+    public void Dismiss()
     {
         if (_closing) return;
-        // 诊断探针（「失焦不关」排查）：有这行而面板仍在 = Close() 本身出了问题；没有 = 压根没人调 Dismiss。
-        App.Instance?.AppendErrorLog($"panel dismiss({origin})");
         _closing = true;
         // 先停看门狗：关窗过程中它再跳一次没有意义，而 DispatcherTimer 不停会一直挂在
         // Dispatcher 的计时器表上，随窗口一起泄漏。
@@ -949,15 +942,18 @@ public partial class QuickPanelWindow : Window
 
     // 看门狗：定期确认自己还在前台，不在就按 PanelFocus.WatchTick 的裁决行事。
     //
-    // Deactivated 事件是主路，这条是兜底——它专治「从来没激活过」那一类：那种情况下
-    // Deactivated 一次都不会来，面板会一直挂在屏幕上，只能靠 Esc 或点格子才消失。
-    // 只有**曾经拿到过前台**才允许它关窗：否则一个抢不到前台、但用鼠标仍然点得动的面板
-    // 会被关掉，那比不关更糟。
+    // Deactivated 事件是主路，这条是兜底——它专治「Deactivated 根本不会来」的那一类：
+    // 从未激活的僵尸（前台压根没进来过），以及半激活（Activated 发过了，但 detach 后
+    // 前台被系统回滚，之后没有任何一拍见到真前台——观察块注释里有部署日志指纹）。
+    // 只有**真的见到过前台又丢了**才允许它直接关窗：否则一个抢不到前台、但用鼠标仍然
+    // 点得动的面板会被关掉，那比不关更糟；没见过真前台的那一类走观察拍，三盏灯齐亮才收。
     //
     // 从未激活的那一类不再只补抢一次：旧版第一个 250ms 补抢一次就收手，而补抢那一下
     // 同样没有前台豁免、同样可能被拒——面板照样挂成一块收不到键盘的浮窗。现在在整个
     // 额度窗口里逐拍重试（PanelFocus.MaxRetries ≈ 2 秒），额度用尽记一行 GiveUp 就收手，
     // 面板留在屏幕上（可见可点），下一次「唤出」经 TogglePanel 的 Revive 分支救活它。
+    // 补抢只认 everActivated 不认 hadFocus：半激活的面板对着用户正在打的字抢前台，
+    // 一晚上八次回滚循环比晚 4 秒收起糟得多——那一类交给观察拍的三盏灯。
     // 判据本身在 Core.PanelFocus：分支挪错、额度被删，测试会红。
     private void StartFocusWatch()
     {
@@ -977,7 +973,7 @@ public partial class QuickPanelWindow : Window
                     try { Native.ForegroundNudge.Activate(mine); } catch { }
                     Activate();
                     break;
-                case PanelWatchAction.Dismiss: Dismiss("watch-focus-lost"); break;
+                case PanelWatchAction.Dismiss: Dismiss(); break;
                 case PanelWatchAction.GiveUp:
                     // 只在这一拍记一次：额度用尽仍没抢到。面板留着（可见可点），
                     // 再按一次「唤出」走 TogglePanel 的 Revive 分支，GiveUp 不是死局。
@@ -1004,17 +1000,13 @@ public partial class QuickPanelWindow : Window
                                && Native.Win32.ForegroundWindowOfOthers() != IntPtr.Zero;
                 if (PanelFocus.ZombieShouldDismiss(otherFg, inside, _outsideTicks))
                 {
-                    Dismiss("watch-zombie-dwell");
+                    // 这类面板是「失焦不关」投诉的本体，留一行常态证据（只在真要收它时才有，平时零噪音）。
+                    App.Instance?.AppendErrorLog("panel dismissed by watchdog (no tick ever saw it in the foreground)");
+                    Dismiss();
                     return;
                 }
             }
             else _outsideTicks = 0;   // 不在观察窗口里（还在补抢额度内 / 见过真前台 / 这一拍就在前台）：计数清零
-            // 诊断探针（「失焦不关」排查）：不在前台时每秒留一行三态快照。
-            // 若面板还在屏幕上、你能打字，而这组行持续 now=False hadFocus=False ever=True——
-            // 那就是「半激活」态：WPF 认为自己是激活的（AttachThreadInput 共享键盘），
-            // 但 OS 前台句柄从来不属于本面板，于是 WatchTick 哪条关闭分支都走不到。
-            if (!now && _watchTick % 4 == 1)
-                App.Instance?.AppendErrorLog($"panel watch: tick={_watchTick} now={now} hadFocus={hadFocus} ever={_everActivated}");
             if (now) hadFocus = true;
             _watchTick++;
         };
