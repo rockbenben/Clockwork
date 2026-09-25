@@ -124,9 +124,9 @@ public class OffUiThreadTests
     [Fact]
     public void ApplyMouseHook_does_not_wait_for_the_install_on_the_ui_thread()
     {
-        var src = Source("App.xaml.cs");
-        int start = src.IndexOf("private void ApplyMouseHook()");
-        Assert.True(start >= 0, "找不到 ApplyMouseHook：这段守卫要跟着它走");
+        var src = Source("Services", "GestureCoordinator.cs");
+        int start = src.IndexOf("public void ApplyMouseHook()");
+        Assert.True(start >= 0, "找不到 ApplyMouseHook：这段守卫要跟着它走（Services/GestureCoordinator.cs）");
         int end = src.IndexOf("\n    /// <summary>安装结果回到 UI 线程", start);
         Assert.True(end > start, "找不到 ApplyMouseHook 的收尾（OnHookInstalled 的文档注释）：这段守卫要跟着它走");
         var body = Code(src.Substring(start, end - start));
@@ -159,7 +159,7 @@ public class OffUiThreadTests
     [Fact]
     public void A_stale_install_result_is_discarded()
     {
-        var body = BodyOf(Source("App.xaml.cs"), "private void OnHookInstalled(");
+        var body = BodyOf(Source("Services", "GestureCoordinator.cs"), "private void OnHookInstalled(");
         Assert.Contains("token != _hookInstallToken", body);
         Assert.Contains("ReferenceEquals(hook, _mouseHook)", body);
     }

@@ -27,11 +27,11 @@ public class TrailGhostingTests
     [Fact]
     public void The_switch_is_flipped_before_the_trail_window_exists()
     {
-        var app = AppSource("App.xaml.cs");
+        var app = AppSource("Services", "GestureCoordinator.cs");
         int flip = app.IndexOf("Win32.DisableWindowGhosting()");
         int trail = app.IndexOf("_trail ??= new Views.GestureTrailWindow()");
-        Assert.True(flip >= 0, "App.xaml.cs 里找不到 Win32.DisableWindowGhosting()：全屏笔迹窗的幽灵化没关");
-        Assert.True(trail >= 0, "App.xaml.cs 里找不到笔迹窗的创建：这段守卫要跟着它走");
+        Assert.True(flip >= 0, "GestureCoordinator.cs 里找不到 Win32.DisableWindowGhosting()：全屏笔迹窗的幽灵化没关");
+        Assert.True(trail >= 0, "GestureCoordinator.cs 里找不到笔迹窗的创建：这段守卫要跟着它走");
         Assert.True(flip < trail, "幽灵化必须在笔迹窗建出来之前就关掉");
     }
 

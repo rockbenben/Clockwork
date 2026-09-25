@@ -163,7 +163,7 @@ public class HookSuspectsTests
     }
 
     private static string AppSource()
-        => File.ReadAllText(Path.Combine(RepoRoot(), "app", "App.xaml.cs"));
+        => File.ReadAllText(Path.Combine(RepoRoot(), "app", "Services", "GestureCoordinator.cs"));
 
     private static string DevChecksSource()
         => File.ReadAllText(Path.Combine(RepoRoot(), "app", "DevChecks.cs"));

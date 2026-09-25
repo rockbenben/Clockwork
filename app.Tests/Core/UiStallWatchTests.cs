@@ -134,8 +134,11 @@ public class UiStallWatchTests
         return d!.FullName;
     }
 
+    // 卡顿计时散在两条域里：钩子/笔迹/自愈归 Services/GestureCoordinator.cs，
+    // TogglePanel 与 SaveConfig 还在 App 壳里。守卫要跨两边钉，这里把两份源码并起来读。
     private static string AppSource()
-        => File.ReadAllText(Path.Combine(RepoRoot(), "app", "App.xaml.cs"));
+        => File.ReadAllText(Path.Combine(RepoRoot(), "app", "App.xaml.cs"))
+         + "\n" + File.ReadAllText(Path.Combine(RepoRoot(), "app", "Services", "GestureCoordinator.cs"));
 
     private static string MouseHookSource()
         => File.ReadAllText(Path.Combine(RepoRoot(), "app", "Native", "MouseHook.cs"));
@@ -191,7 +194,7 @@ public class UiStallWatchTests
         var app = AppSource();
         int start = app.IndexOf("ApplyStallWatch(true)");
         int trail = app.IndexOf("_trail ??= new Views.GestureTrailWindow()");
-        Assert.True(start >= 0, "App.xaml.cs 里找不到 ApplyStallWatch(true)：卡顿仪表没接上");
+        Assert.True(start >= 0, "GestureCoordinator.cs 里找不到 ApplyStallWatch(true)：卡顿仪表没接上");
         Assert.True(trail >= 0, "找不到笔迹窗的创建：这段守卫要跟着它走");
         Assert.True(start < trail, "卡顿仪表必须在笔迹窗建出来之前打开");
     }
