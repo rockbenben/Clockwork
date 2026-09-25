@@ -1,7 +1,7 @@
 namespace Clockwork.Core;
 
 // 「钩子该不该摘了重装」的裁决。纯函数，不碰 Win32——与 GestureGate.ShouldWatch 同一套纪律：
-// 这句话是承重的（它决定中键面板与右键手势何时静默失灵），而它原先只活在 App.HealMouseHookIfDead
+// 这句话是承重的（它决定中键面板与右键手势何时静默失灵），而它原先只活在 GestureCoordinator.HealMouseHookIfDead
 // 里，那儿碰 Win32、也读着实例字段，断言很难对着它写。
 
 public static class HookWatch

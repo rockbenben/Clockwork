@@ -521,7 +521,7 @@ public partial class MainWindow : Window
         foreach (var row in _reminders.Rows) row.Refresh();
     }
 
-    // 快捷面板上增删改动作后调用（见 App.EditPanelItem）：面板改的是同一批模型对象，
+    // 快捷面板上增删改动作后调用（见 PanelCoordinator.EditPanelItem）：面板改的是同一批模型对象，
     // 而这一页的行是与之平行的另一份 VM——不刷的话，主窗口开着时步骤数、摘要会停在改动之前，
     // 看着像面板那次编辑没生效。与上面那条同一形状：只发通知，不触发存盘（存盘在调用方）。
     // 面板管理器：同一批动作组的另一种视图（页与格），编辑仍走本页那两个编辑器。

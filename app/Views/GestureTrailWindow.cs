@@ -328,7 +328,7 @@ public sealed class GestureTrailWindow : Window
     // 它就会原样回到屏上。ShowGated 那套 Opacity 只是赌渲染线程比 DWM 快，赌输就照样闪一下——
     // 真正的保证是「藏之前先让清空后的画面合成出去」，见 HideSoon。
     //
-    // 不 Close：手势一笔接一笔，重建分层窗口不便宜。真不用了（关手势 / 钩子卸载）由 App.CloseTrail 关。
+    // 不 Close：手势一笔接一笔，重建分层窗口不便宜。真不用了（关手势 / 钩子卸载）由 GestureCoordinator.CloseTrail 关。
     public void Finish()
     {
         _placed = false;

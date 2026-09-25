@@ -16,7 +16,7 @@ public static class ReminderEngine
     // 绝不把无人应答记成已处理/未确认然后静默丢弃。
     // 但重发也不是无限的：连续 MaxAutoSnoozes 轮没人理，就不再弹模态窗，改由 App 挂一张常驻卡片
     // 等人回来（见 AutoSnooze）——「不静默丢弃」要的是提醒仍在，不是非得一直抢焦点。
-    // 配了重复催促的提醒超时仍走 UpdateAfterFire 按用户节奏续催（受 repeatUntil/MaxRepeats 约束）。见 App.FireReminder。
+    // 配了重复催促的提醒超时仍走 UpdateAfterFire 按用户节奏续催（受 repeatUntil/MaxRepeats 约束）。见 ReminderScheduler.FireReminder。
     public const int UnattendedPopupSeconds = 60;
     public const int UnattendedSnoozeMinutes = 10;
 
@@ -174,7 +174,7 @@ public static class ReminderEngine
         // 位置是刻意选在 PendingFireAt 之后、而不是方法开头：上面四块（稍后 / 催促 / 循环 / 已武装的延迟）
         // 对事件型同样成立，它们是「已经响过 / 已经排上」之后的续接。挡在开头的话，事件型任务上点一次
         // 「稍后 10 分钟」就等于把它扔了；挡在 pending 之前的话，「解锁后延迟 5 分钟」这类武装好的触发
-        // 永远不会到点——App.FireEventNow 对带延迟的事件正是设 PendingFireAt、交给计时器来引爆的。
+        // 永远不会到点——ReminderScheduler.FireEventNow 对带延迟的事件正是设 PendingFireAt、交给计时器来引爆的。
         if (ReminderEvent.IsEvent(r.Trigger)) return new("none", null);
 
         // 周期过滤。走到这里 pending/repeat/snooze 都已在上面处理并返回，无需再清。

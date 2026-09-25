@@ -272,7 +272,7 @@ public static class Win32
     //
     // 给快捷面板的「场景页」用：面板要按你**呼出它的那一刻正在用哪个程序**来决定先显示哪一页。
     // 时机是承重的——必须在面板窗口显示**之前**问，面板一显示就把前台抢走了，那时再问只会得到
-    // Clockwork 自己。调用点见 App.TogglePanel 的第一行。
+    // Clockwork 自己。调用点见 PanelCoordinator.TogglePanel 的第一行。
     //
     // 全程兜住：进程可能在这两行之间退出（GetProcessById 抛 ArgumentException），
     // 也可能因权限读不到名字。拿不到就当作「没有场景」，面板照常显示全局页——

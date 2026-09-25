@@ -138,7 +138,7 @@ public partial class App
             var realBeat = real.EverBeat;
             var realRight = real.EverRightBeat;
             // 摘钩之前先把这一格抄下来（Dispose 不改它，但「摘钩前抄账」是本文件的既有规矩，
-            // 见 App.HealMouseHookIfDead 的注释：摘掉之后就再也问不到了）。
+            // 见 GestureCoordinator.HealMouseHookIfDead 的注释：摘掉之后就再也问不到了）。
             var realUpstream = real.UpstreamMaxMs;
             var realCallbackMax = real.CallbackMaxMs;
             real.Dispose();
@@ -659,12 +659,12 @@ public partial class App
     }
 
     // 表圈右端那几颗。截图里必须喂上，否则「找东西 / 管东西」那一角永远是空的。
-    // 与 App.BuildPanelWaistOps 一一对应。少喂一个的话，表圈右端在截图里就少一颗，
+    // 与 PanelCoordinator.BuildPanelWaistOps 一一对应。少喂一个的话，表圈右端在截图里就少一颗，
     // 而那正是要验的地方——它和「Esc 关闭」挤在同一行，多一颗少一颗的排布只有渲染看得见。
     private static IReadOnlyList<PanelTile> SampleWaist() => new[]
     {
         new PanelTile(Strings.Get("Gesture_Manager"), char.ConvertFromUtf32(0xE962), () => { }),
-        // fillsEmptyPanel 要跟 App.BuildPanelWaistOps 一致：空面板那颗行动按钮的显隐与文字全看它，
+        // fillsEmptyPanel 要跟 PanelCoordinator.BuildPanelWaistOps 一致：空面板那颗行动按钮的显隐与文字全看它，
         // 这儿漏了标记，QuickPanelEmpty 那张图就会画出一块没有按钮的空面板——一张说谎的截图。
         new PanelTile(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE713), () => { }, fillsEmptyPanel: true),
     };

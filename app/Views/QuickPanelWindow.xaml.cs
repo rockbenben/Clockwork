@@ -95,7 +95,7 @@ public partial class QuickPanelWindow : Window
     private List<PanelTile> _hits = new();   // 当前搜索结果，按名次排好（回车跑第一个）
     private DispatcherTimer? _focusWatch;
 
-    /// <summary>Show 之后到底真激活过没有。App.TogglePanel 靠它分辨僵尸与正常面板（见 PanelFocus.DecideToggle）。</summary>
+    /// <summary>Show 之后到底真激活过没有。PanelCoordinator.TogglePanel 靠它分辨僵尸与正常面板（见 PanelFocus.DecideToggle）。</summary>
     public bool EverActivated => _everActivated;
 
     /// <param name="pages">用户自己的那些页：动作组、以及展开成单格的动作。</param>
@@ -906,7 +906,7 @@ public partial class QuickPanelWindow : Window
     // SetForegroundWindow 走的是「本进程刚响应了一次全局热键」这条豁免路径，此刻调用是允许的。
     //
     // 返回是否真的拿到了前台。中键长按那条路没有豁免，抢前台失败并不少见——
-    // 调用方据此留一行证据（见 App.TogglePanel），看门狗会在 ~2 秒的额度窗口内逐拍补抢
+    // 调用方据此留一行证据（见 PanelCoordinator.TogglePanel），看门狗会在 ~2 秒的额度窗口内逐拍补抢
     //（见 PanelFocus.MaxRetries）；仍不成则面板留着，下一次「唤出」走 Revive 分支救活它。
     public bool Popup()
     {
@@ -973,7 +973,7 @@ public partial class QuickPanelWindow : Window
     // 不是「再呼出一次」；要跟着光标跑是另一个决定，别顺手改。
     // 看门狗计时器必然还活着（只有 Dismiss 停它，而这块面板从没被 Dismiss 过），
     // 把 _watchTick 清零就等于重新拿满额度。
-    // 返回是否抢到了前台，App.TogglePanel 据此留日志。
+    // 返回是否抢到了前台，PanelCoordinator.TogglePanel 据此留日志。
     public bool Revive()
     {
         if (_closing || _menuOpen) return false;   // 关闭中 / 右键菜单挂着时都不动

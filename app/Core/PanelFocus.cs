@@ -24,12 +24,12 @@ public enum PanelToggleAction
 
 // 中键长按唤出面板的焦点决策。纯函数，不碰 Win32——与 HookWatch.ShouldHeal 同一套纪律：
 // 这句话是承重的（它决定僵尸面板是复活还是被误关、看门狗补抢几次），而它原先只活在
-// QuickPanelWindow 的计时器闭包和 App.TogglePanel 的一个 if 里，碰着实例字段，断言没法对它写。
+// QuickPanelWindow 的计时器闭包和 PanelCoordinator.TogglePanel 的一个 if 里，碰着实例字段，断言没法对它写。
 //
 // 背景病：中键长按这条路没有「刚响应用户输入」的前台锁豁免（那次按下被钩子吞了，系统不算
 // Clockwork 响应过输入），SetForegroundWindow 会被降级、AttachThreadInput 兜底也看前台脸色。
 // 旧看门狗只在第一个 250ms 补抢一次，同样没有豁免，自然一样被拒——于是面板挂成一块
-// 永远收不到键盘的浮窗，还占着 App._panel，把下一次「唤出」变成「关闭」，长按时灵时不灵。
+// 永远收不到键盘的浮窗，还占着 PanelCoordinator._panel，把下一次「唤出」变成「关闭」，长按时灵时不灵。
 public static class PanelFocus
 {
     /// <summary>250ms 一拍、最多补抢的拍数（8 拍 ≈ 2 秒）。</summary>
