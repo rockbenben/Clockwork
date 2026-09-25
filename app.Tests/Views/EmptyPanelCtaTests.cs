@@ -24,7 +24,7 @@ public class EmptyPanelCtaTests
     [Fact]
     public void The_panel_manager_is_the_one_that_fills_an_empty_panel()
     {
-        var app = Src("App.xaml.cs");
+        var app = Src("Services", "PanelCoordinator.cs");
         Assert.Contains("Strings.Get(\"Panel_Manager\"), char.ConvertFromUtf32(0xE713), OpenPanelManager, fillsEmptyPanel: true", app);
         // 反面：手势入口不许带这个标记
         Assert.DoesNotContain("OpenGestureManager, fillsEmptyPanel", app);

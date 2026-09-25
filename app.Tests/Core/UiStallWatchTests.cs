@@ -134,11 +134,16 @@ public class UiStallWatchTests
         return d!.FullName;
     }
 
-    // 卡顿计时散在两条域里：钩子/笔迹/自愈归 Services/GestureCoordinator.cs，
-    // TogglePanel 与 SaveConfig 还在 App 壳里。守卫要跨两边钉，这里把两份源码并起来读。
+    // 卡顿计时散在几个域里：钩子/笔迹/自愈归 GestureCoordinator，面板浮窗归 PanelCoordinator，
+    // SaveConfig 还在 App 壳里。守卫要跨几边钉，这里把相关源码并起来读。
     private static string AppSource()
         => File.ReadAllText(Path.Combine(RepoRoot(), "app", "App.xaml.cs"))
          + "\n" + File.ReadAllText(Path.Combine(RepoRoot(), "app", "Services", "GestureCoordinator.cs"));
+
+    // TogglePanel 的建面板段现在住在 PanelCoordinator；App 只留同名门面转发，
+    // 若并集里 IndexOf("public void TogglePanel()") 会先撞上那一行门面、量不到真身。
+    private static string PanelCode()
+        => Code(File.ReadAllText(Path.Combine(RepoRoot(), "app", "Services", "PanelCoordinator.cs")));
 
     private static string MouseHookSource()
         => File.ReadAllText(Path.Combine(RepoRoot(), "app", "Native", "MouseHook.cs"));
@@ -359,7 +364,7 @@ public class UiStallWatchTests
     [Fact]
     public void The_panel_build_is_timed()
     {
-        var app = AppCode();
+        var app = PanelCode();
         int m = app.IndexOf("public void TogglePanel()");
         Assert.True(m >= 0, "找不到 TogglePanel：这段守卫要跟着它走");
         var body = app.Substring(m, 2600);

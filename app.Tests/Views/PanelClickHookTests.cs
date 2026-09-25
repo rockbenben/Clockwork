@@ -20,7 +20,7 @@ public class PanelClickHookTests
     [Fact]
     public void Every_panel_tile_click_goes_through_the_record_funnel()
     {
-        var app = Source("App.xaml.cs");
+        var app = Source("Services", "PanelCoordinator.cs");
         Assert.Contains("() => RecordPanelClick(it.Step)", app);
         // 旧写法不许复活：直接把 RunStep 塞给格子，计数就被整个绕过。
         Assert.DoesNotContain("() => RunStep(it.Step)", app);
@@ -30,7 +30,7 @@ public class PanelClickHookTests
     // 所以漏传编译照样过，表现只是角标和按钮永远不出现。
     [Fact]
     public void The_panel_manager_is_opened_with_the_usage_map()
-        => Assert.Contains("_panelUsage, ResetPanelUsage", Source("App.xaml.cs"));
+        => Assert.Contains("_panelUsage, ResetPanelUsage", Source("Services", "PanelCoordinator.cs"));
 
     // 步骤编辑器保存时是**重建**对象而不是改原对象（ConditionProbe()）。身份那一行一旦漏掉，
     // 这个格子改一次参数就变成「从未点过」：计数归零、不报错。
