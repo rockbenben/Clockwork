@@ -34,7 +34,7 @@ public class GestureReceiptTests
     [Fact]
     public void Only_buttons_get_the_double_click_guard()
     {
-        var app = AppSource("App.xaml.cs");
+        var app = AppSource("Services", "RunOrchestrator.cs");
         Assert.Contains("bool guard = by == StepTrigger.Button;", app);
         Assert.Contains("if (guard && Interlocked.Exchange(ref _stepRunning, 1) == 1) return;", app);
     }
@@ -42,7 +42,7 @@ public class GestureReceiptTests
     // 而回执本身不能连带被删掉：安静的只有成功那一档，失败必须还会弹。
     [Fact]
     public void A_failed_step_still_reports()
-        => Assert.Contains("if (!quiet || mark.Fail > 0)", AppSource("App.xaml.cs"));
+        => Assert.Contains("if (!quiet || mark.Fail > 0)", AppSource("Services", "RunOrchestrator.cs"));
 
     // 反面：编辑器里那两颗「运行」按钮不许跟着变安静——那张卡是它们唯一的结果。
     // 路径分段传，不写成一个带分隔符的串：那样得在源码里塞反斜杠，平台一换就错。
