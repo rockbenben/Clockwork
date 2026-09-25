@@ -792,7 +792,7 @@ public sealed class MouseHook : IDisposable
                 // 划一道手势能有上千个移动消息，UI 队列会被这些重绘塞满。
                 if (_gesture.PointCount != before)
                 {
-                    // 命中与否在**钩子线程**上算完再捎过去：LiveMatch 是纯计算（微秒级），
+                    // 命中与否在**钩子线程**上算完再捎过去：LiveMatch 是纯计算，且按新采样点节流
                     // gate 状态只在这条线程上读写，不存在竞态（旧实现里这条线程就是 UI 线程）。
                     // 投递走合帧：一笔几百个采样点不会往 UI 队列塞几百次整屏分层窗重合成。
                     ScheduleTrail(data.X, data.Y, _gesture.LiveMatch());

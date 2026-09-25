@@ -173,7 +173,20 @@ public sealed class GestureGate
     // 而最坏单次开销回到有一个数量级余量的水平。
     //
     // 想再放宽的话，要先把 LiveMatch 改成增量的（别每个点都重跑 Analyze），不是再调大这个数。
+    // —— 增量的第一步已经落了：LiveMatch 现按采样点计数节流（见 liveEveryPoints），
+    //    每次重算仍是全量 Analyze，但「每点一次」变成「每 8 个新点至多一次」，最坏累积砍掉一个量级。
     private const int MaxPoints = 1024;
+
+    // —— LiveMatch 节流（只为「边画边认」的变色服务）——
+    // 每记一个新点就全量重跑 Analyze 是 O(点²) 的累积（实测 1024 点单次 5.28ms），
+    // 而这份结论的唯一消费者是笔迹颜色——纯视觉反馈。按**新点数**节流而不是按毫秒：
+    // 毫秒阈值会让单测时序化（GestureGatePerfTests 的绝对毫秒界红过 6 次里 5 次，教训在案），
+    // 点数则是确定的。触发语义不受影响：松手那一下走 OnRightUp 的新鲜 Analyze，从不读这份缓存。
+    private readonly int _liveEvery;
+    private int _liveAt = int.MinValue / 2;    // 上次真算时的 _pts.Count；初值让第一次问必答（不会溢出：点数控在 1024）
+    private bool _live;
+    /// <summary>LiveMatch 真的重跑了 Analyze 的次数。节流是否生效唯一的可观测面，测试靠它钉。</summary>
+    public int LiveComputations { get; private set; }
 
     /// <summary>这块屏上一条笔画至少该多长（物理像素）。屏幕越大，手势就该画得越大。</summary>
     //
@@ -205,11 +218,14 @@ public sealed class GestureGate
     /// <param name="matches">画出的方向串是否命中某个已配置的手势（由调用方对着配置查，支持传入上下文进程名）。</param>
     /// <param name="minLegPx">一条腿至少这么长才算数。短于它的（拐角混合、手抖）并入邻居。
     /// 采样间隔取它的四分之一：采样越细，拐角的混合占的比重越小。</param>
-    public GestureGate(Func<string, string?, bool> matches, int minLegPx = 40)
+    /// <param name="liveEveryPoints">LiveMatch 节流：距上次真算不足这么多**新采样点**时复用上次的结论。
+    /// 0 = 不节流（默认；测试与一切按「每点即答」写的调用方照旧）。生产接线传 8（见 GestureCoordinator）。</param>
+    public GestureGate(Func<string, string?, bool> matches, int minLegPx = 40, int liveEveryPoints = 0)
     {
         _matches = matches;
         _minLegPx = minLegPx < 12 ? 12 : minLegPx;
         _stepPx = Math.Max(4, _minLegPx / 4);
+        _liveEvery = liveEveryPoints < 0 ? 0 : liveEveryPoints;
     }
 
     public bool Pending => _pending;
@@ -241,8 +257,15 @@ public sealed class GestureGate
     public bool LiveMatch(string? targetProcess = null)
     {
         if (!_pending || _pts.Count < 2) return false;
+        // 节流窗口内复用上次的结论（targetProcess 一并忽略：生产调用恒为 null=ContextProcess，
+        // 而 ContextProcess 一笔之内不变）。命中与否会在下一次真算时按最新形状翻回来，
+        // 变色慢不到 8 个采样点，而松手判定从不走这条路。
+        if (_liveEvery > 0 && _pts.Count - _liveAt < _liveEvery) return _live;
+        _liveAt = _pts.Count;
+        LiveComputations++;
         var p = Analyze();
-        return p.Length > 0 && _matches(p, targetProcess ?? ContextProcess);
+        _live = p.Length > 0 && _matches(p, targetProcess ?? ContextProcess);
+        return _live;
     }
 
     public PressVerdict OnRightDown(int x, int y)
@@ -250,6 +273,7 @@ public sealed class GestureGate
         // 重复按下（上一次的抬起被丢了）：按新的重新起算，与 LongPressGate 同理。
         _pending = true;
         ContextProcess = null;
+        _liveAt = int.MinValue / 2; _live = false;   // 新一笔：LiveMatch 的节流缓存作废，第一次问必须真算
         // **Path 必须一起清掉。** 它描述的是「刚画完的那一笔」，一旦活得比那一笔久就会骗人：
         // 上层对 Swallow 这一档读它去报「你画的 X 没绑动作」，而按下本身也返回 Swallow，
         // 于是右键**点一下**都会拿上一笔的残留再弹一次提示。调阈值治不了——那串不是这次画的。
@@ -417,7 +441,11 @@ public sealed class GestureGate
         (char D, double Len, int S, int E) a, (char D, double Len, int S, int E) b)
         => (a.D, a.Len + b.Len, Math.Min(a.S, b.S), Math.Max(a.E, b.E));
 
-    public void Reset() { _pending = false; ContextProcess = null; Path = ""; _pts.Clear(); }
+    public void Reset()
+    {
+        _pending = false; ContextProcess = null; Path = ""; _pts.Clear();
+        _liveAt = int.MinValue / 2; _live = false;   // 与按下同规矩：缓存不许活得比它描述的那一笔久
+    }
 
     // 两个角之间的最短夹角（度），处理 ±180 的绕回。
     private static double Delta(double a, double center)

@@ -571,7 +571,9 @@ internal sealed class GestureCoordinator
             && _mouseHookMinLeg == minLeg && _mouseHookTolerance == middleTolerance) return;   // 已经是想要的状态
         DisposeMouseHook("reapply");
         var gesture = wantGesture
-            ? new GestureGate((p, proc) => GestureGate.Match(_config.Gestures, p, proc) != null, minLeg)
+            // liveEveryPoints: 8 —— LiveMatch 只为笔迹变色服务，按新采样点节流（判据与理由见
+            // GestureGate.LiveMatch）。测试里的 gate 默认不节流，语义保持「每点即答」。
+            ? new GestureGate((p, proc) => GestureGate.Match(_config.Gestures, p, proc) != null, minLeg, liveEveryPoints: 8)
             : null;
         // 覆盖窗跟着 gate 走：装了手势才建，卸了就关——没配手势的人不该多出一扇窗，哪怕它是隐藏的。
         if (wantGesture)
