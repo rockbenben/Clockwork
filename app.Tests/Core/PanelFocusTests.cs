@@ -57,4 +57,24 @@ public class PanelFocusTests
     [Fact]
     public void Retry_budget_is_pinned()
         => Assert.Equal(8, PanelFocus.MaxRetries);
+
+    // ── GiveUp 观察拍（ZombieShouldDismiss）：三盏灯齐亮才关 ──
+
+    [Fact]
+    public void Zombie_dismisses_only_with_all_three_lamps_on()
+        => Assert.True(PanelFocus.ZombieShouldDismiss(
+            foregroundIsOtherProcess: true, cursorInsidePanel: false,
+            consecutiveTicksOutside: PanelFocus.ZombieDwellTicks));
+
+    [Theory]
+    [InlineData(false, true, 99)]    // 前台是自家的（用户对着主窗/toast）→ 不许切
+    [InlineData(true, true, 99)]     // 光标还在面板上（正瞄着格子）→ 不许切
+    [InlineData(true, false, PanelFocus.ZombieDwellTicks - 1)]   // 刚走开，还在宽限 → 不许切
+    public void Zombie_waits_for_whole_user_leaving(bool otherFg, bool inside, int outsideTicks)
+        => Assert.False(PanelFocus.ZombieShouldDismiss(otherFg, inside, outsideTicks));
+
+    // 停留门槛是拍数不是秒：窗口每拍 250ms 固定，改这个数=改「走开多久算走开」，要有测试先红。
+    [Fact]
+    public void Zombie_dwell_gate_is_eight_ticks_about_two_seconds()
+        => Assert.Equal(8, PanelFocus.ZombieDwellTicks);
 }

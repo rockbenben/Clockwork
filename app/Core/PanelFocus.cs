@@ -44,8 +44,9 @@ public static class PanelFocus
     //   2. 曾经在前台、现在不在 → 失焦即关。
     //   3. 从未激活、额度没用完 → 再抢一次。
     //   4. 额度用尽的那一拍 → GiveUp（调用方记一行日志，恰好记一次）。
-    //   5. 之后 → None：面板留在屏幕上，仍然可见可点；「再按一次中键」由
-    //      DecideToggle 负责救活，所以 GiveUp 不是死局。
+    //   5. 之后 → None：GiveUp 不等于「永远挂着」——调用方从这里转入僵尸观察拍
+    //      （ZombieShouldDismiss），三盏灯齐亮才关；这一支仍报 None 是因为「关不关」还要问
+    //      前台归属与光标位置，那些信号不归这份纯计时裁决持有。
     // everActivated 为 false 而 hadFocus 为 true 的组合在数学上不可能（拿到过前台必然
     // 激活过），但 Dismiss 仍排在 Retry 之前钉死：万一上游字段被改坏，宁可误关也不能
     // 对着一块收不到键盘的浮窗无限补抢。
@@ -56,6 +57,25 @@ public static class PanelFocus
            : !everActivated && tick < MaxRetries ? PanelWatchAction.Retry
            : !everActivated && tick == MaxRetries ? PanelWatchAction.GiveUp
            : PanelWatchAction.None;
+
+    /// <summary>GiveUp 后观察拍的停留门槛：光标离开面板矩形后需连续这么多拍（250ms×8≈2 秒）没回来。</summary>
+    // 2 秒是「手离开面板去干别的」与「手在面板附近找格子」的分界：后者总会在一两拍内
+    // 把光标带回来（格子就在眼前），前者会持续。拍数与补抢额度同量级，不是随手挑的。
+    public const int ZombieDwellTicks = 8;
+
+    /// <summary>僵尸面板（从未激活、补抢已 GiveUp）的观察拍裁决：三盏灯**同时**亮才关。</summary>
+    //
+    //   1. foregroundIsOtherProcess —— 前台确实是别的程序的窗口。自家主窗/toast/提醒弹窗都不算：
+    //      用户可能正对着这套自家 UI，「前台短暂不是面板」≠「用户走了」。
+    //   2. !cursorInsidePanel —— 光标在面板矩形之外。**回来一下即清零计数**，所以「瞄着点、
+    //      手悬在格子上方」永不会被切；切的是「人明确走开」这一种姿势。
+    //   3. consecutiveTicksOutside ≥ ZombieDwellTicks —— 离开要持续约 2 秒，单拍抖动不算数。
+    //
+    // 成立即正确的原因：这块面板收不到键盘（从未激活），剩下的唯一用法是鼠标点格子——
+    // 光标持续留在面板之外，用法就没有了；此时「留着」才是问题（「失焦不关」的原始投诉），
+    // 关掉是对的。Revive（DecideToggle 那条路）照旧先于一切：再按一次唤出仍是救活。
+    public static bool ZombieShouldDismiss(bool foregroundIsOtherProcess, bool cursorInsidePanel, int consecutiveTicksOutside)
+        => foregroundIsOtherProcess && !cursorInsidePanel && consecutiveTicksOutside >= ZombieDwellTicks;
 
     /// <summary>面板已存在时，这次「唤出」该关掉它还是救活它。</summary>
     //

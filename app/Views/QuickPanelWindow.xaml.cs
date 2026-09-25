@@ -90,6 +90,7 @@ public partial class QuickPanelWindow : Window
     private bool _menuOpen;   // 右键菜单挂着：此刻的失焦是菜单造成的，不是用户点了别处
     private bool _everActivated;   // Show 后到底真激活过没有：被前台锁拒掉时的即刻 Deactivated 不能关窗
     private int _watchTick;        // 看门狗已走过的拍数（补抢额度）：提成字段是为了 Revive 能把它清零重满
+    private int _outsideTicks;     // GiveUp 观察拍里光标已连续离开面板矩形的拍数（回来即清零，判据见 PanelFocus.ZombieShouldDismiss）
     private bool _searching;  // 搜索态：凹坑里铺的是搜索结果，不是某一页
     private bool _hasSearch;  // 这个面板装了搜索吗（动作够多才装，见 BuildWaist）
     private List<PanelTile> _hits = new();   // 当前搜索结果，按名次排好（回车跑第一个）
@@ -976,6 +977,25 @@ public partial class QuickPanelWindow : Window
                     App.Instance?.AppendErrorLog("panel gave up foreground retry (never activated)");
                     break;
             }
+            // GiveUp 观察拍：补抢全部失败、且这一拍仍不在前台的僵尸面板，若「前台属于别的程序 +
+            // 光标离开面板矩形且连续 8 拍（≈2 秒）没回来」三盏灯齐亮，就按「用户已经走开」收起——
+            // 僵尸收不到键盘，光标又不在矩形内，鼠标点格子这条用法也没了，留着就是「失焦不关」
+            // 的投诉本体。三盏灯各自的理由与失败方向都写在 Core.PanelFocus.ZombieShouldDismiss。
+            // _menuOpen 的门在拍子最顶上（挂着菜单不吃拍也不判），孤儿菜单场景天然被挡。
+            if (!_everActivated && _watchTick > PanelFocus.MaxRetries && !now)
+            {
+                bool inside = CursorInsidePanel();
+                _outsideTicks = inside ? 0 : _outsideTicks + 1;
+                bool otherFg = Native.Win32.GetForegroundWindow() != mine
+                               && Native.Win32.ForegroundWindowOfOthers() != IntPtr.Zero;
+                if (PanelFocus.ZombieShouldDismiss(otherFg, inside, _outsideTicks))
+                {
+                    App.Instance?.AppendErrorLog("panel dismissed after give-up (never activated, user moved on)");
+                    Dismiss();
+                    return;
+                }
+            }
+            else if (_watchTick <= PanelFocus.MaxRetries || _everActivated) _outsideTicks = 0;
             if (now) hadFocus = true;
             _watchTick++;
         };
@@ -998,7 +1018,7 @@ public partial class QuickPanelWindow : Window
         try { ok = Native.ForegroundNudge.Activate(hwnd); } catch { ok = false; }
         Activate();
         Focus();   // 与 Popup 同一口径：救活的是面板，不是替用户选中第一格
-        _watchTick = 0;   // 补抢额度重新上满；计时器还在，下一拍照常走 WatchTick
+        _watchTick = 0; _outsideTicks = 0;   // 补抢额度与观察拍一起重新上满   // 补抢额度重新上满；计时器还在，下一拍照常走 WatchTick
         return ok || IsActive;
     }
 
@@ -1011,6 +1031,22 @@ public partial class QuickPanelWindow : Window
     //（PanelMetrics 允许 0）、或者上带那几个格子恰好全是停用的，第一下方向键 / 翻页之后
     // 焦点就在「重启 / 关机」那一排上，而回车紧跟其后——用户以为在选自己的动作，
     // 按下去跑的是仪器自己的开关。Ops 必须排在最后，那一排的分量本来就该最轻。
+    // 光标（物理像素）是否落在本窗口的屏幕矩形内。PointToScreen 给出的就是设备像素，
+    // 与 GetCursorPos 同一条坐标系，不必碰 DPI 换算。
+    // 判不了时按「还在用」处理返回 true：这一路的失败方向必须是不关——误关一块用户正想
+    // 点的面板，比多挂一会儿严重一个量级（下一拍条件还在，总能等到能判的时候）。
+    private bool CursorInsidePanel()
+    {
+        try
+        {
+            var p = Native.Win32.CursorPos();
+            var a = PointToScreen(new System.Windows.Point(0, 0));
+            var b = PointToScreen(new System.Windows.Point(ActualWidth, ActualHeight));
+            return p.X >= a.X && p.X < b.X && p.Y >= a.Y && p.Y < b.Y;
+        }
+        catch { return true; }
+    }
+
     private void FocusFirstTile()
     {
         foreach (var grid in new Panel[] { Tiles, TilesBottom, Ops })
