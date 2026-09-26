@@ -91,6 +91,22 @@ public class OffUiThreadTests
             string.Join("; ", callers.Select(c => $"{c.File}:{c.Line} {c.Text}")));
     }
 
+    // ForceForeground 必须先试「ALT 微输入」这条**真豁免**，AttachThreadInput 只作最后兜底。
+    // 为什么这是形状问题而不是实现细节：attach 借来的前台在 detach 后会被系统回滚——WPF 的
+    // Activated 已经发出，之后却没有任何一拍真前台，于是失焦不关（2026-09-26 部署日志：
+    // 面板挂着 90+ 拍 now=False hadFocus=False ever=True）。改回「先 attach」不会有任何编译症状。
+    [Fact]
+    public void ForceForeground_tries_the_real_exemption_before_borrowing_foreground()
+    {
+        var body = BodyOf(Source("Native", "Win32.cs"), "public static bool ForceForeground(IntPtr hwnd)");
+        int altDown = body.IndexOf("AltExemption(true)");
+        int altUp = body.IndexOf("AltExemption(false)");
+        int attach = body.IndexOf("AttachThreadInput");
+        Assert.True(altDown >= 0 && altUp >= 0, "ALT 豁免步骤不见了");
+        Assert.True(altDown < attach, "ALT 真豁免必须排在 attach 兜底之前");
+        Assert.True(altUp > altDown, "down 必须配 up——留一个按住不放的 ALT 比不豁免更糟");
+    }
+
     // ForegroundNudge 必须真的存在那条专属线程，且**带超时**。
     // 少了超时，一次不返回的 SetForegroundWindow 会把调用方永远吊住——那正是要修的病。
     [Fact]

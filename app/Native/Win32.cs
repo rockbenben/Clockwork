@@ -216,10 +216,19 @@ public static class Win32
     [DllImport("user32.dll")] private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool attach);
     [DllImport("kernel32.dll")] private static extern uint GetCurrentThreadId();
 
+    [DllImport("user32.dll")] private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+    private const byte VK_MENU = 0x12;            // ALT
+    private const uint KEYEVENTF_KEYUP = 0x0002;
+
+    // 一次注入的 ALT（down/up 各半）：伪造「本进程刚响应过键盘输入」，让前台锁放行紧随的
+    // SetForegroundWindow。理由与放它的位置见 ForceForeground。
+    private static void AltExemption(bool down)
+        => keybd_event(VK_MENU, 0x38, down ? 0 : KEYEVENTF_KEYUP, UIntPtr.Zero);
+
     /// <summary>把窗口硬提到前台。返回是否真的到了前台。</summary>
     //
     // **调用方一律走 <see cref="ForegroundNudge.Activate"/>，不要直接调这个方法。**
-    // 它内部会用 AttachThreadInput 挂输入队列，于是**调用线程必须有消息泵**；而「找一条有泵的线程」
+    // 它兜底时会用 AttachThreadInput 挂输入队列，于是**调用线程必须有消息泵**；而「找一条有泵的线程」
     // 这件事本身是有代价的（UI 线程有泵，但它是跨进程同步调用，会把 UI 线程按住甚至永久挂住）。
     // ForegroundNudge 把这份代价收进了一条专属的牺牲线程，并且给调用方加了超时。
     // 直接调它 = 把「哪条线程来承担」这个问题又交回给了每一个调用点。
@@ -251,6 +260,17 @@ public static class Win32
         try
         {
             if (SetForegroundWindow(hwnd) && GetForegroundWindow() == hwnd) return true;   // 有豁免时这一下就够
+            // ALT 微输入豁免（各类启动器的通行做法）：注入的键盘事件记在**注入方线程**所属进程头上，
+            // 前台锁据此给「刚响应过输入」的进程放行——换来的是**真前台**：Activated/Deactivated
+            // 照常成对触发，失焦即关是毫秒级的。务必排在 attach 之前：下面那条 AttachThreadInput
+            // 借来的是「校验完一撒手就被系统回滚」的假前台，正是 2026-09-26「半激活面板」
+            //（能碰得到鼠标、看门狗却没有任何一拍见过它在前台）的病灶，只能当最后兜底。
+            // down 与 up 之间夹着 SFW，「进菜单模式」的副作用落在刚被激活的窗口上而不是用户原先的程序；
+            // 0x38 是左 ALT 的扫描码——认码不认虚键的程序（原始输入的游戏）也吃得下。
+            AltExemption(true);
+            bool viaAlt = SetForegroundWindow(hwnd);
+            AltExemption(false);
+            if (viaAlt && GetForegroundWindow() == hwnd) return true;
             var fg = GetForegroundWindow();
             if (fg == IntPtr.Zero) return false;
             uint theirs = GetWindowThreadProcessId(fg, out _);
