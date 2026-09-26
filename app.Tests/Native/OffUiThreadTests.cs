@@ -109,6 +109,7 @@ public class OffUiThreadTests
         Assert.DoesNotContain("AltExemption(false)", body);
         var helper = BodyOf(Source("Native", "Win32.cs"), "private static void AltExemption()");
         Assert.Contains("SendInput(2,", helper);   // 一对事件、一次原子批
+        Assert.Contains("ReleaseKeys", helper);    // 部分注入的善后：漏了 up 就得补，与 SendKeyCombo 同房规
     }
 
     // ForegroundNudge 必须真的存在那条专属线程，且**带超时**。

@@ -221,8 +221,13 @@ public static class Win32
     // **绝不能拆成 down→SFW→up 的三明治**（坊间流传的那种写法）：Alt up 会随新激活窗口落到
     // 自家队列，旧前台程序手里留下一个没有配对 down——用户下次切回去，菜单条像被按住一样
     // 亮着（2026-09-26 用户实报「造成 alt 黏连」）。同批成对则所有队列看到的都是一闪而过的完整键。
+    // 光同批还不够，还要核对返回条数（与 KeyInput.SendKeyCombo 同一套房规）：SendInput 可能只
+    // 放进前几条就被拒（UIPI/安全桌面），漏了那条 up 的 down 就是又一次黏连——缺什么补什么。
     private static void AltExemption()
-        => SendInput(2, new[] { MakeKey(VK_MENU, false), MakeKey(VK_MENU, true) }, Marshal.SizeOf(typeof(INPUT)));
+    {
+        uint n = SendInput(2, new[] { MakeKey(VK_MENU, false), MakeKey(VK_MENU, true) }, Marshal.SizeOf(typeof(INPUT)));
+        if (n < 2) ReleaseKeys(new ushort[] { VK_MENU });
+    }
 
     /// <summary>把窗口硬提到前台。返回是否真的到了前台。</summary>
     //
