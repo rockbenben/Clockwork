@@ -216,14 +216,10 @@ public static class Win32
     [DllImport("user32.dll")] private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool attach);
     [DllImport("kernel32.dll")] private static extern uint GetCurrentThreadId();
 
-    [DllImport("user32.dll")] private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-    private const byte VK_MENU = 0x12;            // ALT
-    private const uint KEYEVENTF_KEYUP = 0x0002;
-
     // 一次注入的 ALT（down/up 各半）：伪造「本进程刚响应过键盘输入」，让前台锁放行紧随的
-    // SetForegroundWindow。理由与放它的位置见 ForceForeground。
+    // SetForegroundWindow。单发微秒级、不占 InjectionLock——与 MouseHook.ReplayClick 同一口径。
     private static void AltExemption(bool down)
-        => keybd_event(VK_MENU, 0x38, down ? 0 : KEYEVENTF_KEYUP, UIntPtr.Zero);
+        => SendInput(1, new[] { MakeKey(VK_MENU, down) }, Marshal.SizeOf(typeof(INPUT)));
 
     /// <summary>把窗口硬提到前台。返回是否真的到了前台。</summary>
     //
@@ -266,7 +262,7 @@ public static class Win32
             // 借来的是「校验完一撒手就被系统回滚」的假前台，正是 2026-09-26「半激活面板」
             //（能碰得到鼠标、看门狗却没有任何一拍见过它在前台）的病灶，只能当最后兜底。
             // down 与 up 之间夹着 SFW，「进菜单模式」的副作用落在刚被激活的窗口上而不是用户原先的程序；
-            // 0x38 是左 ALT 的扫描码——认码不认虚键的程序（原始输入的游戏）也吃得下。
+            // 扫描码由 MakeKey 现取（MapVirtualKey），认码不认虚键的程序（原始输入的游戏）也吃得下。
             AltExemption(true);
             bool viaAlt = SetForegroundWindow(hwnd);
             AltExemption(false);
