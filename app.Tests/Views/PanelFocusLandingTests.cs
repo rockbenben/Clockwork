@@ -67,4 +67,17 @@ public class PanelFocusLandingTests
         var revive = src.Substring(r, src.IndexOf("\n    }", r) - r);
         Assert.Contains("_outsideTicks = 0", revive);
     }
+
+    // 前台易主事件快路的接线守卫：事件负责「丢焦点当拍就关」，但它**只许**关见过真前台的
+    // 面板——僵尸/半激活那类不会有对自己有意义的事件，观察拍仍是唯一关闭路；接线漏了是退回
+    // 250ms 粒度（无症状的降级），接错（让 !hadFocus 也吃事件）则是开机抢焦点时面板当场被弹走。
+    [Fact]
+    public void Foreground_event_fast_path_is_wired_and_bounded()
+    {
+        var src = Src("Views", "QuickPanelWindow.xaml.cs");
+        Assert.Contains("new Native.ForegroundWatch", src);
+        Assert.Contains("if (_closing || _menuOpen || !hadFocus) return;", src);
+        // 关窗必须解钩：每块面板漏一个钩子，而程序设计成常驻托盘数周。
+        Assert.Contains("_fgWatch?.Dispose()", src);
+    }
 }

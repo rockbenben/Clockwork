@@ -95,6 +95,7 @@ public partial class QuickPanelWindow : Window
     private bool _hasSearch;  // 这个面板装了搜索吗（动作够多才装，见 BuildWaist）
     private List<PanelTile> _hits = new();   // 当前搜索结果，按名次排好（回车跑第一个）
     private DispatcherTimer? _focusWatch;
+    private Native.ForegroundWatch? _fgWatch;   // 前台易主事件（快路）；250ms 轮询仍在，见 StartFocusWatch
 
     /// <summary>Show 之后到底真激活过没有。PanelCoordinator.TogglePanel 靠它分辨僵尸与正常面板（见 PanelFocus.DecideToggle）。</summary>
     public bool EverActivated => _everActivated;
@@ -908,6 +909,8 @@ public partial class QuickPanelWindow : Window
         // Dispatcher 的计时器表上，随窗口一起泄漏。
         try { _focusWatch?.Stop(); } catch { }
         _focusWatch = null;
+        try { _fgWatch?.Dispose(); } catch { }
+        _fgWatch = null;
         try { Close(); } catch { }
     }
 
@@ -959,6 +962,17 @@ public partial class QuickPanelWindow : Window
     {
         bool hadFocus = false;
         _watchTick = 0;
+        // 事件快路：外部进程**成为前台的那一拍**就复核一次失焦即关，不等轮询。
+        // 只关「见过真前台」的面板（hadFocus）——僵尸/半激活那一类不会有对自己有意义的事件，
+        // 它们的关闭路仍是观察拍；轮询照旧挂着，事件缺席时（含回调被系统吞掉的机器）行为不变。
+        _fgWatch?.Dispose();
+        _fgWatch = new Native.ForegroundWatch(() =>
+        {
+            if (_closing || _menuOpen || !hadFocus) return;
+            var mine = new WindowInteropHelper(this).Handle;
+            if (mine == 0 || Native.Win32.GetForegroundWindow() == mine) return;   // 前台又还回来了：这次事件作废
+            Dismiss();
+        });
         _focusWatch = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
         _focusWatch.Tick += (_, _) =>
         {
