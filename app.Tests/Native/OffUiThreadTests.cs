@@ -95,16 +95,20 @@ public class OffUiThreadTests
     // 为什么这是形状问题而不是实现细节：attach 借来的前台在 detach 后会被系统回滚——WPF 的
     // Activated 已经发出，之后却没有任何一拍真前台，于是失焦不关（2026-09-26 部署日志：
     // 面板挂着 90+ 拍 now=False hadFocus=False ever=True）。改回「先 attach」不会有任何编译症状。
+    // 另一半：ALT 必须是**同批成对**的一次调用，不许拆成 down→SFW→up 的三明治——那种写法把
+    // 无配对 down 留在旧前台程序队列里，用户实报「造成 alt 黏连」（AltExemption 的注释有账）。
     [Fact]
     public void ForceForeground_tries_the_real_exemption_before_borrowing_foreground()
     {
         var body = BodyOf(Source("Native", "Win32.cs"), "public static bool ForceForeground(IntPtr hwnd)");
-        int altDown = body.IndexOf("AltExemption(true)");
-        int altUp = body.IndexOf("AltExemption(false)");
+        int alt = body.IndexOf("AltExemption();");
         int attach = body.IndexOf("AttachThreadInput");
-        Assert.True(altDown >= 0 && altUp >= 0, "ALT 豁免步骤不见了");
-        Assert.True(altDown < attach, "ALT 真豁免必须排在 attach 兜底之前");
-        Assert.True(altUp > altDown, "down 必须配 up——留一个按住不放的 ALT 比不豁免更糟");
+        Assert.True(alt >= 0, "ALT 豁免步骤不见了");
+        Assert.True(alt < attach, "ALT 真豁免必须排在 attach 兜底之前");
+        Assert.DoesNotContain("AltExemption(true)", body);
+        Assert.DoesNotContain("AltExemption(false)", body);
+        var helper = BodyOf(Source("Native", "Win32.cs"), "private static void AltExemption()");
+        Assert.Contains("SendInput(2,", helper);   // 一对事件、一次原子批
     }
 
     // ForegroundNudge 必须真的存在那条专属线程，且**带超时**。
