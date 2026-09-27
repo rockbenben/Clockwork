@@ -271,11 +271,18 @@ public sealed class MouseHook : IDisposable
     // 先清上一笔欠账：两个键在 ClickGapMs 内各点一下的话，后来者会顶掉前者的账，那个键就卡在按下态了。
     private bool ReplayClick(int which)
     {
-        ReplayUp();
-        if ((which == 1 ? Win32.SendRightDownTagged() : Win32.SendMiddleDownTagged()) == 0) return false;
-        Volatile.Write(ref _clickUpDue, which);
-        Set(_clickUp, ClickGapMs);
-        return true;
+        // 整段计作跨进程环节（见 Chain 的说明）：注入的按下要等它被插进输入流才返回，
+        // 前台程序吊死时这一步和 CallNextHookEx 一样能把回调按住几十秒。
+        long t = Environment.TickCount64;
+        try
+        {
+            ReplayUp();
+            if ((which == 1 ? Win32.SendRightDownTagged() : Win32.SendMiddleDownTagged()) == 0) return false;
+            Volatile.Write(ref _clickUpDue, which);
+            Set(_clickUp, ClickGapMs);
+            return true;
+        }
+        finally { _chainMs += Environment.TickCount64 - t; }
     }
 
     // 线程池闹钟到点：把询问投回钩子线程。PollFire 改 gate 状态，与 Callback 争用不得，
@@ -617,15 +624,21 @@ public sealed class MouseHook : IDisposable
     // 用户正在画手势、鼠标一直在动，而回调 937ms 一次都没被叫到。那有两种成因，修法相反：
     //
     //   · **我们的回调被堵了**（一次阻塞式 GC 停掉整个世界、或回调里某句 P/Invoke 卡住）：
-    //     这里会留下一行 `ui thread slow: hook-callback took ...ms (thread=bg)`。
+    //     这里会留下一行 `ui thread slow: hook-callback took ...ms (thread=bg) chain=..ms ours=..ms`。
     //     thread=bg 是**对的**——回调跑在专用钩子线程上，不是 UI 线程（见类头第 1 条）。
+    //     chain/ours 的拆分见 Chain()：2026-09-27 那晚 157 条 slow、中位 4 秒最大 45 秒，
+    //     而我们自己的计算是微秒级——不拆开的话，整条钩子链的账都记在我们头上。
     //   · **回调压根没被叫到**（上游某条低级钩子链被堵住、或 Windows 已按 LowLevelHooksTimeout
     //     把它静默摘掉）：一行都不会有，只有沉默。那时要查的是排在我们前面的那些工具。
     //
     // 两种病此前在日志里长得一模一样（都只有「沉默 937ms」），只能靠猜。
     // 代价是每个鼠标事件多两次 TickCount64——常数级读取，与回调里那些 P/Invoke 比可以忽略。
+    private int _cbDepth;    // 重入深度：回调内补发的注入事件会同步重走钩子链，可能重入本回调
+    private long _chainMs;   // 本次回调（最外层）花在跨进程环节上的毫秒数：Chain 放行 + 注入补发
     private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)
     {
+        _cbDepth++;
+        if (_cbDepth == 1) _chainMs = 0;   // 只有最外层清账：内层是我们自己注入引起的，算外层头上
         long t0 = Core.UiStallWatch.Begin();
         try { return CallbackCore(code, wParam, lParam); }
         finally
@@ -634,9 +647,28 @@ public sealed class MouseHook : IDisposable
             // 中间那一段只有这一格抓得住（见 _callbackMax）。
             uint ms = (uint)(Environment.TickCount64 - t0);
             if (ms > _callbackMax) Volatile.Write(ref _callbackMax, ms);
-            Core.UiStallWatch.End("hook-callback", t0);
+            _cbDepth--;
+            // 归因尾巴只在最外层给：内层与外层是同一份活的两次记账，报两遍会误导。
+            // TickCount64 是毫秒粒度，chain 略大于 total 时 ours 兜到 0，不代表算错。
+            string? detail = _cbDepth == 0
+                ? $"chain={_chainMs}ms ours={Math.Max(0, (long)ms - _chainMs)}ms"
+                : null;
+            Core.UiStallWatch.End("hook-callback", t0, detail);
         }
     }
+
+    // 回调内的跨进程环节都从这里过，单独计量：CallNextHookEx 会**同步**跑完排在我们后面的
+    // 所有低级钩子（它们卡在自家消息泵上是几十秒级的事），SendInput 补发要等事件被插进
+    // 输入流（前台程序吊死时同样要等）。这两类耗时不是我们的计算，混进总数就查不了案。
+    // 只跑在钩子线程上，无并发，普通字段即可。
+    private long CrossProcessMs(Func<long> f)
+    {
+        long t = Environment.TickCount64;
+        try { return f(); }
+        finally { _chainMs += Environment.TickCount64 - t; }
+    }
+    private IntPtr Chain(int code, IntPtr wParam, IntPtr lParam)
+        => (IntPtr)CrossProcessMs(() => CallNextHookEx(_hook, code, wParam, lParam).ToInt64());
 
     private IntPtr CallbackCore(int code, IntPtr wParam, IntPtr lParam)
     {
@@ -649,14 +681,14 @@ public sealed class MouseHook : IDisposable
             // 而不是「这一条消息我处理了吗」。Windows 把低级钩子静默卸掉之后，
             // 回调就再也不会被叫到——那时这个戳会停住，而它是唯一能看出来的迹象。
             System.Threading.Volatile.Write(ref _beat, Environment.TickCount64);
-            if (code < 0) return CallNextHookEx(_hook, code, wParam, lParam);
+            if (code < 0) return Chain(code, wParam, lParam);
             int msg = wParam.ToInt32();
             if (msg is not (WM_MOUSEMOVE or WM_MBUTTONDOWN or WM_MBUTTONUP or WM_RBUTTONDOWN or WM_RBUTTONUP))
-                return CallNextHookEx(_hook, code, wParam, lParam);
+                return Chain(code, wParam, lParam);
 
             var data = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
             // 自己补发的那些：原样放行（见类头注释第 3 条）。
-            if (data.DwExtraInfo == Win32.InjectTag) return CallNextHookEx(_hook, code, wParam, lParam);
+            if (data.DwExtraInfo == Win32.InjectTag) return Chain(code, wParam, lParam);
 
             // 上游延迟：这条事件在系统里生成的时刻（MSLLHOOKSTRUCT.time）到此刻隔了多久。
             // TickCount 与 time 都是 32 位、同样 49.7 天回绕，uint 减法天然正确，不必处理回绕。
@@ -679,7 +711,7 @@ public sealed class MouseHook : IDisposable
             {
                 if (msg == WM_RBUTTONDOWN) Volatile.Write(ref _beatRDown, Environment.TickCount64);
                 else Volatile.Write(ref _beatRUp, Environment.TickCount64);
-                if (_gesture == null) return CallNextHookEx(_hook, code, wParam, lParam);
+                if (_gesture == null) return Chain(code, wParam, lParam);
                 // 修饰键（Ctrl/Shift/Alt/Win）按着的右键是**别人的组合手势**——WindowShuffle 的
                 // Ctrl+右键拖窗、Explorer 的 Shift+右键扩展菜单那一类。按下这一刻就整笔放行：
                 // 低级钩子后装先调、return 1 截断整条链，扣下这个按下，排在后面的工具连按下都收不到，
@@ -693,7 +725,7 @@ public sealed class MouseHook : IDisposable
                     // 而 Ctrl 还按着——它会变成一记 Ctrl+右键，正是我们要让路的那类东西。
                     // 这笔账的安全结局本来就是「没人来领就永远不注入」（见 _owedRightClick 注释），作废即可。
                     _owedRightClick = false;
-                    return CallNextHookEx(_hook, code, wParam, lParam);
+                    return Chain(code, wParam, lParam);
                 }
                 // 起笔窗口在**按下那一刻**解析：此刻光标压着的窗就是这笔手势划在谁身上，
                 // 与轨迹起点同一坐标。微秒级 P/Invoke，留在这里安全（回调只做纯查询，不碰 UI）。
@@ -716,7 +748,7 @@ public sealed class MouseHook : IDisposable
                     // 补发被 UIPI 拒了（前台是提权进程）：放行这条真抬起。按下救不回来了，
                     // 但 DefWindowProc 光凭 WM_RBUTTONUP 就会发 WM_CONTEXTMENU，多数程序的菜单靠这一下能出来
                     // （与下面 ReplayClick 失败时同一个口径）。
-                    if (!ReplayClick(1)) return CallNextHookEx(_hook, code, wParam, lParam);
+                    if (!ReplayClick(1)) return Chain(code, wParam, lParam);
                     return 1;
                 }
                 if (msg == WM_RBUTTONDOWN) _owedRightClick = false;   // 新的一按作废旧账
@@ -758,7 +790,7 @@ public sealed class MouseHook : IDisposable
                         _post(() => _fireGesture(path, origin));   // 绝不在回调里跑动作（见类头注释第 2 条）
                         return 1;
                 }
-                return CallNextHookEx(_hook, code, wParam, lParam);
+                return Chain(code, wParam, lParam);
             }
 
             // 移动喂两个 gate：手势那份只记轨迹、永远放行，先喂不影响中键的裁决。
@@ -784,7 +816,7 @@ public sealed class MouseHook : IDisposable
                     _gesture.Reset();
                     _owedRightClick = true;   // 还欠系统一次按下，等真抬起来领（见字段注释）
                     _post(_trailEnd);
-                    return CallNextHookEx(_hook, code, wParam, lParam);
+                    return Chain(code, wParam, lParam);
                 }
                 int before = _gesture.PointCount;
                 _gesture.OnMove(data.X, data.Y);
@@ -798,13 +830,13 @@ public sealed class MouseHook : IDisposable
                     ScheduleTrail(data.X, data.Y, _gesture.LiveMatch());
                 }
             }
-            if (_gate == null) return CallNextHookEx(_hook, code, wParam, lParam);
+            if (_gate == null) return Chain(code, wParam, lParam);
 
             // 中键长按同一条规矩：修饰键按着的中键是别人的组合（浏览器 Ctrl/Shift+中键开标签、
             // 别的工具拿中键做的手势）。按下这一刻整笔放行——gate 不起笔、闹钟不上弦，
             // 随后的移动/抬起天然全部 Pass，修饰键+中键拖拽也走原生路径。
             if (msg == WM_MBUTTONDOWN && _modifierHeld())
-                return CallNextHookEx(_hook, code, wParam, lParam);
+                return Chain(code, wParam, lParam);
 
             var verdict = msg switch
             {
@@ -840,14 +872,14 @@ public sealed class MouseHook : IDisposable
                     // 加一个无配对的中键抬起——浏览器的中键自动滚动彻底失效，而那正是这一分支
                     // 存在的理由（见类头四条出口那段）。救不回来，但必须让它**可见**：
                     // 记进同一份账，诊断行的 injectRejected= 会把它报出去。
-                    if (Win32.SendMiddleDownTagged() == 0) Interlocked.Increment(ref _injectRejected);
+                    if (CrossProcessMs(() => (long)Win32.SendMiddleDownTagged()) == 0) Interlocked.Increment(ref _injectRejected);
                     break;      // 补发按下后放行本次移动，拖拽继续
             }
-            return CallNextHookEx(_hook, code, wParam, lParam);
+            return Chain(code, wParam, lParam);
         }
         catch
         {
-            try { return CallNextHookEx(_hook, code, wParam, lParam); } catch { return IntPtr.Zero; }
+            try { return Chain(code, wParam, lParam); } catch { return IntPtr.Zero; }
         }
     }
 }

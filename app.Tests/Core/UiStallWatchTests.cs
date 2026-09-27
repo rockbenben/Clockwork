@@ -402,11 +402,21 @@ public class UiStallWatchTests
     public void The_hook_callback_is_timed()
     {
         var hook = Code(MouseHookSource());
-        Assert.Contains("Core.UiStallWatch.End(\"hook-callback\", t0)", hook);
+        Assert.Contains("Core.UiStallWatch.End(\"hook-callback\", t0, detail)", hook);
         Assert.Contains("return CallbackCore(code, wParam, lParam);", hook);
         Assert.Contains("private IntPtr CallbackCore(int code, IntPtr wParam, IntPtr lParam)", hook);
         // 委托必须仍然指向**包装**那个：指到 Core 上就绕开了计时，而且没人看得出来。
         Assert.Contains("_proc = Callback;", hook);
+        // 归因拆分必须在：回调慢 =「我们算得慢」还是「跨进程环节（放行/注入）被别人的链堵着」。
+        // 2026-09-27 实测中位 4 秒最大 45 秒全是后者的形状——不拆开就只能互相猜。
+        Assert.Contains("chain={_chainMs}ms ours=", hook);
+        Assert.Contains("private IntPtr Chain(int code, IntPtr wParam, IntPtr lParam)", hook);
+        // 回调内所有放行必须走 Chain：裸 CallNextHookEx(_hook, code 只许出现在 Chain 的定义里一次，
+        // 多出来的每一个都是一处漏计的点。
+        int bare = System.Text.RegularExpressions.Regex.Matches(hook, @"CallNextHookEx\(_hook, code").Count;
+        Assert.True(bare == 1, $"裸 CallNextHookEx 应只剩 Chain() 定义那一条，实际 {bare} 条");
+        // 重入必须只记最外层：内层（自家注入引起的）清账会把外层的 chain 累计抹掉。
+        Assert.Contains("if (_cbDepth == 1) _chainMs = 0;", hook);
     }
 
     // 卡顿行还要带上**上游延迟**：只报 sinceBeat 分不开「链被排在前面的工具堵住」和

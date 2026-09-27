@@ -125,19 +125,21 @@ public static class UiStallWatch
     /// <summary>取计时起点，配 <see cref="End"/> 包住一段可疑调用。</summary>
     public static long Begin() => Environment.TickCount64;
 
-    /// <summary>可疑调用结束：超过阈值就报一行，带上自己的名字与所在线程。</summary>
-    public static void End(string what, long t0) => Note(what, Environment.TickCount64 - t0);
+    /// <summary>可疑调用结束：超过阈值就报一行，带上自己的名字与所在线程。
+    /// detail 是可选的归因尾巴（如 chain=…ms ours=…ms），只有真要报这一行时才拼进去。</summary>
+    public static void End(string what, long t0, string? detail = null) => Note(what, Environment.TickCount64 - t0, detail);
 
     /// <summary>同 <see cref="End"/>，但时长由调用方给（测试用，也便于跨时钟复用）。</summary>
     //
     // isUi 这一格是承重的：同一个名字出现在后台线程上（比如动作线程等窗口）是无害的，
     // 出现在 UI 线程上才是幽灵化的点火源。不区分的话，日志里两者长得一样。
-    public static void Note(string what, long elapsedMs)
+    public static void Note(string what, long elapsedMs, string? detail = null)
     {
         var log = _sink;
         if (log == null || !IsSlow(elapsedMs, _slowMs)) return;
         bool isUi = Environment.CurrentManagedThreadId == _uiThreadId;
-        Report(log, $"ui thread slow: {what} took {elapsedMs}ms (thread={(isUi ? "ui" : "bg")})");
+        Report(log, $"ui thread slow: {what} took {elapsedMs}ms (thread={(isUi ? "ui" : "bg")})"
+                    + (detail is null ? "" : $" {detail}"));
     }
 
     // 日志本身绝不能成为故障源：sink 是 AppendErrorLog，它自己会碰文件系统，
