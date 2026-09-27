@@ -221,8 +221,10 @@ public class ConfigStoreTests : IDisposable
     public void New_step_default_delay_is_100ms()
         => Assert.Equal(100, new LaunchStep().DelayMs);
 
-    // 钉死「改默认值不动老配置」的前提：JsonOptions 不忽略默认值，盘上显式 delayMs:0 必须原样读回，
-    // 不被新的 C# 默认 100 覆盖。这条一红，说明有人给 JsonOptions 加了 DefaultIgnoreCondition。
+    // 钉死「改默认值不动老配置」的前提：省略规则比的是**构造初值**而不是类型默认值
+    //（见 ConfigStore.SkipValuesEqualToFreshInstance），盘上显式 delayMs:0 与初值 100 不等、必须原样读回。
+    // 这条一红，说明有人把省略判据换回了 DefaultIgnoreCondition（类型默认值），
+    // 那会顺带吞掉 enabled:false、sendKey:"" 这一类「合法但等于类型默认」的状态。
     [Fact]
     public void Explicit_zero_delay_on_disk_survives_roundtrip()
     {
@@ -234,6 +236,69 @@ public class ConfigStoreTests : IDisposable
             Assert.Equal(0, ConfigStore.Read(path).LaunchSteps[0].DelayMs);
         }
         finally { File.Delete(path); }
+    }
+
+    // 省略判据的另一半：与「新鲜实例」相等的样板字段不落盘，不等的合法状态原样活着。
+    [Fact]
+    public void Fresh_defaults_are_omitted_and_nondefault_states_survive()
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(new LaunchStep(), ConfigStore.JsonOptions);
+        Assert.DoesNotContain("\"enabled\"", json);     // 初值 true：默认步骤不写
+        Assert.DoesNotContain("\"delayMs\"", json);     // 初值 100：同上
+        Assert.DoesNotContain("\"target\"", json);      // 初值 ""
+        Assert.Contains("\"id\"", json);                // 初值是随机 GUID：每个步骤必须写出，克隆才不撞
+
+        var step = new LaunchStep { Kind = "app", Label = "x", Enabled = false, DelayMs = 0, SendKey = "", PopupSeconds = 0, Repeat = 0 };
+        var path = Path.Combine(Path.GetTempPath(), "cw_cfg_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            ConfigStore.Write(new RootConfig { LaunchSteps = new() { step } }, path);
+            var back = ConfigStore.Read(path).LaunchSteps[0];
+            Assert.False(back.Enabled);
+            Assert.Equal(0, back.DelayMs);
+            Assert.Equal("", back.SendKey);
+            Assert.Equal(0, back.PopupSeconds);
+            Assert.Equal(0, back.Repeat);
+        }
+        finally { File.Delete(path); }
+    }
+
+    // 全模型无损往返：取一次「迁移不动点」（Read 会追加迁移页/补 id，首轮 Write→Read 消化掉），
+    // 再 Write→Read 逐一属性比对——省略规则若吞掉任何字段，这里会点名报出属性路径。
+    [Fact]
+    public void Whole_config_roundtrip_is_lossless_after_first_migration()
+    {
+        var p1 = Path.Combine(Path.GetTempPath(), "cw_cfg_" + Guid.NewGuid().ToString("N") + ".json");
+        var p2 = Path.Combine(Path.GetTempPath(), "cw_cfg_" + Guid.NewGuid().ToString("N") + ".json");
+        try
+        {
+            var seed = new RootConfig();
+            seed.LaunchSteps.Add(new LaunchStep { Kind = "volume", Label = "v", Enabled = false, DelayMs = 0, Level = 0 });
+            seed.LaunchSteps.Add(new LaunchStep { Kind = "text", Label = "t", Text = "hi", SendKey = "" });
+            seed.Reminders.Add(new Reminder());
+            seed.Gestures.Add(new LaunchStep { Kind = "app", Label = "g", Gesture = "LR" });
+            var a = ConfigStore.Read(WriteOnce(seed, p1));
+            var b = ConfigStore.Read(WriteOnce(a, p2));
+            AssertDeepEqual(a, b, "RootConfig");
+        }
+        finally { File.Delete(p1); File.Delete(p2); }
+
+        static string WriteOnce(RootConfig cfg, string path) { ConfigStore.Write(cfg, path); return path; }
+    }
+
+    private static void AssertDeepEqual(object a, object b, string where)
+    {
+        if (a is null || b is null) { Assert.True(a is null && b is null, $"{where}: null 不对称"); return; }
+        if (a.GetType().IsPrimitive || a is string || a is DateTime || a.GetType().IsEnum)
+        { Assert.Equal(a, b); return; }
+        if (a is System.Collections.IList la && b is System.Collections.IList lb)
+        {
+            Assert.Equal(la.Count, lb.Count);
+            for (int i = 0; i < la.Count; i++) AssertDeepEqual(la[i], lb[i], $"{where}[{i}]");
+            return;
+        }
+        foreach (var p in a.GetType().GetProperties().Where(p => p.CanRead && p.CanWrite))
+            AssertDeepEqual(p.GetValue(a), p.GetValue(b), $"{where}.{p.Name}");
     }
 
     // 快照浅拷贝手抄字段的典型漏项守卫：漏带 Repeat/RepeatDelayMs 时后台运行永远只跑 1 轮。

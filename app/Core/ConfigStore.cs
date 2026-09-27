@@ -21,6 +21,37 @@ public static class ConfigStore
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,   // 中文/+ 不转义成 \uXXXX，保持可读 JSON
     };
 
+    // 序列化瘦身：属性只有与「新建实例的初值」不同才落盘。LaunchStep 是全类型大一统结构，
+    // 一个文本步骤原先也要把音量/时钟/手势等字段全体写一遍——实测用户配置 6263 个字段里
+    // 4249 个是空值，这份冗余每次保存都全量重写。
+    //
+    // 这条规则是**构造安全**的：省略 ⇒ 读回时构造初始值就是原值；反过来，凡「类型默认值但
+    // 不是构造默认值」的合法状态（enabled:false、delayMs:0、sendKey:""）都与初始值不等，
+    // 照常落盘。DefaultIgnoreCondition 办不到这点——它拿**类型**默认值比较，
+    // 会把 enabled:false 省掉、读回成 true（ConfigStoreTests 的显式 0 守卫就是防这个的）。
+    // 引用类型（集合/对象）与初始值永不同引用 ⇒ 恒写出，语义不变。
+    static ConfigStore()
+    {
+        var resolver = new System.Text.Json.Serialization.Metadata.DefaultJsonTypeInfoResolver();
+        resolver.Modifiers.Add(SkipValuesEqualToFreshInstance);
+        JsonOptions.TypeInfoResolver = resolver;
+    }
+
+    private static void SkipValuesEqualToFreshInstance(System.Text.Json.Serialization.Metadata.JsonTypeInfo ti)
+    {
+        if (ti.Kind != System.Text.Json.Serialization.Metadata.JsonTypeInfoKind.Object || ti.Type.IsValueType) return;
+        if (ti.Type.GetConstructor(Type.EmptyTypes) is null) return;   // 构造不出「新鲜实例」的类型不参与
+        object proto;
+        try { proto = Activator.CreateInstance(ti.Type)!; } catch { return; }
+        foreach (var p in ti.Properties)
+        {
+            if (p.Get is null) continue;
+            object? protoValue;
+            try { protoValue = p.Get(proto); } catch { continue; }
+            p.ShouldSerialize = (obj, _) => !Equals(p.Get(obj), protoValue);
+        }
+    }
+
     // 深拷贝：序列化再反序列化。复制动作组/提醒共用一处，与读写走同一套 JsonOptions（含未来的 [JsonIgnore] 等约定），
     // 避免各 VM 各写一份、日后改克隆策略时漏改其一。
     public static T DeepClone<T>(T obj) => JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(obj, JsonOptions), JsonOptions)!;
