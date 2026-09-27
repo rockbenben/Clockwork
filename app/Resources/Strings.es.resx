@@ -741,4 +741,12 @@ Registro: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Borrar estadísticas de clics</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Restablece a cero el recuento de clics de los mosaicos. Solo se borran las estadísticas; no se modifica ninguna opción ni mosaico.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>¿Borrar las estadísticas de clics de todos los mosaicos del panel? Esta acción no se puede deshacer.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Referenciar elemento de inicio</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Referenciar elemento de inicio: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Elemento de inicio</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(destino eliminado)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Elemento de inicio no encontrado</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>El elemento de inicio "{0}" está deshabilitado; omitido</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>La lista de inicio está vacía: añade primero un elemento allí y refencialo aquí.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" es referenciado por {1} casilla(s) del panel. Al eliminarlo se quitarán esas casillas. ¿Eliminar de todos modos?</value></data>
 </root>

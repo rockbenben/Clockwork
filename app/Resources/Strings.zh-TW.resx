@@ -742,4 +742,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>清空點擊統計</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>把面板格子的點擊計數歸零。只清統計，不動任何設定與格子。</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>清空所有面板格子的點擊統計嗎？此步驟無法復原。</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>引用啟動項</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>引用啟動項：{0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>啟動項</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>（目標已刪除）</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>找不到啟動項</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>啟動項「{0}」已停用，跳過</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>啟動清單還是空的：先到「啟動清單」頁建一條，再回來引用它。</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>「{0}」正被 {1} 個面板格子引用；刪除會把這些格子一併移除。仍要刪除？</value></data>
 </root>

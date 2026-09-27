@@ -258,6 +258,14 @@ public partial class App
                 var real = RootConfig.Default().ActionGroups;
                 return new StepEditorWindow(new LaunchStep { Kind = "group", GroupId = real[0].Id }, real);
             }),
+            // 「引用启动项」步骤（面板语境）：目标下拉只在拿到清单时出现，不截一次等于没见过——
+            // 与 StepEditorGroup 同一个理由（2026-09 新功能的界面从未被渲染过）。
+            ("StepEditorRef", () =>
+            {
+                var items = RootConfig.Default().LaunchSteps;
+                return new StepEditorWindow(new LaunchStep { Kind = "step", RefId = items[0].Id, Label = items[0].Label },
+                                            new List<ActionGroup>(), items);
+            }),
             // 画手势时屏幕上那条笔迹。它是**唯一一扇没有任何常规界面**的窗口——
             // 透明、点不着、只有一条线——所以更需要被画出来一次：它的三条硬约束
             //（不抢前台、点得穿、不在钩子里画）都不会以「长得不对」的形式暴露，

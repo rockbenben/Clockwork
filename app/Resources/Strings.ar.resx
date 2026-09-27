@@ -741,4 +741,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>مسح إحصاءات النقر</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>يُصفّر عدّادات النقر على جميع مربّعات اللوحة. يُمسَح الإحصاء فقط دون تغيير أي إعداد أو مربّع.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>هل تريد مسح إحصاءات النقر لجميع مربّعات اللوحة؟ لا يمكن التراجع عن هذه الخطوة.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>الإشارة إلى عنصر بدء التشغيل</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>الإشارة إلى عنصر بدء التشغيل: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>عنصر بدء التشغيل</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(تم حذف الهدف)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>لم يتم العثور على عنصر بدء التشغيل</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>عنصر بدء التشغيل "{0}" معطّل؛ تم التجاهل</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>قائمة بدء التشغيل فارغة — أضف عنصرًا هناك أولاً ثم أشِر إليه من هنا.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" مُشار إليه من {1} بلاطة في اللوحة؛ سيؤدي الحذف إلى إزالة تلك البلاطات أيضًا. متابعة الحذف؟</value></data>
 </root>

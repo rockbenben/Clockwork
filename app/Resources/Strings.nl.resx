@@ -741,4 +741,12 @@ Log: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Klikstatistieken wissen</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Zet de kliktellingen van de paneltegels op nul. Alleen de statistieken worden gewist; geen instelling of tegel wordt gewijzigd.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>De klikstatistieken van alle paneltegels wissen? Dit kan niet ongedaan worden gemaakt.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Startitem refereren</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Startitem refereren: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Startitem</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(doel verwijderd)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Startitem niet gevonden</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Startitem "{0}" is uitgeschakeld; overgeslagen</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>De startlijst is leeg — voeg daar eerst een item toe en verwijs hier ernaar.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" wordt verwezen door {1} panel-tegel(s). Verwijdering verwijdert ook die tegels. Toch verwijderen?</value></data>
 </root>

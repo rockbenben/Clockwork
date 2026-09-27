@@ -741,4 +741,12 @@ Nhật ký: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Xóa thống kê nhấp</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Đặt lại số lần nhấp của các ô bảng điều khiển về không. Chỉ xóa thống kê; không thay đổi cài đặt hay ô nào.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Xóa thống kê nhấp của mọi ô trên bảng điều khiển? Hành động này không thể hoàn tác.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Tham chiếu mục khởi động</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Tham chiếu mục khởi động: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Mục khởi động</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(đích đã bị xóa)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Không tìm thấy mục khởi động</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Mục khởi động "{0}" đang bị tắt; đã bỏ qua</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>Danh sách khởi động đang trống — hãy thêm mục ở đó trước, rồi tham chiếu tại đây.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" đang được {1} ô bảng điều khiển tham chiếu. Xóa sẽ gỡ luôn các ô đó. Vẫn xóa?</value></data>
 </root>

@@ -741,4 +741,12 @@ Registro: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Limpar estatísticas de cliques</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Zera a contagem de cliques dos blocos do painel. Apenas as estatísticas são limpas; nenhuma configuração ou bloco é alterado.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Limpar as estatísticas de cliques de todos os blocos do painel? Esta ação não pode ser desfeita.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Referenciar item de inicialização</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Referenciar item de inicialização: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Item de inicialização</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(destino excluído)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Item de inicialização não encontrado</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>O item de inicialização "{0}" está desativado; ignorado</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>A lista de inicialização está vazia — adicione um item lá e depois referencie aqui.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" é referenciado por {1} azulejo(s) do painel. Excluí-lo removerá esses azulejos. Excluir mesmo assim?</value></data>
 </root>

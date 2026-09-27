@@ -741,4 +741,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Сбросить статистику кликов</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Обнуляет счётчики кликов по плиткам панели. Удаляется только статистика; настройки и плитки не меняются.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Сбросить статистику кликов по всем плиткам панели? Это действие нельзя отменить.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Ссылка на элемент автозапуска</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Ссылка на элемент автозапуска: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Элемент автозапуска</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(цель удалена)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Элемент автозапуска не найден</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Элемент автозапуска "{0}" отключён; пропущено</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>Список автозапуска пуст — сначала добавьте в него элемент, затем ссылайтесь на него здесь.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>«{0}» используется {1} плит. Удаление также уберёт эти плитки. Удалить?</value></data>
 </root>

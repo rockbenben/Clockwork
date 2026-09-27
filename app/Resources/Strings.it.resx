@@ -741,4 +741,12 @@ Registro: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Azzera statistiche clic</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Azzera i conteggi dei clic di tutti i riquadri. Vengono cancellate solo le statistiche; nessuna impostazione o riquadro viene modificato.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Azzerare le statistiche dei clic di tutti i riquadri? Operazione non annullabile.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Riferisci elemento di avvio</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Riferisci elemento di avvio: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Elemento di avvio</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(destino eliminato)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Elemento di avvio non trovato</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Elemento di avvio "{0}" disabilitato; ignorato</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>L'elenco di avvio è vuoto: aggiungi prima una voce lì, poi riferiscila qui.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" è referenziato da {1} tessera(e) del pannello. L'eliminazione rimuoverà anche quelle tessere. Eliminare?</value></data>
 </root>

@@ -54,7 +54,12 @@ internal sealed class PanelCoordinator
     // 统计的去抖落盘在 PanelUsageTracker，执行走本类的 RunStep 唯一漏斗。
     private void RecordPanelClick(LaunchStep step)
     {
-        if (!_usage.RecordClick(step.Id)) return;
+        // 统计聚合到被引用条目：点击数据回答「哪个动作最常用」，格子只是入口——
+        // 同一个动作摆在三页上，权重就该是一格三倍，而不是三格各记各的。
+        // 悬空引用（目标已删）记在格子自己头上：它不该污染任何真条目的权重。
+        var usage = step.Kind == StepDisplay.RefKind
+                    && StepRefResolver.Resolve(_config.LaunchSteps, step.RefId) is { } tgt ? tgt : step;
+        if (!_usage.RecordClick(usage.Id)) return;
         RunStep(step);
     }
 
@@ -135,6 +140,23 @@ internal sealed class PanelCoordinator
     public void RunStep(LaunchStep step, Window? owner = null, StepTrigger by = StepTrigger.Button,
                          IntPtr gestureOrigin = default)
     {
+        // 「引用启动项」格子：这一格没有自己的动作，真身在清单里。解析与三分结局同组引用一路。
+        // 措辞借 Toast_GroupStepSkipped 那张通用皮（「{0}，{1}」）：主语由 StepSummary 自带
+        //（「引用启动项：微信」），不必为第二种引用再造一条只有标点差别的文案。
+        if (step.Kind == StepDisplay.RefKind)
+        {
+            var t = StepRefResolver.ResolveForRun(_config.LaunchSteps, step.RefId);
+            if (t.Skip is { } skip)
+            {
+                ShowToast("Clockwork", Lf("Toast_GroupStepSkipped", StepDisplay.StepSummary(step), skip.Text()),
+                          skip.Benign ? Views.ToastLevel.Info : Views.ToastLevel.Warn,
+                          key: "refskip:" + step.RefId);
+                AppendErrorLog($"panel/gesture step-ref {step.RefId} - {skip.TextEn()}");
+                return;
+            }
+            _runner.RunStepAsync(t.Step!, owner, by, gestureOrigin);
+            return;
+        }
         if (step.Kind == "group")
         {
             // 用 ResolveForRun 而不是 Resolve：目标缺失 / 已禁用要**说一声**。
@@ -160,7 +182,8 @@ internal sealed class PanelCoordinator
     }
 
     private List<Views.PanelTilePage> BuildPanelPages(string? foreground = null, int capacity = 0)
-        => PanelLayout.BuildPages(_config.PanelPages, foreground, capacity, actions: _config.ActionGroups)
+        => PanelLayout.BuildPages(_config.PanelPages, foreground, capacity, actions: _config.ActionGroups,
+                                  listItems: _config.LaunchSteps)
             .Select(p => new Views.PanelTilePage(
                 p.Title,
                 p.Items.Select(it => new Views.PanelTile(it.Label, it.Icon, () => RecordPanelClick(it.Step), it.Enabled,
@@ -202,13 +225,28 @@ internal sealed class PanelCoordinator
     // 换出来的是新对象，得替回它在组里的原位，不能只改副本。
     private void EditPanelItem(PanelItem it)
     {
+        // 引用格子的「编辑」= 编辑被引用的那条清单项——这就是这个功能存在的全部意义：
+        // 改路径只改一处，格子跟着活。引用悬空时退回编辑格子本身（在那里可以重指/换类型）。
+        if (it.Step.Kind == StepDisplay.RefKind && StepRefResolver.Resolve(_config.LaunchSteps, it.Step.RefId) is { } target)
+        {
+            _panel?.Dismiss();
+            var owner = DialogOwner?.Invoke();
+            var edited = Views.StepEditorWindow.Edit(owner, target, target.Kind, _config.ActionGroups);
+            if (edited == null) return;
+            int ti = _config.LaunchSteps.IndexOf(target);
+            if (ti < 0) return;   // 期间清单里被删了：格子变悬空引用，由 RunStep 那路如实报
+            _config.LaunchSteps[ti] = edited;
+            _saveConfig();
+            RefreshMainGroupRows?.Invoke();
+            return;
+        }
         _panel?.Dismiss();
-        var owner = DialogOwner?.Invoke();
-        var edited = Views.StepEditorWindow.Edit(owner, it.Step, it.Step.Kind, _config.ActionGroups);
-        if (edited == null) return;
+        var edOwner = DialogOwner?.Invoke();
+        var editedItem = Views.StepEditorWindow.Edit(edOwner, it.Step, it.Step.Kind, _config.ActionGroups, _config.LaunchSteps);
+        if (editedItem == null) return;
         int i = it.Page.Steps.IndexOf(it.Step);
         if (i < 0) return;   // 期间被别处删了：什么都不做，好过把它又插回去
-        it.Page.Steps[i] = edited;
+        it.Page.Steps[i] = editedItem;
         _saveConfig();
         RefreshMainGroupRows?.Invoke();
     }
@@ -238,7 +276,8 @@ internal sealed class PanelCoordinator
             var owner = DialogOwner?.Invoke();
             // 以「运行程序」开场：它是最常放上面板的一类，而编辑器顶上就是类型下拉，
             // 想加别的类型当场换即可——不必先弹一层「选类型」再弹编辑器。
-            var s = Views.StepEditorWindow.Edit(owner, null, "app", _config.ActionGroups);
+            // 传 _config.LaunchSteps：面板语境独有的「引用启动项」类型靠它现身（见 StepDisplay.RefKind）。
+            var s = Views.StepEditorWindow.Edit(owner, null, "app", _config.ActionGroups, _config.LaunchSteps);
             if (s == null) return;
             page.Steps.Add(s);
             _saveConfig();

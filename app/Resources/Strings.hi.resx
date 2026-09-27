@@ -741,4 +741,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>क्लिक आँकड़े रीसेट करें</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>पैनल टाइलों की क्लिक संख्या शून्य पर रीसेट होती है। केवल आँकड़े साफ़ होते हैं; कोई सेटिंग या टाइल नहीं बदलता।</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>सभी पैनल टाइलों के क्लिक आँकड़े साफ़ करें? इसे पूर्ववत नहीं किया जा सकता।</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>स्टार्टअप आइटम संदर्भित करें</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>स्टार्टअप आइटम संदर्भित करें: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>स्टार्टअप आइटम</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(लक्ष्य हटाया गया)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>स्टार्टअप आइटम नहीं मिला</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>स्टार्टअप आइटम "{0}" निष्क्रिय है; छोड़ा गया</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>स्टार्टअप सूची खाली है — पहले वहाँ आइटम जोड़ें, फिर यहाँ संदर्भित करें।</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" पैनल टाइल(ों) {1} द्वारा संदर्भित है। हटाने पर वे टाइलें भी हट जाएँगी। फिर भी हटाएँ?</value></data>
 </root>

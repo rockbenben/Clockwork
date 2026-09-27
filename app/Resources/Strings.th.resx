@@ -741,4 +741,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>ล้างสถิติการคลิก</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>รีเซ็ตจำนวนคลิกของไทล์แผงควบคุมเป็นศูนย์ ลบเฉพาะสถิติเท่านั้น จะไม่แตะต้องการตั้งค่าหรือไทล์ใด ๆ</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>ล้างสถิติการคลิกของไทล์ทั้งหมดบนแผงควบคุมหรือไม่ การกระทำนี้ไม่สามารถย้อนกลับได้</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>อ้างอิงรายการเริ่มต้น</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>อ้างอิงรายการเริ่มต้น: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>รายการเริ่มต้น</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(ลบเป้าหมายแล้ว)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>ไม่พบรายการเริ่มต้น</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>รายการเริ่มต้น "{0}" ถูกปิดใช้งาน; ข้าม</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>รายการเริ่มต้นยังว่างอยู่ — เพิ่มรายการที่นั่นก่อน แล้วกลับมาอ้างอิงที่นี่</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" ถูกอ้างอิงโดย {1} tiles ในพาเนล การลบจะเอา tiles เหล่านั้นออกด้วย ลบต่อหรือไม่?</value></data>
 </root>

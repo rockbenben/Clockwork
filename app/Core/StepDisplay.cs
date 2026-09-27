@@ -63,6 +63,11 @@ public static class StepDisplay
         { "app", "url", "path", "keys", "mouse", "text", "volume", "window", "system", "group",
           "copySelection", "waitClipboard", "prompt", "choice", "delay", "message" };
 
+    // 「引用启动清单项」**不在** StepKinds 里：它不是机制类型，而是面板专属的复用入口——
+    // 执行分流只存在于面板格子的漏斗（PanelCoordinator.RunStep），组内/清单里的步骤到不了那里。
+    // 所以类型下拉只在面板语境（编辑器拿到清单引用）时把它追加进去，其余语境连看见都看不见。
+    public const string RefKind = "step";
+
     // 「新增 ▾」菜单的意图分节。十个机制名平铺时，新用户不知道「关掉微信」该点「窗口动作」还是
     // 「发送按键」——分节按「你想对什么做事」组织，机制名降到节内。节顺序即菜单顺序。
     // 必须恰好覆盖 StepKinds（有测试盯着）：漏一个那种步骤就没了入口，重一个会出现两条同名菜单项。
@@ -381,6 +386,9 @@ public static class StepDisplay
                     ? Strings.Lf("Sum_SysArg", SystemCommandShortLabel(s.Command), s.Level + "%")
                     : SystemCommandShortLabel(s.Command),
             "group" => Strings.Lf("Sum_RunGroup", !string.IsNullOrEmpty(s.Label) ? s.Label : (!string.IsNullOrEmpty(s.GroupId) ? s.GroupId : Strings.Get("Sum_Unset"))),
+            // 引用清单项：与组引用同一条兜底链（名字 → id → 「未设置」）。格子提交时 Label 同步成
+            // 被引用条目的名字，所以常态下这里显示的就是那个条目的名字。
+            "step" => Strings.Lf("Sum_RunRef", !string.IsNullOrEmpty(s.Label) ? s.Label : (!string.IsNullOrEmpty(s.RefId) ? s.RefId : Strings.Get("Sum_Unset"))),
             // 问句本身就是这一步的身份（「关键词？」「去哪儿？」），类型名反而是次要的——
             // 三条「用户输入」摆在清单上，不写出问的是什么就完全分不开。
             // 后面缀上「→ 变量名」：这一步的**产出**去了哪儿，是读这条动作时第二要紧的事。

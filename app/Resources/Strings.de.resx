@@ -741,4 +741,12 @@ Protokoll: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Klickstatistik löschen</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Setzt die Klickzähler aller Kacheln auf null zurück. Nur die Statistik wird gelöscht, Einstellungen und Kacheln bleiben unverändert.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Die Klickstatistik aller Kacheln wirklich löschen? Dies kann nicht rückgängig gemacht werden.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Startobjekt referenzieren</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Startobjekt referenzieren: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Startobjekt</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(Ziel gelöscht)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Startobjekt nicht gefunden</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Startobjekt "{0}" ist deaktiviert; übersprungen</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>Die Startliste ist leer — legen Sie dort zuerst ein Objekt an und referenzieren Sie es hier.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" wird von {1} Panel-Kachel(n) referenziert. Beim Löschen werden diese Kacheln entfernt. Trotzdem löschen?</value></data>
 </root>

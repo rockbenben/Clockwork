@@ -629,7 +629,16 @@ public partial class MainWindow : Window
     private void LDel_Click(object sender, RoutedEventArgs e)
     {
         var sel = _launch?.SelectedStep;
-        if (sel == null || !ConfirmDelete(StepDisplay.StepListSummary(sel))) return;
+        if (sel == null) return;
+        // 「谁在引用它」对清单项同样成立：面板格子可以引用清单条目（kind=step），
+        // 删了条目那些格子就成了悬空指针。与删动作组同一条契约——先点名、承诺联动清理、
+        // 且只真清（计数与摘除用同一份判据，见 StepRefResolver）。
+        int refs = StepRefResolver.CountPanelRefs(_config?.PanelPages, sel.Id);
+        bool ok = refs > 0
+            ? ConfirmDelete(Lf("Confirm_DeleteStepRefs", StepDisplay.StepListSummary(sel), refs))
+            : ConfirmDelete(StepDisplay.StepListSummary(sel));
+        if (!ok) return;
+        if (refs > 0) StepRefResolver.RemovePanelRefs(_config?.PanelPages, sel.Id);
         _launch?.DeleteSelected(); SyncSelection();
     }
     private void LUp_Click(object sender, RoutedEventArgs e) { _launch?.MoveUp(); SyncSelection(); }

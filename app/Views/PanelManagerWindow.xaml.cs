@@ -136,7 +136,7 @@ public partial class PanelManagerWindow : Window
         // 而它其实已经存进配置了，于是每点一次多一张看不见的空页。
         // actions 只是拿去给「运行动作」格子取被引用那个动作的图标，页本身与动作清单无关。
         var pages = PanelLayout.BuildPages(_config.PanelPages, keepEmpty: true, allContexts: true,
-                                           actions: _config.ActionGroups);
+                                           actions: _config.ActionGroups, listItems: _config.LaunchSteps);
         // 正在改名的那一页要是这一屏根本不画（它被删了），就把这个状态收掉：
         // 那个输入框已经随着重画消失，再留着标记，下次会莫名其妙又冒出一个光标。
         if (_renaming != null && !pages.Any(p => ReferenceEquals(p.Source, _renaming))) _renaming = null;
@@ -1141,7 +1141,7 @@ public partial class PanelManagerWindow : Window
     // 可以被这一格指过去的动作。页在那儿没有位置：一格指向一页是没有意义的。
     private void EditStep(PanelPage p, LaunchStep s)
     {
-        var edited = StepEditorWindow.Edit(this, s, s.Kind, _config.ActionGroups);
+        var edited = StepEditorWindow.Edit(this, s, s.Kind, _config.ActionGroups, _config.LaunchSteps);
         if (edited == null) return;
         int i = p.Steps.IndexOf(s);
         if (i < 0) return;
@@ -1152,7 +1152,7 @@ public partial class PanelManagerWindow : Window
     private void AddStep(PanelPage p)
     {
         // 以「运行程序」开场：它是最常放上面板的一类，而编辑器顶上就是类型下拉，想换当场换。
-        var s = StepEditorWindow.Edit(this, null, "app", _config.ActionGroups);
+        var s = StepEditorWindow.Edit(this, null, "app", _config.ActionGroups, _config.LaunchSteps);
         if (s == null) return;
         p.Steps.Add(s);
         Commit();

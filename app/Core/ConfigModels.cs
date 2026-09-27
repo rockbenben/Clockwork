@@ -42,6 +42,10 @@ public sealed class LaunchStep
     public string Combo { get; set; } = "";
     // group（引用动作组 id）
     public string GroupId { get; set; } = "";
+    // kind="step"（引用启动清单项）的目标 id。面板格子借此把清单里已有的条目摆成自己的一格：
+    // 路径与参数只在清单里维护一份，点击统计也聚合到被引用条目上——消灭「同一个程序配三处、
+    // 换路径漏两处」。只在面板语境下可创建（步骤编辑器的类型下拉仅在面板侧带这一项）。
+    public string RefId { get; set; } = "";
     // 鼠标手势（方向串，如 "RD"）。只有 RootConfig.Gestures 里的步骤用得上它，空=没绑。
     // 与 ActionGroup.Hotkey 是同一位置的东西：触发方式挂在被触发的对象上。
     // 手势绑的是**步骤**而不是动作组——「粘贴」「最小化」这类动作只作为手势存在，本来就没有组；

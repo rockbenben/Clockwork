@@ -71,11 +71,13 @@ public static class PanelLayout
     /// 才知道该去哪儿找它。绑哪个程序是每一页自己的一个字段，不是一个导航维度。</param>
     /// <param name="actions">动作清单，只用来给「运行动作」格子取被引用那个动作的图标。
     /// 传 null 只是那种格子回落到按 Kind 取默认图标，页照排不误。</param>
+    /// <param name="listItems">启动清单，同一条理由给「引用启动项」格子取被引用条目的图标。</param>
     public static List<PanelPageView> BuildPages(IReadOnlyList<PanelPage>? pages, string? foreground = null,
                                              int capacity = 0, bool keepEmpty = false, bool allContexts = false,
-                                             IReadOnlyList<ActionGroup>? actions = null)
+                                             IReadOnlyList<ActionGroup>? actions = null,
+                                             IReadOnlyList<LaunchStep>? listItems = null)
     {
-        var built = BuildContentPages(pages, foreground, keepEmpty, allContexts, actions);
+        var built = BuildContentPages(pages, foreground, keepEmpty, allContexts, actions, listItems);
         if (capacity <= 0) return built;
         var chunked = new List<PanelPageView>();
         foreach (var p in built)
@@ -141,7 +143,8 @@ public static class PanelLayout
     // 按内容分页（不管容量）：场景页在前，全局页在后。
     private static List<PanelPageView> BuildContentPages(IReadOnlyList<PanelPage>? pages, string? foreground,
                                                      bool keepEmpty = false, bool allContexts = false,
-                                                     IReadOnlyList<ActionGroup>? actions = null)
+                                                     IReadOnlyList<ActionGroup>? actions = null,
+                                                     IReadOnlyList<LaunchStep>? listItems = null)
     {
         var result = new List<PanelPageView>();
         if (pages == null) return result;
@@ -166,6 +169,9 @@ public static class PanelLayout
                 var icon = s.Icon;
                 if (string.IsNullOrWhiteSpace(icon) && s.Kind == "group")
                     icon = actions == null ? "" : ActionGroupResolver.Resolve(actions, s.GroupId)?.Icon ?? "";
+                // 「引用启动项」同一条口径：图标跟着被引用的条目走，条目设一次，所有指它的格子都跟着。
+                if (string.IsNullOrWhiteSpace(icon) && s.Kind == StepDisplay.RefKind)
+                    icon = listItems == null ? "" : StepRefResolver.Resolve(listItems, s.RefId)?.Icon ?? "";
                 items.Add(new PanelItem(StepDisplay.StepTitle(s),
                                         PanelIcon.Resolve(icon, s.Kind, s.Target, s.AltTargets),
                                         s.Enabled, pg, s));

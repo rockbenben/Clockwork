@@ -741,4 +741,12 @@ Günlük: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Tıklama istatistiklerini temizle</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Panel karolarının tıklama sayılarını sıfırlar. Yalnızca istatistikler temizlenir; hiçbir ayar veya karo değiştirilmez.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Tüm panel karolarının tıklama istatistikleri temizlensin mi? Bu işlem geri alınamaz.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Başlangıç öğesine başvurun</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Başlangıç öğesine başvurun: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Başlangıç öğesi</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(hedef silindi)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Başlangıç öğesi bulunamadı</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Başlangıç öğesi "{0}" devre dışı; atlandı</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>Başlangıç listesi boş — önce orada bir öğe ekleyin, sonra buradan başvurun.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}", {1} panel kutusu tarafından kullanılıyor. Silmek bu kutuları da kaldıracak. Yine de silinsin mi?</value></data>
 </root>

@@ -27,7 +27,9 @@ public class ComposedKeyTests
     // 前缀 → 该前缀下的全部 id（取自生产代码的表）。
     private static readonly (string Prefix, string[] Ids)[] Families =
     {
-        ("Kind_", StepDisplay.StepKinds),
+        // 引用类型（面板语境的 kind="step"）不在 StepKinds 里（见 StepDisplay.RefKind），
+        // 但它同样经 StepKindLabel 取 Kind_step——id 表要按「谁会被拼出键名」算，不是按「谁在下拉里」。
+        ("Kind_", StepDisplay.StepKinds.Append(StepDisplay.RefKind).ToArray()),
         ("Sys_", StepDisplay.SystemCommandMap().Select(kv => kv.Key).ToArray()),
         ("Day_", new[] { "1", "2", "3", "4", "5", "6", "7" }),
         ("Theme_", Themes.All),

@@ -741,4 +741,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>클릭 통계 지우기</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>패널 타일의 클릭 수를 0으로 되돌립니다. 통계만 지우며 설정이나 타일은 변경하지 않습니다.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>모든 패널 타일의 클릭 통계를 지울까요? 이 작업은 되돌릴 수 없습니다.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>시작 항목 참조</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>시작 항목 참조: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>시작 항목</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(대상 삭제됨)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>시작 항목을 찾을 수 없음</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>시작 항목 "{0}"이(가) 비활성화되어 건너뜁니다</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>시작 목록이 비어 있습니다. 먼저 시작 목록에서 항목을 추가한 뒤 여기에서 참조하세요.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}"이(가) 패널 타일 {1}개에서 참조 중입니다. 삭제하면 해당 타일도 제거됩니다. 삭제할까요?</value></data>
 </root>

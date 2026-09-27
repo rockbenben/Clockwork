@@ -744,4 +744,12 @@ Log: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Reset click stats</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Resets every panel tile's click count to zero. Only the statistics are cleared; no settings or tiles are changed.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Clear click statistics for all panel tiles? This cannot be undone.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Run startup item</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Run startup item: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Startup item</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(target deleted)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Startup item not found</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Startup item "{0}" is disabled; skipped</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>The Startup List is empty — add an item there first, then come back and reference it here.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" is referenced by {1} panel tile(s). Deleting it will also remove those tiles. Delete anyway?</value></data>
 </root>

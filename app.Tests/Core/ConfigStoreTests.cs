@@ -286,7 +286,7 @@ public class ConfigStoreTests : IDisposable
         static string WriteOnce(RootConfig cfg, string path) { ConfigStore.Write(cfg, path); return path; }
     }
 
-    private static void AssertDeepEqual(object a, object b, string where)
+    private static void AssertDeepEqual(object? a, object? b, string where)
     {
         if (a is null || b is null) { Assert.True(a is null && b is null, $"{where}: null 不对称"); return; }
         if (a.GetType().IsPrimitive || a is string || a is DateTime || a.GetType().IsEnum)

@@ -31,6 +31,7 @@ public static class PanelGlyph
         "window" => char.ConvertFromUtf32(0xE7C4),    // TaskView ＝ 窗口操作
         "system" => char.ConvertFromUtf32(0xE713),    // Settings ＝ 系统命令
         "group" => Group,                             // 引用另一个组：与「整组一格」同图标，说的是同一件事
+        "step" => Group,                              // 引用清单项：同一个「复用」语义，同一个字形
         "url" => char.ConvertFromUtf32(0xE774),       // Globe ＝ 打开网址
         "path" => char.ConvertFromUtf32(0xE838),      // FolderOpen ＝ 打开文件或文件夹（取不到目标自己的图标时才露这个）
         "copySelection" => char.ConvertFromUtf32(0xE8C8),  // Copy ＝ 获取选中的文字

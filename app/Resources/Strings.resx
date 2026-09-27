@@ -744,4 +744,12 @@
   <data name="Gesture_AppHint" xml:space="preserve"><value>手势只在该程序位于前台时触发；留空则在所有程序中生效。</value></data>
   <data name="Var_SecFolders" xml:space="preserve"><value>常用文件夹</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>系统环境变量</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>引用启动项</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>引用启动项：{0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>启动项</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>（目标已删除）</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>找不到启动项</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>启动项「{0}」已禁用，跳过</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>启动清单还是空的：先到「启动清单」页建一条，再回来引用它。</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>「{0}」正被 {1} 个面板格子引用；删除会把这些格子一并移除。仍要删除？</value></data>
 </root>

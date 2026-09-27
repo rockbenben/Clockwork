@@ -741,4 +741,12 @@ Log: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Hapus statistik klik</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Menyetel ulang jumlah klik pet panel ke nol. Hanya statistik yang dihapus; pengaturan dan pet tidak diubah.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Hapus statistik klik untuk semua pet panel? Tindakan ini tidak dapat dibatalkan.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Rujuk item daftar mulai</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Rujuk item daftar mulai: {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Item daftar mulai</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(target dihapus)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Item daftar mulai tidak ditemukan</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Item daftar mulai "{0}" dinonaktifkan; dilewati</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>Daftar mulai masih kosong — tambahkan item di sana, lalu rujuk dari sini.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" dirujuk oleh {1} ubin panel. Menghapusnya juga akan menghapus ubin itu. Lanjutkan?</value></data>
 </root>

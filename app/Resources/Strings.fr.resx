@@ -741,4 +741,12 @@ Journal : {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Effacer les statistiques de clics</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Remet à zéro le nombre de clics de toutes les vignettes. Seules les statistiques sont effacées ; ni la configuration ni les vignettes ne sont modifiées.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Effacer les statistiques de clics de toutes les vignettes ? Cette action est irréversible.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Référencer un élément de démarrage</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Référencer un élément de démarrage : {0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>Élément de démarrage</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>(cible supprimée)</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>Élément de démarrage introuvable</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>L'élément de démarrage « {0} » est désactivé ; ignoré</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>La liste de démarrage est vide — ajoutez d'abord un élément, puis référez-le ici.</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>« {0} » est référencé par {1} vignette(s) du panneau. La suppression retirera aussi ces vignettes. Supprimer quand même ?</value></data>
 </root>

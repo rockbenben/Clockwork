@@ -742,4 +742,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>クリック統計を消去</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>パネルのタイルのクリック数をゼロに戻します。統計だけを消去し、設定やタイルには一切手を加えません。</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>すべてのパネルタイルのクリック統計を消去しますか？この操作は元に戻せません。</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>起動項目を参照</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>起動項目を参照：{0}</value></data>
+  <data name="Ed_RefTarget" xml:space="preserve"><value>起動項目</value></data>
+  <data name="Ed_RefMissing" xml:space="preserve"><value>（対象は削除されました）</value></data>
+  <data name="Skip_RefNotFound" xml:space="preserve"><value>起動項目が見つかりません</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>起動項目「{0}」は無効のためスキップ</value></data>
+  <data name="Ed_NoRefsHint" xml:space="preserve"><value>起動リストが空です。まず「起動リスト」で項目を追加し、ここで参照してください。</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>「{0}」は {1} 個のパネルタイルから参照されています。削除するとこれらのタイルも除去されます。削除しますか？</value></data>
 </root>

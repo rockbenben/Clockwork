@@ -165,6 +165,13 @@
                     <TextBlock x:Name="NoGroupsHint" Text="{loc:Loc Ed_NoGroupsHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
+                <!-- 「引用启动清单项」：面板语境专属（类型下拉只在拿到清单时提供这一项）。
+                     与 PanGroup 同一形状：一个目标下拉 + 一条「还没有东西可引用」的指路。 -->
+                <StackPanel x:Name="PanRef">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_RefTarget}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="RefCombo" AutomationProperties.Name="{loc:Loc Ed_RefTarget}" Width="240" Height="28"/></StackPanel>
+                    <TextBlock x:Name="NoRefsHint" Text="{loc:Loc Ed_NoRefsHint}" Foreground="{StaticResource BrushMuted}" FontSize="12" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
                 <StackPanel Orientation="Horizontal" Margin="0,8,0,3"><TextBlock Text="{loc:Loc Ed_DelayMs}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="DelayBox" AutomationProperties.Name="{loc:Loc Ed_DelayMs}" Width="120" Height="28"/></StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Note}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="NoteBox" AutomationProperties.Name="{loc:Loc Ed_Note}" Width="380" Height="28"/></StackPanel>
 

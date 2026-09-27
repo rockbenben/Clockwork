@@ -13,19 +13,24 @@ namespace Clockwork.Views;
 public partial class StepEditorWindow : Window
 {
     private readonly IReadOnlyList<ActionGroup> _groups;
+    // 面板语境传进来的一份启动清单：非 null 时类型下拉多一项「引用启动项」（见 StepDisplay.RefKind）。
+    // 它的存在本身就是语境开关——清单/组/提醒那些入口不传，这一项连出现的机会都没有。
+    private readonly IReadOnlyList<LaunchStep>? _listItems;
     private readonly LaunchStep _original;   // 保留 UI 未暴露的字段（启用态 + app 进阶项），编辑时不丢
     private string _icon = "";
     public LaunchStep? Result { get; private set; }
 
-    public StepEditorWindow(LaunchStep step, IReadOnlyList<ActionGroup> groups)
+    public StepEditorWindow(LaunchStep step, IReadOnlyList<ActionGroup> groups, IReadOnlyList<LaunchStep>? listItems = null)
     {
         InitializeComponent();
         Native.DarkWindow.Apply(this);
         WindowSizing.FitToWorkArea(this);
         _groups = groups;
+        _listItems = listItems;
         _original = step;
 
-        FillCombo(KindCombo, StepDisplay.StepKinds.Select(k => (StepDisplay.StepKindLabel(k), k)).ToArray(), step.Kind);
+        FillCombo(KindCombo, (listItems != null ? StepDisplay.StepKinds.Append(StepDisplay.RefKind) : StepDisplay.StepKinds)
+                             .Select(k => (StepDisplay.StepKindLabel(k), k)).ToArray(), step.Kind);
         FillCombo(VolActionCombo, new[]
         {
             (Strings.Get("Vol_mute"), "mute"), (Strings.Get("Vol_unmute"), "unmute"), (Strings.Get("Ed_Vol_Set"), "set"),
@@ -51,6 +56,8 @@ public partial class StepEditorWindow : Window
         // 于是用户只是打开看一眼再点确定，这一步就从「什么都不做」变成了「运行第一个组」，
         // 而第一个组完全可能是关机组。打开再关上绝不能改变一个步骤。
         FillGroupCombo(GroupCombo, _groups, step.GroupId, withNone: true);
+        // 引用目标下拉只在面板语境（拿到清单）时填。失联目标不静默改指（FillRefCombo 的说明）。
+        if (_listItems != null) FillRefCombo(RefCombo, _listItems, step.RefId);
         FillCombo(PresentCombo, new[] { (Strings.Get("Present_Dialog"), ""), (Strings.Get("Present_Card"), "card") }, step.Present == "card" ? "card" : "");
         FillCombo(WinStyleCombo, new[]
         {
@@ -91,6 +98,8 @@ public partial class StepEditorWindow : Window
 
         // 交叉口指路：一个组都没有时「动作组」下拉是死路，指条活路（Ed_NoGroupsHint）。
         Vis(NoGroupsHint, _groups.Count == 0);
+        // 指路同理：清单是空的，「引用启动项」这一类就没有可指的东西——先说清出口。
+        Vis(NoRefsHint, _listItems is { Count: 0 });
         GroupCombo.SelectionChanged += (_, _) => PaintGroupPeek();
         PaintGroupPeek();
 
@@ -287,6 +296,7 @@ public partial class StepEditorWindow : Window
         Vis(PanMouse, kind == "mouse");
         Vis(PanWindow, kind == "window"); Vis(PanSystem, kind == "system"); Vis(PanText, kind == "text");
         Vis(PanMessage, kind == "message"); Vis(PanGroup, kind == "group");
+        Vis(PanRef, kind == StepDisplay.RefKind && _listItems != null);   // 非面板语境打开一条 step 步骤（手改/导入）：不铺没有目标可选的空白面板
         Vis(PanUrl, kind == "url"); Vis(PanPath, kind == "path"); Vis(PanCopySelection, kind == "copySelection");
         Vis(PanWaitClipboard, kind == "waitClipboard");
         Vis(PanPrompt, kind == "prompt"); Vis(PanChoice, kind == "choice");
@@ -449,6 +459,9 @@ public partial class StepEditorWindow : Window
             case "prompt": r.Message = AskTextBox.Text.Trim(); r.Text = AskDefaultBox.Text; break;
             case "choice": r.Message = ChoiceTextBox.Text.Trim(); r.Text = OptionsBox.Text; break;
             case "group": r.GroupId = ComboVal(GroupCombo); r.Label = _groups.FirstOrDefault(g => g.Id == r.GroupId)?.Name ?? r.Label; break;
+            // 引用清单项：只存 id + 同步一次名字（与 group 同一手）。名字不追求实时——清单里改名后
+            // 格子仍显示旧名，点开编辑/悬停摘要会露出真相；换来的是格子的排序、搜索都不依赖解析。
+            case "step": r.RefId = ComboVal(RefCombo); r.Label = _listItems?.FirstOrDefault(x => x.Id == r.RefId)?.Label ?? r.Label; break;
             case "message":
                 r.Message = MessageBox2.Text; r.Speak = SpeakChk.IsChecked == true;
                 r.Present = ComboVal(PresentCombo);
@@ -609,7 +622,9 @@ public partial class StepEditorWindow : Window
         preview.Visibility = Visibility.Collapsed;
     }
     // 打开编辑器，返回编辑后的新步骤（取消→null）。step 为 null=新建指定 kind。
-    public static LaunchStep? Edit(Window? owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups)
+    // listItems 非 null=面板语境：类型下拉追加「引用启动项」（见 _listItems 的说明）。
+    public static LaunchStep? Edit(Window? owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups,
+                                   IReadOnlyList<LaunchStep>? listItems = null)
     {
         // Level 是个**共用的数值位**：音量用 0-100（模型默认 50 是给它挑的），
         // 「等剪贴板变化」借了同一个位置但量纲是秒（1-60，意图默认 5，见 ClampWaitSeconds）。
@@ -622,7 +637,7 @@ public partial class StepEditorWindow : Window
             Action = kind == "volume" ? "set" : (kind == "window" ? "close" : (kind == "mouse" ? "down" : "")),
             Level = kind == "waitClipboard" ? StepHelpers.ClampWaitSeconds(0) : new LaunchStep().Level,
         };
-        var dlg = new StepEditorWindow(s, groups) { Owner = owner };
+        var dlg = new StepEditorWindow(s, groups, listItems) { Owner = owner };
         // owner 为 null 时必须自己找位置、自己保证看得见：这两个入口都能从**面板**进来
         // （面板一格右键 → 编辑；主窗口收在托盘时 App 传的就是 null），而面板此刻已经自己关掉了。
         // 不兜底的话，WindowStartupLocation=CenterOwner 没有 owner 可居中、Topmost 也没置，

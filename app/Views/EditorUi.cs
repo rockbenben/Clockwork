@@ -47,6 +47,18 @@ internal static class EditorUi
         FillCombo(cb, items.ToArray(), selected);
     }
 
+    /// <summary>启动清单条目下拉（面板语境的「引用启动项」）。与 FillGroupCombo 同一条命门：
+    /// **目标条目已被删除时不静默改指**——单列一项露出原 id，保存下来仍指向原来那个。
+    /// 不提供「（无）」：一条不指向任何条目的 step 步骤只会到运行期报坏配置（同 group 步骤的理由）。</summary>
+    public static void FillRefCombo(ComboBox cb, IReadOnlyList<LaunchStep> items, string selected)
+    {
+        var list = new List<(string Label, string Val)>();
+        list.AddRange(items.Select(s => (StepDisplay.StepListSummary(s), s.Id)));
+        if (!string.IsNullOrEmpty(selected) && !list.Any(i => i.Val == selected))
+            list.Insert(0, (Strings.Get("Ed_RefMissing"), selected));
+        FillCombo(cb, list.ToArray(), selected);
+    }
+
     // 整数解析：解析失败或越界回退 fallback。
     public static int ParseOr(string? s, int fallback, int min = int.MinValue, int max = int.MaxValue)
         => int.TryParse((s ?? "").Trim(), out var n) && n >= min && n <= max ? n : fallback;
