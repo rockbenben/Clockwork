@@ -168,7 +168,7 @@
                                                  试过反过来给箭头留定宽槽位、把折叠区内自由行也缩进对齐箭头槽——
                                                  那是在右对齐标签的锯齿左缘上打补丁，两条轨永远差一口气；左对齐后一条轨就够了。 -->
                                             <TextBlock Grid.Column="0" Text="{Binding Header, RelativeSource={RelativeSource AncestorType=Expander}}"
-                                                       TextWrapping="Wrap" FontSize="12.5" Foreground="{StaticResource BrushMuted}"/>
+                                                       TextWrapping="Wrap" MaxWidth="560" FontSize="12.5" Foreground="{StaticResource BrushMuted}"/>
                                             <TextBlock x:Name="Chevron" Grid.Column="1" Text="▸" FontSize="11" Margin="8,1,2,0"
                                                        VerticalAlignment="Top" Foreground="{StaticResource BrushAccentText}"/>
                                         </Grid>
