@@ -99,7 +99,7 @@
         </Border>
 
         <Grid Grid.Row="2" Margin="0,12,0,0">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
             <!-- 这里曾经有一颗「添加面板页」。两条栏各自末尾都有「+」之后它就是第二个入口了，
                  而且在窗口另一头——你正看着左栏，按钮却在这儿。删掉。 -->
             <!-- 直接放进 * 列，不套 WrapPanel：**WrapPanel 给子元素的可用宽度是无限的**，
@@ -108,14 +108,15 @@
                  被按钮压掉）。交给 * 列量宽度，换行才真的会发生。
                  与端口 / 系统启动项两处页脚同一条处理，那边的注释记着同一个坑。
                  这四句话不精简：它们教的全是拖拽手势——看界面看不出来的那一类，正该留在页脚。 -->
-            <!-- 清空点击统计。只在有数据时出现（App 传进来的字典为空就是隐藏），
-                 不套进上面的 WrapPanel：它是这一个窗口的动作，不属于面板外观那条设置。 -->
-            <Button Grid.Column="0" x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32"
-                    MinWidth="104" Margin="0,0,12,0" HorizontalAlignment="Right"
-                    Click="ResetUsage_Click" Visibility="Collapsed" ToolTip="{loc:Loc Btn_ResetUsageTip}"/>
+            <!-- 清空点击统计。只在有数据时出现（App 传进来的字典为空就是隐藏）。
+                 **它必须占自己的列**：曾和指路文案同放 * 列右对齐，于是文案的第二行
+                 直接从按钮底下穿过去（用户实报「底部叠在一起了」——有统计数据时才现形，
+                 默认配置的截图永远截不到）。列一独立，* 列自动让宽，换行点自己会算。 -->
             <TextBlock Grid.Column="0" Text="{loc:Loc Panel_ManagerHint}" Style="{StaticResource FieldHint}"
                        TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,14,0"/>
-            <Button Grid.Column="1" Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32" Click="Close_Click"/>
+            <Button Grid.Column="1" x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32"
+                    MinWidth="104" Margin="0,0,12,0" Click="ResetUsage_Click" Visibility="Collapsed" ToolTip="{loc:Loc Btn_ResetUsageTip}"/>
+            <Button Grid.Column="2" Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32" Click="Close_Click"/>
         </Grid>
     </Grid>
 </Window>

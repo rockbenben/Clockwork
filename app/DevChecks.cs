@@ -239,6 +239,17 @@ public partial class App
                 cfg.Settings.PanelIconOnly = true;
                 return new PanelManagerWindow(cfg, () => { });
             }),
+            // 有点击统计的管理器：「清空点击统计」按钮与格子右下角的计数角标只在这一刻出现，
+            // 而 2026-09-28 用户实报底部重叠正是这颗按钮和指路文案同列造成的——
+            // 没有这一张，截图矩阵永远截不到那条有数据才现形的路。
+            ("PanelManagerUsed", () =>
+            {
+                var cfg = RootConfig.Default();
+                var usage = new Dictionary<string, PanelUsageStore.TileUsage>();
+                foreach (var s in cfg.PanelPages.SelectMany(p => p.Steps).Take(4))
+                    usage[s.Id] = new PanelUsageStore.TileUsage { Clicks = 17, LastUsedUnixMs = 1 };
+                return new PanelManagerWindow(cfg, () => { }, usage, () => { });
+            }),
             // 紧凑 + 只显示图标：格子最小的那一档，两行标签的空间彻底没有。
             ("PanelManagerTiny", () =>
             {
