@@ -15,7 +15,8 @@ namespace Clockwork;
 //                  能一路带到发版；这个开关在 CI 里替用户把每扇窗、每一页都开一遍。
 //   --selftest     要一扇真窗、因而进不了 app.Tests 的那几条检查（问句弹框那条链）。见 DevSelfTest.cs。
 //   --shots <目录>  离屏渲染成 PNG 逐张比对：每个窗口的每个 Tab × 3 档宽度 × 5 档工作区高度 × 6 种语言，
-//                  外加一轮浅色主题——实测约 6200 张。
+//                  外加一轮浅色主题——实测约 6200 张。全量太慢时可用环境变量 CW_SHOT_LANGS /
+//                  CW_SHOT_WINDOWS（逗号分隔，窗口按名前缀）只渲子集，复验单条发现用。
 //                  这些轴都是被真实缺陷逃过之后一条条加上去的：只截首页 → 其余五页从未被渲染；
 //                  宽度恒为 1040 → 窗口拖到最窄时的裁切从未被看见；只跑 zh/en/de/ar → 西语在某些串上比德语更长。
 //                  「工作区高度」是模拟出来的可用高度，不等于窗口高度：最高那一档（1032）下窗口并不会真长到
@@ -260,8 +261,16 @@ public partial class App
                 return new PanelManagerWindow(cfg, () => { });
             }),
             ("StepEditor", () => new StepEditorWindow(new LaunchStep(), groups)),
+            // 「发送按键」步骤：PanKeys 此前在截图矩阵里从未出现过，而它挂着全项目最长、
+            // 拉丁键名最密的提示（Ed_KeysHint）——RTL 下最容易把这种混排打乱，不截等于没见过。
+            ("StepEditorKeys", () => new StepEditorWindow(
+                new LaunchStep { Kind = "keys", SendKey = "Ctrl+Alt+C" }, groups)),
             // 「运行动作组」步骤：组下拉与它下面那行内容预览只在这一种类型下出现，
             // 空步骤的编辑器截不到——而这正是「选择现有动作组」这条路的界面。
+            // 「按键」与「路径」两型共用同一个 { } 变量按钮（RTL 下要 FlowDirection=LeftToRight 才不镜像成 } {），
+            // 而 path 面板此前同样不在矩阵里——顺带把条件行（IfPathExists）也拍上。
+            ("StepEditorPath", () => new StepEditorWindow(
+                new LaunchStep { Kind = "path", Target = @"D:\Reports\daily.xlsx", IfPathExists = @"D:\Reports" }, groups)),
             ("StepEditorGroup", () =>
             {
                 // 用默认配置里的真实组：harness 那个 groups 是个空名占位，截出来看不出选择器长什么样，
@@ -431,6 +440,15 @@ public partial class App
                 return w;
             }),
             ("ReminderEditor", () => new ReminderEditorWindow(new Reminder(), groups)),
+            // 展开「高级」的提醒编辑器：催促（HH:mm，…）/循环（HH:mm，…）/每 N 天锚点
+            // (yyyy-MM-dd；…) 三条带日期的提示全藏在折叠的 Expander 里，收起态的矩阵从未渲染过它们。
+            ("ReminderEditorAdv", () =>
+            {
+                var w = new ReminderEditorWindow(
+                    new Reminder { RecurType = "everyNDays", RepeatMinutes = 10, IntervalMinutes = 30 }, groups);
+                w.Loaded += (_, _) => w.AdvExp.IsExpanded = true;
+                return w;
+            }),
             ("GroupEditor", () => new GroupEditorWindow(new ActionGroup(), groups, NoFunctionHotkeys)),
 // 手势管理器：带两条已绑手势进去，才截得到箭头与摘要。
             // 一条 group（跑整组）、一条 system（只作为手势存在的动作）——这两种正是这个界面要能同时装下的。
@@ -921,6 +939,22 @@ public partial class App
             // 宽度三档：820 是用户能拖到的最窄处（MinWidth），1040 是默认开窗宽，
             // 1600 验的是拉宽之后版面会不会散架（星号列吃掉全部余量、按钮飘到天边）。
             var widths = new[] { 820.0, 1040.0, 1600.0 };
+            // 定向重渲：全矩阵几千张，复验单条发现太慢。CW_SHOT_LANGS / CW_SHOT_WINDOWS
+            // 给逗号分隔清单即只渲子集（窗口按名前缀匹配；语言清单没对上就直接用给定 code，
+            // 便于单验 ja/ko 这六档之外的高危语言）。
+            var langKeep = (Environment.GetEnvironmentVariable("CW_SHOT_LANGS") ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (langKeep.Length > 0)
+            {
+                var picked = langs.Where(l => langKeep.Any(k => l.StartsWith(k, StringComparison.OrdinalIgnoreCase))).ToArray();
+                langs = picked.Length > 0 ? picked : langKeep;
+            }
+
+            var winKeep = (Environment.GetEnvironmentVariable("CW_SHOT_WINDOWS") ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var shotWindows = winKeep.Length == 0
+                ? AllXamlWindows()
+                : AllXamlWindows().Where(w => winKeep.Any(k => w.Name.StartsWith(k, StringComparison.OrdinalIgnoreCase))).ToArray();
 
             int count = 0;
             var fails = new List<string>();
@@ -933,7 +967,7 @@ public partial class App
             {
                 Strings.ApplyCulture(lang);
                 App.ApplyTheme("light");
-                foreach (var (name, make) in AllXamlWindows())
+                foreach (var (name, make) in shotWindows)
                 {
                     Window? w = null;
                     string shot = $"{name}@{lang}@light";
@@ -967,7 +1001,7 @@ public partial class App
             foreach (var lang in langs)
             {
                 Strings.ApplyCulture(lang);
-                foreach (var (name, make) in AllXamlWindows())
+                foreach (var (name, make) in shotWindows)
                     foreach (var wa in waHeights)
                         foreach (var ww in widths)
                         {
