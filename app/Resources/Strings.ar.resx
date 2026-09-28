@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -56,7 +56,7 @@
   <data name="Gesture_WatchFailed" xml:space="preserve"><value>رفض Windows الخطّاف</value></data>
   <data name="Gesture_WatchStale" xml:space="preserve"><value>انقطع الخطّاف — تجري إعادة تثبيته</value></data>
   <data name="Gesture_WatchDeaf" xml:space="preserve"><value>الخطّاف مثبَّت لكن لا يصل أي إدخال — جرّب التشغيل كمسؤول</value></data>
-  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>برنامج آخر يستحوذ على الزر الأيمن (AutoHotkey أو تعريف الفأرة…)</value></data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>برنامج آخر يستحوذ على الزر الأيمن (⁨AutoHotkey⁩ أو تعريف الفأرة…)</value></data>
   <data name="Gesture_Hint" xml:space="preserve"><value>اضغط الزر الأيمن مع الاستمرار وارسم مسارًا، فيُنفَّذ الإجراء المقابل. وبدون إيماءات يعمل الزر الأيمن كالمعتاد.</value></data>
   <data name="Gesture_Track" xml:space="preserve"><value>المسار</value></data>
   <data name="Settings_GestureManage" xml:space="preserve"><value>إدارة الإيماءات…</value></data>
@@ -249,7 +249,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>التشغيل كمسؤول</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>يمكن أن يكون الهدف برنامجًا (مسارًا كاملًا أو الاسم فقط) أو اختصارًا أو نصًا برمجيًا أو مجلدًا أو رابطًا أو مستندًا أو بروتوكولًا مثل ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>اختصار</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>مثال: Win+D / Alt+K / Ctrl+Enter / F5. يُرسَل إلى النافذة النشطة؛ أحضر الهدف للأمام أولًا. التركيبات التي يحجزها ويندوز (Win+D، Win+6…) لا يمكن التقاطها — انقر نقرًا مزدوجًا على الحقل لكتابتها. إجراءات الفأرة مع مفاتيح التعديل موجودة هنا أيضًا: مرّر داخل الحقل لتسجيل واحد (Ctrl للتكبير، Shift للتمرير الأفقي)، واكتب LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward للأزرار. أما التمرير أو النقر العادي فخطوة «الفأرة» أسهل.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>مثال: ⁨Win+D / Alt+K / Ctrl+Enter / F5.⁩ يُرسَل إلى النافذة النشطة؛ أحضر الهدف للأمام أولًا. التركيبات التي يحجزها ويندوز ⁨(Win+D, Win+6…)⁩ لا يمكن التقاطها — انقر نقرًا مزدوجًا على الحقل لكتابتها. إجراءات الفأرة مع مفاتيح التعديل موجودة هنا أيضًا: مرّر داخل الحقل لتسجيل واحد (⁨Ctrl⁩ للتكبير، ⁨Shift⁩ للتمرير الأفقي)، واكتب LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward للأزرار. أما التمرير أو النقر العادي فخطوة «الفأرة» أسهل.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>يذهب التمرير إلى النافذة تحت المؤشر، أما النقر فيقع حيث يوجد المؤشر بالفعل (لا يحرّك هذا البرنامج المؤشر أبدًا). لذا هيّئ الهدف أولًا عبر إجراء النافذة ← الإحضار إلى المقدمة، أو اكتفِ بإجراءات لا تعتمد على الموضع مثل رجوع/تقدّم. للنقر N مرة أو التمرير N درجة ارفع عدد التكرارات بالأسفل، واضبط الإيقاع بمهلة ما بعد الخطوة.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>التمرير لأسفل</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>التمرير لليمين</value></data>
@@ -331,7 +331,7 @@
   <data name="Ed_Trigger" xml:space="preserve"><value>المشغّل</value></data>
   <data name="Ed_Trig_Time" xml:space="preserve"><value>في وقت محدد</value></data>
   <data name="Ed_Trig_Startup" xml:space="preserve"><value>عند تسجيل الدخول</value></data>
-  <data name="Ed_Time" xml:space="preserve"><value>الوقت (HH:mm)</value></data>
+  <data name="Ed_Time" xml:space="preserve"><value>الوقت (⁨HH:mm⁩)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>شرط تسجيل الدخول</value></data>
   <data name="Ed_SMode_Any" xml:space="preserve"><value>دائمًا</value></data>
   <data name="Ed_SMode_Before" xml:space="preserve"><value>فقط قبل N:00</value></data>
@@ -346,7 +346,7 @@
   <data name="Ed_Rec_Once" xml:space="preserve"><value>لمرة واحدة</value></data>
   <data name="Ed_EveryNDays" xml:space="preserve"><value>كل</value></data>
   <data name="Ed_AnchorDays" xml:space="preserve"><value>أيام؛ ابتداءً من</value></data>
-  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd؛ فارغ = اليوم)</value></data>
+  <data name="Ed_AnchorHint" xml:space="preserve"><value>(⁨yyyy-MM-dd⁩؛ فارغ = اليوم)</value></data>
   <data name="Ed_MonthlyDay" xml:space="preserve"><value>يوم الشهر</value></data>
   <data name="Ed_OnceDate" xml:space="preserve"><value>التاريخ</value></data>
   <data name="Ed_ActPopup" xml:space="preserve"><value>تذكير منبثق</value></data>
@@ -365,10 +365,10 @@
   <data name="Tray_QuickRemind" xml:space="preserve"><value>تذكير سريع</value></data>
   <data name="Ed_RepeatNag" xml:space="preserve"><value>التذكير حتى التأكيد</value></data>
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>دقيقة (0 = بلا تكرار)، حتى</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = 20 ظهورًا كحد أقصى)</value></data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(⁨HH:mm⁩، فارغ = 20 ظهورًا كحد أقصى)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>تشغيل دوري</value></data>
   <data name="Ed_LoopUntilPre" xml:space="preserve"><value>دقيقة (0 = إيقاف)، حتى</value></data>
-  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm، فارغ = نهاية اليوم)</value></data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(⁨HH:mm⁩، فارغ = نهاية اليوم)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>تأخير بعد التشغيل</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>ث، بالإضافة إلى عشوائي 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>ث</value></data>
@@ -558,7 +558,7 @@
   <data name="Win_maximizeFg" xml:space="preserve"><value>تكبير النافذة الحالية</value></data>
   <data name="Win_closeFg" xml:space="preserve"><value>إغلاق النافذة الحالية</value></data>
   <data name="Sys_searchSelection" xml:space="preserve"><value>البحث عن النص المحدد</value></data>
-  <data name="Sys_playSound" xml:space="preserve"><value>تشغيل صوت (صوت النظام أو ملف .wav)</value></data>
+  <data name="Sys_playSound" xml:space="preserve"><value>تشغيل صوت (صوت النظام أو ملف ⁨.wav⁩)</value></data>
   <data name="Ed_SearchUrl" xml:space="preserve"><value>عنوان البحث</value></data>
   <data name="Ed_SearchEngine" xml:space="preserve"><value>محرك البحث</value></data>
   <data name="Ed_SearchCustom" xml:space="preserve"><value>مخصص…</value></data>
