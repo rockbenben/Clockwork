@@ -249,7 +249,9 @@ internal sealed class GestureCoordinator
     // LowLevelHooksTimeout 会被 Windows 静默摘掉，正是那次日志里 `silentFor=937ms` 的来源）。
     // alloc = 分配增量（MB）。整屏分层窗每帧要重新合成一遍 2560×1440 ≈ 14MB，
     // 这个数暴涨就说明渲染压力是元凶。
-    // sinceBeat = 钩子距上次回调多久（- 表示没装钩子）——它和卡顿同时发生，才谈得上「同一次事件」。
+    // sinceBeat = 钩子距上次回调多久（- 表示没装钩子，never 表示装了但从没来过事件——
+    // 刚装上的钩子在第一次鼠标移动前就是这个状态，别把 MaxValue 当数读）——
+    // 它和卡顿同时发生，才谈得上「同一次事件」。
     //
     // 这两个 API 都是常数级读取，不会给「刚解卡」的 UI 线程再添负担。
     private string StallContext()
@@ -275,7 +277,7 @@ internal sealed class GestureCoordinator
         // 以为两者可比（旧的那一半几乎恒为 hidden）。
         string trail = _trail == null ? "none" : (_trailUpSinceStall ? "up" : "never");
         _trailUpSinceStall = false;   // 这一份账只用一次，同 _stallGc2 / _stallAllocMb
-        return $"gc2=+{dGc2} alloc=+{dAllocMb}MB sinceBeat={(beat < 0 ? "-" : beat + "ms")} "
+        return $"gc2=+{dGc2} alloc=+{dAllocMb}MB sinceBeat={(beat < 0 ? "-" : beat == long.MaxValue ? "never" : beat + "ms")} "
              + $"upstreamMax={(_mouseHook == null ? "-" : upstream + "ms")} "
              + $"callbackMax={(_mouseHook == null ? "-" : cbMax + "ms")} trailUp={trail}";
     }
