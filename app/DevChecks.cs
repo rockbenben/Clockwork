@@ -614,7 +614,14 @@ public partial class App
                         new PanelTile("cmd", AutoIcon(@"C:\Windows\System32\cmd.exe"), () => { }),
                         // 指向一个不存在的文件：必须优雅退回线描，而不是空一格。
                         new PanelTile("missing", AutoIcon(@"C:\nope\gone.exe"), () => { }),
-                        new PanelTile(Strings.Get("Kind_keys"), PanelGlyph.ForKind("keys"), () => { }),
+                        // 补齐剩下六个类型的字形：这张合影就是 PanelGlyph 的逐格验收图，
+                        // 漏一个类型，它挑错码位时就只有用户先看得见。
+                        new PanelTile(Strings.Get("Kind_url"), PanelGlyph.ForKind("url"), () => { }),
+                        new PanelTile(Strings.Get("Kind_path"), PanelGlyph.ForKind("path"), () => { }),
+                        new PanelTile(Strings.Get("Kind_copySelection"), PanelGlyph.ForKind("copySelection"), () => { }),
+                        new PanelTile(Strings.Get("Kind_waitClipboard"), PanelGlyph.ForKind("waitClipboard"), () => { }),
+                        new PanelTile(Strings.Get("Kind_prompt"), PanelGlyph.ForKind("prompt"), () => { }),
+                        new PanelTile(Strings.Get("Kind_choice"), PanelGlyph.ForKind("choice"), () => { }),
                     }, OnAdd: () => { }),
                     // 带 OnAdd：末尾那个半透明的「新增」虚位只有在这一页可加东西时才画得出来。
                     new PanelTilePage(Strings.Get("Tab_Launch"), new[]
