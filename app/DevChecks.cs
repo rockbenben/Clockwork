@@ -703,7 +703,7 @@ public partial class App
         new PanelTile(Strings.Get("Gesture_Manager"), char.ConvertFromUtf32(0xE962), () => { }),
         // fillsEmptyPanel 要跟 PanelCoordinator.BuildPanelWaistOps 一致：空面板那颗行动按钮的显隐与文字全看它，
         // 这儿漏了标记，QuickPanelEmpty 那张图就会画出一块没有按钮的空面板——一张说谎的截图。
-        new PanelTile(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE713), () => { }, fillsEmptyPanel: true),
+        new PanelTile(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE790), () => { }, fillsEmptyPanel: true),
     };
 
     // 挪出屏幕再显示：不居中、不抢焦点、不进任务栏视野。

@@ -313,7 +313,6 @@ internal sealed class PanelCoordinator
     //
     // 「管理面板」放在面板自己身上：要改面板的人此刻正看着面板，
     // 让他先去开主窗口、再翻到动作组页、再找一颗按钮，是把最近的路绕成最远的。
-    // 用齿轮（MDL2 Settings），与管理器页眉上那颗「编辑这一页」同一个符号——都是「去调它」。
     // 表圈右端那几颗：都是「关于这个程序自己」的入口，不是你配的动作。
     // 手势那颗在这儿，是因为手势和面板是同一批人用的同一类东西（都是「不用键盘就能触发一个动作」），
     // 而在此之前它只在主界面的标题栏上有一个入口——想改一条手势得先把主窗口翻出来。
@@ -330,6 +329,13 @@ internal sealed class PanelCoordinator
         new(Strings.Get("Gesture_Manager"), char.ConvertFromUtf32(0xE962), () => OpenGestureManager?.Invoke()),
         // fillsEmptyPanel：面板空着时那颗行动按钮指向这里——把面板填满的正是「管理面板」。
         // 显式标记而不是靠排在第几个：上面那条手势入口就是加在前面的，靠顺序的话它会把空态按钮劫走。
-        new(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE713), OpenPanelManager, fillsEmptyPanel: true),
+        //
+        // 0xE790 = MDL2 的 Repair（扳手）：「调这块面板」，与任何格子字形都不重形。
+        // 这里一度用齿轮（E713），依据是「与管理器页眉那颗编辑齿轮同符号」——页眉后来没有那颗
+        // 齿轮了，依据失效；更要命的是 system 类格子的字形同为 E713，同一窗口里两颗齿轮指向两处。
+        // 中途还试过 E8A9 Tiles（四方格，语义最准——它管的就是这盘格子），但和 group/引用格子的
+        // E71D AllApps 几乎同形，格子区里一半的格都长着那张网，表圈再挂一张就分不出谁是谁了。
+        // 改码位时 EmptyPanelCtaTests 的源形守卫与 DevChecks 的变体要一起改，并跑 --shots 用眼睛验收。
+        new(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE790), OpenPanelManager, fillsEmptyPanel: true),
     };
 }
