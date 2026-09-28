@@ -1002,8 +1002,13 @@ public partial class App
             {
                 Strings.ApplyCulture(lang);
                 foreach (var (name, make) in shotWindows)
+                {
+                    // 有些对话框自带宽度比矩阵最窄档还小（提醒编辑器 640 < 820）：矩阵测的
+                    // 「最窄」其实比用户实际看到的更宽，窄态溢出永远抓不到。这类窗口按自身宽度补一档。
+                    double native = make().Width;
+                    var ws = native > 0 && native < widths[0] ? widths.Append(native).ToArray() : widths;
                     foreach (var wa in waHeights)
-                        foreach (var ww in widths)
+                        foreach (var ww in ws)
                         {
                             Window? w = null;
                             string shot = $"{name}@{lang}@{(int)ww}x{(int)wa}";
@@ -1054,6 +1059,7 @@ public partial class App
                                 try { w?.Close(); } catch { }
                             }
                         }
+                }
             }
             File.WriteAllText(marker, fails.Count == 0
                 ? $"OK {count} shots -> {dir}"
