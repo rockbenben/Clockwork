@@ -22,8 +22,10 @@
        Danger 危险（当**文字**用，见 Theme.xaml 的 DangerButton）
        Brass  擒纵轨点亮的那几格——唯一不属于强调色的有色元素，例外理由见下第三条
 
-     对比度都量过（相对 Ink #101010）：
-       Paper 15.8:1   Muted 7.1:1   Faint 4.6:1   AccentText 6.8:1   Danger 5.1:1
+     对比度都量过，两块画布分开量——文字不只落画布（Ink #101010），也落卡片（Slate #191919），
+     闸门在 app.Tests/Theme/PaletteContrastTests.cs（三档文字 × 两底 ≥4.5:1 钉死）：
+       相对 Ink    Paper 15.8:1   Muted 7.1:1   Faint 5.1:1   AccentText 6.8:1   Danger 5.1:1
+       相对 Slate  Paper 14.6:1   Muted 6.6:1   Faint 4.7:1
        白字压 Accent 5.7:1，压 AccentHover 4.7:1——悬停也没掉到 4.5 以下，
        这一条上一版没验：按钮悬停变亮的那一瞬间，白字可能就虚了。
        Brass 相对 Slate 7.9:1、相对轨底 Steel 7.0:1。
@@ -44,7 +46,7 @@
     <Color x:Key="Line">#353535</Color>
     <Color x:Key="Paper">#EAEAEA</Color>
     <Color x:Key="Muted">#9E9E9E</Color>
-    <Color x:Key="Faint">#7C7C7C</Color>
+    <Color x:Key="Faint">#848484</Color>
     <Color x:Key="Accent">#3466B2</Color>
     <Color x:Key="AccentHover">#3C74C6</Color>
     <Color x:Key="AccentDeep">#264B82</Color>

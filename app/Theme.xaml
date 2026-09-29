@@ -137,8 +137,9 @@
     <!-- 表单里的说明。与通用 Hint（12px）分开：它们现在独占一列，
          位置已经把主次说清楚了，再叠一层缩字号是三重编码同一件事，
          代价是本就承载实信息的句子（0–600 秒、最多等 90 秒、Esc 取消 / Del 清空）更难读。
-         颜色维持 Muted（对 Ink 背景 6.6:1，过 WCAG AA）——再暗一档的 Faint 只有 3.3:1，
-         当正文用是不合格的，所以层级靠「标签变亮」而不是「说明变暗」。
+         颜色维持 Muted——Faint 那一档被 PaletteContrastTests 钉在 AA 线贴线过（它扛表头/分组标签
+         这类短读数可以，整句承载实信息的说明压在一个贴线的值上，等于把可读性押在容差上），
+         所以层级靠「标签变亮」而不是「说明变暗」。
          页脚那类 Hint 不跟着改：它们是长段落的次要 chrome，放大会把已经四行的端口页页脚再推长一行。 -->
     <Style x:Key="FieldHint" TargetType="TextBlock" BasedOn="{StaticResource Hint}">
         <Setter Property="FontSize" Value="13"/>

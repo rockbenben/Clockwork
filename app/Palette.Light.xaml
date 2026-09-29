@@ -8,8 +8,12 @@
 
      键名与深色一一对应（说明见 Palette.Dark.xaml），值另给一套。
 
-     对比度都量过（相对 Slate #FFFFFF）：
-       Paper 17.4:1   Muted 7.1:1   Faint 4.7:1   AccentText 7.3:1   Danger 5.5:1
+     对比度都量过，两块画布分开量——文字不只落卡片（Slate #FFFFFF），也落窗口画布（Ink #F4F4F3），
+     闸门在 app.Tests/Theme/PaletteContrastTests.cs（三档文字 × 两底 ≥4.5:1 钉死）：
+       相对 Slate  Paper 17.4:1   Muted 7.1:1   Faint 5.2:1   AccentText 7.3:1   Danger 5.5:1
+       相对 Ink    Paper 15.8:1   Muted 6.5:1   Faint 4.8:1
+     Faint 在这一侧的约束面是画布 Ink：#737373 量 Slate 有 4.7 却只给 Ink 4.31，卡在线下——
+     它扛的都是最小的字（表头 11.5px、分组标签 10.5px），压到哪块底都得过线，故取 #6C6C6C。
        白字压 Accent 7.3:1，压 AccentHover 8.7:1
      强调色当填充和当文字用的是同一个值——浅底上 #2C5696 两种用法都够，
      不像深色那边需要单独提亮一档。
@@ -25,7 +29,7 @@
     <Color x:Key="Line">#D4D4D4</Color>
     <Color x:Key="Paper">#1A1A1A</Color>
     <Color x:Key="Muted">#585858</Color>
-    <Color x:Key="Faint">#737373</Color>
+    <Color x:Key="Faint">#6C6C6C</Color>
     <Color x:Key="Accent">#2C5696</Color>
     <Color x:Key="AccentHover">#264B82</Color>
     <Color x:Key="AccentDeep">#20406F</Color>
