@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Yalnızca proje klasörlerinizden başlatılan hizmetleri listeler; .git veya package.json gibi işaretlerle tanınır. İşareti kaldırırsanız dinlemede olan diğer yazılımlar da görünür.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Bir satıra çift tıklayınca tarayıcıda açılır, sağ tıklayınca port serbest bırakılır.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{1} porttan {0} tanesi · her 5 sn’de yenilenir</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>Mevcut süzgeçle eşleşen port yok. Bu bilgisayarda {0} port dinlemede — süzgeci değiştirin veya aramayı temizleyin.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Tarayıcıda aç</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Portu serbest bırak</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Ayrıca şu portları dinliyor: {0}</value></data>

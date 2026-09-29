@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>プロジェクトフォルダーから起動したサービスだけを表示します（.git や package.json などの目印で判定）。チェックを外すと、ほかの待ち受け中のソフトも表示されます。</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>行をダブルクリックするとブラウザーで開き、右クリックでポートを解放します。</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} ポート · 5 秒ごとに自動更新</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>現在の絞り込みではポートが表示されていません。このマシンでは {0} 個のポートが待受中です — 絞り込みを変えるか、検索をクリアしてください。</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>ブラウザーで開く</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>ポートを解放</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>同時に待ち受け中: {0}</value></data>

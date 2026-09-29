@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>केवल वे सेवाएँ दिखाता है जो आपके किसी प्रोजेक्ट फ़ोल्डर से चली हैं — .git या package.json जैसे चिह्नों से पहचानी जाती हैं। बाकी सुन रहे सॉफ़्टवेयर देखने के लिए चिह्न हटाएँ।</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>किसी पंक्ति पर डबल-क्लिक करने पर वह ब्राउज़र में खुलती है; राइट-क्लिक से पोर्ट मुक्त होता है।</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{1} में से {0} पोर्ट · हर 5 सेकंड में ताज़ा</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>वर्तमान फ़िल्टर से मेल खाता कोई पोर्ट नहीं है। इस मशीन पर {0} पोर्ट सुन रहे हैं — फ़िल्टर बदलें या खोज साफ़ करें।</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>ब्राउज़र में खोलें</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>पोर्ट मुक्त करें</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>{0} पर भी सुन रहा है</value></data>

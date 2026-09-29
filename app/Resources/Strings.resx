@@ -31,6 +31,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>只列出从你的项目目录跑起来的服务，按 .git、package.json 这类标记认。取消勾选可看到其余正在监听的软件。</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>双击一行用浏览器打开，右键释放端口。</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} 个端口 · 每 5 秒自动刷新</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>当前筛选下没有端口。机器上共有 {0} 个端口在监听——换个筛选或清空搜索试试。</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>用浏览器打开</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>释放端口</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>同时监听：{0}</value></data>

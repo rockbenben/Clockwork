@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>只列出從你的專案目錄跑起來的服務，按 .git、package.json 這類標記認。取消勾選可看到其餘正在監聽的軟體。</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>雙擊一列用瀏覽器開啟，右鍵釋放連接埠。</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} 個連接埠 · 每 5 秒自動重新整理</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>目前篩選下沒有連接埠。機器上共有 {0} 個連接埠在監聽——換個篩選或清除搜尋試試。</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>用瀏覽器開啟</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>釋放連接埠</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>同時監聽：{0}</value></data>

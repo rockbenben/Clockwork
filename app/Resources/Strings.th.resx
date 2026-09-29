@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>แสดงเฉพาะบริการที่เริ่มจากโฟลเดอร์โปรเจกต์ของคุณ ซึ่งดูจากเครื่องหมายอย่าง .git หรือ package.json ยกเลิกการเลือกเพื่อดูซอฟต์แวร์อื่นที่กำลังรอรับการเชื่อมต่อ</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>ดับเบิลคลิกแถวเพื่อเปิดในเบราว์เซอร์ คลิกขวาเพื่อปล่อยพอร์ต</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} พอร์ต · รีเฟรชทุก 5 วินาที</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>ไม่มีพอร์ตที่ตรงกับตัวกรองปัจจุบัน เครื่องนี้มีพอร์ตกำลังรอรับการเชื่อมต่อ {0} พอร์ต — ลองเปลี่ยนตัวกรองหรือล้างคำค้นหา</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>เปิดในเบราว์เซอร์</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>ปล่อยพอร์ต</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>กำลังรอรับที่ {0} ด้วย</value></data>

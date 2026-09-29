@@ -369,6 +369,7 @@
                         </WrapPanel>
                     </Grid>
                     <Border Grid.Row="1" Margin="0,10,0,0" Style="{StaticResource ListPanel}">
+                        <Grid>
                     <DataGrid x:Name="GridPorts" AutomationProperties.Name="{loc:Loc Tab_Ports}" AutoGenerateColumns="False" CanUserAddRows="False"
                               CanUserDeleteRows="False" SelectionMode="Single" MouseDoubleClick="GridPorts_DoubleClick"
                               PreviewMouseRightButtonDown="GridPorts_RightClick" ContextMenuOpening="GridPorts_MenuOpening">
@@ -406,6 +407,15 @@
                                                 ElementStyle="{StaticResource CellEllipsis}"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                        <!-- 空态不是一整块空洞：档位把行筛到零时，右下角的计数知道机器上其实还有东西，
+                             但没人去对那两个数。这一行把「我是不是被藏了东西」直接回答掉，并指出两根杠杆
+                             （筛选档 / 搜索）。真一个端口都没有时不出现——那时空白列表本身就是事实，
+                             再开口说「有 {0} 个在监听」反倒是撒谎。IsHitTestVisible 关掉：它浮在列表上，
+                             不该截掉表格空白处的自有行为。 -->
+                        <TextBlock x:Name="PortsEmptyHint" Style="{StaticResource Hint}" Visibility="Collapsed"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                                   TextWrapping="Wrap" MaxWidth="460" Margin="16,12" IsHitTestVisible="False"/>
+                        </Grid>
                     </Border>
                     <!-- 底栏：刷新 | 两个手势 | 计数。
                          这句说明原来是 159 字一段，把九件事挤在一起（只列监听 TCP、5 秒自动刷新、双击、

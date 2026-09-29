@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Chỉ liệt kê các dịch vụ khởi chạy từ thư mục dự án của bạn, nhận biết qua dấu hiệu như .git hay package.json. Bỏ chọn để thấy những phần mềm đang lắng nghe còn lại.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Nhấp đúp vào một hàng để mở trong trình duyệt; nhấp chuột phải để giải phóng cổng.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} cổng · tự làm mới mỗi 5 giây</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>Không có cổng nào khớp với bộ lọc hiện tại. Trên máy này có {0} cổng đang lắng nghe — đổi bộ lọc hoặc xóa tìm kiếm.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Mở trong trình duyệt</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Giải phóng cổng</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Cũng đang lắng nghe trên {0}</value></data>

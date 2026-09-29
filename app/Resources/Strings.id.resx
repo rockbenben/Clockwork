@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Hanya menampilkan layanan yang dijalankan dari salah satu folder proyek Anda, dikenali dari penanda seperti .git atau package.json. Hapus centang untuk melihat perangkat lunak lain yang sedang mendengarkan.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Klik dua kali baris untuk membukanya di browser; klik kanan untuk membebaskan port.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} dari {1} port · menyegarkan tiap 5 detik</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>Tidak ada port yang cocok dengan filter saat ini. {0} port sedang mendengarkan di mesin ini — ganti filter atau hapus pencarian.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Buka di peramban</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Bebaskan port</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Juga mendengarkan di {0}</value></data>

@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>يعرض فقط الخدمات التي بدأت من أحد مجلدات مشاريعك، ويتعرّف عليها من علامات مثل .git أو package.json. أزل التحديد لرؤية بقية البرامج المستمعة.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>انقر نقرًا مزدوجًا على صف لفتحه في المتصفح، وانقر بالزر الأيمن لتحرير المنفذ.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} من {1} منفذ · يتحدّث كل 5 ثوانٍ</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>لا توجد منافذ تطابق التصفية الحالية. على هذا الجهاز {0} منفذًا يستمع — غيّر عامل التصفية أو امسح البحث.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>فتح في المتصفح</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>تحرير المنفذ</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>يستمع أيضًا على {0}</value></data>

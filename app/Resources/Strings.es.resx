@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Muestra solo los servicios iniciados desde una de tus carpetas de proyecto, reconocidos por marcas como .git o package.json. Desmárcalo para ver el resto del software a la escucha.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Haz doble clic en una fila para abrirla en el navegador; clic derecho para liberar el puerto.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} de {1} puertos · se actualiza cada 5 s</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>Ningún puerto coincide con el filtro actual. Hay {0} puertos a la escucha en este equipo: cambia el filtro o borra la búsqueda.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Abrir en el navegador</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Liberar el puerto</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>También a la escucha en {0}</value></data>

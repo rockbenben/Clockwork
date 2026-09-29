@@ -82,7 +82,15 @@ public partial class MainWindow : Window
         _ports = ports;
         // 「N / M 个端口」：M 是全部在监听的端口，N 是当前档位筛出来的。挂在 Changed 上，
         // 刷新、搜索、切档位三条路径都会经过 ApplyFilter，不用在三个事件处理器里各写一遍。
-        ports.Changed = () => PortsCount.Text = Lf("Ports_Count", ports.Rows.Count, ports.TotalCount);
+        ports.Changed = () =>
+        {
+            PortsCount.Text = Lf("Ports_Count", ports.Rows.Count, ports.TotalCount);
+            // 行筛到零而机器上明明还有端口——空面板 + 右下角一个「0 / 137」，得靠人对上那两个数；
+            // 直接把答案叠在空的地方（出现条件与理由见 MainWindow.xaml 里 PortsEmptyHint 的注释）。
+            bool hidden = ports.Rows.Count == 0 && ports.TotalCount > 0;
+            PortsEmptyHint.Visibility = hidden ? Visibility.Visible : Visibility.Collapsed;
+            if (hidden) PortsEmptyHint.Text = Lf("Ports_Empty", ports.TotalCount);
+        };
         ports.Changed();
         _portsTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
         _portsTimer.Tick += (_, _) => LoadPorts();

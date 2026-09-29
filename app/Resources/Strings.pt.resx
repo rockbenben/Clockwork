@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Mostra apenas os serviços iniciados a partir de uma das tuas pastas de projeto, reconhecidos por marcas como .git ou package.json. Desmarca para ver o restante software à escuta.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Clique duas vezes numa linha para abri-la no navegador; clique com o botão direito para liberar a porta.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} de {1} portas · atualiza a cada 5 s</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>Nenhuma porta corresponde ao filtro atual. Há {0} portas à escuta nesta máquina — muda o filtro ou limpa a pesquisa.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Abrir no navegador</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Liberar a porta</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Também à escuta em {0}</value></data>

@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Показывает только сервисы, запущенные из ваших каталогов проектов, — они распознаются по меткам вроде .git или package.json. Снимите флажок, чтобы увидеть остальные слушающие программы.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Двойной щелчок открывает строку в браузере, правый — освобождает порт.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} из {1} портов · обновление каждые 5 с</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>В текущем фильтре нет портов. Всего прослушивается: {0} — смените фильтр или очистите поиск.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Открыть в браузере</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Освободить порт</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Также слушает {0}</value></data>

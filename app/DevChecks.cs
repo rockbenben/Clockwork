@@ -218,6 +218,18 @@ public partial class App
                 cfg.Settings.Language = Languages.Normalize(System.Globalization.CultureInfo.CurrentUICulture.Name);
                 return new MainWindow(cfg, () => { });
             }),
+            // 端口页的空态叠行只在「筛到零行」那一刻出现，而机器上有没有端口拍不到第二次机会——
+            // 拿一个永远搜不出结果的词填进搜索，任何一轮真机扫描落回后都是零行、分母不为零，
+            // 提示这条路每轮矩阵都实实在在被拍到，而不是随端口有无闪断。
+            ("MainWindowPortsHidden", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.Settings.Language = Languages.Normalize(System.Globalization.CultureInfo.CurrentUICulture.Name);
+                var w = new MainWindow(cfg, () => { });
+                w.Tabs.SelectedItem = w.TabPorts;
+                w.PSearch.Text = "zzz-no-such-port";
+                return w;
+            }),
             // 面板管理器：默认配置只有一页两格，页眉、空位、并排那三件要验的东西
             // 得靠再添一页格子更多的才拍得全。
             ("PanelManager", () =>

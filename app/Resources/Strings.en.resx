@@ -31,6 +31,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Lists only services started from one of your project folders, recognized by markers like .git or package.json. Uncheck to see the rest of your listening software.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Double-click a row to open it in your browser; right-click to free the port.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} of {1} ports · refreshes every 5s</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>No ports match the current filter. {0} ports are listening on this machine — try a different filter, or clear the search.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Open in browser</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Free the port</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Also listening on {0}</value></data>

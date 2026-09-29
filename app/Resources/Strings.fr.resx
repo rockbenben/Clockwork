@@ -29,6 +29,7 @@
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>N’affiche que les services lancés depuis un de vos dossiers de projet, reconnus par des marqueurs comme .git ou package.json. Décochez pour voir le reste des logiciels à l’écoute.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Double-cliquez sur une ligne pour l’ouvrir dans le navigateur ; clic droit pour libérer le port.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} sur {1} ports · actualisé toutes les 5 s</value></data>
+  <data name="Ports_Empty" xml:space="preserve"><value>Aucun port ne correspond au filtre actuel. {0} ports sont à l’écoute sur cet ordinateur — changez de filtre ou effacez la recherche.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Ouvrir dans le navigateur</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Libérer le port</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>À l’écoute également sur {0}</value></data>

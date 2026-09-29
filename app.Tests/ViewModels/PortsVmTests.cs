@@ -416,4 +416,15 @@ public class PortsVmTests
         vm.Search = "8080";
         Assert.Single(vm.Rows);
     }
+
+    // 空态提示的前提：存在「行被筛到零、分母却不为零」的真实组合（只看项目服务 + 一台只有
+    // 系统端口的机器）。提示的出现条件钉的就是这一组合，这一条让它不可被悄悄改判。
+    [Fact]
+    public void A_system_only_machine_empties_rows_without_empting_total()
+    {
+        var vm = new PortsVm { DevOnly = true };
+        vm.SetItems(new() { E(445, "0.0.0.0", (4, "System")), E(49670, "0.0.0.0", (700, "svchost")) });
+        Assert.Empty(vm.Rows);
+        Assert.Equal(2, vm.TotalCount);
+    }
 }
