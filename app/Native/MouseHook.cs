@@ -173,6 +173,16 @@ public sealed class MouseHook : IDisposable
     // 那才是「闪」的真正来源。间隔短了，闪就没了。
     private const int ClickGapMs = 15;
 
+    // 摘钩时 UI 线程最多陪钩子线程走多久（见 Dispose）。正常拆除是亚毫秒级——WM_QUIT 排在
+    // 那条线程自己的队列里，它下一条 GetMessage 就返回。所以要 200ms 只是为了不误伤慢机器，
+    // 而**不能拿它当「等它退干净」的预算**：等满就是钩子线程正卡在回调里，那时 UI 线程跟着
+    // 冻住，屏幕上那扇整屏覆盖窗没人收（实测旧写法冻 2015ms，见 Dispose 里那段）。
+    // 上限由 MouseHookThreadTests 钉着，改回 1000 会让那条路原样回来。
+    private const int UiJoinBudgetMs = 200;
+    // 后台替系统保住 _proc 那个托管根的时长。放弃得比旧写法（2 秒）晚一个量级，
+    // 因为这里多等不痛——它不占 UI 线程，而少等一次的代价是随机崩进程。
+    private const int BackgroundJoinBudgetMs = 30_000;
+
     // 补发的按下已经发出、抬起还欠着——欠的是哪个键：0=没有，1=右键，2=中键。
     // 卸载时要补上，否则那个键会在全系统卡在按下态，是这个类最不能出的一种事故。
     private int _clickUpDue;
@@ -569,13 +579,34 @@ public sealed class MouseHook : IDisposable
         // 正常路径只走一次：自愈 / 手动重钩 / 退出可能先后碰到同一对象。
         if (Interlocked.Exchange(ref _disposePosted, 1) == 1) return;
         try { PostThreadMessage(_threadId, WM_QUIT, IntPtr.Zero, IntPtr.Zero); } catch { }
-        if (t.Join(1000)) { _thread = null; return; }
-        // 钩子线程不肯走（理论上不该：回调里全是微秒级的活）也不能跳过摘钩——调用方紧接着
-        // 会把本对象置空，_proc 是系统手里那个裸指针唯一的托管根，野指针回调会随机崩进程。
+        // UI 线程只付它该付的那一点。正常路径上泵线程亚毫秒就退（WM_QUIT 排在它自己的队列里），
+        // 等满这一格说明它正卡在某个回调里出不来——那时继续在 UI 线程上等，就是把「一次跨进程
+        // 查询慢了三秒」放大成「UI 线程冻两秒、屏幕上那条笔迹没人收」。实测（2026-10-03）：
+        // hook-join-first 1000ms + hook-join-second 1015ms = hook-dispose:heal 2015ms，
+        // 而同一行 trailUp=up —— 那两秒里整屏覆盖窗就在屏幕上，正是用户报的「轨迹卡住」。
+        long j0 = Core.UiStallWatch.Begin();
+        bool gone = t.Join(UiJoinBudgetMs);
+        Core.UiStallWatch.End("hook-join-first", j0);
+        if (gone) { _thread = null; return; }
+        // 钩子线程不肯走也不能跳过摘钩——这一步必须留在这里做完：它一返回，系统就不会再叫
+        // _proc 一次，后面所有的放手都以它为前提。
         var h = Volatile.Read(ref _hook);
+        long u0 = Core.UiStallWatch.Begin();
         if (h != IntPtr.Zero) try { UnhookWindowsHookEx(h); } catch { }
+        Core.UiStallWatch.End("hook-unhook", u0);
         Volatile.Write(ref _hook, IntPtr.Zero);
-        t.Join(1000);
+        // 剩下的等待挪到后台线程。等本身不能省：`_proc` 是系统手里那个裸函数指针**唯一的**托管根，
+        // 泵线程还没退出就把本对象丢掉，回调会在一次随机的鼠标移动上打到已回收的桩上（旧注释里
+        // 那句「野指针回调会随机崩进程」）。闭包捕获 this 就是替系统保住这个根；
+        // 30 秒的上限也比旧写法放弃前的 2 秒长一个量级——放弃得更晚，不是更早。
+        System.Threading.Tasks.Task.Run(() =>
+        {
+            long b0 = Core.UiStallWatch.Begin();
+            bool exited = t.Join(BackgroundJoinBudgetMs);
+            Core.UiStallWatch.End("hook-join-background", b0);
+            GC.KeepAlive(this);      // 让 this（连同 _proc）确实活到这一次 Join 之后
+            if (exited) _thread = null;
+        });
         _thread = null;
     }
 
@@ -587,6 +618,10 @@ public sealed class MouseHook : IDisposable
         // 那个陈旧的按下时刻会让下一次抬起被算成一次超长的长按。
         Arm(false);
         try { _alarm.Dispose(); } catch { }
+        // 三句「把欠系统的键还回去」各是一次 SendInput。它们排在钩子线程退出的路上（本方法
+        // 是泵线程 finally 里的最后一步），所以它们慢 = 上面 Dispose 的 Join 等满。
+        // 包一格名字，是为了把「Join 等满」这条果倒着查到这一句因上。
+        long inj0 = Core.UiStallWatch.Begin();
         ReplayUp();   // 欠着的抬起先补上，否则右键卡在按下态
         try { _clickUp.Dispose(); } catch { }
         // **扣着的那次真按下要还回去，不是清掉就算完。**
@@ -604,6 +639,7 @@ public sealed class MouseHook : IDisposable
         //   而孤立的右键抬起会被 DefWindowProc 合成一个 WM_CONTEXTMENU（那才是看得见的毛病）。
         // 已经被当成「漏了 _fired 一半」提过一次，留这段免得反复。
         if (_gate?.Pending == true) Win32.SendMiddleDownTagged();
+        Core.UiStallWatch.End("hook-teardown-inject", inj0);
         _gate?.Reset();
         _gesture?.Reset();
         _owedRightClick = false;   // 这笔账随钩子一起作废：上面已经无条件还过了
@@ -728,10 +764,23 @@ public sealed class MouseHook : IDisposable
                     return Chain(code, wParam, lParam);
                 }
                 // 起笔窗口在**按下那一刻**解析：此刻光标压着的窗就是这笔手势划在谁身上，
-                // 与轨迹起点同一坐标。微秒级 P/Invoke，留在这里安全（回调只做纯查询，不碰 UI）。
-                if (msg == WM_RBUTTONDOWN) _gestureOrigin = Win32.WindowAtPoint(data.X, data.Y);
+                // 与轨迹起点同一坐标。回调只做纯查询，不碰 UI。
+                // 「微秒级」这句此前是断言、没量过；而日志里有一条 `hook-callback took 6469ms
+                // chain=0ms ours=6469ms`——chain 排除了 CallNextHookEx 与注入，那么秒级就只可能落在
+                // 这两句跨进程查询或 Disp.BeginInvoke 上，所以三处各包一格计时，让它下次自己报名。
+                if (msg == WM_RBUTTONDOWN)
+                {
+                    long w0 = Core.UiStallWatch.Begin();
+                    _gestureOrigin = Win32.WindowAtPoint(data.X, data.Y);
+                    Core.UiStallWatch.End("hook-window-at", w0);
+                }
                 var gv = msg == WM_RBUTTONDOWN ? _gesture.OnRightDown(data.X, data.Y) : _gesture.OnRightUp();
-                if (msg == WM_RBUTTONDOWN) _gesture.ContextProcess = Win32.ProcessNameForWindow(_gestureOrigin);
+                if (msg == WM_RBUTTONDOWN)
+                {
+                    long p0 = Core.UiStallWatch.Begin();
+                    _gesture.ContextProcess = Win32.ProcessNameForWindow(_gestureOrigin);
+                    Core.UiStallWatch.End("hook-proc-name", p0);
+                }
                 // 屏幕上那条看得见的笔迹，起止都在这里派（一律走 _post，绝不在回调里碰 UI）。
                 //
                 // 按下：先收上一笔再落起点。多数时候上一笔早收了，那一下什么也不做；它堵的是

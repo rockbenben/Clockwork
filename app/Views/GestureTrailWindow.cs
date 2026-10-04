@@ -300,7 +300,12 @@ public sealed class GestureTrailWindow : Window
         _hideTimer.Stop();
         if (!_placed)
         {
-            if (!CoverMonitorOf(px, py)) return;   // 摆不了就整笔都不画，别拿旧的原点画到错的地方去
+            // 分段计时（trail-place / trail-show / trail-add）：日志里最坏的那条 `trail-point took 8375ms`
+            // 同一行报的是 trailUp=never——也就是窗**还没显示出来**，时间只能花在造句柄、摆位置那一段，
+            // 或者花在紧接着的 Show 上。不拆开就只能在两条里继续猜，而这三句是两分钟就能量出来的。
+            long t0 = Core.UiStallWatch.Begin();
+            try { if (!CoverMonitorOf(px, py)) return; }   // 摆不了就整笔都不画，别拿旧的原点画到错的地方去
+            finally { Core.UiStallWatch.End("trail-place", t0); }
             _placed = true;
         }
         // 新的一笔开始：上一笔的药丸立刻收掉，别让它挂在这一笔的旁边。
@@ -309,11 +314,18 @@ public sealed class GestureTrailWindow : Window
         _last = new Point(x, y);
         _hasLast = true;
         if (_disabled) return;
-        _halo.Points.Add(new Point(x, y));
-        _core.Points.Add(new Point(x, y));
+        long tAdd = Core.UiStallWatch.Begin();
+        try
+        {
+            _halo.Points.Add(new Point(x, y));
+            _core.Points.Add(new Point(x, y));
+        }
+        finally { Core.UiStallWatch.End("trail-add", tAdd); }
         if (IsVisible || _core.Points.Count < 2) return;   // 不写 ==2：那一下万一没显示成，后面就再也不试了
         // 重显走 ShowGated（含 Show + 重定位）：藏→显那一帧先整窗全透明，别把上一笔的旧位图顶到屏上。
-        ShowGated();
+        long tShow = Core.UiStallWatch.Begin();
+        try { ShowGated(); }
+        finally { Core.UiStallWatch.End("trail-show", tShow); }
     }
 
     /// <summary>收笔：清掉这条线，把窗藏起来——铺满整屏的覆盖窗不能在两笔之间常驻。</summary>

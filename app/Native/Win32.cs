@@ -294,8 +294,8 @@ public static class Win32
     // 时机是承重的——必须在面板窗口显示**之前**问，面板一显示就把前台抢走了，那时再问只会得到
     // Clockwork 自己。调用点见 PanelCoordinator.TogglePanel 的第一行。
     //
-    // 全程兜住：进程可能在这两行之间退出（GetProcessById 抛 ArgumentException），
-    // 也可能因权限读不到名字。拿不到就当作「没有场景」，面板照常显示全局页——
+    // 全程兜住：进程可能在这两行之间退出（句柄开不出来），也可能因权限读不到名字。
+    // 拿不到就当作「没有场景」，面板照常显示全局页——
     // 一个读不到名字的前台窗口不该让面板开不出来。
     /// <summary>前台窗口句柄；没有前台、或前台是 Clockwork 自己时返回 Zero。</summary>
     //
@@ -338,11 +338,49 @@ public static class Win32
         {
             if (h == IntPtr.Zero) return "";
             GetWindowThreadProcessId(h, out uint pid);
-            if (pid == 0) return "";
-            using var p = Process.GetProcessById((int)pid);
-            return p.ProcessName ?? "";
+            return ProcessNameForPid(pid);
         }
         catch { return ""; }
+    }
+
+    private const uint PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
+    [DllImport("kernel32.dll", SetLastError = true)] private static extern IntPtr OpenProcess(uint access, bool inherit, int pid);
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern bool QueryFullProcessImageName(IntPtr h, uint flags, System.Text.StringBuilder name, ref uint size);
+
+    // 钩子线程上复用的名字缓冲。低级钩子回调只有一个线程在跑，所以一格就够，
+    // 而它要解决的正是「每次按下都 new 一个 1KB 缓冲」——见下面那条不许用组件的理由。
+    [ThreadStatic] private static System.Text.StringBuilder? _nameBuf;
+
+    /// <summary>pid → 进程名（不带目录、不带 <c>.exe</c>，与 <c>Process.ProcessName</c> 同形）；取不到返回空串。</summary>
+    //
+    // **为什么不是 System.Diagnostics.Process。** 这一句跑在低级鼠标钩子的回调里，那条路有
+    // LowLevelHooksTimeout（默认 300ms）的硬预算，超了 Windows 会把钩子静默摘掉。旧写法
+    //（Process.GetProcessById + .ProcessName）在本机量过：377 个活进程各查一次，组件 278ms、
+    // 这个写法 3ms，差约 90 倍；而且组件每次都要 new 一个 Process 对象带一串字符串——现场日志里
+    // 那句 `hook-proc-name took 3187ms`（等于整个回调的时长，chain=0）就是这条路被按住的样子，
+    // 而它一被按住，心跳停 → 自愈判定钩子死了 → UI 线程 Join 等满 2 秒 → 屏幕上那条线冻住。
+    // 判据由 ProcessNameQueryTests 钉着，包括「不许换回组件」那一条。
+    //
+    // 失败一律答空串、绝不外抛：回调里漏出去一个异常就是进程当场没了（见 MouseHook.CallbackCore 的 try）。
+    public static string ProcessNameForPid(uint pid)
+    {
+        if (pid == 0) return "";
+        var h = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, (int)pid);
+        if (h == IntPtr.Zero) return "";
+        try
+        {
+            var sb = _nameBuf ??= new System.Text.StringBuilder(1024);
+            uint size = (uint)sb.Capacity;
+            if (!QueryFullProcessImageName(h, 0, sb, ref size) || size == 0) return "";
+            // flags=0 给的是 Win32 路径（C:\dir\name.exe）；flags=1 那种 \DEVICE\HarddiskVolume 形式不能用。
+            var path = sb.ToString(0, (int)size);
+            int slash = path.LastIndexOf('\\');
+            var leaf = slash >= 0 ? path.Substring(slash + 1) : path;
+            return leaf.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? leaf[..^4] : leaf;
+        }
+        catch { return ""; }
+        finally { try { CloseHandle(h); } catch { } }
     }
 
     public static string ForegroundProcessName() => ProcessNameForWindow(GetForegroundWindow());

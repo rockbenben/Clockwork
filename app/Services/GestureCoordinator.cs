@@ -594,7 +594,16 @@ internal sealed class GestureCoordinator
             _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
         }
         else CloseTrail();
-        _mouseHook = new Native.MouseHook(ms, () => OnTogglePanel?.Invoke(), a => Disp.BeginInvoke(a), gesture, RunByGesture,
+        // `ui-post` 那一格是承重的：BeginInvoke 只是入队，正常情况下微秒级返回，但它要拿
+        // WPF 调度器的锁。钩子线程在回调里等这把锁 = 回调超过 LowLevelHooksTimeout = 系统静默摘钩
+        // = 收不到抬起 = 屏幕上那条线没人收（正是用户报的「轨迹卡住」）。不包这一格，
+        // 这条路在日志里与「上游钩子链被别人堵住」长得一模一样。
+        _mouseHook = new Native.MouseHook(ms, () => OnTogglePanel?.Invoke(), a =>
+        {
+            long t0 = Core.UiStallWatch.Begin();
+            try { Disp.BeginInvoke(a); }
+            finally { Core.UiStallWatch.End("ui-post", t0); }
+        }, gesture, RunByGesture,
             trailPoint: TrailPoint, trailEnd: TrailEnd,
             unmatched: GestureUnmatched, moveTolerancePhysical: middleTolerance);
         _mouseHookMs = ms;
