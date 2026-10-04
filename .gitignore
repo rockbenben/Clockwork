@@ -37,3 +37,6 @@ docs/research/
 # （tools/__pycache__/make_icon.cpython-314.pyc 里就是一条 D:\Backup\... 的完整路径）。
 __pycache__/
 *.pyc
+
+# design-preview 打磨稿（工作稿：实拍矩阵产物 + 审查草稿，随轮次即弃，不入库）
+design-preview/
