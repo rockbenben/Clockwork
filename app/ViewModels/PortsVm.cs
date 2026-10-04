@@ -96,6 +96,11 @@ public sealed class PortsVm
     // 分子是 Rows.Count。两个数摆在一起，「我是不是被藏了东西」就不用靠一段说明去回答。
     public int TotalCount => _all.Count;
 
+    // 「是被筛掉了，还是真的没有」——空列表上那一行叠字的全部判据。
+    // 它住在这里而不是写在界面里：这条判断要在「还没扫过」「扫到零项」「筛到零项」三种状态之间
+    // 分得清，而任何一台具体的机器一次只能给出其中一种，只有造出来的数据能三种都验到。
+    public bool FilterHidesEverything => Rows.Count == 0 && _all.Count > 0;
+
     public string Search { get => _search; set { _search = value ?? ""; ApplyFilter(); } }
     // 三档视图的两个开关。ShowAll 压过 DevOnly（界面上同时把 DevOnly 置灰）：
     // 两个独立布尔能摆出四种组合，其中「只看项目服务 + 看全部」自相矛盾，

@@ -71,6 +71,10 @@ public sealed class SystemStartupVm
 
     public int TotalCount => _all.Count;
 
+    // 与 PortsVm 同一条判据：空列表上那句「是被藏了还是真的没有」只看这两个数。
+    // 扫描没落回时 _all 是空的，所以这一行不会在「正在扫描」那一帧抢着说话。
+    public bool FilterHidesEverything => Rows.Count == 0 && _all.Count > 0;
+
     public SystemStartupVm(Func<SystemStartupItem, bool, string> toggle, Action<string> report, Action? needsAdmin = null)
     {
         _toggle = toggle;

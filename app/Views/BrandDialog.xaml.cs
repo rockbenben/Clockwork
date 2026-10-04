@@ -18,7 +18,8 @@ public partial class BrandDialog : Window
     private readonly long _shownAt = Environment.TickCount64;
     private bool Guarded => Environment.TickCount64 - _shownAt < GuardMs;
 
-    public BrandDialog(string? title, string message, bool confirm, ToastLevel level)
+    public BrandDialog(string? title, string message, bool confirm, ToastLevel level,
+                       string? yesLabel = null, string? noLabel = null)
     {
         InitializeComponent();
         WindowSizing.FitToWorkArea(this);   // 崩溃提示的载体：消息长度不可控，小屏上也不能把是/否挤下屏
@@ -31,8 +32,8 @@ public partial class BrandDialog : Window
         // 眉标平时退到钢灰（强调色交给轨），只有警示才让它跟着变 clay——升级信号要看得出来，不能人人都亮。
         Eyebrow.Foreground = level == ToastLevel.Warn ? accent : (System.Windows.Media.Brush)FindResource("BrushMuted");
         KeyDown += (_, e) => { if (e.Key == System.Windows.Input.Key.Escape) { Result = false; DialogResult = true; } };   // 无关闭按钮 → Esc 取消
-        YesBtn.Content = Strings.Get("Reminder_Popup_Yes");
-        NoBtn.Content = Strings.Get("Reminder_Popup_No");
+        YesBtn.Content = yesLabel ?? Strings.Get("Reminder_Popup_Yes");
+        NoBtn.Content = noLabel ?? Strings.Get("Reminder_Popup_No");
         OkBtn.Content = Strings.Get("Reminder_Popup_Ok");
         YesBtn.Visibility = NoBtn.Visibility = confirm ? Visibility.Visible : Visibility.Collapsed;
         OkBtn.Visibility = confirm ? Visibility.Collapsed : Visibility.Visible;
@@ -158,17 +159,23 @@ public partial class BrandDialog : Window
     public static void Info(Window? owner, string? title, string message) => Show(owner, title, message, false, ToastLevel.Info);
     public static void Warn(Window? owner, string? title, string message) => Show(owner, title, message, false, ToastLevel.Warn);
     // 「是/否」确认。返回 true=是。level 决定强调轨颜色（破坏性操作传 Warn）。
-    public static bool Confirm(Window? owner, string? title, string message, ToastLevel level = ToastLevel.Info)
-        => Show(owner, title, message, true, level);
+    // yesLabel / noLabel 是给破坏性问句准备的：按钮印「是 / 否」时，用户必须回头把题干再读一遍
+    // 才知道自己点下去的是哪一个——而那一遍恰恰是在他最不想读的时候读的。传动词（删除 / 留着），
+    // 两颗按钮各自说清后果。不传就是普通是非题，照旧。
+    public static bool Confirm(Window? owner, string? title, string message, ToastLevel level = ToastLevel.Info,
+                               string? yesLabel = null, string? noLabel = null)
+        => Show(owner, title, message, true, level, yesLabel, noLabel);
 
-    // 删除确认的唯一口径（标题/文案键/Warn 红轨）：主窗口三列表、系统启动项、组编辑器共用，
-    // 契约变更（换键、加「不再询问」等）只改这一处。
+    // 删除确认的唯一口径（标题/文案键/Warn 红轨/两颗按钮的动词）：主窗口三列表、系统启动项、
+    // 组编辑器、面板管理器共用，契约变更只改这一处。
     public static bool ConfirmDelete(Window? owner, string label)
-        => Confirm(owner, Strings.Get("Confirm_Title"), Strings.Lf("Confirm_DeleteItem", label), ToastLevel.Warn);
+        => Confirm(owner, Strings.Get("Confirm_Title"), Strings.Lf("Confirm_DeleteItem", label), ToastLevel.Warn,
+                   Strings.Get("Btn_Delete"), Strings.Get("Confirm_Keep"));
 
-    public static bool Show(Window? owner, string? title, string message, bool confirm, ToastLevel level)
+    public static bool Show(Window? owner, string? title, string message, bool confirm, ToastLevel level,
+                            string? yesLabel = null, string? noLabel = null)
     {
-        var dlg = new BrandDialog(title, message, confirm, level);
+        var dlg = new BrandDialog(title, message, confirm, level, yesLabel, noLabel);
         // owner=用户此刻正在交互的那个窗（主窗/编辑器）→ 认它为父：CenterOwner 居中，关窗后焦点也回它。
         // owner=null → 本框不请自来（开机清单、托盘重跑、热键、提醒触发的动作组、崩溃兜底）：
         // 刻意不退回主窗当 owner——Win32 会把整条 owner 链一起提到前台，用户在别的应用里干活时

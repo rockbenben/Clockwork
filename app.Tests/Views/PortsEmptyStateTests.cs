@@ -33,8 +33,13 @@ public class PortsEmptyStateTests
     [Fact]
     public void The_hint_shows_only_when_something_is_hidden()
     {
+        // 这一条原本钉的是 MainWindow.xaml.cs 里那句字面表达式。判据后来搬进了 PortsVm
+        // （系统启动项页要共用同一条判断），只钉位置就成了假证人：表达式还在，只是换了地方。
+        // 所以两头各钉一刀——VM 里那两个条件还在，视图确实问的是这个属性。
+        var vm = Src("ViewModels", "PortsVm.cs");
+        Assert.Contains("Rows.Count == 0 && _all.Count > 0", vm);
         var cs = Src("MainWindow.xaml.cs");
-        Assert.Contains("ports.Rows.Count == 0 && ports.TotalCount > 0", cs);
+        Assert.Contains("ports.FilterHidesEverything", cs);
         Assert.Contains("Lf(\"Ports_Empty\", ports.TotalCount)", cs);
     }
 

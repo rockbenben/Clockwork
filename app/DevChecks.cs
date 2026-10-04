@@ -202,6 +202,16 @@ public partial class App
     // 所以截图验的是生产代码本身，不是 harness 里另写的一份近似逻辑。
     private static PanelIconSpec AutoIcon(string target) => PanelIcon.Resolve(null, "app", target);
 
+    // 焦点探针的地基：把键盘焦点放到某个元素上，并确认它**真的落上了**。
+    // 少了这句断言，「聚焦图和不聚焦图一模一样」就有两种读法——控件没画焦点框，
+    // 或者根本没聚焦成功。前者是要修的 bug，后者是探针自己坏了。
+    private static void FocusOrThrow(System.Windows.IInputElement element, string what)
+    {
+        System.Windows.Input.Keyboard.Focus(element);
+        if (!ReferenceEquals(System.Windows.Input.Keyboard.FocusedElement, element))
+            throw new InvalidOperationException($"focus probe: keyboard focus never reached the {what}");
+    }
+
     private static (string Name, Func<Window> Make)[] AllXamlWindows()
     {
         var groups = new[] { new ActionGroup() };
@@ -290,7 +300,7 @@ public partial class App
                 var real = RootConfig.Default().ActionGroups;
                 return new StepEditorWindow(new LaunchStep { Kind = "group", GroupId = real[0].Id }, real);
             }),
-            // 「引用启动项」步骤（面板语境）：目标下拉只在拿到清单时出现，不截一次等于没见过——
+            // 「运行启动项」步骤（面板语境）：目标下拉只在拿到清单时出现，不截一次等于没见过——
             // 与 StepEditorGroup 同一个理由（2026-09 新功能的界面从未被渲染过）。
             ("StepEditorRef", () =>
             {
@@ -298,6 +308,13 @@ public partial class App
                 return new StepEditorWindow(new LaunchStep { Kind = "step", RefId = items[0].Id, Label = items[0].Label },
                                             new List<ActionGroup>(), items);
             }),
+            // 条件区展开、且「仅 N 前」真的勾上：这一行的三个部件（复选框 + 时刻框 + 尾缀标签）
+            // 是拼成句子的，各语言语序不同（中文「仅 [08:00] 前执行」、英文把整句放进复选框、
+            // 韩文尾缀只有「실행」）。收起态与不勾的变体都拍不到这三个字，而它们正是逐语言复核
+            // 改过的地方（ko 的两个复选框原本都只写「단」）。
+            ("StepEditorCondition", () => new StepEditorWindow(
+                new LaunchStep { Kind = "app", Target = "notepad.exe", OnlyBefore8 = true, BeforeHour = 8,
+                                 Days = new List<int> { 1, 2, 3, 4, 5 } }, groups)),
             // 画手势时屏幕上那条笔迹。它是**唯一一扇没有任何常规界面**的窗口——
             // 透明、点不着、只有一条线——所以更需要被画出来一次：它的三条硬约束
             //（不抢前台、点得穿、不在钩子里画）都不会以「长得不对」的形式暴露，
@@ -451,6 +468,70 @@ public partial class App
                 w.Loaded += (_, _) => System.Windows.Input.Keyboard.Focus(w.NameBox);
                 return w;
             }),
+            // ── 焦点探针（取证用）：把键盘焦点分别放到 CheckBox / ComboBox / TabItem /
+            // ListBoxItem / DataGridCell 上，与不聚焦的同窗口变体做像素差。差不出来＝键盘用户
+            // 看不见焦点在哪儿。每个探针都要求焦点**确实落到了**目标上（FocusOrThrow）——
+            // 否则「没变化」可能只是没聚焦，这条负证据就不成立。
+            ("FocusProbeChk", () =>
+            {
+                var w = new GroupEditorWindow(new ActionGroup(), groups, NoFunctionHotkeys);
+                w.Loaded += (_, _) => FocusOrThrow(w.ShowInTrayChk, "CheckBox");
+                return w;
+            }),
+            ("FocusProbeCombo", () =>
+            {
+                var w = new StepEditorWindow(new LaunchStep(), groups);
+                w.Loaded += (_, _) => FocusOrThrow(w.KindCombo, "ComboBox");
+                return w;
+            }),
+            ("FocusProbeTab", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.Settings.Language = Languages.Normalize(System.Globalization.CultureInfo.CurrentUICulture.Name);
+                var w = new MainWindow(cfg, () => { });
+                w.Loaded += (_, _) =>
+                {
+                    // 聚焦**当前已选中的**页签：换成别的页签会连带换页，像素差里全是内容变化，
+                    // 量不到「焦点框有没有画」。
+                    if (w.Tabs.ItemContainerGenerator.ContainerFromIndex(w.Tabs.SelectedIndex) is System.Windows.Controls.TabItem ti)
+                        FocusOrThrow(ti, "TabItem");
+                };
+                return w;
+            }),
+            ("FocusProbeList", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.Settings.Language = Languages.Normalize(System.Globalization.CultureInfo.CurrentUICulture.Name);
+                // 与 GestureManager 变体同一份数据：不一致的话两边列表行数不同、窗口高度不同，
+                // 像素差对不齐。
+                cfg.Gestures.Add(new LaunchStep { Kind = "system", Command = "lockScreen", Gesture = "R3D" });
+                if (cfg.ActionGroups.Count > 0)
+                    cfg.Gestures.Add(new LaunchStep { Kind = "group", GroupId = cfg.ActionGroups[0].Id, Label = cfg.ActionGroups[0].Name, Gesture = "1L7" });
+                var w = new GestureManagerWindow(cfg, () => { });
+                w.Loaded += (_, _) =>
+                {
+                    // 只给焦点、不做选中：选中会让右栏换成该条目的编辑器，窗口高度变了，
+                    // 像素差就没法和不聚焦的基线对齐了。
+                    if (w.Bound.ItemContainerGenerator.ContainerFromIndex(0) is System.Windows.Controls.ListBoxItem lbi)
+                        FocusOrThrow(lbi, "ListBoxItem");
+                };
+                return w;
+            }),
+            ("FocusProbeCell", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.Settings.Language = Languages.Normalize(System.Globalization.CultureInfo.CurrentUICulture.Name);
+                var w = new MainWindow(cfg, () => { });
+                w.Loaded += (_, _) =>
+                {
+                    w.GridLaunch.Focus();
+                    if (w.GridLaunch.Items.Count == 0) return;
+                    var row = w.GridLaunch.ItemContainerGenerator.ContainerFromIndex(0) as System.Windows.Controls.DataGridRow;
+                    var cell = row == null ? null : w.GridLaunch.Columns[1].GetCellContent(row)?.Parent as System.Windows.Controls.DataGridCell;
+                    if (cell != null) FocusOrThrow(cell, "DataGridCell");
+                };
+                return w;
+            }),
             ("ReminderEditor", () => new ReminderEditorWindow(new Reminder(), groups)),
             // 展开「高级」的提醒编辑器：催促（HH:mm，…）/循环（HH:mm，…）/每 N 天锚点
             // (yyyy-MM-dd；…) 三条带日期的提示全藏在折叠的 Expander 里，收起态的矩阵从未渲染过它们。
@@ -461,6 +542,12 @@ public partial class App
                 w.Loaded += (_, _) => w.AdvExp.IsExpanded = true;
                 return w;
             }),
+            // 「登录时机」这一档只有 Trigger=startup 才出现，而默认 Reminder 是 time——
+            // 也就是说那个下拉在此之前一张图都没有。它的三个条目刚从「Before N:00」
+            // 改成本地语言的「仅指定小时前」（最长的法语 32 字），没有这一变体就没人知道
+            // 它装不装得下。
+            ("ReminderEditorLogin", () => new ReminderEditorWindow(
+                new Reminder { Trigger = "startup", StartupHourMode = "before", StartupWithinMinutes = 30 }, groups)),
             ("GroupEditor", () => new GroupEditorWindow(new ActionGroup(), groups, NoFunctionHotkeys)),
 // 手势管理器：带两条已绑手势进去，才截得到箭头与摘要。
             // 一条 group（跑整组）、一条 system（只作为手势存在的动作）——这两种正是这个界面要能同时装下的。
@@ -501,6 +588,11 @@ public partial class App
             ("ReminderPopup", () => new ReminderPopupWindow(LongestOf("Msg_", "Reminder_", "Confirm_"), confirm: true, autoDismissSeconds: 0)),
             ("Toast", () => new NotificationToast("Clockwork", LongestOf("SysMsg_", "Warn_", "Err_"), ToastLevel.Info, durationMs: 0)),
             ("BrandDialog", () => new BrandDialog(null, LongestOf("Confirm_"), confirm: true, ToastLevel.Info)),
+            // 删除确认那一档：按钮印的是动词而不是「是 / 否」，而动词比「是」长，
+            // 两颗按钮加宽之后这张卡在最窄一档还站不站得住，只有画出来才知道。
+            ("BrandDialogDelete", () => new BrandDialog(Strings.Get("Confirm_Title"),
+                Strings.Lf("Confirm_DeleteItem", LongestOf("Kind_")), true, ToastLevel.Warn,
+                Strings.Get("Btn_Delete"), Strings.Get("Confirm_Keep"))),
             // 问句形态的同一张卡：多一个输入框 / 多一个列表。两者都只由 Ask / Pick 这两个
             // 静态入口到达（它们自己就跑模态），harness 到不了那条路，所以在这儿把那两行直接摆出来。
             // 要验的是**这张卡长高之后还站得住**：眉标 + 一段可能很长的问句 + 答案 + 两个按钮，
@@ -959,14 +1051,17 @@ public partial class App
             // 1600 验的是拉宽之后版面会不会散架（星号列吃掉全部余量、按钮飘到天边）。
             var widths = new[] { 820.0, 1040.0, 1600.0 };
             // 定向重渲：全矩阵几千张，复验单条发现太慢。CW_SHOT_LANGS / CW_SHOT_WINDOWS
-            // 给逗号分隔清单即只渲子集（窗口按名前缀匹配；语言清单没对上就直接用给定 code，
-            // 便于单验 ja/ko 这六档之外的高危语言）。
+            // 给逗号分隔清单即只渲子集（窗口按名前缀匹配）。语言是**并集**：清单里能对上的
+            // 用矩阵里的写法，对不上的（ja/ko 这类六档之外的高危语言）直接按给定 code 渲。
+            // 早先的写法是「有匹配就丢掉没匹配的」，于是 de,ru,ar,hi 只出三档、hi 静默为零——
+            // 少渲的语言不会报错，只会在报告里根本不出现。
             var langKeep = (Environment.GetEnvironmentVariable("CW_SHOT_LANGS") ?? "")
                 .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             if (langKeep.Length > 0)
             {
                 var picked = langs.Where(l => langKeep.Any(k => l.StartsWith(k, StringComparison.OrdinalIgnoreCase))).ToArray();
-                langs = picked.Length > 0 ? picked : langKeep;
+                var extra = langKeep.Where(k => !picked.Any(l => l.StartsWith(k, StringComparison.OrdinalIgnoreCase))).ToArray();
+                langs = picked.Concat(extra).ToArray();
             }
 
             var winKeep = (Environment.GetEnvironmentVariable("CW_SHOT_WINDOWS") ?? "")

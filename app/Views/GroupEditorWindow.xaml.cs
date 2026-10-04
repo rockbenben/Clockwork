@@ -51,6 +51,10 @@ public partial class GroupEditorWindow : Window
             () => _hotkey, combo => _hotkey = combo);
         foreach (var s in group.Steps) _rows.Add(new StepRowVm(Clone(s), () => { }));
         Steps.ItemsSource = _rows;
+        // 空态跟着集合走，而不是跟着某一个按钮的点击走：加、删、复制、拖拽之后都可能是零行，
+        // 逐处去记得设 Visibility 迟早漏一处（CollectionChanged 是这里唯一的真相来源）。
+        _rows.CollectionChanged += (_, _) => SyncEmptyHint();
+        SyncEmptyHint();
         DataGridReorder.Attach(Steps, (from, to) =>
         {
             if (from < 0 || from >= _rows.Count || to < 0 || to >= _rows.Count || from == to) return;
@@ -75,6 +79,9 @@ public partial class GroupEditorWindow : Window
                         (System.Windows.Media.Brush)FindResource("BrushPaper"));
         GroupIconBtn.ToolTip = _groupIcon.Length > 0 ? _groupIcon : Strings.Get("Icon_None");
     }
+
+    private void SyncEmptyHint()
+        => StepsEmptyHint.Visibility = _rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
     // 选组下拉排除本组：直环在挑选时就选不出来；间接环（A→B→A）由 Ok_Click 的 FindCycle 拦。
     private IReadOnlyList<ActionGroup> StepGroups => _groups.Where(g => g.Id != _original.Id).ToList();

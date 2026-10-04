@@ -88,7 +88,7 @@
                 <!-- 刻字而非标题：全大写、极小、最暗的一档。它的职责只是「认领这个面板是谁弹的」，
                      不该和页名争注意力（热键误按时，知道是谁弹的比知道在第几页重要）。 -->
                 <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="CLOCKWORK"
-                           FontFamily="{StaticResource FontDisplay}" FontSize="9.5"
+                           FontFamily="{StaticResource FontDisplay}" FontSize="{StaticResource FsNano}"
                            Foreground="{StaticResource BrushFaint}" VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis"/>
                 <!-- 页名：这一页叫什么，是表圈上唯一会变的东西，所以给它正中间。
@@ -96,7 +96,7 @@
                      MaxWidth 封住：页名是用户起的，可以任意长，不封顶时它会把面板顶宽，
                      而面板的宽度该由格子阵说了算。 -->
                 <TextBlock Grid.Column="1" x:Name="PageTitle" VerticalAlignment="Center" MaxWidth="190"
-                           FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="11.5"
+                           FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="{StaticResource FsMicro}"
                            Foreground="{StaticResource BrushPaper}" TextAlignment="Center"
                            TextTrimming="CharacterEllipsis" Margin="10,0" Visibility="Collapsed"/>
                 <!-- 表圈右端：先是「管理面板」，再是「Esc 关闭」。
@@ -113,7 +113,7 @@
                     <!-- 找东西 / 管手势 / 管面板，都是「关于这个程序自己」的入口，不是你配的动作。 -->
                     <StackPanel x:Name="HeaderOps" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock x:Name="HintText" VerticalAlignment="Center"
-                               FontSize="10.5" Foreground="{StaticResource BrushFaint}" TextTrimming="CharacterEllipsis"/>
+                               FontSize="{StaticResource FsNano}" Foreground="{StaticResource BrushFaint}" TextTrimming="CharacterEllipsis"/>
                 </StackPanel>
             </Grid>
 
@@ -187,16 +187,16 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                            <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="{StaticResource FsLead}"
                                        Foreground="{StaticResource BrushFaint}" VerticalAlignment="Center" Margin="0,0,9,0"/>
                             <!-- 水印：WPF 的 TextBox 没有 placeholder，压一层字在后面；打了字就收起来。 -->
-                            <TextBlock Grid.Column="1" x:Name="SearchHint" VerticalAlignment="Center" FontSize="12.5"
+                            <TextBlock Grid.Column="1" x:Name="SearchHint" VerticalAlignment="Center" FontSize="{StaticResource FsBody}"
                                        Foreground="{StaticResource BrushFaint}" IsHitTestVisible="False"/>
-                            <TextBox Grid.Column="1" x:Name="SearchBox" BorderThickness="0" FontSize="12.5"
+                            <TextBox Grid.Column="1" x:Name="SearchBox" BorderThickness="0" FontSize="{StaticResource FsBody}"
                                      Background="Transparent" Foreground="{StaticResource BrushPaper}"
                                      VerticalContentAlignment="Center" TextChanged="Search_Changed"/>
                             <TextBlock Grid.Column="2" x:Name="SearchCount" FontFamily="{StaticResource FontMono}"
-                                       FontSize="10.5" Foreground="{StaticResource BrushFaint}"
+                                       FontSize="{StaticResource FsNano}" Foreground="{StaticResource BrushFaint}"
                                        VerticalAlignment="Center" Margin="9,0,0,0"/>
                         </Grid>
                     </Border>

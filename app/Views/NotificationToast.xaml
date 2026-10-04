@@ -32,17 +32,17 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" x:Name="TimeText" FontFamily="{StaticResource FontMono}" FontSize="11.5"
+                        <TextBlock Grid.Column="0" x:Name="TimeText" FontFamily="{StaticResource FontMono}" FontSize="{StaticResource FsMicro}"
                                    Foreground="{StaticResource BrushPaper}" Margin="0,0,8,0"/>
                         <!-- 提醒标题是用户自己写的，什么文字都可能，绝不能锁进等宽体 -->
-                        <TextBlock Grid.Column="1" x:Name="TitleText" FontSize="11.5"
+                        <TextBlock Grid.Column="1" x:Name="TitleText" FontSize="{StaticResource FsMicro}"
                                    Foreground="{StaticResource BrushMuted}" TextTrimming="CharacterEllipsis"
                                    VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" x:Name="CountText" FontFamily="{StaticResource FontMono}" FontSize="11.5"
+                        <TextBlock Grid.Column="2" x:Name="CountText" FontFamily="{StaticResource FontMono}" FontSize="{StaticResource FsMicro}"
                                    Foreground="{StaticResource BrushAccentText}" VerticalAlignment="Center"
                                    Margin="8,0,0,0" Visibility="Collapsed"/>
                     </Grid>
-                    <TextBlock x:Name="MsgText" FontSize="14" Foreground="{StaticResource BrushPaper}"
+                    <TextBlock x:Name="MsgText" FontSize="{StaticResource FsLead}" Foreground="{StaticResource BrushPaper}"
                                TextWrapping="Wrap" LineHeight="20" LineStackingStrategy="BlockLineHeight" Margin="0,6,0,0"/>
                 </StackPanel>
             </Grid>

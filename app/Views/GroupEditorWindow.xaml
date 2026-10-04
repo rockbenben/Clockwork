@@ -89,7 +89,7 @@
         </Grid>
 
         <!-- 动作组只定义动作，触发在别处引用 -->
-        <TextBlock Grid.Row="1" Text="{loc:Loc Ed_GroupHint}" Style="{StaticResource Hint}" FontSize="11.5" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="1" Text="{loc:Loc Ed_GroupHint}" Style="{StaticResource Hint}" FontSize="{StaticResource FsMicro}" Margin="0,10,0,0" TextWrapping="Wrap"/>
 
         <!-- ===== 「步骤」小标题（刻字面板标签）+ 添加按钮 ===== -->
         <Grid Grid.Row="2" Margin="0,16,0,6">
@@ -107,6 +107,7 @@
             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" SharedSizeGroup="StepRail"/></Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Style="{StaticResource ListPanel}">
+                <Grid>
                 <!-- 禁点表头排序：步骤顺序即执行顺序，排序会让选中索引与模型错位（与主窗口三列表同理） -->
                 <DataGrid x:Name="Steps" AutomationProperties.Name="{loc:Loc Col_Steps}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
                           HeadersVisibility="Column" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="SEdit_Click">
@@ -127,6 +128,13 @@
                                             IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
                     </DataGrid.Columns>
                 </DataGrid>
+                <!-- 空态叠在同一格里，不占布局：新建一个动作再打开编辑器，看到的不该是一块
+                     只有表头的 132px 空表格——那既没说坏在哪，也没说下一步做什么。
+                     出现条件由代码跟着 _rows 的变更同步（增删/复制/导入都走同一条）。 -->
+                <TextBlock x:Name="StepsEmptyHint" Text="{loc:Loc Group_NoSteps}" Style="{StaticResource Hint}"
+                           Visibility="Collapsed" TextWrapping="Wrap" MaxWidth="360" TextAlignment="Center"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
             </Border>
 
             <!-- 选中步骤的操作：编辑 / 删除 / 上移 / 下移（次级操作靠边，主操作「添加」在小标题旁）-->

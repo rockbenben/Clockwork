@@ -75,6 +75,17 @@
          （ImageChops 差异框为 None——回退表不看这个列表）。
          中日韩没暴露只是因为方块字本来就不连写，断无可断；
          也就是说这套等宽标签本来就只对拉丁/西里尔/希腊成立。 -->
+    <!-- 字号阶梯：以前 XAML 里散着 9.5/10.5/11/11.5/12/12.5/13/14/15/17 十个字面量，
+         其中四个是半点——同一层级的文字在两个窗口里差半号，谁也说不出哪个才是对的。
+         收成六个角色，每个原值到新值的偏移都不超过半号（肉眼不可辨），但从此只有一个地方能改字号。
+         FsNano 是面板格子里那层微字（88px 宽、带 trimming），密度与别处不同，所以单独一档。 -->
+    <sys:Double x:Key="FsNano">10</sys:Double>
+    <sys:Double x:Key="FsMicro">11</sys:Double>
+    <sys:Double x:Key="FsBody">12</sys:Double>
+    <sys:Double x:Key="FsLead">13</sys:Double>
+    <sys:Double x:Key="FsTitle">15</sys:Double>
+    <sys:Double x:Key="FsHero">17</sys:Double>
+
     <FontFamily x:Key="FontMono">Cascadia Mono, Consolas, Segoe UI</FontFamily>
 
     <!-- ============ ScrollBar (slim) ============ -->
@@ -169,8 +180,8 @@
                                                  试过反过来给箭头留定宽槽位、把折叠区内自由行也缩进对齐箭头槽——
                                                  那是在右对齐标签的锯齿左缘上打补丁，两条轨永远差一口气；左对齐后一条轨就够了。 -->
                                             <TextBlock Grid.Column="0" Text="{Binding Header, RelativeSource={RelativeSource AncestorType=Expander}}"
-                                                       TextWrapping="Wrap" MaxWidth="560" FontSize="12.5" Foreground="{StaticResource BrushMuted}"/>
-                                            <TextBlock x:Name="Chevron" Grid.Column="1" Text="▸" FontSize="11" Margin="8,1,2,0"
+                                                       TextWrapping="Wrap" MaxWidth="560" FontSize="{StaticResource FsBody}" Foreground="{StaticResource BrushMuted}"/>
+                                            <TextBlock x:Name="Chevron" Grid.Column="1" Text="▸" FontSize="{StaticResource FsMicro}" Margin="8,1,2,0"
                                                        VerticalAlignment="Top" Foreground="{StaticResource BrushAccentText}"/>
                                         </Grid>
                                     </Border>
@@ -202,11 +213,20 @@
          真正贴住的是那些换行的说明文字——它们只有左边距、没有宽度，会一路铺满可用宽度，
          于是每一行都正好顶在滚动条上，读起来像被挤住了。
          Padding 加在 ScrollViewer 上正好只撑开这条缝：默认模板把它落到内容承载器的 Margin 上，
-         而滚动条在另一个网格列里，不受影响。底部也留一点——提醒编辑器允许横向滚动，
-         横条冒出来时会同样贴住最后一行。 -->
+         而滚动条在另一个网格列里，不受影响。底部留的那一档不是装饰：设置页与两个编辑器的
+         滚动区底边就压在页脚条／按钮条上，只留 6px 时滚到中途，最后一行说明正好被切成半个字高
+         ——看着像界面坏了，而不是「下面还有」。留够一行的一半，被截的那行就明确是行。 -->
     <Style x:Key="FormScroll" TargetType="ScrollViewer">
-        <Setter Property="Padding" Value="0,0,12,6"/>
+        <Setter Property="Padding" Value="0,0,12,16"/>
     </Style>
+    <!-- 微型字段名：给一排只有数字与符号的控件各自带上一个词（面板管理器那条「4 × 3 + 4」）。
+         它比 GroupLabel 小一档、不带段距——同排还有 28px 的控件，标签不能把行撑高。 -->
+    <Style x:Key="FieldMicroLabel" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Margin" Value="0,0,0,2"/>
+    </Style>
+
     <!-- 分组标签（「选中的行」「步骤」）同样是译文，不走等宽体。 -->
     <Style x:Key="GroupLabel" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
@@ -692,7 +712,7 @@
                         <DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}">
                             <!-- 星期名按语言变（日月火…／SMTWTFS／阿拉伯语），是译文不是读数 -->
                             <TextBlock Text="{Binding}" HorizontalAlignment="Center" Margin="0,2,0,8"
-                                       FontSize="11"
+                                       FontSize="{StaticResource FsMicro}"
                                        Foreground="{StaticResource BrushFaint}"/>
                         </DataTemplate>
                     </ControlTemplate.Resources>
@@ -704,7 +724,7 @@
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                                 <Button x:Name="PART_PreviousButton" Grid.Column="0" Content="‹" Width="30" Height="28" Padding="0"/>
                                 <Button x:Name="PART_HeaderButton" Grid.Column="1" Height="28" Margin="6,0"
-                                        FontFamily="{StaticResource FontDisplay}" FontSize="14"/>
+                                        FontFamily="{StaticResource FontDisplay}" FontSize="{StaticResource FsLead}"/>
                                 <Button x:Name="PART_NextButton" Grid.Column="2" Content="›" Width="30" Height="28" Padding="0"/>
                             </Grid>
                             <Grid Grid.Row="1" Margin="0,8,0,0">
@@ -776,7 +796,17 @@
                             </ToggleButton.Template>
                         </ToggleButton>
                         <ContentPresenter x:Name="cp" Margin="10,0,28,0" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                          Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" IsHitTestVisible="False"/>
+                                          Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" IsHitTestVisible="False">
+                            <!-- 选中项写死在定宽盒子里，长译文会**硬切**（德语 „Keine Einschränkung“ 少掉最后一个字母那次）。
+                                 弹层不受影响：它的 Border 用的是 MinWidth，会自己长到够宽。
+                                 所以这里给字符串型内容一个带省略号的模板——收着时看到「…」，点开就是全文，
+                                 而不是看到一个被裁掉的词还以为那就是词。 -->
+                            <ContentPresenter.Resources>
+                                <DataTemplate DataType="{x:Type sys:String}">
+                                    <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis"/>
+                                </DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                         <Path Data="M 0,0 L 8,0 L 4,5 Z" Fill="{StaticResource BrushMuted}" HorizontalAlignment="Right"
                               VerticalAlignment="Center" Margin="0,0,12,0" IsHitTestVisible="False"/>
                         <Popup x:Name="PART_Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}"
@@ -996,7 +1026,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridRowHeader">
                     <Border Background="Transparent" BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
-                        <TextBlock x:Name="Grip" Text="&#xE76F;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                        <TextBlock x:Name="Grip" Text="&#xE76F;" FontFamily="Segoe MDL2 Assets" FontSize="{StaticResource FsBody}"
                                    Foreground="{StaticResource BrushFaint}" Opacity="0.45"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
@@ -1093,7 +1123,7 @@
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Grid.Column="0" ContentSource="Header" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="1" x:Name="gesture" Text="{TemplateBinding InputGestureText}"
-                                       Foreground="{StaticResource BrushMuted}" FontFamily="{StaticResource FontMono}" FontSize="12"
+                                       Foreground="{StaticResource BrushMuted}" FontFamily="{StaticResource FontMono}" FontSize="{StaticResource FsBody}"
                                        VerticalAlignment="Center" Margin="28,0,0,0"/>
                             <Path Grid.Column="2" x:Name="arrow" Data="M 0,0 L 4,4 L 0,8 Z" Fill="{StaticResource BrushMuted}"
                                   VerticalAlignment="Center" Margin="12,0,0,0" Visibility="Collapsed"/>
@@ -1248,15 +1278,15 @@
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
     </Style>
-    <!-- 类型徽标底 + 延时等宽读数：启动清单与动作组步骤列表共用（从 MainWindow 移来，两处一致口径）。 -->
+    <!-- 类型徽标格 + 延时等宽读数格：启动清单与动作组步骤列表共用（从 MainWindow 移来，两处一致口径）。
+         这一格不带底也不带框：它说的是「这一行是什么类型」，不是「按我」——借按钮那一套
+         （钢底 + 描边 + 圆角）时，它和右侧真正能点的按钮长得一样，扫读时静态标签被当成操作。
+         旧注释担心的「鼠标一划过整块融进行背景」在这里不再成立：没有底，就没有可融的东西，
+         列头已经写着「类型」，这一列不需要徽标自称可点。 -->
     <Style x:Key="KindChipCell" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource BrushSteel}"/>
-        <!-- 描边不是装饰：行悬停色也是 steel，与徽标底同色——没有这道边时，鼠标一划过，
-             类型徽标就整块融进行背景，只剩一行悬空的字。 -->
-        <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="Padding" Value="9,3"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0,3"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>

@@ -29,12 +29,12 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,14">
                     <!-- 眉标是对话框标题（译文），不走等宽体 -->
-                    <TextBlock x:Name="Eyebrow" FontSize="12"
+                    <TextBlock x:Name="Eyebrow" FontSize="{StaticResource FsBody}"
                                Foreground="{StaticResource BrushMuted}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,22" Focusable="False">
                     <StackPanel>
-                        <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="15" Foreground="{StaticResource BrushPaper}"
+                        <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="{StaticResource FsTitle}" Foreground="{StaticResource BrushPaper}"
                                    LineStackingStrategy="BlockLineHeight" LineHeight="23"/>
                         <!-- 问句步骤（用户输入 / 用户选择）才出现的两行。默认都不画——
                              这张卡绝大多数时候只是说一句话，多一个空框会让人以为该填点什么。

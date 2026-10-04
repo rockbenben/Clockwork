@@ -462,7 +462,10 @@ internal sealed class RunOrchestrator
     // 否则确认框藏在模态编辑器后面，用户看着「卡住了」而实际是有个框在等他。
     // owner=null（开机清单/托盘重跑/热键/提醒触发）不再补成主窗：无主时 BrandDialog 自己置顶，
     // 见得着且不会把主界面一起拽到前台。
+    // 确认那颗按钮直接印动作名（重启 / 关机 / 注销）：这里比别处更不能只写「是」——
+    // 手在键盘上、屏幕上是别人的程序时按下去，用户要看见的就是那两个字到底会发生什么。
     private bool ConfirmDestructive(string action, Window? owner = null)
         => Disp.Invoke(() => Views.BrandDialog.Confirm(
-            owner, Strings.Get("Confirm_Title"), Lf("Confirm_Destructive", action), Views.ToastLevel.Warn));
+            owner, Strings.Get("Confirm_Title"), Lf("Confirm_Destructive", action), Views.ToastLevel.Warn,
+            action, Strings.Get("Ed_Cancel")));
 }

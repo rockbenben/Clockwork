@@ -75,7 +75,15 @@ public partial class MainWindow : Window
         GridSystem.ItemsSource = _system.Rows;
         // 「N / M 项」：与端口页同一形状。默认隐藏只读项，被藏了多少由这个数字直接回答——
         // 这句从前是页脚里的一句话（「系统 / 策略 / 一次性等只读项默认隐藏」），没人读，还占着一行。
-        _system.Changed = () => SysCount.Text = Lf("System_Count", _system.Rows.Count, _system.TotalCount);
+        _system.Changed = () =>
+        {
+            SysCount.Text = Lf("System_Count", _system.Rows.Count, _system.TotalCount);
+            // 与端口页同一条判据，判据本身在 ViewModel 里（SystemStartupVm.FilterHidesEverything）：
+            // 筛到零行而机器上明明还有，就把答案叠在那片空白上，并指出两根杠杆（过滤词 / 只读项开关）。
+            bool hidden = _system.FilterHidesEverything;
+            SysEmptyHint.Visibility = hidden ? Visibility.Visible : Visibility.Collapsed;
+            if (hidden) SysEmptyHint.Text = Lf("System_Empty", _system.TotalCount);
+        };
         _system.Changed();
 
         var ports = new PortsVm { DevOnly = config.Settings.PortsDevOnly };
@@ -87,7 +95,8 @@ public partial class MainWindow : Window
             PortsCount.Text = Lf("Ports_Count", ports.Rows.Count, ports.TotalCount);
             // 行筛到零而机器上明明还有端口——空面板 + 右下角一个「0 / 137」，得靠人对上那两个数；
             // 直接把答案叠在空的地方（出现条件与理由见 MainWindow.xaml 里 PortsEmptyHint 的注释）。
-            bool hidden = ports.Rows.Count == 0 && ports.TotalCount > 0;
+            // 判据本身在 PortsVm.FilterHidesEverything，与系统启动项页共用一条。
+            bool hidden = ports.FilterHidesEverything;
             PortsEmptyHint.Visibility = hidden ? Visibility.Visible : Visibility.Collapsed;
             if (hidden) PortsEmptyHint.Text = Lf("Ports_Empty", ports.TotalCount);
         };
@@ -441,7 +450,9 @@ public partial class MainWindow : Window
         var cfgPath = app.ConfigFilePath;
         if (string.IsNullOrEmpty(cfgPath)) return;
         // 导入=整份配置覆盖，全应用最重的破坏性操作，与删除同用 Warn 红轨（别让它比删一行还显得温和）
-        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), Strings.Get("Config_ImportConfirm"), Views.ToastLevel.Warn)) return;
+        // 按钮传动词：「是」在这个句子里既不说明覆盖什么，也不说明点了会怎样。
+        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), Strings.Get("Config_ImportConfirm"), Views.ToastLevel.Warn,
+                Strings.Get("Btn_ImportConfig"), Strings.Get("Ed_Cancel"))) return;
         var dlg = new Microsoft.Win32.OpenFileDialog   // 同上：限定 Win32
         {
             Filter = Strings.Get("Config_Filter"),
@@ -785,8 +796,10 @@ public partial class MainWindow : Window
         if (refReminders.Count > 0 || refSteps > 0)
         {
             // 有引用走专用确认文案（说明会联动清理），无引用走通用删除确认——两条路径都必确认。
+            // 两条都传动词按钮：这条问句长，「是 / 否」在这种句子上最费人——读完题干才想起按钮在问什么。
             if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
-                    Lf("Confirm_DeleteGroupRefs", g.Name, refReminders.Count, refSteps), Views.ToastLevel.Warn)) return;
+                    Lf("Confirm_DeleteGroupRefs", g.Name, refReminders.Count, refSteps), Views.ToastLevel.Warn,
+                    Strings.Get("Btn_Delete"), Strings.Get("Confirm_Keep"))) return;
             foreach (var r in refReminders)
             {
                 if (r.SilentGroupId == g.Id) r.SilentGroupId = "";
@@ -843,12 +856,15 @@ public partial class MainWindow : Window
         if (_system == null) return;
         _systemLoaded = true;
         SysLoading.Visibility = Visibility.Visible;
-        GridSystem.Visibility = Visibility.Collapsed;
+        // 表与表头都留着：以前这里把整个 DataGrid 收起，扫描完再放回来——列头凭空长出，
+        // 用户看到的是界面跳了一下，而它本来有地方站着那五个名字。
+        // 计数一并清空：分母还没数完就先报「0 / 0 项」，那不是在报进度，是在撒谎。
+        SysCount.Text = "";
         Task.Run(() => SystemStartupReader.GetItems()).ContinueWith(t =>
         {
+            // SetItems 走 ApplyFilter → Changed，计数与零行提示在那儿按真实结果重算。
             _system.SetItems(t.IsCompletedSuccessfully ? t.Result : new List<SystemStartupItem>());
             SysLoading.Visibility = Visibility.Collapsed;
-            GridSystem.Visibility = Visibility.Visible;
         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
@@ -919,7 +935,8 @@ public partial class MainWindow : Window
         // 删除会连文件一起移除、该步骤随之失效 → 换专用文案把后果讲清，决定权交还用户。
         bool takenOver = row.Item.Type == "StartupFolder" && StepRefersToFile(row.Item.LnkPath);
         if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
-                Lf(takenOver ? "Confirm_DeleteSysItemTakenOver" : "Confirm_DeleteSysItem", row.Name), Views.ToastLevel.Warn)) return;
+                Lf(takenOver ? "Confirm_DeleteSysItemTakenOver" : "Confirm_DeleteSysItem", row.Name), Views.ToastLevel.Warn,
+                Strings.Get("Btn_Delete"), Strings.Get("Confirm_Keep"))) return;
         var res = SystemStartupReader.DeleteItem(row.Item);
         if (res == "Ok") _system.Remove(row.Item);
         else if (res == "NeedsAdmin") PromptRelaunchAdmin();
@@ -1042,7 +1059,9 @@ public partial class MainWindow : Window
         // 就是把破坏半径藏起来：你以为在释放 3000，实际是停掉整个 dev server 加另外 7 个端口。
         var msg = Lf("Confirm_KillPort", row.PortText, row.OwnersText);
         if (row.SiblingPorts.Count > 0) msg += " " + Lf("Confirm_KillPortAlso", row.SiblingPortsText);
-        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), msg, Views.ToastLevel.Warn)) return;
+        // 这颗按钮印「释放端口」而不是「是」：这一句的后果是停掉一个进程，动词得替用户说准。
+        if (!Views.BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), msg, Views.ToastLevel.Warn,
+                Strings.Get("Ports_Kill"), Strings.Get("Ed_Cancel"))) return;
         // **杀进程这一步也不能在 UI 线程上等。** FreePort 对**每个**占用者调 Kill，
         // 而 Kill 里是 `p.WaitForExit(2000)`——一个端口被三个进程占着，最坏就是 6 秒，
         // 正好越过幽灵化的 5 秒阈值（见 Core.UiStallWatch）。放后台，结果回 UI 线程再报。

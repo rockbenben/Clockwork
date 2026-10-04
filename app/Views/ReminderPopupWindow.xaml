@@ -30,17 +30,17 @@
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
                     <Image Source="/logo-256.png" Width="20" Height="20" VerticalAlignment="Center"
                            RenderOptions.BitmapScalingMode="HighQuality"/>
-                    <TextBlock x:Name="TimeText" FontFamily="{StaticResource FontMono}" FontSize="12"
+                    <TextBlock x:Name="TimeText" FontFamily="{StaticResource FontMono}" FontSize="{StaticResource FsBody}"
                                Foreground="{StaticResource BrushPaper}" VerticalAlignment="Center" Margin="10,0,8,0"/>
                     <!-- 眉标取 Tray_ReminderTitle（译文），不走等宽体；左边的 TimeText 是读数，保留 -->
-                    <TextBlock x:Name="Eyebrow" FontSize="12"
+                    <TextBlock x:Name="Eyebrow" FontSize="{StaticResource FsBody}"
                                Foreground="{StaticResource BrushMuted}" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- 提醒正文：全app最大的正文号——这是要隔着半个房间看清的一句话 -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,22"
                               Focusable="False">
-                    <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="17"
+                    <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="{StaticResource FsHero}"
                                Foreground="{StaticResource BrushPaper}" LineStackingStrategy="BlockLineHeight"
                                LineHeight="26"/>
                 </ScrollViewer>

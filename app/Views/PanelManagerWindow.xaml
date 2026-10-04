@@ -53,7 +53,10 @@
                 <StackPanel x:Name="PageRail" AutomationProperties.Name="{loc:Loc Panel_Pages}"/>
             </ScrollViewer>
             <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <StackPanel x:Name="Pages"/>
+                <!-- 卡片居中，不跟着窗口拉伸：这一格**就是**面板的样子（列数 × 行数的格子阵），
+                     拉宽它就不再是所见即所得，用户在这儿看到的宽度骗了他。
+                     宽度富余时让它成为一块居中的留白，而不是左半边有内容、右半边一整片空。 -->
+                <StackPanel x:Name="Pages" HorizontalAlignment="Center"/>
             </ScrollViewer>
         </Grid>
 
@@ -70,22 +73,37 @@
         <Border Grid.Row="1" Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}"
                 BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,10,0,0">
             <WrapPanel>
-                <TextBlock Text="{loc:Loc Settings_PanelLayout}" Style="{StaticResource FieldHint}" VerticalAlignment="Center"
-                           Margin="0,0,10,0" ToolTip="{loc:Loc Settings_PanelLayoutTip}"/>
-                <!-- 读作「4 列 × 上 3 行 + 下 4 行」：符号本身就是这个几何关系，且不需要翻译。 -->
-                <ComboBox x:Name="PanelColumnsCombo" Width="58" Height="28" SelectionChanged="Look_Changed"
-                          ToolTip="{loc:Loc Settings_PanelLayoutTip}"
-                          AutomationProperties.Name="{loc:Loc Settings_PanelColumns}"/>
-                <TextBlock Text="×" Style="{StaticResource FieldHint}" VerticalAlignment="Center" Margin="6,0"/>
-                <ComboBox x:Name="PanelTopRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
-                          ToolTip="{loc:Loc Settings_PanelLayoutTip}"
-                          AutomationProperties.Name="{loc:Loc Settings_PanelTopRows}"/>
-                <TextBlock Text="+" Style="{StaticResource FieldHint}" VerticalAlignment="Center" Margin="6,0"/>
-                <ComboBox x:Name="PanelBottomRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
-                          ToolTip="{loc:Loc Settings_PanelLayoutTip}"
-                          AutomationProperties.Name="{loc:Loc Settings_PanelBottomRows}"/>
-                <ComboBox x:Name="PanelTileSizeCombo" Width="100" Height="28" Margin="14,0,0,0" SelectionChanged="Look_Changed"
-                          AutomationProperties.Name="{loc:Loc Settings_PanelTileSize}"/>
+                <TextBlock Text="{loc:Loc Settings_PanelLayout}" Style="{StaticResource FieldHint}" VerticalAlignment="Bottom"
+                           Margin="0,0,10,6" ToolTip="{loc:Loc Settings_PanelLayoutTip}"/>
+                <!-- 读作「4 列 × 上 3 行 + 下 4 行」：符号本身就是这个几何关系，且不需要翻译。
+                     符号留下，但每个下拉各自带一个微型字段名——光看「4 × 3 + 4」，
+                     三个数字里哪个是列、哪个是上带，要点开 ToolTip 才知道，而那一步没人会做。
+                     名字用的就是三个下拉本来就带着的朗读名（同一批键，不多一份文案）。 -->
+                <StackPanel VerticalAlignment="Bottom">
+                    <TextBlock Text="{loc:Loc Settings_PanelColumns}" Style="{StaticResource FieldMicroLabel}"/>
+                    <ComboBox x:Name="PanelColumnsCombo" Width="58" Height="28" SelectionChanged="Look_Changed"
+                              ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                              AutomationProperties.Name="{loc:Loc Settings_PanelColumns}"/>
+                </StackPanel>
+                <TextBlock Text="×" Style="{StaticResource FieldHint}" VerticalAlignment="Bottom" Margin="6,0,6,8"/>
+                <StackPanel VerticalAlignment="Bottom">
+                    <TextBlock Text="{loc:Loc Settings_PanelTopRows}" Style="{StaticResource FieldMicroLabel}"/>
+                    <ComboBox x:Name="PanelTopRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
+                              ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                              AutomationProperties.Name="{loc:Loc Settings_PanelTopRows}"/>
+                </StackPanel>
+                <TextBlock Text="+" Style="{StaticResource FieldHint}" VerticalAlignment="Bottom" Margin="6,0,6,8"/>
+                <StackPanel VerticalAlignment="Bottom">
+                    <TextBlock Text="{loc:Loc Settings_PanelBottomRows}" Style="{StaticResource FieldMicroLabel}"/>
+                    <ComboBox x:Name="PanelBottomRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
+                              ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                              AutomationProperties.Name="{loc:Loc Settings_PanelBottomRows}"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Bottom" Margin="14,0,0,0">
+                    <TextBlock Text="{loc:Loc Settings_PanelTileSize}" Style="{StaticResource FieldMicroLabel}"/>
+                    <ComboBox x:Name="PanelTileSizeCombo" Width="100" Height="28" SelectionChanged="Look_Changed"
+                              AutomationProperties.Name="{loc:Loc Settings_PanelTileSize}"/>
+                </StackPanel>
                 <CheckBox x:Name="PanelIconOnlyChk" Content="{loc:Loc Settings_PanelIconOnly}" VerticalAlignment="Center" Margin="18,0,0,0"
                           ToolTip="{loc:Loc Settings_PanelIconOnlyTip}" Click="Look_Changed"/>
                 <CheckBox x:Name="PanelShowOpsChk" Content="{loc:Loc Settings_PanelShowOps}" VerticalAlignment="Center" Margin="18,0,0,0" Click="Look_Changed"/>

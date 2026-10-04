@@ -116,7 +116,8 @@ public partial class PanelManagerWindow : Window
     private void ResetUsage_Click(object sender, RoutedEventArgs e)
     {
         if (_resetUsage == null) return;
-        if (!BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), Strings.Get("Confirm_ResetUsage"), ToastLevel.Warn)) return;
+        if (!BrandDialog.Confirm(this, Strings.Get("Confirm_Title"), Strings.Get("Confirm_ResetUsage"), ToastLevel.Warn,
+                Strings.Get("Btn_ResetUsage"), Strings.Get("Ed_Cancel"))) return;
         _resetUsage();
         ResetUsageBtn.Visibility = Visibility.Collapsed;
         RenderPages();
@@ -253,7 +254,7 @@ public partial class PanelManagerWindow : Window
             int pages = _config.PanelPages.Count(p => PanelLayout.SameCategory(p.Tab, cat));
             if (pages > 0 && !BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
                     Strings.Lf("Confirm_DeleteCategory", cat, pages, Strings.Get("Panel_Uncategorized")),
-                    ToastLevel.Warn)) return;
+                    ToastLevel.Warn, Strings.Get("Btn_Delete"), Strings.Get("Confirm_Keep"))) return;
             // 还没落地的那一类：没有页可搬，去掉这个标记就是了。
             if (PanelLayout.SameCategory(_pendingCat, cat))
             {
@@ -1175,7 +1176,8 @@ public partial class PanelManagerWindow : Window
         // 而这里要说的是两件事——删的是哪一页、上面几个格子会跟着走。
         // 塞成「手边（25）」当名字用过一版，读起来像是这张页就叫「手边（25）」。
         if (!BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
-                Strings.Lf("Confirm_DeletePage", p.Name, p.Steps.Count), ToastLevel.Warn)) return;
+                Strings.Lf("Confirm_DeletePage", p.Name, p.Steps.Count), ToastLevel.Warn,
+                Strings.Get("Btn_Delete"), Strings.Get("Confirm_Keep"))) return;
         if (!_config.PanelPages.Remove(p)) return;
         // 删的正是当前这一页时把「当前」放掉：不放的话重画会拿一个已经不在册的引用去找页，
         // 找不到会退回第一页——那是对的，但顺手清掉更不容易读错。
