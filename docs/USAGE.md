@@ -271,7 +271,7 @@ A tile grid at your mouse, one press away — for when the tray icon is a long w
 Pages follow content, not a tile count: **each one is a page you made and named yourself.** So you flip between "Handy" and "Dev", not "2 of 4". Only when a page overflows is it continued onto a second screen under the same name — that is a capacity problem, not a content one.
 
 **Two rows — the top one picks a category, the left one lists that category's pages.** A category is a name you give
-a batch of pages (*Coding*, *Winding down*). Pages have none by default, so everything sits under *Uncategorised*,
+a batch of pages (*Coding*, *Winding down*). Pages have none by default, so everything sits under *Uncategorized*,
 which is what most people will see forever. A page lives in exactly one place — the left row — so there is never a
 question of which row a page is on.
 
@@ -288,7 +288,7 @@ question of which row a page is on.
   current category. The **+** at the end of the top row makes a new category **with a page already in it** (an empty
   category opens onto nothing), puts it last in the row, and lets you name it on the spot. **Double-click a category
   tab** to rename it; that rewrites the category name on every page in it, because a category is not a record of its
-  own, it emerges from the pages. The manager always keeps its category row, even with only *Uncategorised* on it,
+  own, it emerges from the pages. The manager always keeps its category row, even with only *Uncategorized* on it,
   because that + is the only way to make a category.
 - **Both rows sort freely**: drag a page tab to reorder pages, drag a category tab to reorder categories (the whole
   category travels, and the order inside it is kept). Categorising a page also slides it to the end of that category's
@@ -344,7 +344,7 @@ On the **Settings** tab, under **Quick panel**:
 - Items marked **needs admin**: acting on them prompts to relaunch as administrator, then you can proceed.
 - System / policy / one-time items (Group-Policy Run, RunOnce, Winlogon, Active Setup) can't be touched and are **hidden by default** — tick **Show system / read-only items** (top-right) to view them (greyed out; the right-click actions below are disabled for them).
 - **Right-click a row** for two actions:
-  - **Take over into launch list** — hands the item to Clockwork (disables the original + adds it to your list). Registry Run keys and Startup-folder items only; scheduled tasks aren't supported yet (you'll get a notice).
+  - **Take over into Startup List** — hands the item to Clockwork (disables the original + adds it to your list). Registry Run keys and Startup-folder items only; scheduled tasks aren't supported yet (you'll get a notice).
   - **Delete from system** — removes the entry for good (registry value / Startup-folder shortcut / scheduled task). It asks first and **cannot be undone** — if you only want to stop it running at boot, uncheck **Enable** instead. If the item was taken over earlier and a step still points at its shortcut file, the confirmation says so, because deleting the shortcut breaks that step.
 - A top **filter** searches by name / command.
 

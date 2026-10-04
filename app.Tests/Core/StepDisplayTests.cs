@@ -10,7 +10,10 @@ public class StepDisplayTests
 
     [Fact] public void DaysLabel_empty_everyday() => Assert.Equal("每天", StepDisplay.DaysLabel(new List<int>()));
     [Fact] public void DaysLabel_all7_everyday() => Assert.Equal("每天", StepDisplay.DaysLabel(new List<int> { 1, 2, 3, 4, 5, 6, 7 }));
-    [Fact] public void DaysLabel_weekdays() => Assert.Equal("一二三四五", StepDisplay.DaysLabel(new List<int> { 1, 2, 3, 4, 5 }));
+    // 这一行从前钉的是「一二三四五」——第三轮设计审查指出：中文里那一串是数字，不是星期。
+    // 现在两端带「周」，连续段收成区间。区间的各种边界（两天不收、断档不收、周日周一不环绕）
+    // 由 DaysLabelRangeTests 逐条钉，这里只钉最常见的这一条。
+    [Fact] public void DaysLabel_weekdays() => Assert.Equal("周一–周五", StepDisplay.DaysLabel(new List<int> { 1, 2, 3, 4, 5 }));
 
     [Fact] public void Summary_volume_set() => Assert.Equal("设音量 30%", StepDisplay.StepSummary(new LaunchStep { Kind = "volume", Action = "set", Level = 30 }));
 

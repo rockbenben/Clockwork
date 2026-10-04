@@ -16,7 +16,7 @@ public class ReminderDisplayTests
     [Fact] public void Period_everyNDays_two_still_uses_the_template() => Assert.Equal("每2天", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "everyNDays", IntervalDays = 2 }));
 
     [Fact] public void Period_monthly() => Assert.Equal("每月15号", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "monthly", MonthlyDay = 15 }));
-    [Fact] public void Period_daily_weekdays() => Assert.Equal("一二三四五", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "daily", Days = new() { 1, 2, 3, 4, 5 } }));
+    [Fact] public void Period_daily_weekdays() => Assert.Equal("周一–周五", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "daily", Days = new() { 1, 2, 3, 4, 5 } }));
     [Fact] public void Period_daily_empty_everyday() => Assert.Equal("每天", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "daily", Days = new() }));
 
     [Fact] public void Text_strips_newlines() => Assert.Equal("a b", ReminderDisplay.TextSummary(new Reminder { Message = "a\r\nb" }));

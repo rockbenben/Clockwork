@@ -14,6 +14,7 @@
   <data name="Launch_Hint" xml:space="preserve"><value>로그인할 때 한 번, 위에서 아래로 실행 · 행을 끌어 순서 변경. 시간·이벤트로 실행하려면 → 예약 작업, 언제든 한 번에 실행하려면 → 동작 그룹.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>정해진 시각, 로그인, 잠금 해제·전원 등 이벤트에 알림을 띄우거나 그룹을 조용히 실행합니다. 로그인 때 앱만 열려면 → 시작 목록, 원할 때 한 번에 실행하려면 → 동작 그룹.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>여러 동작을 그룹으로 묶어 단축키 / 트레이에서 언제든 실행하세요. 시작 목록과 예약 작업에서도 참조할 수 있습니다. 로그인 때 한 번만 실행할 거라면 시작 목록에 바로 적는 편이 간단합니다.</value></data>
+  <data name="Group_NoSteps" xml:space="preserve"><value>아직 단계가 없습니다. 위 “추가”를 눌러 첫 단계를 더하세요. 위에 있는 것이 먼저 실행됩니다.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(비어 있음)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>체크/해제는 즉시 적용(삭제가 아닌 비활성화, 복원 가능).</value></data>
   <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>시스템 / 정책 / 일회성 읽기 전용 항목은 기본 숨김입니다.</value></data>
@@ -30,6 +31,7 @@
   <data name="Ports_Footer" xml:space="preserve"><value>행을 두 번 클릭하면 브라우저에서 열리고, 오른쪽 클릭으로 포트를 해제합니다.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} 포트 · 5초마다 자동 새로 고침</value></data>
   <data name="Ports_Empty" xml:space="preserve"><value>현재 필터에 맞는 포트가 없습니다. 이 기기에서 {0}개의 포트가 수신 대기 중입니다 — 필터를 바꾸거나 검색어를 지워 보세요.</value></data>
+  <data name="System_Empty" xml:space="preserve"><value>현재 필터에 맞는 시작 프로그램이 없습니다. 이 기기에는 {0}개가 있습니다 — 필터를 지우거나 “시스템 / 읽기 전용 표시”를 켜세요.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>브라우저에서 열기</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>포트 비우기</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>함께 수신 중: {0}</value></data>
@@ -64,7 +66,7 @@
   <data name="Settings_PanelManage" xml:space="preserve"><value>패널 관리…</value></data>
   <data name="Gesture_None" xml:space="preserve"><value>아직 제스처가 없습니다. [추가]를 눌러 동작을 고르고 오른쪽에 궤적을 그리세요.</value></data>
   <data name="Ed_GestureDrawHere" xml:space="preserve"><value>왼쪽 버튼 누른 채 여기에 그리기</value></data>
-  <data name="Val_GestureDup" xml:space="preserve"><value>제스처 {0}은(는) "{1}"에서 사용 중입니다. 다른 궤적을 그리세요</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>제스처 {0}은(는) “{1}”에서 사용 중입니다. 다른 궤적을 그리세요</value></data>
   <data name="Col_Port" xml:space="preserve"><value>포트</value></data>
   <data name="Col_Process" xml:space="preserve"><value>프로세스</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -138,7 +140,7 @@
     <value>최대 대기(초)</value>
   </data>
   <data name="Ed_UrlHint" xml:space="preserve">
-    <value>{clipboard} 지원: 실행할 때 클립보드의 텍스트로 바뀌며 URL 인코딩됩니다. 「선택 텍스트 가져오기」와 함께 쓰면 선택한 내용을 그대로 검색합니다.</value>
+    <value>{clipboard} 지원: 실행할 때 클립보드의 텍스트로 바뀌며 URL 인코딩됩니다. “선택 텍스트 가져오기”와 함께 쓰면 선택한 내용을 그대로 검색합니다.</value>
   </data>
   <data name="Ed_CopySelectionHint" xml:space="preserve">
     <value>복사 키를 대신 눌러 선택한 텍스트를 클립보드에 넣습니다. 이후 단계에서 {clipboard}로 다시 읽습니다.</value>
@@ -213,6 +215,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>매일</value></data>
   <data name="Days_Sep" xml:space="preserve"><value></value></data>
+  <data name="Days_RangeSep" xml:space="preserve"><value>~</value></data>
   <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>월</value></data>
   <data name="Day_2" xml:space="preserve"><value>화</value></data>
@@ -250,7 +253,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>관리자 권한으로 실행</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>대상에는 프로그램(전체 경로 또는 이름만), 바로 가기, 스크립트, 폴더, URL, 문서, ms-settings: 같은 프로토콜을 넣을 수 있습니다.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>단축키</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>예: Win+D / Alt+K / Ctrl+Enter / F5. 포커스된 창으로 전송되므로 대상을 먼저 앞으로 가져오세요. Win+D, Win+6 처럼 Windows가 선점한 조합은 캡처되지 않습니다. 상자를 두 번 클릭하면 직접 입력할 수 있습니다. 수식 키를 곁들인 마우스 동작도 여기서: 칸 안에서 굴리면 기록됩니다(Ctrl은 확대/축소, Shift는 가로 스크롤). 버튼은 LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward로 입력하세요. 단순한 스크롤이나 클릭은 “마우스” 단계가 더 간편합니다.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>예: Win+D / Alt+K / Ctrl+Enter / F5. 포커스된 창으로 전송되므로 대상을 먼저 앞으로 가져오세요. Win+D, Win+6 처럼 Windows가 선점한 조합은 캡처되지 않습니다. 상자를 두 번 클릭하면 직접 입력할 수 있습니다. 수식 키를 곁들인 마우스 동작도 여기서 기록합니다: 상자 안에서 휠을 굴리면 저장됩니다(Ctrl은 확대/축소, Shift는 가로 스크롤). 단순한 스크롤이나 클릭은 “마우스” 단계가 더 간편합니다.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>스크롤은 포인터 아래 창으로 갑니다. 클릭은 포인터가 지금 있는 자리에서 일어납니다(이 앱은 포인터를 옮기지 않습니다). 클릭 계열은 “창 동작 → 맨 앞으로”로 대상을 맞춘 뒤 쓰거나, 위치와 무관한 뒤로/앞으로만 쓰세요. N번·N칸은 아래 반복 횟수로, 간격은 실행 후 지연으로 조절합니다.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>아래로 스크롤</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>오른쪽으로 스크롤</value></data>
@@ -276,7 +279,7 @@
   <data name="Ed_TextProcess" xml:space="preserve"><value>대상 프로세스</value></data>
   <data name="Ed_TextHint" xml:space="preserve"><value>한 글자씩 입력(줄바꿈=Enter). 대상 프로세스를 비우면 포커스된 창으로 전송(가장 안정적).</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>메시지</value></data>
-  <data name="Ed_Speak" xml:space="preserve"><value>음성 낭독</value></data>
+  <data name="Ed_Speak" xml:space="preserve"><value>음성 안내</value></data>
   <data name="Snd_Both" xml:space="preserve"><value>알림음 + 음성 안내</value></data>
   <data name="Snd_Speak" xml:space="preserve"><value>음성 안내(내용을 읽음)</value></data>
   <data name="Snd_Sound" xml:space="preserve"><value>알림음(딩 한 번)</value></data>
@@ -292,9 +295,9 @@
   <data name="Ed_Repeat" xml:space="preserve"><value>반복 횟수</value></data>
   <data name="Ed_Note" xml:space="preserve"><value>메모</value></data>
   <data name="Ed_DaysHeader" xml:space="preserve"><value>이 요일에만 실행(모두 해제=매일)</value></data>
-  <data name="Ed_OnlyBefore" xml:space="preserve"><value>단</value></data>
+  <data name="Ed_OnlyBefore" xml:space="preserve"><value>이전까지만</value></data>
   <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>형식 H:mm, 예: 08:30. 시만 입력(예: 8)해도 됩니다. 기본값 08:00.</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value>이전 실행</value></data>
+  <data name="Ed_HourBefore" xml:space="preserve"><value>실행</value></data>
   <data name="Ed_Vol_Set" xml:space="preserve"><value>볼륨 설정</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>없음</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>실행 / 파일 열기</value></data>
@@ -302,20 +305,20 @@
   <data name="Ed_Group_None" xml:space="preserve"><value>(없음)</value></data>
   <data name="Ed_GroupMissing" xml:space="preserve"><value>(대상이 삭제됨)</value></data>
 
-  <data name="Warn_SendKeyFail" xml:space="preserve"><value>「{0}」에 키 전송 실패: 창이 나타나지 않거나 앞으로 가져올 수 없음(백그라운드/시작 트리거에서 흔함)</value></data>
-  <data name="Warn_WindowNotFound" xml:space="preserve"><value>「{0}」의 창을 찾을 수 없음(프로세스 미실행/미준비?), {1} 적용 안 됨</value></data>
-  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>「{0}」의 창은 찾았지만 {1}이(가) 적용되지 않았습니다(포그라운드 잠금, 창이 닫기를 거부, 또는 관리자 권한으로 실행 중)</value></data>
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>“{0}”에 키 전송 실패: 창이 나타나지 않거나 앞으로 가져올 수 없음(백그라운드/시작 트리거에서 흔함)</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>“{0}”의 창을 찾을 수 없음(프로세스 미실행/미준비?), {1} 적용 안 됨</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>“{0}”의 창은 찾았지만 {1}이(가) 적용되지 않았습니다(포그라운드 잠금, 창이 닫기를 거부, 또는 관리자 권한으로 실행 중)</value></data>
   <data name="Warn_RestoreFailed" xml:space="preserve"><value>이전 창으로 돌아갈 수 없습니다. 전경 창이 잠겨 있거나 해당 창이 더 이상 열려 있지 않습니다.</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>알 수 없는 창 작업: {0}</value></data>
-  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>'현재 창'은 이 동작({0})을 허용하지 않습니다: 앞으로 가져오기는 의미가 없고, 키 전송은 '키 보내기' 단계를 쓰세요. 건너뜀.</value></data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>“현재 창”은 이 동작({0})을 허용하지 않습니다: 앞으로 가져오기는 의미가 없고, 키를 보내려면 “키 전송” 단계를 쓰세요. 건너뜀.</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>알 수 없는 볼륨 동작: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>알 수 없는 단계 유형: {0}</value></data>
-  <data name="Warn_SelfSkip" xml:space="preserve"><value>「{0}」 건너뜀: 대상이 Clockwork 자신(자동 시작 루프 방지)</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>“{0}” 건너뜀: 대상이 Clockwork 자신(자동 시작 루프 방지)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>시작 실패: {0} — {1}</value></data>
-  <data name="Warn_QuickExit" xml:space="preserve"><value>「{0}」이(가) 시작 후 0.5초 내 종료(종료 코드 {1}), 시작 실패 의심</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>“{0}”이(가) 시작 후 0.5초 내 종료(종료 코드 {1}), 시작 실패 의심</value></data>
   <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>설정 파일을 읽을 수 없어(JSON 손상 가능성) 기본값으로 시작했습니다. 원본은 {0}에 백업했습니다. 수정 후 다시 시작하면 복구됩니다.</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>스크립트 파일을 찾을 수 없습니다(전체 경로를 입력하세요)</value></data>
-  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>스크립트가 BOM 없는 UTF-8이라 Windows PowerShell 5.1에서 올바르게 디코딩되지 않습니다. PowerShell 7을 설치하거나 BOM 포함 UTF-8로 다시 저장하세요</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>스크립트가 실행되지 않았습니다: Windows에 내장된 PowerShell이 이 인코딩을 읽을 수 없어서입니다. 스크립트를 BOM 포함 UTF-8로 다시 저장하거나 PowerShell 7을 사용하세요.</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ 전송됨(미검증)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>예외: {0}</value></data>
 
@@ -335,8 +338,8 @@
   <data name="Ed_Time" xml:space="preserve"><value>시간(HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>로그온 조건</value></data>
   <data name="Ed_SMode_Any" xml:space="preserve"><value>항상</value></data>
-  <data name="Ed_SMode_Before" xml:space="preserve"><value>N시 이전만</value></data>
-  <data name="Ed_SMode_After" xml:space="preserve"><value>N시 이후만</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>지정 시각 이전만</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>지정 시각 이후만</value></data>
   <data name="Ed_Hour" xml:space="preserve"><value>시</value></data>
   <data name="Ed_OnlyBoot" xml:space="preserve"><value>부팅</value></data>
   <data name="Ed_WithinHint" xml:space="preserve"><value>분 이내 실행만 로그온으로 간주(0=매번 알림)</value></data>
@@ -368,7 +371,7 @@
   <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>분마다(0=반복 안 함), 다음 시각까지</value></data>
   <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, 비우면 최대 20회 표시)</value></data>
   <data name="Ed_LoopEvery" xml:space="preserve"><value>반복 실행</value></data>
-  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>분마다(0=끔), 다음 시각까지</value></data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>분마다(0=꺼짐), 다음 시각까지</value></data>
   <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, 비우면 당일 종료)</value></data>
   <data name="Ed_TrigDelay" xml:space="preserve"><value>트리거 후 지연</value></data>
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>초, 추가로 랜덤 0~</value></data>
@@ -376,16 +379,16 @@
   <data name="Ed_Grace" xml:space="preserve"><value>유예(분)</value></data>
   <data name="Ed_GraceHint" xml:space="preserve"><value>이내면 시각을 놓쳐도 알림</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>시간은 HH:mm 형식이어야 합니다</value></data>
-  <data name="Val_RepeatUntil" xml:space="preserve"><value>「반복 종료」는 HH:mm(또는 비움)이어야 합니다</value></data>
-  <data name="Val_LoopUntil" xml:space="preserve"><value>「반복 실행 종료」는 HH:mm(또는 비움)이어야 합니다</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>“반복 종료”는 HH:mm(또는 비움)이어야 합니다</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>“반복 실행 종료”는 HH:mm(또는 비움)이어야 합니다</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>기준일은 yyyy-MM-dd(또는 비움)이어야 합니다</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>날짜는 yyyy-MM-dd 형식이어야 합니다</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>이 날짜는 이미 지났습니다 — 저장해도 이 작업은 실행되지 않습니다(새 날짜를 설정하고 다시 활성화하면 재사용할 수 있습니다)</value></data>
-  <data name="Val_SilentNoGroup" xml:space="preserve"><value>「동작 그룹 조용히 실행」을 선택했지만 아직 그룹을 선택하지 않았습니다</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>“동작 그룹 조용히 실행”을 선택했지만 아직 그룹을 선택하지 않았습니다</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · 확인</value></data>
   <data name="Ask_Title" xml:space="preserve"><value>Clockwork · 질문</value></data>
-  <data name="Confirm_Destructive" xml:space="preserve"><value>「{0}」을(를) 실행하시겠습니까?</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>“{0}”을(를) 실행하시겠습니까?</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · 오류</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>Clockwork에서 오류가 발생했습니다(로그 기록됨, 보통 계속 사용 가능):
 
@@ -396,11 +399,11 @@
   <data name="Tray_ReminderTitle" xml:space="preserve"><value>예약 작업</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>시작 목록 수동 정지: {0}단계 실행, 나머지 건너뜀</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>시작 목록 완료: {0}단계, {1}단계 경고(트레이 우클릭→지난 로그 보기)</value></data>
-  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>긴급 정지 단축키 「{0}」을(를) 인식할 수 없습니다. 메인 창에서 변경하세요. 트레이 우클릭 「정지」는 사용 가능합니다.</value></data>
-  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>긴급 정지 단축키 「{0}」 등록 실패(다른 앱이 사용 중일 수 있음). 트레이 우클릭 「정지」는 사용 가능합니다.</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>긴급 정지 단축키 “{0}”을(를) 인식할 수 없습니다. 메인 창에서 변경하세요. 트레이 우클릭 “정지”는 사용 가능합니다.</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>긴급 정지 단축키 “{0}” 등록 실패(다른 앱이 사용 중일 수 있음). 트레이 우클릭 “정지”는 사용 가능합니다.</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>실행 중인 동작의 정지를 요청했습니다.</value></data>
-  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>「{0}」을(를) 전환하려면 관리자 권한이 필요합니다. 관리자 권한으로 Clockwork를 다시 여세요.</value></data>
-  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>「{0}」 전환 실패: {1}</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>“{0}”을(를) 전환하려면 관리자 권한이 필요합니다. 관리자 권한으로 Clockwork를 다시 여세요.</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>“{0}” 전환 실패: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>작업 실패: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>설정</value></data>
   <data name="Settings_General" xml:space="preserve"><value>일반</value></data>
@@ -410,44 +413,45 @@
   <data name="Update_Latest" xml:space="preserve"><value>최신 버전입니다 ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>새 버전 {0}이(가) 있습니다. 다운로드하시겠습니까?</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>업데이트 확인 실패: {0}</value></data>
-  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>클릭한 뒤 단축키를 누르세요. Esc는 취소, Del은 해제. 트레이의 '중지'는 항상 사용할 수 있습니다.</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>클릭한 뒤 단축키를 누르세요. Esc는 취소, Del은 해제. 트레이의 '정지'는 항상 사용할 수 있습니다.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>단축키를 누르세요…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>시작 목록으로 가져오기</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>시스템에서 삭제</value></data>
-  <data name="Confirm_DeleteItem" xml:space="preserve"><value>「{0}」을(를) 삭제할까요?</value></data>
-  <data name="Confirm_DeletePage" xml:space="preserve"><value>"{0}" 페이지를 삭제하시겠습니까? 이 페이지에 있는 {1}개의 타일도 함께 삭제됩니다. 액션을 가리키는 타일은 해당 참조만 제거할 뿐, 액션 자체는 그대로 유지됩니다.</value></data>
-  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>"{0}" 카테고리를 삭제하시겠습니까? 이 카테고리에 포함된 {1}개의 페이지는 삭제되지 않고 "{2}"로 돌아갑니다.</value></data>
-  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>시작 항목 「{0}」을(를) 시스템에서 완전히 삭제할까요? 이 작업은 되돌릴 수 없습니다(부팅 시 실행만 막으려면 체크를 해제하세요).</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>“{0}”을(를) 삭제할까요?</value></data>
+  <data name="Confirm_Keep" xml:space="preserve"><value>유지</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>“{0}” 페이지를 삭제하시겠습니까? 이 페이지에 있는 {1}개의 타일도 함께 삭제됩니다. 동작을 가리키는 타일은 해당 참조만 제거할 뿐, 동작 자체는 그대로 유지됩니다.</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>“{0}” 카테고리를 삭제하시겠습니까? 이 카테고리에 포함된 {1}개의 페이지는 삭제되지 않고 “{2}”로 돌아갑니다.</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>시작 항목 “{0}”을(를) 시스템에서 완전히 삭제할까요? 이 작업은 되돌릴 수 없습니다(부팅 시 실행만 막으려면 체크를 해제하세요).</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>포트 {0}을(를) 비울까요? {1}을(를) 자식 프로세스까지 함께 종료합니다. 저장하지 않은 내용은 사라집니다.</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>이 프로세스는 포트 {0}도 점유하고 있으며, 함께 비워집니다.</value></data>
-  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>시작 항목 「{0}」은(는) 시작 목록으로 가져와졌으며, 해당 바로 가기 파일을 가리키는 단계가 남아 있습니다. 시스템에서 삭제하면 바로 가기도 함께 제거되어 그 단계가 더 이상 실행할 수 없게 됩니다. 그래도 삭제할까요?</value></data>
-  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>「{0}」 삭제 실패: {1}</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>시작 항목 “{0}”은(는) 시작 목록으로 가져와졌으며, 해당 바로 가기 파일을 가리키는 단계가 남아 있습니다. 시스템에서 삭제하면 바로 가기도 함께 제거되어 그 단계가 더 이상 실행할 수 없게 됩니다. 그래도 삭제할까요?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>“{0}” 삭제 실패: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>내보내기 대상은 설정 파일 자체일 수 없습니다. 다른 이름이나 위치를 선택하세요.</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>보낼 키 내용이 유효한 키 시퀀스가 아닙니다. 닫히지 않은 중괄호와 알 수 없는 키 이름을 확인하세요(예: {ENTER}; 리터럴 {는 {{}, 리터럴 }는 {}}로 입력).</value></data>
   <data name="Val_SearchUrl" xml:space="preserve"><value>검색 URL에는 {0}이(가) 필요합니다. 검색어가 들어갈 자리입니다. 없으면 이 단계는 매번 같은 페이지만 엽니다.</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>놓치면 나중에 알림 (절전/종료 후에도)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0}분</value></data>
-  <data name="Warn_KeyNoMain" xml:space="preserve"><value>단축키 "{0}"에 주 키가 없어 전송하지 않았습니다</value></data>
-  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>인식할 수 없는 키 이름 "{0}"(여러 자리 숫자는 키가 아님), 단축키 "{1}" 전송 안 함</value></data>
-  <data name="Warn_KeyUnknown" xml:space="preserve"><value>인식할 수 없는 키 "{0}", 단축키 "{1}" 전송 안 함</value></data>
-  <data name="Warn_KeyRejected" xml:space="preserve"><value>단축키 "{0}"이(가) 시스템에 의해 거부됨(앞에 권한 상승 창/보안 데스크톱이 있을 때 발생), 적용 안 됨</value></data>
-  <data name="Warn_KeyPartial" xml:space="preserve"><value>단축키 "{0}"이(가) 일부만 주입됨({1}/{2}), 키 놓기를 다시 보냄, 적용 안 됨</value></data>
-  <data name="Warn_TextSendFail" xml:space="preserve"><value>텍스트 전송: "{0}" 창을 앞으로 가져오지 못해 전송하지 않았습니다</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>단축키 “{0}”에 주 키가 없어 전송하지 않았습니다</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>인식할 수 없는 키 이름 “{0}”(여러 자리 숫자는 키가 아님), 단축키 “{1}” 전송 안 함</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>인식할 수 없는 키 “{0}”, 단축키 “{1}” 전송 안 함</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>단축키 “{0}”이(가) 시스템에 의해 거부됨(앞에 권한 상승 창/보안 데스크톱이 있을 때 발생), 적용 안 됨</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>단축키 “{0}”이(가) 일부만 주입됨({1}/{2}), 키 놓기를 다시 보냄, 적용 안 됨</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>텍스트 전송: “{0}” 창을 앞으로 가져오지 못해 전송하지 않았습니다</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>설정 저장 실패: {0} (변경 사항은 메모리에만 있으며 재시작 시 사라집니다)</value></data>
-  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>알림 "{0}"이(가) 참조하는 동작 그룹이 없어 이번에는 아무것도 실행되지 않았습니다</value></data>
-  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>알림 "{0}"이(가) 참조하는 동작 그룹이 비활성화되어 이번에는 아무것도 실행되지 않았습니다</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>알림 “{0}”이(가) 참조하는 동작 그룹이 없어 이번에는 아무것도 실행되지 않았습니다</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>알림 “{0}”이(가) 참조하는 동작 그룹이 비활성화되어 이번에는 아무것도 실행되지 않았습니다</value></data>
   <data name="Skip_GroupNotFound" xml:space="preserve"><value>참조한 동작 그룹을 찾을 수 없습니다</value></data>
-  <data name="Skip_GroupDisabled" xml:space="preserve"><value>동작 그룹 "{0}"이(가) 비활성화되어 건너뛰었습니다</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>동작 그룹 “{0}”이(가) 비활성화되어 건너뛰었습니다</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>동작 그룹 재진입(순환 참조 또는 이미 실행 중)으로 건너뛰었습니다</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Toast_GroupCancelled" xml:space="preserve"><value>동작 그룹 “{0}”의 취소를 요청했습니다.</value></data>
   <data name="Toast_GroupStarted" xml:space="preserve"><value>동작 그룹 “{0}”을(를) 시작했습니다.</value></data>
-  <data name="Toast_GroupBusy" xml:space="preserve"><value>동작 그룹 “{0}”은(는) 이미 실행 중입니다(다른 경로에서 시작). 이 키로는 멈출 수 없습니다. 비상 정지 단축키를 사용하세요.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>동작 그룹 “{0}”은(는) 이미 실행 중입니다(다른 경로에서 시작). 이 키로는 멈출 수 없습니다. 긴급 정지 키를 사용하세요.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>실행이 5000단계 한도에 도달하여 중지되었으며 나머지 단계는 건너뛰었습니다(반복 횟수가 너무 크지 않은지 확인하세요)</value></data>
-  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>"예" 클릭 시 실행할 동작 그룹이 없어 건너뛰었습니다</value></data>
-  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>"예" 클릭 시 실행할 동작 그룹이 비활성화되어 건너뛰었습니다</value></data>
-  <data name="Warn_OnYesFailed" xml:space="preserve"><value>“예를 누른 뒤” 동작을 실행하지 못했습니다: {0}</value></data>
-  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>예약 작업 항목은 아직 인수를 지원하지 않습니다. 레지스트리 Run 키와 시작 폴더 항목만 지원됩니다</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>“예” 클릭 시 실행할 동작 그룹이 없어 건너뛰었습니다</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>“예” 클릭 시 실행할 동작 그룹이 비활성화되어 건너뛰었습니다</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>“예 누른 후” 동작을 실행하지 못했습니다: {0}</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>이 항목은 가져올 수 없습니다 — 레지스트리 Run 키와 시작 폴더 항목만 가져올 수 있습니다.</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>시작 목록 실행 중단: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>마지막 시작 로그 보기</value></data>
   <data name="Tray_History" xml:space="preserve"><value>최근 알림</value></data>
@@ -467,11 +471,11 @@
   <data name="Log_GroupCycle" xml:space="preserve"><value>순환 참조라 건너뛰었습니다</value></data>
   <data name="Log_RunGroup" xml:space="preserve"><value>동작 그룹 실행: {0}</value></data>
   <data name="Log_Stopped" xml:space="preserve"><value>수동으로 멈춰서 이후 단계는 실행되지 않았습니다</value></data>
-  <data name="Log_HdrStopped" xml:space="preserve"><value>이번 실행은 수동으로 멈췄습니다(비상 정지 키 또는 트레이의 “정지”)</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>이번 실행은 수동으로 멈췄습니다(긴급 정지 키 또는 트레이의 “정지”)</value></data>
   <data name="Err_JsonNull" xml:space="preserve"><value>이 파일은 파싱하면 비어 있습니다. 설정 파일이 아닙니다.</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>클립보드 지우기 실패: {0}</value></data>
-  <data name="Err_SoundNotWav" xml:space="preserve"><value>"{0}"은(는) .wav 파일이 아닙니다. 이 단계에서는 wav 파일만 재생됩니다.</value></data>
-  <data name="Err_SoundMissing" xml:space="preserve"><value>"{0}" 사운드 파일을 찾을 수 없습니다.</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>“{0}”은(는) .wav 파일이 아닙니다. 이 단계에서는 wav 파일만 재생됩니다.</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>“{0}” 사운드 파일을 찾을 수 없습니다.</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>휴지통 비우기 실패: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>알 수 없는 시스템 명령: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>실행: {0}</value></data>
@@ -505,7 +509,7 @@
   <data name="Smp_RemBills" xml:space="preserve"><value>이번 달 청구서와 구독 확인 (예시 · 매월 1일)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>잘 시간이에요 (예시)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>이 작업에는 관리자 권한이 필요합니다. Clockwork를 관리자 권한으로 다시 열까요?</value></data>
-  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>동작 그룹 "{0}"은(는) 알림 {1}개와 단계 {2}개에서 참조 중입니다. 삭제하면 해당 참조도 함께 정리됩니다(알림은 팝업만, 참조 단계는 제거). 그래도 삭제할까요?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>동작 그룹 “{0}”은(는) 알림 {1}개와 단계 {2}개에서 참조 중입니다. 삭제하면 해당 참조도 함께 정리됩니다(알림은 팝업만, 참조 단계는 제거). 그래도 삭제할까요?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>찾아보기…</value></data>
   <data name="Btn_Pick" xml:space="preserve"><value>선택…</value></data>
   <data name="Btn_Capture" xml:space="preserve"><value>캡처</value></data>
@@ -568,7 +572,7 @@
   <data name="Ed_ProcessHint" xml:space="preserve"><value>*를 입력하면 현재 창, 즉 제스처를 그리기 전이나 패널을 열기 전에 쓰던 창이 됩니다. 비워 두면 이 단계는 아무것도 하지 않습니다.</value></data>
   <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0}은(는) 검색할 단어입니다. 자동으로 이스케이프됩니다.</value></data>
   <data name="Ed_SoundFile" xml:space="preserve"><value>사운드 파일</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>시스템 알림 소리를 사용하려면 이 항목을 비워 두십시오. 또는 .wav 파일의 전체 경로를 입력하십시오.</value></data>
+  <data name="Ed_SoundHint" xml:space="preserve"><value>시스템 알림 소리를 사용하려면 이 항목을 비워 두세요. 또는 .wav 파일의 전체 경로를 입력하세요.</value></data>
   <data name="Sys_brightness" xml:space="preserve"><value>화면 밝기</value></data>
   <data name="Sys_notificationsOff" xml:space="preserve"><value>알림 끄기</value></data>
   <data name="Sys_notificationsOn" xml:space="preserve"><value>알림 켜기</value></data>
@@ -582,13 +586,13 @@
   <data name="Ed_ClipText" xml:space="preserve"><value>클립보드 텍스트</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>밝기(0-100)</value></data>
   <data name="Ed_BrightnessHint" xml:space="preserve"><value>시스템이 제어하는 디스플레이(노트북 내장 화면 등)에서만 동작합니다. 외장 모니터는 지원되지 않습니다.</value></data>
-  <data name="Ed_OnlyAfter" xml:space="preserve"><value>단</value></data>
-  <data name="Ed_HourAfter" xml:space="preserve"><value>이후 실행</value></data>
-  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>형식 시:분, 예: 18:30. 시만(예: 18) 입력해도 됩니다. 기본값 18:00.</value></data>
+  <data name="Ed_OnlyAfter" xml:space="preserve"><value>이후부터</value></data>
+  <data name="Ed_HourAfter" xml:space="preserve"><value>실행</value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>형식 H:mm, 예: 18:30. 시만(예: 18) 입력해도 됩니다. 기본값 18:00.</value></data>
   <data name="Ed_Cond_Any" xml:space="preserve"><value>제한 없음</value></data>
   <data name="Ed_IfProcess" xml:space="preserve"><value>프로세스 조건</value></data>
-  <data name="Ed_IfProc_Running" xml:space="preserve"><value>해당 프로세스 실행 중</value></data>
-  <data name="Ed_IfProc_Not" xml:space="preserve"><value>해당 프로세스 실행 중 아님</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>프로세스 실행 중</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>프로세스 실행 중 아님</value></data>
   <data name="Ed_IfPower" xml:space="preserve"><value>전원 조건</value></data>
   <data name="Ed_IfPower_Ac" xml:space="preserve"><value>전원 연결 시에만</value></data>
   <data name="Ed_IfPower_Battery" xml:space="preserve"><value>배터리 사용 시에만</value></data>
@@ -611,7 +615,7 @@
   <data name="Ed_IdleHint" xml:space="preserve"><value>키보드·마우스 조작이 이만큼의 시간 동안 없으면 한 번 실행합니다. 다시 조작하면 시간이 초기화됩니다.</value></data>
   <data name="Ed_BatteryPercent" xml:space="preserve"><value>배터리 미만(%)</value></data>
   <data name="Ed_BatteryHint" xml:space="preserve"><value>배터리로 동작 중 잔량이 이 값 아래로 떨어지면 한 번 실행합니다. 다시 충전하거나 전원을 연결하면 재무장됩니다.</value></data>
-  <data name="Ed_EventHint" xml:space="preserve"><value>이벤트가 발생하는 즉시 실행합니다. 아래 요일로 적용 날짜를 제한할 수 있습니다. 유예 / 놓친 항목 보충은 이벤트에 해당하지 않아 숨겨집니다.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>이벤트가 발생하는 즉시 실행합니다. 아래 요일로 적용 날짜를 제한할 수 있습니다. “유예”와 “놓치면 나중에 알림”은 이벤트에 해당하지 않아 숨겨집니다.</value></data>
   <data name="Period_OnEvent" xml:space="preserve"><value>발생할 때마다</value></data>
   <data name="Time_Idle" xml:space="preserve"><value>유휴 {0}분</value></data>
   <data name="Time_LowBattery" xml:space="preserve"><value>배터리 &lt; {0}%</value></data>
@@ -624,7 +628,7 @@
   <data name="Settings_Boot" xml:space="preserve"><value>시작</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>설정 백업</value></data>
   <data name="Settings_BackupTip" xml:space="preserve"><value>하나의 json 파일로 내보냅니다. 가져오면 현재 설정이 모두 대체됩니다.</value></data>
-  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0~600초이며 '로그온 시 시작'이 켜져 있을 때만 적용됩니다. 로그온 후 이만큼 기다렸다가 목록을 실행해 로그온 직후의 혼잡을 피합니다. 수동 재실행에는 영향이 없습니다.</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0~600초이며 “로그인 시 시작”이 켜져 있을 때만 적용됩니다. 로그인 후 이만큼 기다렸다가 목록을 실행해 로그인 직후의 혼잡을 피합니다. 수동 재실행에는 영향이 없습니다.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>시스템이 준비될 때까지 대기(바탕 화면 / 네트워크)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>둘 다 준비되면 바로 진행하며 최대 90초까지 기다립니다. 그 뒤에 위의 고정 지연이 더해집니다. 너무 일찍 실행돼 프로그램이 뜨지 않을 때 켜세요.</value></data>
   <data name="Menu_SecOpen" xml:space="preserve"><value>열기</value></data>
@@ -650,14 +654,14 @@
   <data name="Ed_BusyMinutes" xml:space="preserve"><value>연속 사용 분</value></data>
   <data name="Ed_BusyHint" xml:space="preserve"><value>이만큼의 분 동안 계속 사용하면 한 번 알립니다. 1분 이상 자리를 비우면 다시 셉니다.</value></data>
   <data name="Settings_PanelHotkey" xml:space="preserve"><value>빠른 패널 키</value></data>
-  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>마우스 위치에 타일 패널을 띄우고 한 칸에 한 동작입니다. Esc는 취소, Del은 해제. 해제해도 가운데 버튼 길게 누르기나 트레이 메뉴로 열 수 있습니다.</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>마우스 위치에 타일 패널을 띄워 한 타일에 한 동작씩 실행합니다. Esc는 취소, Del은 해제. 해제해도 가운데 버튼 길게 누르기나 트레이 메뉴로 열 수 있습니다.</value></data>
   <data name="Tray_Panel" xml:space="preserve"><value>빠른 패널 열기</value></data>
   <data name="Panel_Hint" xml:space="preserve"><value>Esc 닫기</value></data>
   <data name="Panel_Empty" xml:space="preserve"><value>패널이 비어 있습니다. 여기에 넣은 동작이 나타납니다.</value></data>
   <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>시작 목록을 건너뛰었습니다. {0} 을(를) 삭제하면 다시 자동으로 실행됩니다.</value></data>
   <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>실행할 때 Shift 를 누르고 있어 시작 목록을 건너뛰었습니다. 이번 한 번만이며 다음 부팅은 평소대로 실행됩니다.</value></data>
-  <data name="Warn_GroupNotFound" xml:space="preserve"><value>"{0}" 동작 그룹을 찾을 수 없어 아무것도 실행하지 않았습니다.</value></data>
-  <data name="Warn_GroupDisabled" xml:space="preserve"><value>동작 그룹 "{0}" 이(가) 꺼져 있어 아무것도 실행하지 않았습니다.</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>“{0}” 동작 그룹을 찾을 수 없어 아무것도 실행하지 않았습니다.</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>동작 그룹 “{0}” 이(가) 꺼져 있어 아무것도 실행하지 않았습니다.</value></data>
   <data name="Unit_Ms" xml:space="preserve"><value>밀리초</value></data>
   <data name="Settings_MiddleLongPress" xml:space="preserve"><value>마우스 가운데 버튼을 길게 눌러 패널 열기</value></data>
   <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>평소의 가운데 클릭은 그대로 동작합니다(짧게 누르면 실제 가운데 클릭으로 다시 보냅니다). 전역 마우스 후크가 필요하므로 기본값은 꺼짐입니다.</value></data>
@@ -670,8 +674,8 @@
   <data name="Settings_UseGesturesTip" xml:space="preserve"><value>끄면 오른쪽 버튼을 전혀 감시하지 않아 원래대로 동작합니다. 제스처 자체는 '동작 그룹' 탭 사이드바의 제스처 관리자에서 그립니다.</value></data>
   <data name="Settings_PanelLayout" xml:space="preserve"><value>배치</value></data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>열 수 × 위쪽 줄 수 + 아래쪽 줄 수가 한 페이지에 들어가는 개수와 패널 너비를 정합니다. 넘치는 것은 다음 페이지로 가고, 아래쪽을 0으로 하면 한 줄띠가 됩니다.</value></data>
-  <data name="Settings_PanelColumns" xml:space="preserve"><value>한 줄의 칸 수</value></data>
-  <data name="Settings_PanelTileSize" xml:space="preserve"><value>칸 크기</value></data>
+  <data name="Settings_PanelColumns" xml:space="preserve"><value>한 줄의 타일 수</value></data>
+  <data name="Settings_PanelTileSize" xml:space="preserve"><value>타일 크기</value></data>
   <data name="Size_compact" xml:space="preserve"><value>작게</value></data>
   <data name="Size_normal" xml:space="preserve"><value>보통</value></data>
   <data name="Size_roomy" xml:space="preserve"><value>넓게</value></data>
@@ -682,14 +686,14 @@
   <data name="Settings_PanelTopRows" xml:space="preserve"><value>위쪽 줄 수</value></data>
   <data name="Settings_PanelBottomRows" xml:space="preserve"><value>아래쪽 줄 수</value></data>
   <data name="Ed_Icon" xml:space="preserve"><value>패널 아이콘</value></data>
-  <data name="Ed_IconHint" xml:space="preserve"><value>비워 두면 저절로 정해집니다. 「프로그램 실행」은 대상 자체의 아이콘을, 나머지는 종류에 맞는 선 아이콘을 씁니다.</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>비워 두면 저절로 정해집니다. “앱 실행”은 대상 자체의 아이콘을, 나머지는 종류에 맞는 선 아이콘을 씁니다.</value></data>
   <data name="Btn_Close" xml:space="preserve"><value>닫기</value></data>
   <data name="Panel_Manager" xml:space="preserve"><value>패널 관리</value></data>
   <data name="Panel_Global" xml:space="preserve"><value>모든 앱</value></data>
   <data name="Panel_AddPage" xml:space="preserve"><value>페이지 추가</value></data>
   <data name="Panel_NewPage" xml:space="preserve"><value>새 페이지</value></data>
   <data name="Panel_AddHere" xml:space="preserve"><value>여기에 동작 넣기</value></data>
-  <data name="Panel_NoPages" xml:space="preserve"><value>아직 페이지가 없습니다. 페이지 탭 레일 끝에 있는 ‘+’를 클릭하면 페이지가 생성되며, 그 위에 액션을 추가할 수 있습니다.</value></data>
+  <data name="Panel_NoPages" xml:space="preserve"><value>아직 페이지가 없습니다. 페이지 탭 레일 끝에 있는 ‘+’를 클릭하면 페이지가 생성되며, 그 위에 동작을 추가할 수 있습니다.</value></data>
   <data name="Panel_Uncategorized" xml:space="preserve"><value>분류 없음</value></data>
   <data name="Panel_NewCategory" xml:space="preserve"><value>분류 추가</value></data>
   <data name="Panel_Category" xml:space="preserve"><value>분류</value></data>
@@ -712,7 +716,7 @@
   <data name="Theme_dark" xml:space="preserve"><value>어두움</value></data>
   <data name="Theme_light" xml:space="preserve"><value>밝음</value></data>
   <data name="Theme_system" xml:space="preserve"><value>Windows 따르기</value></data>
-  <data name="Settings_ThemeTip" xml:space="preserve"><value>새 테마를 적용하려고 Clockwork가 곧바로 다시 시작합니다. "Windows 따르기"는 Windows의 앱 모드를 봅니다.</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>새 테마를 적용하려고 Clockwork가 곧바로 다시 시작합니다. “Windows 따르기”는 Windows의 앱 모드를 봅니다.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
   <data name="Btn_InsertVar" xml:space="preserve"><value>변수 삽입</value></data>
@@ -720,11 +724,11 @@
   <data name="Ed_PathHint" xml:space="preserve"><value>%APPDATA% 같은 환경 변수를 지원하며 실행할 때 자동으로 펼쳐집니다. { }을(를) 클릭해 자주 쓰는 폴더를 삽입하세요.</value></data>
   <data name="Kind_path" xml:space="preserve"><value>파일 또는 폴더 열기</value></data>
   <data name="Sum_OpenPath" xml:space="preserve"><value>{0} 열기</value></data>
-  <data name="Sys_quickOpen" xml:space="preserve"><value>빠른 열기(선택한 텍스트에서 URL, 파일 경로, 매그넘 링크, 레지스트리 키를 자동 인식)</value></data>
+  <data name="Sys_quickOpen" xml:space="preserve"><value>빠른 열기(선택한 텍스트에서 URL, 파일 경로, 매그넷 링크, 레지스트리 키를 자동 인식)</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>선택한 텍스트를 인식할 수 없습니다: {0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>레지스트리 편집기가 이미 실행 중이라 자동으로 닫지 못했습니다. 창을 앞으로 가져왔으니 직접 닫은 뒤 다시 시도하세요.</value></data>
   <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>빠른 열기 단축키</value></data>
-  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>아무 앱에서 텍스트를 선택하고 이 키를 누르면 URL, 파일 경로, 매그넘 링크, 레지스트리 키를 자동으로 인식해 엽니다.</value></data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>아무 앱에서 텍스트를 선택하고 이 키를 누르면 URL, 파일 경로, 매그넷 링크, 레지스트리 키를 자동으로 인식해 엽니다.</value></data>
   <data name="Gesture_Sensitivity" xml:space="preserve"><value>민감도</value></data>
   <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>높음</value></data>
   <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>보통</value></data>
@@ -742,12 +746,12 @@
   <data name="Btn_ResetUsage" xml:space="preserve"><value>클릭 통계 지우기</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>패널 타일의 클릭 수를 0으로 되돌립니다. 통계만 지우며 설정이나 타일은 변경하지 않습니다.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>모든 패널 타일의 클릭 통계를 지울까요? 이 작업은 되돌릴 수 없습니다.</value></data>
-  <data name="Kind_step" xml:space="preserve"><value>시작 항목 참조</value></data>
-  <data name="Sum_RunRef" xml:space="preserve"><value>시작 항목 참조: {0}</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>시작 항목 실행</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>시작 항목 실행: {0}</value></data>
   <data name="Ed_RefTarget" xml:space="preserve"><value>시작 항목</value></data>
   <data name="Ed_RefMissing" xml:space="preserve"><value>(대상 삭제됨)</value></data>
   <data name="Skip_RefNotFound" xml:space="preserve"><value>시작 항목을 찾을 수 없음</value></data>
-  <data name="Skip_RefDisabled" xml:space="preserve"><value>시작 항목 "{0}"이(가) 비활성화되어 건너뜁니다</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>시작 항목 “{0}”이(가) 비활성화되어 건너뜁니다</value></data>
   <data name="Ed_NoRefsHint" xml:space="preserve"><value>시작 목록이 비어 있습니다. 먼저 시작 목록에서 항목을 추가한 뒤 여기에서 참조하세요.</value></data>
-  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}"이(가) 패널 타일 {1}개에서 참조 중입니다. 삭제하면 해당 타일도 제거됩니다. 삭제할까요?</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>“{0}”이(가) 패널 타일 {1}개에서 참조 중입니다. 삭제하면 해당 타일도 제거됩니다. 삭제할까요?</value></data>
 </root>

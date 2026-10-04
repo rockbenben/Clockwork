@@ -237,13 +237,26 @@ public static class StepDisplay
         return trimmed.Length > 0 ? trimmed : (label ?? "");
     }
 
-    // 星期集合 → 文案：空或全 7 天=每天，否则列出（中文连排「一二三」/英文空格分隔「Mon Tue」）。
+    // 星期集合 → 文案：空或全 7 天=每天；连着三天以上收成一段区间（周一–周五），
+    // 剩下的照旧逐日列。
+    // 区间只取两端 + 一个连接号（Days_RangeSep），不是「{0} 至 {1}」那种整句键：两端本来就是
+    // 各语言自己的星期名。但那个号**必须**是每语言自己的——逐语言复核指出，韩语的区间记号是
+    // 「~」、日语是「〜」，硬写一个 en dash 在这两种语言里看着就是机器拼的。
+    // 阈值取 3：两天收成区间反而看不出是哪两天（「周六–周日」不如「周六、周日」直白）。
     public static string DaysLabel(IEnumerable<int>? days)
     {
         var d = (days ?? Enumerable.Empty<int>()).ToList();
         if (d.Count == 0 || d.Count == 7) return Strings.Get("Days_EveryDay");
+        var on = d.Where(x => x >= 1 && x <= 7).OrderBy(x => x).ToList();
+        if (on.Count == 0) return Strings.Get("Days_EveryDay");
+        // 首尾都在、且中间无空档 = 一段连续的星期，才配得上区间。
+        // 周日与周一在 1..7 里是两端而非相邻，这种环绕的两天照旧逐日列——
+        // 「周一–周日」会把「只勾了周日和周一」说成「每天」，那是撒谎。
+        bool contiguous = on.Count >= 3 && on.Last() - on.First() + 1 == on.Count;
+        if (contiguous)
+            return Strings.Get("Day_" + on.First()) + Strings.Get("Days_RangeSep") + Strings.Get("Day_" + on.Last());
         var sep = Strings.Get("Days_Sep");
-        return string.Join(sep, d.OrderBy(x => x).Where(x => x >= 1 && x <= 7).Select(x => Strings.Get("Day_" + x)));
+        return string.Join(sep, on.Select(x => Strings.Get("Day_" + x)));
     }
 
     private static string NoNewline(string s) => Regex.Replace(s ?? "", @"\r?\n", " ");

@@ -13,9 +13,10 @@
   <data name="Tab_System" xml:space="preserve"><value>System Startup</value></data>
   <data name="Tab_Ports" xml:space="preserve"><value>Ports</value></data>
 
-  <data name="Launch_Hint" xml:space="preserve"><value>Runs once at login, top to bottom · drag rows to reorder. On a schedule or an event → Scheduled tasks; on demand with one tap → Action Groups.</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Fires at a time, at login, or on events like unlock / power — a reminder, or a group run silently. Just opening apps at login → Startup List; on demand with one tap → Action Groups.</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>Runs once at login, top to bottom · drag rows to reorder. On a schedule or an event → Scheduled tasks; on demand with one tap → Actions.</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>Fires at a time, at login, or on events like unlock / power — a reminder, or a group run silently. Just opening apps at login → Startup List; on demand with one tap → Actions.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Bundle a routine and fire it any time via hotkey / tray; the Startup List and Scheduled tasks can reference it too. Something that only runs at login is simpler as plain Startup List steps.</value></data>
+  <data name="Group_NoSteps" xml:space="preserve"><value>No steps yet. Click “Add” above to make the first one — whatever is on top runs first.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(empty)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Checking / unchecking takes effect immediately (disable, not delete; reversible).</value></data>
   <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>System / policy / one-time read-only items are hidden by default.</value></data>
@@ -30,12 +31,13 @@
   <data name="Ports_DevOnly" xml:space="preserve"><value>Project services only</value></data>
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Lists only services started from one of your project folders, recognized by markers like .git or package.json. Uncheck to see the rest of your listening software.</value></data>
   <data name="Ports_Footer" xml:space="preserve"><value>Double-click a row to open it in your browser; right-click to free the port.</value></data>
-  <data name="Ports_Count" xml:space="preserve"><value>{0} of {1} ports · refreshes every 5s</value></data>
+  <data name="Ports_Count" xml:space="preserve"><value>{0} of {1} ports · refreshes every 5 s</value></data>
   <data name="Ports_Empty" xml:space="preserve"><value>No ports match the current filter. {0} ports are listening on this machine — try a different filter, or clear the search.</value></data>
+  <data name="System_Empty" xml:space="preserve"><value>No startup items match the current filter. This machine has {0} of them — clear the filter, or tick “Show system / read-only items”.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Open in browser</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Free the port</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Also listening on {0}</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>Couldn't free port {0}: {1}</value></data>
+  <data name="Ports_KillFail" xml:space="preserve"><value>Couldn’t free port {0}: {1}</value></data>
 
   <data name="Col_Enabled" xml:space="preserve"><value>On</value></data>
   <data name="Col_Kind" xml:space="preserve"><value>Type</value></data>
@@ -142,7 +144,7 @@
     <value>Wait up to (s)</value>
   </data>
   <data name="Ed_UrlHint" xml:space="preserve">
-    <value>Supports {clipboard}: replaced at run time with the text on the clipboard, URL-escaped. Pair it with "Get Selected Text" to search whatever you selected.</value>
+    <value>Supports {clipboard}: replaced at run time with the text on the clipboard, URL-escaped. Pair it with “Get Selected Text” to search whatever you selected.</value>
   </data>
   <data name="Ed_CopySelectionHint" xml:space="preserve">
     <value>Presses the copy key for you and puts the selected text on the clipboard. Later steps read it back with {clipboard}.</value>
@@ -155,13 +157,13 @@
   <data name="Ed_OutputVarHint" xml:space="preserve"><value>Later steps use {0} to refer to it. Leave it empty and this step produces nothing.</value></data>
   <data name="Ed_OutputVarSample" xml:space="preserve"><value>name</value></data>
   <data name="Mig_PageMoved" xml:space="preserve">
-    <value>Panel page "{0}" moved out of your actions into Panel pages ({1} tile(s))</value>
+    <value>Panel page “{0}” moved out of your actions into Panel pages ({1} tile(s))</value>
   </data>
   <data name="Mig_PageAndAction" xml:space="preserve">
-    <value>"{0}" is both a panel page and an action (hotkey/referenced): the action is kept, and the page now holds one tile pointing at it</value>
+    <value>“{0}” is both a panel page and an action (hotkey/referenced): the action is kept, and the page now holds one tile pointing at it</value>
   </data>
   <data name="Mig_PageTrayDropped" xml:space="preserve">
-    <value>Panel page "{0}" no longer appears in the tray menu (a page is not a runnable action)</value>
+    <value>Panel page “{0}” no longer appears in the tray menu (a page is not a runnable action)</value>
   </data>
   <data name="Mig_Title" xml:space="preserve">
     <value>Panel pages are now separate</value>
@@ -217,6 +219,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Every day</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Days_RangeSep" xml:space="preserve"><value>–</value></data>
   <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Mon</value></data>
   <data name="Day_2" xml:space="preserve"><value>Tue</value></data>
@@ -254,7 +257,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Run as administrator</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Target can be a program (full path or bare name), shortcut, script, folder, URL, document, or a protocol like ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Hotkey</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first. Combos Windows itself owns (Win+D, Win+6…) can't be captured — double-click this box to type one. Mouse actions with modifiers live here too: scroll inside the box to record one (hold Ctrl to zoom, Shift for horizontal), and type LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward for buttons. For plain scrolling or clicking, the Mouse step is easier.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>e.g. Win+D / Alt+K / Ctrl+Enter / F5. Sent to the focused window — make sure the target is in front first. Combos Windows itself owns (Win+D, Win+6…) can’t be captured — double-click this box to type one. Mouse actions with modifiers live here too: scroll inside the box to record one (hold Ctrl to zoom, Shift for horizontal). For plain scrolling or clicking, the Mouse step is easier.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Scrolling goes to the window under the pointer; clicks land wherever the pointer already is (this app never moves it), so put the target in place first with Window action → bring to front, or stick to position-independent actions like Back/Forward. Raise the repeat count below for N clicks or notches, and use the post-step delay for the rhythm.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Scroll down</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Scroll right</value></data>
@@ -271,8 +274,8 @@
   <data name="Ed_Level" xml:space="preserve"><value>Volume (0-100)</value></data>
   <data name="Ed_Process" xml:space="preserve"><value>Process</value></data>
   <data name="Ed_SendKey" xml:space="preserve"><value>Send keys</value></data>
-  <data name="Ed_WaitWin" xml:space="preserve"><value>Wait window (s)</value></data>
-  <data name="Ed_PostDelay" xml:space="preserve"><value>After appear (s)</value></data>
+  <data name="Ed_WaitWin" xml:space="preserve"><value>Wait for window (s)</value></data>
+  <data name="Ed_PostDelay" xml:space="preserve"><value>After it appears (s)</value></data>
   <data name="Ed_WindowHint" xml:space="preserve"><value>Process name without .exe (e.g. Weixin / msedge). Bring-to-front / send-keys need foreground focus and may not work at startup.</value></data>
   <data name="Ed_RestoreHint" xml:space="preserve"><value>Brings back the window you were using when this action was triggered. Nothing to pick for this one.</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>Command</value></data>
@@ -306,20 +309,20 @@
   <data name="Ed_Group_None" xml:space="preserve"><value>(none)</value></data>
   <data name="Ed_GroupMissing" xml:space="preserve"><value>(target deleted)</value></data>
 
-  <data name="Warn_SendKeyFail" xml:space="preserve"><value>Failed to send keys to "{0}": window didn't appear, or couldn't bring it to front (common at startup/background triggers)</value></data>
-  <data name="Warn_WindowNotFound" xml:space="preserve"><value>No window found for "{0}" (process not running or not ready?); {1} had no effect</value></data>
-  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Found a window for "{0}" but {1} had no effect (foreground lock, the window refused to close, or it runs as administrator)</value></data>
+  <data name="Warn_SendKeyFail" xml:space="preserve"><value>Failed to send keys to “{0}”: window didn’t appear, or couldn’t bring it to front (common at startup/background triggers)</value></data>
+  <data name="Warn_WindowNotFound" xml:space="preserve"><value>No window found for “{0}” (process not running or not ready?); {1} had no effect</value></data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Found a window for “{0}” but {1} had no effect (foreground lock, the window refused to close, or it runs as administrator)</value></data>
   <data name="Warn_RestoreFailed" xml:space="preserve"><value>Could not get back to the previous window: the foreground is locked, or that window is gone.</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Unknown window action: {0}</value></data>
   <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>The current window does not allow this action ({0}): activating it is a no-op, and to send keys use the Send keys step instead. Skipped.</value></data>
   <data name="Warn_UnknownVolume" xml:space="preserve"><value>Unknown volume action: {0}</value></data>
   <data name="Warn_UnknownKind" xml:space="preserve"><value>Unknown step type: {0}</value></data>
-  <data name="Warn_SelfSkip" xml:space="preserve"><value>Skipped "{0}": target is Clockwork itself (avoids an autostart loop)</value></data>
+  <data name="Warn_SelfSkip" xml:space="preserve"><value>Skipped “{0}”: target is Clockwork itself (avoids an autostart loop)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>Launch failed: {0} — {1}</value></data>
-  <data name="Warn_QuickExit" xml:space="preserve"><value>"{0}" exited within 0.5s (exit code {1}); likely failed to start</value></data>
+  <data name="Warn_QuickExit" xml:space="preserve"><value>“{0}” exited within 0.5 s (exit code {1}); likely failed to start</value></data>
   <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>Config file could not be read (likely malformed JSON); started with defaults. The original was backed up to {0} — fix it and restart to recover.</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>Script file not found (enter a full path)</value></data>
-  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Script is UTF-8 without BOM, which Windows PowerShell 5.1 cannot decode correctly; install PowerShell 7, or re-save the script as UTF-8 with BOM</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>The script didn’t run: the PowerShell that ships with Windows can’t read this encoding. Save the script as UTF-8 with BOM, or use PowerShell 7.</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Sent (unverified)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Error: {0}</value></data>
 
@@ -339,8 +342,8 @@
   <data name="Ed_Time" xml:space="preserve"><value>Time (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Login timing</value></data>
   <data name="Ed_SMode_Any" xml:space="preserve"><value>Always</value></data>
-  <data name="Ed_SMode_Before" xml:space="preserve"><value>Before N:00</value></data>
-  <data name="Ed_SMode_After" xml:space="preserve"><value>After N:00</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>Only before the set hour</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>Only after the set hour</value></data>
   <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
   <data name="Ed_OnlyBoot" xml:space="preserve"><value>Only within</value></data>
   <data name="Ed_WithinHint" xml:space="preserve"><value>min of login counts as a login (0 = every launch)</value></data>
@@ -359,7 +362,7 @@
   <data name="Ed_SilentGroup" xml:space="preserve"><value>Run action</value></data>
   <data name="Ed_OnYes_Group" xml:space="preserve"><value>Run action</value></data>
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Auto-close (s)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>auto-close if no click (0: card = never, dialog = 60s)</value></data>
+  <data name="Ed_AutoHint" xml:space="preserve"><value>auto-close if no click (0: card = never, dialog = 60 s)</value></data>
   <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Reminder set for {0} min, but reminders are paused — it will fire once the pause ends</value></data>
   <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Un-skipped for today: {0}</value></data>
   <data name="Toast_SkipToday" xml:space="preserve"><value>Skipped for today: {0}</value></data>
@@ -380,16 +383,16 @@
   <data name="Ed_Grace" xml:space="preserve"><value>Grace (min)</value></data>
   <data name="Ed_GraceHint" xml:space="preserve"><value>still fires if the time was missed within</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Time must be in HH:mm format</value></data>
-  <data name="Val_RepeatUntil" xml:space="preserve"><value>"Repeat until" must be HH:mm (or blank)</value></data>
-  <data name="Val_LoopUntil" xml:space="preserve"><value>"Interval run until" must be HH:mm (or blank)</value></data>
+  <data name="Val_RepeatUntil" xml:space="preserve"><value>“Repeat until” must be HH:mm (or blank)</value></data>
+  <data name="Val_LoopUntil" xml:space="preserve"><value>“Interval run until” must be HH:mm (or blank)</value></data>
   <data name="Val_Anchor" xml:space="preserve"><value>Start date must be yyyy-MM-dd (or blank)</value></data>
   <data name="Val_OnceDate" xml:space="preserve"><value>Date must be yyyy-MM-dd</value></data>
   <data name="Val_OnceDatePast" xml:space="preserve"><value>That date has passed — this task will not fire (set a new date and re-enable to reuse)</value></data>
-  <data name="Val_SilentNoGroup" xml:space="preserve"><value>"Run an action silently" is selected but no action is chosen</value></data>
+  <data name="Val_SilentNoGroup" xml:space="preserve"><value>“Run an action silently” is selected but no action is chosen</value></data>
 
   <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Confirm</value></data>
   <data name="Ask_Title" xml:space="preserve"><value>Clockwork · Question</value></data>
-  <data name="Confirm_Destructive" xml:space="preserve"><value>Are you sure you want to "{0}"?</value></data>
+  <data name="Confirm_Destructive" xml:space="preserve"><value>Are you sure you want to “{0}”?</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Error</value></data>
   <data name="Crash_Body" xml:space="preserve"><value>Clockwork hit an error (logged; usually safe to continue):
 
@@ -400,62 +403,63 @@ Log: {1}</value></data>
   <data name="Tray_ReminderTitle" xml:space="preserve"><value>Scheduled task</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Startup list stopped: {0} step(s) done, the rest skipped</value></data>
   <data name="Tray_LaunchWarn" xml:space="preserve"><value>Startup list done: {0} step(s), {1} with warnings (tray → view last startup log)</value></data>
-  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Stop hotkey "{0}" not recognized; change it in the main window. Tray "Stop" still works.</value></data>
-  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Failed to register stop hotkey "{0}" (may be in use by another app); tray "Stop" still works.</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Stop hotkey “{0}” not recognized; change it in the main window. Tray “Stop” still works.</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Failed to register stop hotkey “{0}” (may be in use by another app); tray “Stop” still works.</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Requested stop of running actions.</value></data>
-  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>"{0}" needs administrator rights to toggle; reopen Clockwork as administrator.</value></data>
-  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>"{0}" toggle failed: {1}</value></data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>“{0}” needs administrator rights to toggle; reopen Clockwork as administrator.</value></data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>“{0}” toggle failed: {1}</value></data>
   <data name="Autostart_Fail" xml:space="preserve"><value>Operation failed: {0}</value></data>
   <data name="Tab_Settings" xml:space="preserve"><value>Settings</value></data>
   <data name="Settings_General" xml:space="preserve"><value>General</value></data>
   <data name="About_CheckUpdate" xml:space="preserve"><value>Check for updates</value></data>
   <data name="About_Series" xml:space="preserve"><value>365 Open Source Plan · #020</value></data>
   <data name="Update_Checking" xml:space="preserve"><value>Checking…</value></data>
-  <data name="Update_Latest" xml:space="preserve"><value>You're on the latest version ({0})</value></data>
+  <data name="Update_Latest" xml:space="preserve"><value>You’re on the latest version ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>New version {0} available. Go to download?</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Update check failed: {0}</value></data>
-  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Click, then press the shortcut. Esc cancels, Del clears it. "Stop" in the tray menu always works.</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Click, then press the shortcut. Esc cancels, Del clears it. “Stop” in the tray menu always works.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Press a shortcut…</value></data>
-  <data name="Sys_Takeover" xml:space="preserve"><value>Take over into launch list</value></data>
+  <data name="Sys_Takeover" xml:space="preserve"><value>Take over into Startup List</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Delete from system</value></data>
-  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Delete "{0}"?</value></data>
+  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Delete “{0}”?</value></data>
+  <data name="Confirm_Keep" xml:space="preserve"><value>Keep it</value></data>
   <data name="Confirm_DeletePage" xml:space="preserve"><value>Delete the page “{0}”? The {1} tile(s) on it go with it. A tile pointing at an action only removes that reference; the action itself stays.</value></data>
   <data name="Confirm_DeleteCategory" xml:space="preserve"><value>Delete the category “{0}”? The {1} page(s) in it are not deleted — they go back to “{2}”.</value></data>
-  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Permanently delete startup item "{0}" from the system? This cannot be undone (to just stop it from launching at startup, uncheck it instead).</value></data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Permanently delete startup item “{0}” from the system? This cannot be undone (to just stop it from launching at startup, uncheck it instead).</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>Free port {0}? This ends {1}, along with any child processes. Anything unsaved is lost.</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>That process also holds port {0}, which will be freed too.</value></data>
-  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Startup item "{0}" has been taken over into the launch list, and a step still points to its shortcut file. Deleting it from the system also removes the shortcut, so that step will no longer be able to launch it. Delete anyway?</value></data>
-  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>"{0}" delete failed: {1}</value></data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Startup item “{0}” has been taken over into the Startup List, and a step still points to its shortcut file. Deleting it from the system also removes the shortcut, so that step will no longer be able to launch it. Delete anyway?</value></data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>“{0}” delete failed: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>The export target cannot be the config file itself — choose a different name or location.</value></data>
   <data name="Val_SendKeys" xml:space="preserve"><value>The send-keys text is not a valid key sequence: check for unclosed braces and unknown key names (e.g. {ENTER}; write a literal { as {{} and a literal } as {}}).</value></data>
   <data name="Val_SearchUrl" xml:space="preserve"><value>The search URL needs {0} — that is where the query goes. Without it, this step opens the same page every time.</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Catch up if missed (after sleep/off)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} min</value></data>
-  <data name="Warn_KeyNoMain" xml:space="preserve"><value>Hotkey "{0}" has no main key; not sent</value></data>
-  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Unrecognized key name "{0}" (multi-digit numbers aren't keys); hotkey "{1}" not sent</value></data>
-  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Unrecognized key "{0}"; hotkey "{1}" not sent</value></data>
-  <data name="Warn_KeyRejected" xml:space="preserve"><value>Hotkey "{0}" was rejected by the system (happens when an elevated window or the secure desktop is in front); no effect</value></data>
-  <data name="Warn_KeyPartial" xml:space="preserve"><value>Hotkey "{0}" only partially injected ({1}/{2}); key-ups resent, no effect</value></data>
-  <data name="Warn_TextSendFail" xml:space="preserve"><value>Send text: couldn't bring the "{0}" window to the front; not sent</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>Hotkey “{0}” has no main key; not sent</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Unrecognized key name “{0}” (multi-digit numbers aren’t keys); hotkey “{1}” not sent</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Unrecognized key “{0}”; hotkey “{1}” not sent</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>Hotkey “{0}” was rejected by the system (happens when an elevated window or the secure desktop is in front); no effect</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>Hotkey “{0}” only partially injected ({1}/{2}); key-ups resent, no effect</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>Send text: couldn’t bring the “{0}” window to the front; not sent</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Failed to save config: {0} (changes are only in memory and will be lost on restart)</value></data>
-  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>The action referenced by reminder "{0}" no longer exists; nothing was run this time</value></data>
-  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>The action referenced by reminder "{0}" is disabled; nothing was run this time</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>The action referenced by reminder “{0}” no longer exists; nothing was run this time</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>The action referenced by reminder “{0}” is disabled; nothing was run this time</value></data>
   <data name="Skip_GroupNotFound" xml:space="preserve"><value>Action not found</value></data>
-  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Action "{0}" is disabled; skipped</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Action “{0}” is disabled; skipped</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Action re-entered (circular reference or already running); skipped</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Toast_GroupCancelled" xml:space="preserve"><value>Requested cancellation of action “{0}”.</value></data>
   <data name="Toast_GroupStarted" xml:space="preserve"><value>Started action “{0}”.</value></data>
-  <data name="Toast_GroupBusy" xml:space="preserve"><value>Action “{0}” is already running (started elsewhere); this key can’t stop it — use the panic hotkey.</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>Action “{0}” is already running (started elsewhere); this key can’t stop it — use the stop hotkey.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Run stopped at the 5000-step limit; remaining steps were skipped (check for oversized repeat counts)</value></data>
-  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>The action to run on "Yes" no longer exists; skipped</value></data>
-  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>The action to run on "Yes" is disabled; skipped</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>The action to run on “Yes” no longer exists; skipped</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>The action to run on “Yes” is disabled; skipped</value></data>
   <data name="Warn_OnYesFailed" xml:space="preserve"><value>The On-Yes action could not run: {0}</value></data>
-  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Scheduled tasks can't be taken over yet; only registry Run keys and Startup-folder items are supported</value></data>
-  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Launch-list run aborted: {0}</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>This item can’t be taken over — only registry Run entries and Startup folder items can.</value></data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Startup List run aborted: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>View last startup log</value></data>
   <data name="Tray_History" xml:space="preserve"><value>Recent</value></data>
-  <data name="Tray_NoLog" xml:space="preserve"><value>No startup log yet (run the launch list once first)</value></data>
+  <data name="Tray_NoLog" xml:space="preserve"><value>No startup log yet (run the Startup List once first)</value></data>
   <data name="Log_Title" xml:space="preserve"><value>Last startup-list run log</value></data>
   <data name="Log_When" xml:space="preserve"><value>Time: {0}</value></data>
   <data name="Log_Summary" xml:space="preserve"><value>{0} step(s) in all: {1} failed or warned, {2} sent but could not be verified, the rest succeeded</value></data>
@@ -471,11 +475,11 @@ Log: {1}</value></data>
   <data name="Log_GroupCycle" xml:space="preserve"><value>Circular reference; skipped</value></data>
   <data name="Log_RunGroup" xml:space="preserve"><value>Run action: {0}</value></data>
   <data name="Log_Stopped" xml:space="preserve"><value>Stopped by hand; the later steps did not run</value></data>
-  <data name="Log_HdrStopped" xml:space="preserve"><value>This run was stopped by hand (panic key or the tray’s Stop)</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>This run was stopped by hand (the stop hotkey or the tray’s Stop)</value></data>
   <data name="Err_JsonNull" xml:space="preserve"><value>This file parses to nothing — it is not a configuration.</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Failed to clear clipboard: {0}</value></data>
-  <data name="Err_SoundNotWav" xml:space="preserve"><value>"{0}" is not a .wav file. This step plays wav only.</value></data>
-  <data name="Err_SoundMissing" xml:space="preserve"><value>Sound file not found: "{0}"</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>“{0}” is not a .wav file. This step plays wav only.</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>Sound file not found: “{0}”</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Failed to empty recycle bin: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Unknown system command: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>Run: {0}</value></data>
@@ -492,7 +496,7 @@ Log: {1}</value></data>
   <data name="Tpl_EndOfDay" xml:space="preserve"><value>End of day</value></data>
   <data name="Tpl_Bedtime" xml:space="preserve"><value>Bedtime</value></data>
   <data name="Tpl_Away" xml:space="preserve"><value>Stepping away</value></data>
-  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Did you log all of today's tasks?</value></data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Did you log all of today’s tasks?</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Time for bed!</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Time for a break</value></data>
   <data name="Tpl_Search" xml:space="preserve"><value>Quick search</value></data>
@@ -505,11 +509,11 @@ Log: {1}</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Open your chat app (sample · starts minimized in the background)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Show desktop with Win+D (sample · send a key combo)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Stand up and drink some water (sample)</value></data>
-  <data name="Smp_RemWrapUp" xml:space="preserve"><value>Time to wrap up — any loose ends on today's to-do? (sample)</value></data>
-  <data name="Smp_RemBills" xml:space="preserve"><value>Check this month's bills and subscriptions (sample · on the 1st)</value></data>
+  <data name="Smp_RemWrapUp" xml:space="preserve"><value>Time to wrap up — any loose ends on today’s to-do? (sample)</value></data>
+  <data name="Smp_RemBills" xml:space="preserve"><value>Check this month’s bills and subscriptions (sample · on the 1st)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Time for bed (sample)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>This action needs administrator rights. Reopen Clockwork as administrator?</value></data>
-  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Action "{0}" is referenced by {1} reminder(s) and {2} step(s). Deleting it will also clear those references (reminders become popup-only; steps referencing it are removed). Delete anyway?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Action “{0}” is referenced by {1} reminder(s) and {2} step(s). Deleting it will also clear those references (reminders become popup-only; steps referencing it are removed). Delete anyway?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Browse…</value></data>
   <data name="Btn_Pick" xml:space="preserve"><value>Pick…</value></data>
   <data name="Btn_Capture" xml:space="preserve"><value>Capture</value></data>
@@ -520,10 +524,10 @@ Log: {1}</value></data>
   <data name="WinStyle_Minimized" xml:space="preserve"><value>Start minimized</value></data>
   <data name="WinStyle_Maximized" xml:space="preserve"><value>Start maximized</value></data>
   <data name="WinStyle_Hidden" xml:space="preserve"><value>Start hidden</value></data>
-  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>Activate window if already running (don't relaunch)</value></data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>Activate window if already running (don’t relaunch)</value></data>
   <data name="Ed_ActivateProcess" xml:space="preserve"><value>Process to activate</value></data>
   <data name="Ed_AltTargets" xml:space="preserve"><value>Fallback paths</value></data>
-  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>One full path per line; when Target doesn't exist, the first existing one is used (for machines with different install paths)</value></data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>One full path per line; when Target doesn’t exist, the first existing one is used (for machines with different install paths)</value></data>
   <data name="Picker_Process" xml:space="preserve"><value>Pick a process</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Search process name / window title</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Pick a date</value></data>
@@ -532,10 +536,10 @@ Log: {1}</value></data>
   <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Click, then press a key combo to run this group anytime; press it again while it runs to stop it. Esc cancels, Del clears it.</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Failed to register hotkey {1} for action “{0}”: it may already be in use</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Hotkey {0} is already used by “{1}”; choose a different combo</value></data>
-  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can't be used as a hotkey</value></data>
+  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} is a system-reserved combo (registering it would hijack a system key) and can’t be used as a hotkey</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>Repeat whole action</value></data>
   <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Show in tray menu</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>delay between rounds (ms)</value></data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>Delay between rounds (ms)</value></data>
   <data name="Val_GroupCycle" xml:space="preserve"><value>Circular group reference ({0}) — break the reference chain before saving</value></data>
 
   <data name="Btn_ExportConfig" xml:space="preserve"><value>Export settings</value></data>
@@ -547,7 +551,7 @@ Log: {1}</value></data>
   <data name="Config_Filter" xml:space="preserve"><value>Clockwork config|*.json|All files|*.*</value></data>
   <data name="Config_ExportFail" xml:space="preserve"><value>Export failed: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (copy)</value></data>
-  <data name="Relaunch_Fail" xml:space="preserve"><value>Couldn't restart automatically. Please reopen Clockwork manually. ({0})</value></data>
+  <data name="Relaunch_Fail" xml:space="preserve"><value>Couldn’t restart automatically. Please reopen Clockwork manually. ({0})</value></data>
   <data name="Vol_micMute" xml:space="preserve"><value>Mute microphone</value></data>
   <data name="Vol_micUnmute" xml:space="preserve"><value>Unmute microphone</value></data>
   <data name="Sys_setClipboard" xml:space="preserve"><value>Set clipboard text</value></data>
@@ -567,7 +571,7 @@ Log: {1}</value></data>
   <data name="Ed_SearchEngine" xml:space="preserve"><value>Search engine</value></data>
   <data name="Ed_SearchCustom" xml:space="preserve"><value>Custom…</value></data>
   <data name="Err_NoSelection" xml:space="preserve"><value>No text is selected. Select what you want to search for, then run this step.</value></data>
-  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>There's no window to act on right now (Clockwork itself or the desktop is in front)</value></data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>There’s no window to act on right now (Clockwork itself or the desktop is in front)</value></data>
   <data name="Ed_ProcessHint" xml:space="preserve"><value>Type * for the current window — the one you were using before you drew the gesture or opened the panel. Left empty, this step does nothing.</value></data>
   <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} stands for the words being searched; they are escaped for you.</value></data>
   <data name="Ed_SoundFile" xml:space="preserve"><value>Sound file</value></data>
@@ -580,7 +584,7 @@ Log: {1}</value></data>
   <data name="Sys_displayExtend" xml:space="preserve"><value>Display: Extend</value></data>
   <data name="Sys_displayExternal" xml:space="preserve"><value>Display: Second screen only</value></data>
   <data name="Err_SysCommand" xml:space="preserve"><value>{0} failed: {1}</value></data>
-  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>This machine doesn't support or has disabled that power state (run powercfg /a to check)</value></data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>This machine doesn’t support or has disabled that power state (run powercfg /a to check)</value></data>
   <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Ed_ClipText" xml:space="preserve"><value>Clipboard text</value></data>
   <data name="Ed_Brightness" xml:space="preserve"><value>Brightness (0-100)</value></data>
@@ -590,8 +594,8 @@ Log: {1}</value></data>
   <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Format H:mm, e.g. 18:30; entering just the hour (e.g. 18) also works; default 18:00.</value></data>
   <data name="Ed_Cond_Any" xml:space="preserve"><value>No limit</value></data>
   <data name="Ed_IfProcess" xml:space="preserve"><value>Process condition</value></data>
-  <data name="Ed_IfProc_Running" xml:space="preserve"><value>That process is running</value></data>
-  <data name="Ed_IfProc_Not" xml:space="preserve"><value>That process is not running</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>Process running</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>Process not running</value></data>
   <data name="Ed_IfPower" xml:space="preserve"><value>Power condition</value></data>
   <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Only on AC power</value></data>
   <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Only on battery</value></data>
@@ -614,7 +618,7 @@ Log: {1}</value></data>
   <data name="Ed_IdleHint" xml:space="preserve"><value>Fires once after this many minutes with no keyboard or mouse activity; the count restarts when you come back.</value></data>
   <data name="Ed_BatteryPercent" xml:space="preserve"><value>Battery below (%)</value></data>
   <data name="Ed_BatteryHint" xml:space="preserve"><value>Fires once when running on battery and the charge drops below this; it re-arms after charging back up or plugging in.</value></data>
-  <data name="Ed_EventHint" xml:space="preserve"><value>Runs the moment the event happens. The weekday boxes below still limit which days it counts; grace and catch-up don't apply to events and are hidden.</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>Runs the moment the event happens. The weekday boxes below still limit which days it counts; grace and catch-up don’t apply to events and are hidden.</value></data>
   <data name="Period_OnEvent" xml:space="preserve"><value>Every time</value></data>
   <data name="Time_Idle" xml:space="preserve"><value>Idle {0} min</value></data>
   <data name="Time_LowBattery" xml:space="preserve"><value>Battery &lt; {0}%</value></data>
@@ -642,8 +646,8 @@ Log: {1}</value></data>
   <data name="Adv_Once" xml:space="preserve"><value>fires once</value></data>
   <data name="Adv_Nag" xml:space="preserve"><value>nags every {0} min until confirmed</value></data>
   <data name="Adv_NagUntil" xml:space="preserve"><value>nags every {0} min until confirmed, at most until {1}</value></data>
-  <data name="Adv_Loop" xml:space="preserve"><value>runs every {0} min until end of day (confirming doesn't stop it)</value></data>
-  <data name="Adv_LoopUntil" xml:space="preserve"><value>runs every {0} min until {1} (confirming doesn't stop it)</value></data>
+  <data name="Adv_Loop" xml:space="preserve"><value>runs every {0} min until end of day (confirming doesn’t stop it)</value></data>
+  <data name="Adv_LoopUntil" xml:space="preserve"><value>runs every {0} min until {1} (confirming doesn’t stop it)</value></data>
   <data name="Ed_Trig_Busy" xml:space="preserve"><value>After continuous use</value></data>
   <data name="Ed_Trig_Display" xml:space="preserve"><value>On display change</value></data>
   <data name="Ed_Trig_NetUp" xml:space="preserve"><value>On network connected</value></data>
@@ -659,13 +663,13 @@ Log: {1}</value></data>
   <data name="Panel_Empty" xml:space="preserve"><value>The panel is empty. The actions you put on it show up here.</value></data>
   <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>Startup list skipped. Delete {0} to let it run automatically again.</value></data>
   <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>Startup list skipped because Shift was held at launch. Just this once — the next boot runs as usual.</value></data>
-  <data name="Warn_GroupNotFound" xml:space="preserve"><value>No action named "{0}" — nothing ran.</value></data>
-  <data name="Warn_GroupDisabled" xml:space="preserve"><value>Action "{0}" is switched off — nothing ran.</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>No action named “{0}” — nothing ran.</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>Action “{0}” is switched off — nothing ran.</value></data>
   <data name="Unit_Ms" xml:space="preserve"><value>ms</value></data>
   <data name="Settings_MiddleLongPress" xml:space="preserve"><value>Hold the middle mouse button to open the panel</value></data>
   <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>A normal middle click still works — a short press is passed through untouched. Off by default, because it needs a global mouse hook.</value></data>
   <data name="Settings_LongPressMs" xml:space="preserve"><value>Hold time (ms)</value></data>
-  <data name="Warn_MouseHookFail" xml:space="preserve"><value>Couldn't install the mouse hook, so middle-button hold is off. Security software or group policy may have blocked it; the panel still opens from the hotkey or the tray menu.</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>Couldn’t install the mouse hook, so middle-button hold is off. Security software or group policy may have blocked it; the panel still opens from the hotkey or the tray menu.</value></data>
   <data name="Settings_Panel" xml:space="preserve"><value>Quick panel</value></data>
   <data name="Settings_UsePanel" xml:space="preserve"><value>Use the quick panel</value></data>
   <data name="Settings_UsePanelTip" xml:space="preserve"><value>Turn it off and the hotkey goes back to other apps, the middle-button hook is not installed, and the tray entry disappears. Your panel pages stay — you can still tidy them under Manage panel.</value></data>
@@ -685,7 +689,7 @@ Log: {1}</value></data>
   <data name="Settings_PanelTopRows" xml:space="preserve"><value>Top rows</value></data>
   <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Bottom rows</value></data>
   <data name="Ed_Icon" xml:space="preserve"><value>Panel icon</value></data>
-  <data name="Ed_IconHint" xml:space="preserve"><value>Left empty it fills itself in: *Launch App* takes the target’s own icon, everything else gets a line icon for its type.</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>Left empty it fills itself in: “Launch App” takes the target’s own icon, everything else gets a line icon for its type.</value></data>
   <data name="Btn_Close" xml:space="preserve"><value>Close</value></data>
   <data name="Panel_Manager" xml:space="preserve"><value>Manage panel</value></data>
   <data name="Panel_Global" xml:space="preserve"><value>Any app</value></data>
@@ -693,7 +697,7 @@ Log: {1}</value></data>
   <data name="Panel_NewPage" xml:space="preserve"><value>New page</value></data>
   <data name="Panel_AddHere" xml:space="preserve"><value>Put an action here</value></data>
   <data name="Panel_NoPages" xml:space="preserve"><value>No pages yet. The + at the end of the page tab rail makes one; then put actions on it.</value></data>
-  <data name="Panel_Uncategorized" xml:space="preserve"><value>Uncategorised</value></data>
+  <data name="Panel_Uncategorized" xml:space="preserve"><value>Uncategorized</value></data>
   <data name="Panel_NewCategory" xml:space="preserve"><value>New category</value></data>
   <data name="Panel_Category" xml:space="preserve"><value>Category</value></data>
   <data name="Panel_Pages" xml:space="preserve"><value>Pages</value></data>
@@ -715,7 +719,7 @@ Log: {1}</value></data>
   <data name="Theme_dark" xml:space="preserve"><value>Dark</value></data>
   <data name="Theme_light" xml:space="preserve"><value>Light</value></data>
   <data name="Theme_system" xml:space="preserve"><value>Match Windows</value></data>
-  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork restarts right away to apply the new theme. "Match Windows" follows the app mode in Windows settings.</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork restarts right away to apply the new theme. “Match Windows” follows the app mode in Windows settings.</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
   <data name="Btn_InsertVar" xml:space="preserve"><value>Insert variable</value></data>
@@ -743,14 +747,14 @@ Log: {1}</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Environment Variables</value></data>
   <data name="Panel_UsageCount" xml:space="preserve"><value>{0} clicks</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Reset click stats</value></data>
-  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Resets every panel tile's click count to zero. Only the statistics are cleared; no settings or tiles are changed.</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Resets every panel tile’s click count to zero. Only the statistics are cleared; no settings or tiles are changed.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Clear click statistics for all panel tiles? This cannot be undone.</value></data>
   <data name="Kind_step" xml:space="preserve"><value>Run startup item</value></data>
   <data name="Sum_RunRef" xml:space="preserve"><value>Run startup item: {0}</value></data>
   <data name="Ed_RefTarget" xml:space="preserve"><value>Startup item</value></data>
   <data name="Ed_RefMissing" xml:space="preserve"><value>(target deleted)</value></data>
   <data name="Skip_RefNotFound" xml:space="preserve"><value>Startup item not found</value></data>
-  <data name="Skip_RefDisabled" xml:space="preserve"><value>Startup item "{0}" is disabled; skipped</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Startup item “{0}” is disabled; skipped</value></data>
   <data name="Ed_NoRefsHint" xml:space="preserve"><value>The Startup List is empty — add an item there first, then come back and reference it here.</value></data>
-  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" is referenced by {1} panel tile(s). Deleting it will also remove those tiles. Delete anyway?</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>“{0}” is referenced by {1} panel tile(s). Deleting it will also remove those tiles. Delete anyway?</value></data>
 </root>

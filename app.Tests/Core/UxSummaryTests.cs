@@ -24,7 +24,7 @@ public class UxSummaryTests
     {
         var s = new LaunchStep { Kind = "volume", Action = "mute", Days = new() { 1, 2, 3 }, Repeat = 3, IfPower = "battery" };
         Assert.Equal("静音" + StepDisplay.DecorationSummary(s), StepDisplay.StepSummary(s));
-        Assert.Equal(" ×3（一二三）（用电池）", StepDisplay.DecorationSummary(s));
+        Assert.Equal(" ×3（周一–周三）（用电池）", StepDisplay.DecorationSummary(s));
     }
 
     // —— 催促 / 循环的行为句 ——

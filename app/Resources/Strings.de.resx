@@ -13,7 +13,8 @@
   <data name="Tab_Ports" xml:space="preserve"><value>Ports</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>Läuft einmal bei der Anmeldung, von oben nach unten · Zeilen per Ziehen umordnen. Nach Zeitplan oder Ereignis → Geplante Aufgaben; jederzeit per Klick → Aktionsgruppen.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Löst zu einer Uhrzeit, bei der Anmeldung oder bei Ereignissen wie Entsperren / Netzteil aus — Erinnerung oder still laufende Gruppe. Nur Apps beim Anmelden öffnen → Startliste; jederzeit per Klick → Aktionsgruppen.</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>Bündle eine Routine und starte sie jederzeit per Hotkey / Tray; Startliste und geplante Aufgaben können sie referenzieren. Was nur bei der Anmeldung läuft, ist als einfacher Startlisten-Schritt simpler.</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>Bündeln Sie eine Routine und starten Sie sie jederzeit per Hotkey / Infobereich; Startliste und geplante Aufgaben können sie referenzieren. Was nur bei der Anmeldung läuft, ist als einfacher Startlisten-Schritt simpler.</value></data>
+  <data name="Group_NoSteps" xml:space="preserve"><value>Noch keine Schritte. Klicken Sie oben auf „Hinzufügen“, um den ersten anzulegen — was oben steht, läuft zuerst.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(leer)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Ändern wirkt sofort (deaktivieren, nicht löschen; umkehrbar).</value></data>
   <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>System- / Richtlinien- / einmalige schreibgeschützte Einträge sind standardmäßig ausgeblendet.</value></data>
@@ -30,6 +31,7 @@
   <data name="Ports_Footer" xml:space="preserve"><value>Doppelklick öffnet die Zeile im Browser, Rechtsklick gibt den Port frei.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} von {1} Ports · aktualisiert alle 5 s</value></data>
   <data name="Ports_Empty" xml:space="preserve"><value>Keine Ports entsprechen dem aktuellen Filter. Auf diesem Rechner lauschen {0} Ports — Filter wechseln oder Suche löschen.</value></data>
+  <data name="System_Empty" xml:space="preserve"><value>Keine Starteinträge entsprechen dem aktuellen Filter. Dieser Rechner hat {0} — Filter löschen oder „System- / schreibgeschützte Einträge anzeigen“ aktivieren.</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Im Browser öffnen</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Port freigeben</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>Lauscht außerdem auf {0}</value></data>
@@ -213,6 +215,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Täglich</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Days_RangeSep" xml:space="preserve"><value>–</value></data>
   <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Mo</value></data>
   <data name="Day_2" xml:space="preserve"><value>Di</value></data>
@@ -250,7 +253,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Als Administrator ausführen</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>Als Ziel möglich: Programm (voller Pfad oder bloßer Name), Verknüpfung, Skript, Ordner, URL, Dokument oder ein Protokoll wie ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Tastenkürzel</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen. Von Windows belegte Kombinationen (Win+D, Win+6 …) lassen sich nicht aufzeichnen – doppelklicke das Feld, um sie einzutippen. Mausaktionen mit Modifikatoren gehören ebenfalls hierher: im Feld scrollen, um eine aufzuzeichnen (Strg zum Zoomen, Umschalt für horizontal). Tasten tippen Sie als LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Für einfaches Scrollen oder Klicken ist der Schritt „Maus“ bequemer.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>z. B. Win+D / Alt+K / Ctrl+Enter / F5. Wird an das aktive Fenster gesendet; Ziel zuerst in den Vordergrund bringen. Von Windows belegte Kombinationen (Win+D, Win+6 …) lassen sich nicht aufzeichnen – doppelklicken Sie das Feld, um sie einzutippen. Mausaktionen mit Modifikatoren gehören ebenfalls hierher: im Feld scrollen, um eine aufzuzeichnen (Strg zum Zoomen, Umschalt für horizontal). Für einfaches Scrollen oder Klicken ist der Schritt „Maus“ bequemer.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Scrollen geht an das Fenster unter dem Zeiger; Klicks passieren dort, wo der Zeiger gerade steht (diese App bewegt ihn nie). Bringen Sie das Ziel daher zuerst per Fensteraktion → in den Vordergrund, oder bleiben Sie bei positionsunabhängigen Aktionen wie Zurück/Vor. Für N Klicks bzw. Rastungen die Wiederholungszahl unten erhöhen; das Tempo regelt die Verzögerung nach dem Schritt.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Nach unten scrollen</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Nach rechts scrollen</value></data>
@@ -315,7 +318,7 @@
   <data name="Warn_QuickExit" xml:space="preserve"><value>„{0}“ endete innerhalb 0,5 s (Code {1}); Start wahrscheinlich fehlgeschlagen</value></data>
   <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>Konfigurationsdatei konnte nicht gelesen werden (vermutlich fehlerhaftes JSON); mit Standardwerten gestartet. Das Original wurde nach {0} gesichert — beheben und neu starten zum Wiederherstellen.</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>Skriptdatei nicht gefunden (vollständigen Pfad angeben)</value></data>
-  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Skript ist UTF-8 ohne BOM; Windows PowerShell 5.1 kann es nicht korrekt dekodieren. Installieren Sie PowerShell 7 oder speichern Sie das Skript als UTF-8 mit BOM</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Das Skript wurde nicht ausgeführt: Die mit Windows ausgelieferte PowerShell kann diese Kodierung nicht lesen. Speichern Sie das Skript als UTF-8 mit BOM, oder verwenden Sie PowerShell 7.</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Gesendet (unbestätigt)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Fehler: {0}</value></data>
 
@@ -325,7 +328,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>Aktionsgruppe bearbeiten</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Eine Gruppe läuft nie von selbst — lösen Sie sie über das Tray-Menü, ein globales Tastenkürzel, einen Aktionsgruppen-Schritt in der Startliste oder eine geplante Aufgabe aus.</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>Eine Gruppe läuft nie von selbst — lösen Sie sie über das Infobereichsmenü, ein globales Tastenkürzel, einen Aktionsgruppen-Schritt in der Startliste oder eine geplante Aufgabe aus.</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>Bitte einen Gruppennamen eingeben.</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>Geplante Aufgabe bearbeiten</value></data>
@@ -335,8 +338,8 @@
   <data name="Ed_Time" xml:space="preserve"><value>Zeit (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Anmeldebedingung</value></data>
   <data name="Ed_SMode_Any" xml:space="preserve"><value>Immer</value></data>
-  <data name="Ed_SMode_Before" xml:space="preserve"><value>Nur vor N:00</value></data>
-  <data name="Ed_SMode_After" xml:space="preserve"><value>Nur nach N:00</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>Nur vor der angegebenen Stunde</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>Nur nach der angegebenen Stunde</value></data>
   <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
   <data name="Ed_OnlyBoot" xml:space="preserve"><value>Nur innerhalb</value></data>
   <data name="Ed_WithinHint" xml:space="preserve"><value>Min nach dem Start zählt als Anmeldung (0 = bei jedem Öffnen)</value></data>
@@ -357,7 +360,7 @@
   <data name="Ed_AutoDismiss" xml:space="preserve"><value>Auto-Schließen (s)</value></data>
   <data name="Ed_AutoHint" xml:space="preserve"><value>schließt sich ohne Klick (0: Karte = nie, Dialog = 60 s)</value></data>
   <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Erinnerung in {0} Min. gesetzt, aber Erinnerungen pausieren — sie meldet sich erst danach</value></data>
-  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Aussetzen für heute aufgehoben: {0}</value></data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>„Heute aussetzen“ rückgängig gemacht: {0}</value></data>
   <data name="Toast_SkipToday" xml:space="preserve"><value>Heute ausgesetzt: {0}</value></data>
   <data name="Toast_QuickSet" xml:space="preserve"><value>Erinnerung in {0} Min. gesetzt ({1})</value></data>
   <data name="Quick_Done" xml:space="preserve"><value>{0} Minuten sind um</value></data>
@@ -374,7 +377,7 @@
   <data name="Ed_DelaySecPlus" xml:space="preserve"><value>s, plus zufällig 0~</value></data>
   <data name="Ed_Sec" xml:space="preserve"><value>s</value></data>
   <data name="Ed_Grace" xml:space="preserve"><value>Toleranz (Min)</value></data>
-  <data name="Ed_GraceHint" xml:space="preserve"><value>löst noch aus, wenn die Zeit innerhalb verpasst wurde</value></data>
+  <data name="Ed_GraceHint" xml:space="preserve"><value>löst noch aus, wenn die Zeit innerhalb dieses Zeitraums verpasst wurde</value></data>
   <data name="Val_TimeFormat" xml:space="preserve"><value>Zeit muss im Format HH:mm sein</value></data>
   <data name="Val_RepeatUntil" xml:space="preserve"><value>„Wiederholen bis“ muss HH:mm sein (oder leer)</value></data>
   <data name="Val_LoopUntil" xml:space="preserve"><value>„Wiederkehrender Lauf bis“ muss HH:mm sein (oder leer)</value></data>
@@ -415,11 +418,12 @@ Protokoll: {1}</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>In Startliste übernehmen</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Aus dem System löschen</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>„{0}“ wirklich löschen?</value></data>
+  <data name="Confirm_Keep" xml:space="preserve"><value>Behalten</value></data>
   <data name="Confirm_DeletePage" xml:space="preserve"><value>Die Seite „{0}“ löschen? Die darauf befindlichen {1} Kachel(n) werden mitgelöscht. Eine Kachel, die auf eine Aktion verweist, entfernt lediglich diesen Verweis; die Aktion selbst bleibt bestehen.</value></data>
   <data name="Confirm_DeleteCategory" xml:space="preserve"><value>Soll die Kategorie „{0}“ gelöscht werden? Die darin enthaltenen {1} Seiten werden nicht gelöscht – sie werden wieder unter „{2}“ eingeordnet.</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Autostart-Eintrag „{0}“ endgültig aus dem System löschen? Dies kann nicht rückgängig gemacht werden (zum bloßen Deaktivieren einfach das Häkchen entfernen).</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>Port {0} freigeben? Beendet {1} — samt allen Unterprozessen. Nicht Gespeichertes geht verloren.</value></data>
-  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Dieser Prozess belegt auch Port {0} — die werden ebenfalls frei.</value></data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Dieser Prozess belegt auch Port {0} — er wird ebenfalls freigegeben.</value></data>
   <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Der Autostart-Eintrag „{0}“ wurde in die Startliste übernommen, und ein Schritt verweist noch auf seine Verknüpfungsdatei. Beim Löschen aus dem System wird auch die Verknüpfung entfernt – dieser Schritt kann ihn dann nicht mehr starten. Trotzdem löschen?</value></data>
   <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Löschen von „{0}“ fehlgeschlagen: {1}</value></data>
   <data name="Config_ExportSamePath" xml:space="preserve"><value>Das Exportziel darf nicht die Konfigurationsdatei selbst sein – bitte anderen Namen oder Ort wählen.</value></data>
@@ -427,30 +431,30 @@ Protokoll: {1}</value></data>
   <data name="Val_SearchUrl" xml:space="preserve"><value>Die Such-URL braucht {0} – dort kommt der Suchbegriff hin. Ohne ihn öffnet dieser Schritt jedes Mal dieselbe Seite.</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>Verpasste nachholen (nach Ruhezustand/Aus)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} Min.</value></data>
-  <data name="Warn_KeyNoMain" xml:space="preserve"><value>Tastenkürzel "{0}" hat keine Haupttaste; nicht gesendet</value></data>
-  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Unbekannter Tastenname "{0}" (mehrstellige Zahlen sind keine Tasten); Tastenkürzel "{1}" nicht gesendet</value></data>
-  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Unbekannte Taste "{0}"; Tastenkürzel "{1}" nicht gesendet</value></data>
-  <data name="Warn_KeyRejected" xml:space="preserve"><value>Tastenkürzel "{0}" wurde vom System abgelehnt (passiert bei erhöhtem Fenster/sicherem Desktop im Vordergrund); keine Wirkung</value></data>
-  <data name="Warn_KeyPartial" xml:space="preserve"><value>Tastenkürzel "{0}" nur teilweise injiziert ({1}/{2}); Tasten-Loslassen erneut gesendet, keine Wirkung</value></data>
-  <data name="Warn_TextSendFail" xml:space="preserve"><value>Text senden: Fenster "{0}" konnte nicht in den Vordergrund gebracht werden; nicht gesendet</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>Tastenkürzel „{0}“ hat keine Haupttaste; nicht gesendet</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Unbekannter Tastenname „{0}“ (mehrstellige Zahlen sind keine Tasten); Tastenkürzel „{1}“ nicht gesendet</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Unbekannte Taste „{0}“; Tastenkürzel „{1}“ nicht gesendet</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>Tastenkürzel „{0}“ wurde vom System abgelehnt (passiert bei erhöhtem Fenster/sicherem Desktop im Vordergrund); keine Wirkung</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>Tastenkürzel „{0}“ nur teilweise injiziert ({1}/{2}); Tasten-Loslassen erneut gesendet, keine Wirkung</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>Text senden: Fenster „{0}“ konnte nicht in den Vordergrund gebracht werden; nicht gesendet</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Konfiguration konnte nicht gespeichert werden: {0} (Änderungen sind nur im Speicher und gehen beim Neustart verloren)</value></data>
-  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Die von Erinnerung "{0}" referenzierte Aktionsgruppe existiert nicht mehr; diesmal wurde nichts ausgeführt</value></data>
-  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Die von Erinnerung "{0}" referenzierte Aktionsgruppe ist deaktiviert; diesmal wurde nichts ausgeführt</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Die von Erinnerung „{0}“ referenzierte Aktionsgruppe existiert nicht mehr; diesmal wurde nichts ausgeführt</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Die von Erinnerung „{0}“ referenzierte Aktionsgruppe ist deaktiviert; diesmal wurde nichts ausgeführt</value></data>
   <data name="Skip_GroupNotFound" xml:space="preserve"><value>Referenzierte Aktionsgruppe nicht gefunden</value></data>
-  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Aktionsgruppe "{0}" ist deaktiviert; übersprungen</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Aktionsgruppe „{0}“ ist deaktiviert; übersprungen</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>Aktionsgruppe erneut betreten (Zirkelbezug oder bereits in Ausführung); übersprungen</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Toast_GroupCancelled" xml:space="preserve"><value>Abbruch der Aktionsgruppe „{0}“ angefordert.</value></data>
   <data name="Toast_GroupStarted" xml:space="preserve"><value>Aktionsgruppe „{0}“ gestartet.</value></data>
   <data name="Toast_GroupBusy" xml:space="preserve"><value>Aktionsgruppe „{0}“ läuft bereits (anderweitig gestartet); diese Taste kann sie nicht stoppen – nutzen Sie die Not-Aus-Taste.</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>Der Lauf wurde beim Limit von 5000 Schritten gestoppt; die restlichen Schritte wurden übersprungen (prüfen Sie auf zu große Wiederholungszahlen)</value></data>
-  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Die bei "Ja" auszuführende Aktionsgruppe existiert nicht mehr; übersprungen</value></data>
-  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Die bei "Ja" auszuführende Aktionsgruppe ist deaktiviert; übersprungen</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Die bei „Ja“ auszuführende Aktionsgruppe existiert nicht mehr; übersprungen</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Die bei „Ja“ auszuführende Aktionsgruppe ist deaktiviert; übersprungen</value></data>
   <data name="Warn_OnYesFailed" xml:space="preserve"><value>Die Aktion nach „Ja“ konnte nicht ausgeführt werden: {0}</value></data>
-  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Geplante Aufgaben können noch nicht übernommen werden; nur Registry-Run-Schlüssel und Autostart-Ordner-Einträge werden unterstützt</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Dieser Eintrag kann nicht übernommen werden – nur Registry-Run-Einträge und Einträge im Autostart-Ordner können übernommen werden.</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Startlisten-Lauf abgebrochen: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Letztes Startprotokoll anzeigen</value></data>
-  <data name="Tray_History" xml:space="preserve"><value>Zuletzt</value></data>
+  <data name="Tray_History" xml:space="preserve"><value>Zuletzt verwendet</value></data>
   <data name="Tray_NoLog" xml:space="preserve"><value>Noch kein Startprotokoll (Startliste zuerst einmal ausführen)</value></data>
   <data name="Log_Title" xml:space="preserve"><value>Protokoll des letzten Startlistenlaufs</value></data>
   <data name="Log_When" xml:space="preserve"><value>Zeit: {0}</value></data>
@@ -467,7 +471,7 @@ Protokoll: {1}</value></data>
   <data name="Log_GroupCycle" xml:space="preserve"><value>Zirkelbezug; übersprungen</value></data>
   <data name="Log_RunGroup" xml:space="preserve"><value>Aktionsgruppe ausführen: {0}</value></data>
   <data name="Log_Stopped" xml:space="preserve"><value>Von Hand gestoppt; die weiteren Schritte liefen nicht</value></data>
-  <data name="Log_HdrStopped" xml:space="preserve"><value>Dieser Lauf wurde von Hand gestoppt (Not-Aus-Taste oder „Stopp“ im Infobereich)</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>Dieser Lauf wurde von Hand gestoppt (Not-Aus-Taste oder „Stoppen“ im Infobereich)</value></data>
   <data name="Err_JsonNull" xml:space="preserve"><value>Diese Datei ergibt beim Einlesen nichts – sie ist keine Konfiguration.</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>Zwischenablage konnte nicht geleert werden: {0}</value></data>
   <data name="Err_SoundNotWav" xml:space="preserve"><value>„{0}“ ist keine WAV-Datei. Dieser Schritt spielt nur WAV-Dateien ab.</value></data>
@@ -494,10 +498,10 @@ Protokoll: {1}</value></data>
   <data name="Tpl_Search" xml:space="preserve"><value>Schnellsuche</value></data>
   <data name="Tpl_SearchAsk" xml:space="preserve"><value>Wonach suchen?</value></data>
   <data name="Tpl_SearchVar" xml:space="preserve"><value>Stichwort</value></data>
-  <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Steh auf und beweg dich kurz</value></data>
+  <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Kurz aufstehen und sich bewegen</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Beim Start stummschalten (Beispiel · gegen automatisch abspielende Seiten)</value></data>
   <data name="Smp_OpenApp" xml:space="preserve"><value>Öffnen Sie Ihren Browser (Beispiel: Rufen Sie eine App auf, die Sie tatsächlich nutzen).</value></data>
-  <data name="Smp_OpenSite" xml:space="preserve"><value>Website öffnen (Beispiel · nur werktags; deine Mail- oder To-do-URL)</value></data>
+  <data name="Smp_OpenSite" xml:space="preserve"><value>Website öffnen (Beispiel · nur werktags; Ihre Mail- oder To-do-URL)</value></data>
   <data name="Smp_OpenChat" xml:space="preserve"><value>Chat-App öffnen (Beispiel · startet minimiert im Hintergrund)</value></data>
   <data name="Smp_ShowDesktop" xml:space="preserve"><value>Desktop anzeigen mit Win+D (Beispiel · Tastenkombination senden)</value></data>
   <data name="Smp_RemWater" xml:space="preserve"><value>Kurz aufstehen und Wasser trinken (Beispiel)</value></data>
@@ -505,7 +509,7 @@ Protokoll: {1}</value></data>
   <data name="Smp_RemBills" xml:space="preserve"><value>Rechnungen und Abos des Monats prüfen (Beispiel · am 1.)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>Zeit zum Schlafen (Beispiel)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Diese Aktion erfordert Administratorrechte. Clockwork als Administrator neu öffnen?</value></data>
-  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Die Aktionsgruppe "{0}" wird von {1} Erinnerung(en) und {2} Schritt(en) referenziert. Beim Löschen werden diese Verweise mit entfernt (Erinnerungen nur noch Popup; referenzierende Schritte entfernt). Trotzdem löschen?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Die Aktionsgruppe „{0}“ wird von {1} Erinnerung(en) und {2} Schritt(en) referenziert. Beim Löschen werden diese Verweise mit entfernt (Erinnerungen nur noch Popup; referenzierende Schritte entfernt). Trotzdem löschen?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>Durchsuchen…</value></data>
   <data name="Btn_Pick" xml:space="preserve"><value>Auswählen…</value></data>
   <data name="Btn_Capture" xml:space="preserve"><value>Erfassen</value></data>
@@ -524,7 +528,7 @@ Protokoll: {1}</value></data>
   <data name="Picker_Search" xml:space="preserve"><value>Prozessname / Fenstertitel suchen</value></data>
   <data name="Date_Pick" xml:space="preserve"><value>Datum auswählen</value></data>
   <data name="Capture_Key" xml:space="preserve"><value>Taste erfassen</value></data>
-  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Globale Tastenkombination</value></data>
+  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Globaler Hotkey</value></data>
   <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Klicken und Tastenkombination drücken, um diese Gruppe jederzeit auszuführen; erneut drücken, während sie läuft, stoppt sie. Esc bricht ab, Entf löscht</value></data>
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Tastenkombination {1} für Aktionsgruppe „{0}“ konnte nicht registriert werden: möglicherweise bereits belegt</value></data>
   <data name="Val_HotkeyDup" xml:space="preserve"><value>Tastenkombination {0} wird bereits von „{1}“ verwendet; bitte eine andere wählen</value></data>
@@ -624,7 +628,7 @@ Protokoll: {1}</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Systemstart</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Sicherung</value></data>
   <data name="Settings_BackupTip" xml:space="preserve"><value>Exportiert eine einzelne .json-Datei. Ein Import ersetzt alle aktuellen Einstellungen.</value></data>
-  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s und nur bei aktiviertem Autostart: wartet nach der Anmeldung so lange, bevor die Liste läuft, und umgeht so den Anmeldesturm. Manuelles erneutes Ausführen bleibt unberührt.</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s und nur wenn „Beim Anmelden starten“ aktiviert ist: wartet nach der Anmeldung so lange, bevor die Liste läuft, und umgeht so den Anmeldesturm. Manuelles erneutes Ausführen bleibt unberührt.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Warten, bis das System bereit ist (Desktop / Netzwerk)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Geht weiter, sobald beides bereit ist, wartet höchstens 90 s; die feste Verzögerung oben kommt zusätzlich dazu. Einschalten, wenn die Liste zu früh für Ihre Programme läuft.</value></data>
   <data name="Menu_SecOpen" xml:space="preserve"><value>Öffnen</value></data>
@@ -632,7 +636,7 @@ Protokoll: {1}</value></data>
   <data name="Menu_SecSystem" xml:space="preserve"><value>System &amp; Ton</value></data>
   <data name="Menu_SecFlow" xml:space="preserve"><value>Ablauf</value></data>
   <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Apps bei der Anmeldung mit Reihenfolge und Verzögerung öffnet die Startliste bequemer; Bedingungen wie „nur innerhalb N Minuten nach dem Start“ oder „nur vormittags“ gehören genau hierher.</value></data>
-  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Noch keine Aktionsgruppen — lege zuerst im Tab „Aktionsgruppen“ eine aus einer Vorlage an und referenziere sie dann hier.</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Noch keine Aktionsgruppen — legen Sie zuerst im Tab „Aktionsgruppen“ eine aus einer Vorlage an und referenzieren Sie sie dann hier.</value></data>
   <data name="Ed_CondHeader" xml:space="preserve"><value>Bedingungen &amp; Wiederholung: {0}</value></data>
   <data name="Ed_CondAlways" xml:space="preserve"><value>läuft immer</value></data>
   <data name="Ed_AdvHeader" xml:space="preserve"><value>Erweitert: {0}</value></data>
@@ -650,7 +654,7 @@ Protokoll: {1}</value></data>
   <data name="Ed_BusyMinutes" xml:space="preserve"><value>Minuten Nutzung</value></data>
   <data name="Ed_BusyHint" xml:space="preserve"><value>Wird einmal ausgelöst, nachdem Sie so viele Minuten durchgehend gearbeitet haben; eine volle Minute Pause startet die Zählung neu.</value></data>
   <data name="Settings_PanelHotkey" xml:space="preserve"><value>Taste für Schnellpanel</value></data>
-  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Öffnet ein Kachelpanel an der Maus, eine Aktion pro Kachel. Esc bricht ab, Entf löscht sie; danach öffnen die mittlere Maustaste oder das Infobereichsmenü das Panel.</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Öffnet ein Kachelpanel an der Maus, eine Aktion pro Kachel. Esc bricht ab, Entf löscht sie; das Halten der mittleren Maustaste und das Infobereichsmenü öffnen das Panel weiterhin.</value></data>
   <data name="Tray_Panel" xml:space="preserve"><value>Schnellpanel öffnen</value></data>
   <data name="Panel_Hint" xml:space="preserve"><value>Esc zum Schließen</value></data>
   <data name="Panel_Empty" xml:space="preserve"><value>Das Panel ist leer. Hier erscheinen die Aktionen, die Sie daraufstellen.</value></data>
@@ -682,7 +686,7 @@ Protokoll: {1}</value></data>
   <data name="Settings_PanelTopRows" xml:space="preserve"><value>Obere Zeilen</value></data>
   <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Untere Zeilen</value></data>
   <data name="Ed_Icon" xml:space="preserve"><value>Panel-Symbol</value></data>
-  <data name="Ed_IconHint" xml:space="preserve"><value>Leer gelassen ergänzt es sich selbst: „Programm ausführen“ übernimmt das Symbol des Ziels, alles andere erhält ein Liniensymbol nach seiner Art.</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>Leer gelassen ergänzt es sich selbst: „App starten“ übernimmt das Symbol des Ziels, alles andere erhält ein Liniensymbol nach seiner Art.</value></data>
   <data name="Btn_Close" xml:space="preserve"><value>Schließen</value></data>
   <data name="Panel_Manager" xml:space="preserve"><value>Panel verwalten</value></data>
   <data name="Panel_Global" xml:space="preserve"><value>Jede App</value></data>
@@ -742,12 +746,12 @@ Protokoll: {1}</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Klickstatistik löschen</value></data>
   <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Setzt die Klickzähler aller Kacheln auf null zurück. Nur die Statistik wird gelöscht, Einstellungen und Kacheln bleiben unverändert.</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>Die Klickstatistik aller Kacheln wirklich löschen? Dies kann nicht rückgängig gemacht werden.</value></data>
-  <data name="Kind_step" xml:space="preserve"><value>Startobjekt referenzieren</value></data>
-  <data name="Sum_RunRef" xml:space="preserve"><value>Startobjekt referenzieren: {0}</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Startobjekt ausführen</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Startobjekt ausführen: {0}</value></data>
   <data name="Ed_RefTarget" xml:space="preserve"><value>Startobjekt</value></data>
   <data name="Ed_RefMissing" xml:space="preserve"><value>(Ziel gelöscht)</value></data>
   <data name="Skip_RefNotFound" xml:space="preserve"><value>Startobjekt nicht gefunden</value></data>
-  <data name="Skip_RefDisabled" xml:space="preserve"><value>Startobjekt "{0}" ist deaktiviert; übersprungen</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>Startobjekt „{0}“ ist deaktiviert; übersprungen</value></data>
   <data name="Ed_NoRefsHint" xml:space="preserve"><value>Die Startliste ist leer — legen Sie dort zuerst ein Objekt an und referenzieren Sie es hier.</value></data>
-  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" wird von {1} Panel-Kachel(n) referenziert. Beim Löschen werden diese Kacheln entfernt. Trotzdem löschen?</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>„{0}“ wird von {1} Panel-Kachel(n) referenziert. Beim Löschen werden diese Kacheln entfernt. Trotzdem löschen?</value></data>
 </root>

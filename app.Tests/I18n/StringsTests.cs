@@ -12,28 +12,74 @@ public class StringsTests
         finally { CultureInfo.CurrentUICulture = old; }
     }
 
-    [Fact] public void Zh_returns_chinese() => WithCulture("zh-CN", () => Assert.Equal("我的启动清单", Strings.Get("Tab_Launch")));
-    [Fact] public void En_returns_english() => WithCulture("en", () => Assert.Equal("Startup List", Strings.Get("Tab_Launch")));
-    [Fact] public void ZhTw_returns_traditional() => WithCulture("zh-TW", () => Assert.Equal("我的開機清單", Strings.Get("Tab_Launch")));
-    [Fact] public void Ja_returns_japanese() => WithCulture("ja", () => Assert.Equal("起動リスト", Strings.Get("Tab_Launch")));
-    [Fact] public void Ko_returns_korean() => WithCulture("ko", () => Assert.Equal("시작 목록", Strings.Get("Tab_Launch")));
-    [Fact] public void Es_returns_spanish() => WithCulture("es", () => Assert.Equal("Lista de inicio", Strings.Get("Tab_Launch")));
-    [Fact] public void Fr_returns_french() => WithCulture("fr", () => Assert.Equal("Liste de démarrage", Strings.Get("Tab_Launch")));
-    [Fact] public void De_returns_german() => WithCulture("de", () => Assert.Equal("Startliste", Strings.Get("Tab_Launch")));
-    [Fact] public void It_returns_italian() => WithCulture("it", () => Assert.Equal("Elenco di avvio", Strings.Get("Tab_Launch")));
-    [Fact] public void Pt_returns_portuguese() => WithCulture("pt", () => Assert.Equal("Lista de inicialização", Strings.Get("Tab_Launch")));
-    [Fact] public void Ru_returns_russian() => WithCulture("ru", () => Assert.Equal("Список запуска", Strings.Get("Tab_Launch")));
-    [Fact] public void Ar_returns_arabic() => WithCulture("ar", () => Assert.Equal("قائمة البدء", Strings.Get("Tab_Launch")));
-    [Fact] public void Hi_returns_hindi() => WithCulture("hi", () => Assert.Equal("स्टार्टअप सूची", Strings.Get("Tab_Launch")));
-    [Fact] public void Id_returns_indonesian() => WithCulture("id", () => Assert.Equal("Daftar startup", Strings.Get("Tab_Launch")));
-    [Fact] public void Vi_returns_vietnamese() => WithCulture("vi", () => Assert.Equal("Danh sách khởi động", Strings.Get("Tab_Launch")));
-    [Fact] public void Th_returns_thai() => WithCulture("th", () => Assert.Equal("รายการเริ่มต้น", Strings.Get("Tab_Launch")));
-    [Fact] public void Tr_returns_turkish() => WithCulture("tr", () => Assert.Equal("Başlangıç listesi", Strings.Get("Tab_Launch")));
-    [Fact] public void Nl_returns_dutch() => WithCulture("nl", () => Assert.Equal("Opstartlijst", Strings.Get("Tab_Launch")));
+    // 这一组测的是「切了语言就拿到那份语言的文本」这条路由，不是任何一句文案的写法。
+    // 早先每个语言钉一条逐字串（18 条），于是改一句标签就得顺手改一次测试；而改测试的人
+    // 只会照着新值再抄一遍——什么都没验，只把当时的写法冻住了。2026-10 给 zh-TW 的
+    // 「启动清单」统一用词时就红了这条，而它抓到的根本不是缺陷。
+    // 现在判的是性质：每门语言都真的落到自己的卫星资源（不等于中性中文），且 18 门互不相同。
+    private static readonly string[] OtherCultures =
+        { "en", "zh-TW", "ja", "ko", "es", "fr", "de", "it", "pt", "ru", "ar", "hi", "id", "vi", "th", "tr", "nl" };
+
+    private static string GetIn(string culture, string key)
+    {
+        string? value = null;
+        WithCulture(culture, () => value = Strings.Get(key));
+        return value!;
+    }
+
+    private static Dictionary<string, string> Entries(string code)
+    {
+        var set = new System.Resources.ResourceManager("Clockwork.Resources.Strings", typeof(Strings).Assembly)
+            .GetResourceSet(CultureInfo.GetCultureInfo(code), createIfNotExists: true, tryParents: false);
+        var d = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (set == null) return d;
+        foreach (System.Collections.DictionaryEntry e in set)
+            if (e.Key is string k && e.Value is string v) d[k] = v;
+        return d;
+    }
+
+    [Fact]
+    public void Every_culture_routes_to_its_own_text()
+    {
+        var neutral = GetIn("zh-CN", "Tab_Launch");
+        Assert.False(string.IsNullOrWhiteSpace(neutral));
+        var seen = new Dictionary<string, string>(StringComparer.Ordinal) { [neutral] = "zh-CN" };
+        var bad = new List<string>();
+        foreach (var culture in OtherCultures)
+        {
+            var value = GetIn(culture, "Tab_Launch");
+            if (string.IsNullOrWhiteSpace(value)) bad.Add($"{culture}：空");
+            else if (value == neutral) bad.Add($"{culture}：拿到的是中性中文（没落到卫星资源）");
+            else if (seen.TryGetValue(value, out var other)) bad.Add($"{culture} 与 {other} 同值：{value}");
+            else seen[value] = culture;
+        }
+        Assert.True(bad.Count == 0, "Tab_Launch 的语言路由不对：\n" + string.Join("\n", bad));
+    }
+
+    // 简繁这条判性质不判句子：TW 全文里不许出现只有简体才写得出的字。
+    // 表是手工挑的高频简化偏旁字（每个都有独立繁体写法），当前全文零命中；
+    // 一次简转繁的复制粘贴就会撞上它。
+    private const string SimplifiedOnly =
+        "启单页录动设选时显网关们这为于乐风区医几则华厂厅历参双变叶号吗员问图园圆墙声处备头夹夺奖实宠审写军农冲突净准凉爽凤击递";
+
+    [Fact]
+    public void ZhTw_carries_no_simplified_only_characters()
+    {
+        var values = Entries("zh-TW");
+        var bad = new List<string>();
+        foreach (var kv in values)
+        {
+            if (kv.Value == null) continue;
+            foreach (var ch in kv.Value.Where(c => SimplifiedOnly.IndexOf(c) >= 0).Distinct())
+                bad.Add($"zh-TW/{kv.Key}: 含简体字 {ch} → {kv.Value}");
+        }
+        Assert.True(bad.Count == 0, "繁体文件里混进简体字：\n" + string.Join("\n", bad));
+    }
 
     [Fact]
     public void Untranslated_culture_falls_back_to_chinese()
-        => WithCulture("sw", () => Assert.Equal("我的启动清单", Strings.Get("Tab_Launch")));   // 无 sw 卫星→回退中性(中文)
+        // 无 sw 卫星 → 回退中性（中文）。跟中性自己比，别把某一句抄一遍当基准。
+        => Assert.Equal(GetIn("zh-CN", "Tab_Launch"), GetIn("sw", "Tab_Launch"));
 
     [Fact] public void Unknown_key_returns_key() => Assert.Equal("__nope__", Strings.Get("__nope__"));
 
@@ -101,7 +147,7 @@ public class StringsTests
         Assert.Equal("Launch App", StepDisplay.StepKindLabel("app"));
         Assert.Equal("Volume 30%", StepDisplay.StepSummary(new LaunchStep { Kind = "volume", Action = "set", Level = 30 }));
         Assert.Equal("Close Window Weixin", StepDisplay.StepSummary(new LaunchStep { Kind = "window", Action = "close", Process = "Weixin" }));
-        Assert.Equal("Mon Tue Wed Thu Fri", StepDisplay.DaysLabel(new List<int> { 1, 2, 3, 4, 5 }));
+        Assert.Equal("Mon–Fri", StepDisplay.DaysLabel(new List<int> { 1, 2, 3, 4, 5 }));
         Assert.Equal("Every 3 days", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "everyNDays", IntervalDays = 3 }));
         Assert.Equal("At login · before 8:00", ReminderDisplay.TimeLabel(new Reminder { Trigger = "startup", StartupHourMode = "before", StartupHour = 8 }));
         Assert.Equal("Scheduled Task", StartupLabels.TypeLabel("ScheduledTask"));

@@ -13,7 +13,8 @@
   <data name="Tab_Ports" xml:space="preserve"><value>พอร์ต</value></data>
   <data name="Launch_Hint" xml:space="preserve"><value>ทำงานครั้งเดียวตอนเข้าสู่ระบบ จากบนลงล่าง · ลากแถวเพื่อจัดลำดับ อยากให้ทำตามเวลา / เหตุการณ์ → งานตามกำหนดเวลา อยากสั่งเองทุกเมื่อ → กลุ่มการทำงาน</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>ทำงานตามเวลา ตอนเข้าสู่ระบบ หรือเหตุการณ์อย่างปลดล็อก / เสียบไฟ — เด้งเตือนหรือรันกลุ่มแบบเงียบ แค่อยากเปิดแอปตอนเข้าระบบ → รายการเริ่มต้น อยากสั่งเอง → กลุ่มการทำงาน</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่ม สั่งได้ทุกเมื่อด้วยฮ็อตคีย์ / เทรย์ รายการเริ่มต้นและงานตามกำหนดเวลาก็อ้างอิงได้ ถ้าจะรันแค่ตอนเปิดเครื่อง เขียนลงรายการเริ่มต้นตรง ๆ ง่ายกว่า</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>รวมชุดการทำงานเป็นกลุ่ม สั่งได้ทุกเมื่อด้วยคีย์ลัด / เมนูถาด รายการเริ่มต้นและงานตามกำหนดเวลาก็อ้างอิงได้ ถ้าจะรันแค่ตอนเปิดเครื่อง เขียนลงรายการเริ่มต้นตรง ๆ ง่ายกว่า</value></data>
+  <data name="Group_NoSteps" xml:space="preserve"><value>ยังไม่มีขั้นตอน กด «เพิ่ม» ข้างบนเพื่อเพิ่มขั้นตอนแรก อะไรอยู่ด้านบนจะทำงานก่อน</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(ว่าง)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>ติ๊ก/เอาออกมีผลทันที (ปิดใช้งาน ไม่ใช่ลบ ย้อนกลับได้)</value></data>
   <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>รายการระบบ / นโยบาย / ครั้งเดียวแบบอ่านอย่างเดียวถูกซ่อนโดยค่าเริ่มต้น</value></data>
@@ -30,6 +31,7 @@
   <data name="Ports_Footer" xml:space="preserve"><value>ดับเบิลคลิกแถวเพื่อเปิดในเบราว์เซอร์ คลิกขวาเพื่อปล่อยพอร์ต</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} พอร์ต · รีเฟรชทุก 5 วินาที</value></data>
   <data name="Ports_Empty" xml:space="preserve"><value>ไม่มีพอร์ตที่ตรงกับตัวกรองปัจจุบัน เครื่องนี้มีพอร์ตกำลังรอรับการเชื่อมต่อ {0} พอร์ต — ลองเปลี่ยนตัวกรองหรือล้างคำค้นหา</value></data>
+  <data name="System_Empty" xml:space="preserve"><value>ไม่มีรายการเริ่มต้นที่ตรงกับตัวกรองปัจจุบัน เครื่องนี้มี {0} รายการ — ล้างตัวกรองหรือเลือก «แสดงรายการระบบ / อ่านอย่างเดียว»</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>เปิดในเบราว์เซอร์</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>ปล่อยพอร์ต</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>กำลังรอรับที่ {0} ด้วย</value></data>
@@ -64,7 +66,7 @@
   <data name="Settings_PanelManage" xml:space="preserve"><value>จัดการแผง…</value></data>
   <data name="Gesture_None" xml:space="preserve"><value>ยังไม่มีเจสเจอร์ กด «เพิ่ม» เลือกการกระทำ แล้ววาดเส้นทางด้านขวา</value></data>
   <data name="Ed_GestureDrawHere" xml:space="preserve"><value>กดปุ่มซ้ายค้างแล้ววาดที่นี่</value></data>
-  <data name="Val_GestureDup" xml:space="preserve"><value>เจสเจอร์ {0} ถูกใช้โดย "{1}" แล้ว โปรดวาดเส้นอื่น</value></data>
+  <data name="Val_GestureDup" xml:space="preserve"><value>เจสเจอร์ {0} ถูกใช้โดย «{1}» แล้ว โปรดวาดเส้นอื่น</value></data>
   <data name="Col_Port" xml:space="preserve"><value>พอร์ต</value></data>
   <data name="Col_Process" xml:space="preserve"><value>โปรเซส</value></data>
   <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
@@ -128,8 +130,8 @@
   <data name="Warn_WaitClipboard" xml:space="preserve">
     <value>คลิปบอร์ดไม่เปลี่ยนภายใน {0} วินาที จะทำงานต่อไป</value>
   </data>
-  <data name="Warn_AskNoUi" xml:space="preserve"><value>ขั้นตอนนี้จำเป็นต้องถามคุณบางอย่าง แต่ไม่มีใครที่จะถามได้บนเส้นทางนี้ (การทำงานครั้งนี้ไม่มีผู้ดูแล) จึงถูกข้ามไป</value></data>
-  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>ขั้นนี้จะลบข้อมูลอย่างถาวรและต้องให้คุณยืนยันก่อน แต่บนเส้นทางนี้ไม่มีใครให้ถาม (การทำงานครั้งนี้ไม่มีผู้ดูแล) จึงข้ามไป</value></data>
+  <data name="Warn_AskNoUi" xml:space="preserve"><value>ขั้นตอนนี้จำเป็นต้องถามคุณบางอย่าง แต่ไม่มีใครที่จะถามได้บนเส้นทางนี้ (การทำงานครั้งนี้ไม่มีผู้ใช้ดูแล) จึงถูกข้ามไป</value></data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>ขั้นนี้จะลบข้อมูลอย่างถาวรและต้องให้คุณยืนยันก่อน แต่บนเส้นทางนี้ไม่มีใครให้ถาม (การทำงานครั้งนี้ไม่มีผู้ใช้ดูแล) จึงข้ามไป</value></data>
   <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>ขั้นตอนนี้ยังไม่มีตัวเลือกใดที่ถูกกำหนดไว้ จึงไม่มีตัวเลือกใดให้เลือก ข้ามขั้นตอนนี้ไป</value></data>
   <data name="Ed_Url" xml:space="preserve">
     <value>URL</value>
@@ -151,10 +153,10 @@
   <data name="Ed_OutputVarHint" xml:space="preserve"><value>ขั้นตอนต่อไปจะใช้ {0} เพื่ออ้างอิงถึงมัน หากปล่อยว่างไว้ ขั้นตอนนี้จะไม่สร้างผลลัพธ์ใดๆ</value></data>
   <data name="Ed_OutputVarSample" xml:space="preserve"><value>ชื่อ</value></data>
   <data name="Mig_PageMoved" xml:space="preserve">
-    <value>ย้ายหน้าแผง «{0}» ออกจากการทำงานของคุณไปไว้ที่หน้าแผง (ช่อง: {1})</value>
+    <value>ย้ายหน้าแผง «{0}» ออกจากการทำงานของคุณไปไว้ที่หน้าแผง (ไทล์: {1})</value>
   </data>
   <data name="Mig_PageAndAction" xml:space="preserve">
-    <value>«{0}» เป็นทั้งหน้าแผงและการทำงาน (คีย์ลัด/ถูกอ้างถึง) จึงเก็บการทำงานไว้ และให้หน้านั้นมีช่องหนึ่งชี้ไปที่มัน</value>
+    <value>«{0}» เป็นทั้งหน้าแผงและการทำงาน (คีย์ลัด/ถูกอ้างถึง) จึงเก็บการทำงานไว้ และให้หน้านั้นมีไทล์หนึ่งตัวชี้ไปที่มัน</value>
   </data>
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>หน้าแผง «{0}» ไม่ปรากฏในเมนูถาดอีกต่อไป (หน้าไม่ใช่การทำงานที่เรียกใช้ได้)</value>
@@ -162,7 +164,7 @@
   <data name="Mig_Title" xml:space="preserve">
     <value>หน้าแผงแยกออกมาแล้ว</value>
   </data>
-  <data name="Kind_group" xml:space="preserve"><value>เรียกใช้กลุ่มการกระทำ</value></data>
+  <data name="Kind_group" xml:space="preserve"><value>เรียกใช้กลุ่มการทำงาน</value></data>
   <data name="Kind_message" xml:space="preserve"><value>ข้อความ</value></data>
   <data name="Kind_delay" xml:space="preserve"><value>หน่วงเวลา</value></data>
   <data name="Kind_text" xml:space="preserve"><value>ส่งข้อความ</value></data>
@@ -213,6 +215,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>ทุกวัน</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Days_RangeSep" xml:space="preserve"><value>–</value></data>
   <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>จ</value></data>
   <data name="Day_2" xml:space="preserve"><value>อ</value></data>
@@ -241,7 +244,7 @@
 
   <data name="Ed_Ok" xml:space="preserve"><value>ตกลง</value></data>
   <data name="Ed_Cancel" xml:space="preserve"><value>ยกเลิก</value></data>
-  <data name="Ed_Title_Step" xml:space="preserve"><value>แก้ไขขั้น</value></data>
+  <data name="Ed_Title_Step" xml:space="preserve"><value>แก้ไขขั้นตอน</value></data>
   <data name="Ed_Type" xml:space="preserve"><value>ชนิด</value></data>
   <data name="Ed_Label" xml:space="preserve"><value>ป้ายกำกับ</value></data>
   <data name="Ed_Target" xml:space="preserve"><value>เป้าหมาย</value></data>
@@ -250,8 +253,8 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>เรียกใช้ในฐานะผู้ดูแล</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>เป้าหมายใส่ได้ทั้งโปรแกรม (พาธเต็มหรือแค่ชื่อ) ทางลัด สคริปต์ โฟลเดอร์ URL เอกสาร หรือโปรโตคอลอย่าง ms-settings:</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>ทางลัด</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง พิมพ์  การสั่งงานเมาส์พร้อมปุ่มร่วมก็อยู่ที่นี่ เลื่อนล้อในช่องนี้เพื่อบันทึก (กด Ctrl เพื่อย่อขยาย, Shift เพื่อเลื่อนแนวนอน) ส่วนปุ่มให้พิมพ์ LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward ถ้าแค่เลื่อนหรือคลิกธรรมดา ใช้ขั้นตอน “เมาส์” ง่ายกว่า</value></data>
-  <data name="Ed_MouseHint" xml:space="preserve"><value>การเลื่อนจะไปยังหน้าต่างใต้ตัวชี้ ส่วนการคลิกจะเกิดตรงตำแหน่งที่ตัวชี้อยู่ (โปรแกรมนี้ไม่ย้ายตัวชี้) จึงควรใช้ “การกระทำกับหน้าต่าง → นำมาไว้หน้าสุด” จัดเป้าหมายก่อน หรือใช้เฉพาะการกระทำที่ไม่ขึ้นกับตำแหน่ง เช่น ย้อนกลับ/ไปหน้าถัดไป ถ้าต้องการคลิก N ครั้งหรือเลื่อน N ระดับ ให้เพิ่มจำนวนครั้งด้านล่าง และใช้การหน่วงหลังขั้นตอนคุมจังหวะ</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>เช่น Win+D / Alt+K / Ctrl+Enter / F5 ส่งไปยังหน้าต่างที่โฟกัส; นำเป้าหมายมาด้านหน้าก่อน ชุดปุ่มที่ Windows ใช้เอง (Win+D, Win+6…) จับไม่ได้ — ดับเบิลคลิกช่องนี้เพื่อพิมพ์เอง การสั่งงานเมาส์พร้อมปุ่มร่วมก็อยู่ที่นี่ เลื่อนล้อในช่องนี้เพื่อบันทึก (กด Ctrl เพื่อย่อขยาย, Shift เพื่อเลื่อนแนวนอน) ถ้าแค่เลื่อนหรือคลิกธรรมดา ใช้ขั้นตอน «เมาส์» ง่ายกว่า</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>การเลื่อนจะไปยังหน้าต่างใต้ตัวชี้ ส่วนการคลิกจะเกิดตรงตำแหน่งที่ตัวชี้อยู่ (โปรแกรมนี้ไม่ย้ายตัวชี้) จึงควรใช้ «การกระทำหน้าต่าง → นำไปด้านหน้า» จัดเป้าหมายก่อน หรือใช้เฉพาะการกระทำที่ไม่ขึ้นกับตำแหน่ง เช่น ย้อนกลับ/ไปหน้าถัดไป ถ้าต้องการคลิก N ครั้งหรือเลื่อน N ระดับ ให้เพิ่มจำนวนครั้งด้านล่าง และใช้การหน่วงหลังขั้นตอนคุมจังหวะ</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>เลื่อนลง</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>เลื่อนไปทางขวา</value></data>
   <data name="Mouse_forward" xml:space="preserve"><value>ไปหน้าถัดไป (ปุ่มข้าง)</value></data>
@@ -274,7 +277,7 @@
   <data name="Ed_Command" xml:space="preserve"><value>คำสั่ง</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>ข้อความ</value></data>
   <data name="Ed_TextProcess" xml:space="preserve"><value>โปรเซสเป้าหมาย</value></data>
-  <data name="Ed_TextHint" xml:space="preserve"><value>พิมพ์ทีละอักขระ (ขึ้นบรรทัด = Enter) เว้นโปรเซสว่างเพื่อส่งไปยังหน้าต่างที่โฟกัส (เชื่อถือได้สุด)</value></data>
+  <data name="Ed_TextHint" xml:space="preserve"><value>พิมพ์ทีละอักขระ (ขึ้นบรรทัด = Enter) เว้นช่องโปรเซสให้ว่างเพื่อส่งไปยังหน้าต่างที่โฟกัส (เชื่อถือได้สุด)</value></data>
   <data name="Ed_Message" xml:space="preserve"><value>ข้อความ</value></data>
   <data name="Ed_Speak" xml:space="preserve"><value>อ่านออกเสียง</value></data>
   <data name="Snd_Both" xml:space="preserve"><value>เสียงเตือน + อ่านออกเสียง</value></data>
@@ -308,14 +311,14 @@
   <data name="Warn_RestoreFailed" xml:space="preserve"><value>ไม่สามารถกลับไปยังหน้าต่างก่อนหน้าได้: หน้าต่างที่อยู่ด้านหน้าถูกล็อก หรือหน้าต่างนั้นได้ปิดไปแล้ว</value></data>
   <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>การกระทำกับหน้าต่างที่ไม่รู้จัก: {0}</value></data>
   <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>«หน้าต่างปัจจุบัน» ไม่รับการทำงานนี้ ({0}) การนำมาไว้หน้าสุดไม่มีผล และถ้าจะส่งปุ่มให้ใช้ขั้น «ส่งปุ่ม» จึงข้ามไป</value></data>
-  <data name="Warn_UnknownVolume" xml:space="preserve"><value>การกระทำระดับเสียงไม่รู้จัก: {0}</value></data>
-  <data name="Warn_UnknownKind" xml:space="preserve"><value>ชนิดขั้นไม่รู้จัก: {0}</value></data>
+  <data name="Warn_UnknownVolume" xml:space="preserve"><value>การกระทำระดับเสียงที่ไม่รู้จัก: {0}</value></data>
+  <data name="Warn_UnknownKind" xml:space="preserve"><value>ชนิดของขั้นตอนที่ไม่รู้จัก: {0}</value></data>
   <data name="Warn_SelfSkip" xml:space="preserve"><value>ข้าม «{0}»: เป้าหมายคือ Clockwork เอง (เลี่ยงลูปเริ่มต้นอัตโนมัติ)</value></data>
   <data name="Warn_LaunchFail" xml:space="preserve"><value>เริ่มไม่สำเร็จ: {0} — {1}</value></data>
   <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» ปิดภายใน 0.5 วิ (รหัส {1}); น่าจะเริ่มไม่สำเร็จ</value></data>
   <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>อ่านไฟล์การตั้งค่าไม่ได้ (น่าจะ JSON เสีย) จึงเริ่มด้วยค่าเริ่มต้น ไฟล์เดิมสำรองไว้ที่ {0} แก้ไขแล้วเริ่มโปรแกรมใหม่เพื่อกู้คืน</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>ไม่พบไฟล์สคริปต์ (โปรดระบุพาธแบบเต็ม)</value></data>
-  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>สคริปต์เป็น UTF-8 แบบไม่มี BOM ซึ่ง Windows PowerShell 5.1 ถอดรหัสได้ไม่ถูกต้อง โปรดติดตั้ง PowerShell 7 หรือบันทึกสคริปต์ใหม่เป็น UTF-8 แบบมี BOM</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>สคริปต์ไม่ได้ทำงาน: PowerShell ที่มาพร้อม Windows อ่านการเข้ารหัสแบบนี้ไม่ออก บันทึกสคริปต์ใหม่เป็น UTF-8 แบบมี BOM หรือใช้ PowerShell 7 แทน</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ ส่งแล้ว (ไม่ได้ยืนยัน)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>ข้อผิดพลาด: {0}</value></data>
 
@@ -325,7 +328,7 @@
   <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
 
   <data name="Ed_Title_Group" xml:space="preserve"><value>แก้ไขกลุ่มการทำงาน</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>กลุ่มจะไม่ทำงานเอง — สั่งจากเมนูถาดระบบ คีย์ลัดส่วนกลาง ขั้นตอน "กลุ่มการกระทำ" ในรายการเริ่มต้น หรืองานตามเวลา</value></data>
+  <data name="Ed_GroupHint" xml:space="preserve"><value>กลุ่มจะไม่ทำงานเอง — สั่งจากเมนูถาดระบบ คีย์ลัดส่วนกลาง ขั้นตอน «เรียกใช้กลุ่มการทำงาน» ในรายการเริ่มต้น หรืองานตามเวลา</value></data>
   <data name="Val_GroupName" xml:space="preserve"><value>โปรดกรอกชื่อกลุ่ม</value></data>
 
   <data name="Ed_Title_Reminder" xml:space="preserve"><value>แก้ไขงานตามกำหนดเวลา</value></data>
@@ -335,8 +338,8 @@
   <data name="Ed_Time" xml:space="preserve"><value>เวลา (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>เงื่อนไขเข้าสู่ระบบ</value></data>
   <data name="Ed_SMode_Any" xml:space="preserve"><value>เสมอ</value></data>
-  <data name="Ed_SMode_Before" xml:space="preserve"><value>เฉพาะก่อน N:00</value></data>
-  <data name="Ed_SMode_After" xml:space="preserve"><value>เฉพาะหลัง N:00</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>เฉพาะก่อนชั่วโมงที่กำหนด</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>เฉพาะหลังชั่วโมงที่กำหนด</value></data>
   <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
   <data name="Ed_OnlyBoot" xml:space="preserve"><value>เฉพาะภายใน</value></data>
   <data name="Ed_WithinHint" xml:space="preserve"><value>นาทีหลังบูตจึงนับเป็นการเข้าสู่ระบบ (0 = ทุกครั้งที่เปิด)</value></data>
@@ -415,8 +418,9 @@
   <data name="Sys_Takeover" xml:space="preserve"><value>นำเข้าสู่รายการเริ่มต้น</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>ลบออกจากระบบ</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>ลบ «{0}» หรือไม่?</value></data>
-  <data name="Confirm_DeletePage" xml:space="preserve"><value>จะลบหน้า "{0}" หรือไม่? กระเบื้อง {1} ที่อยู่บนหน้านั้นจะถูกลบไปด้วย การคลิกที่กระเบื้องที่ชี้ไปยังการกระทำจะลบเพียงการอ้างอิงนั้นเท่านั้น ส่วนการกระทำเองจะยังคงอยู่</value></data>
-  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>จะลบหมวดหมู่ "{0}" หรือไม่? หน้า {1} ที่อยู่ในหมวดหมู่นี้จะไม่ถูกลบ — แต่จะกลับไปยัง "{2}"</value></data>
+  <data name="Confirm_Keep" xml:space="preserve"><value>เก็บไว้</value></data>
+  <data name="Confirm_DeletePage" xml:space="preserve"><value>จะลบหน้า «{0}» หรือไม่? ไทล์ {1} ที่อยู่บนหน้านั้นจะถูกลบไปด้วย ไทล์ที่ชี้ไปยังการทำงานจะถูกลบเฉพาะการอ้างอิงนั้นเท่านั้น ส่วนการทำงานเองจะยังคงอยู่</value></data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>จะลบหมวดหมู่ «{0}» หรือไม่? หน้า {1} ที่อยู่ในหมวดหมู่นี้จะไม่ถูกลบ — แต่จะกลับไปยัง «{2}»</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>ลบรายการเริ่มต้น «{0}» ออกจากระบบอย่างถาวรหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้ (หากต้องการเพียงหยุดไม่ให้ทำงานตอนเปิดเครื่อง ให้ยกเลิกการเลือกแทน)</value></data>
   <data name="Confirm_KillPort" xml:space="preserve"><value>ปล่อยพอร์ต {0} หรือไม่ จะสิ้นสุด {1} พร้อมโปรเซสลูก สิ่งที่ยังไม่ได้บันทึกจะหายไป</value></data>
   <data name="Confirm_KillPortAlso" xml:space="preserve"><value>โปรเซสนี้ยังถือพอร์ต {0} อยู่ด้วย ซึ่งจะถูกปล่อยไปพร้อมกัน</value></data>
@@ -427,27 +431,27 @@
   <data name="Val_SearchUrl" xml:space="preserve"><value>URL การค้นหาต้องมี {0} ซึ่งเป็นตำแหน่งที่คำค้นจะถูกใส่ลงไป ถ้าไม่มี ขั้นตอนนี้จะเปิดหน้าเดิมทุกครั้ง</value></data>
   <data name="Ed_CatchUp" xml:space="preserve"><value>แจ้งย้อนหลังถ้าพลาด (หลังสลีป/ปิดเครื่อง)</value></data>
   <data name="Unit_Minutes" xml:space="preserve"><value>{0} นาที</value></data>
-  <data name="Warn_KeyNoMain" xml:space="preserve"><value>คีย์ลัด "{0}" ไม่มีปุ่มหลัก จึงไม่ได้ส่ง</value></data>
-  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>ชื่อปุ่มที่ไม่รู้จัก "{0}" (ตัวเลขหลายหลักไม่ใช่ปุ่ม) คีย์ลัด "{1}" ไม่ได้ส่ง</value></data>
-  <data name="Warn_KeyUnknown" xml:space="preserve"><value>ปุ่มที่ไม่รู้จัก "{0}" คีย์ลัด "{1}" ไม่ได้ส่ง</value></data>
-  <data name="Warn_KeyRejected" xml:space="preserve"><value>คีย์ลัด "{0}" ถูกระบบปฏิเสธ (เกิดขึ้นเมื่อมีหน้าต่างสิทธิ์สูง/เดสก์ท็อปนิรภัยอยู่ด้านหน้า) ไม่มีผล</value></data>
-  <data name="Warn_KeyPartial" xml:space="preserve"><value>คีย์ลัด "{0}" ถูกส่งเพียงบางส่วน ({1}/{2}) ส่งการปล่อยปุ่มซ้ำแล้ว ไม่มีผล</value></data>
-  <data name="Warn_TextSendFail" xml:space="preserve"><value>ส่งข้อความ: ไม่สามารถนำหน้าต่าง "{0}" มาไว้ด้านหน้าได้ จึงไม่ได้ส่ง</value></data>
+  <data name="Warn_KeyNoMain" xml:space="preserve"><value>คีย์ลัด «{0}» ไม่มีปุ่มหลัก จึงไม่ได้ส่ง</value></data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>ชื่อปุ่มที่ไม่รู้จัก «{0}» (ตัวเลขหลายหลักไม่ใช่ปุ่ม) คีย์ลัด «{1}» ไม่ได้ส่ง</value></data>
+  <data name="Warn_KeyUnknown" xml:space="preserve"><value>ปุ่มที่ไม่รู้จัก «{0}» คีย์ลัด «{1}» ไม่ได้ส่ง</value></data>
+  <data name="Warn_KeyRejected" xml:space="preserve"><value>คีย์ลัด «{0}» ถูกระบบปฏิเสธ (เกิดขึ้นเมื่อมีหน้าต่างสิทธิ์สูง/เดสก์ท็อปนิรภัยอยู่ด้านหน้า) ไม่มีผล</value></data>
+  <data name="Warn_KeyPartial" xml:space="preserve"><value>คีย์ลัด «{0}» ถูกส่งเพียงบางส่วน ({1}/{2}) ส่งการปล่อยปุ่มซ้ำแล้ว ไม่มีผล</value></data>
+  <data name="Warn_TextSendFail" xml:space="preserve"><value>ส่งข้อความ: ไม่สามารถนำหน้าต่าง «{0}» มาไว้ด้านหน้าได้ จึงไม่ได้ส่ง</value></data>
   <data name="Warn_SaveConfigFail" xml:space="preserve"><value>บันทึกการตั้งค่าไม่สำเร็จ: {0} (การเปลี่ยนแปลงอยู่ในหน่วยความจำเท่านั้นและจะหายไปเมื่อรีสตาร์ท)</value></data>
-  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน "{0}" อ้างอิงไม่มีอยู่แล้ว ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
-  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน "{0}" อ้างอิงถูกปิดใช้งาน ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน «{0}» อ้างอิงไม่มีอยู่แล้ว ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่การแจ้งเตือน «{0}» อ้างอิงถูกปิดใช้งาน ครั้งนี้จึงไม่ได้ทำอะไร</value></data>
   <data name="Skip_GroupNotFound" xml:space="preserve"><value>ไม่พบกลุ่มการทำงานที่อ้างอิง</value></data>
-  <data name="Skip_GroupDisabled" xml:space="preserve"><value>กลุ่มการทำงาน "{0}" ถูกปิดใช้งาน ข้ามไป</value></data>
+  <data name="Skip_GroupDisabled" xml:space="preserve"><value>กลุ่มการทำงาน «{0}» ถูกปิดใช้งาน ข้ามไป</value></data>
   <data name="Skip_GroupReentrant" xml:space="preserve"><value>เข้าซ้ำในกลุ่มการทำงาน (การอ้างอิงแบบวนซ้ำหรือกำลังทำงานอยู่แล้ว) ข้ามไป</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
-  <data name="Toast_GroupCancelled" xml:space="preserve"><value>ขอให้ยกเลิกกลุ่มการทำงาน “{0}” แล้ว</value></data>
-  <data name="Toast_GroupStarted" xml:space="preserve"><value>เริ่มกลุ่มการทำงาน “{0}” แล้ว</value></data>
-  <data name="Toast_GroupBusy" xml:space="preserve"><value>กลุ่มการทำงาน “{0}” กำลังทำงานอยู่ (ถูกเรียกจากที่อื่น) ปุ่มนี้หยุดมันไม่ได้ กรุณาใช้ปุ่มลัดหยุดฉุกเฉิน</value></data>
+  <data name="Toast_GroupCancelled" xml:space="preserve"><value>ขอให้ยกเลิกกลุ่มการทำงาน «{0}» แล้ว</value></data>
+  <data name="Toast_GroupStarted" xml:space="preserve"><value>เริ่มกลุ่มการทำงาน «{0}» แล้ว</value></data>
+  <data name="Toast_GroupBusy" xml:space="preserve"><value>กลุ่มการทำงาน «{0}» กำลังทำงานอยู่ (ถูกเรียกจากที่อื่น) ปุ่มนี้หยุดมันไม่ได้ กรุณาใช้ปุ่มลัดหยุดฉุกเฉิน</value></data>
   <data name="Warn_RunBudget" xml:space="preserve"><value>การทำงานหยุดที่ขีดจำกัด 5000 ขั้นตอน ขั้นตอนที่เหลือถูกข้าม (ตรวจสอบว่ามีจำนวนการทำซ้ำมากเกินไปหรือไม่)</value></data>
-  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ไม่มีอยู่แล้ว ข้ามไป</value></data>
-  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด "ใช่" ถูกปิดใช้งาน ข้ามไป</value></data>
-  <data name="Warn_OnYesFailed" xml:space="preserve"><value>ไม่สามารถทำงานหลังกด “ใช่” ได้: {0}</value></data>
-  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>ยังไม่รองรับการรับช่วงงานตามกำหนดเวลา รองรับเฉพาะคีย์ Run ในรีจิสทรีและรายการในโฟลเดอร์เริ่มต้นเท่านั้น</value></data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด «ใช่» ไม่มีอยู่แล้ว ข้ามไป</value></data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>กลุ่มการทำงานที่จะรันเมื่อกด «ใช่» ถูกปิดใช้งาน ข้ามไป</value></data>
+  <data name="Warn_OnYesFailed" xml:space="preserve"><value>ไม่สามารถทำงานหลังกด «ใช่» ได้: {0}</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>รายการนี้นำเข้าไม่ได้ — นำเข้าได้เฉพาะคีย์ Run ในรีจิสทรีและรายการในโฟลเดอร์เริ่มต้นเท่านั้น</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>การรันรายการเริ่มต้นถูกขัดจังหวะ: {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>ดูบันทึกการเริ่มต้นครั้งล่าสุด</value></data>
   <data name="Tray_History" xml:space="preserve"><value>ล่าสุด</value></data>
@@ -461,17 +465,17 @@
   <data name="Log_BootDelay" xml:space="preserve"><value>หน่วงเวลาตอนเริ่ม: {0} วินาที</value></data>
   <data name="Log_BudgetHit" xml:space="preserve"><value>การทำงานครั้งนี้ถึงเพดาน {0} ขั้น ขั้นที่เหลือจึงไม่ได้ทำงาน</value></data>
   <data name="Log_Nth" xml:space="preserve"><value> ({0} จาก {1})</value></data>
-  <data name="Log_GroupBusy" xml:space="preserve"><value>กลุ่มการกระทำ “{0}” กำลังทำงานอยู่แล้ว (ถูกเรียกจากที่อื่น) จึงข้ามในครั้งนี้</value></data>
-  <data name="Log_GroupMissing" xml:space="preserve"><value>ไม่พบกลุ่มการกระทำ</value></data>
-  <data name="Log_GroupDisabled" xml:space="preserve"><value>กลุ่มการกระทำ “{0}” ถูกปิดอยู่ จึงข้ามไป</value></data>
+  <data name="Log_GroupBusy" xml:space="preserve"><value>กลุ่มการทำงาน «{0}» กำลังทำงานอยู่แล้ว (ถูกเรียกจากที่อื่น) จึงข้ามในครั้งนี้</value></data>
+  <data name="Log_GroupMissing" xml:space="preserve"><value>ไม่พบกลุ่มการทำงาน</value></data>
+  <data name="Log_GroupDisabled" xml:space="preserve"><value>กลุ่มการทำงาน «{0}» ถูกปิดอยู่ จึงข้ามไป</value></data>
   <data name="Log_GroupCycle" xml:space="preserve"><value>อ้างอิงวนกลับ จึงข้ามไป</value></data>
-  <data name="Log_RunGroup" xml:space="preserve"><value>เรียกใช้กลุ่มการกระทำ: {0}</value></data>
+  <data name="Log_RunGroup" xml:space="preserve"><value>เรียกใช้กลุ่มการทำงาน: {0}</value></data>
   <data name="Log_Stopped" xml:space="preserve"><value>หยุดด้วยตนเอง ขั้นถัดไปจึงไม่ได้ทำงาน</value></data>
-  <data name="Log_HdrStopped" xml:space="preserve"><value>การทำงานครั้งนี้ถูกหยุดด้วยตนเอง (ปุ่มหยุดฉุกเฉิน หรือ “หยุด” ในถาดระบบ)</value></data>
+  <data name="Log_HdrStopped" xml:space="preserve"><value>การทำงานครั้งนี้ถูกหยุดด้วยตนเอง (ปุ่มหยุดฉุกเฉิน หรือ «หยุด» ในถาดระบบ)</value></data>
   <data name="Err_JsonNull" xml:space="preserve"><value>ไฟล์นี้แจงแล้วได้ค่าว่าง ไม่ใช่ไฟล์การตั้งค่า</value></data>
   <data name="Err_ClearClipboard" xml:space="preserve"><value>ล้างคลิปบอร์ดไม่สำเร็จ: {0}</value></data>
-  <data name="Err_SoundNotWav" xml:space="preserve"><value>"{0}" ไม่ใช่ไฟล์ .wav ขั้นตอนนี้เล่นไฟล์ wav เท่านั้น</value></data>
-  <data name="Err_SoundMissing" xml:space="preserve"><value>ไม่พบไฟล์เสียง: "{0}"</value></data>
+  <data name="Err_SoundNotWav" xml:space="preserve"><value>«{0}» ไม่ใช่ไฟล์ .wav ขั้นตอนนี้เล่นไฟล์ wav เท่านั้น</value></data>
+  <data name="Err_SoundMissing" xml:space="preserve"><value>ไม่พบไฟล์เสียง: «{0}»</value></data>
   <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>ล้างถังรีไซเคิลไม่สำเร็จ: {0}</value></data>
   <data name="Err_UnknownSysCmd" xml:space="preserve"><value>คำสั่งระบบที่ไม่รู้จัก: {0}</value></data>
   <data name="Tray_RunGroup" xml:space="preserve"><value>รัน: {0}</value></data>
@@ -479,9 +483,9 @@
   <data name="Tray_DndEndOfDay" xml:space="preserve"><value>จนจบวันนี้</value></data>
   <data name="Toast_DndEndOfDay" xml:space="preserve"><value>พักการเตือนจนจบวันนี้แล้ว</value></data>
   <data name="Tray_DndResumeHours" xml:space="preserve"><value>เตือนต่อ (เหลือ {0} ชม.)</value></data>
-  <data name="Tray_DndMenu" xml:space="preserve"><value>หยุดการแจ้งเตือน</value></data>
+  <data name="Tray_DndMenu" xml:space="preserve"><value>พักการแจ้งเตือน</value></data>
   <data name="Tray_Hours" xml:space="preserve"><value>{0} ชม.</value></data>
-  <data name="Toast_DndOn" xml:space="preserve"><value>หยุดการแจ้งเตือนแล้ว {0} ชม.</value></data>
+  <data name="Toast_DndOn" xml:space="preserve"><value>พักการแจ้งเตือน {0} ชม.</value></data>
   <data name="Toast_DndOff" xml:space="preserve"><value>กลับมาแจ้งเตือนแล้ว</value></data>
   <data name="Tpl_Focus" xml:space="preserve"><value>โหมดโฟกัส</value></data>
   <data name="Tpl_Meeting" xml:space="preserve"><value>โหมดประชุม</value></data>
@@ -505,7 +509,7 @@
   <data name="Smp_RemBills" xml:space="preserve"><value>ตรวจบิลและค่าสมาชิกของเดือนนี้ (ตัวอย่าง · ทุกวันที่ 1)</value></data>
   <data name="Smp_RemSleep" xml:space="preserve"><value>ได้เวลานอนแล้ว (ตัวอย่าง)</value></data>
   <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>การทำงานนี้ต้องใช้สิทธิ์ผู้ดูแลระบบ เปิด Clockwork ใหม่ในฐานะผู้ดูแลระบบหรือไม่?</value></data>
-  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>กลุ่มการทำงาน "{0}" ถูกอ้างอิงโดยการแจ้งเตือน {1} รายการและขั้นตอน {2} รายการ การลบจะล้างการอ้างอิงเหล่านี้ด้วย (การแจ้งเตือนจะเหลือแค่ป๊อปอัป ขั้นตอนที่อ้างอิงจะถูกลบ) ยังต้องการลบหรือไม่?</value></data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>กลุ่มการทำงาน «{0}» ถูกอ้างอิงโดยการแจ้งเตือน {1} รายการและขั้นตอน {2} รายการ การลบจะล้างการอ้างอิงเหล่านี้ด้วย (การแจ้งเตือนจะเหลือแค่ป๊อปอัป ขั้นตอนที่อ้างอิงจะถูกลบ) ยังต้องการลบหรือไม่?</value></data>
   <data name="Btn_Browse" xml:space="preserve"><value>เรียกดู…</value></data>
   <data name="Btn_Pick" xml:space="preserve"><value>เลือก…</value></data>
   <data name="Btn_Capture" xml:space="preserve"><value>จับปุ่ม</value></data>
@@ -526,8 +530,8 @@
   <data name="Capture_Key" xml:space="preserve"><value>จับปุ่มกด</value></data>
   <data name="Ed_GroupHotkey" xml:space="preserve"><value>ปุ่มลัดส่วนกลาง</value></data>
   <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>คลิกแล้วกดปุ่มลัดเพื่อเรียกใช้กลุ่มนี้ได้ทุกเมื่อ; กดซ้ำขณะกำลังทำงานเพื่อหยุด; Esc ยกเลิก, Delete ล้าง</value></data>
-  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>ลงทะเบียนปุ่มลัด {1} ของกลุ่มการทำงาน “{0}” ไม่สำเร็จ: อาจถูกใช้งานอยู่แล้ว</value></data>
-  <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย “{1}” แล้ว โปรดเลือกชุดอื่น</value></data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>ลงทะเบียนปุ่มลัด {1} ของกลุ่มการทำงาน «{0}» ไม่สำเร็จ: อาจถูกใช้งานอยู่แล้ว</value></data>
+  <data name="Val_HotkeyDup" xml:space="preserve"><value>ปุ่มลัด {0} ถูกใช้โดย «{1}» แล้ว โปรดเลือกชุดอื่น</value></data>
   <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} เป็นชุดปุ่มที่ระบบสงวนไว้ (การลงทะเบียนจะยึดปุ่มระบบ) ใช้เป็นปุ่มลัดไม่ได้</value></data>
   <data name="Ed_GroupRepeat" xml:space="preserve"><value>ทำซ้ำทั้งกลุ่ม</value></data>
   <data name="Ed_GroupShowInTray" xml:space="preserve"><value>แสดงในเมนูถาด</value></data>
@@ -540,7 +544,7 @@
   <data name="Config_Exported" xml:space="preserve"><value>ส่งออกการตั้งค่าไปยัง: {0}</value></data>
   <data name="Config_Imported" xml:space="preserve"><value>นำเข้าการตั้งค่าแล้ว กำลังรีสตาร์ทเพื่อใช้งาน</value></data>
   <data name="Config_ImportFail" xml:space="preserve"><value>นำเข้าล้มเหลว: {0}</value></data>
-  <data name="Config_ImportConfirm" xml:space="preserve"><value>การนำเข้าจะเขียนทับการตั้งค่าปัจจุบันทั้งหมด (รายการเริ่มต้น / การเตือน / กลุ่มการกระทำ / การตั้งค่า) ดำเนินการต่อหรือไม่?</value></data>
+  <data name="Config_ImportConfirm" xml:space="preserve"><value>การนำเข้าจะเขียนทับการตั้งค่าปัจจุบันทั้งหมด (รายการเริ่มต้น / การเตือน / กลุ่มการทำงาน / การตั้งค่า) ดำเนินการต่อหรือไม่?</value></data>
   <data name="Config_Filter" xml:space="preserve"><value>การตั้งค่า Clockwork|*.json|ไฟล์ทั้งหมด|*.*</value></data>
   <data name="Config_ExportFail" xml:space="preserve"><value>ส่งออกล้มเหลว: {0}</value></data>
   <data name="Dup_Suffix" xml:space="preserve"><value> (สำเนา)</value></data>
@@ -584,11 +588,11 @@
   <data name="Ed_BrightnessHint" xml:space="preserve"><value>ใช้ได้เฉพาะจอที่ระบบควบคุม (จอในตัวของโน้ตบุ๊ก) จอภายนอกไม่รองรับ</value></data>
   <data name="Ed_OnlyAfter" xml:space="preserve"><value>เฉพาะหลัง</value></data>
   <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
-  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>รูปแบบ ชม:นาที เช่น 18:30 ใส่แค่ชั่วโมง (เช่น 18) ก็ได้ ค่าเริ่มต้น 18:00</value></data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>รูปแบบ H:mm เช่น 18:30 ใส่แค่ชั่วโมง (เช่น 18) ก็ได้ ค่าเริ่มต้น 18:00</value></data>
   <data name="Ed_Cond_Any" xml:space="preserve"><value>ไม่จำกัด</value></data>
   <data name="Ed_IfProcess" xml:space="preserve"><value>เงื่อนไขโปรเซส</value></data>
-  <data name="Ed_IfProc_Running" xml:space="preserve"><value>โปรเซสนั้นกำลังทำงาน</value></data>
-  <data name="Ed_IfProc_Not" xml:space="preserve"><value>โปรเซสนั้นไม่ได้ทำงาน</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>โปรเซสทำงาน</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>โปรเซสไม่ได้ทำงาน</value></data>
   <data name="Ed_IfPower" xml:space="preserve"><value>เงื่อนไขแหล่งจ่ายไฟ</value></data>
   <data name="Ed_IfPower_Ac" xml:space="preserve"><value>เฉพาะเมื่อเสียบไฟ</value></data>
   <data name="Ed_IfPower_Battery" xml:space="preserve"><value>เฉพาะเมื่อใช้แบตเตอรี่</value></data>
@@ -611,7 +615,7 @@
   <data name="Ed_IdleHint" xml:space="preserve"><value>ทำงานหนึ่งครั้งเมื่อไม่มีการใช้คีย์บอร์ดหรือเมาส์นานเท่านี้นาที และจะเริ่มนับใหม่เมื่อคุณกลับมา</value></data>
   <data name="Ed_BatteryPercent" xml:space="preserve"><value>แบตเตอรี่ต่ำกว่า (%)</value></data>
   <data name="Ed_BatteryHint" xml:space="preserve"><value>ทำงานหนึ่งครั้งเมื่อใช้แบตเตอรี่และระดับลดต่ำกว่านี้ จะพร้อมทำงานอีกครั้งเมื่อชาร์จกลับขึ้นมาหรือเสียบไฟ</value></data>
-  <data name="Ed_EventHint" xml:space="preserve"><value>ทำงานทันทีที่เหตุการณ์เกิดขึ้น ช่องวันด้านล่างยังใช้จำกัดวันที่มีผลได้ ส่วนช่วงผ่อนผันและการชดเชยที่พลาดไม่เกี่ยวกับเหตุการณ์จึงถูกซ่อนไว้</value></data>
+  <data name="Ed_EventHint" xml:space="preserve"><value>ทำงานทันทีที่เหตุการณ์เกิดขึ้น ช่องวันด้านล่างยังใช้จำกัดวันที่มีผลได้ ส่วน «ผ่อนผัน» กับ «แจ้งย้อนหลังถ้าพลาด» ไม่เกี่ยวกับเหตุการณ์ จึงถูกซ่อนไว้</value></data>
   <data name="Period_OnEvent" xml:space="preserve"><value>ทุกครั้งที่เกิด</value></data>
   <data name="Time_Idle" xml:space="preserve"><value>ว่าง {0} นาที</value></data>
   <data name="Time_LowBattery" xml:space="preserve"><value>แบตเตอรี่ &lt; {0}%</value></data>
@@ -624,15 +628,15 @@
   <data name="Settings_Boot" xml:space="preserve"><value>การเริ่มต้น</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>สำรองข้อมูล</value></data>
   <data name="Settings_BackupTip" xml:space="preserve"><value>ส่งออกเป็นไฟล์ .json ไฟล์เดียว การนำเข้าจะแทนที่การตั้งค่าปัจจุบันทั้งหมด</value></data>
-  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 วินาที และมีผลเฉพาะเมื่อเปิด "เริ่มเมื่อเข้าสู่ระบบ": จะรอเท่านี้หลังเข้าสู่ระบบก่อนรันรายการ เพื่อเลี่ยงช่วงที่เครื่องกำลังยุ่ง การรันซ้ำด้วยตนเองไม่ได้รับผลกระทบ</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 วินาที และมีผลเฉพาะเมื่อเปิด «เริ่มเมื่อเข้าสู่ระบบ»: จะรอเท่านี้หลังเข้าสู่ระบบก่อนรันรายการ เพื่อเลี่ยงช่วงที่เครื่องกำลังยุ่ง การรันซ้ำด้วยตนเองไม่ได้รับผลกระทบ</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>รอจนระบบพร้อม (เดสก์ท็อป / เครือข่าย)</value></data>
-  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>ไปต่อทันทีที่ทั้งสองพร้อม รอไม่เกิน 90 วินาที แล้วจึงบวกหน่วงเวลาคงที่ด้านบนเพิ่ม เปิดไว้เมื่อรายการทำงานเร็วเกินไปจนโปรแกรมยังไม่ขึ้น</value></data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>ไปต่อทันทีที่ทั้งสองพร้อม รอไม่เกิน 90 วินาที แล้วจึงบวกหน่วงเวลาคงที่ด้านบนเพิ่ม เปิดไว้เมื่อรายการรันเร็วเกินไปจนโปรแกรมยังไม่ขึ้น</value></data>
   <data name="Menu_SecOpen" xml:space="preserve"><value>เปิด</value></data>
   <data name="Menu_SecControl" xml:space="preserve"><value>ควบคุมโปรแกรม</value></data>
   <data name="Menu_SecSystem" xml:space="preserve"><value>ระบบและเสียง</value></data>
   <data name="Menu_SecFlow" xml:space="preserve"><value>โฟลว์</value></data>
-  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>ถ้าจะเปิดแอปตอนเข้าระบบพร้อมลำดับและหน่วงเวลา รายการเริ่มต้นสะดวกกว่า แต่เงื่อนไขอย่าง “เฉพาะภายใน N นาทีหลังเปิดเครื่อง” หรือ “เฉพาะตอนเช้า” คือหน้าที่ของตรงนี้</value></data>
-  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>ยังไม่มีกลุ่มการทำงาน — สร้างจากเทมเพลตในแท็บ “กลุ่มการทำงาน” ก่อน แล้วค่อยกลับมาอ้างอิงที่นี่</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>ถ้าจะเปิดแอปตอนเข้าระบบพร้อมลำดับและหน่วงเวลา รายการเริ่มต้นสะดวกกว่า แต่เงื่อนไขอย่าง «เฉพาะภายใน N นาทีหลังเปิดเครื่อง» หรือ «เฉพาะตอนเช้า» คือหน้าที่ของตรงนี้</value></data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>ยังไม่มีกลุ่มการทำงาน — สร้างจากเทมเพลตในแท็บ «กลุ่มการทำงาน» ก่อน แล้วค่อยกลับมาอ้างอิงที่นี่</value></data>
   <data name="Ed_CondHeader" xml:space="preserve"><value>เงื่อนไขและการทำซ้ำ: {0}</value></data>
   <data name="Ed_CondAlways" xml:space="preserve"><value>ทำงานเสมอ</value></data>
   <data name="Ed_AdvHeader" xml:space="preserve"><value>ขั้นสูง: {0}</value></data>
@@ -650,22 +654,22 @@
   <data name="Ed_BusyMinutes" xml:space="preserve"><value>นาทีที่ใช้งาน</value></data>
   <data name="Ed_BusyHint" xml:space="preserve"><value>แจ้งครั้งเดียวเมื่อใช้งานต่อเนื่องครบจำนวนนาทีนี้ หากไม่แตะเครื่องครบ 1 นาทีจะเริ่มนับใหม่</value></data>
   <data name="Settings_PanelHotkey" xml:space="preserve"><value>ปุ่มแผงด่วน</value></data>
-  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>เปิดแผงไทล์ตรงตำแหน่งเมาส์ หนึ่งไทล์ต่อหนึ่งการทำงาน Esc เพื่อยกเลิก Del เพื่อล้าง เมื่อล้างแล้วยังเปิดได้ด้วยการกดปุ่มกลางค้างหรือเมนูซิสเทมเทรย์</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>เปิดแผงไทล์ตรงตำแหน่งเมาส์ หนึ่งไทล์ต่อหนึ่งการทำงาน Esc เพื่อยกเลิก Del เพื่อล้าง เมื่อล้างแล้วยังเปิดได้ด้วยการกดปุ่มกลางค้างหรือเมนูถาดระบบ</value></data>
   <data name="Tray_Panel" xml:space="preserve"><value>เปิดแผงด่วน</value></data>
   <data name="Panel_Hint" xml:space="preserve"><value>Esc เพื่อปิด</value></data>
   <data name="Panel_Empty" xml:space="preserve"><value>แผงยังว่างอยู่ การกระทำที่คุณใส่ไว้จะมาอยู่ตรงนี้</value></data>
   <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>ข้ามรายการเริ่มต้นแล้ว ลบ {0} เพื่อให้ทำงานอัตโนมัติอีกครั้ง</value></data>
   <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>ข้ามรายการเริ่มต้นเพราะกด Shift ค้างไว้ตอนเปิด ครั้งนี้เท่านั้น ครั้งต่อไปจะทำงานตามปกติ</value></data>
-  <data name="Warn_GroupNotFound" xml:space="preserve"><value>ไม่พบกลุ่มการทำงานชื่อ "{0}" จึงไม่ได้เรียกใช้อะไร</value></data>
-  <data name="Warn_GroupDisabled" xml:space="preserve"><value>กลุ่มการทำงาน "{0}" ถูกปิดอยู่ จึงไม่ได้เรียกใช้อะไร</value></data>
+  <data name="Warn_GroupNotFound" xml:space="preserve"><value>ไม่พบกลุ่มการทำงานชื่อ «{0}» จึงไม่ได้เรียกใช้อะไร</value></data>
+  <data name="Warn_GroupDisabled" xml:space="preserve"><value>กลุ่มการทำงาน «{0}» ถูกปิดอยู่ จึงไม่ได้เรียกใช้อะไร</value></data>
   <data name="Unit_Ms" xml:space="preserve"><value>มิลลิวินาที</value></data>
   <data name="Settings_MiddleLongPress" xml:space="preserve"><value>กดปุ่มกลางของเมาส์ค้างไว้เพื่อเปิดแผง</value></data>
   <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>การคลิกปุ่มกลางแบบปกติยังใช้ได้ — การกดสั้นจะถูกส่งต่อไปตามเดิม ปิดไว้เป็นค่าเริ่มต้น เพราะต้องใช้ hook เมาส์ระดับระบบ</value></data>
   <data name="Settings_LongPressMs" xml:space="preserve"><value>ระยะเวลากด (มิลลิวินาที)</value></data>
-  <data name="Warn_MouseHookFail" xml:space="preserve"><value>ติดตั้ง hook เมาส์ไม่ได้ จึงปิดการกดปุ่มกลางค้างไว้ อาจถูกซอฟต์แวร์ความปลอดภัยหรือ group policy บล็อก แผงยังเปิดได้จากปุ่มลัดหรือเมนูซิสเทมเทรย์</value></data>
+  <data name="Warn_MouseHookFail" xml:space="preserve"><value>ติดตั้ง hook เมาส์ไม่ได้ จึงปิดการกดปุ่มกลางค้างไว้ อาจถูกซอฟต์แวร์ความปลอดภัยหรือ group policy บล็อก แผงยังเปิดได้จากปุ่มลัดหรือเมนูถาดระบบ</value></data>
   <data name="Settings_Panel" xml:space="preserve"><value>แผงด่วน</value></data>
   <data name="Settings_UsePanel" xml:space="preserve"><value>ใช้แผงด่วน</value></data>
-  <data name="Settings_UsePanelTip" xml:space="preserve"><value>ปิดแล้วคีย์ลัดจะคืนให้โปรแกรมอื่น ไม่ติดตั้งฮุกปุ่มกลาง และรายการในถาดก็หายไป หน้าแผงของคุณยังอยู่ ยังจัดได้จาก «จัดการแผง…»</value></data>
+  <data name="Settings_UsePanelTip" xml:space="preserve"><value>ปิดแล้วคีย์ลัดจะคืนให้โปรแกรมอื่น ไม่ติดตั้ง hook ปุ่มกลาง และรายการในถาดก็หายไป หน้าแผงของคุณยังอยู่ ยังจัดได้จาก «จัดการแผง…»</value></data>
   <data name="Settings_UseGestures" xml:space="preserve"><value>ใช้ท่าทางเมาส์</value></data>
   <data name="Settings_UseGesturesTip" xml:space="preserve"><value>ปิดแล้วจะไม่เฝ้าดูปุ่มขวาเลย ปุ่มขวาจึงกลับมาทำงานตามปกติ ตัวท่าทางวาดได้ในตัวจัดการท่าทาง จากแถบข้างของแท็บ «กลุ่มการทำงาน»</value></data>
   <data name="Settings_PanelLayout" xml:space="preserve"><value>เลย์เอาต์</value></data>
@@ -682,7 +686,7 @@
   <data name="Settings_PanelTopRows" xml:space="preserve"><value>แถวบน</value></data>
   <data name="Settings_PanelBottomRows" xml:space="preserve"><value>แถวล่าง</value></data>
   <data name="Ed_Icon" xml:space="preserve"><value>ไอคอนแผง</value></data>
-  <data name="Ed_IconHint" xml:space="preserve"><value>ถ้าเว้นว่างไว้จะเติมให้เอง «เรียกใช้โปรแกรม» จะใช้ไอคอนของเป้าหมายเอง ส่วนอย่างอื่นจะได้ไอคอนเส้นตามชนิดของมัน</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>ถ้าเว้นว่างไว้จะเติมให้เอง «เปิดแอป» จะใช้ไอคอนของเป้าหมายเอง ส่วนอย่างอื่นจะได้ไอคอนเส้นตามชนิดของมัน</value></data>
   <data name="Btn_Close" xml:space="preserve"><value>ปิด</value></data>
   <data name="Panel_Manager" xml:space="preserve"><value>จัดการแผง</value></data>
   <data name="Panel_Global" xml:space="preserve"><value>แอปใดก็ได้</value></data>
@@ -695,7 +699,7 @@
   <data name="Panel_Category" xml:space="preserve"><value>หมวด</value></data>
   <data name="Panel_Pages" xml:space="preserve"><value>หน้า</value></data>
   <data name="Panel_CategoryHint" xml:space="preserve"><value>หน้านี้อยู่ในหมวดใด แถวบนมีแท็บละหนึ่งหมวด เลือกแล้วจะแสดงเฉพาะหน้าในหมวดนั้น</value></data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>คลิกหมวดด้านบน คลิกหน้าด้านซ้าย ดับเบิลคลิกเพื่อเปลี่ยนชื่อ ลากแท็บเพื่อจัดลำดับ ปล่อยลงบนหมวดเพื่อย้ายหน้านั้นเข้าหมวด และปล่อยช่องลงบนแท็บเพื่อย้ายเข้าหน้านั้น คลิกขวาที่แท็บเพื่อเปลี่ยนชื่อหรือลบ</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>คลิกหมวดด้านบน คลิกหน้าด้านซ้าย ดับเบิลคลิกเพื่อเปลี่ยนชื่อ ลากแท็บเพื่อจัดลำดับ ปล่อยลงบนหมวดเพื่อย้ายหน้านั้นเข้าหมวด และปล่อยไทล์ลงบนแท็บเพื่อย้ายเข้าหน้านั้น คลิกขวาที่แท็บเพื่อเปลี่ยนชื่อหรือลบ</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>แสดงแท็บด้านซ้าย</value></data>
   <data name="Panel_ShowTopTabs" xml:space="preserve"><value>แสดงแถวหมวด</value></data>
   <data name="Panel_BarsHint" xml:space="preserve"><value>ด้านบนใช้เลือกหมวด ด้านซ้ายจะแสดงหน้าในหมวดนั้น ถ้ามีหมวดเดียวจะไม่วาดแถวบน และถ้าหมวดปัจจุบันมีหน้าเดียวก็ไม่วาดแถวซ้าย เครื่องหมายสองช่องนี้ใช้บังคับซ่อนแม้มีหลายรายการ ส่วนหน้าต่างจัดการจะคงแถวหมวดไว้เสมอ เครื่องหมาย + บนแถวนั้นคือทางสร้างหมวดใหม่</value></data>
@@ -712,7 +716,7 @@
   <data name="Theme_dark" xml:space="preserve"><value>มืด</value></data>
   <data name="Theme_light" xml:space="preserve"><value>สว่าง</value></data>
   <data name="Theme_system" xml:space="preserve"><value>ตาม Windows</value></data>
-  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork จะเริ่มใหม่ทันทีเพื่อใช้ธีมใหม่ "ตาม Windows" จะอ่านโหมดแอปของ Windows</value></data>
+  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork จะเริ่มใหม่ทันทีเพื่อใช้ธีมใหม่ «ตาม Windows» จะอ่านโหมดแอปของ Windows</value></data>
 
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
   <data name="Btn_InsertVar" xml:space="preserve"><value>แทรกตัวแปร</value></data>
@@ -740,14 +744,14 @@
   <data name="Var_SecEnv" xml:space="preserve"><value>ตัวแปรสภาพแวดล้อม</value></data>
   <data name="Panel_UsageCount" xml:space="preserve"><value>{0} ครั้ง</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>ล้างสถิติการคลิก</value></data>
-  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>รีเซ็ตจำนวนคลิกของไทล์แผงควบคุมเป็นศูนย์ ลบเฉพาะสถิติเท่านั้น จะไม่แตะต้องการตั้งค่าหรือไทล์ใด ๆ</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>รีเซ็ตจำนวนคลิกของไทล์บนแผงเป็นศูนย์ ลบเฉพาะสถิติเท่านั้น จะไม่แตะต้อง การตั้งค่า หรือไทล์ใด ๆ</value></data>
   <data name="Confirm_ResetUsage" xml:space="preserve"><value>ล้างสถิติการคลิกของไทล์ทั้งหมดบนแผงควบคุมหรือไม่ การกระทำนี้ไม่สามารถย้อนกลับได้</value></data>
-  <data name="Kind_step" xml:space="preserve"><value>อ้างอิงรายการเริ่มต้น</value></data>
-  <data name="Sum_RunRef" xml:space="preserve"><value>อ้างอิงรายการเริ่มต้น: {0}</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>รันรายการเริ่มต้น</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>รันรายการเริ่มต้น: {0}</value></data>
   <data name="Ed_RefTarget" xml:space="preserve"><value>รายการเริ่มต้น</value></data>
   <data name="Ed_RefMissing" xml:space="preserve"><value>(ลบเป้าหมายแล้ว)</value></data>
   <data name="Skip_RefNotFound" xml:space="preserve"><value>ไม่พบรายการเริ่มต้น</value></data>
-  <data name="Skip_RefDisabled" xml:space="preserve"><value>รายการเริ่มต้น "{0}" ถูกปิดใช้งาน; ข้าม</value></data>
+  <data name="Skip_RefDisabled" xml:space="preserve"><value>รายการเริ่มต้น «{0}» ถูกปิดใช้งาน; ข้าม</value></data>
   <data name="Ed_NoRefsHint" xml:space="preserve"><value>รายการเริ่มต้นยังว่างอยู่ — เพิ่มรายการที่นั่นก่อน แล้วกลับมาอ้างอิงที่นี่</value></data>
-  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>"{0}" ถูกอ้างอิงโดย {1} tiles ในพาเนล การลบจะเอา tiles เหล่านั้นออกด้วย ลบต่อหรือไม่?</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>«{0}» ถูกอ้างอิงโดยไทล์บนแผง {1} รายการ การลบจะเอาไทล์เหล่านั้นออกด้วย ลบต่อหรือไม่?</value></data>
 </root>

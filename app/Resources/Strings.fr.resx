@@ -14,6 +14,7 @@
   <data name="Launch_Hint" xml:space="preserve"><value>S'exécute une fois à l'ouverture de session, de haut en bas · glissez les lignes pour réordonner. Sur horaire ou événement → Tâches planifiées ; à la demande en un clic → Groupes d'actions.</value></data>
   <data name="Reminder_Hint" xml:space="preserve"><value>Se déclenche à une heure, à l'ouverture de session ou sur des événements (déverrouillage, secteur…) — rappel ou groupe silencieux. Juste ouvrir des applis à la connexion → Liste de démarrage ; à la demande → Groupes d'actions.</value></data>
   <data name="Group_Hint" xml:space="preserve"><value>Regroupez une routine et lancez-la à tout moment par raccourci / zone de notification ; la Liste de démarrage et les Tâches planifiées peuvent aussi y faire référence. Ce qui ne tourne qu'à la connexion est plus simple en étapes de la Liste de démarrage.</value></data>
+  <data name="Group_NoSteps" xml:space="preserve"><value>Aucune étape pour le moment. Cliquez sur « Ajouter » ci-dessus pour créer la première ; la première en haut s’exécute en premier.</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>(vide)</value></data>
   <data name="System_Footer" xml:space="preserve"><value>Cocher/décocher prend effet immédiatement (désactivation, pas suppression ; réversible).</value></data>
   <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>Les éléments système / stratégie / uniques en lecture seule sont masqués par défaut.</value></data>
@@ -30,6 +31,7 @@
   <data name="Ports_Footer" xml:space="preserve"><value>Double-cliquez sur une ligne pour l’ouvrir dans le navigateur ; clic droit pour libérer le port.</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} sur {1} ports · actualisé toutes les 5 s</value></data>
   <data name="Ports_Empty" xml:space="preserve"><value>Aucun port ne correspond au filtre actuel. {0} ports sont à l’écoute sur cet ordinateur — changez de filtre ou effacez la recherche.</value></data>
+  <data name="System_Empty" xml:space="preserve"><value>Aucun élément de démarrage ne correspond au filtre actuel. Cet ordinateur en compte {0} — effacez le filtre ou cochez « Afficher les éléments système / en lecture seule ».</value></data>
   <data name="Ports_Open" xml:space="preserve"><value>Ouvrir dans le navigateur</value></data>
   <data name="Ports_Kill" xml:space="preserve"><value>Libérer le port</value></data>
   <data name="Ports_AlsoListening" xml:space="preserve"><value>À l’écoute également sur {0}</value></data>
@@ -50,7 +52,7 @@
   <data name="Col_Hotkey" xml:space="preserve"><value>Raccourci</value></data>
   <data name="Gesture_Manager" xml:space="preserve"><value>Gestes de souris</value></data>
   <data name="Gesture_Enabled" xml:space="preserve"><value>Activés</value></data>
-  <data name="Gesture_Rehook" xml:space="preserve"><value>Réaccrocher</value></data>
+  <data name="Gesture_Rehook" xml:space="preserve"><value>Réinstaller le hook</value></data>
   <data name="Gesture_RehookHint" xml:space="preserve"><value>Un autre programme (pilote de souris, AutoHotkey, un autre outil de gestes) peut passer avant nous et avaler le bouton droit : tout semble correct ici et pourtant aucun bouton droit n’arrive. Le hook installé en dernier passe en premier ; le réinstaller reprend donc la tête de file.</value></data>
   <data name="Gesture_WatchLive" xml:space="preserve"><value>Bouton droit surveillé</value></data>
   <data name="Gesture_WatchOff" xml:space="preserve"><value>Bouton droit non surveillé</value></data>
@@ -151,10 +153,10 @@
   <data name="Ed_OutputVarHint" xml:space="preserve"><value>Les étapes suivantes utilisent {0} pour y faire référence. Si vous laissez ce champ vide, cette étape ne produit aucun résultat.</value></data>
   <data name="Ed_OutputVarSample" xml:space="preserve"><value>nom</value></data>
   <data name="Mig_PageMoved" xml:space="preserve">
-    <value>La page de panneau « {0} » a quitté vos actions pour les Pages de panneau (cases : {1})</value>
+    <value>La page de panneau « {0} » a quitté vos actions pour les Pages de panneau (tuiles : {1})</value>
   </data>
   <data name="Mig_PageAndAction" xml:space="preserve">
-    <value>« {0} » est à la fois une page de panneau et une action (raccourci ou référencée) : l'action est conservée et la page contient maintenant une case qui pointe vers elle</value>
+    <value>« {0} » est à la fois une page de panneau et une action (raccourci ou référencée) : l'action est conservée et la page contient maintenant une tuile qui pointe vers elle</value>
   </data>
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>La page de panneau « {0} » n'apparaît plus dans le menu de la zone de notification (une page n'est pas une action exécutable)</value>
@@ -213,6 +215,7 @@
 
   <data name="Days_EveryDay" xml:space="preserve"><value>Tous les jours</value></data>
   <data name="Days_Sep" xml:space="preserve"><value> </value></data>
+  <data name="Days_RangeSep" xml:space="preserve"><value>–</value></data>
   <data name="List_Sep" xml:space="preserve"><value>, </value></data>
   <data name="Day_1" xml:space="preserve"><value>Lun</value></data>
   <data name="Day_2" xml:space="preserve"><value>Mar</value></data>
@@ -224,7 +227,7 @@
 
   <data name="Period_EveryNDays" xml:space="preserve"><value>Tous les {0} jours</value></data>
   <data name="Period_Monthly" xml:space="preserve"><value>Le {0} de chaque mois</value></data>
-  <data name="Period_Once" xml:space="preserve"><value>Une fois {0}</value></data>
+  <data name="Period_Once" xml:space="preserve"><value>Une fois le {0}</value></data>
   <data name="Period_EachLogin" xml:space="preserve"><value>À chaque connexion</value></data>
   <data name="Time_LoopEvery" xml:space="preserve"><value>toutes les {0} min</value></data>
   <data name="Time_LoopUntil" xml:space="preserve"><value>jusqu'à {0}</value></data>
@@ -250,7 +253,7 @@
   <data name="Ed_Elevated" xml:space="preserve"><value>Exécuter en administrateur</value></data>
   <data name="Ed_AppHint" xml:space="preserve"><value>La cible peut être un programme (chemin complet ou nom seul), un raccourci, un script, un dossier, une URL, un document ou un protocole comme ms-settings:.</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>Raccourci</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan. Les combinaisons réservées par Windows (Win+D, Win+6…) ne peuvent pas être capturées — double-cliquez sur le champ pour les saisir. Les actions de souris avec modificateurs sont ici aussi : faites défiler dans le champ pour en enregistrer une (Ctrl pour zoomer, Maj pour l’horizontal). Les boutons se saisissent LeftClick / DoubleClick / RightClick / MiddleClick / MouseBack / MouseForward. Pour un simple défilement ou clic, l’étape « Souris » est plus simple.</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>Ex. : Win+D / Alt+K / Ctrl+Entrée / F5. Envoyé à la fenêtre active ; mettez d'abord la cible au premier plan. Les combinaisons réservées par Windows (Win+D, Win+6…) ne peuvent pas être capturées — double-cliquez sur le champ pour les saisir. Les actions de souris avec modificateurs sont ici aussi : faites défiler dans le champ pour en enregistrer une (Ctrl pour zoomer, Maj pour l’horizontal). Pour un simple défilement ou clic, l’étape « Souris » est plus simple.</value></data>
   <data name="Ed_MouseHint" xml:space="preserve"><value>Le défilement va à la fenêtre sous le pointeur ; les clics se produisent là où le pointeur se trouve déjà (cette appli ne le déplace jamais). Placez donc la cible avec Action de fenêtre → premier plan, ou tenez-vous-en aux actions indépendantes de la position comme Précédent/Suivant. Augmentez le nombre de répétitions pour N clics ou crans, et réglez le rythme avec le délai après l’étape.</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>Défiler vers le bas</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>Défiler vers la droite</value></data>
@@ -315,7 +318,7 @@
   <data name="Warn_QuickExit" xml:space="preserve"><value>« {0} » s'est fermé en 0,5 s (code {1}) ; échec de démarrage probable</value></data>
   <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>Impossible de lire le fichier de configuration (JSON probablement invalide) ; démarrage avec les valeurs par défaut. L'original a été sauvegardé sous {0} — corrigez-le puis redémarrez pour le restaurer.</value></data>
   <data name="Err_ScriptMissing" xml:space="preserve"><value>Fichier de script introuvable (indiquez un chemin complet)</value></data>
-  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Le script est en UTF-8 sans BOM, que Windows PowerShell 5.1 ne peut pas décoder correctement ; installez PowerShell 7 ou réenregistrez le script en UTF-8 avec BOM</value></data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Le script ne s'est pas exécuté : le PowerShell fourni avec Windows ne sait pas lire ce codage. Enregistrez le script en UTF-8 avec BOM ou utilisez PowerShell 7.</value></data>
   <data name="Mark_Unverified" xml:space="preserve"><value>~ Envoyé (non vérifié)</value></data>
   <data name="Mark_Exception" xml:space="preserve"><value>Erreur : {0}</value></data>
 
@@ -335,8 +338,8 @@
   <data name="Ed_Time" xml:space="preserve"><value>Heure (HH:mm)</value></data>
   <data name="Ed_LoginTiming" xml:space="preserve"><value>Condition d'ouverture</value></data>
   <data name="Ed_SMode_Any" xml:space="preserve"><value>Toujours</value></data>
-  <data name="Ed_SMode_Before" xml:space="preserve"><value>Seulement avant N h</value></data>
-  <data name="Ed_SMode_After" xml:space="preserve"><value>Seulement après N h</value></data>
+  <data name="Ed_SMode_Before" xml:space="preserve"><value>Seulement avant l’heure indiquée</value></data>
+  <data name="Ed_SMode_After" xml:space="preserve"><value>Seulement après l’heure indiquée</value></data>
   <data name="Ed_Hour" xml:space="preserve"><value>h</value></data>
   <data name="Ed_OnlyBoot" xml:space="preserve"><value>Seulement dans</value></data>
   <data name="Ed_WithinHint" xml:space="preserve"><value>min après le démarrage compte comme ouverture (0 = à chaque ouverture)</value></data>
@@ -395,9 +398,9 @@ Journal : {1}</value></data>
   <data name="Run_Title" xml:space="preserve"><value>Clockwork · Exécution</value></data>
   <data name="Tray_ReminderTitle" xml:space="preserve"><value>Tâche planifiée</value></data>
   <data name="Tray_LaunchStopped" xml:space="preserve"><value>Liste de démarrage arrêtée : {0} étapes faites, le reste ignoré</value></data>
-  <data name="Tray_LaunchWarn" xml:space="preserve"><value>Liste de démarrage terminée : {0} étapes, {1} avec avertissements (icône → voir le dernier journal)</value></data>
-  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Touche d'arrêt « {0} » non reconnue ; changez-la dans la fenêtre principale. « Arrêter » (icône) reste disponible.</value></data>
-  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Échec de l'enregistrement de la touche d'arrêt « {0} » (peut-être déjà utilisée) ; « Arrêter » (icône) reste disponible.</value></data>
+  <data name="Tray_LaunchWarn" xml:space="preserve"><value>Liste de démarrage terminée : {0} étapes, {1} avec avertissements (zone de notification → voir le dernier journal)</value></data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Touche d'arrêt « {0} » non reconnue ; changez-la dans la fenêtre principale. « Arrêter » dans la zone de notification reste disponible.</value></data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Échec de l'enregistrement de la touche d'arrêt « {0} » (peut-être déjà utilisée) ; « Arrêter » dans la zone de notification reste disponible.</value></data>
   <data name="Hotkey_Stopped" xml:space="preserve"><value>Arrêt des actions en cours demandé.</value></data>
   <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>« {0} » nécessite des droits administrateur pour être basculé ; rouvrez Clockwork en administrateur.</value></data>
   <data name="SysMsg_ToggleFail" xml:space="preserve"><value>Échec du basculement de « {0} » : {1}</value></data>
@@ -410,11 +413,12 @@ Journal : {1}</value></data>
   <data name="Update_Latest" xml:space="preserve"><value>Vous avez la dernière version ({0})</value></data>
   <data name="Update_Available" xml:space="preserve"><value>Nouvelle version {0} disponible. Aller au téléchargement ?</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Échec de la vérification des mises à jour : {0}</value></data>
-  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Cliquez puis appuyez sur le raccourci. Échap annule, Suppr l'efface. « Arrêter » dans la barre d'état fonctionne toujours.</value></data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Cliquez puis appuyez sur le raccourci. Échap annule, Suppr l'efface. « Arrêter » dans la zone de notification fonctionne toujours.</value></data>
   <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Appuyez sur un raccourci…</value></data>
   <data name="Sys_Takeover" xml:space="preserve"><value>Reprendre dans la liste de démarrage</value></data>
   <data name="Sys_Delete" xml:space="preserve"><value>Supprimer du système</value></data>
   <data name="Confirm_DeleteItem" xml:space="preserve"><value>Supprimer « {0} » ?</value></data>
+  <data name="Confirm_Keep" xml:space="preserve"><value>Conserver</value></data>
   <data name="Confirm_DeletePage" xml:space="preserve"><value>Souhaitez-vous supprimer la page « {0} » ? La ou les tuiles {1} qu'elle contient seront supprimées en même temps. Une tuile pointant vers une action ne fait que supprimer cette référence ; l'action elle-même reste en place.</value></data>
   <data name="Confirm_DeleteCategory" xml:space="preserve"><value>Supprimer la catégorie « {0} » ? Les {1} pages qu'elle contient ne seront pas supprimées : elles seront transférées vers « {2} ».</value></data>
   <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Supprimer définitivement l'élément de démarrage « {0} » du système ? Cette action est irréversible (pour seulement l'empêcher de se lancer au démarrage, décochez-le).</value></data>
@@ -438,7 +442,7 @@ Journal : {1}</value></data>
   <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Le groupe d'actions référencé par le rappel « {0} » est désactivé ; rien n'a été exécuté cette fois</value></data>
   <data name="Skip_GroupNotFound" xml:space="preserve"><value>Groupe d'actions référencé introuvable</value></data>
   <data name="Skip_GroupDisabled" xml:space="preserve"><value>Le groupe d'actions « {0} » est désactivé ; ignoré</value></data>
-  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Groupe d'actions réentré (référence circulaire ou déjà en cours d'exécution) ; ignoré</value></data>
+  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Nouvelle entrée dans le groupe d'actions (référence circulaire ou déjà en cours d'exécution) ; ignoré</value></data>
   <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
   <data name="Toast_GroupCancelled" xml:space="preserve"><value>Annulation du groupe d'actions « {0} » demandée.</value></data>
   <data name="Toast_GroupStarted" xml:space="preserve"><value>Groupe d'actions « {0} » démarré.</value></data>
@@ -447,7 +451,7 @@ Journal : {1}</value></data>
   <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Le groupe d'actions à exécuter sur « Oui » n'existe plus ; ignoré</value></data>
   <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Le groupe d'actions à exécuter sur « Oui » est désactivé ; ignoré</value></data>
   <data name="Warn_OnYesFailed" xml:space="preserve"><value>L’action après « Oui » n’a pas pu s’exécuter : {0}</value></data>
-  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Les tâches planifiées ne peuvent pas encore être reprises ; seules les clés Run du registre et les éléments du dossier Démarrage sont pris en charge</value></data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Cet élément ne peut pas être repris — seules les entrées Run du Registre et les éléments du Dossier de démarrage le peuvent.</value></data>
   <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Exécution de la liste de démarrage interrompue : {0}</value></data>
   <data name="Tray_ViewLog" xml:space="preserve"><value>Voir le dernier journal de démarrage</value></data>
   <data name="Tray_History" xml:space="preserve"><value>Récents</value></data>
@@ -492,7 +496,7 @@ Journal : {1}</value></data>
   <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>C'est l'heure de dormir !</value></data>
   <data name="Tpl_Sedentary" xml:space="preserve"><value>Rappel de pause</value></data>
   <data name="Tpl_Search" xml:space="preserve"><value>Recherche rapide</value></data>
-  <data name="Tpl_SearchAsk" xml:space="preserve"><value>Chercher quoi ?</value></data>
+  <data name="Tpl_SearchAsk" xml:space="preserve"><value>Que chercher ?</value></data>
   <data name="Tpl_SearchVar" xml:space="preserve"><value>mot-clé</value></data>
   <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Levez-vous et bougez un peu</value></data>
   <data name="Smp_Mute" xml:space="preserve"><value>Couper le son au démarrage (exemple · évite les lectures automatiques)</value></data>
@@ -565,7 +569,7 @@ Journal : {1}</value></data>
   <data name="Ed_SearchCustom" xml:space="preserve"><value>Personnalisé…</value></data>
   <data name="Err_NoSelection" xml:space="preserve"><value>Aucun texte n'est sélectionné. Sélectionnez ce que vous voulez rechercher, puis relancez cette étape.</value></data>
   <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>Il n'y a pour l'instant aucune fenêtre sur laquelle agir (au premier plan se trouve Clockwork lui-même ou le bureau)</value></data>
-  <data name="Ed_ProcessHint" xml:space="preserve"><value>Saisissez * pour la fenêtre active, celle où vous étiez avant de tracer le geste ou d’ouvrir le panneau. Laissé vide, ce pas ne fait rien.</value></data>
+  <data name="Ed_ProcessHint" xml:space="preserve"><value>Saisissez * pour la fenêtre active, celle où vous étiez avant de tracer le geste ou d’ouvrir le panneau. Laissé vide, cette étape ne fait rien.</value></data>
   <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} représente les mots recherchés ; ils sont échappés automatiquement.</value></data>
   <data name="Ed_SoundFile" xml:space="preserve"><value>Fichier audio</value></data>
   <data name="Ed_SoundHint" xml:space="preserve"><value>Laissez ce champ vide pour utiliser le son de notification du système. Vous pouvez également indiquer le chemin d'accès complet vers un fichier .wav.</value></data>
@@ -587,8 +591,8 @@ Journal : {1}</value></data>
   <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Format H:mm, par ex. 18:30 ; l'heure seule (par ex. 18) fonctionne aussi ; 18:00 par défaut.</value></data>
   <data name="Ed_Cond_Any" xml:space="preserve"><value>Sans condition</value></data>
   <data name="Ed_IfProcess" xml:space="preserve"><value>Condition de processus</value></data>
-  <data name="Ed_IfProc_Running" xml:space="preserve"><value>Ce processus tourne</value></data>
-  <data name="Ed_IfProc_Not" xml:space="preserve"><value>Ce processus ne tourne pas</value></data>
+  <data name="Ed_IfProc_Running" xml:space="preserve"><value>Processus en cours</value></data>
+  <data name="Ed_IfProc_Not" xml:space="preserve"><value>Processus absent</value></data>
   <data name="Ed_IfPower" xml:space="preserve"><value>Condition d'alimentation</value></data>
   <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Seulement sur secteur</value></data>
   <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Seulement sur batterie</value></data>
@@ -624,14 +628,14 @@ Journal : {1}</value></data>
   <data name="Settings_Boot" xml:space="preserve"><value>Démarrage</value></data>
   <data name="Settings_Backup" xml:space="preserve"><value>Sauvegarde</value></data>
   <data name="Settings_BackupTip" xml:space="preserve"><value>Exporte un seul fichier .json. L’import remplace toute la configuration actuelle.</value></data>
-  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s, et uniquement si le démarrage à l'ouverture de session est activé : attend ce délai après la connexion avant d'exécuter la liste, pour éviter la ruée du démarrage. Les relances manuelles ne sont pas concernées.</value></data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 s, et uniquement si « Lancer à la connexion » est activé : attend ce délai après la connexion avant d'exécuter la liste, pour éviter la ruée du démarrage. Les relances manuelles ne sont pas concernées.</value></data>
   <data name="Settings_WaitReady" xml:space="preserve"><value>Attendre que le système soit prêt (bureau / réseau)</value></data>
   <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Repart dès que les deux sont prêts, avec 90 s d'attente maximum ; le délai fixe ci-dessus s'y ajoute. À activer si la liste s'exécute trop tôt pour vos logiciels.</value></data>
   <data name="Menu_SecOpen" xml:space="preserve"><value>Ouvrir</value></data>
   <data name="Menu_SecControl" xml:space="preserve"><value>Piloter des applis</value></data>
   <data name="Menu_SecSystem" xml:space="preserve"><value>Système et son</value></data>
   <data name="Menu_SecFlow" xml:space="preserve"><value>Déroulement</value></data>
-  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Pour ouvrir des applis à la connexion avec ordre et délais, la Liste de démarrage est plus pratique ; des conditions comme « seulement N minutes après le démarrage » ou « le matin seulement » sont exactement pour ici.</value></data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Pour ouvrir des applis à la connexion avec ordre et délais, la Liste de démarrage est plus pratique ; des conditions comme « seulement N minutes après le démarrage » ou « le matin seulement » sont exactement ce qui se règle ici.</value></data>
   <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Pas encore de groupe d'actions — créez-en un depuis un modèle dans l'onglet « Groupes d'actions », puis référencez-le ici.</value></data>
   <data name="Ed_CondHeader" xml:space="preserve"><value>Conditions et répétition : {0}</value></data>
   <data name="Ed_CondAlways" xml:space="preserve"><value>toujours exécuté</value></data>
@@ -650,7 +654,7 @@ Journal : {1}</value></data>
   <data name="Ed_BusyMinutes" xml:space="preserve"><value>Minutes d'usage</value></data>
   <data name="Ed_BusyHint" xml:space="preserve"><value>Se déclenche une fois après ce nombre de minutes d'utilisation continue ; une minute complète d'absence remet le compteur à zéro.</value></data>
   <data name="Settings_PanelHotkey" xml:space="preserve"><value>Raccourci du panneau</value></data>
-  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Ouvre un panneau de tuiles à l'emplacement du pointeur, une action par tuile. Échap annule, Suppr l'efface ; le bouton central de la souris ou le menu de la zone de notification l'ouvrent toujours.</value></data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Ouvre un panneau de tuiles à l'emplacement du pointeur, une action par tuile. Échap annule, Suppr l'efface ; maintenir le bouton central de la souris et le menu de la zone de notification l'ouvrent toujours.</value></data>
   <data name="Tray_Panel" xml:space="preserve"><value>Ouvrir le panneau rapide</value></data>
   <data name="Panel_Hint" xml:space="preserve"><value>Échap pour fermer</value></data>
   <data name="Panel_Empty" xml:space="preserve"><value>Le panneau est vide. Les actions que vous y mettez apparaîtront ici.</value></data>
@@ -682,10 +686,10 @@ Journal : {1}</value></data>
   <data name="Settings_PanelTopRows" xml:space="preserve"><value>Rangées du haut</value></data>
   <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Rangées du bas</value></data>
   <data name="Ed_Icon" xml:space="preserve"><value>Icône du panneau</value></data>
-  <data name="Ed_IconHint" xml:space="preserve"><value>Laissé vide, il se remplit seul : « Lancer un programme » reprend l’icône de la cible, tout le reste reçoit une icône linéaire selon son type.</value></data>
+  <data name="Ed_IconHint" xml:space="preserve"><value>Laissé vide, il se remplit seul : « Lancer une app » reprend l’icône de la cible, tout le reste reçoit une icône linéaire selon son type.</value></data>
   <data name="Btn_Close" xml:space="preserve"><value>Fermer</value></data>
   <data name="Panel_Manager" xml:space="preserve"><value>Gérer le panneau</value></data>
-  <data name="Panel_Global" xml:space="preserve"><value>N'importe quelle application</value></data>
+  <data name="Panel_Global" xml:space="preserve"><value>Toutes les applications</value></data>
   <data name="Panel_AddPage" xml:space="preserve"><value>Ajouter une page</value></data>
   <data name="Panel_NewPage" xml:space="preserve"><value>Nouvelle page</value></data>
   <data name="Panel_AddHere" xml:space="preserve"><value>Placer une action ici</value></data>
@@ -695,7 +699,7 @@ Journal : {1}</value></data>
   <data name="Panel_Category" xml:space="preserve"><value>Catégorie</value></data>
   <data name="Panel_Pages" xml:space="preserve"><value>Pages</value></data>
   <data name="Panel_CategoryHint" xml:space="preserve"><value>La catégorie de cette page. La rangée du haut a un onglet par catégorie ; en choisir un n’affiche que ses pages.</value></data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>En haut vous cliquez une catégorie, à gauche une page. Double-clic pour renommer, glissez les onglets pour réordonner, déposez-en un sur une catégorie pour y faire passer la page ; déposez une case sur un onglet pour la faire passer dans cette page. Clic droit sur un onglet pour le renommer ou le supprimer.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>En haut vous cliquez une catégorie, à gauche une page. Double-clic pour renommer, glissez les onglets pour réordonner, déposez-en un sur une catégorie pour y faire passer la page ; déposez une tuile sur un onglet pour la faire passer dans cette page. Clic droit sur un onglet pour le renommer ou le supprimer.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>Afficher les onglets de gauche</value></data>
   <data name="Panel_ShowTopTabs" xml:space="preserve"><value>Afficher la rangée de catégories</value></data>
   <data name="Panel_BarsHint" xml:space="preserve"><value>En haut vous choisissez une catégorie ; à gauche figurent ses pages. Avec une seule catégorie la rangée du haut n’est pas dessinée, et avec une seule page dans la catégorie courante celle de gauche non plus ; ces cases les masquent même quand il y en a plusieurs. Le gestionnaire garde toujours sa rangée de catégories : le + qui s’y trouve sert à en créer une.</value></data>
@@ -740,14 +744,14 @@ Journal : {1}</value></data>
   <data name="Var_SecEnv" xml:space="preserve"><value>Variables d’environnement</value></data>
   <data name="Panel_UsageCount" xml:space="preserve"><value>{0} clics</value></data>
   <data name="Btn_ResetUsage" xml:space="preserve"><value>Effacer les statistiques de clics</value></data>
-  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Remet à zéro le nombre de clics de toutes les vignettes. Seules les statistiques sont effacées ; ni la configuration ni les vignettes ne sont modifiées.</value></data>
-  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Effacer les statistiques de clics de toutes les vignettes ? Cette action est irréversible.</value></data>
-  <data name="Kind_step" xml:space="preserve"><value>Référencer un élément de démarrage</value></data>
-  <data name="Sum_RunRef" xml:space="preserve"><value>Référencer un élément de démarrage : {0}</value></data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Remet à zéro le nombre de clics de toutes les tuiles. Seules les statistiques sont effacées ; ni la configuration ni les tuiles ne sont modifiées.</value></data>
+  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Effacer les statistiques de clics de toutes les tuiles ? Cette action est irréversible.</value></data>
+  <data name="Kind_step" xml:space="preserve"><value>Exécuter un élément de démarrage</value></data>
+  <data name="Sum_RunRef" xml:space="preserve"><value>Exécuter un élément de démarrage : {0}</value></data>
   <data name="Ed_RefTarget" xml:space="preserve"><value>Élément de démarrage</value></data>
   <data name="Ed_RefMissing" xml:space="preserve"><value>(cible supprimée)</value></data>
   <data name="Skip_RefNotFound" xml:space="preserve"><value>Élément de démarrage introuvable</value></data>
   <data name="Skip_RefDisabled" xml:space="preserve"><value>L'élément de démarrage « {0} » est désactivé ; ignoré</value></data>
   <data name="Ed_NoRefsHint" xml:space="preserve"><value>La liste de démarrage est vide — ajoutez d'abord un élément, puis référez-le ici.</value></data>
-  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>« {0} » est référencé par {1} vignette(s) du panneau. La suppression retirera aussi ces vignettes. Supprimer quand même ?</value></data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>« {0} » est référencé par {1} tuile(s) du panneau. La suppression retirera aussi ces tuiles. Supprimer quand même ?</value></data>
 </root>
