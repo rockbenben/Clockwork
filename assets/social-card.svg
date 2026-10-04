@@ -1,56 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <!-- 这张卡在 X / Discord / GitHub 链接预览里的真实宽度是 360–500px，不是 1200px。
-       实测：按 1200 设计时，24px 的说明文字到 360px 只剩 7.2px —— 四行说明和页脚全是灰糊，
-       只有大标题活着。所以这一版按**投递尺寸**排：源文件里小于 40px 的字一律不承担信息，
-       能被读到的只有品牌、标题、四个触发词。说明文字全部删掉——读不出的说明只贡献噪点。 -->
-  <defs>
-    <linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#191919"/><stop offset="0.6" stop-color="#101010"/><stop offset="1" stop-color="#0B0B0B"/></linearGradient>
-    <radialGradient id="cglow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#E8C170" stop-opacity="0.13"/><stop offset="1" stop-color="#E8C170" stop-opacity="0"/></radialGradient>
-    <linearGradient id="brass" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#EBBE66"/><stop offset="1" stop-color="#C08C2E"/></linearGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#cbg)"/>
-  <circle cx="1140" cy="380" r="330" fill="url(#cglow)"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <!-- GitHub 的 Social preview 规格：1280x640（2:1），不超过 1MB，
+       只能在 Settings → General → Social preview 手动上传。
+       这张卡替代原先那张 1200x630 的中文卡：那个比例是 Twitter 口径，
+       语言也跟仓库首屏（英文 README）不一致。
 
-  <!-- 擒纵轮放大到出血。图形比文字耐缩放得多，所以视觉识别交给它。
-       裁掉一部分而不是整轮塞进角落：残缺的机械读作「里面那台机器比画框还大」，
-       而一个完整的小轮子只读作一个图标。这是这一版唯一冒的险。
-       裁的位置刻意让**齿**而不是轮毂占据可见部分：一只完整的轮毂会把它读成钟面。
-       **这里用的就是 logo.svg 那条路径本身**（同一份齿形，轴毂同样是填色而不是镂空），不是另画一个近似的：
-       卡片和标识必须是同一个东西，而两份手抄的几何迟早会漂。 -->
-  <g transform="translate(1140,380) scale(2.96) translate(-128,-128)" opacity="0.18">
-    <path d="M128.00,30.92 L168.71,12.06 L165.15,38.31 L209.98,36.47 L196.64,59.36 L238.77,74.81 L217.69,90.85 L250.69,121.25 L225.08,128.00 L243.94,168.71 L217.69,165.15 L219.53,209.98 L196.64,196.64 L181.19,238.77 L165.15,217.69 L134.75,250.69 L128.00,225.08 L87.29,243.94 L90.85,217.69 L46.02,219.53 L59.36,196.64 L17.23,181.19 L38.31,165.15 L5.31,134.75 L30.92,128.00 L12.06,87.29 L38.31,90.85 L36.47,46.02 L59.36,59.36 L74.81,17.23 L90.85,38.31 L121.25,5.31 Z" fill="#D9A544"/>
-  </g>
+       排版按投递尺寸定：链接预览实际被看到的是 360~500px 宽（约 x0.34），
+       所以源文件里小于 40px 的字一律不承担信息。旧版页脚那两串（18px 与 20px）
+       在 440px 下只剩 6~7px，是灰糊；这一版把它们并成一行 40px。
 
-  <!-- 品牌 -->
-  <g transform="translate(70,92)">
-    <g transform="translate(0,-4) scale(0.18)">
-      <path d="M128.00,30.92 L168.71,12.06 L165.15,38.31 L209.98,36.47 L196.64,59.36 L238.77,74.81 L217.69,90.85 L250.69,121.25 L225.08,128.00 L243.94,168.71 L217.69,165.15 L219.53,209.98 L196.64,196.64 L181.19,238.77 L165.15,217.69 L134.75,250.69 L128.00,225.08 L87.29,243.94 L90.85,217.69 L46.02,219.53 L59.36,196.64 L17.23,181.19 L38.31,165.15 L5.31,134.75 L30.92,128.00 L12.06,87.29 L38.31,90.85 L36.47,46.02 L59.36,59.36 L74.81,17.23 L90.85,38.31 L121.25,5.31 Z" fill="url(#brass)"/>
-      <circle cx="128" cy="128" r="30.72" fill="#7A5115"/>
-      <circle cx="128" cy="128" r="9.34" fill="#F2DCA6"/>
-    </g>
-    <text x="60" y="30" font-family="Bahnschrift, DIN, sans-serif" font-weight="600" font-size="40" fill="#EAEAEA" letter-spacing="0.5">Clockwork</text>
-  </g>
+       出血那只轮子用的是 assets/logo.svg 里那条路径本身，不是另画一份近似的。
+       手抄几何会漂这件事，tools/make_icon.py 里已经踩过一次；改了形状要重新抄这一份，
+       下面的断言就是拿来盯这件事的。 -->
 
-  <!-- 承诺。两行，字号从 62 提到 72：它是唯一在 360px 下仍然舒服的东西，值得占更多地方。 -->
-  <text x="70" y="268" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="72" fill="#EAEAEA" letter-spacing="1">电脑上重复的事，</text>
-  <text x="70" y="356" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="72" fill="#EAEAEA" letter-spacing="1">自动<tspan fill="#E8C170">帮你做</tspan></text>
-
-  <!-- 四种开始方式。横排在一条轨上：四个位置属于同一套机构，正如轮上的四颗齿。
-       只留词，不留说明——四个词本身就说清了「它会在什么时候自己动」。 -->
-  <g>
-    <line x1="70" y1="452" x2="606" y2="452" stroke="#B5842F" stroke-opacity="0.45" stroke-width="2"/>
-    <rect x="70" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
-    <text x="128" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">开机</text>
-    <rect x="210" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
-    <text x="268" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">到点</text>
-    <rect x="350" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
-    <text x="408" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">一键</text>
-    <rect x="490" y="420" width="116" height="64" rx="12" fill="#191919" stroke="#B5842F" stroke-opacity="0.55" stroke-width="2"/>
-    <text x="548" y="466" font-family="Microsoft YaHei, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">手势</text>
-  </g>
-
-  <!-- 页脚：全尺寸下才读的信息，刻意压低对比，缩小时读作一条安静的横线而不是一团糊字。 -->
-  <line x1="70" y1="556" x2="1130" y2="556" stroke="#353535" stroke-opacity="0.7"/>
-  <text x="70" y="590" font-family="Consolas, monospace" font-size="18" fill="#7C7C7C" letter-spacing="1">365 开源计划 · #020</text>
-  <text x="1130" y="590" font-family="Microsoft YaHei, sans-serif" font-size="20" fill="#9E9E9E" text-anchor="end">一个 exe · 不用安装 · 不联网</text>
+<defs><linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#191919"/><stop offset="0.6" stop-color="#101010"/><stop offset="1" stop-color="#0B0B0B"/></linearGradient><radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#E8C170" stop-opacity="0.15"/><stop offset="1" stop-color="#E8C170" stop-opacity="0"/></radialGradient></defs>
+<rect width="1280" height="640" fill="url(#cbg)"/>
+<g transform="translate(1080,330) scale(2.7) translate(-128,-128) rotate(-12)" opacity="0.13"><path d="M128.00,30.92 L168.71,12.06 L165.15,38.31 L209.98,36.47 L196.64,59.36 L238.77,74.81 L217.69,90.85 L250.69,121.25 L225.08,128.00 L243.94,168.71 L217.69,165.15 L219.53,209.98 L196.64,196.64 L181.19,238.77 L165.15,217.69 L134.75,250.69 L128.00,225.08 L87.29,243.94 L90.85,217.69 L46.02,219.53 L59.36,196.64 L17.23,181.19 L38.31,165.15 L5.31,134.75 L30.92,128.00 L12.06,87.29 L38.31,90.85 L36.47,46.02 L59.36,59.36 L74.81,17.23 L90.85,38.31 L121.25,5.31 Z" fill="#E8C170"/></g>
+<circle cx="1080" cy="320" r="400" fill="url(#glow)"/>
+<image href="logo-256.png" x="72" y="87" width="46" height="46"/><text x="136" y="118" font-family="Bahnschrift, DIN, Segoe UI, sans-serif" font-weight="600" font-size="46" fill="#EAEAEA" letter-spacing="0.5">Clockwork</text>
+<text x="1208" y="118" font-family="Segoe UI, Arial, sans-serif" font-size="40" fill="#7C7C7C" text-anchor="end">free &#183; open source</text>
+<text x="72" y="276" font-family="Bahnschrift, DIN, Segoe UI, sans-serif" font-weight="700" font-size="88" fill="#EAEAEA">Put the repetitive parts</text>
+<text x="72" y="368" font-family="Bahnschrift, DIN, Segoe UI, sans-serif" font-weight="700" font-size="88" fill="#EAEAEA">of your PC on <tspan fill="#E8C170">autopilot</tspan></text>
+<line x1="72" y1="452" x2="1208" y2="452" stroke="#353535" stroke-width="2"/>
+<rect x="72" y="499" width="228" height="72" rx="14" fill="#191919" stroke="#B5842F" stroke-opacity="0.6" stroke-width="2"/><text x="186" y="548" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">At login</text><rect x="318" y="499" width="206" height="72" rx="14" fill="#191919" stroke="#B5842F" stroke-opacity="0.6" stroke-width="2"/><text x="421" y="548" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">On time</text><rect x="542" y="499" width="206" height="72" rx="14" fill="#191919" stroke="#B5842F" stroke-opacity="0.6" stroke-width="2"/><text x="645" y="548" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">One tap</text><rect x="766" y="499" width="206" height="72" rx="14" fill="#191919" stroke="#B5842F" stroke-opacity="0.6" stroke-width="2"/><text x="869" y="548" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="40" fill="#E8C170" text-anchor="middle">Gesture</text>
+<text x="72" y="620" font-family="Segoe UI, Arial, sans-serif" font-size="40" fill="#9E9E9E">one exe &#183; no installer &#183; nothing leaves your PC</text>
 </svg>

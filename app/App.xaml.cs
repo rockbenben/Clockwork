@@ -697,20 +697,19 @@ public partial class App : System.Windows.Application
         catch { }
     }
 
-    // 把内嵌 logo.ico 解压到 LocalAppData 的稳定路径并返回；已存在(非空)则直接复用，不重复写。
+    // 把内嵌 logo.ico 解压到 LocalAppData 的稳定路径并返回。判据与理由见 Core/BrandIconCache：
+    // 比的是内容，不是「文件在不在」——否则标识换过之后老用户永远看到旧图标。
     private static string? ExtractBrandIcon()
     {
         try
         {
             var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Clockwork");
             Directory.CreateDirectory(dir);
-            var path = Path.Combine(dir, "logo.ico");
-            if (File.Exists(path) && new FileInfo(path).Length > 0) return path;
             var res = System.Windows.Application.GetResourceStream(new Uri("logo.ico", UriKind.Relative));
             if (res == null) return null;
-            using var fs = File.Create(path);
-            res.Stream.CopyTo(fs);
-            return path;
+            using var ms = new MemoryStream();
+            res.Stream.CopyTo(ms);
+            return BrandIconCache.Refresh(Path.Combine(dir, "logo.ico"), ms.ToArray());
         }
         catch { return null; }
     }
