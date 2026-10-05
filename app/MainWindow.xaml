@@ -97,6 +97,20 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
+                                <!-- 图标列：这一格画的就是「这条被放到面板上会长什么样」——同一个
+                                     PanelIcon.Resolve + IconVisual.Make，所以清单与面板的图标不是两套代码
+                                     各猜一遍，而是同一份。没有表头：图标不需要名字，而给它配一个是
+                                     18 种语言乘一条；拖拽轨那一列同样没有表头，先例在这儿。 -->
+                                <DataGridTemplateColumn x:Name="ColLaunchIcon" Width="36" CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <!-- Loaded 而不是 LoadingRow：DataGridRow.Cells 不是公开的，
+                                                 而格子自己的 DataContext 就是那一行的 VM，取不到第二手信息。 -->
+                                            <ContentControl x:Name="StepIcon" Focusable="False" Loaded="StepIcon_Loaded"
+                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="{loc:Loc Col_Kind}" Width="Auto" MinWidth="104">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>

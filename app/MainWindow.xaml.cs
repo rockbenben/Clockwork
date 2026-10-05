@@ -642,6 +642,22 @@ public partial class MainWindow : Window
 
     private void GridLaunch_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) => LEdit_Click(sender, e);
 
+    // 启动清单每行左边那一格图标。取法与面板同源（PanelIcon 定档，IconVisual 画）：设了图标就用它，
+    // 「运行程序」借目标自己的真图标，按键/窗口这类落回类型线描字形。位图是后台取的、取不到就画字形，
+    // 这条路径一秒都不等——它跑在 UI 线程上，而一次展开二十几行。
+    //
+    // 挂在格子的 Loaded 上而不是 DataGrid 的 LoadingRow 上：`DataGridRow.Cells` 不是公开的，
+    // 而格子自己的 DataContext 就是这一行的 VM——少一层「按列下标找格子」，也就少一种悄悄错位的方式。
+    private void StepIcon_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is not ContentControl host) return;
+        if (host.DataContext is not StepRowVm vm) return;
+        var s = vm.Step;
+        host.Content = Views.IconVisual.Make(
+            PanelIcon.Resolve(s.Icon, s.Kind, s.Target, s.AltTargets), 18,
+            (System.Windows.Media.Brush)FindResource("BrushPaper"));
+    }
+
     // 删除统一先确认：口径（文案/红轨）在 BrandDialog.ConfirmDelete 一处维护。
     private bool ConfirmDelete(string label) => Views.BrandDialog.ConfirmDelete(this, label);
 

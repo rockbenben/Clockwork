@@ -76,9 +76,13 @@ public sealed class LaunchStep
     public string IfProcessMode { get; set; } = "";   // ""=不限 | running | notRunning
     public string IfPower { get; set; } = "";         // ""=不限 | ac | battery
     public string IfPathExists { get; set; } = "";
-    // 面板格子的图标。空 = 自动（「运行程序」取目标自己的图标，其余按步骤类型用线描字形）。
-    // 也可以填一张图片的路径、一个 exe（借它的图标），或四位十六进制的 MDL2 码位（如 E7C4）。
-    // 解析口径见 Core.PanelIcon —— 只在面板上用得到，运行动作时不读它。
+    // 图标。空 = 自动（「运行程序」取目标自己的图标，其余按步骤类型用线描字形）。
+    // 也可以填一张图片的路径、一个 exe（借它的图标）、四位十六进制的 MDL2 码位（如 E7C4），
+    // 或一枚内置品牌轮廓（brand:wechat，见 Core.BrandIcons）。解析口径见 Core.PanelIcon。
+    //
+    // **谁读它**：面板格子、面板管理器、启动清单那一列、以及两处编辑器里的图标按钮。
+    // 运行这条动作时不读它；手势表与定时任务表也**没有图标列**——在那儿设一个不会报错，
+    // 但什么都不会变，别把它当成「设了就该在别处露出来」的字段。
     public string Icon { get; set; } = "";
     // window
     public string Process { get; set; } = "";
