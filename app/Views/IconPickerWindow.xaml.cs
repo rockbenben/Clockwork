@@ -27,7 +27,32 @@ public partial class IconPickerWindow : Window
         Native.DarkWindow.Apply(this);
 
         int cur = IconLibrary.Parse(current);
+        string? curBrand = BrandIcons.TryGet(current, out var cb) ? cb.Slug : null;
+        // 品牌图标排在字形前面：挑「一格开一个程序」的人多半是带着某个具体软件来的，
+        // 认 logo 比扫线描快。总数（64 + 112）仍是 16 的整数倍，最后一行不缺角。
+        foreach (var b in BrandIcons.All) Grid.Children.Add(MakeBrandCell(b, b.Slug == curBrand));
         foreach (var cp in IconLibrary.Glyphs) Grid.Children.Add(MakeCell(cp, cp == cur));
+    }
+
+    private Button MakeBrandCell(BrandIcons.Icon icon, bool selected)
+    {
+        var b = new Button
+        {
+            // 画的那条轮廓、上的那个颜色都走 IconVisual.Brand —— 与面板格子里画出来的是同一段代码，
+            // 所以选择器里看到什么，面板上就是什么。
+            Content = IconVisual.Brand(
+                new PanelIconSpec(PanelIconKind.Brand, icon.Slug, ""), 22, (Brush)FindResource("BrushPaper")),
+            Width = 32,
+            Height = 32,
+            Margin = new Thickness(1),
+            MinWidth = 0,
+            Padding = new Thickness(0),
+            ToolTip = BrandIcons.Prefix + icon.Slug,
+            BorderBrush = (Brush)FindResource(selected ? "BrushAccent" : "BrushLine"),
+        };
+        // 存进配置的写法是 `brand:slug`（名字，不是第几号字形）——见 BrandIcons 的类注释。
+        b.Click += (_, _) => { Picked = BrandIcons.Prefix + icon.Slug; DialogResult = true; };
+        return b;
     }
 
     private Button MakeCell(int codepoint, bool selected)

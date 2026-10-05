@@ -731,6 +731,9 @@ public partial class App
                     new PanelTilePage(Strings.Get("Tab_Launch"), new[]
                     {
                         new PanelTile(LongestOf("Win_"), PanelGlyph.ForKind("mouse"), () => { }),
+                        // 一枚品牌轮廓混在线描格子里：这张合影就是「彩色品牌图标和线描字形
+                        // 并排站时齐不齐」的验收图（回退字形挂在第三个参数上，认不出名字时画它）。
+                        new PanelTile("WeChat", new PanelIconSpec(PanelIconKind.Brand, "wechat", PanelGlyph.ForKind("app")), () => { }),
                     }),
                     new PanelTilePage(Strings.Get("Tab_Reminder"), new[]
                     {

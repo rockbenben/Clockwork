@@ -734,6 +734,10 @@ public partial class QuickPanelWindow : Window
         var texts = new List<TextBlock>();
         void PaintIcon()
         {
+        // 品牌轮廓是现成的矢量，不需要后台取：先于位图那条路判掉。
+        // 它和真实程序图标一样留自己的颜色（品牌色），不参与前景色绑定。
+        var brand = IconVisual.Brand(t.Icon, box, (Brush)FindResource("BrushPaper"));
+        if (brand != null) { shell.Content = brand; return; }
         var bmp = t.Icon.Kind == PanelIconKind.Image
             ? Native.IconLoader.Load(t.Icon.Value,
                 () => { if (PresentationSource.FromVisual(shell) != null) PaintIcon(); })   // 面板早关了就别再画

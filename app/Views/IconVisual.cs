@@ -1,10 +1,12 @@
+using System.Collections.Concurrent;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using Clockwork.Core;
 // UseWindowsForms 把 WinForms 也加进了隐式全局 using，这些名字两边都有。
 using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 using Image = System.Windows.Controls.Image;
 
@@ -17,6 +19,10 @@ public static class IconVisual
 {
     private static readonly FontFamily IconFont = new("Segoe MDL2 Assets");
 
+    // 品牌图标的轮廓解析一次留一份：面板一次呼出要画二十几格，而 Geometry.Parse
+    // 是逐字符解析路径串。冻结之后可以跨线程复用（缓存也是 static，面板会开很多次）。
+    private static readonly ConcurrentDictionary<string, Geometry> Geometries = new();
+
     /// <summary>按规格画一个图标元素：能取到真实文件图标就用位图，取不到回退线描字形。</summary>
     /// <param name="size">画多大（像素）。字形按 0.78 折算，让它和位图在同一个方框里看着一样重。</param>
     public static FrameworkElement Make(PanelIconSpec spec, double size, Brush foreground)
@@ -27,6 +33,8 @@ public static class IconVisual
         var shell = new ContentControl { Focusable = false };
         void Paint()
         {
+            var brand = Brand(spec, size, foreground);
+            if (brand != null) { shell.Content = brand; return; }
             var bmp = spec.Kind == PanelIconKind.Image ? Native.IconLoader.Load(spec.Value, () => Repaint()) : null;
             if (bmp != null)
             {
@@ -42,6 +50,40 @@ public static class IconVisual
         void Repaint() { if (PresentationSource.FromVisual(shell) != null) Paint(); }
         Paint();
         return shell;
+    }
+
+    private static uint ToHex(Color c) => ((uint)c.R << 16) | ((uint)c.G << 8) | c.B;
+
+    private static Geometry ParseFrozen(string mini)
+    {
+        var g = Geometry.Parse(mini);
+        g.Freeze();
+        return g;
+    }
+
+    /// <summary>品牌图标（`brand:slug`）画成一个矢量轮廓 + 官方品牌色；不是品牌规格返回 null，
+    /// 由调用方走原来的位图/字形那条路。名字认不出来时同样返回 null —— 那一格回退线描字形，
+    /// 而不是画一个空方框：配置是可以手改的，写错一个 slug 不该让面板缺一块。</summary>
+    public static FrameworkElement? Brand(PanelIconSpec spec, double size, Brush foreground)
+    {
+        if (spec.Kind != PanelIconKind.Brand) return null;
+        if (!BrandIcons.TryGet(BrandIcons.Prefix + spec.Value, out var icon)) return null;
+        // 认不出前景色是什么（渐变/画刷没实色化）就照官方品牌色画：宁可少一次换色，
+        // 也不要把一枚本来好好的 logo 换成猜出来的颜色。
+        uint hex = foreground is SolidColorBrush ink ? BrandIcons.ColorFor(icon.Hex, ToHex(ink.Color)) : icon.Hex;
+        var path = new Path
+        {
+            Data = Geometries.GetOrAdd(icon.Path, ParseFrozen),
+            Fill = new SolidColorBrush(Color.FromRgb((byte)(hex >> 16), (byte)(hex >> 8), (byte)hex)),
+            Width = size,
+            Height = size,
+            Stretch = Stretch.Uniform,
+            // 显式限定：WinForms 那边也有一个叫 HorizontalAlignment 的枚举（这文件顶部就在治同类遮蔽）。
+            HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Focusable = false,
+        };
+        return path;
     }
 
     private static FrameworkElement Glyph(PanelIconSpec spec, double size, Brush foreground)

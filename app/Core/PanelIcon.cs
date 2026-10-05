@@ -9,23 +9,29 @@ public enum PanelIconKind
     Glyph,
     /// <summary>一个文件的路径：图片直接用，其余（exe / lnk / 文档）取它的系统图标。</summary>
     Image,
+    /// <summary>一枚内置的品牌轮廓，<see cref="PanelIconSpec.Value"/> 是它的 slug（见 <see cref="BrandIcons"/>）。</summary>
+    Brand,
 }
 
-/// <summary>解析结果。<see cref="Value"/> 对 Glyph 是那个字符，对 Image 是文件路径。
+/// <summary>解析结果。<see cref="Value"/> 对 Glyph 是那个字符，对 Image 是文件路径，对 Brand 是 slug。
 /// <see cref="Fallback"/> 恒是一个字形：图片路径可能指向一个已被删掉 / 读不了的文件，
 /// 那时得有东西顶上，不能让格子空着——所以「回退画什么」在这一层就定好，不留给视图临场决定。</summary>
 public sealed record PanelIconSpec(PanelIconKind Kind, string Value, string Fallback);
 
-// 一格的图标取哪个。纯逻辑，不碰文件系统、不碰 WPF——真正去把文件变成位图的是 Native.IconLoader。
+// 一格的图标取哪个。纯逻辑，不碰文件系统、不碰 WPF——真正去把文件变成位图的是 Native.IconLoader，
+// 真正把 path 变成轮廓的是 Views.IconVisual。
 //
-// 三档，按优先级：
-//   1. 用户指定的图片        —— 自己挑的一张 png / ico，或干脆指向另一个 exe 借它的图标。绝对优先。
+// 四档，按优先级：
+//   1. 用户指定的图标        —— 一张图片、一个 exe / lnk（借它自己的图标）、一枚 `brand:slack`
+//                              品牌轮廓，或四位十六进制点一个 MDL2 字形。绝对优先。
 //   2. 目标程序自己的图标    —— 「运行程序」步骤自动从它要启动的那个文件上取。零配置，
 //                              而这正是面板好看起来的关键：一屏彩色的真实图标，一眼就能认出哪个是哪个。
-//   3. 步骤类型的线性图标    —— 兜底。发送按键、音量、窗口动作这些没有文件可取，用 MDL2 字形。
+//   3. 脚本的线性图标        —— 目标是 .bat / .ps1 / .ahk 这类时不借关联图标（见 PanelGlyph.ForScript）。
+//   4. 步骤类型的线性图标    —— 兜底。发送按键、音量、窗口动作这些没有文件可取，用 MDL2 字形。
 //
 // 于是面板上会自然分成两种质感：**彩色 = 打开一个东西，线描 = 做一件事**。
 // 这不是装饰，是把「这一格会发生什么」编进了视觉——找程序时眼睛扫彩色块，找系统动作时扫线描。
+// 品牌图标走彩色那一侧：它标的正是一个程序。
 public static class PanelIcon
 {
     // 四位十六进制 = 直接指定一个 MDL2 码位（E7C4 / 0xE7C4 都收）。
@@ -66,6 +72,12 @@ public static class PanelIcon
                 var ch = char.ConvertFromUtf32(cp);
                 return new PanelIconSpec(PanelIconKind.Glyph, ch, ch);
             }
+            // `brand:slack` —— 内置的品牌轮廓。名字认不出来也在这里收口：那一格回退线描字形，
+            // 而不是拿 "brand:nope" 去磁盘上找一趟文件图标（那会白等一次 IO 再悄悄回退）。
+            if (BrandIcons.IsBrandSyntax(custom))
+                return BrandIcons.TryGet(custom, out var brand)
+                    ? new PanelIconSpec(PanelIconKind.Brand, brand.Slug, glyph)
+                    : new PanelIconSpec(PanelIconKind.Glyph, glyph, glyph);
             // 不是码位就当路径。NormalizeTarget 顺手把引号去掉、把 %USERPROFILE% 这类展开，
             // 与「目标」输入框同一口径——图标路径和程序路径本来就该按同一套规矩解释。
             // 这里不判存不存在——那是磁盘的事，交给 IconLoader；它取不到就回退到字形，
