@@ -53,6 +53,23 @@ public static class Win32
     [DllImport("advapi32.dll", SetLastError = true)] private static extern bool GetTokenInformation(IntPtr tok, int cls, out uint info, uint len, out uint ret);
     [DllImport("kernel32.dll")] private static extern IntPtr GetCurrentProcess();
 
+    [DllImport("kernel32.dll", SetLastError = true)] private static extern bool TerminateProcess(IntPtr h, uint code);
+
+    /// <summary>硬退本进程：只给退出看门狗兜底用（见 <c>App.ArmExitWatchdog</c>）。</summary>
+    //
+    // 为什么是 TerminateProcess 而不是 <c>Environment.Exit</c>：Exit 走托管那一套
+    //（ProcessExit、终结器、模块卸载），而它要拦的那个症状**正是托管收尾里某条线程不返回**——
+    // 那时候 Exit 自己也会停在那儿，看门狗就成了摆设。TerminateProcess 是内核调用：
+    // 所有线程当场结束、句柄由系统回收，不跑任何托管代码，所以它不会挂。
+    //
+    // 代价要说清楚：该落盘的东西一个都不会落。所以调用方必须先尽力补写（App 那边带超时），
+    // 并且这是**最后**一招，不是退出流程的常规一步。互斥体句柄由系统关掉＝abandoned，
+    // 接管的实例本来就有 AbandonedMutexException 那条分支（见 ClaimSingleInstance）。
+    public static void TerminateSelf(uint code = 0)
+    {
+        try { TerminateProcess(GetCurrentProcess(), code); } catch { }
+    }
+
     [DllImport("kernel32.dll", SetLastError = true)] private static extern bool CloseHandle(IntPtr h);
 
     /// <summary>本进程是不是提权运行的。</summary>
@@ -74,6 +91,122 @@ public static class Win32
         // 现在只有 --hookprobe 调一次、进程随即退出，所以泄漏一个句柄看不出影响——
         // 但这个方法的名字听起来随时可以调，下一个调用点很可能在一个循环里。
         finally { if (tok != IntPtr.Zero) try { CloseHandle(tok); } catch { } }
+    }
+
+    [DllImport("user32.dll")] private static extern IntPtr GetShellWindow();
+    [DllImport("kernel32.dll")] private static extern int GetCurrentProcessId();
+    // 同一句 API 的变长结构版本：上面那个 `out uint` 重载只够读 TokenElevation 这种 4 字节值，
+    // 而 TokenIntegrityLevel 给的是 TOKEN_MANDATORY_LABEL（里面是一个 SID 指针），必须拿缓冲区读。
+    [DllImport("advapi32.dll", SetLastError = true)]
+    private static extern bool GetTokenInformation(IntPtr tok, int cls, IntPtr info, uint len, out uint ret);
+    [DllImport("advapi32.dll")] private static extern byte GetSidSubAuthorityCount(IntPtr sid);
+    [DllImport("advapi32.dll")] private static extern IntPtr GetSidSubAuthority(IntPtr sid, uint idx);
+
+    /// <summary>UIPI 会不会把一次注入丢掉：目标进程的完整性级别高于我们自己时，`SendInput` 被静默丢弃。</summary>
+    /// <param name="selfRid">我们的完整性 RID（SecurityMedium=0x2000 / High=0x3000…）。</param>
+    /// <param name="targetRid">目标的同一格，**0 = 读不到**。</param>
+    //
+    // 读不到按「会拦」处理，这个取向是行为决定不是省事：答错成「送得进去」，代价是抬起已经吞了、
+    // 注入又被丢——用户那一下右键**彻底消失**（正是他报的症状）；答错成「送不进去」，走的是
+    // 「放行真抬起」那条既有路，最坏是多弹一次菜单。受保护进程（杀软那种）开不到 token，
+    // 而它们恰恰几乎都是提权的，所以这一档猜「拦」也猜得对。
+    internal static bool IntegrityBlocksInjection(uint selfRid, uint targetRid)
+        => targetRid == 0 || targetRid > selfRid;
+
+    /// <summary>此刻能不能把一次注入送进目标程序的输入队列——补发之前问的那一句。</summary>
+    //
+    // 为什么必须在**吞掉真抬起之前**问：补发改到补发线程排队之后，回调一 `return 1`，那条真抬起
+    // 就再也还不回去了。旧写法能拿 `SendInput` 的返回值当场决定「被拒就放行真事件」，是因为注入
+    // 就跑在回调里（见 MouseHook.ReplayClick）。异步化不能把这个兜底弄丢，于是把它前移成一次探测。
+    //
+    // 判据是完整性级别而不是「是不是管理员」，因为 UIPI 丢的正是「低 IL → 高 IL 窗口」这一档；
+    // 我们自己提权时普通窗口全在下面，不会被丢。
+    public static bool InputNotBlockedNow()
+    {
+        try
+        {
+            // 安全桌面（UAC 提示屏）：那个桌面上没有本进程的钩子，也没有可投的输入队列。
+            // 判据用 shell 窗是否存在——它是按当前桌面查的，切到安全桌面上就问不到。
+            if (GetShellWindow() == IntPtr.Zero) return false;
+            if (IsElevated()) return true;
+            var fg = GetForegroundWindow();
+            if (fg == IntPtr.Zero) return true;         // 没有前台窗：没有「更强的目标」，照平常走
+            uint pid = GetWindowThreadProcessId(fg, out _);
+            if (pid == 0 || pid == GetCurrentProcessId()) return true;
+            return !IntegrityBlocksInjection(SelfIntegrityRid(), IntegrityRidOfProcess(pid));
+        }
+        catch { return false; }   // 问不出来就当送不进去：取向见 IntegrityBlocksInjection
+    }
+
+    private static uint _selfIntegrityRid;   // 本进程的 IL 不会变，读一次存着
+
+    private static uint SelfIntegrityRid()
+    {
+        uint cached = Volatile.Read(ref _selfIntegrityRid);
+        if (cached != 0) return cached;
+        uint rid = TokenIntegrityRid(GetCurrentProcess());
+        Volatile.Write(ref _selfIntegrityRid, rid);
+        return rid;
+    }
+
+    private static uint IntegrityRidOfProcess(uint pid)
+    {
+        var h = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, (int)pid);
+        if (h == IntPtr.Zero) return 0;
+        try { return TokenIntegrityRid(h); }
+        finally { try { CloseHandle(h); } catch { } }
+    }
+
+    /// <summary>前台窗口所属进程的 pid；没有前台窗时返回 0。</summary>
+    //
+    // **这里一个字都不许加。** 它跑在低级鼠标钩子回调里（见 HookProbe），而那条路上
+    // `OpenProcess` 是已知能卡住整条鼠标链的东西（本机实测 3187ms / 6469ms，见 HookProbe 类头）。
+    // 这一句是 GetForegroundWindow + GetWindowThreadProcessId，两次 user32 调用、纯本进程可答、
+    // 不碰别的进程的对象，所以它留在回调里是安全的；本进程自己的 pid 也直接答掉。
+    public static uint ForegroundPid()
+    {
+        try
+        {
+            var fg = GetForegroundWindow();
+            if (fg == IntPtr.Zero) return 0;
+            GetWindowThreadProcessId(fg, out uint pid);
+            if (pid == (uint)Environment.ProcessId) return 0;   // 前台是自己（覆盖窗抢到了）：没有「目标」
+            return pid;
+        }
+        catch { return 0; }
+    }
+
+    // TOKEN_MANDATORY_LABEL 的最后一个子授权就是完整性 RID（0x1000 Low / 0x2000 Medium /
+    // 0x3000 High / 0x4000 System）。失败一律答 0=读不到，绝不外抛：调用它的地方在钩子回调路径上。
+    private static uint TokenIntegrityRid(IntPtr hProcess)
+    {
+        if (!OpenProcessToken(hProcess, 0x0008, out IntPtr tok) || tok == IntPtr.Zero) return 0;
+        IntPtr buf = IntPtr.Zero;
+        try
+        {
+            uint len = 64;
+            buf = Marshal.AllocHGlobal((int)len);
+            if (!GetTokenInformation(tok, 25 /* TokenIntegrityLevel */, buf, len, out uint need))
+            {
+                // 缓冲区不够时系统会把需要的长度报回来，别一上来就赌 64 字节永远够。
+                if (need == 0 || need > 4096) return 0;
+                Marshal.FreeHGlobal(buf);
+                len = need;
+                buf = Marshal.AllocHGlobal((int)len);
+                if (!GetTokenInformation(tok, 25, buf, len, out _)) return 0;
+            }
+            IntPtr sid = Marshal.ReadIntPtr(buf);            // LABEL 结构体只有一个 SID 指针
+            if (sid == IntPtr.Zero) return 0;
+            byte count = GetSidSubAuthorityCount(sid);
+            if (count == 0) return 0;
+            return (uint)Marshal.ReadInt32(GetSidSubAuthority(sid, (uint)(count - 1)));
+        }
+        catch { return 0; }
+        finally
+        {
+            if (buf != IntPtr.Zero) Marshal.FreeHGlobal(buf);
+            try { CloseHandle(tok); } catch { }
+        }
     }
 
     /// <summary>光标此刻在哪（物理像素）。取不到时返回 (0,0)。</summary>

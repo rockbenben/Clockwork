@@ -37,4 +37,18 @@ public static class HookWatch
         => cursorMovedInSample
            && silentSinceMs > observedSampleMs + beatSkewMs
            && msSinceLastHeal >= minGapMs;
+
+    /// <summary>装完又哑之后，下一次自愈该等多久。</summary>
+    //
+    // 为什么固定下限不够（原来只有 `minGapMs` 一条 3 秒的闸）：3 秒正好是「链被堵住」与
+    // 「钩子被系统摘了」两种病共同的节拍，于是前者会被当成后者治——2026-10-06 06:16:40 起
+    // 17 秒内重装 5 次，每次留下一条卡在链里的泵线程（`hook-join-background took 30000ms` 四条），
+    // 而每一次摘装之间都有一段输入空窗，用户看到的正是「右键多点几下就卡、有些右键不出现」。
+    //
+    // 退避的读法：**重装真的把输入接回来了，调用方就把间隔复位**（见 GestureCoordinator 里
+    // 心跳新鲜那一格），所以一次性的真故障仍然 3 秒内治好；只有「装了又哑、哑了又装」那种
+    // 循环才会长。封顶是为了别让一次长达几小时的拥堵把自愈推到几分钟开外——那时它和原来的
+    // 3 秒一样治不了病，但至少不再制造新的空窗。
+    public static long NextHealGap(long currentMs, long floorMs, long capMs)
+        => Math.Min(capMs, currentMs < floorMs ? floorMs : currentMs * 2);
 }

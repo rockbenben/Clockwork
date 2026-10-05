@@ -306,7 +306,17 @@ public sealed class GestureGate
         // 此前这一档是彻底的沉默，而沉默把三件事混成一件——功能没开、笔画画歪了、
         // 动作跑失败了，看起来都是「按了没反应」，可这三件事的补救完全不同。
         Path = p;
-        return _matches(p, targetProcess ?? ContextProcess) ? PressVerdict.Fire : PressVerdict.Swallow;
+        // 画出来了却没绑上动作：**这一下右键还给用户**，不再吃掉。
+        //
+        // 判据来自同类实现与本机算术。MacStroke 在未识别那一档照样把原始的按下与抬起补发回去
+        //（AppDelegate.m:379→385：手势白画一场，但用户的右键一定还在）；StrokesPlus 把它做成
+        // 配置项 `Relay Gesture on No Match`。反过来 easystroke 是响铃并吃掉（handler.cc:985），
+        // 可它在 X 上是主动 grab，按下从未进过目标程序，没有「半截配对状态」要收拾，不是我们的对等模型。
+        //
+        // 为什么这条在本机是常事而不是边角：`MinLegForScreen(2560, "high")` = 38px——
+        // 连点右键时手很容易漂过它，一漂过就成了一条「没绑的笔画」，于是「经常右键被吞」。
+        // 提示照旧要报（`Path` 留着给上层读「你画的是 R，它没绑动作」），只是不再吞键。
+        return _matches(p, targetProcess ?? ContextProcess) ? PressVerdict.Fire : PressVerdict.ReplayClick;
     }
 
     // 采样点 → 方向串：切腿、吸收短腿、剩下的就是答案。

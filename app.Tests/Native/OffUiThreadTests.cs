@@ -260,6 +260,63 @@ public class OffUiThreadTests
         Assert.Contains("FlushErrorLog()", body);
     }
 
+    // **退出要有一颗硬退的兜底表**，但别把它当壳进程的解药（这条界限写在这儿，是因为上一轮
+    // 我把两件事混过一回）。托盘点了「退出」而进程还活着，有两种成因，只有这一颗治得了其中一种：
+    //
+    //   · **托管收尾吊住**（托盘、互斥体、WPF 关窗、写盘队列拿着不返回的锁）——进程还活着也还肯收
+    //     TerminateProcess，到点硬退有意义，这就是这颗表管的那一档。
+    //   · **有条线程卡在 win32k 里**（替整条输入链等一个不回话的第三方钩子）——这种内核等待
+    //     连给自己 TerminateProcess 都完不成，taskkill /F 也一样；本机的两次壳进程都是这一档。
+    //     它的解法不在这里，在「别让钩子跟着壳进程留在链上」（StallProbeWiringTests 里
+    //     The_chain_is_left_before_anything_that_can_wait 钉着那一句）。
+    //
+    // 逐个证明「托管收尾里没有一个会吊死」是不成立的，所以这颗表留着；
+    // 而把「退出之后还有壳」当成它的失职，也是错的。
+    // 钉形状的理由和这份文件里其它条一样：把 `ArmExitWatchdog()` 删掉、或把它挪到 `_reminders.Stop()`
+    // 之后，全都编译通过、单测全绿，症状只在下一次真卡住时出现。
+    [Fact]
+    public void The_exit_path_arms_a_hard_exit_watchdog()
+    {
+        var src = Source("App.xaml.cs");
+        var exit = BodyOf(src, "public void ExitApp()");
+        Assert.Contains("ArmExitWatchdog();", exit);
+        Assert.True(exit.IndexOf("ArmExitWatchdog();") < exit.IndexOf("_reminders.Stop();"),
+            "看门狗要排在上手第一件事：它盯的正是接下来这几步里的任何一卡");
+
+        var dog = BodyOf(src, "private void ArmExitWatchdog()");
+        Assert.Contains("Thread.Sleep(ExitWatchdogMs)", dog);
+        // 补写必须由**再一条**线程去做、且带超时：卡住的那条线程手里正拿着那些锁，
+        // 看门狗自己去拿就是一起死。
+        Assert.Contains("flush.Join(ExitFlushBudgetMs)", dog);
+        Assert.Contains("Native.Win32.TerminateSelf();", dog);
+        // 两条都得不拦进程退出，否则看门狗自己就是第二次僵尸。
+        Assert.Equal(2, System.Text.RegularExpressions.Regex.Matches(dog, "IsBackground = true").Count);
+    }
+
+    // 看门狗到点之后做的事 = OnExit 那三步，一步都不能少：卡死多半发生在走到 OnExit **之前**，
+    // 那时「稍后/今天已弹」和点击统计还全在内存里。
+    [Fact]
+    public void The_exit_flush_writes_the_same_three_things_as_OnExit()
+    {
+        var flush = BodyOf(Source("App.xaml.cs"), "private void FlushForExit()");
+        Assert.Contains("ReminderStateStore.FlushPending()", flush);
+        Assert.Contains("FlushUsageNow()", flush);
+        Assert.Contains("FlushErrorLog()", flush);
+    }
+
+    // 硬退那一招用的是内核调用，不是 `Environment.Exit`：Exit 走托管收尾（ProcessExit、终结器），
+    // 而它要拦的正是「托管收尾里有一条线程不返回」——那时 Exit 自己也停在那儿，看门狗成了摆设。
+    // 改回 Environment.Exit 一样编译通过、测试全绿，只在真卡死时露馅。
+    [Fact]
+    public void The_hard_exit_is_a_kernel_call_not_a_managed_one()
+    {
+        var body = BodyOf(Source("Native", "Win32.cs"), "public static void TerminateSelf(uint code = 0)");
+        Assert.Contains("TerminateProcess(GetCurrentProcess()", body);
+        Assert.DoesNotContain("Environment.Exit", body);
+        Assert.Contains("[DllImport(\"kernel32.dll\", SetLastError = true)] private static extern bool TerminateProcess",
+                        Code(Source("Native", "Win32.cs")));
+    }
+
     // **两处同步排空都必须带超时，绝不能用无界 `lock`。**
     // 文件若落在已经断掉的网络盘上，写盘线程会卡在一次系统调用里很久；这时 OnExit 正等着拿
     // _logFileLock——无界等就是「点了退出，程序赖着不走」，比少写几行日志难看得多。

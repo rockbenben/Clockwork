@@ -758,7 +758,8 @@
                                 <Image Grid.Column="0" Source="/logo-256.png" Width="40" Height="40" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <StackPanel Grid.Column="1" Margin="14,0,16,0" VerticalAlignment="Center">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Clockwork" FontFamily="{StaticResource FontDisplay}" FontSize="{StaticResource FsHero}" FontWeight="SemiBold" VerticalAlignment="Bottom"/>
+                                        <TextBlock Text="Clockwork" FontFamily="{StaticResource FontDisplay}" FontSize="{StaticResource FsHero}" FontWeight="SemiBold" VerticalAlignment="Bottom"
+                                                   TextOptions.TextFormattingMode="Ideal"/>
                                         <TextBlock x:Name="VersionText" Foreground="{StaticResource BrushMuted}" FontFamily="{StaticResource FontMono}" FontSize="{StaticResource FsBody}" VerticalAlignment="Bottom" Margin="8,0,0,2"/>
                                         <!-- 这一行原来是写死的中文，18 种语言的界面里都印着「365 开源计划」 -->
                                         <TextBlock Text="{loc:Loc About_Series}" Style="{StaticResource Hint}" VerticalAlignment="Bottom" Margin="16,0,0,2"/>

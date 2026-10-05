@@ -36,6 +36,14 @@ public class MouseHookThreadTests
         => typeof(MouseHook).GetField(name,
             System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.GetValue(hook);
 
+    private static string RepoRoot()
+    {
+        var d = new DirectoryInfo(System.AppContext.BaseDirectory);
+        while (d != null && !Directory.Exists(Path.Combine(d.FullName, "app", "Resources"))) d = d.Parent;
+        Assert.NotNull(d);   // 找不到就是布局变了，宁可红也别静默跳过
+        return d!.FullName;
+    }
+
     // ── 专用钩子线程生命周期 ──
 
     [Fact]
@@ -70,8 +78,60 @@ public class MouseHookThreadTests
         hook.Dispose();
     }
 
-    // ── 笔迹合帧 ──
+    // 退出那一路（DisposeForExit）少掉的**只有**「在调用线程上摘钩」这一步，生命周期一模一样：
+    // 泵线程照样要收干净——不收的话 _proc 那个托管根一丢，回调就打在已回收的桩上。
+    [Fact]
+    public void DisposeForExit_takes_the_same_lifecycle_as_Dispose()
+    {
+        // 没装过钩子：就地收尾，不起线程、不抛；退出收尾之后再 Dispose 也不抛。
+        var a = new MouseHook(350, () => { }, x => x(), gesture: null);
+        a.DisposeForExit();
+        Assert.Null(Field(a, "_thread"));
+        a.Dispose();
 
+        var b = new MouseHook(350, () => { }, x => x(), gesture: null);
+        if (!b.Install()) { b.DisposeForExit(); return; }   // 无头会话装不上低级钩子：判不了就不算回归
+        var t = Assert.IsType<System.Threading.Thread>(Field(b, "_thread"));
+        b.DisposeForExit();
+        Assert.Null(Field(b, "_thread"));
+        Assert.True(t.Join(2000), "泵线程必须在 DisposeForExit 后退出");
+        b.DisposeForExit();   // 重复退出收尾不抛
+    }
+
+    // ── 扣在链里的那条线程要能被数出来（自愈靠它决定「这一次别装第二个」）──
+    [Fact]
+    public void A_clean_dispose_strands_nothing()
+    {
+        int before = MouseHook.StrandedTeardowns;
+        var hook = new MouseHook(350, () => { }, x => x(), gesture: null);
+        if (hook.Install())
+        {
+            hook.Dispose();
+            // 泵线程在预算内退出 = 走的是 `if (gone) return` 那条早退路，一次计数都不该加。
+            // 这条同时是「计数会减回去」的守卫：漏掉减 = 自愈从此再也不重装，症状要几小时后才看见。
+            Assert.Equal(before, MouseHook.StrandedTeardowns);
+        }
+        hook.DisposeForExit();
+        Assert.Equal(before, MouseHook.StrandedTeardowns);
+    }
+
+    // **还键只能还一次。** 泵线程的 Teardown 与「它没退回来」时那条工作线程调的是同一个方法。
+    // 这里不能拿「真 pending」的钩子测：那会往开发机的桌面上注入一次真的右键按下，
+    // 而它的抬起没人补（Trail 那条测试里 `gate.Reset()` 的注释防的就是这个）。
+    // 所以钉形状：claim 在**任何注入之前**取，取不到就直接返回（OffUiThreadTests 钉两个调用点）。
+    [Fact]
+    public void The_settle_claim_is_taken_before_anything_is_injected()
+    {
+        var src = File.ReadAllText(Path.Combine(RepoRoot(), "app", "Native", "MouseHook.cs"));
+        int body = src.IndexOf("private void SettleOwedKeys()");
+        Assert.True(body >= 0, "SettleOwedKeys 不见了：还键这件事又回到只有泵线程能做了");
+        int claim = src.IndexOf("Interlocked.Exchange(ref _downsSettled, 1) == 1", body);
+        int inject = src.IndexOf("Win32.SendRightDownTagged()", body);
+        Assert.True(claim > 0, "claim 没了：两条线程会各还一次，用户那边就是凭空多出的右键菜单");
+        Assert.True(claim < inject, "claim 必须排在注入之前，否则「只还一次」不成立");
+    }
+
+    // ── 笔迹合帧 ──
     [Fact]
     public void Trail_points_coalesce_into_one_queued_redraw_and_paint_the_latest()
     {

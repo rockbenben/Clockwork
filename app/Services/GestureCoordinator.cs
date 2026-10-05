@@ -34,17 +34,28 @@ internal sealed class GestureCoordinator
     private void WarnToast(string msg) => _diag.WarnToast(msg);
     private void AppendErrorLog(string line) => _diag.AppendErrorLog(line);
 
-    // 退出收尾（App.ExitApp 调）：全局钩子必须显式摘掉——留着不摘，退出过程中任何一次
-    // 鼠标移动都会回调进一个正在拆的对象。收笔也要在这里做：退出时手可能正按着，
+    // 退出收尾（App.ExitApp 调）。收笔也要在这里做：退出时手可能正按着，
     // 不收笔那条线会跟着桌面一直留到重启。
+    //
+    // 摘钩走 DisposeForExit：钩子**先离开链**（这一句在日志里从来没慢过），而那条可能永远不回来的
+    // 泵线程一行都不等。顺序很重要——留着一条吞右键的钩子跟着壳进程挂在链上，比壳进程本身糟得多
+    //（2026-10-06：点了退出，右键还是一路卡）。托管根也还活着：HandOff 那个闭包替系统保着 _proc。
     public void DisposeOnExit()
     {
-        _mouseHook?.Dispose();
+        _mouseHook?.DisposeForExit();
         _mouseHook = null;
+        // 探针排在钩子**之后**收：钩子还可能再回调一次（HandOff 兜底那一路），
+        // 先收探针会让那一次回调读到已 Dispose 的队列。
+        _probe?.Dispose();
+        _probe = null;
         CloseTrail();
     }
 
     private Native.MouseHook? _mouseHook;
+    // 「这一下能不能接管成手势」与「起笔窗是谁家的程序」的后台探针（见 Native/HookProbe 类头：
+    // 这两句要 OpenProcess，放在钩子回调里实测能卡住整条鼠标链 3~6 秒）。
+    // 随钩子一起起、一起收：没装钩子时不需要它，也就没有那条后台线程。
+    private Native.HookProbe? _probe;
     private int _mouseHookMs;          // 当前钩子是按哪个阈值装的：只有阈值真变了才重装（0=中键关着）
     private bool _mouseHookGesture;    // 当前钩子装没装手势那半
     // 当前那个 GestureGate 是按哪个最小笔画长度造的。GestureGate 不可变，所以换主屏 / 换分辨率
@@ -110,6 +121,12 @@ internal sealed class GestureCoordinator
     // 这条上限治不了病（钩子该死还是死），只保证病发时不额外推高摘装频率。
     private const long HealMinGapMs = 3000;
 
+    // 重装一次又哑，下一次就等多一倍，到 30 秒封顶（见 HookWatch.NextHealGap 的账）。
+    // 固定 3 秒那条闸治不了这个：它只是把「17 秒重装 5 次」变成「17 秒重装 5 次」——
+    // 因为 3 秒恰好就是判定死亡的节拍本身。心跳一恢复就复位，所以真掉了的钩子还是 3 秒内接回来。
+    private const long HealMaxGapMs = 30_000;
+    private long _healGapMs = HealMinGapMs;
+
     /// <summary>钩子掉了就重新装上。</summary>
     //
     // **Windows 会把低级鼠标钩子静默卸掉**：回调占用超过 LowLevelHooksTimeout（默认 300ms）
@@ -144,6 +161,10 @@ internal sealed class GestureCoordinator
     // 300~500ms 这一段正是「我们把自己搞死」的区间，却一声不响。摘掉之后 upstreamMax 还会
     // 停在最后那个小值上，看着一切正常；只有这一格会把那段历史带出来。
     private uint _prevCallbackMax;
+    // 回调那段耗时的两个分量（链 vs 我们自己的注入），与上一格成对，见 MouseHook.Attribution。
+    private uint _prevChainMax;
+    // 补发线程那三格读数（见 MouseHook.ReplayMaxMs）：注入移出回调之后接替 `injectMax=` 的正是它们。
+    private int _prevReplayMax, _prevReplayQueued, _prevReplayDropped;
     // 自愈那一刻**在跑的那些「会装低级鼠标钩子」的程序**（见 Core.HookSuspects）。
     //
     // 上游延迟只能证明「链被堵了」，证明不了「谁堵的」——Windows 不给枚举别人钩子的 API，
@@ -271,6 +292,16 @@ internal sealed class GestureCoordinator
         // 卡顿行里两格一起报，才分得开「一次阻塞式 GC 停掉了整个世界（两个都会大）」
         // 和「上游某个工具堵了链（只有 upstreamMax 大）」。
         uint cbMax = _mouseHook?.CallbackMaxMs ?? 0;
+        // `chainMax` 量的是回调里 CallNextHookEx 那段——别人的链堵了我们多久。
+        // 从前它旁边站着 `injectMax`（我们自己的 SendInput 在回调里堵了多久）。两格拆开之后
+        // 才第一次把「不是我们的计算」与「不是我们造成的」分开；拆完当天（21:07）的读数是
+        // `callbackMax=313ms chainMax=125ms injectMax=313ms`——慢的是我们自己的注入，
+        // 于是它越过了系统摘钩的预算。补发改到补发线程之后那一格退役，接替它的是下面的
+        // `replayMax=`：同一次注入，换一条线程，不再按住整条输入链。
+        uint chainMax = _mouseHook?.ChainMaxMs ?? 0;
+        int replayMax = _mouseHook?.ReplayMaxMs ?? 0;
+        int replayQueued = _mouseHook?.ReplayQueued ?? 0;
+        int replayDropped = _mouseHook?.ReplayDropped ?? 0;
         // trailUp 用**锁存值**（见 _trailUpSinceStall）：问的是「这段时间里覆盖窗在不在屏幕上」，
         // 不是「此刻在不在」——解卡那一刻它必然已经藏了，现读只会给出一个误导的 hidden。
         // 名字从 trail= 改成 trailUp= 是承重的：语义变了，沿用旧名字会让读过旧日志的人
@@ -279,7 +310,10 @@ internal sealed class GestureCoordinator
         _trailUpSinceStall = false;   // 这一份账只用一次，同 _stallGc2 / _stallAllocMb
         return $"gc2=+{dGc2} alloc=+{dAllocMb}MB sinceBeat={(beat < 0 ? "-" : beat == long.MaxValue ? "never" : beat + "ms")} "
              + $"upstreamMax={(_mouseHook == null ? "-" : upstream + "ms")} "
-             + $"callbackMax={(_mouseHook == null ? "-" : cbMax + "ms")} trailUp={trail}";
+             + $"callbackMax={(_mouseHook == null ? "-" : cbMax + "ms")} "
+             + $"chainMax={(_mouseHook == null ? "-" : chainMax + "ms")} "
+             + $"replayMax={(_mouseHook == null ? "-" : replayMax + "ms")} "
+             + $"replayQueued={replayQueued} replayDropped={replayDropped} trailUp={trail}";
     }
 
     /// <summary>每半秒看一眼光标。装了钩子（手势或中键面板）期间跑。</summary>
@@ -313,6 +347,13 @@ internal sealed class GestureCoordinator
     {
         // 时刻先取、只取这一次：区间长度和心跳年龄都得站在同一个瞬间上，否则又造出一扇错位的窗。
         long nowMs = Environment.TickCount64;
+        // 顺带让后台探针重算一次「当前窗口送不送得进去」。OpenProcess 在探针自己的线程上跑
+        // （见 HookProbe 类头），这里只投一次请求、立即返回——**这一句必须是纯投递**，
+        // 它跑在 UI 线程上，而 UI 线程慢 5 秒会在全屏笔迹窗上招来一块点得中的幽灵窗。
+        //
+        // 半秒一拍足够新鲜：人从切换窗口到按右键远不止半秒，而答「快照不是给这个窗口算的」
+        // 的代价只是那一笔不接管成手势（见 MouseHook.CallbackCore 里那段闸门）。
+        _probe?.Refresh();
         var pos = Native.Win32.CursorPos();
         // **第一次采样只用来定基线，不构成区间。**
         // _lastCursor 的初值是 (0,0)，而真实光标几乎不可能正好在那儿——不特判的话，
@@ -337,9 +378,22 @@ internal sealed class GestureCoordinator
     // 此前这里一个计时都没有，所以 2026-09-18 的日志里只有一句没有名字的
     // `ui thread stalled 4594ms`。名字是承重的：它和 `hook-install-wait`（在后台线程上）
     // 是**完全不同**的两条路，修法也不同，混在一起只能靠猜。
+    /// <summary>拆钩那一行的内容（纯函数，好让「写了哪几格」能被断言钉住）。</summary>
+    internal static string HookDetachLine(string why, bool gestures, bool panel, int minLeg,
+                                          int middleTolerance, int stranded)
+        => $"mouse hook detached: source={why} gestures={gestures} panel={panel} "
+         + $"minLeg={minLeg} middleTolerance={middleTolerance} stranded={stranded}";
+
     private void DisposeMouseHook(string why)
     {
         if (_mouseHook == null) return;
+        // **拆钩要留一行，哪怕一切正常。** 从前只有「重装」才记（`_prevBeat == null` 就 return），
+        // 于是「用户把手势关了」这条路在日志里完全沉默。2026-10-06 就吃过这个亏：用户 19:14 把
+        // gesturesEnabled 改成 false，之后卡顿照旧，而日志从 19:06 起一个字没写——「开关到底生效
+        // 没有」判不出来，而「右键被吞」的两种解释恰恰要靠这一格分开。
+        // 两个开关的当前读数一并写出去：off / reapply / heal / manual 每条路都经过这里。
+        AppendErrorLog(HookDetachLine(why, _mouseHookGesture, _mouseHookMs > 0, _mouseHookMinLeg,
+                                     _mouseHookTolerance, Clockwork.Native.MouseHook.StrandedTeardowns));
         long t0 = Core.UiStallWatch.Begin();
         try { _mouseHook.Dispose(); }
         finally { Core.UiStallWatch.End("hook-dispose:" + why, t0); }
@@ -400,6 +454,9 @@ internal sealed class GestureCoordinator
         // 于是判据从「试三次再放弃」改成「根本不试」：少了三次无谓的装卸，日志里那 3 行一簇没了，
         // 而真正的自愈（收到过输入、后来停了）一次都没少——那一档 EverBeat 恒为真。
         if (!_mouseHook.EverBeat) return;
+        // **心跳新就是链通了，退避立刻复位。** 下面那格的增长只针对「装了又哑、哑了又装」那个循环；
+        // 一次性的真掉钩（回调自己超了 300ms 被系统摘掉）隔几小时再来一次，还是该 3 秒内接回来。
+        if (_mouseHook.SinceBeatMs <= intervalMs + HealBeatSkewMs) _healGapMs = HealMinGapMs;
         // 三条守卫合起来才动手（区间内有移动、心跳老于本区间、距上次摘钩够久）：
         // 抽成 HookWatch.ShouldHeal 就是要让每条都有断言盯着（挪错一条阈值、或把下限删掉，
         // 都有测试变红）。状态行用的 StaleBeatMs 与此无关：那格取宽是给人看的，这里只要
@@ -408,8 +465,23 @@ internal sealed class GestureCoordinator
         // 不做这一步的话，开机不到 HealMinGapMs 就启动的程序，第一次真故障会被那条下限误挡住。
         long sinceLastHeal = _lastHealAt == 0 ? long.MaxValue : Environment.TickCount64 - _lastHealAt;
         if (!HookWatch.ShouldHeal(movedInSample, _mouseHook.SinceBeatMs, intervalMs,
-                                  sinceLastHeal, HealBeatSkewMs, HealMinGapMs))
+                                  sinceLastHeal, HealBeatSkewMs, _healGapMs))
             return;
+        // **上一次重装把泵线程扣在了链里，这一次就别装第二个。** 新钩子只会用同样的方式再扣住一次
+        //（它排在链首，第一件事就是替整条链走一遍 CallNextHookEx），而每一次摘装之间都有一截输入
+        // 空窗——2026-10-06 那 17 秒重装 5 次的账就是这么叠出来的。这一格到 0 之前不动手，
+        // 而它自己会到 0：那边放弃等待（30 秒）时计数就减掉了，不会把自愈永久拦住。
+        if (Native.MouseHook.StrandedTeardowns > 0)
+        {
+            _healGapMs = HookWatch.NextHealGap(_healGapMs, HealMinGapMs, HealMaxGapMs);
+            // 这一跳也算「动过一次手」：不改 _lastHealAt 的话，ShouldHeal 里那条闸量的还是
+            // 上一次**真摘钩**的时刻，于是每 500ms 一拍就重复一行 deferred（2026-10-06 实测
+            // 06:58:25 与 :26 连着两行），而这一格一堵就是 30 秒。
+            _lastHealAt = Environment.TickCount64;
+            AppendErrorLog($"mouse heal deferred: stranded={Native.MouseHook.StrandedTeardowns}"
+                           + $" gap={_healGapMs}ms silentFor={_mouseHook.SinceBeatMs}ms");
+            return;
+        }
         // **先把上一个钩子的账记下来，再摘掉它。** 这两格（收到过输入吗、收到过右键吗）
         // 是判断「为什么没工作」的全部依据，而摘掉之后就再也问不到了——
         // 此前这里先置空再走 ApplyMouseHook，于是自愈这条路上日志永远是「-」：
@@ -426,12 +498,20 @@ internal sealed class GestureCoordinator
         _prevUpstream = _mouseHook.UpstreamMaxMs;
         // 与上一格成对：那个量别人堵了我们多久，这个量我们自己离被摘还有多远（见 _prevCallbackMax）。
         _prevCallbackMax = _mouseHook.CallbackMaxMs;
+        _prevChainMax = _mouseHook.ChainMaxMs;
+        // 注入已经不在回调里了，`injectMax=` 那格跟着退役（留着一部永远答 0 的仪表比没有更坏，
+        // 因为它看起来像在读数）。耗时没消失，它换了地方，所以名字也换。
+        _prevReplayMax = _mouseHook.ReplayMaxMs;
+        _prevReplayQueued = _mouseHook.ReplayQueued;
+        _prevReplayDropped = _mouseHook.ReplayDropped;
         // 顺手采一次在场名单（见 _prevSuspects）。放在**摘钩之前**与上面那几格同一理由：
         // 这一格记的是「出事那一刻谁在跑」，而不是「我们查日志那一刻谁在跑」——
         // 用户关掉某个工具之后再来看日志，两者就不是一回事了。
         _prevSuspects = HookSuspects.Describe(HookSuspects.RunningProcessNames());
         var wasGesture = _mouseHookGesture;
         _lastHealAt = Environment.TickCount64;   // 记在真动手之前：万一重装又失败，下限仍得拦住立刻再摘一次
+        // 这一跳之后要是输入回来了，下面那格复位会把它抹掉；没回来就是「装了又哑」，下一跳等双倍。
+        _healGapMs = HookWatch.NextHealGap(_healGapMs, HealMinGapMs, HealMaxGapMs);
         DisposeMouseHook("heal");
         _mouseHookMs = -1;                 // 逼 ApplyMouseHook 走完整的重装，别被那句「已经是想要的状态」挡回去
         _mouseHookGesture = !wasGesture;
@@ -469,6 +549,10 @@ internal sealed class GestureCoordinator
             _prevRejected = _mouseHook.InjectRejected;
             _prevUpstream = _mouseHook.UpstreamMaxMs;
             _prevCallbackMax = _mouseHook.CallbackMaxMs;   // 同上：与上一格成对
+            _prevChainMax = _mouseHook.ChainMaxMs;
+            _prevReplayMax = _mouseHook.ReplayMaxMs;
+            _prevReplayQueued = _mouseHook.ReplayQueued;
+            _prevReplayDropped = _mouseHook.ReplayDropped;
             // 手动「重新挂钩」也记这一格：那几下恰恰是用户排障时按的，
             // 而「他按的时候链上都有谁」正是他下一步要问的（见 _prevSuspects）。
             _prevSuspects = HookSuspects.Describe(HookSuspects.RunningProcessNames());
@@ -476,6 +560,7 @@ internal sealed class GestureCoordinator
         DisposeMouseHook("manual");
         _mouseHookMs = -1;               // 逼 ApplyMouseHook 走完整重装，别被「已经是想要的状态」挡回去
         _lastHealAt = Environment.TickCount64;  // 手动摘钩也算摘钩：否则紧接着的真故障会立刻再摘一次
+        _healGapMs = HealMinGapMs;              // 人按的那一下是意图，不是循环：退避从头算
         _mouseHookFailed = false;        // 上一次装失败不该让这一次连报错都不报
         ApplyMouseHook();
     }
@@ -592,8 +677,21 @@ internal sealed class GestureCoordinator
             ApplyStallWatch(true);
             _trail ??= new Views.GestureTrailWindow();
             _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
+            // 探针跟钩子同起同收。**起在钩子装上之前**：钩子一装上就可能收到右键，
+            // 而那一刻它要问的两句答案得有人在算。
+            _probe ??= new Native.HookProbe();
+            _probe.Start();   // 幂等；不在构造函数里起线程（与 MouseHook 同一条纪律）
+            _probe.Refresh(); // 立刻算一次，免得第一笔手势撞上「还没算过」
         }
-        else CloseTrail();
+        else
+        {
+            CloseTrail();
+            // 手势关掉就收掉探针：没装手势的人不该多留一条睡在队列上的后台线程。
+            // 排在钩子拆除之后——ApplyMouseHook 末尾还会 DisposeMouseHook，那一次回调
+            // 仍可能读到探针。
+            _probe?.Dispose();
+            _probe = null;
+        }
         // `ui-post` 那一格是承重的：BeginInvoke 只是入队，正常情况下微秒级返回，但它要拿
         // WPF 调度器的锁。钩子线程在回调里等这把锁 = 回调超过 LowLevelHooksTimeout = 系统静默摘钩
         // = 收不到抬起 = 屏幕上那条线没人收（正是用户报的「轨迹卡住」）。不包这一格，
@@ -605,7 +703,8 @@ internal sealed class GestureCoordinator
             finally { Core.UiStallWatch.End("ui-post", t0); }
         }, gesture, RunByGesture,
             trailPoint: TrailPoint, trailEnd: TrailEnd,
-            unmatched: GestureUnmatched, moveTolerancePhysical: middleTolerance);
+            unmatched: GestureUnmatched, moveTolerancePhysical: middleTolerance,
+            probe: _probe);
         _mouseHookMs = ms;
         _mouseHookGesture = wantGesture;
         _mouseHookMinLeg = minLeg;
@@ -690,6 +789,10 @@ internal sealed class GestureCoordinator
                            // 离被摘还有多远（LowLevelHooksTimeout 是回调的预算，本机实测 300ms）。
                            // 这一格非零且接近 300，就说明「钩子被摘」是我们自己造成的，别再去查上游。
                            + $"callbackMax={_prevCallbackMax}ms "
+                           // callbackMax 那一格再往下劈两半：链（别人的）与注入（我们自己的 SendInput）。
+                           // 缺这两格时 `ours=0ms` 只能证明「不在我们自己的计算里」，
+                           // 证不了「不是我们的注入堵的」——而那两种病修法相反（见 MouseHook._injectMs 处）。
+                           + $"chainMax={_prevChainMax}ms replayMax={_prevReplayMax}ms replayQueued={_prevReplayQueued} replayDropped={_prevReplayDropped} "
                            // 链被堵时唯一拿得到的人证：那一刻谁在场（见 _prevSuspects）。
                            // 只有 `upstreamMax` 大才有意义——那时是别人堵的，这一格是唯一的线索；
                            // 而它只是候选，不是判决，所以写 `suspects=` 而不是 `culprit=`。

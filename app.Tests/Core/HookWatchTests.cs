@@ -65,4 +65,39 @@ public class HookWatchTests
     [Fact]
     public void Heals_the_moment_the_gap_elapses()
         => Assert.True(HookWatch.ShouldHeal(true, SampleMs + SkewMs + 1, SampleMs, GapMs, SkewMs, GapMs));
+
+    // ── 装了又哑的退避 ──
+    //
+    // 上面那条 3 秒下限只保证「别比 3 秒更密」，治不了这个循环本身：3 秒恰好也是判定死亡的节拍，
+    // 于是链被堵住（重装治不了那种）会被当成钩子被摘（重装才是解药那种）来治。
+    // 2026-10-06 06:16:40 起 17 秒重装 5 次、留下 4 条 `hook-join-background took 30000ms`，
+    // 而每次摘装之间都有一截输入空窗——用户报的「右键多点几下会卡，有些右键不出现」。
+    [Fact]
+    public void The_gap_doubles_after_each_heal_that_went_silent_again()
+    {
+        Assert.Equal(6000, HookWatch.NextHealGap(GapMs, GapMs, 30_000));
+        Assert.Equal(12_000, HookWatch.NextHealGap(6000, GapMs, 30_000));
+        Assert.Equal(24_000, HookWatch.NextHealGap(12_000, GapMs, 30_000));
+    }
+
+    // 封顶之后不再长：退避是为了止损，不是为了把自愈关掉。
+    [Fact]
+    public void The_backoff_caps_and_never_goes_below_the_floor()
+    {
+        Assert.Equal(30_000, HookWatch.NextHealGap(24_000, GapMs, 30_000));
+        Assert.Equal(30_000, HookWatch.NextHealGap(30_000, GapMs, 30_000));
+        Assert.Equal(30_000, HookWatch.NextHealGap(900_000, GapMs, 30_000));   // 别人手滑写大的也压回封顶
+        // 调用方复位成 0 / 比下限还小的值时，回落到下限而不是「立刻可以再摘」。
+        Assert.Equal(GapMs, HookWatch.NextHealGap(0, GapMs, 30_000));
+        Assert.Equal(GapMs, HookWatch.NextHealGap(500, GapMs, 30_000));
+    }
+
+    // 退避只加长下限，不动那两条真判据：没移动、心跳新鲜，依旧不许动手。
+    [Fact]
+    public void A_grown_gap_still_gates_only_the_frequency()
+    {
+        Assert.False(HookWatch.ShouldHeal(true, SampleMs + SkewMs + 1, SampleMs, GapMs, SkewMs, 12_000));
+        Assert.False(HookWatch.ShouldHeal(false, LongAgo, SampleMs, LongAgo, SkewMs, 12_000));
+        Assert.True(HookWatch.ShouldHeal(true, SampleMs + SkewMs + 1, SampleMs, 12_000, SkewMs, 12_000));
+    }
 }

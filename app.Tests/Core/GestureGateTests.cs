@@ -156,16 +156,36 @@ public class GestureGateTests
     [Fact]
     public void Path_is_cleared_when_a_new_stroke_starts()
     {
-        var g = new GestureGate(_ => false, MinLeg);   // 什么都匹配不上，走 Swallow
+        var g = new GestureGate(_ => false, MinLeg);   // 什么都匹配不上 → 画出来也没绑
         g.OnRightDown(500, 500);
         for (int i = 1; i <= 30; i++) g.OnMove(500, 500 + i * 5);
-        Assert.Equal(PressVerdict.Swallow, g.OnRightUp());
+        Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());   // 未匹配不再吞（见 Unmatched_stroke_replays_the_click）
         Assert.Equal("D", g.Path);                     // 上一笔留下了串
 
         Assert.Equal(PressVerdict.Swallow, g.OnRightDown(500, 500));   // 只是按下，还没画
         Assert.Equal("", g.Path);                      // 残留必须没了，否则上层照着它弹提示
         Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());         // 没动就抬起 = 普通右键
         Assert.Equal("", g.Path);
+    }
+
+    // 画出来了却没绑动作：**这一下右键要还给用户**，不能吃掉。
+    //
+    // 从前这一档是 Swallow，理由写在 MouseHook 里——「补发点击会在轨迹终点弹一个莫名的菜单」。
+    // 但代价落在用户身上：2560 宽 + high 档的最小笔画只有 38px，连点右键时手很容易漂过它，
+    // 漂过就被判成「画了一条没绑的笔画」，于是"经常右键被吞"（用户原话，2026-10-06）。
+    // 判据来自同类实现：MacStroke 在未识别那一档照样把原始按下与抬起补发回去
+    //（AppDelegate.m:379→385，手势白画一场，但用户的右键一定还在）；StrokesPlus 把它做成了
+    // 配置项 `Relay Gesture on No Match`。easystroke 相反（响铃并吃掉，handler.cc:985），
+    // 可它在 X 上是主动 grab，按下从未进过目标程序，没有「配对状态」要收拾——不是我们的对等模型。
+    // 提示照旧要报（`Path` 留着给上层读），只是不再吞键。
+    [Fact]
+    public void An_unbound_stroke_replays_the_click_instead_of_eating_it()
+    {
+        var g = new GestureGate(_ => false, MinLeg);   // 什么都匹配不上
+        g.OnRightDown(500, 500);
+        for (int i = 1; i <= 30; i++) g.OnMove(500 + i * 5, 500);
+        Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());
+        Assert.Equal("R", g.Path);                     // 形状还得留给「你画的是 R，它没绑动作」那句
     }
 
     // Reset 同理：钩子卸载 / 抬起丢了而超时收笔，都不该把上一笔的串留给下一次。
@@ -263,13 +283,14 @@ public class GestureGateTests
 
     // 画了但没配：吞掉，什么都不发生——在轨迹终点弹出莫名的右键菜单更糟。
     [Fact]
-    public void Unmatched_stroke_is_swallowed()
+    public void Unmatched_stroke_replays_the_click()
     {
         var g = New("RD");
         double x = 500, y = 500;
         g.OnRightDown((int)x, (int)y);
         for (int i = 0; i < 24; i++) g.OnMove((int)(x -= 5), (int)y);
-        Assert.Equal(PressVerdict.Swallow, g.OnRightUp());
+        // 画出一条没绑的笔画：这一下右键要还给用户（判据见 An_unbound_stroke_replays...）
+        Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());
     }
 
     // 移动一律放行：光标位移吞不掉也不必吞。
@@ -554,7 +575,7 @@ public class GestureBindingTests
         var g = new GestureGate(_ => false);          // 什么都匹配不上
         g.OnRightDown(100, 100);
         for (int y = 100; y <= 300; y += 5) g.OnMove(100, y);   // 一条向下的直线
-        Assert.Equal(PressVerdict.Swallow, g.OnRightUp());
+        Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());  // 报了形状，也不吃掉这一键
         Assert.Equal("D", g.Path);
     }
 
@@ -648,6 +669,6 @@ public class GestureBindingTests
         for (int y = 100; y <= 200; y += 5) g.OnMove(100, y);
 
         Assert.False(g.LiveMatch());
-        Assert.Equal(PressVerdict.Swallow, g.OnRightUp());
+        Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());   // 按上下文进程没绑上 → 还原成普通右键
     }
 }

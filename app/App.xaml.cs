@@ -456,12 +456,61 @@ public partial class App : System.Windows.Application
 
     public void ExitApp()
     {
+        ArmExitWatchdog();   // 第一句：它要盯的就是接下来这几步里的任何一卡
         _reminders.Stop();
         _gesture.DisposeOnExit();   // 摘钩 + 收笔（理由见 GestureCoordinator.DisposeOnExit）
         if (_main != null) _main.AllowClose = true;
         _tray?.Dispose();
         try { _mutex?.ReleaseMutex(); } catch { }
         Shutdown();
+    }
+
+    // 看门狗到点硬退；给补写的时间上限。
+    //
+    // 5000 不是随手取的：它等于系统的 HungWindowTimeout。超过这个数，窗口已经被判「未响应」，
+    // 用户看到的正是「点了退出没反应」——这时进程已经没有可挽回的部分了，硬退比挂着好。
+    // 1000 是「三步补写串起来跑一遍」的预算：它们各自带超时（日志 300ms、提醒快照写盘重试），
+    // 正常远用不满；超了就放弃补写直接退，看门狗不能自己也赖着。
+    private const int ExitWatchdogMs = 5000;
+    private const int ExitFlushBudgetMs = 1000;
+
+    /// <summary>给退出上一道兜底：到点进程还在就尽力补写、然后硬退。</summary>
+    //
+    // **先说清它能兜什么、兜不了什么。** 2026-10-06 那种壳进程（点了退出，`Get-Process` 只剩一条线程、
+    // `taskkill /F` 回「没有此任务的实例在运行」）它兜不了：那条线程卡在 win32k 里，替整条输入链
+    // 等一个不回话的第三方钩子，这种内核等待连给自己 TerminateProcess 都完不成。
+    // 那种局面的正解在 MouseHook.DisposeForExit——**别让钩子跟着壳进程留在链上**：
+    // 壳只是难看，还吞着右键的壳才是「退出之后一直卡」。
+    //
+    // 这一颗管的是另一类：托管收尾自己吊住（托盘、互斥体、WPF 关窗、写盘队列拿着不返回的锁），
+    // 那时进程还活着也还肯收 TerminateProcess，到点硬退就有意义。逐个证明「它们都不会」是不成立的。
+    //
+    // 为什么补写要**再起一条线程**、而不是看门狗自己直接调：这一步唯一的可能就是「有别的东西不返回」，
+    // 而卡住那条线程手里的锁（磁盘、`_usageLock`、写盘队列）看门狗自己去拿就是一起死。
+    // 两条都是后台线程：硬退之后没有遗留，也不会有第二次僵尸。
+    private void ArmExitWatchdog()
+    {
+        var t = new Thread(() =>
+        {
+            try { Thread.Sleep(ExitWatchdogMs); } catch { }
+            var flush = new Thread(() => { try { FlushForExit(); } catch { } })
+            { Name = "Clockwork.ExitFlush", IsBackground = true };
+            flush.Start();
+            try { flush.Join(ExitFlushBudgetMs); } catch { }
+            Native.Win32.TerminateSelf();
+        })
+        { Name = "Clockwork.ExitWatchdog", IsBackground = true };
+        t.Start();
+    }
+
+    // OnExit 那三步（见下方），看门狗自己走一遍：卡死多半发生在**走到 OnExit 之前**，
+    // 那时这三步一次都没做过，而没落盘的正是「稍后/今天已弹」和点击统计。
+    // 三步都是幂等的（写完清脏标记/清待写快照），与 UI 线程那一遍撞上也只会有一边白做一次。
+    private void FlushForExit()
+    {
+        Core.ReminderStateStore.FlushPending();
+        FlushUsageNow();
+        FlushErrorLog();
     }
 
     // 所有退出路径（托盘退出/语言切换重启/提权重启）都过 Shutdown → 在此兜底：

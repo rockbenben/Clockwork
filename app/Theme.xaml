@@ -137,7 +137,16 @@
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
-        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+        <!-- Display 而不是 Ideal（本来的值）。
+             两个模式在 WPF 里的取舍是「小字要 Display、大字要 Ideal」：Ideal 走完整的
+             OpenType 整形与字距调整，效果最好，但那是**给大字号准备的**；Display 走
+             GDI 式的字形栅格化，小字上更快、边缘也更实。
+             而这一份字号表从 FsNano=10 到 FsHero=17（见上面），**全部落在小字那一档**，
+             于是原来的 Ideal 在这里只付了代价没拿到好处：设置页与四个列表加起来几百个
+             TextBlock，每一个都走较慢的那条整形路径，滚动与开窗时的布局/绘制都更贵。
+             真要 Ideal 的只有主窗口那个 FsHero 的标题（17px），它在下面单独设回 Ideal——
+             大字号上它确实更平滑，而那一处一次只画一个字。 -->
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
     </Style>
     <Style x:Key="Hint" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource BrushMuted}"/>
@@ -1080,6 +1089,11 @@
         <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
         <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
         <Setter Property="AlternatingRowBackground" Value="Transparent"/>
+        <!-- 行虚拟化开：四个列表里「系统启动项」与「端口」动辄几百行，
+             不虚拟化时每行都要实例化整棵视觉树（每行还有图标列），滚动与首次打开明显发涩。
+             WPF 默认就是开的，这里显式写出来是为了让「哪天被人关掉」在 diff 里看得见——
+             关掉它不会有任何编译错误或测试失败，只表现为长列表变卡。 -->
+        <Setter Property="EnableRowVirtualization" Value="True"/>
     </Style>
 
     <!-- 列表面板：把表格包成一块蓝钢面板，条目少时下方空白也是有形的面板表面，

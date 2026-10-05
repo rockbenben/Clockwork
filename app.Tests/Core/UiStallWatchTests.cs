@@ -111,13 +111,20 @@ public class UiStallWatchTests
     // 注入锁排队）是无害的；出现在 UI 线程上才是幽灵化的点火源。不区分的话，日志里两者
     // 长得一模一样，而这条仪表存在的全部意义就是把它们分开。
     [Fact]
-    public async Task The_same_call_on_a_background_thread_is_marked_as_such()
+    public void The_same_call_on_a_background_thread_is_marked_as_such()
     {
         var lines = new List<string>();
         UiStallWatch.Start(lines.Add, nowMs: 0, uiThreadId: Environment.CurrentManagedThreadId);
         try
         {
-            await Task.Run(() => UiStallWatch.Note("foreground-nudge", 900));
+            // **不能用 Task.Run**：await 期间调用方那条线程已经空出来了，而它自己就是线程池线程——
+            // 池完全可能把这段活儿派回**同一条**线程上跑。那时 CurrentManagedThreadId 正好等于
+            // 记下来的 uiThreadId，这一格读出 `thread=ui`，测试红，而仪表一点毛病都没有
+            //（2026-10-06 全量跑到第 2401 条时就是这么偶然红了一次，单跑那个类 4 次全绿）。
+            // 专属线程才是这条断言想要的那一侧：它必然不是记下来的那一条。
+            var t = new System.Threading.Thread(() => UiStallWatch.Note("foreground-nudge", 900));
+            t.Start();
+            Assert.True(t.Join(5000), "那条线程没跑完 Note：这一格量的东西根本没发生");
             var one = Assert.Single(lines);
             Assert.Contains("(thread=bg)", one);
         }
@@ -299,6 +306,19 @@ public class UiStallWatchTests
 
     private static string AppCode() => Code(AppSource());
 
+    // 取一个方法的**整个方法体**，而不是"从签名往后数 N 个字符"。
+    // 原先那两处守卫写的是 Substring(ctx, 1200) / (c, 700)——代码一长（这次给归因又加了两格）
+    // 窗口就盖不住结尾那几行，红的是尺子不是产品。按缩进找收尾括号是唯一不会过期的切法
+    //（口径同 TrailStaleBitmapTests / StallProbeWiringTests 的 BodyOf）。
+    private static string MethodAt(string src, string signature)
+    {
+        int start = src.IndexOf(signature);
+        Assert.True(start >= 0, $"源码里找不到 {signature}：这段守卫要跟着它走");
+        int end = src.IndexOf("\n    }", start);
+        Assert.True(end > start, $"{signature} 的方法体没找到收尾括号");
+        return src.Substring(start, end - start);
+    }
+
     // **自愈那条路**是这次复现的核心：HealMouseHookIfDead 在 UI 线程上摘钩，而
     // MouseHook.Dispose() 内部有两次 Join(1000)——钩子线程正卡在回调里时会双双等满，
     // UI 线程卡满 2 秒。它此前完全没有计时，所以日志里只有一句没有名字的 stalled。
@@ -387,7 +407,7 @@ public class UiStallWatchTests
         var app = AppCode();
         int ctx = app.IndexOf("private string StallContext()");
         Assert.True(ctx >= 0, "找不到 StallContext：卡顿行又只剩时长了");
-        var body = app.Substring(ctx, 1200);
+        var body = MethodAt(app, "private string StallContext()");
         Assert.Contains("GC.CollectionCount(2)", body);
         Assert.Contains("GC.GetTotalAllocatedBytes", body);
         Assert.Contains("SinceBeatMs", body);
@@ -402,20 +422,23 @@ public class UiStallWatchTests
     public void The_hook_callback_is_timed()
     {
         var hook = Code(MouseHookSource());
-        Assert.Contains("Core.UiStallWatch.End(\"hook-callback\", t0, detail)", hook);
+        Assert.Contains("Core.UiStallWatch.End(\"hook-callback\", t0,", hook);
         Assert.Contains("return CallbackCore(code, wParam, lParam);", hook);
         Assert.Contains("private IntPtr CallbackCore(int code, IntPtr wParam, IntPtr lParam)", hook);
         // 委托必须仍然指向**包装**那个：指到 Core 上就绕开了计时，而且没人看得出来。
         Assert.Contains("_proc = Callback;", hook);
-        // 归因拆分必须在：回调慢 =「我们算得慢」还是「跨进程环节（放行/注入）被别人的链堵着」。
-        // 2026-09-27 实测中位 4 秒最大 45 秒全是后者的形状——不拆开就只能互相猜。
-        Assert.Contains("chain={_chainMs}ms ours=", hook);
+        // 归因必须在：**链（CallNextHookEx）/ 剩下才是我们自己的计算**。
+        // 从前这里还劈出第三格「我们的注入（SendInput）」，拆出它的当天（21:07）正是那一格
+        // 判了方向（`injectMax=313ms` 而 `chainMax=125ms`）；补发移到补发线程之后，回调里
+        // 没有注入可记，那一格退役——接管它的是 ReplayOffCallbackTests 与 replayMax= 读数，
+        // 所以这一句从三格改成两格是**有接替者的收窄**，不是把判据放宽。
+        Assert.Contains("Attribution(ms, _chainMs)", hook);
         Assert.Contains("private IntPtr Chain(int code, IntPtr wParam, IntPtr lParam)", hook);
         // 回调内所有放行必须走 Chain：裸 CallNextHookEx(_hook, code 只许出现在 Chain 的定义里一次，
         // 多出来的每一个都是一处漏计的点。
         int bare = System.Text.RegularExpressions.Regex.Matches(hook, @"CallNextHookEx\(_hook, code").Count;
         Assert.True(bare == 1, $"裸 CallNextHookEx 应只剩 Chain() 定义那一条，实际 {bare} 条");
-        // 重入必须只记最外层：内层（自家注入引起的）清账会把外层的 chain 累计抹掉。
+        // 重入必须只记最外层：内层（自家注入引起的）落在外层的注入窗口之内，再累加一次就是算两遍。
         Assert.Contains("if (_cbDepth == 1) _chainMs = 0;", hook);
     }
 
@@ -428,7 +451,7 @@ public class UiStallWatchTests
         var app = AppCode();
         int ctx = app.IndexOf("private string StallContext()");
         Assert.True(ctx >= 0, "找不到 StallContext");
-        var body = app.Substring(ctx, 1200);
+        var body = MethodAt(app, "private string StallContext()");
         Assert.Contains("UpstreamMaxMs", body);
         // 没装钩子时必须报 "-" 而不是 "0ms"：0ms 读起来像「一点没迟到」，
         // 而真相是「没有钩子可问」——把「没有」和「很好」混成一格，正是这条仪表要避免的错。
@@ -447,7 +470,7 @@ public class UiStallWatchTests
         var app = AppCode();
         int ctx = app.IndexOf("private string StallContext()");
         Assert.True(ctx >= 0, "找不到 StallContext");
-        var body = app.Substring(ctx, 1200);
+        var body = MethodAt(app, "private string StallContext()");
         Assert.Contains("_trailUpSinceStall", body);            // 读的是锁存值
         Assert.DoesNotContain("_trail.IsVisible", body);        // 而不是此刻的可见性
         // 语义变了就得换名字：旧名字 trail= 的含义是「此刻」，沿用会让读过旧日志的人以为可比。
@@ -539,7 +562,7 @@ public class UiStallWatchTests
         var hook = Code(MouseHookSource());
         int c = hook.IndexOf("private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)");
         Assert.True(c >= 0, "找不到 Callback：这段守卫要跟着它走");
-        var body = hook.Substring(c, 700);
+        var body = MethodAt(hook, "private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)");
         int write = body.IndexOf("Volatile.Write(ref _callbackMax, ms)");
         int slow = body.IndexOf("UiStallWatch.End(\"hook-callback\"");
         Assert.True(write >= 0, "回调里没有记耗时峰值");
@@ -555,6 +578,10 @@ public class UiStallWatchTests
         var dev = Code(DevChecksSource());
         Assert.Contains("real.CallbackMaxMs", dev);
         Assert.Contains("回调耗时峰值=", dev);
+        // 拆出来的两格也得在那一页上，否则现场量一次还是分不出「链堵的」和「我们注入堵的」。
+        Assert.Contains("real.ChainMaxMs", dev);
+        Assert.Contains("real.ReplayMaxMs", dev);
+                Assert.Contains("补发线程注入峰值={realReplayMax}ms", dev);
     }
 
     // 上游延迟怎么量的：拿系统给这条事件的时刻戳（MSLLHOOKSTRUCT.time）跟现在比。

@@ -142,6 +142,8 @@ public partial class App
             // 见 GestureCoordinator.HealMouseHookIfDead 的注释：摘掉之后就再也问不到了）。
             var realUpstream = real.UpstreamMaxMs;
             var realCallbackMax = real.CallbackMaxMs;
+            var realChainMax = real.ChainMaxMs;
+            var realReplayMax = real.ReplayMaxMs;
             real.Dispose();
             var elevated = Native.Win32.IsElevated();
             var text =
@@ -156,6 +158,14 @@ public partial class App
                 // 离被摘还有多远（LowLevelHooksTimeout 是回调的预算，本机实测 300ms）。
                 // 光看上游延迟分不出「链被堵」和「我们自己把钩子搞死」——而这两种病修法相反。
                 $"回调耗时峰值={realCallbackMax}ms（预算 300ms，接近它就是在被摘的边缘）\r\n" +
+                // 回调那段时间再劈两半，否则上面那一格只说「我们花了多久」，说不清是谁占的：
+                // 链（CallNextHookEx，别人的钩子）与注入（我们自己的 SendInput）。
+                // 链（CallNextHookEx，别人的钩子）单独一格：它大 = 链堵了，只能让路 / 抢链首。
+                // 我们自己的注入从前挂在旁边（`我们的注入=`）；2026-10-06 把补发整体上移到补发线程
+                // 之后，回调里只剩拖拽救援那一处同步注入，所以这里报的是**补发线程**的峰值——
+                // 它与回调耗时不再是同一条账（见 MouseHook.ReplayMaxMs / ReplayQueued / ReplayDropped）。
+                $"　其中 链={realChainMax}ms  补发线程注入峰值={realReplayMax}ms "
+                + $"（排队 {real.ReplayQueued} 次，投不进去 {real.ReplayDropped} 次）\r\n" +
                 // 同一刻在跑的那些「会装低级鼠标钩子」的程序（见 Core.HookSuspects）。
                 // 上游延迟那一格说明链**有没有**被堵，这一格说明当时**谁在场**——
                 // 两格合起来才是一句完整的话；只有前一格，结论停在「有人堵，但不知道去关谁」。
