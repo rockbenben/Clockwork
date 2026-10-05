@@ -15,6 +15,24 @@ public class ActionGroupTemplatesTests
         Assert.All(all, g => Assert.True(g.Enabled));
     }
 
+    // 八个模板摆到面板上得是八个样子：「运行动作」的格子没自己设图标时跟着组走（见 PanelLayout），
+    // 组不设就是八格共用同一枚「一叠动作」字形——那正是「看着一样但不知道哪个是哪个」的来源。
+    [Fact]
+    public void Every_template_carries_a_distinct_recognizable_icon()
+    {
+        var all = ActionGroupTemplates.All();
+        var icons = all.Select(g => g.Icon).ToArray();
+        Assert.All(icons, i => Assert.False(string.IsNullOrWhiteSpace(i), "有模板没设图标"));
+        Assert.Equal(icons.Length, icons.Distinct().Count());
+        // 「认得」= PanelIcon 把它当码位（或 brand:slug）解析成图标，而不是当文件路径去磁盘上找一趟。
+        Assert.All(all, g =>
+        {
+            var spec = PanelIcon.Resolve(g.Icon, "group");
+            Assert.True(spec.Kind is PanelIconKind.Glyph or PanelIconKind.Brand,
+                        $"{g.Name} 的图标 {g.Icon} 解析不出图标");
+        });
+    }
+
     // 关通知 / 麦克风静音 / 扬声器静音都是有状态的开关：改完不会自己恢复。模板里每出现一个「关」，
     // 「恢复正常」里就必须有对应的「开」，否则用户第二天会以为通知坏了。
     // 这条测试就是那个出口的看门人——「恢复正常」被删或被改瘦，它立刻红。

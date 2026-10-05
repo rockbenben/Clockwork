@@ -13,10 +13,14 @@ public static class ActionGroupTemplates
 {
     public static List<ActionGroup> All() => new()
     {
+        // 图标逐组指定：「运行动作」的格子没自己设图标时跟着组走（见 PanelLayout），而组没设就是
+        // 那枚共用的「一叠动作」字形——八个模板摆到面板上会长成八格一模一样，认不出哪个是哪个。
+        // 码位取的都是 Windows 自带字体里画得出来的形状（验收靠 --shots，见 IconLibrary 的注释）；
+        // 不必每个都在选择器那张表里——首启预设的「显示桌面」用的 E770 也不在表里，同一个先例。
         // 专注：IM 用「最小化」而不是「关闭」——关掉会漏消息，现实中没人这么用。
         // 关通知排在最前：先把打断源掐掉，再收拾屏幕，顺序反了的话收拾到一半照样会被弹窗打断。
         // 它是有状态的开关（改注册表，不会自己恢复），所以「恢复正常」那个模板必须存在、且要配一条回来。
-        new ActionGroup { Name = Strings.Get("Tpl_Focus"), Steps = new()
+        new ActionGroup { Name = Strings.Get("Tpl_Focus"), Icon = "E7ED", Steps = new()
         {
             new LaunchStep { Kind = "system", Command = "notificationsOff" },
             new LaunchStep { Kind = "volume", Action = "mute" },
@@ -31,7 +35,7 @@ public static class ActionGroupTemplates
         // 又会在刚清干净的（很可能正在共享的）屏幕上，把聊天窗口重新亮出来小一秒。
         // 麦克风先静音：会前最容易出事的就是「以为没开麦」，这一步关的是系统默认录音设备本身，
         // 比任何会议软件自己的静音都彻底。进会后手动开麦即可——反过来（默认开着）风险大得多。
-        new ActionGroup { Name = Strings.Get("Tpl_Meeting"), Steps = new()
+        new ActionGroup { Name = Strings.Get("Tpl_Meeting"), Icon = "E716", Steps = new()
         {
             new LaunchStep { Kind = "volume", Action = "micMute" },
             new LaunchStep { Kind = "system", Command = "notificationsOff" },
@@ -42,7 +46,7 @@ public static class ActionGroupTemplates
         // 通知 / 麦克风静音都是有状态的开关——只给「关」不给「开」，用户第二天会以为通知坏了。
         // 亮度放最后且给 80 而不是 100：100 在多数笔记本上刺眼，80 是「回到正常工作亮度」
         // （模板里没有调暗的组，但亮度命令在，手动调暗过的人需要这个回程）。
-        new ActionGroup { Name = Strings.Get("Tpl_Restore"), Steps = new()
+        new ActionGroup { Name = Strings.Get("Tpl_Restore"), Icon = "E895", Steps = new()
         {
             new LaunchStep { Kind = "system", Command = "notificationsOn" },
             new LaunchStep { Kind = "volume", Action = "micUnmute" },
@@ -50,7 +54,7 @@ public static class ActionGroupTemplates
             new LaunchStep { Kind = "system", Command = "brightness", Level = 80 },
         } },
         // 收工：确认闸门在最前（答「否」整组中止），锁屏必须在最后。
-        new ActionGroup { Name = Strings.Get("Tpl_EndOfDay"), Steps = new()
+        new ActionGroup { Name = Strings.Get("Tpl_EndOfDay"), Icon = "E7C1", Steps = new()
         {
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_EndOfDayMsg"), Confirm = true },
             new LaunchStep { Kind = "window", Action = "close", Process = "Slack" },
@@ -59,7 +63,7 @@ public static class ActionGroupTemplates
             new LaunchStep { Kind = "system", Command = "lockScreen" },
         } },
         // 睡前：锁屏 + 息屏都要——只息屏的话动下鼠标就亮、机器还在跑。
-        new ActionGroup { Name = Strings.Get("Tpl_Bedtime"), Steps = new()
+        new ActionGroup { Name = Strings.Get("Tpl_Bedtime"), Icon = "E708", Steps = new()
         {
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_BedtimeMsg"), Speak = true },
             new LaunchStep { Kind = "volume", Action = "mute" },
@@ -70,13 +74,13 @@ public static class ActionGroupTemplates
             new LaunchStep { Kind = "system", Command = "lockScreen", DelayMs = 1500 },
             new LaunchStep { Kind = "system", Command = "monitorOff" },
         } },
-        new ActionGroup { Name = Strings.Get("Tpl_Away"), Steps = new()
+        new ActionGroup { Name = Strings.Get("Tpl_Away"), Icon = "E72E", Steps = new()
         {
             new LaunchStep { Kind = "system", Command = "lockScreen", DelayMs = 1500 },   // 同「睡前」：等锁屏落定再息屏
             new LaunchStep { Kind = "system", Command = "monitorOff" },
         } },
         // 唯一演示「整组循环」的模板：45 分钟一轮、跑 8 轮 ≈ 覆盖一个下午。
-        new ActionGroup { Name = Strings.Get("Tpl_Sedentary"), Repeat = 8, RepeatDelayMs = 2700000, Steps = new()
+        new ActionGroup { Name = Strings.Get("Tpl_Sedentary"), Icon = "E916", Repeat = 8, RepeatDelayMs = 2700000, Steps = new()
         {
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_SedentaryMsg") },
         } },
@@ -92,7 +96,7 @@ public static class ActionGroupTemplates
     private static ActionGroup SearchTemplate()
     {
         var v = Strings.Get("Tpl_SearchVar");
-        return new ActionGroup { Name = Strings.Get("Tpl_Search"), Steps = new()
+        return new ActionGroup { Name = Strings.Get("Tpl_Search"), Icon = "E721", Steps = new()
         {
             new LaunchStep { Kind = "prompt", Message = Strings.Get("Tpl_SearchAsk"), OutputVar = v },
             new LaunchStep { Kind = "url", Target = string.Format(StepDisplay.DefaultSearchUrl, "{" + v + "}") },
