@@ -37,6 +37,29 @@ public class PanelGlyphTests
     public void A_group_step_shares_the_group_glyph()
         => Assert.Equal(PanelGlyph.Group, PanelGlyph.ForKind("group"));
 
+    // 脚本字形撞进步骤类型那一批就白加了：一格花括号和一格「发送文本」的铅笔得能分开。
+    [Fact]
+    public void Script_glyphs_dont_collide_with_kind_glyphs()
+    {
+        var kinds = StepDisplay.StepKinds.Select(PanelGlyph.ForKind).ToHashSet();
+        Assert.NotEmpty(kinds);
+        Assert.DoesNotContain(PanelGlyph.Console, kinds);
+        Assert.DoesNotContain(PanelGlyph.Code, kinds);
+    }
+
+    // 认不出来的目标要答 null，让 PanelIcon 照旧去借目标自己的图标——
+    // 把 .exe 也当成脚本的话，整个面板的彩色图标会一夜之间变成线描。
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(@"C:\Windows\notepad.exe")]
+    [InlineData(@"C:\Start Menu\微信.lnk")]
+    [InlineData(@"D:\art\icon.png")]
+    [InlineData("https://example.com")]
+    [InlineData(@"D:\notes\run.me")]        // 后缀像 .me，不是 .ps1
+    public void Anything_that_is_not_a_script_reports_no_glyph(string? path)
+        => Assert.Null(PanelGlyph.ForScript(path));
+
     // 都该是单个字符（MDL2 是基本多文种平面内的私用区码位）。写成两个字符通常意味着
     // 码位抄错成了需要代理对的位置，那种字符 Segoe MDL2 Assets 里根本没有，只会画出方框。
     [Fact]
@@ -45,5 +68,7 @@ public class PanelGlyphTests
         Assert.All(StepDisplay.StepKinds, k => Assert.Equal(1, PanelGlyph.ForKind(k).Length));
         Assert.Equal(1, PanelGlyph.Group.Length);
         Assert.Equal(1, PanelGlyph.Fallback.Length);
+        Assert.Equal(1, PanelGlyph.Console.Length);
+        Assert.Equal(1, PanelGlyph.Code.Length);
     }
 }

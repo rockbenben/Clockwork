@@ -5,6 +5,31 @@ using Xunit;
 // 「彩色 = 打开一个东西，线描 = 做一件事」这条视觉规则就落在这里，写错了面板会整片失去区分度。
 public class PanelIconTests
 {
+    // 脚本格子不借文件关联的图标：那支笔说的是「这台机器用什么打开它」，而不是这一格要干什么。
+    // 带引号的目标也要认——目标框里写 `"D:\my docs\跑一次.ps1"` 是常见写法。
+    [Theory]
+    [InlineData(@"D:\scripts\run.bat")]
+    [InlineData(@"D:\scripts\RUN.CMD")]
+    [InlineData(@"D:\scripts\up.ps1")]
+    [InlineData(@"D:\scripts\热键.ahk")]
+    [InlineData(@"""D:\my docs\任务 1.ps1""")]
+    public void A_script_target_stays_on_a_line_glyph(string target)
+    {
+        var spec = PanelIcon.Resolve(null, "app", target);
+        Assert.Equal(PanelIconKind.Glyph, spec.Kind);
+        Assert.Equal(PanelGlyph.ForScript(target), spec.Value);
+        Assert.NotNull(PanelGlyph.ForScript(target));
+    }
+
+    // 批处理画控制台，其余脚本画花括号：两种「跑一段脚本」在面板上分得开。
+    [Fact]
+    public void Batch_files_get_the_console_and_other_scripts_the_braces()
+    {
+        Assert.Equal(PanelGlyph.Console, PanelGlyph.ForScript(@"D:\x\run.bat"));
+        Assert.Equal(PanelGlyph.Code, PanelGlyph.ForScript(@"D:\x\up.ps1"));
+        Assert.Equal(PanelGlyph.Code, PanelGlyph.ForScript(@"D:\x\热键.ahk"));
+    }
+
     // 「运行程序」自动借目标自己的图标——面板好看起来全靠这一条。
     [Fact]
     public void A_launch_step_borrows_its_targets_icon()

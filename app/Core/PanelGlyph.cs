@@ -20,6 +20,35 @@ public static class PanelGlyph
     /// 空字符串会让那一格只剩文字，在一片有图标的格子里显得像是坏了。</summary>
     public static readonly string Fallback = char.ConvertFromUtf32(0xE768);   // Play
 
+    /// <summary>控制台窗口（写着 C:\ 的那台）——批处理用。</summary>
+    public static readonly string Console = char.ConvertFromUtf32(0xE756);    // CommandPrompt
+
+    /// <summary>一对花括号——其余脚本用。</summary>
+    public static readonly string Code = char.ConvertFromUtf32(0xE943);       // CodeBraces
+
+    private static readonly string[] ConsoleExt = { ".bat", ".cmd" };
+    // 只列「点它会跑起来」的那些。.lnk / .exe 不在此列——它们有自己的图标可借（见 PanelIcon）。
+    private static readonly string[] CodeExt =
+    {
+        ".ps1", ".psm1", ".ahk", ".ah2", ".au3", ".vbs", ".js", ".jse", ".wsf", ".py", ".rb", ".lua", ".pl",
+    };
+
+    /// <summary>目标是一段脚本 → 该画的线描字形；不是脚本返回 null。
+    ///
+    /// 为什么脚本不走「借目标自己的图标」那条：脚本文件的关联图标是**这台机器上装了哪个编辑器**
+    /// 的产物——一台默认配置的机器上 `.ps1` 就是记事本那支笔，改了关联又变成编辑器的图标，
+    /// 同一份配置换台机器还会长得不一样。而这一格要说的是「跑它」，不是「打开它看」：
+    /// 面板的质感规则本来就是「彩色 = 打开一个东西，线描 = 做一件事」，脚本属于后者。</summary>
+    public static string? ForScript(string? path)
+    {
+        var p = (path ?? "").Trim().TrimEnd('"');
+        foreach (var e in ConsoleExt)
+            if (p.EndsWith(e, StringComparison.OrdinalIgnoreCase)) return Console;
+        foreach (var e in CodeExt)
+            if (p.EndsWith(e, StringComparison.OrdinalIgnoreCase)) return Code;
+        return null;
+    }
+
     /// <summary>按步骤类型取图标。</summary>
     public static string ForKind(string? kind) => kind switch
     {

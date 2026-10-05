@@ -82,6 +82,10 @@ public static class PanelIcon
             // 顺带让低级鼠标钩子超时被卸掉。取图标这件事等不起，也不需要真答案——
             // 猜错了无非是 IconLoader 取不到、回退线描字形，而那条路本身也是不阻塞的。
             var resolved = LaunchTarget.ResolveLaunchTarget(target ?? "", altTargets ?? "", blocking: false);
+            // 脚本先于「取文件图标」判定：借来的关联图标说的是这台机器装了哪个编辑器，
+            // 而不是这一格要干什么（见 PanelGlyph.ForScript）。
+            var script = PanelGlyph.ForScript(resolved);
+            if (script != null) return new PanelIconSpec(PanelIconKind.Glyph, script, script);
             // URL / 协议（https:、ms-settings:）没有本地文件，取不到图标——回退线描，别去碰网络。
             // 但 shell:AppsFolder\<AUMID>（商店应用、wt 这类别名解析后的 UWP 目标）是例外：
             // 它也匹配协议正则，却能由 IShellItemImageFactory 直接出图，不能在这一层被挡掉。
