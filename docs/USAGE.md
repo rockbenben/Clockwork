@@ -8,7 +8,7 @@ A small Windows tray tool that manages five everyday things (plus a Settings tab
 
 1. **Startup list** — open your everyday apps in order at login, and do a few chores along the way.
 2. **Scheduled tasks** — pop a reminder (on-time / read aloud / repeat-nagging / do something when you click **Yes**) or silently run an action; runs once, on an interval, or on the usual weekday/every-N-days/monthly recurrence.
-3. **Actions** — bundle a series of actions into a group (Focus / Wrap-up / Bedtime…) and trigger it with one tap or a **global hotkey**.
+3. **Actions** — bundle a series of actions into a group (Focus mode / End of day / Bedtime…) and trigger it with one tap or a **global hotkey**.
 4. **System startup items** — view and manage everything on your PC that auto-starts; switch off what you don't need.
 5. **Ports** — see which ports are being listened on and what is holding them; double-click to open `localhost:3000` in your browser, right-click to free the port.
 
@@ -168,7 +168,7 @@ These don't watch the clock, they watch the machine — the task fires the momen
 ## Actions
 
 - **Add** opens an empty action straight away. To start from something that already works, use **From a template…** next to it: pick a **built-in template** (Focus mode / Meeting mode / Back to normal / End of day / Bedtime / Stepping away / Time for a break / Quick search), tweak the process names and save.
-  - **Back to normal is the way out.** Muting notifications and muting the mic are stateful — they don't undo themselves. Focus and Meeting each switch something off, so keep a *Back to normal* around (a hotkey suits it well) to switch them all back on.
+  - **Back to normal is the way out.** Muting notifications and muting the mic are stateful — they don't undo themselves. Focus mode and Meeting mode each switch something off, so keep a *Back to normal* around (a hotkey suits it well) to switch them all back on.
 - The list shows each group's **step summary** and **hotkey** columns (an empty group's summary reads **(empty)**).
 - A group runs **only one copy at a time** (repeat triggers are skipped — except its hotkey, see "the hotkey is a toggle" below).
 - Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**. You can also select a row on the Actions tab and hit **Run** to fire it once by hand.
@@ -244,7 +244,7 @@ A tile grid at your mouse, one press away — for when the tray icon is a long w
 - **A page is a thing you make, not a side job of some action.** Hit the **+** at the end of the left rail in the **panel manager** and a card drops in with its name ready to type, **in whichever category you were looking at**; the **+** at the end of the top row makes a category instead — just the category, no page with it, so its rail starts empty and you add the first page yourself. click an empty slot to put something on it. A page's name, category and app binding are all edited in place on its header — there is no separate settings window.
   - **Pages and actions are two different things.** An action is a run of operations plus how it fires (hotkey, tray, referenced elsewhere); a page is a screenful of tiles plus when it shows (category, app). They share no properties, so they no longer share a stored object — configs from older versions are moved across on first launch, and you get a card listing what changed.
   - **Every step kind works as a tile** — launch program, open URL, send keys, mouse, send text, volume, window action, system command, run action, delay, message, and the rest. A tile runs that one operation the same way the **Run** button next to a step does.
-  - **Want a tile that runs a whole action?** Add a **Run action** step pointing at it — that is what the step kind is for. So a whole routine ("Focus", "Wrap up") and a single operation (lock screen, mute) sit side by side on the same page. A tile with no icon of its own borrows the icon of the action it points at.
+  - **Want a tile that runs a whole action?** Add a **Run action** step pointing at it — that is what the step kind is for. So a whole routine ("Focus mode", "End of day") and a single operation (lock screen, mute) sit side by side on the same page. A tile with no icon of its own borrows the icon of the action it points at.
   - Page order is set by dragging tabs; tile order by dragging tiles.
 - **Switched-off tiles are greyed, not missing** — so "it's disabled" and "it's gone" stay distinguishable.
 - **Then the handful you reach for anyway**, below a divider so they never get confused with your own actions: rerun the startup list, stop running actions, pause/resume reminders, open the window.
