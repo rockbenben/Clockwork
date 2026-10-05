@@ -100,8 +100,12 @@
                                 <!-- 图标列：这一格画的就是「这条被放到面板上会长什么样」——同一个
                                      PanelIcon.Resolve + IconVisual.Make，所以清单与面板的图标不是两套代码
                                      各猜一遍，而是同一份。没有表头：图标不需要名字，而给它配一个是
-                                     18 种语言乘一条；拖拽轨那一列同样没有表头，先例在这儿。 -->
-                                <DataGridTemplateColumn x:Name="ColLaunchIcon" Width="36" CanUserResize="False">
+                                     18 种语言乘一条；拖拽轨那一列同样没有表头，先例在这儿。
+                                     CellStyle 借 RailCellStyle 只为它那一条 Padding=0：DataGridCell 默认
+                                     内边距 12,9，36 宽的列被吃掉 24 之后只剩 12px，18px 的图标会被横向裁掉
+                                     （第一版就是这么坏的——示例数据全是线描字形，裁得不明显，真图标才露出来）。 -->
+                                <DataGridTemplateColumn x:Name="ColLaunchIcon" Width="36" CanUserResize="False"
+                                            CellStyle="{StaticResource RailCellStyle}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <!-- Loaded 而不是 LoadingRow：DataGridRow.Cells 不是公开的，
