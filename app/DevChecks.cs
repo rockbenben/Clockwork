@@ -212,6 +212,89 @@ public partial class App
             throw new InvalidOperationException($"focus probe: keyboard focus never reached the {what}");
     }
 
+    // ── 焦点可见性的成对判据（--smoke 跑，所以 CI 每次构建都过一遍）──────────────
+    //
+    // 强调色环是**纯样式属性**：谁重做一次 CheckBox 模板、把那个 ring 元素改个名，环就静默消失，
+    // 而唯一受害者是键盘用户——他看不见焦点在哪，只能靠 Tab 数格子。截图矩阵里那五个探针只产出
+    // 给人看的 PNG，而 CI 不跑 --shots，所以「补了环」这件事原本没有任何东西在守。
+    //
+    // 判据是**同一扇窗的成对像素差**：一次什么都不做，一次把键盘焦点放到目标控件上，两次的位图
+    // 必须差出一片。基线用的是截图矩阵里已有的同名变体——两边都由 AllXamlWindows() 造，
+    // 所以「探针和基线长得一样」不是这张表维护的巧合，而是同一个构造函数的结果。
+    //
+    // 名字写死在这儿：改了探针名而没改这张表，这里会直接抛，而不是静默少测一类控件。
+    private static readonly (string Focused, string Baseline, string Control)[] FocusPairs =
+    {
+        ("FocusProbeChk", "GroupEditor", "CheckBox"),
+        ("FocusProbeCombo", "StepEditor", "ComboBox"),
+        ("FocusProbeTab", "MainWindow", "TabItem"),
+        ("FocusProbeList", "GestureManager", "ListBoxItem"),
+        ("FocusProbeCell", "MainWindow", "DataGridCell"),
+    };
+
+    // 阈值是量出来的，不是拍的：五类控件补上环之后实测差 128 / 552 / 311 / 1226 / 1972 像素，
+    // 而环坏掉的那一轮实测是**整 0**（不是「小一点」，是一模一样）。线就画在 0 与 128 之间，
+    // 取 32：离抗锯齿抖动的量级足够远，又离最小的真环足够近。
+    private const int FocusChangedPixelsMin = 32;
+
+    private void CheckFocusRings()
+    {
+        var byName = AllXamlWindows().ToDictionary(v => v.Name, v => v.Make);
+        // 一次跑完五类再报：第一条就抛的话，改一类要重跑一遍全矩阵才知道下一类坏没坏。
+        var bad = new List<string>();
+        foreach (var (focused, baseline, control) in FocusPairs)
+        {
+            if (!byName.TryGetValue(focused, out var makeFocused) || !byName.TryGetValue(baseline, out var makePlain))
+            {
+                bad.Add($"{control}：判据找不到变体 {focused} 或 {baseline}（改名请把这张表一起改，别让它静默少测一类控件）");
+                continue;
+            }
+            var plain = RenderForDiff(makePlain);
+            var hot = RenderForDiff(makeFocused);
+            if (plain.W != hot.W || plain.H != hot.H)
+            {
+                bad.Add($"{control}：聚焦把窗口从 {plain.W}x{plain.H} 撑成 {hot.W}x{hot.H}，" +
+                        "像素差对不齐——探针必须只动焦点，别动选中/展开（那会换掉整块内容）");
+                continue;
+            }
+            int changed = CountDifferentPixels(plain.Pixels, hot.Pixels);
+            if (changed < FocusChangedPixelsMin)
+                bad.Add($"{control}：聚焦与不聚焦只差 {changed} 像素（下限 {FocusChangedPixelsMin}）——键盘用户看不见焦点在哪儿");
+        }
+        if (bad.Count > 0)
+            throw new InvalidOperationException("焦点可见性判据失败：\n  " + string.Join("\n  ", bad));
+    }
+
+    private (int W, int H, byte[] Pixels) RenderForDiff(Func<Window> make)
+    {
+        var w = make();
+        try
+        {
+            Park(w);
+            w.Show();
+            PumpToLoaded();
+            w.UpdateLayout();
+            int pw = (int)Math.Ceiling(w.ActualWidth), ph = (int)Math.Ceiling(w.ActualHeight);
+            var rtb = new RenderTargetBitmap(pw, ph, 96, 96, PixelFormats.Pbgra32);
+            rtb.Render(w);
+            var px = new byte[pw * ph * 4];
+            rtb.CopyPixels(px, pw * 4, 0);
+            return (pw, ph, px);
+        }
+        finally { try { w.Close(); } catch { } }
+    }
+
+    // 逐字节比不成立：Pbgra32 里预乘的 alpha 会让「同一个不透明像素」在两次渲染间字节不同。
+    // 比 RGB 三通道，且要求差得出来（>8/255）才算变——抗锯齿的轻微抖动不该被算成焦点环。
+    private static int CountDifferentPixels(byte[] a, byte[] b)
+    {
+        int changed = 0;
+        for (int i = 0; i + 3 < a.Length && i + 3 < b.Length; i += 4)
+            if (Math.Abs(a[i] - b[i]) > 8 || Math.Abs(a[i + 1] - b[i + 1]) > 8 || Math.Abs(a[i + 2] - b[i + 2]) > 8)
+                changed++;
+        return changed;
+    }
+
     private static (string Name, Func<Window> Make)[] AllXamlWindows()
     {
         var groups = new[] { new ActionGroup() };
@@ -869,6 +952,7 @@ public partial class App
                 w.Close();
             }
             CheckStepMenuFits();
+            CheckFocusRings();
             File.WriteAllText(marker, "OK");
             Shutdown(0);
         }

@@ -507,6 +507,11 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
                         </Trigger>
+                        <!-- 键盘焦点与悬停同色（与 RadioButton 同一套语汇）：环的颜色只说「指针/焦点在这儿」，
+                             选中与否由勾本身说。少了这条，Tab 到复选框上是一片像素不动。 -->
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
+                        </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.4"/>
                         </Trigger>
@@ -590,12 +595,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="bd" Background="Transparent" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                    <Border x:Name="bd" Background="Transparent" CornerRadius="5" Padding="{TemplateBinding Padding}"
+                            BorderThickness="1" BorderBrush="Transparent">
                         <ContentPresenter/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/></Trigger>
                         <Trigger Property="IsSelected" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/></Trigger>
+                        <!-- 边框厚度恒为 1（未聚焦时透明）：改成 0↔1 会让每行在 Tab 走过时长缩 2px。 -->
+                        <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccent}"/></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -823,6 +831,11 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccentDeep}"/>
                         </Trigger>
+                        <!-- 聚焦比悬停亮一档（Accent vs AccentDeep）：下拉常常正被鼠标压着，
+                             同色就分不出「鼠标在这儿」和「Tab 到这儿了」。 -->
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -892,6 +905,10 @@
                                 HorizontalAlignment="Center" Visibility="Collapsed"
                                 Background="{StaticResource BrushAccent}"
                                 Width="{Binding ActualWidth, ElementName=hdr}"/>
+                        <!-- 键盘焦点：一圈细环。页签的选中态是底下那条 3px 圆头条，而聚焦要说的不是
+                             「选中」，所以另给一层，不复用那条（复用就等于把「Tab 到哪儿」画成「当前页」）。 -->
+                        <Border x:Name="ring" CornerRadius="8" BorderThickness="1" Margin="5,3"
+                                BorderBrush="{StaticResource BrushAccent}" Visibility="Collapsed"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -900,6 +917,9 @@
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="ring" Property="Visibility" Value="Visible"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -984,9 +1004,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridCell">
-                    <Border Background="Transparent" Padding="{TemplateBinding Padding}" BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
+                    <Border x:Name="bd" Background="Transparent" Padding="{TemplateBinding Padding}" BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
                         <ContentPresenter VerticalAlignment="Center"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- 键盘焦点落在格子上（Tab 进表格之后靠方向键走）。厚度不动、只换色 + 一层底色：
+                             加边框会把行高撑 1px，一整表跟着抖。 -->
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
