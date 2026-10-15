@@ -13,24 +13,24 @@
   <data name="Tab_System" xml:space="preserve"><value>系统启动项</value></data>
   <data name="Tab_Ports" xml:space="preserve"><value>端口</value></data>
 
-  <data name="Launch_Hint" xml:space="preserve"><value>只在登录时跑一次，从上到下依次执行 · 拖动行可调顺序。要按时间 / 事件触发 → 「定时任务」；要随时一键触发 → 「动作」。</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>到点、登录或解锁 / 插拔电源等事件时，弹提醒或静默跑一个动作。只想开机开软件 → 「我的启动清单」；想随手一键触发 → 「动作」。</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>把一串操作打包成一个动作，热键 / 托盘随时一键触发，也可被启动清单和定时任务引用。只在开机跑一次的，直接写进「我的启动清单」更省事。</value></data>
+  <data name="Launch_Hint" xml:space="preserve"><value>只在登录时跑一次，从上到下依次执行 · 拖动行可调顺序。要按时间或事件触发 → 「定时任务」；要随时一键触发 → 「动作」。</value></data>
+  <data name="Reminder_Hint" xml:space="preserve"><value>到点、登录、解锁或插拔电源等事件时，弹提醒或静默跑一个动作。只想开机开软件 → 「我的启动清单」；想随手一键触发 → 「动作」。</value></data>
+  <data name="Group_Hint" xml:space="preserve"><value>把一串操作打包成一个动作，可通过热键或托盘随时一键触发，也可被启动清单和定时任务引用。只在开机跑一次的，直接写进「我的启动清单」更省事。</value></data>
   <data name="Group_NoSteps" xml:space="preserve"><value>还没有步骤。点上面「新增」加第一步；谁在上面就先跑谁。</value></data>
   <data name="Group_Empty" xml:space="preserve"><value>（空）</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>勾选、取消即时生效（非删除，可恢复）。</value></data>
+  <data name="System_Footer" xml:space="preserve"><value>勾选或取消即时生效（仅切换启用状态，可随时恢复）。</value></data>
   <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>系统、策略、一次性等只读项默认隐藏。</value></data>
   <data name="System_Count" xml:space="preserve"><value>{0} / {1} 项</value></data>
   <data name="System_Filter" xml:space="preserve"><value>过滤</value></data>
   <data name="System_ShowReadOnly" xml:space="preserve"><value>显示系统、只读项</value></data>
   <data name="System_Scanning" xml:space="preserve"><value>正在扫描开机自启项…</value></data>
   <data name="System_Refresh" xml:space="preserve"><value>刷新</value></data>
-
+ 
   <data name="Ports_ShowAll" xml:space="preserve"><value>显示全部端口</value></data>
   <data name="Ports_ShowAllTip" xml:space="preserve"><value>一个进程占多个端口时，默认只显示对外的那个。勾选后逐条列全，并跳过上面的筛选。</value></data>
   <data name="Ports_DevOnly" xml:space="preserve"><value>只看项目服务</value></data>
   <data name="Ports_DevOnlyTip" xml:space="preserve"><value>只列出从你的项目目录跑起来的服务，按 .git、package.json 这类标记认。取消勾选可看到其余正在监听的软件。</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>双击一行用浏览器打开，右键释放端口。</value></data>
+  <data name="Ports_Footer" xml:space="preserve"><value>双击条目在浏览器中打开，右键可释放该端口。</value></data>
   <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} 个端口 · 每 5 秒自动刷新</value></data>
   <data name="Ports_Empty" xml:space="preserve"><value>当前筛选下没有端口。机器上共有 {0} 个端口在监听。换个筛选或清空搜索试试。</value></data>
   <data name="System_Empty" xml:space="preserve"><value>当前筛选下没有启动项。机器上共有 {0} 项。清掉过滤词，或勾上「显示系统、只读项」。</value></data>
@@ -255,10 +255,10 @@
   <data name="Ed_Args" xml:space="preserve"><value>参数</value></data>
   <data name="Ed_WorkDir" xml:space="preserve"><value>工作目录</value></data>
   <data name="Ed_Elevated" xml:space="preserve"><value>以管理员运行</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>目标可填：程序（全路径或裸名）/ 快捷方式 / 脚本 / 文件夹 / 网址 / 文档 / ms-settings: 等协议。</value></data>
+  <data name="Ed_AppHint" xml:space="preserve"><value>目标可填：程序（完整路径或文件名）、快捷方式、脚本、文件夹、网址、文档或 ms-settings: 等协议。</value></data>
   <data name="Ed_Combo" xml:space="preserve"><value>组合键</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。发给当前焦点窗口，先把目标带到最前。被 Windows 占用的组合（Win+D、Win+6）录不到，双击本框可手输。带修饰键的鼠标动作也在这里：在框里滚一下即录（Ctrl 滚＝缩放、Shift 滚＝横向滚）。单纯滚动或点击用「鼠标」步骤更省事。</value></data>
-  <data name="Ed_MouseHint" xml:space="preserve"><value>滚动发给鼠标指针下的窗口；点击落在鼠标当前位置（本程序不挪指针），所以点击类动作请先用「窗口动作 → 带到最前面」把目标摆好，或只用在后退/前进这类与位置无关的动作上。要点 N 次 / 滚 N 格就把下面的「重复次数」调大，用「执行后延时」控制节奏。</value></data>
+  <data name="Ed_KeysHint" xml:space="preserve"><value>例：Win+D / Alt+K / Ctrl+Enter / F5。发给当前焦点窗口，请先确保目标在最前。被 Windows 占用的组合（Win+D、Win+6）录不到，双击本框可手动输入。带修饰键的鼠标动作也在这里：在框里滚一下即录（Ctrl 滚＝缩放、Shift 滚＝横向滚）。单纯滚动或点击用「鼠标」步骤更省事。</value></data>
+  <data name="Ed_MouseHint" xml:space="preserve"><value>滚动发给鼠标指针下的窗口；点击落在鼠标当前位置（本程序不移动指针），因此点击类动作建议先用「窗口动作 → 带到最前面」就位，或仅用于后退、前进等与位置无关的操作。若需点击多次或滚动多格，可调大下方的「重复次数」，并用「执行后延时」控制节奏。</value></data>
   <data name="Wheel_down" xml:space="preserve"><value>向下滚</value></data>
   <data name="Wheel_right" xml:space="preserve"><value>向右滚</value></data>
   <data name="Mouse_forward" xml:space="preserve"><value>前进（侧键）</value></data>
@@ -276,7 +276,7 @@
   <data name="Ed_SendKey" xml:space="preserve"><value>发送按键</value></data>
   <data name="Ed_WaitWin" xml:space="preserve"><value>等窗口（秒）</value></data>
   <data name="Ed_PostDelay" xml:space="preserve"><value>出现后等（秒）</value></data>
-  <data name="Ed_WindowHint" xml:space="preserve"><value>进程名不含 .exe（如 Weixin / msedge）。带到最前 / 发送按键需抢占前台，开机自启时可能不生效。</value></data>
+  <data name="Ed_WindowHint" xml:space="preserve"><value>进程名不含 .exe（如 Weixin、msedge）。置前窗口与发送按键需获取前台焦点，开机自启时可能受限。</value></data>
   <data name="Ed_RestoreHint" xml:space="preserve"><value>回到你触发这条动作那一刻正在用的那个窗口。这一档不用选目标。</value></data>
   <data name="Ed_Command" xml:space="preserve"><value>命令</value></data>
   <data name="Ed_Text" xml:space="preserve"><value>文本</value></data>
@@ -290,7 +290,7 @@
   <data name="Snd_None" xml:space="preserve"><value>不出声</value></data>
   <data name="Ed_SoundMode" xml:space="preserve"><value>声音</value></data>
   <data name="Ed_Confirm" xml:space="preserve"><value>是/否确认（是=继续，否=中止这个动作）</value></data>
-  <data name="Ed_OnYes" xml:space="preserve"><value>点是后</value></data>
+  <data name="Ed_OnYes" xml:space="preserve"><value>点「是」后</value></data>
   <data name="Ed_Present" xml:space="preserve"><value>呈现方式</value></data>
   <data name="Present_Dialog" xml:space="preserve"><value>对话框（等你回应）</value></data>
   <data name="Present_Card" xml:space="preserve"><value>卡片（不打断）</value></data>
@@ -305,7 +305,7 @@
   <data name="Ed_Vol_Set" xml:space="preserve"><value>设为音量</value></data>
   <data name="Ed_OnYes_None" xml:space="preserve"><value>无</value></data>
   <data name="Ed_OnYes_Run" xml:space="preserve"><value>运行、打开文件</value></data>
-  <data name="Ed_OnYes_Url" xml:space="preserve"><value>开网页</value></data>
+  <data name="Ed_OnYes_Url" xml:space="preserve"><value>打开网址</value></data>
   <data name="Ed_Group_None" xml:space="preserve"><value>（无）</value></data>
   <data name="Ed_GroupMissing" xml:space="preserve"><value>（目标已删除）</value></data>
 
@@ -731,7 +731,7 @@
   <data name="Ed_PathHint" xml:space="preserve"><value>支持 %环境变量%（如 %APPDATA%）：运行时自动展开。点右侧 { } 可插入常用文件夹。</value></data>
   <data name="Kind_path" xml:space="preserve"><value>打开文件或文件夹</value></data>
   <data name="Sum_OpenPath" xml:space="preserve"><value>打开 {0}</value></data>
-  <data name="Sys_quickOpen" xml:space="preserve"><value>一键直达（选中文字自动识别网址 / 路径 / 磁力链接 / 注册表项）</value></data>
+  <data name="Sys_quickOpen" xml:space="preserve"><value>一键直达（选中文字自动识别网址、路径、磁力链接或注册表项）</value></data>
   <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>无法识别选中的内容：{0}</value></data>
   <data name="Err_RegEditBusy" xml:space="preserve"><value>注册表编辑器已在运行且无法自动关闭，已把它的窗口带到最前面。请先手动关闭它，再试一次。</value></data>
   <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>一键直达键</value></data>

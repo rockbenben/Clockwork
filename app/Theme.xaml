@@ -93,15 +93,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Border CornerRadius="4" Background="{StaticResource BrushLine}" Margin="2"/>
+                    <Border x:Name="bd" CornerRadius="4" Background="{StaticResource BrushLine}" Margin="2"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushMuted}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushPaper}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
-            </Trigger>
-        </Style.Triggers>
     </Style>
     <Style TargetType="ScrollBar">
         <Setter Property="Background" Value="Transparent"/>
@@ -188,7 +191,7 @@
                                                  标题若前置箭头就会被顶出半个字宽，成为全表单唯一不在轨上的一行。
                                                  试过反过来给箭头留定宽槽位、把折叠区内自由行也缩进对齐箭头槽——
                                                  那是在右对齐标签的锯齿左缘上打补丁，两条轨永远差一口气；左对齐后一条轨就够了。 -->
-                                            <TextBlock Grid.Column="0" Text="{Binding Header, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                            <TextBlock x:Name="hdr" Grid.Column="0" Text="{Binding Header, RelativeSource={RelativeSource AncestorType=Expander}}"
                                                        TextWrapping="Wrap" MaxWidth="560" FontSize="{StaticResource FsBody}" Foreground="{StaticResource BrushMuted}"/>
                                             <TextBlock x:Name="Chevron" Grid.Column="1" Text="▸" FontSize="{StaticResource FsMicro}" Margin="8,1,2,0"
                                                        VerticalAlignment="Top" Foreground="{StaticResource BrushAccentText}"/>
@@ -199,7 +202,12 @@
                                             <Setter TargetName="Chevron" Property="Text" Value="▾"/>
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Chevron" Property="Foreground" Value="{StaticResource BrushAccentDeep}"/>
+                                            <Setter TargetName="Chevron" Property="Foreground" Value="{StaticResource BrushAccent}"/>
+                                            <Setter TargetName="hdr" Property="Foreground" Value="{StaticResource BrushPaper}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsKeyboardFocused" Value="True">
+                                            <Setter TargetName="Chevron" Property="Foreground" Value="{StaticResource BrushAccent}"/>
+                                            <Setter TargetName="hdr" Property="Foreground" Value="{StaticResource BrushPaper}"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -463,6 +471,9 @@
                                       VerticalAlignment="Stretch" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccentDeep}"/>
+                        </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrushAccent}"/>
                         </Trigger>

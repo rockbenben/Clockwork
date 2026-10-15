@@ -46,9 +46,9 @@
                     </StackPanel>
                 </ScrollViewer>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="YesBtn" Style="{StaticResource PrimaryButton}" MinWidth="88" Height="34" Margin="0,0,8,0" Click="Yes_Click"/>
-                    <Button x:Name="NoBtn" MinWidth="88" Height="34" Margin="0,0,8,0" Click="No_Click"/>
-                    <Button x:Name="OkBtn" Style="{StaticResource PrimaryButton}" MinWidth="88" Height="34" Click="Ok_Click"/>
+                    <Button x:Name="YesBtn" Style="{StaticResource DialogPrimaryButton}" Margin="0,0,8,0" Click="Yes_Click"/>
+                    <Button x:Name="NoBtn" Style="{StaticResource DialogButton}" Margin="0,0,8,0" Click="No_Click"/>
+                    <Button x:Name="OkBtn" Style="{StaticResource DialogPrimaryButton}" Click="Ok_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>
