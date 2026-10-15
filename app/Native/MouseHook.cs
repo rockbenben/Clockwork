@@ -238,6 +238,11 @@ public sealed class MouseHook : IDisposable
     private int _replayMaxMs;
     // 排队排进去过多少次（右键/中键合在一起）：证明「补发确实在跑」，而不是静默地被跳过。
     private int _replayQueued;
+    // 拖拽救援因为**已经在重入里**而被跳过注入的次数（见 RescueDragDown 的限深闸）。
+    // 与 `_replayDropped` 同一个理由：这一档是主动退让，不是失败，但它必须看得见——
+    // 否则「中键拖拽偶尔不自动滚动」与「压根没触发过救援」在日志里长得一模一样，
+    // 而这两种病修法完全不同（前者是我们主动让的，后者是判定没走到）。
+    private int _rescueSkipped;
     // 「这次注入送不送得进去」的探子。单测注入用，生产走 `Win32.InputNotBlockedNow`。
     private readonly Func<bool> _canInject;
 
@@ -298,7 +303,16 @@ public sealed class MouseHook : IDisposable
         // 与钩子线程同一条纪律，见 MouseHookThreadTests.Constructor_does_not_start_any_thread）。
         // 没 Install 时队列只进不出，测试因此可以驱动补发路径而不往开发机桌面上注入真按键。
         _replay = new System.Collections.Concurrent.BlockingCollection<int>(ReplayQueueCapacity);
-        _canInject = canInject ?? Win32.InputNotBlockedNow;
+        // **补发前那道「送得进去吗」也必须走探针的快照** —— 它同样要 OpenProcess + 读 token，
+        // 而 `ReplayClick` 是被 `CallbackCore` **同步**调的，也就是每一次右键抬起都在回调里做一遍。
+        // 漏掉它的话，这一条与 `mayEngage`／进程名那两句是同一个病，只是频率更高（每次点击都做）。
+        //
+        // 用的是快照里的 `Injectable` 而不是 `MayEngage(pid)`：按下那一刻已经按 pid 校验过一道了，
+        // 而这里若再拿 pid 比一次，快照比前台旧半秒就会答 false —— 那一刻真抬起已经被吞，
+        // 于是又变成「吞了却还不回去」的那一档，正是本次要治的病。快照答「上次问是能送的」，
+        // 是此刻手上最好的知识；真被拒的窄缝照旧计进 `_injectRejected`（见 ReplayClick 的注释）。
+        if (probe != null) _canInject = () => probe.Injectable;
+        else _canInject = canInject ?? Win32.InputNotBlockedNow;
         // 探针在场就用它的答案（后台线程算好的快照），不在场退回同步实现——生产永远传探针，
         // 所以「回调里做跨进程查询」这条路在生产里已经不成立（理由见字段处与 HookProbe 类头）。
         // 两个都**显式取方法组**：写成 `probe?.ProcessName ?? other` 会让编译器报「方法组不可为 null」
@@ -921,6 +935,10 @@ public sealed class MouseHook : IDisposable
     /// 所以它不吃掉按键，但必须看得见——见 EnqueueReplay。</summary>
     public int ReplayDropped => Volatile.Read(ref _replayDropped);
 
+    /// <summary>拖拽救援因已在重入中而被跳过的次数（见 <see cref="RescueDragDown"/> 的限深闸）。
+    /// 它非零 = 那段时间下游的链正在堵，而我们是**主动**不再往里叠注入，不是判定没走到。</summary>
+    public int RescueSkipped => Volatile.Read(ref _rescueSkipped);
+
     /// <summary>把一次回调的时长拆成「链 / 剩下才是我们自己的计算」。</summary>
     // 纯函数，为了这一句能被断言钉住（日志归因写错方向比没有归因更糟）。
     // TickCount64 是毫秒粒度，取整会让 chain 略大于 total，ours 兜到 0，不代表算错。
@@ -977,7 +995,40 @@ public sealed class MouseHook : IDisposable
     // 按下排到补发线程上就落到移动后面，功能整个消失。代价照实说：这里仍可能被输入队列按住
     // 一次（每次拖拽一次，不是每次点击一次），所以它自己报名 `hook-drag-rescue`，慢的时候
     // 出现在 slow 行里的是这个名字，而不是重新混进 `ours=`。
-    private void RescueDragDown() => SendSync(() => Win32.SendMiddleDownTagged());
+    //
+    // ── 限深：已经在重入里就不再注一层 ──
+    //
+    // **为什么这道闸是必需的（本机日志，不是推测）**：注入出去的那条中键按下回到本回调时，
+    // 在 `CallbackCore` 里被 `DwExtraInfo == Win32.InjectTag` 认出后**原样放行**——而「放行」
+    // 就是一次 `CallNextHookEx`，也就是它要把整条下游链**同步走完**才返回。于是链不堵时它几微秒，
+    // 链堵时它就是一次完整的阻塞，而这次阻塞**发生在回调内部**，于是下一个注入又能再套一层。
+    //
+    // 2026-10-14 06:42–06:49 那 41 条 `hook-callback slow` 正是这个形状：同一秒里若干条
+    // **无归因尾巴**的递增时长（735 → 1078 → 1422 → 1781…），最后一条才是带
+    // `chain=…ms ours=0ms` 的最外层。无归因 = `_cbDepth > 1`（见 Callback 的 finally），
+    // 递增 = 真的层层嵌套，最深一簇套了 **8 层**，最外层 4047ms。
+    // 那一簇 `ours=0ms` 说明时间全在链上、不是我们的计算——**所以不是新病，是老堵塞的放大版**：
+    // 一次链堵被我们自己的注入乘上了层数。而 `LowLevelHooksTimeout` 本机只有 300ms。
+    //
+    // 为什么不改到别的线程上去：上面那条「必须抢在这一条移动放行之前」的理由仍然成立，
+    // 排队就落到移动后面了，中键自动滚动整个功能消失。这里能退的只有**层数**。
+    //
+    // 为什么取向是「跳过」而不是「照注」：注入是为了让下游看到中键按下，而重入中的这一次
+    // 注入，下游**已经**在祖先那一帧里收到过一次按下了（那才是它生效的那一次）。再注一层
+    // 不增加下游看到按下的机会，只把回调的阻塞乘二。跳过的那一次中键自动滚动这一次不响应，
+    // 与 `MayEngage` 答 false 就整笔放行是同一个决定的两半：宁可这一次没手势，也不要把按键吞了。
+    private void RescueDragDown()
+    {
+        // 只在**最外层**注：`_cbDepth > 1` 说明这次移动本身就是某个注入的产物，
+        // 而那个祖先已经替我们注入过了。闸放在注入之前，不放在回调入口——
+        // 入口那道闸会把祖先那次也一起挡掉，功能直接失效。
+        if (_cbDepth > 1)
+        {
+            Interlocked.Increment(ref _rescueSkipped);
+            return;
+        }
+        SendSync(() => Win32.SendMiddleDownTagged());
+    }
 
     private uint SendSync(Func<uint> send)
     {
@@ -1094,7 +1145,7 @@ public sealed class MouseHook : IDisposable
                 // 做的，补写在它后面等于给下一次用——那一笔仍然按空串判（而 Gate.Pending 已被
                 // 清掉，这条补写连「本笔」都认不出来了）。
                 // 读缓存仍是纯字典查，不把跨进程查询放回回调。
-                if (msg == WM_RBUTTONUP && string.IsNullOrEmpty(_gesture.ContextProcess) && _gesturePid != 0)
+                if (msg == WM_RBUTTONUP && string.IsNullOrEmpty(_gesture.ContextProcess))
                     _gesture.ContextProcess = _procNameForPid(_gesturePid);
                 var gv = msg == WM_RBUTTONDOWN ? _gesture.OnRightDown(data.X, data.Y) : _gesture.OnRightUp();
                 if (msg == WM_RBUTTONDOWN)

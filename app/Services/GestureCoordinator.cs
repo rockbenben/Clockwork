@@ -165,6 +165,8 @@ internal sealed class GestureCoordinator
     private uint _prevChainMax;
     // 补发线程那三格读数（见 MouseHook.ReplayMaxMs）：注入移出回调之后接替 `injectMax=` 的正是它们。
     private int _prevReplayMax, _prevReplayQueued, _prevReplayDropped;
+    // 拖拽救援被限深闸挡下的次数（见 MouseHook.RescueDragDown）：那一簇嵌套回调的最直接自证。
+    private int _prevRescueSkipped;
     // 自愈那一刻**在跑的那些「会装低级鼠标钩子」的程序**（见 Core.HookSuspects）。
     //
     // 上游延迟只能证明「链被堵了」，证明不了「谁堵的」——Windows 不给枚举别人钩子的 API，
@@ -302,6 +304,10 @@ internal sealed class GestureCoordinator
         int replayMax = _mouseHook?.ReplayMaxMs ?? 0;
         int replayQueued = _mouseHook?.ReplayQueued ?? 0;
         int replayDropped = _mouseHook?.ReplayDropped ?? 0;
+        // 限深闸挡下过几次（见 MouseHook.RescueDragDown）。这一格与上面几格读法不同：
+        // 它**不描述卡顿本身**，而是回答「那段时间里钩子链是不是正在堵」——
+        // 2026-10-14 06:42–06:49 那批嵌套回调 ours=0ms chain=Nms 就是这个形状。
+        int rescueSkipped = _mouseHook?.RescueSkipped ?? 0;
         // trailUp 用**锁存值**（见 _trailUpSinceStall）：问的是「这段时间里覆盖窗在不在屏幕上」，
         // 不是「此刻在不在」——解卡那一刻它必然已经藏了，现读只会给出一个误导的 hidden。
         // 名字从 trail= 改成 trailUp= 是承重的：语义变了，沿用旧名字会让读过旧日志的人
@@ -313,7 +319,7 @@ internal sealed class GestureCoordinator
              + $"callbackMax={(_mouseHook == null ? "-" : cbMax + "ms")} "
              + $"chainMax={(_mouseHook == null ? "-" : chainMax + "ms")} "
              + $"replayMax={(_mouseHook == null ? "-" : replayMax + "ms")} "
-             + $"replayQueued={replayQueued} replayDropped={replayDropped} trailUp={trail}";
+             + $"replayQueued={replayQueued} replayDropped={replayDropped} rescueSkipped={rescueSkipped} trailUp={trail}";
     }
 
     /// <summary>每半秒看一眼光标。装了钩子（手势或中键面板）期间跑。</summary>
@@ -504,6 +510,9 @@ internal sealed class GestureCoordinator
         _prevReplayMax = _mouseHook.ReplayMaxMs;
         _prevReplayQueued = _mouseHook.ReplayQueued;
         _prevReplayDropped = _mouseHook.ReplayDropped;
+        // 拖拽救援的限深退让（见 MouseHook.RescueDragDown）：非零 = 那段时间链在堵，
+        // 而我们是主动不再往里叠注入。它与 replayDropped 分得开「主动退」与「投不进去」。
+        _prevRescueSkipped = _mouseHook.RescueSkipped;
         // 顺手采一次在场名单（见 _prevSuspects）。放在**摘钩之前**与上面那几格同一理由：
         // 这一格记的是「出事那一刻谁在跑」，而不是「我们查日志那一刻谁在跑」——
         // 用户关掉某个工具之后再来看日志，两者就不是一回事了。
@@ -553,6 +562,7 @@ internal sealed class GestureCoordinator
             _prevReplayMax = _mouseHook.ReplayMaxMs;
             _prevReplayQueued = _mouseHook.ReplayQueued;
             _prevReplayDropped = _mouseHook.ReplayDropped;
+            _prevRescueSkipped = _mouseHook.RescueSkipped;
             // 手动「重新挂钩」也记这一格：那几下恰恰是用户排障时按的，
             // 而「他按的时候链上都有谁」正是他下一步要问的（见 _prevSuspects）。
             _prevSuspects = HookSuspects.Describe(HookSuspects.RunningProcessNames());
@@ -793,6 +803,9 @@ internal sealed class GestureCoordinator
                            // 缺这两格时 `ours=0ms` 只能证明「不在我们自己的计算里」，
                            // 证不了「不是我们的注入堵的」——而那两种病修法相反（见 MouseHook._injectMs 处）。
                            + $"chainMax={_prevChainMax}ms replayMax={_prevReplayMax}ms replayQueued={_prevReplayQueued} replayDropped={_prevReplayDropped} "
+                           // 与上面 replayDropped 并排：重入层数被限住时留下的痕迹。
+                           // 非零说明那段时间链在堵、我们主动不再往里叠注入（见 MouseHook.RescueDragDown）。
+                           + $"rescueSkipped={_prevRescueSkipped} "
                            // 链被堵时唯一拿得到的人证：那一刻谁在场（见 _prevSuspects）。
                            // 只有 `upstreamMax` 大才有意义——那时是别人堵的，这一格是唯一的线索；
                            // 而它只是候选，不是判决，所以写 `suspects=` 而不是 `culprit=`。

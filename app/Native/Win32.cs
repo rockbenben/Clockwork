@@ -157,6 +157,16 @@ public static class Win32
         finally { try { CloseHandle(h); } catch { } }
     }
 
+    /// <summary>前台窗口句柄（纯 user32，不碰别的进程）；没有前台时返回 Zero。</summary>
+    //
+    // 给 HookProbe.Refresh 当「前台换没换」的廉价判据用：这一句只回答一个布尔，
+    // 而真正贵的那次 `InputNotBlockedNow()` 只在它答「换了」时才值得付。
+    public static IntPtr ForegroundWindow()
+    {
+        try { return GetForegroundWindow(); }
+        catch { return IntPtr.Zero; }
+    }
+
     /// <summary>前台窗口所属进程的 pid；没有前台窗时返回 0。</summary>
     //
     // **这里一个字都不许加。** 它跑在低级鼠标钩子回调里（见 HookProbe），而那条路上

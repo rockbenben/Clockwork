@@ -200,7 +200,12 @@ public class StallProbeWiringTests
     [Fact]
     public void The_callback_makes_no_cross_process_query_and_times_the_one_it_keeps()
     {
-        var body = Body(Src("app", "Native", "MouseHook.cs"), "private IntPtr CallbackCore");
+        // **范围要盖住整个回调路径，不只是 CallbackCore 本身。**
+        // 上一版只查 CallbackCore 的方法体，于是漏掉了下一层的 ReplayClick —— 它同样被回调
+        // 同步调用（每次右键抬起都走），里面那句 `Win32.InputNotBlockedNow()` 是同一个病，
+        // 修好另外两处之后它成了最后一条。要它变红：把 `_canInject` 改回 `?? Win32.InputNotBlockedNow`。
+        var raw = Src("app", "Native", "MouseHook.cs");
+        var body = Body(raw, "private IntPtr CallbackCore");
         // 纯 user32 的命中测试还留着：WindowFromPoint 不碰别的进程的对象，留在回调里是安全的。
         AssertWraps(body, "hook-window-at", "Win32.WindowAtPoint(data.X, data.Y)");
         // 要 OpenProcess 的那两句，一句都不许回到回调里。
@@ -210,7 +215,32 @@ public class StallProbeWiringTests
         AssertWraps(body, "hook-proc-name", "_procNameForPid(");
         // 「能不能接管」也走探针——那一问要 OpenProcess + 读 token，与上面同一个理由。
         Assert.Contains("_mayEngage(", body);
-        Assert.DoesNotContain("Win32.InputNotBlockedNow()", body);
+        // **补发前那道闸同样不许自己去打 Win32**：它只准读探针的快照。
+        //
+        // 盯的是**构造函数里那两行**，不是 `ReplayClick` 的方法体——上一版盯错了地方，
+        // 于是把 probe 分支删掉（退回 `?? Win32.InputNotBlockedNow`）它照样绿，而那正是
+        // 本次真实的回归。这份守卫已经假绿过一次，记在这里免得再犯。
+        var ctor = Body(raw, "public MouseHook(int holdMs");
+        Assert.Contains("if (probe != null) _canInject = () => probe.Injectable;", ctor);
+        Assert.Contains("else _canInject = canInject ?? Win32.InputNotBlockedNow;", ctor);
+    }
+
+    // 探针不得被叫成「每拍问一次」。那句要 OpenProcess，而本机实测它能到秒级（见 HookProbe 类头）；
+    // 无条件每 500ms 问一次等于把一个已知会卡的操作放大到每分钟 120 次——比修之前还频繁，
+    // 只是搬到了后台线程。搬走的是「卡住输入链」，不是「凭空多一倍的跨进程查询」。
+    //
+    // 让它变红：把 Refresh 改回无条件 `Request(0)`（功能完全等价、测试全绿），
+    // 直到某台机器上它真的把后台线程按死为止。
+    [Fact]
+    public void The_probe_re_probes_on_window_change_not_on_every_tick()
+    {
+        var body = Body(Src("app", "Native", "HookProbe.cs"), "public void Refresh()");
+        // 必须先比一次前台窗口句柄（纯 user32），没换且快照还新鲜就直接返回。
+        Assert.Contains("ForegroundWindow()", body);
+        Assert.Contains("_lastForeground", body);
+        Assert.Contains("SnapshotMaxAgeMs", body);
+        // 而且这个「没换就不问」必须让位给一次真正的刷新：只 Request 不判断，等于没节流。
+        Assert.Contains("return;", body);
     }
 
     // —— 回调归因的两格：链（CallNextHookEx）/ 剩下才是我们自己的计算 ——

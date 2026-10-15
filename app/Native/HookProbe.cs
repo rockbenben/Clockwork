@@ -86,8 +86,31 @@ public sealed class HookProbe : IDisposable
 
     /// <summary>排一次「重算注入可行性」的请求（幂等，队列满时静默跳过）。</summary>
     //
-    // 用 0 表示「没有指定 pid，只刷新可行性」——可行性问的是前台窗口本身，与 pid 无关。
-    public void Refresh() => Request(0);
+    // **只在真正需要时才去问那一句。** 那一句要 OpenProcess，而本机实测它能到秒级（见类头）：
+    // 无条件每 500ms 问一次，等于把这个已知会卡的操作放大到**每分钟 120 次**——比修复之前
+    // （只在每次右键抬起时问）还频繁，只是从钩子线程搬到了后台。搬走的是「卡住输入链」，
+    // 不是「凭空多出一倍的跨进程查询」，所以频率必须一起收回来。
+    //
+    // 判据是**前台窗口换没换**（GetForegroundWindow 是纯 user32，纳秒级）：而「送不送得进去」
+    // 只取决于前台那个窗口，窗口没换答案就不变。快照另有一个上限（SnapshotMaxAgeMs），
+    // 用来兜住「窗口没换但桌面换了」的那一档——UAC 安全桌面就是：它不会让前台窗口句柄改变，
+    // 可 `GetShellWindow()` 会答 0，而那正是补发必定送不进去的情形。
+    public void Refresh()
+    {
+        IntPtr fg = Win32.ForegroundWindow();
+        long now = Environment.TickCount64;
+        // 这两个字段只由 Refresh() 写，而它只从 UI 线程那一个计时器来 —— 普通字段即可。
+        if (fg == _lastForeground && now - _lastProbeAt < SnapshotMaxAgeMs) return;
+        _lastForeground = fg;
+        _lastProbeAt = now;
+        Request(0);
+    }
+
+    // 快照的最长保鲜期。前台窗口没换时的兜底重算间隔，5 秒足够短（切到安全桌面后一次
+    // 右键最多晚 5 秒才不接管），又足够长到不会变成「每秒问一次」。
+    private const long SnapshotMaxAgeMs = 5000;
+    private IntPtr _lastForeground = IntPtr.Zero;
+    private long _lastProbeAt;
 
     private void Request(uint pid)
     {

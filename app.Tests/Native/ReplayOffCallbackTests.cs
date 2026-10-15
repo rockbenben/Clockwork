@@ -104,6 +104,54 @@ public class ReplayOffCallbackTests
         Assert.Contains("RescueDragDown();", BodyOf(src, "private IntPtr CallbackCore("));
     }
 
+    // ── 1b. 那唯一一处同步注入不许再往里叠一层 ──
+    //
+    // 限深闸存在的理由是 2026-10-14 06:42–06:49 那 41 条 `hook-callback slow`：同一秒里若干条
+    // **无归因尾巴**的递增时长（735 → 1078 → 1422 → 1781…），最后一条才是带
+    // `chain=…ms ours=0ms` 的最外层。无归因 = `_cbDepth > 1`（见 Callback 的 finally），
+    // 递增 = 真嵌套，最深一簇 **8 层**。那一簇 ours=0ms 说明时间全在链上、不是我们的计算——
+    // 一次链堵被自己的注入乘上了层数，而 LowLevelHooksTimeout 本机只有 300ms。
+    //
+    // 为什么盯**闸的位置与判据**而不只是「有这个 if」：
+    //   · 写成 `_cbDepth > 0`（在入口就挡）会把祖先那次也挡掉，中键自动滚动整个失效；
+    //   · 闸放进 `SendSync` 会连补发线程之外将来的同步注入一起误伤，而那条唯一出口
+    //     的语义是「唯一的例外」，加闸不该改它的定义；
+    //   · 删掉 return 直接落注，是最自然的「优化」——三处都编译通过、单测全绿，
+    //     直到某台机器上链真的堵住为止。
+    // 让它变红：把 `_cbDepth > 1` 改成 `>= 0`，或把 `return;` 删掉。
+    [Fact]
+    public void The_drag_rescue_does_not_stack_a_second_injection_inside_a_reentry()
+    {
+        var src = Source("Native", "MouseHook.cs");
+        var rescue = BodyOf(src, "private void RescueDragDown()");
+        // 闸必须在注入**之前**、且带 return —— 少 return 那一句就等于闸不存在。
+        Assert.Contains("if (_cbDepth > 1)", rescue);
+        Assert.Contains("Interlocked.Increment(ref _rescueSkipped);", rescue);
+        Assert.Contains("return;", rescue);
+        Assert.Contains("SendSync(() => Win32.SendMiddleDownTagged());", rescue);
+        // 顺序是承重的：`return` 之前不能已经发起注入，否则闸只是个记数器。
+        Assert.True(rescue.IndexOf("return;", StringComparison.Ordinal)
+                  < rescue.IndexOf("SendSync(() => Win32", StringComparison.Ordinal),
+            "闸必须在 SendSync 之前收工——晚一步就等于没挡");
+        // 退出动作不许偷偷改成别的键或别的线程（那会让这道闸守着一个假的例外）。
+        Assert.DoesNotContain("Thread.", rescue);
+    }
+
+    // 跳过必须**可见**：与 ReplayDropped 同一纪律（静默的退让和判定没走到长得一模一样）。
+    // 让它变红：把 `_rescueSkipped` 的自增删掉，或把它从公开读数里摘掉。
+    [Fact]
+    public void A_skipped_rescue_is_counted_and_readable()
+    {
+        var src = Source("Native", "MouseHook.cs");
+        Assert.Contains("private int _rescueSkipped;", src);
+        Assert.Contains("public int RescueSkipped => Volatile.Read(ref _rescueSkipped);", src);
+        // 卡顿行与重装行都要带上它，否则排障时那两个现场都答不出「当时闸挡过没有」。
+        var coord = Source("Services", "GestureCoordinator.cs");
+        Assert.Contains("_mouseHook.RescueSkipped", coord);
+        Assert.Contains("rescueSkipped={rescueSkipped}", coord);
+        Assert.Contains("rescueSkipped={_prevRescueSkipped}", coord);
+    }
+
     // ── 2. 注入只能发生在补发线程上，而那条线程必须是具名的后台线程 ──
     //
     // 让它变红的改动：把 worker 的代码合回回调、或者起线程时漏掉 `IsBackground`（前台线程 =
