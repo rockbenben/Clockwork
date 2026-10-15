@@ -52,9 +52,13 @@ public class PathProbeTests
     public void A_missing_path_settles_to_false()
     {
         // 用一个没被别的用例问过的本地路径：问过一次缓存里就是真答案了，第一次的乐观就看不到。
-        const string gone = @"C:\__clockwork_settles_to_false__\nope.exe";
+        string gone = $@"C:\__clockwork_settles_to_false_{Guid.NewGuid():N}__\nope.exe";
         Assert.True(PathProbe.ExistsOptimistic(gone));    // 冷缓存：先当它在
-        System.Threading.Thread.Sleep(300);
+        // 轮询等待后台探测回填：CI 虚拟机在并发跑 2400+ 用例时线程池调度可能偶发略超 300ms，
+        // 轮询至多等 3 秒（本地通常几十毫秒即回填完成），杜绝假红。
+        var sw = Stopwatch.StartNew();
+        while (PathProbe.ExistsOptimistic(gone) && sw.ElapsedMilliseconds < 3000)
+            System.Threading.Thread.Sleep(20);
         Assert.False(PathProbe.ExistsOptimistic(gone));   // 回填之后：如实说不在
     }
 
