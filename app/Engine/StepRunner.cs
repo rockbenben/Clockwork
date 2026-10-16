@@ -40,16 +40,16 @@ public static class StepRunner
 
     // 活：跑单步并归纳标记，捕获异常。
     public static StepMark RunStepMark(LaunchStep s, Func<string, bool>? confirmDestructive, IReadOnlyList<string> selfPaths,
-                                       RunVars? vars = null)
+                                       RunVars? vars = null, IReadOnlyList<SiteEntry>? sites = null)
     {
-        try { return MarkOf(InvokeStepAction(s, confirmDestructive, selfPaths, null, vars)); }
+        try { return MarkOf(InvokeStepAction(s, confirmDestructive, selfPaths, null, vars, sites)); }
         catch (Exception ex) { return new StepMark("⚠ " + Strings.Lf("Mark_Exception", ex.Message), 1, 0); }
     }
 
     // 活：跑单步 repeat 次（单步「运行」/循环动作的测试路径）。
     public static StepMark RunStepMarkRepeat(LaunchStep s, Func<string, bool>? confirmDestructive, IReadOnlyList<string> selfPaths,
-                                             RunVars? vars = null)
-        => AggregateRepeat(StepHelpers.StepRepeat(s), _ => RunStepMark(s, confirmDestructive, selfPaths, vars), s.DelayMs);
+                                             RunVars? vars = null, IReadOnlyList<SiteEntry>? sites = null)
+        => AggregateRepeat(StepHelpers.StepRepeat(s), _ => RunStepMark(s, confirmDestructive, selfPaths, vars, sites), s.DelayMs);
 
     // 活：单步派发。
     // cancel：本次动作组运行的取消闸；null=没有 per-run 闸（开机清单 / 单步「运行这一步」），只认全局急停。
@@ -59,7 +59,8 @@ public static class StepRunner
     // vars：这一次运行的变量表（见 Core.RunVars）。null = 这条路径上没有变量，占位符只认 {clipboard}。
     // 产出值的步骤往里写，送文字出去的步骤从里读——这一层是**唯一**同时看得见两边的地方。
     public static ActionResult InvokeStepAction(LaunchStep s, Func<string, bool>? confirmDestructive, IReadOnlyList<string> selfPaths,
-                                                RunCancel? cancel = null, RunVars? vars = null)
+                                                RunCancel? cancel = null, RunVars? vars = null,
+                                                IReadOnlyList<SiteEntry>? sites = null)
     {
         switch (s.Kind)
         {
@@ -195,6 +196,172 @@ public static class StepRunner
                     ? ActionResult.Empty
                     : ActionResult.Warn("Warn_WaitClipboard", secs);
             }
+            // ---- 产出值的那一族：读浏览器地址 / 网址映射 / 正则 / 替换 / URL 解码 ----
+            // 五条都只干一件事：把一段文字写进 OutputVar，后面任何一步用 {名字} 引用。
+            // 与 copySelection 同规格——留空 OutputVar 就只当这一步不存在，不产出。
+
+            // 读浏览器地址栏。只覆盖 Chromium 系（Chrome/Edge/…），理由见 BrowserUrlReader。
+            case "browserUrl":
+            {
+                var got = BrowserUrlReader.Read();
+                if (string.IsNullOrWhiteSpace(got)) return ActionResult.Warn("Warn_BrowserUrlNone");
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, got);
+                return ActionResult.Empty;
+            }
+
+            // 网址 → 本地源文件。这是「看见线上文章、改它的源文件」那一整件事。
+            //
+            // 网址来源两选一：文本框里写了就走占位替换（可以引用上一步 browserUrl 的产出），
+            // **留空才去读地址栏**。留空即现读是有意的：一整条「读地址 → 映射 → 打开」
+            // 就三步，中间那个变量不必留在用户的配置里。
+            case "siteMap":
+            {
+                var url = Fill(s.Text, urlEncode: false, vars).Trim();
+                if (url.Length == 0) url = (BrowserUrlReader.Read() ?? "").Trim();
+                if (url.Length == 0) return ActionResult.Warn("Warn_BrowserUrlNone");
+
+                var mapped = SiteMap.Resolve(sites, url);
+                if (!mapped.Ok)
+                {
+                    return mapped.Error switch
+                    {
+                        SiteMapError.NotAbsoluteUrl => ActionResult.Warn("Warn_SiteMapBadUrl", StepHelpers.Ellipsis(url, 60)),
+                        SiteMapError.NoMatchingSite => ActionResult.Warn("Warn_SiteMapNoMatch"),
+                        SiteMapError.BadSourceRoot => ActionResult.Warn("Warn_SiteMapBadRoot", mapped.SiteName),
+                        _ => ActionResult.Warn("Warn_SiteMapNotFound", StepHelpers.Ellipsis(mapped.Path, 80)),
+                    };
+                }
+
+                // 先写变量再打开：打开失败时路径已经在手里，用户可以直接复制到地址栏去试。
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, mapped.Path);
+
+                // action: open（默认）用系统默认程序打开；reveal 在资源管理器里选中；none 只产出不打开。
+                var mode = string.IsNullOrWhiteSpace(s.Action) ? "open" : s.Action.Trim().ToLowerInvariant();
+                if (mode == "none") return ActionResult.Empty;
+                try
+                {
+                    if (mode == "reveal")
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        { FileName = "explorer.exe", Arguments = "/select,\"" + mapped.Path + "\"", UseShellExecute = true });
+                    else
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        { FileName = mapped.Path, UseShellExecute = true });
+                    return ActionResult.Empty;
+                }
+                catch (Exception ex) { return ActionResult.Warn("Warn_SiteMapOpenFail", ex.Message); }
+            }
+
+            // 正则提取：从输入里按正则取一部分（默认整个匹配，取第 N 个捕获组则取那一组）。
+            // 输入支持 {名字} 占位，与别的步骤同一套。
+            case "regex":
+            {
+                if (string.IsNullOrEmpty(s.Pattern)) return ActionResult.Warn("Warn_RegexNoPattern");
+                var input = Fill(s.Text, urlEncode: false, vars);
+                System.Text.RegularExpressions.Match m;
+                try { m = System.Text.RegularExpressions.Regex.Match(input, s.Pattern); }
+                catch (ArgumentException ex) { return ActionResult.Warn("Warn_RegexBadPattern", ex.Message); }
+                if (!m.Success) return ActionResult.Warn("Warn_RegexNoMatch");
+
+                // group=0 是整个匹配；1..n 是捕获组。越界如实报，不退回整体——那会得到一个
+                // 看着对其实错的路径，而错误提示「找不到文件」永远指不到真正的原因。
+                var gi = Math.Max(0, s.Level);
+                string value;
+                if (gi == 0) value = m.Value;
+                else if (gi <= m.Groups.Count) value = m.Groups[gi].Value;
+                else return ActionResult.Warn("Warn_RegexNoGroup", gi, Math.Max(0, m.Groups.Count - 1));
+
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, value);
+                return ActionResult.Empty;
+            }
+
+            // 替换：把输入里匹配正则的部分换成 Replace（.NET 语法，$1 是分组引用）。
+            // 与 regex 分成两步而不是合成一步带模式开关：合成后编辑器那个面板要同时摆
+            // 「取哪一组」和「换成什么」两套互斥字段，而配错时不会有任何提示。
+            case "replace":
+            {
+                if (string.IsNullOrEmpty(s.Pattern)) return ActionResult.Warn("Warn_RegexNoPattern");
+                var input = Fill(s.Text, urlEncode: false, vars);
+                string value;
+                try { value = System.Text.RegularExpressions.Regex.Replace(input, s.Pattern, s.Replace ?? ""); }
+                catch (ArgumentException ex) { return ActionResult.Warn("Warn_RegexBadPattern", ex.Message); }
+
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, value);
+                return ActionResult.Empty;
+            }
+
+            // URL 解码：%E4%B8%AD → 中。地址栏里显示的是中文，剪贴板 / 变量里却是编码态，
+            // 不解就会拼出一个名字里带 % 的文件，然后如实说「文件不存在」——而真正的原因看不懂。
+            case "urlDecode":
+            {
+                var input = Fill(s.Text, urlEncode: false, vars);
+                string value;
+                try { value = Uri.UnescapeDataString(input); }
+                catch (UriFormatException ex) { return ActionResult.Warn("Warn_UrlDecodeBad", ex.Message); }
+
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, value);
+                return ActionResult.Empty;
+            }
+
+            // ---- 等一个键 / 拆行 / 算一步 / 跳出 ----
+            // 这四步是「交互式流程」的底座：前两步把用户的一次输入变成一个值，
+            // 后两步让步骤序列能被这个值改道。它们都不碰系统状态之外的东西，
+            // 因此各自失败时说的都是同一件事：这一步没法用，不是「程序坏了」。
+
+            // 等用户按下指定键里的任意一个。输出的是**键名**（「Escape」），不是虚拟键码（27）：
+            // 数字码要用户自己去查表，而键名可以直接写在下一步的条件里，一眼看得懂。
+            case "waitKey":
+            {
+                var (ok, unknown) = KeyNames.ParseList(s.Text);
+                if (ok.Count == 0)
+                    return ActionResult.Warn("Warn_NoKeysAccepted",
+                        string.IsNullOrWhiteSpace(s.Text) ? Strings.Get("Sum_Unset") : string.Join(", ", unknown));
+
+                // 超时秒数 0 = 不限时。限时用 waitClipboard 同一个夹取（1..60），不另造一套刻度。
+                var secs = StepHelpers.ClampWaitSeconds(s.Level);
+                var vk = KeyWaiter.Wait(ok.Select(k => k.Vk).ToArray(), secs == 0 ? 0 : secs * 1000, cancel);
+
+                // 取消（急停 / 这次运行的闸）与超时**分别说话**：前者是用户主动叫停，后者是「一直没按」。
+                // 都报成「没等到」的话，用户按了急停却看到「请按一个键」，会去检查键盘。
+                if (vk == null)
+                    return (cancel?.IsStopped ?? false) || StopSignal.IsRequested
+                        ? ActionResult.Empty
+                        : ActionResult.Warn("Warn_WaitKeyTimeout", secs);
+
+                var name = KeyNames.ToName(vk.Value);
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, name);
+                return ActionResult.Empty;
+            }
+
+            // 多行文本 → 列表。产出列表变量，供「每个」遍历。
+            // 空行**保留**：往终端里逐行喂命令时，空行常常就是一条要发出去的空命令，
+            // 顺手滤掉会让行号与用户以为的错位，而「我明明敲了个空行」。
+            case "splitLines":
+            {
+                var text = Fill(s.Text, urlEncode: false, vars);
+                if (text.Length == 0) return ActionResult.Warn("Warn_SplitNoText");
+                var lines = text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.SetList(s.OutputVar, lines);
+                return ActionResult.Empty;
+            }
+
+            // 算一步：Text 里写「{当前ID}+1」这样的表达式，占位替换后求值，结果进变量。
+            // 只认「左 运算符 右」一种形状（理由见 StepMath），所以错也只有三种可能，每种都说得清。
+            case "math":
+            {
+                var r = StepMath.Evaluate(Fill(s.Text, urlEncode: false, vars));
+                if (!r.Ok) return ActionResult.Warn("Warn_MathBad", r.Error ?? "");
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, r.Value);
+                return ActionResult.Empty;
+            }
+
+            // 跳出。Action: block = 跳出当前块（循环停止迭代、顶层跳过后续步骤）；
+            // run = 中止整组（与 message 答「否」同义，会向上传染）。
+            //
+            // **它本身什么都不做，只改控制流**，所以返回值是 Empty 而不是告警：
+            // 在日志里记一个 ⚠ 会让「一切按预期进行」的一次正常退出看起来像出了问题。
+            // 真正的控制流由 runner 在读到它之后处理（见 ActionGroupRunner.RunRange）。
+            case "skip": return ActionResult.Empty;
+
             // 问句步骤走不到这里就该被接走了（交互路径各自拦下：RunOrchestrator.RunStepAsync 与 ActionGroupRunner）。
             // 落到这儿说明这条执行路径上没有可以发问的界面——开机清单就是这种：登录时弹一个
             // 拦住整条清单的输入框，是个没人想要的结果。如实说一声，别记成 ✓。

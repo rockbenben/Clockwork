@@ -290,7 +290,10 @@ internal sealed class RunOrchestrator
             // 那条——什么都不说。Unverified（「发出去了但没法证实」）有意不报：它不是失败，报了只会变成噪音。
             RunStep = s =>
             {
-                var r = StepRunner.InvokeStepAction(s, unattended ? null : a => ConfirmDestructive(a, owner), selfPaths, deps.Cancel, deps.Vars);
+                // sites 一路带下来：siteMap 步骤要读站点映射表，而那张表在 RootConfig 上，
+                // 不在这条调用链的任何参数里。不传等于「没配任何站点」，于是每条 siteMap 都报
+                // 「这个网址不在配置里」——一句对用户完全成立的假话，而真相是接线漏了。
+                var r = StepRunner.InvokeStepAction(s, unattended ? null : a => ConfirmDestructive(a, owner), selfPaths, deps.Cancel, deps.Vars, _config.Sites);
                 if (r.HasWarning) LogGroupStepWarn(s, r);
             },
             // 这两个回调都会开模态（ShowGroupMessage 的 Confirm / Info 两种形态、AskUser 全部），

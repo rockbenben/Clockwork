@@ -112,6 +112,9 @@ public static class ActionGroupRunner
         {
             var now = DateTime.Now;   // 取一次，小时/分钟同源，避免跨分钟边界不一致
             var (hour, iso) = StepCondition.ResolveSentinels(deps.Hour, deps.IsoDay, now);
+            // 把平铺的步骤按 ParentId 收成层级。**一次构建、整轮复用**：每轮重收一遍的话，
+            // 一个 10 轮 × 30 步的组就是 300 次同样的建表，而它压根不会变（步骤表整轮不动）。
+            var tree = StepTree.Build(group.Steps);
             bool stopped = false;
             // 「被否中止」与 stopped 分开记：stopped 也被急停/预算/睡眠打断占用，混在一起就分不出
             // 该向上传染的那一种。用户在子组里答过一次「否」，祖先各层的剩余轮次都必须一起收。
@@ -119,81 +122,170 @@ public static class ActionGroupRunner
             int rounds = StepHelpers.ClampRepeat(group.Repeat);
             for (int round = 1; round <= rounds && !stopped; round++)
             {
-                foreach (var step in group.Steps)
-                {
-                    if (stopped || deps.Cancel.IsStopped || deps.Budget.Exhausted) { stopped = true; break; }
-                    if (!step.Enabled) continue;
-                    if (!StepCondition.IsSatisfied(step, hour, iso, now.Minute)) continue;   // 组内步骤同样遵守时间条件（分钟级）
-
-                    if (step.Kind == "message")
-                    {
-                        if (!deps.Budget.TryConsume()) { stopped = true; break; }
-                        if (step.Speak) deps.Speak(step.Message);
-                        var res = deps.ShowMessage(step);
-                        // 弹窗是模态、要等用户点掉才返回，其间取消/急停完全可能已经按下。此时那个答案作废：
-                        // 用户按取消的意思是「这组别做了」，不是「把 onYes 那一串做完再停」。查在 RunOnYes 之前。
-                        if (deps.Cancel.IsStopped) { stopped = true; break; }
-                        if (res == MsgResult.Yes) deps.RunOnYes(step);
-                        else if (res == MsgResult.No) { stopped = true; aborted = true; break; }   // 否/关闭 → 中止整组剩余步骤（含后续轮次），并让上层一并收手
-                        if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
-                    }
-                    // 问句步骤：问一句，把答案写进变量，后面的步骤用 {名字} 引用。
-                    // 形状照抄上面那个 message 分支——它们是同一类东西（都要跳 UI 线程、都会挂住整组、
-                    // 取消都意味着「这组别做了」），照抄比另起一套更不容易漏掉那几处取消检查。
-                    else if (step.Kind is "prompt" or "choice")
-                    {
-                        if (!deps.Budget.TryConsume()) { stopped = true; break; }
-                        var answer = deps.AskUser(step);
-                        // 弹框是模态、要等用户点掉才返回，其间取消/急停完全可能已经按下。查在写变量之前：
-                        // 用户按取消的意思是「这组别做了」，那么这个答案连记下来都没有意义。
-                        if (deps.Cancel.IsStopped) { stopped = true; break; }
-                        if (answer == null) { stopped = true; aborted = true; break; }   // 取消 → 同 message 答「否」
-                        deps.Vars.Set(step.OutputVar, answer);
-                        if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
-                    }
-                    else if (step.Kind == "group")
-                    {
-                        // 组内嵌套动作组：跑引用的组。嵌套调用共享同一 deps → 同一份预算；
-                        // 环重入（以及目标缺失/已禁用等其他「没跑」的结局）由 RunGroupStep 包装层经 OnStepSkipped
-                        // 上报——这些都不是异常，OnStepError 专属 RunStep 真正抛出的异常。
-                        // 每次引用迭代自身也占一步预算：否则叶子组只含 group 步骤时，999^depth 的展开
-                        // 一步都不计费，5000 步保险丝对纯引用链完全失效（文档承诺的「至多 5000 步」要真成立）。
-                        int rep = StepHelpers.StepRepeat(step);
-                        for (int i = 1; i <= rep && !stopped; i++)
-                        {
-                            if (!deps.Budget.TryConsume()) { stopped = true; break; }
-                            var sub = GroupRunResult.Completed;
-                            try { sub = deps.RunGroupStep(step); }
-                            catch (Exception ex) { deps.OnStepError(step, ex); }
-                            // 子组被「否」中止：本轮剩余步骤与后续轮次全停，并把中止继续往上传
-                            // ——否则 rep 次迭代会把同一个确认框重弹 rep 次（循环子序列的推荐做法正好走这条路）。
-                            if (sub == GroupRunResult.Aborted) { stopped = true; aborted = true; break; }
-                            // 重入注定持续整个循环（同一 id 在同一调用栈上）：再迭代只会重复上报 + 空睡，
-                            // Repeat=999 时就是 999 条日志/气泡和 ~99 秒的零工作睡眠。
-                            if (sub == GroupRunResult.Skipped) break;
-                            if (deps.Cancel.IsStopped || deps.Budget.Exhausted) stopped = true;
-                            else if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
-                        }
-                    }
-                    else
-                    {
-                        int rep = StepHelpers.StepRepeat(step);
-                        for (int i = 1; i <= rep && !stopped; i++)
-                        {
-                            if (!deps.Budget.TryConsume()) { stopped = true; break; }
-                            // 单步异常必须就地兜住：否则一步抛异常会中断整组剩余步骤——收工/睡前组里
-                            // 若前面某步失败，锁屏/关显示器就不再执行，屏幕开着且无任何提示。每步失败记一笔、整组继续。
-                            try { deps.RunStep(step); }
-                            catch (Exception ex) { deps.OnStepError(step, ex); }
-                            if (deps.Cancel.IsStopped) stopped = true;
-                            else if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) stopped = true;
-                        }
-                    }
-                }
+                var flow = RunRange(tree.Top, tree, deps, hour, iso, now.Minute);
+                stopped = flow.Stopped;
+                if (flow.Aborted) { aborted = true; break; }
                 if (!stopped && round < rounds && group.RepeatDelayMs > 0 && !deps.Cancel.InterruptibleSleep(group.RepeatDelayMs)) stopped = true;
             }
             return aborted ? GroupRunResult.Aborted : GroupRunResult.Completed;
         }
         finally { _running.TryRemove(gid, out _); }
+    }
+
+    /// <summary>一段步骤跑完之后的控制流。与 GroupRunResult 分开是因为多了一档「跳出本块」。</summary>
+    // SkipBlock 不等于 Aborted：跳出本块之后，**外层继续往下走**（循环的下一次迭代、顶层的下一步）。
+    // 而 Aborted 会一路传染到顶。混在一档的话，「Esc 退出这一轮逐行输入、回到桌面」会被当成整组中止，
+    // 后面的收尾步骤（锁屏、关显示器）就跟着一起不跑了。
+    private readonly record struct Flow(bool Stopped, bool Aborted, bool SkipBlock);
+
+    private static readonly Flow Done = new(false, false, false);
+    private static readonly Flow Halted = new(true, false, false);
+    private static readonly Flow Aborted = new(true, true, false);
+    private static readonly Flow Skipping = new(false, false, true);
+
+    /// <summary>跑一串步骤（顶层，或某个块的孩子）。StopSignal / 取消 / 预算在每一处等待点自查。</summary>
+    private static Flow RunRange(IReadOnlyList<LaunchStep> steps, StepTree tree, GroupDeps deps, int hour, int iso, int minute)
+    {
+        foreach (var step in steps)
+        {
+            if (deps.Cancel.IsStopped || deps.Budget.Exhausted) return Halted;
+            if (!step.Enabled) continue;
+            if (!StepCondition.IsSatisfied(step, hour, iso, minute, null, deps.Vars)) continue;   // 组内步骤同样遵守时间/环境/变量条件
+
+            // ---- 「每个」块：把它的孩子按迭代跑 N 遍 ----
+            if (step.Kind == "each")
+            {
+                var f = RunEach(step, tree, deps, hour, iso, minute);
+                if (f.Stopped) return f;
+                if (f.SkipBlock) return Skipping;      // 块内跳出 = 这一轮的后续子步骤不跑了，但外层继续
+                continue;
+            }
+
+            // ---- 「跳出」步：只改控制流，本体什么都不做 ----
+            if (step.Kind == "skip")
+            {
+                if ((step.Action ?? "").Trim().ToLowerInvariant() == "run") return Aborted;
+                return Skipping;
+            }
+
+            if (step.Kind == "message")
+            {
+                if (!deps.Budget.TryConsume()) return Halted;
+                if (step.Speak) deps.Speak(step.Message);
+                var res = deps.ShowMessage(step);
+                // 弹窗是模态、要等用户点掉才返回，其间取消/急停完全可能已经按下。此时那个答案作废：
+                // 用户按取消的意思是「这组别做了」，不是「把 onYes 那一串做完再停」。查在 RunOnYes 之前。
+                if (deps.Cancel.IsStopped) return Halted;
+                if (res == MsgResult.Yes) deps.RunOnYes(step);
+                else if (res == MsgResult.No) return Aborted;   // 否/关闭 → 中止整组剩余步骤（含后续轮次），并让上层一并收手
+                if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) return Halted;
+                continue;
+            }
+            // 问句步骤：问一句，把答案写进变量，后面的步骤用 {名字} 引用。
+            // 形状照抄上面那个 message 分支——它们是同一类东西（都要跳 UI 线程、都会挂住整组、
+            // 取消都意味着「这组别做了」），照抄比另起一套更不容易漏掉那几处取消检查。
+            if (step.Kind is "prompt" or "choice")
+            {
+                if (!deps.Budget.TryConsume()) return Halted;
+                var answer = deps.AskUser(step);
+                // 弹框是模态、要等用户点掉才返回，其间取消/急停完全可能已经按下。查在写变量之前：
+                // 用户按取消的意思是「这组别做了」，那么这个答案连记下来都没有意义。
+                if (deps.Cancel.IsStopped) return Halted;
+                if (answer == null) return Aborted;   // 取消 → 同 message 答「否」
+                deps.Vars.Set(step.OutputVar, answer);
+                if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) return Halted;
+                continue;
+            }
+            if (step.Kind == "group")
+            {
+                // 组内嵌套动作组：跑引用的组。嵌套调用共享同一 deps → 同一份预算；
+                // 环重入（以及目标缺失/已禁用等其他「没跑」的结局）由 RunGroupStep 包装层经 OnStepSkipped
+                // 上报——这些都不是异常，OnStepError 专属 RunStep 真正抛出的异常。
+                // 每次引用迭代自身也占一步预算：否则叶子组只含 group 步骤时，999^depth 的展开
+                // 一步都不计费，5000 步保险丝对纯引用链完全失效（文档承诺的「至多 5000 步」要真成立）。
+                int rep = StepHelpers.StepRepeat(step);
+                for (int i = 1; i <= rep; i++)
+                {
+                    if (!deps.Budget.TryConsume()) return Halted;
+                    var sub = GroupRunResult.Completed;
+                    try { sub = deps.RunGroupStep(step); }
+                    catch (Exception ex) { deps.OnStepError(step, ex); }
+                    // 子组被「否」中止：本轮剩余步骤与后续轮次全停，并把中止继续往上传
+                    // ——否则 rep 次迭代会把同一个确认框重弹 rep 次（循环子序列的推荐做法正好走这条路）。
+                    if (sub == GroupRunResult.Aborted) return Aborted;
+                    // 重入注定持续整个循环（同一 id 在同一调用栈上）：再迭代只会重复上报 + 空睡，
+                    // Repeat=999 时就是 999 条日志/气泡和 ~99 秒的零工作睡眠。
+                    if (sub == GroupRunResult.Skipped) break;
+                    if (deps.Cancel.IsStopped || deps.Budget.Exhausted) return Halted;
+                    if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) return Halted;
+                }
+                continue;
+            }
+
+            int reps = StepHelpers.StepRepeat(step);
+            for (int i = 1; i <= reps; i++)
+            {
+                if (!deps.Budget.TryConsume()) return Halted;
+                // 单步异常必须就地兜住：否则一步抛异常会中断整组剩余步骤——收工/睡前组里
+                // 若前面某步失败，锁屏/关显示器就不再执行，屏幕开着且无任何提示。每步失败记一笔、整组继续。
+                try { deps.RunStep(step); }
+                catch (Exception ex) { deps.OnStepError(step, ex); }
+                if (deps.Cancel.IsStopped) return Halted;
+                if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) return Halted;
+            }
+        }
+        return Done;
+    }
+
+    /// <summary>「每个」：把 Text 指的那个列表（或 {重复次数} 指定的轮数）逐项跑一遍孩子。</summary>
+    private static Flow RunEach(LaunchStep step, StepTree tree, GroupDeps deps, int hour, int iso, int minute)
+    {
+        var children = tree.ChildrenOf(step.Id);
+        // 两个循环变量的名字各占一个字段：**OutputVar = 当前项，Pattern = 序号**。
+        // 留空各回落到 item / index。
+        //
+        // 序号用 Pattern 而不是 GroupId：GroupId 在别的步骤上是「引用哪个动作组」的意思，
+        // 拿它装一个变量名，界面上与摘要里读起来都是「引用了一个组」，而它实际是个变量。
+        // Pattern 在 each 这一档是空的（只有 regex/replace 读它），拿它不会与任何既有语义撞上。
+        var itemVar = string.IsNullOrWhiteSpace(step.OutputVar) ? StepTree.DefaultItemVar : step.OutputVar.Trim();
+        var indexVar = string.IsNullOrWhiteSpace(step.Pattern) ? StepTree.DefaultIndexVar : step.Pattern.Trim();
+
+        // 列表来源：Text 里写变量名（可以带 { }，先替换）。写不出来或那个名字不是列表 → 如实说，不静默跑零遍。
+        var srcName = StepPlaceholder.Apply((step.Text ?? "").Trim(), null, false, deps.Vars).Trim();
+        var items = srcName.Length == 0 ? null : deps.Vars.GetList(srcName);
+
+        int count;
+        if (items != null) count = items.Count;
+        else if (srcName.Length == 0) count = StepHelpers.ClampRepeat(step.Repeat);   // 没写列表 = 纯按「重复次数」跑
+        else
+        {
+            // GroupSkip 收的是**键 + 参数**，由它自己按当前语言渲染（同一个原因还要以英文进错误日志，
+            // 在这里就渲染定死的话另一种语言再也拿不回来）。所以这里只递键。
+            deps.OnStepSkipped(step, new GroupSkip("Skip_EachNoList", srcName, true));
+            return Done;      // benign：这个变量不是列表通常就是还没跑那个产出步骤，不是故障
+        }
+
+        // 预算先扣一遍整块的步数上限：count 可能很大，而每轮的孩子要跑到一半才发现预算耗尽，
+        // 那时用户已经看着它跑了 4900 步。宁可一开始就拒绝一个明显过头的配置。
+        for (int i = 0; i < count; i++)
+        {
+            if (!deps.Budget.TryConsume()) return Halted;
+            if (deps.Cancel.IsStopped) return Halted;
+
+            // 循环变量存档：内层循环一跑，外层的「当前项」就没了，而两个 item 同名。
+            // 存档的**只有这两个**——循环体里攒的其它变量（累加、收集结果）必须留在外面，
+            // 那正是循环的常见用法（StepTree/RunVars.Scope 的注释写着这条）。
+            using (deps.Vars.Scope(itemVar, indexVar))
+            {
+                if (items != null) deps.Vars.Set(itemVar, items[i]);
+                deps.Vars.Set(indexVar, i.ToString());
+                var f = RunRange(children, tree, deps, hour, iso, minute);
+                if (f.Stopped) return f;              // 急停 / 预算 / 被否中止：一路往上
+                // SkipBlock：**继续下一次迭代**，不是结束这个循环 —— 这正是「continue」的语义，
+                // 也是逐行输入里按 Esc 想做的事（不结束循环的话，Esc 每按一次都要按两次）。
+                if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) return Halted;
+            }
+        }
+        return Done;
     }
 }
