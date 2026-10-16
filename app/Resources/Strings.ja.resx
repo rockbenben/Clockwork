@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} 秒待っても、そのキーは来ませんでした。</data>
   <data name="Warn_SplitNoText" xml:space="preserve">分割するテキストがありません（欄が空で、変数の参照もありません）。</data>
   <data name="Warn_MathBad" xml:space="preserve">計算できません：{0}</data>
+  <data name="Kind_list" xml:space="preserve">リスト（複数行入力）</data>
+  <data name="Kind_join" xml:space="preserve">結合（リストを文字列に）</data>
+  <data name="Sum_Join" xml:space="preserve">結合：{0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">初期値</data>
+  <data name="Ed_ListHint" xml:space="preserve">複数行入力の箱が出ます：Enter で改行、Ctrl+Enter で決定。行ごとにリストに分割して変数に入れ、空行も残します。</data>
+  <data name="Ed_JoinList" xml:space="preserve">このリスト</data>
+  <data name="Ed_Separator" xml:space="preserve">区切り文字</data>
+  <data name="Ed_JoinHint" xml:space="preserve">リストの各項目をこの区切り文字でつないだ 1 本の文字列にし、変数に入れて保存します。空 = 何も挟まずにつなぎます。</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">この手順にはまだリスト名がありません。</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂はリスト変数ではありません。先にリストを作る手順を実行してください（リストまたは行に分割）。</data>
 </root>

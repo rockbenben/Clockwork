@@ -2166,4 +2166,14 @@ Günlük: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} saniye bekendi, o tuşa hiç basılmadı.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Bölünecek metin yok (kutu boş ve hiçbir değişkene başvurmuyor).</data>
   <data name="Warn_MathBad" xml:space="preserve">Hesaplanamadı: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Liste (çok satırlı giriş)</data>
+  <data name="Kind_join" xml:space="preserve">Birleştir (listeyi metne)</data>
+  <data name="Sum_Join" xml:space="preserve">Birleştir: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Önceden doldurulacak içerik</data>
+  <data name="Ed_ListHint" xml:space="preserve">Birkaç satır istenen bir kutu açılır: Enter yeni satır, Ctrl+Enter onaylar. Metin satır satır listeye bölünür, boş satırlar korunur.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Bu liste</data>
+  <data name="Ed_Separator" xml:space="preserve">Ayırıcı</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Bu ayırıcıyla listenin her öğesini tek metinde birleştirip bir değişkene kaydeder. Boş = araya hiçbir şey koymadan birleştirir.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">Bu adımda henüz hangi liste olduğu yazılı değil.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ bir liste değişkeni değil — önce onu üreten adımı çalıştırın (Liste veya Satırlara böl).</data>
 </root>

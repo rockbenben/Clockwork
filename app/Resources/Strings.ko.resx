@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0}초를 기다렸지만 그 키가 눌려지지 않았습니다.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">분할할 텍스트가 없습니다(입력란이 비어 있고 변수도 참조하지 않았습니다).</data>
   <data name="Warn_MathBad" xml:space="preserve">계산할 수 없습니다: {0}</data>
+  <data name="Kind_list" xml:space="preserve">목록(여러 줄 입력)</data>
+  <data name="Kind_join" xml:space="preserve">합치기(목록을 텍스트로)</data>
+  <data name="Sum_Join" xml:space="preserve">합치기: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">미리 채울 내용</data>
+  <data name="Ed_ListHint" xml:space="preserve">여러 줄을 입력할 상자가 열립니다: Enter는 줄바꿈, Ctrl+Enter 는 확인입니다. 줄마다 목록으로 나누어 변수에 넣고 빈 줄도 남습니다.</data>
+  <data name="Ed_JoinList" xml:space="preserve">이 목록</data>
+  <data name="Ed_Separator" xml:space="preserve">구분 문자</data>
+  <data name="Ed_JoinHint" xml:space="preserve">목록의 각 항목을 이 구분 문자로 이어 하나의 문자열로 만들어 변수에 넣습니다. 비우면 아무것도 넣지 않고 그냥 이어 붙입니다.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">이 단계에 아직 목록 이름이 없습니다.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂은(는) 목록 변수가 아닙니다. 먼저 목록을 만드는 단계를 실행하세요(목록 또는 줄로 나누기).</data>
 </root>

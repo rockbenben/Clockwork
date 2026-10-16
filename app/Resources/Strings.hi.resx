@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} सेकंड बीत गए, वह कुंजी कभी नहीं आई।</data>
   <data name="Warn_SplitNoText" xml:space="preserve">बाँटने के लिए कोई टेक्स्ट नहीं (खाना खाली है और किसी चर का संदर्भ नहीं है)।</data>
   <data name="Warn_MathBad" xml:space="preserve">गणना नहीं हो सकी: {0}</data>
+  <data name="Kind_list" xml:space="preserve">सूची (कई पंक्तियों का इनपुट)</data>
+  <data name="Kind_join" xml:space="preserve">जोड़ें (सूची को टेक्स्ट में)</data>
+  <data name="Sum_Join" xml:space="preserve">जोड़ें: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">पहले से भरा जाने वाला पाठ</data>
+  <data name="Ed_ListHint" xml:space="preserve">कई पंक्तियों का इनपुट बॉक्स खुलेगा: Enter नई पंक्ति, Ctrl+Enter पुष्टि। पाठ पंक्ति-दर-पंक्ति सूची में बँटता है, खाली पंक्तियाँ रह जाती हैं।</data>
+  <data name="Ed_JoinList" xml:space="preserve">यह सूची</data>
+  <data name="Ed_Separator" xml:space="preserve">विभाजक</data>
+  <data name="Ed_JoinHint" xml:space="preserve">इस विभाजक से सूची की हर प्रविष्टि को जोड़कर एक टेक्स्ट बनाता है और चर में रखता है। खाली = बीच में कुछ भी डाले बिना जोड़ दिया जाता है।</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">इस चरण में अभी तक यह नहीं बताया कि कौन-सी सूची।</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ सूची चर नहीं है — पहले वह चरण चलाएँ जो सूची बनाता है (सूची या पंक्तियों में बाँटें)।</data>
 </root>

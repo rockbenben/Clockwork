@@ -2166,4 +2166,14 @@ Nhật ký: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">Đã chờ {0} giây mà phím đó không bao giờ được nhấn.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Không có văn bản để tách (ô trống và không tham chiếu biến nào).</data>
   <data name="Warn_MathBad" xml:space="preserve">Không tính được: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Danh sách (nhập nhiều dòng)</data>
+  <data name="Kind_join" xml:space="preserve">Nối (danh sách thành văn bản)</data>
+  <data name="Sum_Join" xml:space="preserve">Nối: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Nội dung điền sẵn</data>
+  <data name="Ed_ListHint" xml:space="preserve">Một hộp nhận nhiều dòng: Enter để xuống dòng, Ctrl+Enter để xác nhận. Văn bản được tách theo dòng thành danh sách, dòng trống vẫn giữ.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Danh sách này</data>
+  <data name="Ed_Separator" xml:space="preserve">Dấu phân cách</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Nối từng phần tử của danh sách thành một văn bản bằng dấu này rồi lưu vào biến. Để trống = nối sát, không chèn gì ở giữa.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">Bước này chưa ghi danh sách nào.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ không phải biến danh sách — hãy chạy bước tạo ra nó trước (Danh sách hoặc Tách thành các dòng).</data>
 </root>

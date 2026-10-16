@@ -2166,4 +2166,14 @@ Journal : {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} secondes d’attente, cette touche n’est jamais arrivée.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Aucun texte à découper (la case est vide et ne référence aucune variable).</data>
   <data name="Warn_MathBad" xml:space="preserve">Calcul impossible : {0}</data>
+  <data name="Kind_list" xml:space="preserve">Liste (saisie multiligne)</data>
+  <data name="Kind_join" xml:space="preserve">Joindre (liste vers texte)</data>
+  <data name="Sum_Join" xml:space="preserve">Joindre : {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Contenu prérempli</data>
+  <data name="Ed_ListHint" xml:space="preserve">Une boîte demande plusieurs lignes : Entrée passe à la ligne, Ctrl+Entrée confirme. Le texte est découpé ligne par ligne en une liste, lignes vides comprises.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Cette liste</data>
+  <data name="Ed_Separator" xml:space="preserve">Séparateur</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Relie les éléments de la liste en un seul texte avec ce séparateur et l’enregistre dans une variable. Vide = concaténé sans rien entre.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">Cette étape n’indique pas encore quelle liste.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂ {0} ＂ n’est pas une variable de liste. Exécutez d’abord l’étape qui en produit une (Liste ou Découper en lignes).</data>
 </root>

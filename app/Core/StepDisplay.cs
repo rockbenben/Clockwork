@@ -70,8 +70,8 @@ public static class StepDisplay
     // 步骤类型 id 的规范顺序（步骤编辑器「类型」下拉用；标签一律经 StepKindLabel 本地化）。
     public static readonly string[] StepKinds =
         { "app", "url", "path", "siteMap", "keys", "mouse", "text", "volume", "window", "system", "group",
-          "copySelection", "waitClipboard", "browserUrl", "prompt", "choice", "delay", "message",
-          "regex", "replace", "urlDecode",
+          "copySelection", "waitClipboard", "browserUrl", "prompt", "choice", "list", "delay", "message",
+          "regex", "replace", "urlDecode", "join",
           "waitKey", "splitLines", "math", "skip", "each" };
 
     // 「引用启动清单项」**不在** StepKinds 里：它不是机制类型，而是面板专属的复用入口——
@@ -98,12 +98,14 @@ public static class StepDisplay
         // 「用户输入」「用户选择」与「取选中的文字」「等剪贴板变化」同属这一节：
         // 它们本身不做事，是为**下一步**准备材料的——四条都产出一个值给后面的步骤用。
         // 「读浏览器地址」也在这条线上：它同样不做事，只产出一个网址给后面的步骤。
-        ("Menu_SecFlow", new[] { "copySelection", "waitClipboard", "browserUrl", "prompt", "choice", "delay", "message",
+        // 「列表」是第四种「取值」形态（单行文字 / 挑一项 / 多行文字 / 网址）——
+        // 它必须和前两种挨着放，因为用户找「我想要的这个东西怎么填进来」时看的就是这一节。
+        ("Menu_SecFlow", new[] { "copySelection", "waitClipboard", "browserUrl", "prompt", "choice", "list", "delay", "message",
                                  "waitKey", "splitLines", "skip", "each" }),
         // 文本处理自成一节，而不是塞进流程：找「把一段文字里的某部分换掉」的人会去「流程」里翻吗——
         // 不会，他脑子里的是「处理文字」，不是「流程」。同理，这三个步骤也不属于「打开」：
         // 它们自己不打开任何东西，只改写一个值。
-        ("Menu_SecText", new[] { "urlDecode", "regex", "replace", "math" }),
+        ("Menu_SecText", new[] { "urlDecode", "regex", "replace", "math", "join" }),
     };
 
     // 「常用」——一份预填好的步骤。它们**没有任何新的执行路径**：每一条都只是既有类型
@@ -428,7 +430,7 @@ public static class StepDisplay
             // 问句本身就是这一步的身份（「关键词？」「去哪儿？」），类型名反而是次要的——
             // 三条「用户输入」摆在清单上，不写出问的是什么就完全分不开。
             // 后面缀上「→ 变量名」：这一步的**产出**去了哪儿，是读这条动作时第二要紧的事。
-            "prompt" or "choice" => Strings.Lf("Sum_Ask", Arg(NoNewline(s.Message)))
+            "prompt" or "choice" or "list" => Strings.Lf("Sum_Ask", Arg(NoNewline(s.Message)))
                 + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
             "delay" => s.DelayMs % 1000 == 0 ? Strings.Lf("Sum_Delay_Sec", s.DelayMs / 1000) : Strings.Lf("Sum_Delay_Ms", s.DelayMs),
             "message" => StepHelpers.MessageFormOf(s) == MessageForm.Card
@@ -471,6 +473,10 @@ public static class StepDisplay
             "regex" => Strings.Lf("Sum_Regex", Arg(Clip(NoNewline(s.Text), 24)), Arg(Clip(NoNewline(s.Pattern), 24)))
                 + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
             "replace" => Strings.Lf("Sum_Replace", Arg(Clip(NoNewline(s.Pattern), 20)), Arg(Clip(NoNewline(s.Replace), 20)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            // 「合」写的是「从哪个列表来」，不写分隔符：分隔符往往是个换行或逗号，
+            // 印进摘要既占地方又读不出什么，而从哪个列表来才是这一步的身份。
+            "join" => Strings.Lf("Sum_Join", Arg(string.IsNullOrWhiteSpace(s.Text) ? Strings.Get("Sum_Unset") : Clip(NoNewline(s.Text), 28)))
                 + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
 
             // ---- 交互式流程 ----

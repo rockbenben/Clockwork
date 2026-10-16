@@ -2166,4 +2166,14 @@ Registro: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">Sono passati {0} secondi e quel tasto non è mai arrivato.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Non c’è testo da dividere (il campo è vuoto e non fa riferimento a variabili).</data>
   <data name="Warn_MathBad" xml:space="preserve">Impossibile calcolare: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Elenco (input su più righe)</data>
+  <data name="Kind_join" xml:space="preserve">Unisci (elenco a testo)</data>
+  <data name="Sum_Join" xml:space="preserve">Unisci: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Contenuto precompilato</data>
+  <data name="Ed_ListHint" xml:space="preserve">Una casella chiede più righe: Invio va a capo, Ctrl+Invio conferma. Il testo viene diviso riga per riga in un elenco, righe vuote comprese.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Questo elenco</data>
+  <data name="Ed_Separator" xml:space="preserve">Separatore</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Unisce gli elementi dell’elenco in un solo testo con questo separatore e lo salva in una variabile. Vuoto = concatenato senza nulla in mezzo.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">Questo passaggio non dice ancora quale elenco.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ non è una variabile di elenco: esegui prima il passo che ne produce una (Elenco o Dividi in righe).</data>
 </root>

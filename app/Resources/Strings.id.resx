@@ -2166,4 +2166,14 @@ Log: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} detik berlalu dan tombol itu tidak pernah ditekan.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Tidak ada teks untuk dipisah (kotak kosong dan tidak merujuk variabel apa pun).</data>
   <data name="Warn_MathBad" xml:space="preserve">Tidak bisa dihitung: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Daftar (masukan multibaris)</data>
+  <data name="Kind_join" xml:space="preserve">Gabungkan (daftar ke teks)</data>
+  <data name="Sum_Join" xml:space="preserve">Gabungkan: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Konten awal</data>
+  <data name="Ed_ListHint" xml:space="preserve">Sebuah kotak meminta beberapa baris: Enter membuat baris baru, Ctrl+Enter mengonfirmasi. Teks dipecah per baris menjadi daftar, baris kosong dipertahankan.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Daftar ini</data>
+  <data name="Ed_Separator" xml:space="preserve">Pemisah</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Menggabungkan setiap item daftar menjadi satu teks dengan pemisah ini dan menyimpannya ke variabel. Kosong = disambung tanpa apa pun di antaranya.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">Langkah ini belum menyebut daftar yang mana.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ não é uma variável de lista — execute primeiro o passo que cria uma (Lista ou Dividir em linhas).</data>
 </root>

@@ -2166,4 +2166,14 @@ Registro: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">Pasaron {0} segundos y esa tecla nunca llegó.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">No hay texto que dividir (la casilla está vacía y no referencia ninguna variable).</data>
   <data name="Warn_MathBad" xml:space="preserve">No se pudo calcular: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Lista (entrada de varias líneas)</data>
+  <data name="Kind_join" xml:space="preserve">Unir (lista a texto)</data>
+  <data name="Sum_Join" xml:space="preserve">Unir: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Contenido precargado</data>
+  <data name="Ed_ListHint" xml:space="preserve">Una caja pide varias líneas: Enter hace un salto de línea, Ctrl+Enter confirma. El texto se parte por líneas en una lista y las líneas vacías se conservan.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Esta lista</data>
+  <data name="Ed_Separator" xml:space="preserve">Separador</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Une los elementos de la lista en un solo texto con este separador y lo guarda en una variable. Vacío = se concatena sin nada entre medio.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">Este paso todavía no dice qué lista es.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ no es una variable de lista. Ejecuta antes el paso que produzca una (Lista o Dividir en líneas).</data>
 </root>

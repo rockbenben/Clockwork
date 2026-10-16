@@ -151,6 +151,12 @@ public sealed class LaunchStep
     // 替换文本。.NET 语法：$1…$9 是分组引用。空字符串是**合法值**（删掉匹配到的部分），
     // 与「没填」不同档，所以单独存而不是复用别的字段。
     public string Replace { get; set; } = "";
+    // 「合」（列表 → 文本）用的分隔符。空 = 直接连在一起，不插任何东西。
+    //
+    // 单独开一个字段而不是复用 Replace / Pattern：那两个字段的名字已经各自绑死了一种
+    // 含义（正则、替换文本），塞第三个含义进去，读代码的人得先翻定义才知道这里存的是什么。
+    // 缺失即空串，老配置不受影响。
+    public string Separator { get; set; } = "";
 }
 
 public sealed class Reminder

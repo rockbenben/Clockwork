@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">รอไป {0} วินาที แต่ไม่มีการกดปุ่มนั้น</data>
   <data name="Warn_SplitNoText" xml:space="preserve">ไม่มีข้อความให้แยก (ช่องว่างและไม่ได้อ้างถึงตัวแปรใด ๆ)</data>
   <data name="Warn_MathBad" xml:space="preserve">คำนวณไม่ได้: {0}</data>
+  <data name="Kind_list" xml:space="preserve">รายการ (ป้อนหลายบรรทัด)</data>
+  <data name="Kind_join" xml:space="preserve">รวม (รายการเป็นข้อความ)</data>
+  <data name="Sum_Join" xml:space="preserve">รวม: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">เนื้อหาเริ่มต้น</data>
+  <data name="Ed_ListHint" xml:space="preserve">จะมีช่องให้กรอก หลายบรรทัด Enter เพื่อขึ้นบรรทัดใหม่ Ctrl+Enter เพื่อยืนยัน ข้อความจะถูกแยกเป็นรายการตามบรรทัด โดยเก็บบรรทัดว่างไว้</data>
+  <data name="Ed_JoinList" xml:space="preserve">รายการนี้</data>
+  <data name="Ed_Separator" xml:space="preserve">ตัวคั่น</data>
+  <data name="Ed_JoinHint" xml:space="preserve">รวมรายการแต่ละรายการเป็นข้อความเดียวด้วยตัวคั่นนี้แล้วเก็บลงตัวแปร เว้นว่างไว้ = ต่อกันโดยไม่แทรกอะไร</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">ขั้นตอนนี้ยังไม่ได้ระบุรายการใด</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ ไม่ใช่ตัวแปรรายการ — ให้รันขั้นตอนที่สร้างมันก่อน (รายการ หรือ แยกเป็นบรรทัด)</data>
 </root>

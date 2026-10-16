@@ -183,7 +183,7 @@ internal sealed class RunOrchestrator
         //（丢进去会撞上 InvokeStepAction 那句「这条路径上没有可以发问的界面」）。
         // 单步跑一个问句步骤，答案无处可去——后面没有步骤了——所以问完就把它显示出来，
         // 那是这一步在「试一试」语境下唯一能给出的结果。
-        if (step.Kind is "prompt" or "choice")
+        if (step.Kind is "prompt" or "choice" or "list")
         {
             var one = new RunVars();
             var answer = AskUser(step, one, owner);
@@ -437,6 +437,10 @@ internal sealed class RunOrchestrator
             }
             return Disp.Invoke(() => Views.BrandDialog.Pick(owner, title, msg, options));
         }
+        // 「列表」与「用户输入」是同一件事的两种输入形态：一段单行 vs 一段多行。
+        // 返回的都是原始文字，拆不拆由调用方定（ActionGroupRunner 按 kind 分派）。
+        if (step.Kind == "list")
+            return Disp.Invoke(() => Views.BrandDialog.AskMulti(owner, title, msg, FillForUi(step.Text, vars)));
         return Disp.Invoke(() => Views.BrandDialog.Ask(owner, title, msg, FillForUi(step.Text, vars)));
     }
 

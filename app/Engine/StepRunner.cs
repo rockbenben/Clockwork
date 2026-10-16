@@ -332,14 +332,18 @@ public static class StepRunner
                 return ActionResult.Empty;
             }
 
-            // 多行文本 → 列表。产出列表变量，供「每个」遍历。
+            // 拆行。产出列表变量，供「每个」循环遍历。
             // 空行**保留**：往终端里逐行喂命令时，空行常常就是一条要发出去的空命令，
             // 顺手滤掉会让行号与用户以为的错位，而「我明明敲了个空行」。
+            //
+            // 拆行规则与「列表」步骤收用户回答时走的是同一个函数（StepHelpers.SplitLines）——
+            // 两处各写一份的话，改了「滤不滤空行」这种小事两边会慢慢不一样，
+            // 而表现是「同一个列表，从两条路来的条数不一样」。
             case "splitLines":
             {
                 var text = Fill(s.Text, urlEncode: false, vars);
                 if (text.Length == 0) return ActionResult.Warn("Warn_SplitNoText");
-                var lines = text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
+                var lines = StepHelpers.SplitLines(text);
                 if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.SetList(s.OutputVar, lines);
                 return ActionResult.Empty;
             }
@@ -361,6 +365,25 @@ public static class StepRunner
             // 在日志里记一个 ⚠ 会让「一切按预期进行」的一次正常退出看起来像出了问题。
             // 真正的控制流由 runner 在读到它之后处理（见 ActionGroupRunner.RunRange）。
             case "skip": return ActionResult.Empty;
+
+            // 「合」：列表 → 文本。这是列表这条链上缺的最后一环——只有它，「循环里攒下的一串
+            // 结果」才走得出去。攒在列表里出不来，而占位替换只在文本位置生效，
+            // 于是循环体里存下的东西对后面的步骤完全不可见。
+            case "join":
+            {
+                var name = StepPlaceholder.Apply((s.Text ?? "").Trim(), null, false, vars).Trim();
+                // 没填名字与填了但那不是列表，是两回事：前者是「这一步还没配」，
+                // 后者是「前面那一步产出的不是列表」。合成一句话的话，用户读到
+                // 「列表变量「」不是列表」会去看自己的配置，而不是去看上一环节。
+                if (name.Length == 0) return ActionResult.Warn("Warn_JoinNoName");
+                var items = vars?.GetList(name);
+                if (items == null) return ActionResult.Warn("Warn_JoinNoList", name);
+
+                var sep = Fill(s.Separator, urlEncode: false, vars);
+                var joined = string.Join(sep, items);
+                if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, joined);
+                return ActionResult.Empty;
+            }
 
             // 问句步骤走不到这里就该被接走了（交互路径各自拦下：RunOrchestrator.RunStepAsync 与 ActionGroupRunner）。
             // 落到这儿说明这条执行路径上没有可以发问的界面——开机清单就是这种：登录时弹一个

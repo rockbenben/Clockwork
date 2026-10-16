@@ -28,6 +28,17 @@ public static class StepHelpers
     // 重复次数夹取：<1→1，>999→999（防手写 json/输入框填出跑不完的序列）。
     public static int ClampRepeat(int n) => n < 1 ? 1 : (n > 999 ? 999 : n);
 
+    /// <summary>把一段文本按行拆成列表。三种换行写法都认。</summary>
+    //
+    // 收在一处是因为它现在有两个调用方：「拆分为多行」步骤，和「列表」步骤把用户的
+    // 多行回答收进变量。各写一份的话，改了「要不要滤空行」这种事两处会慢慢不一样，
+    // 而表现是「同一个列表，从两条路来的条数不一样」。
+    //
+    // **空行保留。** 往终端里逐行敲命令时，空行常常就是要发出去的那一条；
+    // 滤掉会让行号与用户以为的错位，而错位的原因在界面上完全看不出来。
+    public static string[] SplitLines(string? text)
+        => (text ?? "").Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
+
     // 步骤重复次数：夹到 1..999（C# 强类型，缺失即默认 1）。
     // 消息步骤恒为 1：编辑器对它隐藏了重复行，所以那个值只可能是切换步骤类型时残留下来的
     //（「发送按键 ×3」改成「消息」→ repeat 仍是 3 → 每次运行连弹 3 张一模一样的卡片）。
@@ -37,7 +48,7 @@ public static class StepHelpers
     // 而答案写进同一个变量，每轮覆盖上一轮，只有最后一个能留下。
     // 曾经只夹了 message，于是编辑器给问句步骤露出了重复行、摘要跟着印一个「×N」，
     // 而 ActionGroupRunner 那个分支压根没有循环——界面承诺了一件引擎不做的事。
-    public static int StepRepeat(LaunchStep s) => s.Kind is "message" or "prompt" or "choice" ? 1 : ClampRepeat(s.Repeat);
+    public static int StepRepeat(LaunchStep s) => s.Kind is "message" or "prompt" or "choice" or "list" ? 1 : ClampRepeat(s.Repeat);
 
     // 「仅 N 前」阈值的时/分（各自夹取）与「当天分钟数」。支持任意时刻（不再只整点）：时 0..23、分 0..59，
     // 越界回退 8:00（兼容旧配置只有 onlyBefore8 没有 beforeHour/beforeMinute——缺失即模型默认 8:00）。

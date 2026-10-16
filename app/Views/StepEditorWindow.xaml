@@ -220,6 +220,24 @@
                     <TextBlock Text="{loc:Loc Ed_EachHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
+                <!-- 列表：问一句，收回一段多行文字，按行拆成列表存进变量。
+                     与「用户输入」的差别只在输入框多一行、产出多一层拆分——
+                     用户心里想的是同一件事（「问我要点东西」），所以两行并排摆在一起，
+                     而不是把「列表」塞进「文本处理」那一节。 -->
+                <StackPanel x:Name="PanList">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_AskText}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ListAskBox" AutomationProperties.Name="{loc:Loc Ed_AskText}" Width="380" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_ListDefault}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="ListDefaultBox" AutomationProperties.Name="{loc:Loc Ed_ListDefault}" Width="300" Height="70" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/><Button x:Name="ListDefaultVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickListDefaultVar_Click"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_ListHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- 「合」：列表 → 一段文字。这一步是列表这条链的最后一环——
+                     没有它，循环体里攒下的东西对后面的步骤完全不可见（占位替换只在文本位置生效）。 -->
+                <StackPanel x:Name="PanJoin">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_JoinList}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="JoinListBox" AutomationProperties.Name="{loc:Loc Ed_JoinList}" Width="300" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Separator}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="JoinSepBox" AutomationProperties.Name="{loc:Loc Ed_Separator}" Width="180" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_JoinHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
                 <StackPanel x:Name="PanMessage">
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Message}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MessageBox2" AutomationProperties.Name="{loc:Loc Ed_Message}" Width="380" Height="80" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Present}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="PresentCombo" AutomationProperties.Name="{loc:Loc Ed_Present}" Width="240" Height="28" SelectionChanged="Present_Changed"/></StackPanel>

@@ -184,7 +184,7 @@ public static class ActionGroupRunner
             // 问句步骤：问一句，把答案写进变量，后面的步骤用 {名字} 引用。
             // 形状照抄上面那个 message 分支——它们是同一类东西（都要跳 UI 线程、都会挂住整组、
             // 取消都意味着「这组别做了」），照抄比另起一套更不容易漏掉那几处取消检查。
-            if (step.Kind is "prompt" or "choice")
+            if (step.Kind is "prompt" or "choice" or "list")
             {
                 if (!deps.Budget.TryConsume()) return Halted;
                 var answer = deps.AskUser(step);
@@ -192,7 +192,13 @@ public static class ActionGroupRunner
                 // 用户按取消的意思是「这组别做了」，那么这个答案连记下来都没有意义。
                 if (deps.Cancel.IsStopped) return Halted;
                 if (answer == null) return Aborted;   // 取消 → 同 message 答「否」
-                deps.Vars.Set(step.OutputVar, answer);
+                // 「列表」收的是多行文字，落进变量的是**按行拆开的列表**——
+                // 中间那个字符串不留。留住它就要用户自己再接一次「拆分为多行」，
+                // 而「我要一个列表」本来就不该还要他们自己动手拆一道。
+                if (step.Kind == "list")
+                    deps.Vars.SetList(step.OutputVar, StepHelpers.SplitLines(answer));
+                else
+                    deps.Vars.Set(step.OutputVar, answer);
                 if (step.DelayMs > 0 && !deps.Cancel.InterruptibleSleep(step.DelayMs)) return Halted;
                 continue;
             }

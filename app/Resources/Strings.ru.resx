@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">Прошло {0} секунд, а эта клавиша так и не нажата.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Нечего разбивать (поле пусто и не ссылается ни на одну переменную).</data>
   <data name="Warn_MathBad" xml:space="preserve">Не удалось вычислить: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Список (многострочный ввод)</data>
+  <data name="Kind_join" xml:space="preserve">Собрать (список в текст)</data>
+  <data name="Sum_Join" xml:space="preserve">Собрать: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Предзаполненное содержимое</data>
+  <data name="Ed_ListHint" xml:space="preserve">Откроется поле для нескольких строк: Enter — новая строка, Ctrl+Enter — подтвердить. Текст разбивается по строкам в список, пустые строки сохраняются.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Этот список</data>
+  <data name="Ed_Separator" xml:space="preserve">Разделитель</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Склеивает элементы списка в один текст этим разделителем и сохраняет в переменную. Пусто — склеивает вплотную, ничего не вставляя.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">В этом шаге ещё не указано, какой список.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ не является списком. Сначала выполните шаг, который его создаёт (Список или Разбить на строки).</data>
 </root>

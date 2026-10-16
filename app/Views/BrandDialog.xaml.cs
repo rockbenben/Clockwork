@@ -109,6 +109,47 @@ public partial class BrandDialog : Window
         return Run(dlg);
     }
 
+    /// <summary>问一句，收**多行**文字。返回 null = 用户取消（Esc / 关闭）。</summary>
+    ///
+    // 与 Ask 共用同一个输入框，只是把它变成多行。
+    //
+    // 为什么要这一档：列表是这个程序里唯一**不能凭空从文本得到**的形状——文本由
+    // prompt / 浏览器地址 / 正则 / 替换…十来种方式产出，列表此前只有「把一段多行文本拆开」
+    // 这一条降级路径，而多行文本又没有一步能造（prompt 是单行框）。于是循环功能在
+    // 界面上第一步就走不出去：用户得先手改配置才凑得出多行文本。
+    //
+    // **不新开一个 TextBox**：答案收取在 Confirm 里按「哪个框可见」分派（见那里），
+    // 多开一个就多一条分支；而这一档与 Ask 的差别只有 AcceptsReturn 和高度，
+    // 那两个属性在切换前设回去即可，行为与 Ask 逐字一致。
+    public static string? AskMulti(Window? owner, string? title, string message, string? initial)
+    {
+        var dlg = Make(owner, title, message);
+        dlg.AnswerBox.Text = initial ?? "";
+        dlg.AnswerBox.Visibility = Visibility.Visible;
+        // 多行框的回车是「换一行」而不是「确定」——所以 IsDefault 必须摘掉，
+        // 否则回车会被 OkBtn 接走，用户永远打不出第二行。
+        // 那这一档怎么提交？Ctrl+Enter（AnswerBox 上显式挂一个回车处理）。见下面。
+        dlg.YesBtn.IsDefault = false;
+        dlg.AnswerBox.AcceptsReturn = true;
+        dlg.AnswerBox.Height = 132;
+        System.Windows.Automation.AutomationProperties.SetName(dlg.AnswerBox, message ?? "");
+
+        dlg.AnswerBox.PreviewKeyDown += (_, e) =>
+        {
+            // Ctrl+Enter = 确定。这是所有多行输入框的共同约定（VS Code、记事本、
+            // 浏览器地址栏的编辑框都是它），而单靠回车的话这一档没法提交——
+            // 回车已经被「换行」占用了。
+            if (e.Key == System.Windows.Input.Key.Enter
+                && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != 0)
+            {
+                e.Handled = true;
+                dlg.Confirm();
+            }
+        };
+        dlg.ContentRendered += (_, _) => { dlg.AnswerBox.Focus(); dlg.AnswerBox.SelectAll(); };
+        return Run(dlg);
+    }
+
     // 问句形态的两处共用：建卡 + 摆位 + 跑模态。摆位规则与 Show 那条一字不差
     //（owner 在前台就认它当父，否则 Topmost 自保），理由见 Show 的注释。
     private static BrandDialog Make(Window? owner, string? title, string message)

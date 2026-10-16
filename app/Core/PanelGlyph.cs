@@ -81,6 +81,11 @@ public static class PanelGlyph
         "math" => char.ConvertFromUtf32(0xE8EF),       // 计算器
         "skip" => char.ConvertFromUtf32(0xE711),       // X ＝ 跳出这一段
         "each" => char.ConvertFromUtf32(0xE895),       // 双向循环箭头 ＝ 反复
+        "list" => char.ConvertFromUtf32(0xE8F1),       // 一摞书 ＝ 一叠条目
+        // 「合」挑得最费劲：双向箭头 ⇄（已在 replace 用着）是「来回替换」，
+        // 循环箭头（已在 each 用着）是「反复」——两个都不对。最后用一个向下的箭头
+        // 压着一条横线：好几段收成一段。
+        "join" => char.ConvertFromUtf32(0xE8C5),
         "copySelection" => char.ConvertFromUtf32(0xE8C8),  // Copy ＝ 获取选中的文字
         "waitClipboard" => char.ConvertFromUtf32(0xE823),  // Sync ＝ 等剪贴板变化
         "prompt" => char.ConvertFromUtf32(0xE8AC),    // Rename ＝ 让你打一句话进去

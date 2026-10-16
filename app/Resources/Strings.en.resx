@@ -2166,4 +2166,14 @@ Log: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">Waited {0} seconds and that key never came.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">There’s no text to split (the box is empty and references no variable).</data>
   <data name="Warn_MathBad" xml:space="preserve">Couldn’t calculate: {0}</data>
+  <data name="Kind_list" xml:space="preserve">List (multi-line input)</data>
+  <data name="Kind_join" xml:space="preserve">Join (list to text)</data>
+  <data name="Sum_Join" xml:space="preserve">Join: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Prefilled content</data>
+  <data name="Ed_ListHint" xml:space="preserve">A box asking for several lines: Enter makes a new line, Ctrl+Enter confirms. The text is split by line into a list; blank lines are kept.</data>
+  <data name="Ed_JoinList" xml:space="preserve">This list</data>
+  <data name="Ed_Separator" xml:space="preserve">Separator</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Joins the list's items into one piece of text with this separator and saves it to a variable. Empty = concatenated with nothing in between.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">This step has no list named yet.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ isn’t a list variable. Run the step that produces one first (List or Split into lines).</data>
 </root>

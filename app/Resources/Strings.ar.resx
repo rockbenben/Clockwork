@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">مرّت {0} ثانية ولم يُضغط ذلك المفتاح.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">لا يوجد نص لتقسيمه (الحقل فارغ ولا يشير إلى أي متغير).</data>
   <data name="Warn_MathBad" xml:space="preserve">تعذّر الحساب: {0}</data>
+  <data name="Kind_list" xml:space="preserve">قائمة (إدخال متعدد الأسطر)</data>
+  <data name="Kind_join" xml:space="preserve">دمج (قائمة إلى نص)</data>
+  <data name="Sum_Join" xml:space="preserve">دمج: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">محتوى معبّأ مسبقًا</data>
+  <data name="Ed_ListHint" xml:space="preserve">سيظهر مربع ل入力 عدة أسطر: Enter لسطر جديد، Ctrl+Enter للتأكيد. يُقسَّم النص سطرًا سطرًا إلى قائمة، وتبقى الأسطر الفارغة.</data>
+  <data name="Ed_JoinList" xml:space="preserve">هذه القائمة</data>
+  <data name="Ed_Separator" xml:space="preserve">الفاصل</data>
+  <data name="Ed_JoinHint" xml:space="preserve">يدمج عناصر القائمة في نص واحد بهذا الفاصل ويحفظه في متغير. فارغ = يُدمج بلا شيء بينهما.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">لم تُحدَّد هذه الخطوة أي قائمة بعد.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ ليس متغير قائمة. نفّذ أولًا الخطوة التي تنتج قائمة (قائمة أو تقسيم إلى أسطر).</data>
 </root>

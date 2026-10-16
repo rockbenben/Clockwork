@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">等了 {0} 秒，没有等到那个键。</data>
   <data name="Warn_SplitNoText" xml:space="preserve">没有可拆的文本（文本框是空的，且没有引用到任何变量）。</data>
   <data name="Warn_MathBad" xml:space="preserve">算不了：{0}</data>
+  <data name="Kind_list" xml:space="preserve">列表（多行输入）</data>
+  <data name="Kind_join" xml:space="preserve">合（列表转文本）</data>
+  <data name="Sum_Join" xml:space="preserve">合起来：{0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">预填内容</data>
+  <data name="Ed_ListHint" xml:space="preserve">弹一个框让你填多行，回车换行，Ctrl+Enter 确定。按行拆成列表存进变量，空行也保留。</data>
+  <data name="Ed_JoinList" xml:space="preserve">这个列表</data>
+  <data name="Ed_Separator" xml:space="preserve">用什么分隔</data>
+  <data name="Ed_JoinHint" xml:space="preserve">把列表里的各项用这个分隔符接成一段文字，存进变量。留空 = 紧挨着接，不插任何东西。</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">这一步还没填是哪个列表。</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂不是列表变量。先跑产出列表的那一步（＂列表＂或＂拆分为多行＂）。</data>
 </root>

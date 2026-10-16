@@ -2166,4 +2166,14 @@ Protokoll: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} Sekunden gewartet, die Taste kam nicht.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Es gibt keinen Text zum Aufteilen (das Feld ist leer und verweist auf keine Variable).</data>
   <data name="Warn_MathBad" xml:space="preserve">Konnte nicht berechnet werden: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Liste (mehrzeilige Eingabe)</data>
+  <data name="Kind_join" xml:space="preserve">Verbinden (Liste zu Text)</data>
+  <data name="Sum_Join" xml:space="preserve">Verbinden: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Vorbelegter Inhalt</data>
+  <data name="Ed_ListHint" xml:space="preserve">Ein Feld fragt nach mehreren Zeilen: Enter macht einen Zeilenumbruch, Strg+Enter bestätigt. Der Text wird zeilenweise zu einer Liste, leere Zeilen bleiben erhalten.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Diese Liste</data>
+  <data name="Ed_Separator" xml:space="preserve">Trennzeichen</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Verbindet die Einträge der Liste mit diesem Trennzeichen zu einem Text und speichert ihn in einer Variablen. Leer = ohne dazwischen direkt aneinander.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">In diesem Schritt steht noch nicht, welche Liste gemeint ist.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ ist keine Listenvariable — führen Sie zuerst den Schritt aus, der eine erzeugt (Liste oder In Zeilen aufteilen).</data>
 </root>

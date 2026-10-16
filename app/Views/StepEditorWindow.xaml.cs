@@ -293,6 +293,12 @@ public partial class StepEditorWindow : Window
         EachListCombo.Text = s.Text;
         EachItemBox.Text = s.OutputVar;      // 留空 = 回落成 item
         EachIndexBox.Text = s.Pattern;       // 留空 = 回落成 index
+        // 「列表」与「用户输入」共用 Message/Text 两个字段（问句 / 预填），照两行填进去。
+        // 两个面板各有各的输入框，但存盘口径与 prompt 一致——换类型时字段不会互相吞掉。
+        ListAskBox.Text = s.Message;
+        ListDefaultBox.Text = s.Text;
+        JoinListBox.Text = s.Text;
+        JoinSepBox.Text = s.Separator;
         MessageBox2.Text = s.Message; SpeakChk.IsChecked = s.Speak; ConfirmChk.IsChecked = s.Confirm; OnYesTargetBox.Text = s.OnYes.Target;
         PopupSecondsBox.Text = s.PopupSeconds.ToString();
         DelayBox.Text = s.DelayMs.ToString();
@@ -327,7 +333,7 @@ public partial class StepEditorWindow : Window
         Vis(PanRef, kind == StepDisplay.RefKind && _listItems != null);   // 非面板语境打开一条 step 步骤（手改/导入）：不铺没有目标可选的空白面板
         Vis(PanUrl, kind == "url"); Vis(PanPath, kind == "path"); Vis(PanCopySelection, kind == "copySelection");
         Vis(PanWaitClipboard, kind == "waitClipboard");
-        Vis(PanPrompt, kind == "prompt"); Vis(PanChoice, kind == "choice");
+        Vis(PanPrompt, kind == "prompt"); Vis(PanChoice, kind == "choice"); Vis(PanList, kind == "list"); Vis(PanJoin, kind == "join");
         Vis(PanBrowserUrl, kind == "browserUrl");
         Vis(PanSiteMap, kind == "siteMap");
         Vis(PanUrlDecode, kind == "urlDecode");
@@ -461,6 +467,14 @@ public partial class StepEditorWindow : Window
                 r.Action = StepDisplay.SiteMapActionOf(new LaunchStep { Action = ComboVal(SiteMapActionCombo) });
                 break;
             case "urlDecode": r.Text = DecodeTextBox.Text; break;
+            case "list":
+                r.Message = ListAskBox.Text;
+                r.Text = ListDefaultBox.Text;
+                break;
+            case "join":
+                r.Text = JoinListBox.Text;
+                r.Separator = JoinSepBox.Text;
+                break;
             case "regex":
                 r.Text = RegexInputBox.Text;
                 r.Pattern = RegexPatternBox.Text;
@@ -612,6 +626,7 @@ public partial class StepEditorWindow : Window
     private void PickReplaceInputVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(ReplaceInputBox, ReplaceInputVarBtn);
     private void PickSplitVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(SplitTextBox, SplitVarBtn);
     private void PickMathVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(MathExprBox, MathVarBtn);
+    private void PickListDefaultVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(ListDefaultBox, ListDefaultVarBtn);
 
     private void PickVar_Click(TextBox targetBox, Button anchorBtn)
     {

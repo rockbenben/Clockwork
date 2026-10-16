@@ -2166,4 +2166,14 @@ Log: {1}</value>
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} seconden gewacht en die toets is nooit ingedrukt.</data>
   <data name="Warn_SplitNoText" xml:space="preserve">Er is geen tekst om te splitsen (het veld is leeg en verwijst naar geen variabele).</data>
   <data name="Warn_MathBad" xml:space="preserve">Berekenen mislukt: {0}</data>
+  <data name="Kind_list" xml:space="preserve">Lijst (invoer over meerdere regels)</data>
+  <data name="Kind_join" xml:space="preserve">Samenvoegen (lijst naar tekst)</data>
+  <data name="Sum_Join" xml:space="preserve">Samenvoegen: {0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">Vooraf ingevulde inhoud</data>
+  <data name="Ed_ListHint" xml:space="preserve">Een vak vraagt om meerdere regels: Enter maakt een nieuwe regel, Ctrl+Enter bevestigt. De tekst wordt per regel een lijst, lege regels blijven er.</data>
+  <data name="Ed_JoinList" xml:space="preserve">Deze lijst</data>
+  <data name="Ed_Separator" xml:space="preserve">Scheidingsteken</data>
+  <data name="Ed_JoinHint" xml:space="preserve">Voegt de items van de lijst aan elkaar tot één tekst met dit scheidingsteken en slaat die op in een variabele. Leeg = direct aan elkaar, zonder ertussen.</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">Deze stap noemt nog geen lijst.</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ is geen lijstvariabele — voer eerst de stap uit die er een maakt (Lijst of Opsplitsen in regels).</data>
 </root>

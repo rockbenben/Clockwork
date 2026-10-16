@@ -2166,4 +2166,14 @@
   <data name="Warn_WaitKeyTimeout" xml:space="preserve">等了 {0} 秒，沒有等到那個鍵。</data>
   <data name="Warn_SplitNoText" xml:space="preserve">沒有可拆的文字（文字方塊是空的，且沒有參照到任何變數）。</data>
   <data name="Warn_MathBad" xml:space="preserve">算不了：{0}</data>
+  <data name="Kind_list" xml:space="preserve">清單（多行輸入）</data>
+  <data name="Kind_join" xml:space="preserve">合（清單轉文字）</data>
+  <data name="Sum_Join" xml:space="preserve">合起來：{0}</data>
+  <data name="Ed_ListDefault" xml:space="preserve">預填內容</data>
+  <data name="Ed_ListHint" xml:space="preserve">彈一個框讓你填多行，回車換行，Ctrl+Enter 確定。按行拆成清單存進變數，空行也保留。</data>
+  <data name="Ed_JoinList" xml:space="preserve">這個清單</data>
+  <data name="Ed_Separator" xml:space="preserve">用什麼分隔</data>
+  <data name="Ed_JoinHint" xml:space="preserve">把清單裡的各項用這個分隔符接成一段文字，存進變數。留空 = 緊挨著接，不插任何東西。</data>
+  <data name="Warn_JoinNoName" xml:space="preserve">這一步還沒填是哪個清單。</data>
+  <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂不是清單變數。先跑產出清單的那一步（＂清單＂或＂拆分為多行＂）。</data>
 </root>
