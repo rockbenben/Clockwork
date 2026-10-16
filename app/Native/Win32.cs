@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Clockwork.Native;
 
@@ -786,5 +787,24 @@ public static class Win32
             return true;
         }, IntPtr.Zero);
         return list.ToArray();
+    }
+
+    /// <summary>
+    /// 按 Z 序枚举顶层窗口，交给回调挑。EnumWindows 自顶向下，最近激活的在前。
+    /// 不按进程过滤——Chromium 系窗口要和别的进程比，调用方自己按窗口类名判。
+    /// </summary>
+    public static void EnumTopLevelWindows(Func<IntPtr, bool> visit)
+    {
+        EnumWindows((h, p) => visit(h), IntPtr.Zero);
+    }
+
+    /// <summary>窗口类名（Chrome_WidgetWin_1 这类）。读不到返回空串。</summary>
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetClassName(IntPtr h, StringBuilder s, int n);
+
+    public static string GetClassName(IntPtr h)
+    {
+        var sb = new StringBuilder(256);
+        return GetClassName(h, sb, sb.Capacity) > 0 ? sb.ToString() : "";
     }
 }

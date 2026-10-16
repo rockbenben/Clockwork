@@ -219,6 +219,31 @@ public static class ConfigStore
         foreach (var r in cfg.Reminders) { r.OnYes ??= new(); r.RepeatUntil ??= ""; r.IntervalUntil ??= ""; r.OnceDate ??= ""; normalized |= NormalizeOnYes(r.OnYes); }
         cfg.Gestures ??= new();
 
+        // 站点映射表。与上面那些集合同一条底线：只补 null，绝不替用户改写他写下的内容。
+        // 这张表是**手改**的（见 SiteMap.cs），所以：
+        //   域名不做小写化、不去空白、不排序——"NewZone.top" 和 "newzone.top" 都是用户的原意，
+        //     匹配那边本来就大小写不敏感，改写只会让他下次看不懂自己写过什么；
+        //   sourceRoot 不 TrimEnd('\')——Path.Combine 自己会处理，而存盘上的形态是给他看的；
+        //   路径写错、目录不存在、正则写坏，一律原样留着：那些要让 siteMap 步骤在运行时如实报错，
+        //     由用户自己看着改，而不是启动时静默「修好」一份他没写过的东西。
+        cfg.Sites ??= new();
+        normalized |= cfg.Sites.RemoveAll(s => s is null) > 0;
+        foreach (var site in cfg.Sites)
+        {
+            site.Hosts ??= new();
+            site.PathRules ??= new();
+            site.Name ??= "";
+            site.SourceRoot ??= "";
+            site.IndexFile ??= "";
+            normalized |= site.Hosts.RemoveAll(h => h is null) > 0;
+            normalized |= site.PathRules.RemoveAll(r => r is null) > 0;
+            foreach (var rule in site.PathRules)
+            {
+                rule.Match ??= "";
+                rule.Replace ??= "";
+            }
+        }
+
         normalized |= cfg.Gestures.RemoveAll(s => s is null) > 0;
         foreach (var st in cfg.Gestures)
         {

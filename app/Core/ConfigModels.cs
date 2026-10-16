@@ -76,6 +76,32 @@ public sealed class LaunchStep
     public string IfProcessMode { get; set; } = "";   // ""=不限 | running | notRunning
     public string IfPower { get; set; } = "";         // ""=不限 | ac | battery
     public string IfPathExists { get; set; } = "";
+
+    // 变量条件：{名字} 与某个值比一比。不成立即跳过这一步——与上面四条环境条件同一个口径、同一个后果。
+    //
+    // **为什么单独三个字段而不是复用 IfProcessMode 那样的一个**：上面每条环境条件都有各自的取值框，
+    // 而这一条的比较对象是一个用户自己起的变量名 + 一个随便什么内容的值，形状与它们都不同。
+    // 硬塞进 IfProcess 那组字段会让那四个框里出现第五种含义，而它们分属不同页面、共用一套标签文案。
+    //
+    // IfVarOp 取值见 StepMath.Compare：eq/ne/contains/notcontains/gt/lt/ge/le/empty/notempty，
+    // 外加三个只看列表的：listcount（列表非空）/ listcountgt / listcountlt。
+    public string IfVar { get; set; } = "";
+    public string IfVarOp { get; set; } = "";
+    public string IfVarValue { get; set; } = "";
+
+    /// <summary>
+    /// 这一步属于哪个块。空 = 顶层。
+    ///
+    /// **用平铺 + 指向块，而不是把子步骤嵌进块自己的字段里。** 三条理由：
+    ///   · 老配置没有这个键 → 全部为空 → 全部顶层，**天然向后兼容**，不需要迁移；
+    ///   · 面板格子、拖拽排序、摘要渲染、搜索语料这一整套都已经是按「一串步骤」写的，
+    ///     改成嵌套树要把每一处都重写一遍；
+    ///   · 一条「把某步拖进块里」的编辑操作，在这个模型里就是改一个字符串字段——
+    ///     而嵌套模型下那是整个子树的重写，中途失败就留下半棵子树。
+    ///
+    /// 代价：顺序由平铺位置决定（同一个块的孩子必须**挨在一起**），这条由 ConfigStore 规范化时收拾。
+    /// </summary>
+    public string ParentId { get; set; } = "";
     // 图标。空 = 自动（「运行程序」取目标自己的图标，其余按步骤类型用线描字形）。
     // 也可以填一张图片的路径、一个 exe（借它的图标）、四位十六进制的 MDL2 码位（如 E7C4），
     // 或一枚内置品牌轮廓（brand:wechat，见 Core.BrandIcons）。解析口径见 Core.PanelIcon。
@@ -118,6 +144,13 @@ public sealed class LaunchStep
     public string OutputVar { get; set; } = "";
     // 所有步骤通用：连续执行次数（循环动作）；每次之间等 delayMs
     public int Repeat { get; set; } = 1;
+
+    // 正则提取 / 替换两步用的正则。空 = 这一步没配正则，运行时如实报错而不是拿空正则去跑
+    // （空正则会匹配每一处，产出「在每个字符之间插一条替换文本」这种东西，比报错更难收拾）。
+    public string Pattern { get; set; } = "";
+    // 替换文本。.NET 语法：$1…$9 是分组引用。空字符串是**合法值**（删掉匹配到的部分），
+    // 与「没填」不同档，所以单独存而不是复用别的字段。
+    public string Replace { get; set; } = "";
 }
 
 public sealed class Reminder
@@ -399,6 +432,11 @@ public sealed class RootConfig
     // 鼠标手势：一条手势 = 一个步骤，轨迹存在步骤的 Gesture 字段上。
     // 单独一份列表而不是散在动作组里，因为手势是全局的、少而互斥，而且多数动作根本不配手势。
     public List<LaunchStep> Gestures { get; set; } = new();
+
+    /// <summary>站点映射表：域名 → 本地源码根 + 路径改写规则。供 siteMap 步骤使用。</summary>
+    // 与 RunVars 分开存，理由见 SiteMap.cs 的注释：那张表要长期存在、要手改，
+    // 而 RunVars 是一次运行内的变量，跑完即焚。
+    public List<SiteEntry> Sites { get; set; } = new();
 
     // 页上的格子要指回动作的 Id，所以动作得先建出来、再传给 DefaultPanelPages——
     // 两边各调一次 DefaultActionGroups() 的话，Id 是新 Guid，面板上两格全指向不存在的动作。

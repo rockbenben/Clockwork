@@ -44,7 +44,8 @@ public static class StepCondition
     // 生产调用点传入当前分钟，实现分钟级精度。
     // env=null → 用真实探针（StepEnv.Live）。三个环境条件都只在「用户确实配了」时才去查，
     // 没配的步骤一次探针都不会跑——否则每条开机步骤都白白枚举一遍进程表。
-    public static bool IsSatisfied(LaunchStep s, int currentHour, int currentIsoDay, int currentMinute = 0, StepEnv? env = null)
+    public static bool IsSatisfied(LaunchStep s, int currentHour, int currentIsoDay, int currentMinute = 0, StepEnv? env = null,
+                                   RunVars? vars = null)
     {
         if (currentIsoDay <= 0) currentIsoDay = IsoDayOfWeek(DateTime.Now);
         int nowMinutes = currentHour * 60 + currentMinute;
@@ -78,6 +79,29 @@ public static class StepCondition
         // 目标框认「资源管理器复制来的带引号路径」和 %USERPROFILE%，条件框若只 Trim，这两种写法就恒判为
         // 「不存在」——而条件不成立的步骤是静默跳过、日志里连一行都没有，用户没有任何线索可查。
         if (!string.IsNullOrWhiteSpace(s.IfPathExists) && !probe.PathExists(LaunchTarget.NormalizeTarget(s.IfPathExists))) return false;
+
+        // **变量条件最后判，且是唯一一个会去读 RunVars 的。**
+        // 为什么放最后：前面的判据都不碰变量表，所以一批没配变量条件的步骤一次字典都不用查；
+        // 放前面的话每次判定都要问一遍「这次运行有没有变量表」，而开机清单那条路径压根没有。
+        //
+        // 读不到变量（名字没配、没产出、这次运行没有变量表）一律按**不成立**：
+        // 「条件不成立的步骤是静默跳过」，所以判错方向的后果是「这组里靠这个变量分流的两条路都跑」
+        // ——那是用户看不见的重入与死循环，而反过来（读不到就当成立）会跳过本该跑的那条。
+        if (!string.IsNullOrWhiteSpace(s.IfVar) && !string.IsNullOrWhiteSpace(s.IfVarOp))
+        {
+            var have = vars?.Get(s.IfVar);
+            var list = vars?.GetList(s.IfVar);
+            if (!vars?.Has(s.IfVar) == true) return false;
+            var right = s.IfVarValue ?? "";
+            bool ok = (s.IfVarOp ?? "").Trim().ToLowerInvariant() switch
+            {
+                "listcount" => (list?.Count ?? 0) > 0,
+                "listcountgt" => (list?.Count ?? 0) > 0 && int.TryParse(right, out var n) && list!.Count > n,
+                "listcountlt" => (list?.Count ?? 0) > 0 && int.TryParse(right, out var n) && list!.Count < n,
+                _ => StepMath.Compare(have ?? "", s.IfVarOp, right),
+            };
+            if (!ok) return false;
+        }
         return true;
     }
 }
