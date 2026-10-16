@@ -1,3 +1,4 @@
+using System.Windows;
 using Clockwork.Core;
 
 namespace Clockwork.ViewModels;
@@ -7,13 +8,24 @@ public sealed class StepRowVm : ObservableObject, IRowVm
 {
     private readonly Action _onChanged;
 
-    public StepRowVm(LaunchStep step, Action onChanged)
+    public StepRowVm(LaunchStep step, Action onChanged, int depth = 0)
     {
         Step = step;
         _onChanged = onChanged;
+        Depth = depth;
     }
 
     public LaunchStep Step { get; }
+
+    /// <summary>这一行在第几层（顶层 = 0）。块里的孩子 &gt; 0。</summary>
+    // 层级是**平铺表 + ParentId** 这套模型的全部呈现：DataGrid 仍然是平的一串，
+    // 靠这一列的缩进让人看出块与子步骤的归属。见 StepTree 的注释（为什么不用嵌套树）。
+    public int Depth { get; }
+
+    /// <summary>给类型标签那一格用的左缩进。</summary>
+    // 直接给 Thickness 而不是让 XAML 拿 Depth 换算：换算要一个 IValueConverter，
+    // 而换算规则只有这一条（每层缩进固定像素），写进 VM 比写进转换器更好读、也少一个文件。
+    public Thickness IndentMargin => new(Depth * 16, 0, 0, 0);
 
     public object Model => Step;
 

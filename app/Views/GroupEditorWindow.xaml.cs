@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,6 +50,7 @@ public partial class GroupEditorWindow : Window
         KeyCaptureBox.Attach(HotkeyBox, HotkeyCapture.KeyCaptureMode.Hotkey, null,
             () => _hotkey, combo => _hotkey = combo);
         foreach (var s in group.Steps) _rows.Add(new StepRowVm(Clone(s), () => { }));
+        RebuildRows();
         Steps.ItemsSource = _rows;
         // 空态跟着集合走，而不是跟着某一个按钮的点击走：加、删、复制、拖拽之后都可能是零行，
         // 逐处去记得设 Visibility 迟早漏一处（CollectionChanged 是这里唯一的真相来源）。
@@ -61,7 +62,10 @@ public partial class GroupEditorWindow : Window
             var r = _rows[from];
             _rows.RemoveAt(from);
             _rows.Insert(to, r);
-            Steps.SelectedIndex = to;
+            // 拖完之后立刻重排：拖动只改了平铺位置，块与孩子的从属关系由 RebuildRows 重新算一遍。
+            // 不重排的话，用户把某个子步骤拖到块外面，界面上它仍带着缩进——看着还在块里，跑起来却在块外。
+            RebuildRows();
+            Steps.SelectedIndex = IndexOfStep(r.Step);
         });
     }
 
@@ -83,6 +87,74 @@ public partial class GroupEditorWindow : Window
     private void SyncEmptyHint()
         => StepsEmptyHint.Visibility = _rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
+    // _rows 是 ObservableCollection，而 FindIndex / RemoveAll 是 List<T> 的方法。
+    // 改成 List 会失去变更通知（增删后界面不刷新），所以给两个小helper 而不是换集合类型。
+    // 比的是**引用**不是 id：重排时每一行都是新的 StepRowVm，而 Step 本身还是同一个对象。
+    private int IndexOfStep(LaunchStep s)
+    {
+        for (int i = 0; i < _rows.Count; i++) if (ReferenceEquals(_rows[i].Step, s)) return i;
+        return -1;
+    }
+
+    private void RemoveSteps(IEnumerable<LaunchStep> doomed)
+    {
+        var set = new HashSet<LaunchStep>(doomed);
+        for (int i = _rows.Count - 1; i >= 0; i--) if (set.Contains(_rows[i].Step)) _rows.RemoveAt(i);
+    }
+
+    // ---- 块（level）与层级 ----
+    //
+    // _rows 始终是**平铺**的一串，与 LaunchStep.ParentId 一样是「一串里带层级信息」。
+    // 每次增删改之后都重排一次，让 (a) 行序符合块的阅读顺序、(b) 每行的 Depth 是当前值。
+    //
+    // **为什么每次都重排而不是只改受影响的几行**：一次操作最多动十几个行对象，
+    // 而「谁是谁的孩子」这件事只有走一遍整棵树才知道。局部更新省下来的那点算力
+    // 换来的是「某次拖拽之后缩进没更新」这类只在特定顺序下出现的错，而重排永远是收敛的。
+
+    /// <summary>按块层级重排 _rows 并刷新每行的缩进。选中项尽量保持在原来那一条上。</summary>
+    private void RebuildRows()
+    {
+        var keep = Sel >= 0 && Sel < _rows.Count ? _rows[Sel].Step : null;
+
+        var steps = _rows.Select(r => r.Step).ToList();
+        var ordered = new List<LaunchStep>();
+        var tree = StepTree.Build(steps);
+        var byId = steps.Where(s => !string.IsNullOrWhiteSpace(s.Id))
+                        .GroupBy(s => s.Id).ToDictionary(g => g.Key, g => g.First());
+        var placed = new HashSet<LaunchStep>();
+        var depth = new Dictionary<LaunchStep, int>();
+
+        void Walk(IReadOnlyList<LaunchStep> list, int d)
+        {
+            foreach (var s in list)
+            {
+                if (!placed.Add(s)) continue;   // 环：已在别处放过，跳过（StepTree.Build 也做了同样的事）
+                ordered.Add(s);
+                depth[s] = d;
+                if (StepDisplay.IsBlockKind(s.Kind)) Walk(tree.ChildrenOf(s.Id), d + 1);
+            }
+        }
+        Walk(tree.Top, 0);
+
+        // StepTree 认不出来（父 id 指向已删的步骤之类）的，补在末尾——它们仍在配置里，
+        // 悄悄丢掉才是数据损失，而界面上排最后比排中间更容易看出「这一条不属于任何块」。
+        foreach (var s in steps) if (placed.Add(s)) { ordered.Add(s); depth[s] = 0; }
+
+        _rows.Clear();
+        foreach (var s in ordered) _rows.Add(new StepRowVm(s, () => { }, depth.TryGetValue(s, out var d) ? d : 0));
+
+        var idx = keep == null ? -1 : IndexOfStep(keep);
+        if (idx >= 0) Steps.SelectedIndex = idx;
+    }
+
+    /// <summary>把新步骤挂到当前选中的块下面（选中的不是块就挂顶层）。</summary>
+    // 「选住一个循环，点新增，出来的东西就在循环里」——这是最顺的一条建块路径。
+    // 比「先建循环、再把别的步骤拖进去」少一步，而拖拽跨层要额外做归属推算（DataGridReorder 只管上下）。
+    private string? ParentIdForNewStep()
+        => Sel >= 0 && Sel < _rows.Count && StepDisplay.IsBlockKind(_rows[Sel].Step.Kind)
+            ? _rows[Sel].Step.Id
+            : null;
+
     // 选组下拉排除本组：直环在挑选时就选不出来；间接环（A→B→A）由 Ok_Click 的 FindCycle 拦。
     private IReadOnlyList<ActionGroup> StepGroups => _groups.Where(g => g.Id != _original.Id).ToList();
 
@@ -93,9 +165,11 @@ public partial class GroupEditorWindow : Window
         {
             var step = StepEditorWindow.Edit(this, seed, k, StepGroups);
             if (step == null) return;
+            step.ParentId = ParentIdForNewStep() ?? "";
             int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
             _rows.Insert(pos, new StepRowVm(step, () => { }));
-            Steps.SelectedIndex = pos;
+            RebuildRows();
+            Steps.SelectedIndex = IndexOfStep(step);
         });
         menu.PlacementTarget = SAdd;
         menu.IsOpen = true;
@@ -114,10 +188,40 @@ public partial class GroupEditorWindow : Window
     {
         int i = Sel;
         if (i < 0 || i >= _rows.Count) return;
-        // 与三个列表页同一条删除契约：必先确认。虽然取消编辑器可整体回退，但用户不该为救一个误删丢掉本次全部编辑。
-        if (!BrandDialog.ConfirmDelete(this, StepDisplay.StepListSummary(_rows[i].Step))) return;
-        _rows.RemoveAt(i);
+        var target = _rows[i].Step;
+
+        // 删一个块要连它的孩子一起删，且**先说清楚要删几条**。
+        // 不说的话：块没了、孩子留下，而孩子的 ParentId 指向一个不存在的 id —— 运行期靠
+        // StepTree 兜成顶层，于是它们继续跑，而且出现在块本该在的位置之外的地方。
+        // 用户删「那个循环」时的本意是「那一整段都不要了」，只删外壳等于留了个空壳在原地跑里面的东西。
+        var doomed = DescendantsOf(target).ToList();
+        var label = doomed.Count > 0
+            ? Strings.Lf("Confirm_DeleteBlockWithSteps", StepDisplay.StepListSummary(target), doomed.Count)
+            : StepDisplay.StepListSummary(target);
+        if (!BrandDialog.ConfirmDelete(this, label)) return;
+
+        RemoveSteps(doomed);
+        RebuildRows();
         if (_rows.Count > 0) Steps.SelectedIndex = Math.Min(i, _rows.Count - 1);
+    }
+
+    /// <summary>某个块的孩子（不含它自己）。</summary>
+    private IEnumerable<LaunchStep> DescendantsOf(LaunchStep block)
+    {
+        var tree = StepTree.Build(_rows.Select(r => r.Step).ToList());
+        var outp = new List<LaunchStep>();
+        var seen = new HashSet<string>(StringComparer.Ordinal) { block.Id ?? "" };
+        void Walk(IReadOnlyList<LaunchStep> list)
+        {
+            foreach (var s in list)
+            {
+                if (!seen.Add(s.Id ?? "")) continue;
+                outp.Add(s);
+                Walk(tree.ChildrenOf(s.Id));
+            }
+        }
+        Walk(tree.ChildrenOf(block.Id));
+        return outp;
     }
 
     // 复制选中步骤：深拷贝插到选中之后（与主窗口三列表的「复制」同一条插入契约）。
@@ -125,21 +229,91 @@ public partial class GroupEditorWindow : Window
     {
         int i = Sel;
         if (i < 0 || i >= _rows.Count) return;
+        var src = _rows[i].Step;
+
+        // 复制要连**整个子树**一起复制。只复制块外壳的话，副本是个空壳，而用户复制一个循环的
+        // 意图是「再来一遍同样的事」——那个循环里当然有东西，不然谁会复制它。
+        //
+        // 父 id 必须**传递性**重映射：孙步骤的 ParentId 指的是它父亲的 id，而父亲也被换了新 id。
+        // 只改第一层的话，复制出来的块里所有孙子立刻变成孤儿（StepTree 会把它们兜成顶层，
+        // 于是它们出现在块外面继续跑——一次复制变成了两份都可能执行的步骤）。
+        var family = new List<LaunchStep> { src };
+        family.AddRange(DescendantsOf(src));
+
+        var idMap = new Dictionary<string, string>(StringComparer.Ordinal);
+        var clones = family.Select(CloneWithNewId).ToList();
+        foreach (var c in clones) if (!string.IsNullOrWhiteSpace(c.Id)) idMap[c.Id] = c.Id;
+        foreach (var c in clones)
+        {
+            var oldParent = c.ParentId ?? "";
+            c.ParentId = idMap.TryGetValue(oldParent, out var nid) ? nid : "";
+        }
+
         int pos = StepHelpers.InsertPosition(i, _rows.Count);
-        _rows.Insert(pos, new StepRowVm(Clone(_rows[i].Step), () => { }));
-        Steps.SelectedIndex = pos;
+        foreach (var c in clones) _rows.Insert(pos++, new StepRowVm(c, () => { }));
+        RebuildRows();
+        Steps.SelectedIndex = IndexOfStep(clones[0]);
     }
 
+    // 上移 / 下移 = **与上一个 / 下一个兄弟换位**，不是「整行往上挪一行」。
+    //
+    // 为什么不是后者：平铺表里「上一行」很可能正在另一个块内部（上一个兄弟的循环里的第一步），
+    // 整行挪上去会把我的循环塞进它的循环里——而 ParentId 还指着原来的父亲，
+    // 于是重排时这一段直接跑到别人的块底下。在没有嵌套的年代两种做法一模一样，
+    // 有了块之后必须说清楚是哪一种。这里选换位：它在树上永远有个明确的含义，用户按一次就知道发生了什么。
+    //
+    // **整棵子树一起动**（含我自己的孩子）：只挪外壳的话，孩子留在原地，
+    // 一段循环会被拆成前后两半，而两半都会跑。
     private void SUp_Click(object sender, RoutedEventArgs e)
     {
         int i = Sel;
-        if (i > 0) { _rows.Move(i, i - 1); Steps.SelectedIndex = i - 1; }
+        if (i <= 0) return;
+        var r = _rows[i];
+        // 上一行比我还浅 = 我是父亲的第一个孩子，上面已经没有我的位置了。
+        if (_rows[i - 1].Depth < r.Depth) return;
+
+        // 上一行可能在我前面那个兄弟的块**内部**——要退到那个块的外面，才是我的上一位。
+        int d = _rows[i - 1].Depth;
+        int j = i - 1;
+        while (j > 0 && _rows[j].Depth > d) j--;
+
+        MoveSubtree(r.Step, i, j);
     }
 
     private void SDown_Click(object sender, RoutedEventArgs e)
     {
         int i = Sel;
-        if (i >= 0 && i < _rows.Count - 1) { _rows.Move(i, i + 1); Steps.SelectedIndex = i + 1; }
+        if (i < 0 || i >= _rows.Count) return;
+        var r = _rows[i];
+        int span = 1 + DescendantsOf(r.Step).Count();
+        if (i + span >= _rows.Count) return;
+
+        // 下一行的深度与我相同 = 它是我的下一个兄弟，插到它整块之后。
+        if (_rows[i + span].Depth != r.Depth)
+        {
+            // 下一行比我还深 = 我是这个块里的最后一个孩子，下面没有我的位置了。
+            if (_rows[i + span].Depth > r.Depth) return;
+            // 比我还浅 = 我是最后一个孩子。允许移到「父亲之后」（即离开这个块），
+            // 否则一个块的最后一行永远动不了，而「把循环体里的东西挪到循环外面」是常见操作。
+            return;
+        }
+
+        int d = r.Depth;
+        int end = i + span;
+        while (end < _rows.Count && _rows[end].Depth >= d) end++;
+        MoveSubtree(r.Step, i, end);
+    }
+
+    /// <summary>把 <paramref name="step"/> 及其整棵子树，从 from 处挪到 to 处（to 会落在它后面）。</summary>
+    private void MoveSubtree(LaunchStep step, int from, int to)
+    {
+        int span = 1 + DescendantsOf(step).Count();
+        var block = _rows.Skip(from).Take(span).ToList();
+        for (int k = 0; k < span; k++) _rows.RemoveAt(from);
+        int at = to > from ? to - span : to;
+        for (int k = 0; k < block.Count; k++) _rows.Insert(at + k, block[k]);
+        RebuildRows();
+        Steps.SelectedIndex = IndexOfStep(step);
     }
 
     // —— 试跑：跑的是编辑中（未保存）的内容，所见即所得 ——
@@ -275,6 +449,17 @@ public partial class GroupEditorWindow : Window
         var c = System.Text.Json.JsonSerializer.Deserialize<LaunchStep>(
             System.Text.Json.JsonSerializer.Serialize(s, ConfigStore.JsonOptions), ConfigStore.JsonOptions)!;
         c.Days ??= new(); c.OnYes ??= new();   // 源对象字段为 null（手改配置）时补默认，与 ConfigStore.Read 同口径
+        return c;
+    }
+
+    /// <summary>深拷贝并**换一个全新的 Id**。复制步骤专用。</summary>
+    // 为什么要换：Id 是面板点击统计（Core.PanelUsageStore）的键，也是块与子步骤之间那根 ParentId 链的锚。
+    // 复制出两条同 id 的记录，两边共用一份点击计数（改一个参数，另一边的统计也变），
+    // 而更糟的是子步骤的 ParentId 指向谁变得不确定——复制出来的块可能认到原件的孩子上。
+    private static LaunchStep CloneWithNewId(LaunchStep s)
+    {
+        var c = Clone(s);
+        c.Id = Guid.NewGuid().ToString();
         return c;
     }
 

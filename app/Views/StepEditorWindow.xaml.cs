@@ -41,6 +41,19 @@ public partial class StepEditorWindow : Window
         FillCombo(MouseActCombo, StepDisplay.MouseActions.Select(m => (Strings.Get(m.LabelKey), m.Action)).ToArray(),
                   StepDisplay.MouseActions.Any(m => m.Action == step.Action) ? step.Action : "down");
         FillCombo(WinActionCombo, StepDisplay.WindowActionMap().Select(kv => (kv.Value, kv.Key)).ToArray(), string.IsNullOrEmpty(step.Action) ? "close" : step.Action);
+        // siteMap 的打开方式。三档的 id 与 StepRunner 那支的 mode、StepDisplay.SiteMapActionOf 的
+        // 归一结果同一批字面量——三处各写一份的话，改动只落一处，清单上就会写着「定位」而实际打开了文件。
+        FillCombo(SiteMapActionCombo, new[]
+        {
+            (Strings.Get("Val_SiteMapOpen"), "open"),
+            (Strings.Get("Val_SiteMapReveal"), "reveal"),
+            (Strings.Get("Val_SiteMapNone"), "none"),
+        }, StepDisplay.SiteMapActionOf(step));
+        FillCombo(SkipModeCombo, new[]
+        {
+            (Strings.Get("Val_SkipBlock"), "block"),
+            (Strings.Get("Val_SkipRun"), "run"),
+        }, string.Equals(step.Action, "run", StringComparison.OrdinalIgnoreCase) ? "run" : "block");
         FillCombo(SysCmdCombo, StepDisplay.SystemCommandMap().Select(kv => (kv.Value, kv.Key)).ToArray(), step.Command);
         // 引擎下拉的「值」就是地址本身，所以选中哪一项 = 盘上存的是哪个地址，不必另存一个引擎 id。
         // 手改 json 填了个表外的地址（或从旧版本升上来）→ 反查不到 → 落到「自定义…」并把地址原样露出来。
@@ -265,6 +278,21 @@ public partial class StepEditorWindow : Window
         UrlBox.Text = s.Kind == "url" ? s.Target : "";
         PathBox.Text = s.Kind == "path" ? s.Target : "";
         WaitSecondsBox.Text = StepHelpers.ClampWaitSeconds(s.Level).ToString();
+        // 五个新类型的字段。与上面同一批字段一起载入，缺一个就是「编辑再保存抹掉用户填的值」。
+        SiteMapUrlBox.Text = s.Text;
+        // siteMap 的打开方式下拉在构造时由 FillCombo 填好并按 s.Action 选中，这里不再重设：
+        // LoadStep 跑在构造之后，重设等于把 FillCombo 那套「表外值退回第一项」的兜底绕过去。
+        DecodeTextBox.Text = s.Text;
+        RegexInputBox.Text = s.Text; RegexPatternBox.Text = s.Pattern;
+        RegexGroupBox.Text = Math.Max(0, s.Level).ToString();
+        ReplaceInputBox.Text = s.Text; ReplacePatternBox.Text = s.Pattern; ReplaceWithBox.Text = s.Replace;
+        WaitKeysBox.Text = s.Text;
+        WaitKeySecondsBox.Text = StepHelpers.ClampWaitSeconds(s.Level).ToString();
+        SplitTextBox.Text = s.Text;
+        MathExprBox.Text = s.Text;
+        EachListCombo.Text = s.Text;
+        EachItemBox.Text = s.OutputVar;      // 留空 = 回落成 item
+        EachIndexBox.Text = s.Pattern;       // 留空 = 回落成 index
         MessageBox2.Text = s.Message; SpeakChk.IsChecked = s.Speak; ConfirmChk.IsChecked = s.Confirm; OnYesTargetBox.Text = s.OnYes.Target;
         PopupSecondsBox.Text = s.PopupSeconds.ToString();
         DelayBox.Text = s.DelayMs.ToString();
@@ -300,8 +328,22 @@ public partial class StepEditorWindow : Window
         Vis(PanUrl, kind == "url"); Vis(PanPath, kind == "path"); Vis(PanCopySelection, kind == "copySelection");
         Vis(PanWaitClipboard, kind == "waitClipboard");
         Vis(PanPrompt, kind == "prompt"); Vis(PanChoice, kind == "choice");
+        Vis(PanBrowserUrl, kind == "browserUrl");
+        Vis(PanSiteMap, kind == "siteMap");
+        Vis(PanUrlDecode, kind == "urlDecode");
+        Vis(PanRegex, kind == "regex");
+        Vis(PanReplace, kind == "replace");
+        Vis(PanWaitKey, kind == "waitKey");
+        Vis(PanSplitLines, kind == "splitLines");
+        Vis(PanMath, kind == "math");
+        Vis(PanSkip, kind == "skip");
+        Vis(PanEach, kind == "each");
         // 「输出到变量」跟着**会产出值的类型**走，不跟着单个面板走——三种类型共用这一行。
-        Vis(PanOutputVar, kind is "prompt" or "choice" or "copySelection");
+        // 列出全部七种：browserUrl / siteMap / urlDecode / regex / replace 与原有的两种问句、
+        // 取选中的文字。这行漏一个，那一步就产不出值，而界面上没有任何地方提示过它本该产出。
+        Vis(PanOutputVar, kind is "prompt" or "choice" or "copySelection"
+                           or "browserUrl" or "siteMap" or "urlDecode" or "regex" or "replace"
+                           or "waitKey" or "splitLines" or "math");
         // 说明里带上当前的变量名，好让「下一步怎么引用它」有个照着抄的样子：
         // 只写「用 {名字} 引用」的话，用户还得自己把名字代进去一次，而那一步正是最容易写错的。
         OutputVarHint.Text = Strings.Lf("Ed_OutputVarHint",
@@ -413,6 +455,36 @@ public partial class StepEditorWindow : Window
             // 与 url 对称：路径也存进 Target 这个共用字段，三个「打开」类型互相改来改去都不丢值。
             case "path": r.Target = PathBox.Text.Trim(); break;
             case "copySelection": break;   // 除了「输出到变量」（下面统一收）没有别的参数
+            case "browserUrl": break;      // 同上：只有「输出到变量」
+            case "siteMap":
+                r.Text = SiteMapUrlBox.Text;
+                r.Action = StepDisplay.SiteMapActionOf(new LaunchStep { Action = ComboVal(SiteMapActionCombo) });
+                break;
+            case "urlDecode": r.Text = DecodeTextBox.Text; break;
+            case "regex":
+                r.Text = RegexInputBox.Text;
+                r.Pattern = RegexPatternBox.Text;
+                r.Level = Math.Max(0, ParseOr(RegexGroupBox.Text, 0));
+                break;
+            case "replace":
+                r.Text = ReplaceInputBox.Text;
+                r.Pattern = ReplacePatternBox.Text;
+                r.Replace = ReplaceWithBox.Text;
+                break;
+            case "waitKey":
+                r.Text = WaitKeysBox.Text;
+                // 0 = 不限时。**照实存 0**，不夹成 1：ClampWaitSeconds 把 0 变成 5 秒，
+                // 而「一直等」与「等 5 秒」是两件事，存进去就再也分不出来了。
+                r.Level = ParseOr(WaitKeySecondsBox.Text, 0) <= 0 ? 0 : StepHelpers.ClampWaitSeconds(ParseOr(WaitKeySecondsBox.Text, 0));
+                break;
+            case "splitLines": r.Text = SplitTextBox.Text; break;
+            case "math": r.Text = MathExprBox.Text; break;
+            case "skip": r.Action = ComboVal(SkipModeCombo); break;
+            case "each":
+                r.Text = EachListCombo.Text.Trim();
+                r.OutputVar = EachItemBox.Text.Trim();
+                r.Pattern = EachIndexBox.Text.Trim();
+                break;
             case "waitClipboard": r.Level = StepHelpers.ClampWaitSeconds(ParseOr(WaitSecondsBox.Text, 5)); break;
             // 动作存进 Action（与音量/窗口步骤同一个字段的用法），不为它新开配置字段。
             // 点几次/滚几格用共用的「重复次数」，这里不存第二个计数。
@@ -532,6 +604,14 @@ public partial class StepEditorWindow : Window
     private void PickPathVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(PathBox, PathVarBtn);
     private void PickWorkDirVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(WorkDirBox, WorkDirVarBtn);
     private void PickIfPathVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(IfPathBox, IfPathVarBtn);
+    // 四个新面板的「插入变量」按钮。四条同款写法，与上面那四条是同一个函数的不同入参——
+    // 各写一份出来的话，将来给菜单加一项（比如剪贴板历史）就只改得动其中一半。
+    private void PickSiteMapUrlVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(SiteMapUrlBox, SiteMapUrlVarBtn);
+    private void PickDecodeVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(DecodeTextBox, DecodeVarBtn);
+    private void PickRegexInputVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(RegexInputBox, RegexInputVarBtn);
+    private void PickReplaceInputVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(ReplaceInputBox, ReplaceInputVarBtn);
+    private void PickSplitVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(SplitTextBox, SplitVarBtn);
+    private void PickMathVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(MathExprBox, MathVarBtn);
 
     private void PickVar_Click(TextBox targetBox, Button anchorBtn)
     {

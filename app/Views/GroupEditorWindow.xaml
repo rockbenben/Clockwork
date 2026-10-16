@@ -116,7 +116,9 @@
                         <DataGridTemplateColumn Header="{loc:Loc Col_Kind}" Width="Auto" MinWidth="104">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Border Style="{StaticResource KindChipCell}">
+                                    <!-- Margin 来自 StepRowVm.IndentMargin：块里的子步骤按层级缩进。
+                                         平铺的 DataGrid 靠这一列的缩进表达归属（见 StepTree 的注释）。 -->
+                                    <Border Style="{StaticResource KindChipCell}" Margin="{Binding IndentMargin}">
                                         <TextBlock Text="{Binding KindLabel}" Style="{StaticResource KindChip}"/>
                                     </Border>
                                 </DataTemplate>

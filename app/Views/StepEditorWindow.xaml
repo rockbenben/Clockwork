@@ -145,6 +145,81 @@
                     <TextBlock Text="{loc:Loc Ed_TextHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
                 </StackPanel>
 
+                <!-- 读浏览器地址栏：它本身不做事，只产出一个网址给后面的步骤引用，所以与
+                     「获取选中的文字」同性质。说明行把「只覆盖 Chromium 系」写在最前面——
+                     Firefox 读不到这件事，用户不试一次是不知道的，而试的成本是配了半天才发现不工作。 -->
+                <StackPanel x:Name="PanBrowserUrl">
+                    <TextBlock Text="{loc:Loc Ed_BrowserUrlHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,4,0,4"/>
+                </StackPanel>
+
+                <!-- 网址 → 本地源文件。**网址留空 = 现读地址栏**，这是最常见的用法，
+                     所以「留空即自动」必须写在说明行第一句，而不是藏在末尾当补充。 -->
+                <StackPanel x:Name="PanSiteMap">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Url}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="SiteMapUrlBox" AutomationProperties.Name="{loc:Loc Ed_Url}" Width="300" Height="28"/><Button x:Name="SiteMapUrlVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickSiteMapUrlVar_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SiteMapAction}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SiteMapActionCombo" AutomationProperties.Name="{loc:Loc Ed_SiteMapAction}" Width="240" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_SiteMapUrlHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- URL 解码。输入框与「发送文本」共用 Ed_Text 这个标签，但两处含义不同
+                     （那一步是要敲出去的字，这一步是要处理的字），版面上能靠所在面板区分。 -->
+                <StackPanel x:Name="PanUrlDecode">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="DecodeTextBox" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="300" Height="28"/><Button x:Name="DecodeVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickDecodeVar_Click"/></StackPanel>
+                </StackPanel>
+
+                <!-- 正则提取。三个框的顺序是「输入 → 规则 → 取哪一段」，与读的动作同向；
+                     「取第几组」紧跟规则，因为它的取值范围由规则决定，挪远了就得来回对照。 -->
+                <StackPanel x:Name="PanRegex">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="RegexInputBox" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="300" Height="28"/><Button x:Name="RegexInputVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickRegexInputVar_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_RegexPattern}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="RegexPatternBox" AutomationProperties.Name="{loc:Loc Ed_RegexPattern}" Width="300" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_RegexGroup}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="RegexGroupBox" AutomationProperties.Name="{loc:Loc Ed_RegexGroup}" Width="90" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_RegexHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- 替换。三个框同 regex 那套，只把「取第几组」换成「替换为」——
+                     两步分开而不是合成一步带模式开关，见 StepRunner 里 replace 那一支的注释。 -->
+                <StackPanel x:Name="PanReplace">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ReplaceInputBox" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="300" Height="28"/><Button x:Name="ReplaceInputVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickReplaceInputVar_Click"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_RegexPattern}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ReplacePatternBox" AutomationProperties.Name="{loc:Loc Ed_RegexPattern}" Width="300" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_ReplaceWith}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="ReplaceWithBox" AutomationProperties.Name="{loc:Loc Ed_ReplaceWith}" Width="300" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_RegexHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- 等按键。键名一栏可以直接打「Insert,Escape,F1」——写成逗号分隔而不是多选下拉，
+                     是因为用户心里的键集合就是「这一串」，下拉要多点几次才能表达同一件事。 -->
+                <StackPanel x:Name="PanWaitKey">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WaitKeys}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WaitKeysBox" AutomationProperties.Name="{loc:Loc Ed_WaitKeys}" Width="300" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_WaitSeconds}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="WaitKeySecondsBox" AutomationProperties.Name="{loc:Loc Ed_WaitSeconds}" Width="90" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_WaitKeyHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- 拆行。输出到变量走共用的 PanOutputVar 行。 -->
+                <StackPanel x:Name="PanSplitLines">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Text}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="SplitTextBox" AutomationProperties.Name="{loc:Loc Ed_Text}" Width="300" Height="90" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/><Button x:Name="SplitVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickSplitVar_Click"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_SplitHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- 算一步。表达式一栏就够，不拆成「左/运算符/右」三个框——
+                     「{当前ID}+1」这种写法用户一眼认得，拆成三个框反而要他去对应哪一栏。 -->
+                <StackPanel x:Name="PanMath">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Expr}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="MathExprBox" AutomationProperties.Name="{loc:Loc Ed_Expr}" Width="300" Height="28"/><Button x:Name="MathVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickMathVar_Click"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_MathHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <StackPanel x:Name="PanSkip">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SkipMode}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SkipModeCombo" AutomationProperties.Name="{loc:Loc Ed_SkipMode}" Width="240" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_SkipHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
+                <!-- 「每个」：列表来源 + 两个循环变量名。**孩子不在这里配**——
+                     它们就是缩进在它下面的那几行，在组编辑器里排。这里摆一个列表控件
+                     会让人以为那是另一个东西。 -->
+                <StackPanel x:Name="PanEach">
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_EachList}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="EachListCombo" AutomationProperties.Name="{loc:Loc Ed_EachList}" Width="240" Height="28" IsEditable="True"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_EachItem}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="EachItemBox" AutomationProperties.Name="{loc:Loc Ed_EachItem}" Width="180" Height="28"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_EachIndex}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="EachIndexBox" AutomationProperties.Name="{loc:Loc Ed_EachIndex}" Width="180" Height="28"/></StackPanel>
+                    <TextBlock Text="{loc:Loc Ed_EachHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                </StackPanel>
+
                 <StackPanel x:Name="PanMessage">
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Message}" Width="108" TextWrapping="Wrap" Margin="0,4,10,0" VerticalAlignment="Top"/><TextBox x:Name="MessageBox2" AutomationProperties.Name="{loc:Loc Ed_Message}" Width="380" Height="80" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/></StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Present}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="PresentCombo" AutomationProperties.Name="{loc:Loc Ed_Present}" Width="240" Height="28" SelectionChanged="Present_Changed"/></StackPanel>
