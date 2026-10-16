@@ -63,6 +63,24 @@ public static class PanelGlyph
         "step" => Group,                              // 引用清单项：同一个「复用」语义，同一个字形
         "url" => char.ConvertFromUtf32(0xE774),       // Globe ＝ 打开网址
         "path" => char.ConvertFromUtf32(0xE838),      // FolderOpen ＝ 打开文件或文件夹（取不到目标自己的图标时才露这个）
+        // 下面五个是新加的类型（网址→本地源文件 / 读地址栏 / URL 解码 / 正则 / 替换）。
+        // 码位经 GlyphCoverageTests 验过「在字体里存在」，但**语义是挑的、没经过人眼确认**——
+        // 那条测试的注释写明了它只挡得住「不存在」（画成空心方框），挡不住「存在但语义不对」。
+        // 上线前照它说的跑一次 `--shots` 看一眼这一排。
+        "siteMap" => char.ConvertFromUtf32(0xE8B7),   // OpenFile ＝ 打开本地源文件
+        "browserUrl" => char.ConvertFromUtf32(0xE71B),// Link ＝ 读浏览器地址栏
+        "urlDecode" => char.ConvertFromUtf32(0xE945),   // 花括号 = 处理编码/代码
+        "regex" => char.ConvertFromUtf32(0xE721),      // Find ＝ 正则提取是「从一段里找出一段」
+        "replace" => char.ConvertFromUtf32(0xE8AB),    // 双向箭头 ＝ 来回替换
+        // 交互式流程那五个。码位验过存在、与既有那一批不撞（PanelGlyphTests 钉唯一性），
+        // **语义是渲染出来看图挑的**——上面那个测试只挡得住「不存在」，挡不住「存在但语义不对」
+        // （原先随手挑的五个里有画成 (o) 的、有画成实心方块的，全是这个盲区）。
+        // 改这里之后重跑 tools/_glyph-probe 那类探针看一眼，别只信测试。
+        "waitKey" => char.ConvertFromUtf32(0xE8E1),    // 摊开的手掌 ＝ 伸手等你按一下
+        "splitLines" => char.ConvertFromUtf32(0xE8E3), // 文本行堆 ＝ 一段变几行
+        "math" => char.ConvertFromUtf32(0xE8EF),       // 计算器
+        "skip" => char.ConvertFromUtf32(0xE711),       // X ＝ 跳出这一段
+        "each" => char.ConvertFromUtf32(0xE895),       // 双向循环箭头 ＝ 反复
         "copySelection" => char.ConvertFromUtf32(0xE8C8),  // Copy ＝ 获取选中的文字
         "waitClipboard" => char.ConvertFromUtf32(0xE823),  // Sync ＝ 等剪贴板变化
         "prompt" => char.ConvertFromUtf32(0xE8AC),    // Rename ＝ 让你打一句话进去

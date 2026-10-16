@@ -30,6 +30,15 @@ public static class StepDisplay
 
     public static bool SystemCommandTakesLevel(string id) => id == "brightness";
 
+    /// <summary>siteMap 这一步打开方式：open（默认）/ reveal（资源管理器里选中）/ none（只产出不打开）。</summary>
+    // 单一出处：摘要（决定说「打开」还是「定位」）、编辑器下拉、运行时三处都读它。
+    // 各写一份的话，改动一旦只落一处，清单上就会写着「定位」而实际打开了文件。
+    public static string SiteMapActionOf(LaunchStep s)
+    {
+        var a = (s.Action ?? "").Trim().ToLowerInvariant();
+        return a is "reveal" or "none" ? a : "open";
+    }
+
     // 常见搜索引擎的地址模板，{0} 是被搜的词。**名字不进文案表**：Bing / Google / 百度 都是商标，
     // 各语言写法本来就一样（中文界面写 Bing 也没人不认识），翻译它们只会造出十八份要维护的同义词。
     //
@@ -60,8 +69,10 @@ public static class StepDisplay
 
     // 步骤类型 id 的规范顺序（步骤编辑器「类型」下拉用；标签一律经 StepKindLabel 本地化）。
     public static readonly string[] StepKinds =
-        { "app", "url", "path", "keys", "mouse", "text", "volume", "window", "system", "group",
-          "copySelection", "waitClipboard", "prompt", "choice", "delay", "message" };
+        { "app", "url", "path", "siteMap", "keys", "mouse", "text", "volume", "window", "system", "group",
+          "copySelection", "waitClipboard", "browserUrl", "prompt", "choice", "delay", "message",
+          "regex", "replace", "urlDecode",
+          "waitKey", "splitLines", "math", "skip", "each" };
 
     // 「引用启动清单项」**不在** StepKinds 里：它不是机制类型，而是面板专属的复用入口——
     // 执行分流只存在于面板格子的漏斗（PanelCoordinator.RunStep），组内/清单里的步骤到不了那里。
@@ -79,14 +90,20 @@ public static class StepDisplay
         // 功能一直都在，只是没人找得到。
         // 节标题借 Tab_Group（「动作组」，已 18 语），不为一个标题再造一条文案。
         ("Tab_Group", new[] { "group" }),
-        ("Menu_SecOpen", new[] { "app", "url", "path" }),
+        ("Menu_SecOpen", new[] { "app", "url", "path", "siteMap" }),
         ("Menu_SecControl", new[] { "window", "keys", "mouse", "text" }),
         ("Menu_SecSystem", new[] { "volume", "system" }),
         // 「取选中的文字」「等剪贴板变化」归流程而不归系统：它们本身不做事，
         // 是为**下一步**准备材料的——与延时、消息同一个性质。
         // 「用户输入」「用户选择」与「取选中的文字」「等剪贴板变化」同属这一节：
         // 它们本身不做事，是为**下一步**准备材料的——四条都产出一个值给后面的步骤用。
-        ("Menu_SecFlow", new[] { "copySelection", "waitClipboard", "prompt", "choice", "delay", "message" }),
+        // 「读浏览器地址」也在这条线上：它同样不做事，只产出一个网址给后面的步骤。
+        ("Menu_SecFlow", new[] { "copySelection", "waitClipboard", "browserUrl", "prompt", "choice", "delay", "message",
+                                 "waitKey", "splitLines", "skip", "each" }),
+        // 文本处理自成一节，而不是塞进流程：找「把一段文字里的某部分换掉」的人会去「流程」里翻吗——
+        // 不会，他脑子里的是「处理文字」，不是「流程」。同理，这三个步骤也不属于「打开」：
+        // 它们自己不打开任何东西，只改写一个值。
+        ("Menu_SecText", new[] { "urlDecode", "regex", "replace", "math" }),
     };
 
     // 「常用」——一份预填好的步骤。它们**没有任何新的执行路径**：每一条都只是既有类型
@@ -181,6 +198,12 @@ public static class StepDisplay
     }
 
     public static string StepKindLabel(string kind) => OrRaw("Kind_" + kind, kind);
+
+    /// <summary>这一步是不是一个「块」（有孩子、会被重复执行的那一种）。</summary>
+    // 编辑器据此决定「新增」时新步骤挂进谁、删除时要不要连坐、步序重排时能不能跨层。
+    // 目前只有「每个」。**单一定义在这**：编辑器与运行期各写一份的话，加第二种块时
+    // 就会出现「编辑器认得它、runner 不认得它」或者反过来——而那种差异在界面上完全看不出来。
+    public static bool IsBlockKind(string? kind) => kind == "each";
 
     /// <summary>动作组的内容摘要：前三步的动作串起来，多余的用省略号收尾。
     /// 动作组列表那一列、以及步骤编辑器里选组时的内容预览，用的都是它——
@@ -419,6 +442,54 @@ public static class StepDisplay
             "path" => Strings.Lf("Sum_OpenPath", Arg(Clip(NoNewline(LaunchTarget.NormalizeTarget(s.Target)), 48))),
             "copySelection" => Strings.Get("Kind_copySelection"),
             "waitClipboard" => Strings.Lf("Sum_WaitClipboard", StepHelpers.ClampWaitSeconds(s.Level)),
+
+            // ---- 产出值的那一族 ----
+            // 摘要是「不写出来就答不了这一步在干什么」的那些字段：
+            //   browserUrl 不写参数——它没有参数，产出的名字就在「→ 变量名」那一段里（同 prompt/choice 的口径）；
+            //   siteMap 写「打开的是哪个文件」，砍成域名就答不了「我要改的那篇在不在」；
+            //   三个文本步骤写**输入**，不写正则——正则可能有二三十字，摘要放不下，
+            //     而「在处理哪段文字」比「用什么规则处理」更能让人认出这一步。
+
+            "browserUrl" => Strings.Get("Kind_browserUrl")
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            // 三档都要各自的动词。原来只判 reveal，于是 none 落进「打开」那一支，
+            // 清单上写着「打开源文件」而这一步根本不打开——用户照着点，什么也不会发生，
+            // 而界面上看不出任何异常。三档说同一句话的话，这一档就白配了。
+            "siteMap" => Strings.Lf(
+                    SiteMapActionOf(s) switch
+                    {
+                        "reveal" => "Sum_LocateSource",
+                        "none" => "Sum_SourcePath",
+                        _ => "Sum_OpenSource",
+                    },
+                    Arg(string.IsNullOrWhiteSpace(s.Text) ? Strings.Get("Sum_CurrentUrl") : Clip(NoNewline(s.Text), 48)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            // urlDecode 同样要挂「→ 变量名」：它是一条产出值的步骤，
+            // 摘要里不写出来，用户就不知道后面那一步该引用什么。
+            "urlDecode" => Strings.Lf("Sum_UrlDecode", Arg(Clip(NoNewline(s.Text), 30)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            "regex" => Strings.Lf("Sum_Regex", Arg(Clip(NoNewline(s.Text), 24)), Arg(Clip(NoNewline(s.Pattern), 24)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            "replace" => Strings.Lf("Sum_Replace", Arg(Clip(NoNewline(s.Pattern), 20)), Arg(Clip(NoNewline(s.Replace), 20)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+
+            // ---- 交互式流程 ----
+            // 摘要写「等的是哪个键 / 拆的是哪段 / 算的是什么」，不写死字段名：
+            // 这几步的字段名（哪些键、哪段文本、哪个表达式）用户是照着框里那一栏理解的。
+
+            "waitKey" => Strings.Lf("Sum_WaitKey", Arg(Clip(NoNewline(s.Text), 40)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            "splitLines" => Strings.Lf("Sum_SplitLines", Arg(Clip(NoNewline(s.Text), 24)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            "math" => Strings.Lf("Sum_Math", Arg(Clip(NoNewline(s.Text), 30)))
+                + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
+            "skip" => Strings.Get((s.Action ?? "").Trim().ToLowerInvariant() == "run" ? "Sum_SkipRun" : "Sum_SkipBlock"),
+            // 「每个」只写清单来源，**不写孩子有几步**：摘要这一格只拿到单条步骤，看不到兄弟列表，
+            // 而硬要去数就得把整棵树传进 StepBaseCore 的签名——为了一个括注改一个被十几处调用的出口。
+            // 孩子有几步在编辑器里是看得见的（缩进那一列就是），清单上要个数的地方用「运行整组」看日志。
+            "each" => Strings.Lf("Sum_Each",
+                    Arg(string.IsNullOrWhiteSpace(s.Text) ? Strings.Get("Sum_Unset") : Clip(NoNewline(s.Text), 28))),
+
             _ => s.Kind,
         };
     }

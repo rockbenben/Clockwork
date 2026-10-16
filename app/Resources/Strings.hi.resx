@@ -1,115 +1,308 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
-  <resheader name="version"><value>2.0</value></resheader>
-  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-
-  <data name="App_Subtitle" xml:space="preserve"><value>स्टार्टअप · रिमाइंडर · एक-टैप क्रियाएँ</value></data>
-  <data name="Tab_Launch" xml:space="preserve"><value>स्टार्टअप सूची</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>शेड्यूल किए गए कार्य</value></data>
-  <data name="Tab_Group" xml:space="preserve"><value>क्रिया समूह</value></data>
-  <data name="Tab_System" xml:space="preserve"><value>सिस्टम स्टार्टअप</value></data>
-  <data name="Tab_Ports" xml:space="preserve"><value>पोर्ट</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>लॉगिन पर एक बार, ऊपर से नीचे चलता है · पंक्तियाँ खींचकर क्रम बदलें। समय / घटना पर चलाना है → शेड्यूल किए गए कार्य; कभी भी एक क्लिक से → क्रिया समूह।</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>समय पर, लॉगिन पर, या अनलॉक / पावर जैसी घटनाओं पर चलता है — रिमाइंडर या मौन समूह। लॉगिन पर सिर्फ़ ऐप खोलने हैं → स्टार्टअप सूची; कभी भी एक क्लिक से → क्रिया समूह।</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>क्रियाओं की शृंखला को समूह बनाएँ, हॉटकी / ट्रे से कभी भी चलाएँ; स्टार्टअप सूची और शेड्यूल किए गए कार्य भी इसका संदर्भ ले सकते हैं। जो सिर्फ़ लॉगिन पर चलना है, उसे सीधे स्टार्टअप सूची में लिखना आसान है।</value></data>
-  <data name="Group_NoSteps" xml:space="preserve"><value>अभी कोई चरण नहीं हैं। पहला चरण जोड़ने के लिए ऊपर «जोड़ें» दबाएँ — जो ऊपर है, व पहले चलता है।</value></data>
-  <data name="Group_Empty" xml:space="preserve"><value>(खाली)</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>चेक/अनचेक तुरंत लागू (अक्षम, हटाना नहीं; पूर्ववत)।</value></data>
-  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>सिस्टम / नीति / एक-बार केवल-पठन आइटम डिफ़ॉल्ट रूप से छिपे हैं।</value></data>
-  <data name="System_Count" xml:space="preserve"><value>{1} में से {0} आइटम</value></data>
-  <data name="System_Filter" xml:space="preserve"><value>फ़िल्टर</value></data>
-  <data name="System_ShowReadOnly" xml:space="preserve"><value>सिस्टम / केवल-पठन आइटम दिखाएँ</value></data>
-  <data name="System_Scanning" xml:space="preserve"><value>ऑटो-स्टार्ट प्रविष्टियाँ स्कैन हो रही हैं…</value></data>
-  <data name="System_Refresh" xml:space="preserve"><value>रीफ़्रेश</value></data>
-
-  <data name="Ports_ShowAll" xml:space="preserve"><value>सभी पोर्ट दिखाएँ</value></data>
-  <data name="Ports_ShowAllTip" xml:space="preserve"><value>जब एक ही प्रोसेस कई पोर्ट रखती है, तब डिफ़ॉल्ट रूप से केवल बाहर की ओर वाला पोर्ट दिखता है। हर पोर्ट सूचीबद्ध करने और ऊपर का फ़िल्टर छोड़ने के लिए इसे चुनें।</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>केवल प्रोजेक्ट सेवाएँ</value></data>
-  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>केवल वे सेवाएँ दिखाता है जो आपके किसी प्रोजेक्ट फ़ोल्डर से चली हैं — .git या package.json जैसे चिह्नों से पहचानी जाती हैं। बाकी सुन रहे सॉफ़्टवेयर देखने के लिए चिह्न हटाएँ।</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>किसी पंक्ति पर डबल-क्लिक करने पर वह ब्राउज़र में खुलती है; राइट-क्लिक से पोर्ट मुक्त होता है।</value></data>
-  <data name="Ports_Count" xml:space="preserve"><value>{1} में से {0} पोर्ट · हर 5 सेकंड में ताज़ा</value></data>
-  <data name="Ports_Empty" xml:space="preserve"><value>वर्तमान फ़िल्टर से मेल खाता कोई पोर्ट नहीं है। इस मशीन पर {0} पोर्ट सुन रहे हैं — फ़िल्टर बदलें या खोज साफ़ करें।</value></data>
-  <data name="System_Empty" xml:space="preserve"><value>वर्तमान फ़िल्टर से मेल खाता कोई स्टार्टअप आइटम नहीं। इस मशीन पर कुल {0} हैं — फ़िल्टर साफ़ करें या «सिस्टम / केवल-पठन आइटम दिखाएँ» चुनें।</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>ब्राउज़र में खोलें</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>पोर्ट मुक्त करें</value></data>
-  <data name="Ports_AlsoListening" xml:space="preserve"><value>{0} पर भी सुन रहा है</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>पोर्ट {0} मुक्त नहीं किया जा सका: {1}</value></data>
-
-  <data name="Col_Enabled" xml:space="preserve"><value>चालू</value></data>
-  <data name="Col_Kind" xml:space="preserve"><value>प्रकार</value></data>
-  <data name="Col_Summary" xml:space="preserve"><value>सारांश</value></data>
-  <data name="Col_Delay" xml:space="preserve"><value>देरी</value></data>
-  <data name="Col_Time" xml:space="preserve"><value>समय</value></data>
-  <data name="Col_Period" xml:space="preserve"><value>अवधि</value></data>
-  <data name="Col_Text" xml:space="preserve"><value>पाठ</value></data>
-  <data name="Col_Name" xml:space="preserve"><value>नाम</value></data>
-  <data name="Col_Steps" xml:space="preserve"><value>चरण</value></data>
-  <data name="Col_Command" xml:space="preserve"><value>कमांड</value></data>
-  <data name="Col_Source" xml:space="preserve"><value>स्रोत</value></data>
-  <data name="Col_Scope" xml:space="preserve"><value>दायरा</value></data>
-  <data name="Col_Hotkey" xml:space="preserve"><value>हॉटकी</value></data>
-  <data name="Gesture_Manager" xml:space="preserve"><value>माउस जेस्चर</value></data>
-  <data name="Gesture_Enabled" xml:space="preserve"><value>चालू</value></data>
-  <data name="Gesture_Rehook" xml:space="preserve"><value>दोबारा हुक करें</value></data>
-  <data name="Gesture_RehookHint" xml:space="preserve"><value>कोई दूसरा प्रोग्राम (माउस ड्राइवर, AutoHotkey, कोई और जेस्चर टूल) हमसे आगे रहकर दायाँ बटन निगल सकता है — तब यहाँ सब ठीक दिखता है फिर भी दायाँ बटन नहीं आता। सबसे बाद में लगाया हुक पहले चलता है, इसलिए दोबारा लगाने से कतार का अगला स्थान वापस मिल जाता है।</value></data>
-  <data name="Gesture_WatchLive" xml:space="preserve"><value>दायाँ बटन देखा जा रहा है</value></data>
-  <data name="Gesture_WatchOff" xml:space="preserve"><value>दायाँ बटन नहीं देखा जा रहा</value></data>
-  <data name="Gesture_WatchFailed" xml:space="preserve"><value>Windows ने हुक अस्वीकार किया</value></data>
-  <data name="Gesture_WatchStale" xml:space="preserve"><value>हुक बंद हो गया — दोबारा लगाया जा रहा है</value></data>
-  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>हुक लगा है पर कोई इनपुट नहीं आ रहा — व्यवस्थापक के रूप में चलाकर देखें</value></data>
-  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>कोई दूसरा प्रोग्राम दायाँ बटन ले जा रहा है (AutoHotkey, माउस ड्राइवर…)</value></data>
-  <data name="Gesture_Hint" xml:space="preserve"><value>दायाँ बटन दबाए रखकर एक रेखा खींचें — संबंधित क्रिया चलेगी। कोई जेस्चर न हो तो दायाँ बटन सामान्य रूप से काम करता है।</value></data>
-  <data name="Gesture_Track" xml:space="preserve"><value>रेखा</value></data>
-  <data name="Settings_GestureManage" xml:space="preserve"><value>जेस्चर प्रबंधित करें…</value></data>
-  <data name="Settings_PanelManage" xml:space="preserve"><value>पैनल प्रबंधित करें…</value></data>
-  <data name="Gesture_None" xml:space="preserve"><value>अभी कोई जेस्चर नहीं। «जोड़ें» दबाएँ, एक क्रिया चुनें, फिर दाईं ओर रेखा खींचें।</value></data>
-  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>बायाँ बटन दबाकर यहाँ खींचें</value></data>
-  <data name="Val_GestureDup" xml:space="preserve"><value>जेस्चर {0} पहले से «{1}» में प्रयुक्त है; कोई और रेखा खींचें</value></data>
-  <data name="Col_Port" xml:space="preserve"><value>पोर्ट</value></data>
-  <data name="Col_Process" xml:space="preserve"><value>प्रोसेस</value></data>
-  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
-  <data name="Col_Address" xml:space="preserve"><value>पता</value></data>
-
-  <data name="Btn_Add" xml:space="preserve"><value>जोड़ें</value></data>
-  <data name="Btn_AddMenu" xml:space="preserve"><value>जोड़ें ▾</value></data>
-  <data name="Btn_FromTemplate" xml:space="preserve"><value>एक टेम्पलेट से…</value></data>
-  <data name="Btn_Edit" xml:space="preserve"><value>संपादित करें</value></data>
-  <data name="Btn_Rename" xml:space="preserve"><value>नाम बदलें</value></data>
-  <data name="Btn_Delete" xml:space="preserve"><value>हटाएँ</value></data>
-  <data name="Btn_Up" xml:space="preserve"><value>↑ ऊपर</value></data>
-  <data name="A11y_DragHandle" xml:space="preserve"><value>क्रम बदलने के लिए खींचें</value></data>
-  <data name="Btn_Down" xml:space="preserve"><value>↓ नीचे</value></data>
-  <data name="Btn_RunStep" xml:space="preserve"><value>▶ यह चरण चलाएँ</value></data>
-  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ समूह चलाएँ</value></data>
-  <data name="Btn_StopRun" xml:space="preserve"><value>■ रोकें</value></data>
-  <data name="Btn_Run" xml:space="preserve"><value>▶ चलाएँ</value></data>
-
-  <data name="Settings_StartupDelay" xml:space="preserve"><value>स्टार्टअप देरी (से)</value></data>
-  <data name="Settings_StartMinimized" xml:space="preserve"><value>प्रारंभ में ट्रे में छोटा करें</value></data>
-  <data name="Settings_StopHotkey" xml:space="preserve"><value>रोक कुंजी</value></data>
-  <data name="Settings_Language" xml:space="preserve"><value>भाषा</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>नई भाषा लागू करने के लिए Clockwork तुरंत पुनः आरंभ होता है।</value></data>
-
-  <data name="Autostart_Label" xml:space="preserve"><value>लॉगिन पर शुरू करें</value></data>
-
-  <data name="Tray_Show" xml:space="preserve"><value>विंडो दिखाएँ</value></data>
-  <data name="Tray_Rerun" xml:space="preserve"><value>स्टार्टअप सूची फिर चलाएँ</value></data>
-  <data name="Tray_Stop" xml:space="preserve"><value>चल रही क्रियाएँ रोकें</value></data>
-  <data name="Tray_Exit" xml:space="preserve"><value>बाहर निकलें</value></data>
-
-  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>हाँ</value></data>
-  <data name="Reminder_Popup_No" xml:space="preserve"><value>नहीं</value></data>
-  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>ठीक है</value></data>
-  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>10 मिनट बाद</value></data>
-  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>और स्नूज़ विकल्प</value></data>
-
-  <data name="Kind_app" xml:space="preserve"><value>ऐप चलाएँ</value></data>
-  <data name="Kind_keys" xml:space="preserve"><value>कुंजियाँ भेजें</value></data>
-  <data name="Kind_volume" xml:space="preserve"><value>वॉल्यूम</value></data>
-  <data name="Kind_window" xml:space="preserve"><value>विंडो क्रिया</value></data>
-  <data name="Kind_system" xml:space="preserve"><value>सिस्टम कमांड</value></data>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Subtitle" xml:space="preserve">
+    <value>स्टार्टअप · रिमाइंडर · एक-टैप क्रियाएँ</value>
+  </data>
+  <data name="Tab_Launch" xml:space="preserve">
+    <value>स्टार्टअप सूची</value>
+  </data>
+  <data name="Tab_Reminder" xml:space="preserve">
+    <value>शेड्यूल किए गए कार्य</value>
+  </data>
+  <data name="Tab_Group" xml:space="preserve">
+    <value>क्रिया समूह</value>
+  </data>
+  <data name="Tab_System" xml:space="preserve">
+    <value>सिस्टम स्टार्टअप</value>
+  </data>
+  <data name="Tab_Ports" xml:space="preserve">
+    <value>पोर्ट</value>
+  </data>
+  <data name="Launch_Hint" xml:space="preserve">
+    <value>लॉगिन पर एक बार, ऊपर से नीचे चलता है · पंक्तियाँ खींचकर क्रम बदलें। समय / घटना पर चलाना है → शेड्यूल किए गए कार्य; कभी भी एक क्लिक से → क्रिया समूह।</value>
+  </data>
+  <data name="Reminder_Hint" xml:space="preserve">
+    <value>समय पर, लॉगिन पर, या अनलॉक / पावर जैसी घटनाओं पर चलता है — रिमाइंडर या मौन समूह। लॉगिन पर सिर्फ़ ऐप खोलने हैं → स्टार्टअप सूची; कभी भी एक क्लिक से → क्रिया समूह।</value>
+  </data>
+  <data name="Group_Hint" xml:space="preserve">
+    <value>क्रियाओं की शृंखला को समूह बनाएँ, हॉटकी / ट्रे से कभी भी चलाएँ; स्टार्टअप सूची और शेड्यूल किए गए कार्य भी इसका संदर्भ ले सकते हैं। जो सिर्फ़ लॉगिन पर चलना है, उसे सीधे स्टार्टअप सूची में लिखना आसान है।</value>
+  </data>
+  <data name="Group_NoSteps" xml:space="preserve">
+    <value>अभी कोई चरण नहीं हैं। पहला चरण जोड़ने के लिए ऊपर «जोड़ें» दबाएँ — जो ऊपर है, व पहले चलता है।</value>
+  </data>
+  <data name="Group_Empty" xml:space="preserve">
+    <value>(खाली)</value>
+  </data>
+  <data name="System_Footer" xml:space="preserve">
+    <value>चेक/अनचेक तुरंत लागू (अक्षम, हटाना नहीं; पूर्ववत)।</value>
+  </data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve">
+    <value>सिस्टम / नीति / एक-बार केवल-पठन आइटम डिफ़ॉल्ट रूप से छिपे हैं।</value>
+  </data>
+  <data name="System_Count" xml:space="preserve">
+    <value>{1} में से {0} आइटम</value>
+  </data>
+  <data name="System_Filter" xml:space="preserve">
+    <value>फ़िल्टर</value>
+  </data>
+  <data name="System_ShowReadOnly" xml:space="preserve">
+    <value>सिस्टम / केवल-पठन आइटम दिखाएँ</value>
+  </data>
+  <data name="System_Scanning" xml:space="preserve">
+    <value>ऑटो-स्टार्ट प्रविष्टियाँ स्कैन हो रही हैं…</value>
+  </data>
+  <data name="System_Refresh" xml:space="preserve">
+    <value>रीफ़्रेश</value>
+  </data>
+  <data name="Ports_ShowAll" xml:space="preserve">
+    <value>सभी पोर्ट दिखाएँ</value>
+  </data>
+  <data name="Ports_ShowAllTip" xml:space="preserve">
+    <value>जब एक ही प्रोसेस कई पोर्ट रखती है, तब डिफ़ॉल्ट रूप से केवल बाहर की ओर वाला पोर्ट दिखता है। हर पोर्ट सूचीबद्ध करने और ऊपर का फ़िल्टर छोड़ने के लिए इसे चुनें।</value>
+  </data>
+  <data name="Ports_DevOnly" xml:space="preserve">
+    <value>केवल प्रोजेक्ट सेवाएँ</value>
+  </data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve">
+    <value>केवल वे सेवाएँ दिखाता है जो आपके किसी प्रोजेक्ट फ़ोल्डर से चली हैं — .git या package.json जैसे चिह्नों से पहचानी जाती हैं। बाकी सुन रहे सॉफ़्टवेयर देखने के लिए चिह्न हटाएँ।</value>
+  </data>
+  <data name="Ports_Footer" xml:space="preserve">
+    <value>किसी पंक्ति पर डबल-क्लिक करने पर वह ब्राउज़र में खुलती है; राइट-क्लिक से पोर्ट मुक्त होता है।</value>
+  </data>
+  <data name="Ports_Count" xml:space="preserve">
+    <value>{1} में से {0} पोर्ट · हर 5 सेकंड में ताज़ा</value>
+  </data>
+  <data name="Ports_Empty" xml:space="preserve">
+    <value>वर्तमान फ़िल्टर से मेल खाता कोई पोर्ट नहीं है। इस मशीन पर {0} पोर्ट सुन रहे हैं — फ़िल्टर बदलें या खोज साफ़ करें।</value>
+  </data>
+  <data name="System_Empty" xml:space="preserve">
+    <value>वर्तमान फ़िल्टर से मेल खाता कोई स्टार्टअप आइटम नहीं। इस मशीन पर कुल {0} हैं — फ़िल्टर साफ़ करें या «सिस्टम / केवल-पठन आइटम दिखाएँ» चुनें।</value>
+  </data>
+  <data name="Ports_Open" xml:space="preserve">
+    <value>ब्राउज़र में खोलें</value>
+  </data>
+  <data name="Ports_Kill" xml:space="preserve">
+    <value>पोर्ट मुक्त करें</value>
+  </data>
+  <data name="Ports_AlsoListening" xml:space="preserve">
+    <value>{0} पर भी सुन रहा है</value>
+  </data>
+  <data name="Ports_KillFail" xml:space="preserve">
+    <value>पोर्ट {0} मुक्त नहीं किया जा सका: {1}</value>
+  </data>
+  <data name="Col_Enabled" xml:space="preserve">
+    <value>चालू</value>
+  </data>
+  <data name="Col_Kind" xml:space="preserve">
+    <value>प्रकार</value>
+  </data>
+  <data name="Col_Summary" xml:space="preserve">
+    <value>सारांश</value>
+  </data>
+  <data name="Col_Delay" xml:space="preserve">
+    <value>देरी</value>
+  </data>
+  <data name="Col_Time" xml:space="preserve">
+    <value>समय</value>
+  </data>
+  <data name="Col_Period" xml:space="preserve">
+    <value>अवधि</value>
+  </data>
+  <data name="Col_Text" xml:space="preserve">
+    <value>पाठ</value>
+  </data>
+  <data name="Col_Name" xml:space="preserve">
+    <value>नाम</value>
+  </data>
+  <data name="Col_Steps" xml:space="preserve">
+    <value>चरण</value>
+  </data>
+  <data name="Col_Command" xml:space="preserve">
+    <value>कमांड</value>
+  </data>
+  <data name="Col_Source" xml:space="preserve">
+    <value>स्रोत</value>
+  </data>
+  <data name="Col_Scope" xml:space="preserve">
+    <value>दायरा</value>
+  </data>
+  <data name="Col_Hotkey" xml:space="preserve">
+    <value>हॉटकी</value>
+  </data>
+  <data name="Gesture_Manager" xml:space="preserve">
+    <value>माउस जेस्चर</value>
+  </data>
+  <data name="Gesture_Enabled" xml:space="preserve">
+    <value>चालू</value>
+  </data>
+  <data name="Gesture_Rehook" xml:space="preserve">
+    <value>दोबारा हुक करें</value>
+  </data>
+  <data name="Gesture_RehookHint" xml:space="preserve">
+    <value>कोई दूसरा प्रोग्राम (माउस ड्राइवर, AutoHotkey, कोई और जेस्चर टूल) हमसे आगे रहकर दायाँ बटन निगल सकता है — तब यहाँ सब ठीक दिखता है फिर भी दायाँ बटन नहीं आता। सबसे बाद में लगाया हुक पहले चलता है, इसलिए दोबारा लगाने से कतार का अगला स्थान वापस मिल जाता है।</value>
+  </data>
+  <data name="Gesture_WatchLive" xml:space="preserve">
+    <value>दायाँ बटन देखा जा रहा है</value>
+  </data>
+  <data name="Gesture_WatchOff" xml:space="preserve">
+    <value>दायाँ बटन नहीं देखा जा रहा</value>
+  </data>
+  <data name="Gesture_WatchFailed" xml:space="preserve">
+    <value>Windows ने हुक अस्वीकार किया</value>
+  </data>
+  <data name="Gesture_WatchStale" xml:space="preserve">
+    <value>हुक बंद हो गया — दोबारा लगाया जा रहा है</value>
+  </data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve">
+    <value>हुक लगा है पर कोई इनपुट नहीं आ रहा — व्यवस्थापक के रूप में चलाकर देखें</value>
+  </data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve">
+    <value>कोई दूसरा प्रोग्राम दायाँ बटन ले जा रहा है (AutoHotkey, माउस ड्राइवर…)</value>
+  </data>
+  <data name="Gesture_Hint" xml:space="preserve">
+    <value>दायाँ बटन दबाए रखकर एक रेखा खींचें — संबंधित क्रिया चलेगी। कोई जेस्चर न हो तो दायाँ बटन सामान्य रूप से काम करता है।</value>
+  </data>
+  <data name="Gesture_Track" xml:space="preserve">
+    <value>रेखा</value>
+  </data>
+  <data name="Settings_GestureManage" xml:space="preserve">
+    <value>जेस्चर प्रबंधित करें…</value>
+  </data>
+  <data name="Settings_PanelManage" xml:space="preserve">
+    <value>पैनल प्रबंधित करें…</value>
+  </data>
+  <data name="Gesture_None" xml:space="preserve">
+    <value>अभी कोई जेस्चर नहीं। «जोड़ें» दबाएँ, एक क्रिया चुनें, फिर दाईं ओर रेखा खींचें।</value>
+  </data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve">
+    <value>बायाँ बटन दबाकर यहाँ खींचें</value>
+  </data>
+  <data name="Val_GestureDup" xml:space="preserve">
+    <value>जेस्चर {0} पहले से «{1}» में प्रयुक्त है; कोई और रेखा खींचें</value>
+  </data>
+  <data name="Col_Port" xml:space="preserve">
+    <value>पोर्ट</value>
+  </data>
+  <data name="Col_Process" xml:space="preserve">
+    <value>प्रोसेस</value>
+  </data>
+  <data name="Col_Pid" xml:space="preserve">
+    <value>PID</value>
+  </data>
+  <data name="Col_Address" xml:space="preserve">
+    <value>पता</value>
+  </data>
+  <data name="Btn_Add" xml:space="preserve">
+    <value>जोड़ें</value>
+  </data>
+  <data name="Btn_AddMenu" xml:space="preserve">
+    <value>जोड़ें ▾</value>
+  </data>
+  <data name="Btn_FromTemplate" xml:space="preserve">
+    <value>एक टेम्पलेट से…</value>
+  </data>
+  <data name="Btn_Edit" xml:space="preserve">
+    <value>संपादित करें</value>
+  </data>
+  <data name="Btn_Rename" xml:space="preserve">
+    <value>नाम बदलें</value>
+  </data>
+  <data name="Btn_Delete" xml:space="preserve">
+    <value>हटाएँ</value>
+  </data>
+  <data name="Btn_Up" xml:space="preserve">
+    <value>↑ ऊपर</value>
+  </data>
+  <data name="A11y_DragHandle" xml:space="preserve">
+    <value>क्रम बदलने के लिए खींचें</value>
+  </data>
+  <data name="Btn_Down" xml:space="preserve">
+    <value>↓ नीचे</value>
+  </data>
+  <data name="Btn_RunStep" xml:space="preserve">
+    <value>▶ यह चरण चलाएँ</value>
+  </data>
+  <data name="Btn_RunGroup" xml:space="preserve">
+    <value>▶ समूह चलाएँ</value>
+  </data>
+  <data name="Btn_StopRun" xml:space="preserve">
+    <value>■ रोकें</value>
+  </data>
+  <data name="Btn_Run" xml:space="preserve">
+    <value>▶ चलाएँ</value>
+  </data>
+  <data name="Settings_StartupDelay" xml:space="preserve">
+    <value>स्टार्टअप देरी (से)</value>
+  </data>
+  <data name="Settings_StartMinimized" xml:space="preserve">
+    <value>प्रारंभ में ट्रे में छोटा करें</value>
+  </data>
+  <data name="Settings_StopHotkey" xml:space="preserve">
+    <value>रोक कुंजी</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>भाषा</value>
+  </data>
+  <data name="Settings_LangRestart" xml:space="preserve">
+    <value>नई भाषा लागू करने के लिए Clockwork तुरंत पुनः आरंभ होता है।</value>
+  </data>
+  <data name="Autostart_Label" xml:space="preserve">
+    <value>लॉगिन पर शुरू करें</value>
+  </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>विंडो दिखाएँ</value>
+  </data>
+  <data name="Tray_Rerun" xml:space="preserve">
+    <value>स्टार्टअप सूची फिर चलाएँ</value>
+  </data>
+  <data name="Tray_Stop" xml:space="preserve">
+    <value>चल रही क्रियाएँ रोकें</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>बाहर निकलें</value>
+  </data>
+  <data name="Reminder_Popup_Yes" xml:space="preserve">
+    <value>हाँ</value>
+  </data>
+  <data name="Reminder_Popup_No" xml:space="preserve">
+    <value>नहीं</value>
+  </data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve">
+    <value>ठीक है</value>
+  </data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve">
+    <value>10 मिनट बाद</value>
+  </data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve">
+    <value>और स्नूज़ विकल्प</value>
+  </data>
+  <data name="Kind_app" xml:space="preserve">
+    <value>ऐप चलाएँ</value>
+  </data>
+  <data name="Kind_keys" xml:space="preserve">
+    <value>कुंजियाँ भेजें</value>
+  </data>
+  <data name="Kind_volume" xml:space="preserve">
+    <value>वॉल्यूम</value>
+  </data>
+  <data name="Kind_window" xml:space="preserve">
+    <value>विंडो क्रिया</value>
+  </data>
+  <data name="Kind_system" xml:space="preserve">
+    <value>सिस्टम कमांड</value>
+  </data>
   <data name="Kind_url" xml:space="preserve">
     <value>वेब पेज खोलें</value>
   </data>
@@ -119,8 +312,12 @@
   <data name="Kind_waitClipboard" xml:space="preserve">
     <value>क्लिपबोर्ड की प्रतीक्षा</value>
   </data>
-  <data name="Kind_prompt" xml:space="preserve"><value>उपयोगकर्ता इनपुट</value></data>
-  <data name="Kind_choice" xml:space="preserve"><value>उपयोगकर्ता की पसंद</value></data>
+  <data name="Kind_prompt" xml:space="preserve">
+    <value>उपयोगकर्ता इनपुट</value>
+  </data>
+  <data name="Kind_choice" xml:space="preserve">
+    <value>उपयोगकर्ता की पसंद</value>
+  </data>
   <data name="Sum_OpenUrl" xml:space="preserve">
     <value>{0} खोलें</value>
   </data>
@@ -130,9 +327,15 @@
   <data name="Warn_WaitClipboard" xml:space="preserve">
     <value>क्लिपबोर्ड {0} सेकंड में नहीं बदला; फिर भी आगे बढ़ रहे हैं</value>
   </data>
-  <data name="Warn_AskNoUi" xml:space="preserve"><value>इस चरण में आपको कुछ पूछना है, और इस रास्ते पर पूछने के लिए कोई नहीं है (यह रन बिना देखरेख के चलता है)। छोड़ा गया।</value></data>
-  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>यह चरण कुछ को स्थायी रूप से हटाता है और पहले आपकी पुष्टि चाहता है, पर इस पथ पर पूछने वाला कोई नहीं है (यह रन बिना देखरेख के चलता है)। छोड़ा गया।</value></data>
-  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>इस चरण में कोई विकल्प कॉन्फ़िगर नहीं किए गए हैं, इसलिए चुनने के लिए कुछ भी नहीं है। छोड़ा गया।</value></data>
+  <data name="Warn_AskNoUi" xml:space="preserve">
+    <value>इस चरण में आपको कुछ पूछना है, और इस रास्ते पर पूछने के लिए कोई नहीं है (यह रन बिना देखरेख के चलता है)। छोड़ा गया।</value>
+  </data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve">
+    <value>यह चरण कुछ को स्थायी रूप से हटाता है और पहले आपकी पुष्टि चाहता है, पर इस पथ पर पूछने वाला कोई नहीं है (यह रन बिना देखरेख के चलता है)। छोड़ा गया।</value>
+  </data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve">
+    <value>इस चरण में कोई विकल्प कॉन्फ़िगर नहीं किए गए हैं, इसलिए चुनने के लिए कुछ भी नहीं है। छोड़ा गया।</value>
+  </data>
   <data name="Ed_Url" xml:space="preserve">
     <value>URL</value>
   </data>
@@ -145,13 +348,27 @@
   <data name="Ed_CopySelectionHint" xml:space="preserve">
     <value>यह आपके लिए कॉपी की दबाता है और चयनित पाठ को क्लिपबोर्ड पर रखता है। बाद के चरण इसे {clipboard} से वापस पढ़ते हैं।</value>
   </data>
-  <data name="Ed_AskText" xml:space="preserve"><value>प्रश्न</value></data>
-  <data name="Ed_AskDefault" xml:space="preserve"><value>डिफ़ॉल्ट उत्तर</value></data>
-  <data name="Ed_Options" xml:space="preserve"><value>विकल्प</value></data>
-  <data name="Ed_OptionsHint" xml:space="preserve"><value>प्रत्येक पंक्ति में एक। रन टाइम पर इन्हें सूचीबद्ध किया जाता है और आप इनमें से एक चुनते हैं।</value></data>
-  <data name="Ed_OutputVar" xml:space="preserve"><value>उत्तर को इस रूप में सहेजें</value></data>
-  <data name="Ed_OutputVarHint" xml:space="preserve"><value>बाद के चरण इसे संदर्भित करने के लिए {0} का उपयोग करते हैं। इसे खाली छोड़ें और यह चरण कुछ भी उत्पन्न नहीं करता।</value></data>
-  <data name="Ed_OutputVarSample" xml:space="preserve"><value>नाम</value></data>
+  <data name="Ed_AskText" xml:space="preserve">
+    <value>प्रश्न</value>
+  </data>
+  <data name="Ed_AskDefault" xml:space="preserve">
+    <value>डिफ़ॉल्ट उत्तर</value>
+  </data>
+  <data name="Ed_Options" xml:space="preserve">
+    <value>विकल्प</value>
+  </data>
+  <data name="Ed_OptionsHint" xml:space="preserve">
+    <value>प्रत्येक पंक्ति में एक। रन टाइम पर इन्हें सूचीबद्ध किया जाता है और आप इनमें से एक चुनते हैं।</value>
+  </data>
+  <data name="Ed_OutputVar" xml:space="preserve">
+    <value>उत्तर को इस रूप में सहेजें</value>
+  </data>
+  <data name="Ed_OutputVarHint" xml:space="preserve">
+    <value>बाद के चरण इसे संदर्भित करने के लिए {0} का उपयोग करते हैं। इसे खाली छोड़ें और यह चरण कुछ भी उत्पन्न नहीं करता।</value>
+  </data>
+  <data name="Ed_OutputVarSample" xml:space="preserve">
+    <value>नाम</value>
+  </data>
   <data name="Mig_PageMoved" xml:space="preserve">
     <value>पैनल पेज «{0}» आपकी क्रियाओं से हटकर पैनल पेज में चला गया (टाइल: {1})</value>
   </data>
@@ -164,594 +381,1789 @@
   <data name="Mig_Title" xml:space="preserve">
     <value>पैनल पेज अब अलग हैं</value>
   </data>
-  <data name="Kind_group" xml:space="preserve"><value>क्रिया समूह चलाएँ</value></data>
-  <data name="Kind_message" xml:space="preserve"><value>संदेश</value></data>
-  <data name="Kind_delay" xml:space="preserve"><value>देरी</value></data>
-  <data name="Kind_text" xml:space="preserve"><value>पाठ भेजें</value></data>
-
-  <data name="Sys_showDesktop" xml:space="preserve"><value>डेस्कटॉप दिखाएँ</value></data>
-  <data name="Sys_lockScreen" xml:space="preserve"><value>स्क्रीन लॉक करें (लौटने पर पासवर्ड)</value></data>
-  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>रीसायकल बिन खाली करें</value></data>
-  <data name="Sys_openSettings" xml:space="preserve"><value>Windows सेटिंग्स खोलें</value></data>
-  <data name="Sys_screenshot" xml:space="preserve"><value>स्क्रीनशॉट (क्षेत्र चुनें)</value></data>
-  <data name="Sys_clearClipboard" xml:space="preserve"><value>क्लिपबोर्ड साफ़ करें</value></data>
-  <data name="Sys_taskManager" xml:space="preserve"><value>टास्क मैनेजर खोलें</value></data>
-  <data name="Sys_monitorOff" xml:space="preserve"><value>स्क्रीन बंद करें (जगाने के लिए माउस हिलाएँ)</value></data>
-  <data name="Sys_sleep" xml:space="preserve"><value>स्लीप (कम बिजली, तेज़ जागना)</value></data>
-  <data name="Sys_hibernate" xml:space="preserve"><value>हाइबरनेट (सहेजें और बंद करें)</value></data>
-  <data name="Sys_signOut" xml:space="preserve"><value>साइन आउट (पुष्टि)</value></data>
-  <data name="Sys_restart" xml:space="preserve"><value>पुनरारंभ (पुष्टि)</value></data>
-  <data name="Sys_shutdown" xml:space="preserve"><value>शट डाउन (पुष्टि)</value></data>
-
-  <data name="Vol_mute" xml:space="preserve"><value>म्यूट</value></data>
-  <data name="Vol_unmute" xml:space="preserve"><value>अनम्यूट</value></data>
-  <data name="Vol_set" xml:space="preserve"><value>वॉल्यूम {0}%</value></data>
-  <data name="Win_close" xml:space="preserve"><value>विंडो बंद करें</value></data>
-  <data name="Win_minimize" xml:space="preserve"><value>छोटा करें</value></data>
-  <data name="Win_maximize" xml:space="preserve"><value>बड़ा करें</value></data>
-  <data name="Cmd_playPause" xml:space="preserve"><value>चलाएँ / रोकें</value></data>
-  <data name="Cmd_prevTrack" xml:space="preserve"><value>पिछला ट्रैक</value></data>
-  <data name="Cmd_nextTrack" xml:space="preserve"><value>अगला ट्रैक</value></data>
-  <data name="Cmd_volUp" xml:space="preserve"><value>आवाज़ बढ़ाएँ</value></data>
-  <data name="Cmd_volDown" xml:space="preserve"><value>आवाज़ घटाएँ</value></data>
-  <data name="Win_topmost" xml:space="preserve"><value>विंडो को सबसे ऊपर रखना टॉगल करें</value></data>
-  <data name="Win_topmostFg" xml:space="preserve"><value>वर्तमान विंडो को सबसे ऊपर रखना टॉगल करें</value></data>
-  <data name="Ed_TopmostHint" xml:space="preserve"><value>यह प्रत्येक विंडो पर अलग से लागू होता है: किसी विंडो के लिए इसे फिर से बंद करने के लिए, पहले उस विंडो को सबसे आगे लाएँ।</value></data>
-  <data name="Win_activate" xml:space="preserve"><value>सामने लाएँ</value></data>
-  <data name="Win_sendkey" xml:space="preserve"><value>सामने लाकर कुंजियाँ भेजें</value></data>
-  <data name="Win_restore" xml:space="preserve"><value>पिछली विंडो पर वापस जाएँ</value></data>
-
-  <data name="Sum_SendKeys" xml:space="preserve"><value>भेजें {0}</value></data>
-  <data name="Sum_Delay_Sec" xml:space="preserve"><value>देरी {0}से</value></data>
-  <data name="Sum_Delay_Ms" xml:space="preserve"><value>देरी {0}मिसे</value></data>
-  <data name="Sum_RunGroup" xml:space="preserve"><value>समूह चलाएँ: {0}</value></data>
-  <data name="Sum_Unset" xml:space="preserve"><value>(निर्दिष्ट नहीं)</value></data>
-  <data name="Sum_Text" xml:space="preserve"><value>टाइप करें {0}</value></data>
-  <data name="Sum_Ask" xml:space="preserve"><value>प्रश्न: {0}</value></data>
-  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
-  <data name="Sum_MsgCard" xml:space="preserve"><value>कार्ड: {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (केवल {0} से पहले)</value></data>
-  <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
-
-  <data name="Days_EveryDay" xml:space="preserve"><value>रोज़</value></data>
-  <data name="Days_Sep" xml:space="preserve"><value> </value></data>
-  <data name="Days_RangeSep" xml:space="preserve"><value>–</value></data>
-  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
-  <data name="Day_1" xml:space="preserve"><value>सोम</value></data>
-  <data name="Day_2" xml:space="preserve"><value>मंगल</value></data>
-  <data name="Day_3" xml:space="preserve"><value>बुध</value></data>
-  <data name="Day_4" xml:space="preserve"><value>गुरु</value></data>
-  <data name="Day_5" xml:space="preserve"><value>शुक्र</value></data>
-  <data name="Day_6" xml:space="preserve"><value>शनि</value></data>
-  <data name="Day_7" xml:space="preserve"><value>रवि</value></data>
-
-  <data name="Period_EveryNDays" xml:space="preserve"><value>हर {0} दिन</value></data>
-  <data name="Period_Monthly" xml:space="preserve"><value>हर महीने की {0} तारीख़</value></data>
-  <data name="Period_Once" xml:space="preserve"><value>केवल एक बार {0}</value></data>
-  <data name="Period_EachLogin" xml:space="preserve"><value>हर लॉगिन पर</value></data>
-  <data name="Time_LoopEvery" xml:space="preserve"><value>हर {0} मिनट</value></data>
-  <data name="Time_LoopUntil" xml:space="preserve"><value>{0} तक</value></data>
-  <data name="Time_Startup" xml:space="preserve"><value>लॉगऑन पर</value></data>
-  <data name="Time_Startup_Before" xml:space="preserve"><value>लॉगऑन पर · {0}:00 से पहले</value></data>
-  <data name="Time_Startup_After" xml:space="preserve"><value>लॉगऑन पर · {0}:00 के बाद</value></data>
-
-  <data name="Type_Registry" xml:space="preserve"><value>रजिस्ट्री</value></data>
-  <data name="Type_StartupFolder" xml:space="preserve"><value>स्टार्टअप फ़ोल्डर</value></data>
-  <data name="Type_ScheduledTask" xml:space="preserve"><value>अनुसूचित कार्य</value></data>
-  <data name="Scope_Machine" xml:space="preserve"><value>सभी उपयोगकर्ता</value></data>
-  <data name="Scope_User" xml:space="preserve"><value>वर्तमान उपयोगकर्ता</value></data>
-  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0} (एडमिन आवश्यक)</value></data>
-
-  <data name="Ed_Ok" xml:space="preserve"><value>ठीक है</value></data>
-  <data name="Ed_Cancel" xml:space="preserve"><value>रद्द करें</value></data>
-  <data name="Ed_Title_Step" xml:space="preserve"><value>चरण संपादित करें</value></data>
-  <data name="Ed_Type" xml:space="preserve"><value>प्रकार</value></data>
-  <data name="Ed_Label" xml:space="preserve"><value>लेबल</value></data>
-  <data name="Ed_Target" xml:space="preserve"><value>लक्ष्य</value></data>
-  <data name="Ed_Args" xml:space="preserve"><value>तर्क</value></data>
-  <data name="Ed_WorkDir" xml:space="preserve"><value>कार्य निर्देशिका</value></data>
-  <data name="Ed_Elevated" xml:space="preserve"><value>व्यवस्थापक के रूप में चलाएँ</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>लक्ष्य में प्रोग्राम (पूरा पथ या केवल नाम), शॉर्टकट, स्क्रिप्ट, फ़ोल्डर, URL, दस्तावेज़, या ms-settings: जैसा प्रोटोकॉल दिया जा सकता है।</value></data>
-  <data name="Ed_Combo" xml:space="preserve"><value>शॉर्टकट</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>जैसे: Win+D / Alt+K / Ctrl+Enter / F5. ये फोकस वाली विंडो को भेजी जाती हैं — पहले लक्ष्य को सामने लाएँ। जो संयोजन Windows खुद इस्तेमाल करता है (Win+D, Win+6…) कैप्चर नहीं होते — बॉक्स पर डबल-क्लिक करके टाइप करें। मॉडिफ़ायर सहित माउस क्रियाएँ भी यहीं: रिकॉर्ड करने के लिए इसी बॉक्स में स्क्रॉल करें (Ctrl से ज़ूम, Shift से क्षैतिज)। सिर्फ़ स्क्रॉल या क्लिक करना हो तो «माउस» चरण आसान है।</value></data>
-  <data name="Ed_MouseHint" xml:space="preserve"><value>स्क्रॉल पॉइंटर के नीचे वाली विंडो पर जाता है; क्लिक वहीं होता है जहाँ पॉइंटर पहले से है (यह ऐप उसे कभी नहीं हिलाता)। इसलिए पहले «विंडो क्रिया → सामने लाएँ» से लक्ष्य सेट करें, या केवल पीछे/आगे जैसी स्थिति-निरपेक्ष क्रियाएँ ही उपयोग करें। N क्लिक या N निशान के लिए नीचे दोहराव संख्या बढ़ाएँ और गति के लिए चरण-बाद विलंब का उपयोग करें।</value></data>
-  <data name="Wheel_down" xml:space="preserve"><value>नीचे स्क्रॉल</value></data>
-  <data name="Wheel_right" xml:space="preserve"><value>दाएँ स्क्रॉल</value></data>
-  <data name="Mouse_forward" xml:space="preserve"><value>आगे (साइड बटन)</value></data>
-  <data name="Mouse_back" xml:space="preserve"><value>पीछे (साइड बटन)</value></data>
-  <data name="Mouse_middleClick" xml:space="preserve"><value>मध्य क्लिक</value></data>
-  <data name="Mouse_rightClick" xml:space="preserve"><value>दायाँ क्लिक</value></data>
-  <data name="Mouse_doubleClick" xml:space="preserve"><value>डबल क्लिक</value></data>
-  <data name="Mouse_leftClick" xml:space="preserve"><value>बायाँ क्लिक</value></data>
-  <data name="Wheel_left" xml:space="preserve"><value>बाएँ स्क्रॉल</value></data>
-  <data name="Wheel_up" xml:space="preserve"><value>ऊपर स्क्रॉल</value></data>
-  <data name="Kind_mouse" xml:space="preserve"><value>माउस</value></data>
-  <data name="Ed_Action" xml:space="preserve"><value>क्रिया</value></data>
-  <data name="Ed_Level" xml:space="preserve"><value>वॉल्यूम (0-100)</value></data>
-  <data name="Ed_Process" xml:space="preserve"><value>प्रोसेस</value></data>
-  <data name="Ed_SendKey" xml:space="preserve"><value>कुंजियाँ भेजें</value></data>
-  <data name="Ed_WaitWin" xml:space="preserve"><value>विंडो प्रतीक्षा (से)</value></data>
-  <data name="Ed_PostDelay" xml:space="preserve"><value>दिखने के बाद (से)</value></data>
-  <data name="Ed_WindowHint" xml:space="preserve"><value>प्रोसेस नाम .exe के बिना (जैसे Weixin / msedge)। सामने लाना / कुंजियाँ भेजना फोकस माँगता है और स्टार्टअप पर काम न कर सकता है।</value></data>
-  <data name="Ed_RestoreHint" xml:space="preserve"><value>यह उस विंडो को वापस लाता है जिसे आप इस क्रिया के ट्रिगर होने पर उपयोग कर रहे थे। इसके लिए कोई लक्ष्य चुनने का विकल्प नहीं है।</value></data>
-  <data name="Ed_Command" xml:space="preserve"><value>कमांड</value></data>
-  <data name="Ed_Text" xml:space="preserve"><value>पाठ</value></data>
-  <data name="Ed_TextProcess" xml:space="preserve"><value>लक्ष्य प्रोसेस</value></data>
-  <data name="Ed_TextHint" xml:space="preserve"><value>अक्षर-दर-अक्षर टाइप करता है (नई लाइन = Enter)। फोकस वाली विंडो को भेजने के लिए प्रोसेस खाली रखें (सबसे विश्वसनीय)।</value></data>
-  <data name="Ed_Message" xml:space="preserve"><value>संदेश</value></data>
-  <data name="Ed_Speak" xml:space="preserve"><value>वाचन</value></data>
-  <data name="Snd_Both" xml:space="preserve"><value>टोन + वाचन</value></data>
-  <data name="Snd_Speak" xml:space="preserve"><value>वाचन (संदेश पढ़ता है)</value></data>
-  <data name="Snd_Sound" xml:space="preserve"><value>टोन (एक बार)</value></data>
-  <data name="Snd_None" xml:space="preserve"><value>मौन</value></data>
-  <data name="Ed_SoundMode" xml:space="preserve"><value>ध्वनि</value></data>
-  <data name="Ed_Confirm" xml:space="preserve"><value>हाँ/नहीं पुष्टि (हाँ = जारी, नहीं = समूह रद्द)</value></data>
-  <data name="Ed_OnYes" xml:space="preserve"><value>«हाँ» के बाद</value></data>
-  <data name="Ed_Present" xml:space="preserve"><value>इस रूप में दिखाएँ</value></data>
-  <data name="Present_Dialog" xml:space="preserve"><value>संवाद (रोकता है)</value></data>
-  <data name="Present_Card" xml:space="preserve"><value>कार्ड (बिना रुकावट)</value></data>
-  <data name="Ed_Group" xml:space="preserve"><value>क्रिया समूह</value></data>
-  <data name="Ed_DelayMs" xml:space="preserve"><value>बाद में देरी (ms)</value></data>
-  <data name="Ed_Repeat" xml:space="preserve"><value>दोहराव</value></data>
-  <data name="Ed_Note" xml:space="preserve"><value>नोट</value></data>
-  <data name="Ed_DaysHeader" xml:space="preserve"><value>केवल इन दिनों चलाएँ (कोई नहीं = रोज़)</value></data>
-  <data name="Ed_OnlyBefore" xml:space="preserve"><value>केवल पहले</value></data>
-  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>प्रारूप H:mm, जैसे 08:30; केवल घंटा (जैसे 8) भी चलेगा; डिफ़ॉल्ट 08:00।</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
-  <data name="Ed_Vol_Set" xml:space="preserve"><value>वॉल्यूम सेट करें</value></data>
-  <data name="Ed_OnYes_None" xml:space="preserve"><value>कोई नहीं</value></data>
-  <data name="Ed_OnYes_Run" xml:space="preserve"><value>चलाएँ / फ़ाइल खोलें</value></data>
-  <data name="Ed_OnYes_Url" xml:space="preserve"><value>URL खोलें</value></data>
-  <data name="Ed_Group_None" xml:space="preserve"><value>(कोई नहीं)</value></data>
-  <data name="Ed_GroupMissing" xml:space="preserve"><value>(लक्ष्य हटाया गया)</value></data>
-
-  <data name="Warn_SendKeyFail" xml:space="preserve"><value>«{0}» को कुंजियाँ भेजना विफल: विंडो नहीं दिखी या सामने नहीं लाई जा सकी (स्टार्टअप/बैकग्राउंड में आम)</value></data>
-  <data name="Warn_WindowNotFound" xml:space="preserve"><value>«{0}» की विंडो नहीं मिली (प्रोसेस नहीं चल रही या तैयार नहीं?); {1} बेअसर</value></data>
-  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>«{0}» की विंडो मिली, लेकिन {1} का कोई असर नहीं हुआ (फ़ोरग्राउंड लॉक, विंडो ने बंद होने से मना किया, या वह व्यवस्थापक के रूप में चल रही है)</value></data>
-  <data name="Warn_RestoreFailed" xml:space="preserve"><value>पिछली विंडो पर वापस नहीं जा सका: फ़ोरग्राउंड लॉक है, या वह विंडो गायब हो गई है।</value></data>
-  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>अज्ञात विंडो क्रिया: {0}</value></data>
-  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>«वर्तमान विंडो» यह क्रिया ({0}) स्वीकार नहीं करती: उसे सामने लाना निष्फल है, और कुंजियाँ भेजने के लिए «कुंजियाँ भेजें» चरण लें। छोड़ा गया।</value></data>
-  <data name="Warn_UnknownVolume" xml:space="preserve"><value>अज्ञात वॉल्यूम क्रिया: {0}</value></data>
-  <data name="Warn_UnknownKind" xml:space="preserve"><value>अज्ञात चरण प्रकार: {0}</value></data>
-  <data name="Warn_SelfSkip" xml:space="preserve"><value>«{0}» छोड़ा गया: लक्ष्य स्वयं Clockwork है (ऑटो-स्टार्ट लूप से बचाव)</value></data>
-  <data name="Warn_LaunchFail" xml:space="preserve"><value>प्रारंभ विफल: {0} — {1}</value></data>
-  <data name="Warn_QuickExit" xml:space="preserve"><value>«{0}» 0.5 से में बंद हुआ (कोड {1}); संभवतः प्रारंभ विफल</value></data>
-  <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>कॉन्फ़िगरेशन फ़ाइल पढ़ी नहीं जा सकी (संभवतः JSON खराब है); डिफ़ॉल्ट सेटिंग्स के साथ शुरू किया गया। मूल फ़ाइल {0} में सहेजी गई है — ठीक करके पुनः आरंभ करें।</value></data>
-  <data name="Err_ScriptMissing" xml:space="preserve"><value>स्क्रिप्ट फ़ाइल नहीं मिली (पूरा पथ भरें)</value></data>
-  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>स्क्रिप्ट नहीं चली: Windows के साथ आने वाली PowerShell यह एन्कोडिंग नहीं पढ़ सकती। स्क्रिप्ट को BOM सहित UTF-8 में सहेजें या PowerShell 7 इस्तेमाल करें।</value></data>
-  <data name="Mark_Unverified" xml:space="preserve"><value>~ भेजा गया (असत्यापित)</value></data>
-  <data name="Mark_Exception" xml:space="preserve"><value>त्रुटि: {0}</value></data>
-
-  <data name="Note_Policy" xml:space="preserve"><value>नीति</value></data>
-  <data name="Note_OneTime" xml:space="preserve"><value>एक-बार</value></data>
-  <data name="Note_System" xml:space="preserve"><value>सिस्टम-महत्वपूर्ण</value></data>
-  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
-
-  <data name="Ed_Title_Group" xml:space="preserve"><value>क्रिया समूह संपादित करें</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>समूह अपने आप कभी नहीं चलता — इसे ट्रे मेनू, ग्लोबल शॉर्टकट, स्टार्टअप सूची के «क्रिया समूह» चरण, या शेड्यूल किए गए कार्य से चलाएँ।</value></data>
-  <data name="Val_GroupName" xml:space="preserve"><value>कृपया समूह का नाम भरें।</value></data>
-
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>शेड्यूल किया गया कार्य संपादित करें</value></data>
-  <data name="Ed_Trigger" xml:space="preserve"><value>ट्रिगर</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>समय पर</value></data>
-  <data name="Ed_Trig_Startup" xml:space="preserve"><value>लॉगऑन पर</value></data>
-  <data name="Ed_Time" xml:space="preserve"><value>समय (HH:mm)</value></data>
-  <data name="Ed_LoginTiming" xml:space="preserve"><value>लॉगऑन शर्त</value></data>
-  <data name="Ed_SMode_Any" xml:space="preserve"><value>हमेशा</value></data>
-  <data name="Ed_SMode_Before" xml:space="preserve"><value>केवल निर्दिष्ट घंटे से पहले</value></data>
-  <data name="Ed_SMode_After" xml:space="preserve"><value>केवल निर्दिष्ट घंटे के बाद</value></data>
-  <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
-  <data name="Ed_OnlyBoot" xml:space="preserve"><value>केवल भीतर</value></data>
-  <data name="Ed_WithinHint" xml:space="preserve"><value>मिनट (बूट के बाद) लॉगऑन गिना जाता है (0 = हर बार खुलने पर)</value></data>
-  <data name="Ed_Period" xml:space="preserve"><value>अवधि</value></data>
-  <data name="Ed_Rec_Daily" xml:space="preserve"><value>सप्ताह के दिन अनुसार</value></data>
-  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>हर N दिन</value></data>
-  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>मासिक</value></data>
-  <data name="Ed_Rec_Once" xml:space="preserve"><value>एक बार</value></data>
-  <data name="Ed_EveryNDays" xml:space="preserve"><value>हर</value></data>
-  <data name="Ed_AnchorDays" xml:space="preserve"><value>दिन; आरंभ से</value></data>
-  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; खाली = आज)</value></data>
-  <data name="Ed_MonthlyDay" xml:space="preserve"><value>महीने का दिन</value></data>
-  <data name="Ed_OnceDate" xml:space="preserve"><value>तिथि</value></data>
-  <data name="Ed_ActPopup" xml:space="preserve"><value>पॉपअप रिमाइंडर</value></data>
-  <data name="Ed_ActSilent" xml:space="preserve"><value>क्रिया समूह चुपचाप चलाएँ</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>क्रिया समूह चलाएँ</value></data>
-  <data name="Ed_OnYes_Group" xml:space="preserve"><value>क्रिया समूह चलाएँ</value></data>
-  <data name="Ed_AutoDismiss" xml:space="preserve"><value>स्वतः बंद (से)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>क्लिक न होने पर स्वयं बंद (0: कार्ड = कभी नहीं, संवाद = 60 सेकंड)</value></data>
-  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>{0} मिनट बाद सेट, पर रिमाइंडर रुके हुए हैं — रुकावट खत्म होने पर बजेगा</value></data>
-  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>आज के लिए छोड़ना रद्द: {0}</value></data>
-  <data name="Toast_SkipToday" xml:space="preserve"><value>आज के लिए छोड़ा: {0}</value></data>
-  <data name="Toast_QuickSet" xml:space="preserve"><value>{0} मिनट बाद रिमाइंडर सेट ({1})</value></data>
-  <data name="Quick_Done" xml:space="preserve"><value>{0} मिनट पूरे हुए</value></data>
-  <data name="Btn_SkipToday" xml:space="preserve"><value>आज छोड़ें</value></data>
-  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · आज छोड़ा</value></data>
-  <data name="Tray_QuickRemind" xml:space="preserve"><value>त्वरित रिमाइंडर</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>पुष्टि होने तक याद दिलाएँ</value></data>
-  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>मिनट (0 = कोई दोहराव नहीं), तक</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, खाली = अधिकतम 20 बार दिखेगा)</value></data>
-  <data name="Ed_LoopEvery" xml:space="preserve"><value>दोहराव चलाना, हर</value></data>
-  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>मिनट (0 = बंद), तक</value></data>
-  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, खाली = दिन का अंत)</value></data>
-  <data name="Ed_TrigDelay" xml:space="preserve"><value>ट्रिगर के बाद देरी</value></data>
-  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>से, साथ में यादृच्छिक 0~</value></data>
-  <data name="Ed_Sec" xml:space="preserve"><value>से</value></data>
-  <data name="Ed_Grace" xml:space="preserve"><value>छूट (मिनट)</value></data>
-  <data name="Ed_GraceHint" xml:space="preserve"><value>भीतर समय चूकने पर भी ट्रिगर होता है</value></data>
-  <data name="Val_TimeFormat" xml:space="preserve"><value>समय HH:mm प्रारूप में होना चाहिए</value></data>
-  <data name="Val_RepeatUntil" xml:space="preserve"><value>दोहराव की समाप्ति का समय HH:mm में हो (या खाली छोड़ें)</value></data>
-  <data name="Val_LoopUntil" xml:space="preserve"><value>लूप की समाप्ति का समय HH:mm में हो (या खाली छोड़ें)</value></data>
-  <data name="Val_Anchor" xml:space="preserve"><value>आरंभ तिथि yyyy-MM-dd होनी चाहिए (या खाली)</value></data>
-  <data name="Val_OnceDate" xml:space="preserve"><value>तिथि yyyy-MM-dd प्रारूप में होनी चाहिए</value></data>
-  <data name="Val_OnceDatePast" xml:space="preserve"><value>यह तिथि बीत चुकी है — सहेजने के बाद यह कार्य ट्रिगर नहीं होगा (नई तिथि सेट करें और फिर से सक्षम करें)</value></data>
-  <data name="Val_SilentNoGroup" xml:space="preserve"><value>«क्रिया समूह चुपचाप चलाएँ» चुना गया है लेकिन अभी तक कोई समूह नहीं चुना गया</value></data>
-
-  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · पुष्टि</value></data>
-  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · प्रश्न</value></data>
-  <data name="Confirm_Destructive" xml:space="preserve"><value>क्या आप वाकई «{0}» चलाना चाहते हैं?</value></data>
-  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · त्रुटि</value></data>
-  <data name="Crash_Body" xml:space="preserve"><value>Clockwork में त्रुटि आई (लॉग की गई; आमतौर पर जारी रखना सुरक्षित):
+  <data name="Kind_group" xml:space="preserve">
+    <value>क्रिया समूह चलाएँ</value>
+  </data>
+  <data name="Kind_message" xml:space="preserve">
+    <value>संदेश</value>
+  </data>
+  <data name="Kind_delay" xml:space="preserve">
+    <value>देरी</value>
+  </data>
+  <data name="Kind_text" xml:space="preserve">
+    <value>पाठ भेजें</value>
+  </data>
+  <data name="Sys_showDesktop" xml:space="preserve">
+    <value>डेस्कटॉप दिखाएँ</value>
+  </data>
+  <data name="Sys_lockScreen" xml:space="preserve">
+    <value>स्क्रीन लॉक करें (लौटने पर पासवर्ड)</value>
+  </data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve">
+    <value>रीसायकल बिन खाली करें</value>
+  </data>
+  <data name="Sys_openSettings" xml:space="preserve">
+    <value>Windows सेटिंग्स खोलें</value>
+  </data>
+  <data name="Sys_screenshot" xml:space="preserve">
+    <value>स्क्रीनशॉट (क्षेत्र चुनें)</value>
+  </data>
+  <data name="Sys_clearClipboard" xml:space="preserve">
+    <value>क्लिपबोर्ड साफ़ करें</value>
+  </data>
+  <data name="Sys_taskManager" xml:space="preserve">
+    <value>टास्क मैनेजर खोलें</value>
+  </data>
+  <data name="Sys_monitorOff" xml:space="preserve">
+    <value>स्क्रीन बंद करें (जगाने के लिए माउस हिलाएँ)</value>
+  </data>
+  <data name="Sys_sleep" xml:space="preserve">
+    <value>स्लीप (कम बिजली, तेज़ जागना)</value>
+  </data>
+  <data name="Sys_hibernate" xml:space="preserve">
+    <value>हाइबरनेट (सहेजें और बंद करें)</value>
+  </data>
+  <data name="Sys_signOut" xml:space="preserve">
+    <value>साइन आउट (पुष्टि)</value>
+  </data>
+  <data name="Sys_restart" xml:space="preserve">
+    <value>पुनरारंभ (पुष्टि)</value>
+  </data>
+  <data name="Sys_shutdown" xml:space="preserve">
+    <value>शट डाउन (पुष्टि)</value>
+  </data>
+  <data name="Vol_mute" xml:space="preserve">
+    <value>म्यूट</value>
+  </data>
+  <data name="Vol_unmute" xml:space="preserve">
+    <value>अनम्यूट</value>
+  </data>
+  <data name="Vol_set" xml:space="preserve">
+    <value>वॉल्यूम {0}%</value>
+  </data>
+  <data name="Win_close" xml:space="preserve">
+    <value>विंडो बंद करें</value>
+  </data>
+  <data name="Win_minimize" xml:space="preserve">
+    <value>छोटा करें</value>
+  </data>
+  <data name="Win_maximize" xml:space="preserve">
+    <value>बड़ा करें</value>
+  </data>
+  <data name="Cmd_playPause" xml:space="preserve">
+    <value>चलाएँ / रोकें</value>
+  </data>
+  <data name="Cmd_prevTrack" xml:space="preserve">
+    <value>पिछला ट्रैक</value>
+  </data>
+  <data name="Cmd_nextTrack" xml:space="preserve">
+    <value>अगला ट्रैक</value>
+  </data>
+  <data name="Cmd_volUp" xml:space="preserve">
+    <value>आवाज़ बढ़ाएँ</value>
+  </data>
+  <data name="Cmd_volDown" xml:space="preserve">
+    <value>आवाज़ घटाएँ</value>
+  </data>
+  <data name="Win_topmost" xml:space="preserve">
+    <value>विंडो को सबसे ऊपर रखना टॉगल करें</value>
+  </data>
+  <data name="Win_topmostFg" xml:space="preserve">
+    <value>वर्तमान विंडो को सबसे ऊपर रखना टॉगल करें</value>
+  </data>
+  <data name="Ed_TopmostHint" xml:space="preserve">
+    <value>यह प्रत्येक विंडो पर अलग से लागू होता है: किसी विंडो के लिए इसे फिर से बंद करने के लिए, पहले उस विंडो को सबसे आगे लाएँ।</value>
+  </data>
+  <data name="Win_activate" xml:space="preserve">
+    <value>सामने लाएँ</value>
+  </data>
+  <data name="Win_sendkey" xml:space="preserve">
+    <value>सामने लाकर कुंजियाँ भेजें</value>
+  </data>
+  <data name="Win_restore" xml:space="preserve">
+    <value>पिछली विंडो पर वापस जाएँ</value>
+  </data>
+  <data name="Sum_SendKeys" xml:space="preserve">
+    <value>भेजें {0}</value>
+  </data>
+  <data name="Sum_Delay_Sec" xml:space="preserve">
+    <value>देरी {0}से</value>
+  </data>
+  <data name="Sum_Delay_Ms" xml:space="preserve">
+    <value>देरी {0}मिसे</value>
+  </data>
+  <data name="Sum_RunGroup" xml:space="preserve">
+    <value>समूह चलाएँ: {0}</value>
+  </data>
+  <data name="Sum_Unset" xml:space="preserve">
+    <value>(निर्दिष्ट नहीं)</value>
+  </data>
+  <data name="Sum_Text" xml:space="preserve">
+    <value>टाइप करें {0}</value>
+  </data>
+  <data name="Sum_Ask" xml:space="preserve">
+    <value>प्रश्न: {0}</value>
+  </data>
+  <data name="Sum_ToVar" xml:space="preserve">
+    <value> → {0}</value>
+  </data>
+  <data name="Sum_MsgCard" xml:space="preserve">
+    <value>कार्ड: {0}</value>
+  </data>
+  <data name="Sum_Before" xml:space="preserve">
+    <value> (केवल {0} से पहले)</value>
+  </data>
+  <data name="Sum_DaysSuffix" xml:space="preserve">
+    <value> ({0})</value>
+  </data>
+  <data name="Days_EveryDay" xml:space="preserve">
+    <value>रोज़</value>
+  </data>
+  <data name="Days_Sep" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="Days_RangeSep" xml:space="preserve">
+    <value>–</value>
+  </data>
+  <data name="List_Sep" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Day_1" xml:space="preserve">
+    <value>सोम</value>
+  </data>
+  <data name="Day_2" xml:space="preserve">
+    <value>मंगल</value>
+  </data>
+  <data name="Day_3" xml:space="preserve">
+    <value>बुध</value>
+  </data>
+  <data name="Day_4" xml:space="preserve">
+    <value>गुरु</value>
+  </data>
+  <data name="Day_5" xml:space="preserve">
+    <value>शुक्र</value>
+  </data>
+  <data name="Day_6" xml:space="preserve">
+    <value>शनि</value>
+  </data>
+  <data name="Day_7" xml:space="preserve">
+    <value>रवि</value>
+  </data>
+  <data name="Period_EveryNDays" xml:space="preserve">
+    <value>हर {0} दिन</value>
+  </data>
+  <data name="Period_Monthly" xml:space="preserve">
+    <value>हर महीने की {0} तारीख़</value>
+  </data>
+  <data name="Period_Once" xml:space="preserve">
+    <value>केवल एक बार {0}</value>
+  </data>
+  <data name="Period_EachLogin" xml:space="preserve">
+    <value>हर लॉगिन पर</value>
+  </data>
+  <data name="Time_LoopEvery" xml:space="preserve">
+    <value>हर {0} मिनट</value>
+  </data>
+  <data name="Time_LoopUntil" xml:space="preserve">
+    <value>{0} तक</value>
+  </data>
+  <data name="Time_Startup" xml:space="preserve">
+    <value>लॉगऑन पर</value>
+  </data>
+  <data name="Time_Startup_Before" xml:space="preserve">
+    <value>लॉगऑन पर · {0}:00 से पहले</value>
+  </data>
+  <data name="Time_Startup_After" xml:space="preserve">
+    <value>लॉगऑन पर · {0}:00 के बाद</value>
+  </data>
+  <data name="Type_Registry" xml:space="preserve">
+    <value>रजिस्ट्री</value>
+  </data>
+  <data name="Type_StartupFolder" xml:space="preserve">
+    <value>स्टार्टअप फ़ोल्डर</value>
+  </data>
+  <data name="Type_ScheduledTask" xml:space="preserve">
+    <value>अनुसूचित कार्य</value>
+  </data>
+  <data name="Scope_Machine" xml:space="preserve">
+    <value>सभी उपयोगकर्ता</value>
+  </data>
+  <data name="Scope_User" xml:space="preserve">
+    <value>वर्तमान उपयोगकर्ता</value>
+  </data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve">
+    <value>{0} (एडमिन आवश्यक)</value>
+  </data>
+  <data name="Ed_Ok" xml:space="preserve">
+    <value>ठीक है</value>
+  </data>
+  <data name="Ed_Cancel" xml:space="preserve">
+    <value>रद्द करें</value>
+  </data>
+  <data name="Ed_Title_Step" xml:space="preserve">
+    <value>चरण संपादित करें</value>
+  </data>
+  <data name="Ed_Type" xml:space="preserve">
+    <value>प्रकार</value>
+  </data>
+  <data name="Ed_Label" xml:space="preserve">
+    <value>लेबल</value>
+  </data>
+  <data name="Ed_Target" xml:space="preserve">
+    <value>लक्ष्य</value>
+  </data>
+  <data name="Ed_Args" xml:space="preserve">
+    <value>तर्क</value>
+  </data>
+  <data name="Ed_WorkDir" xml:space="preserve">
+    <value>कार्य निर्देशिका</value>
+  </data>
+  <data name="Ed_Elevated" xml:space="preserve">
+    <value>व्यवस्थापक के रूप में चलाएँ</value>
+  </data>
+  <data name="Ed_AppHint" xml:space="preserve">
+    <value>लक्ष्य में प्रोग्राम (पूरा पथ या केवल नाम), शॉर्टकट, स्क्रिप्ट, फ़ोल्डर, URL, दस्तावेज़, या ms-settings: जैसा प्रोटोकॉल दिया जा सकता है।</value>
+  </data>
+  <data name="Ed_Combo" xml:space="preserve">
+    <value>शॉर्टकट</value>
+  </data>
+  <data name="Ed_KeysHint" xml:space="preserve">
+    <value>जैसे: Win+D / Alt+K / Ctrl+Enter / F5. ये फोकस वाली विंडो को भेजी जाती हैं — पहले लक्ष्य को सामने लाएँ। जो संयोजन Windows खुद इस्तेमाल करता है (Win+D, Win+6…) कैप्चर नहीं होते — बॉक्स पर डबल-क्लिक करके टाइप करें। मॉडिफ़ायर सहित माउस क्रियाएँ भी यहीं: रिकॉर्ड करने के लिए इसी बॉक्स में स्क्रॉल करें (Ctrl से ज़ूम, Shift से क्षैतिज)। सिर्फ़ स्क्रॉल या क्लिक करना हो तो «माउस» चरण आसान है।</value>
+  </data>
+  <data name="Ed_MouseHint" xml:space="preserve">
+    <value>स्क्रॉल पॉइंटर के नीचे वाली विंडो पर जाता है; क्लिक वहीं होता है जहाँ पॉइंटर पहले से है (यह ऐप उसे कभी नहीं हिलाता)। इसलिए पहले «विंडो क्रिया → सामने लाएँ» से लक्ष्य सेट करें, या केवल पीछे/आगे जैसी स्थिति-निरपेक्ष क्रियाएँ ही उपयोग करें। N क्लिक या N निशान के लिए नीचे दोहराव संख्या बढ़ाएँ और गति के लिए चरण-बाद विलंब का उपयोग करें।</value>
+  </data>
+  <data name="Wheel_down" xml:space="preserve">
+    <value>नीचे स्क्रॉल</value>
+  </data>
+  <data name="Wheel_right" xml:space="preserve">
+    <value>दाएँ स्क्रॉल</value>
+  </data>
+  <data name="Mouse_forward" xml:space="preserve">
+    <value>आगे (साइड बटन)</value>
+  </data>
+  <data name="Mouse_back" xml:space="preserve">
+    <value>पीछे (साइड बटन)</value>
+  </data>
+  <data name="Mouse_middleClick" xml:space="preserve">
+    <value>मध्य क्लिक</value>
+  </data>
+  <data name="Mouse_rightClick" xml:space="preserve">
+    <value>दायाँ क्लिक</value>
+  </data>
+  <data name="Mouse_doubleClick" xml:space="preserve">
+    <value>डबल क्लिक</value>
+  </data>
+  <data name="Mouse_leftClick" xml:space="preserve">
+    <value>बायाँ क्लिक</value>
+  </data>
+  <data name="Wheel_left" xml:space="preserve">
+    <value>बाएँ स्क्रॉल</value>
+  </data>
+  <data name="Wheel_up" xml:space="preserve">
+    <value>ऊपर स्क्रॉल</value>
+  </data>
+  <data name="Kind_mouse" xml:space="preserve">
+    <value>माउस</value>
+  </data>
+  <data name="Ed_Action" xml:space="preserve">
+    <value>क्रिया</value>
+  </data>
+  <data name="Ed_Level" xml:space="preserve">
+    <value>वॉल्यूम (0-100)</value>
+  </data>
+  <data name="Ed_Process" xml:space="preserve">
+    <value>प्रोसेस</value>
+  </data>
+  <data name="Ed_SendKey" xml:space="preserve">
+    <value>कुंजियाँ भेजें</value>
+  </data>
+  <data name="Ed_WaitWin" xml:space="preserve">
+    <value>विंडो प्रतीक्षा (से)</value>
+  </data>
+  <data name="Ed_PostDelay" xml:space="preserve">
+    <value>दिखने के बाद (से)</value>
+  </data>
+  <data name="Ed_WindowHint" xml:space="preserve">
+    <value>प्रोसेस नाम .exe के बिना (जैसे Weixin / msedge)। सामने लाना / कुंजियाँ भेजना फोकस माँगता है और स्टार्टअप पर काम न कर सकता है।</value>
+  </data>
+  <data name="Ed_RestoreHint" xml:space="preserve">
+    <value>यह उस विंडो को वापस लाता है जिसे आप इस क्रिया के ट्रिगर होने पर उपयोग कर रहे थे। इसके लिए कोई लक्ष्य चुनने का विकल्प नहीं है।</value>
+  </data>
+  <data name="Ed_Command" xml:space="preserve">
+    <value>कमांड</value>
+  </data>
+  <data name="Ed_Text" xml:space="preserve">
+    <value>पाठ</value>
+  </data>
+  <data name="Ed_TextProcess" xml:space="preserve">
+    <value>लक्ष्य प्रोसेस</value>
+  </data>
+  <data name="Ed_TextHint" xml:space="preserve">
+    <value>अक्षर-दर-अक्षर टाइप करता है (नई लाइन = Enter)। फोकस वाली विंडो को भेजने के लिए प्रोसेस खाली रखें (सबसे विश्वसनीय)।</value>
+  </data>
+  <data name="Ed_Message" xml:space="preserve">
+    <value>संदेश</value>
+  </data>
+  <data name="Ed_Speak" xml:space="preserve">
+    <value>वाचन</value>
+  </data>
+  <data name="Snd_Both" xml:space="preserve">
+    <value>टोन + वाचन</value>
+  </data>
+  <data name="Snd_Speak" xml:space="preserve">
+    <value>वाचन (संदेश पढ़ता है)</value>
+  </data>
+  <data name="Snd_Sound" xml:space="preserve">
+    <value>टोन (एक बार)</value>
+  </data>
+  <data name="Snd_None" xml:space="preserve">
+    <value>मौन</value>
+  </data>
+  <data name="Ed_SoundMode" xml:space="preserve">
+    <value>ध्वनि</value>
+  </data>
+  <data name="Ed_Confirm" xml:space="preserve">
+    <value>हाँ/नहीं पुष्टि (हाँ = जारी, नहीं = समूह रद्द)</value>
+  </data>
+  <data name="Ed_OnYes" xml:space="preserve">
+    <value>«हाँ» के बाद</value>
+  </data>
+  <data name="Ed_Present" xml:space="preserve">
+    <value>इस रूप में दिखाएँ</value>
+  </data>
+  <data name="Present_Dialog" xml:space="preserve">
+    <value>संवाद (रोकता है)</value>
+  </data>
+  <data name="Present_Card" xml:space="preserve">
+    <value>कार्ड (बिना रुकावट)</value>
+  </data>
+  <data name="Ed_Group" xml:space="preserve">
+    <value>क्रिया समूह</value>
+  </data>
+  <data name="Ed_DelayMs" xml:space="preserve">
+    <value>बाद में देरी (ms)</value>
+  </data>
+  <data name="Ed_Repeat" xml:space="preserve">
+    <value>दोहराव</value>
+  </data>
+  <data name="Ed_Note" xml:space="preserve">
+    <value>नोट</value>
+  </data>
+  <data name="Ed_DaysHeader" xml:space="preserve">
+    <value>केवल इन दिनों चलाएँ (कोई नहीं = रोज़)</value>
+  </data>
+  <data name="Ed_OnlyBefore" xml:space="preserve">
+    <value>केवल पहले</value>
+  </data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve">
+    <value>प्रारूप H:mm, जैसे 08:30; केवल घंटा (जैसे 8) भी चलेगा; डिफ़ॉल्ट 08:00।</value>
+  </data>
+  <data name="Ed_HourBefore" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Ed_Vol_Set" xml:space="preserve">
+    <value>वॉल्यूम सेट करें</value>
+  </data>
+  <data name="Ed_OnYes_None" xml:space="preserve">
+    <value>कोई नहीं</value>
+  </data>
+  <data name="Ed_OnYes_Run" xml:space="preserve">
+    <value>चलाएँ / फ़ाइल खोलें</value>
+  </data>
+  <data name="Ed_OnYes_Url" xml:space="preserve">
+    <value>URL खोलें</value>
+  </data>
+  <data name="Ed_Group_None" xml:space="preserve">
+    <value>(कोई नहीं)</value>
+  </data>
+  <data name="Ed_GroupMissing" xml:space="preserve">
+    <value>(लक्ष्य हटाया गया)</value>
+  </data>
+  <data name="Warn_SendKeyFail" xml:space="preserve">
+    <value>«{0}» को कुंजियाँ भेजना विफल: विंडो नहीं दिखी या सामने नहीं लाई जा सकी (स्टार्टअप/बैकग्राउंड में आम)</value>
+  </data>
+  <data name="Warn_WindowNotFound" xml:space="preserve">
+    <value>«{0}» की विंडो नहीं मिली (प्रोसेस नहीं चल रही या तैयार नहीं?); {1} बेअसर</value>
+  </data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve">
+    <value>«{0}» की विंडो मिली, लेकिन {1} का कोई असर नहीं हुआ (फ़ोरग्राउंड लॉक, विंडो ने बंद होने से मना किया, या वह व्यवस्थापक के रूप में चल रही है)</value>
+  </data>
+  <data name="Warn_RestoreFailed" xml:space="preserve">
+    <value>पिछली विंडो पर वापस नहीं जा सका: फ़ोरग्राउंड लॉक है, या वह विंडो गायब हो गई है।</value>
+  </data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve">
+    <value>अज्ञात विंडो क्रिया: {0}</value>
+  </data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve">
+    <value>«वर्तमान विंडो» यह क्रिया ({0}) स्वीकार नहीं करती: उसे सामने लाना निष्फल है, और कुंजियाँ भेजने के लिए «कुंजियाँ भेजें» चरण लें। छोड़ा गया।</value>
+  </data>
+  <data name="Warn_UnknownVolume" xml:space="preserve">
+    <value>अज्ञात वॉल्यूम क्रिया: {0}</value>
+  </data>
+  <data name="Warn_UnknownKind" xml:space="preserve">
+    <value>अज्ञात चरण प्रकार: {0}</value>
+  </data>
+  <data name="Warn_SelfSkip" xml:space="preserve">
+    <value>«{0}» छोड़ा गया: लक्ष्य स्वयं Clockwork है (ऑटो-स्टार्ट लूप से बचाव)</value>
+  </data>
+  <data name="Warn_LaunchFail" xml:space="preserve">
+    <value>प्रारंभ विफल: {0} — {1}</value>
+  </data>
+  <data name="Warn_QuickExit" xml:space="preserve">
+    <value>«{0}» 0.5 से में बंद हुआ (कोड {1}); संभवतः प्रारंभ विफल</value>
+  </data>
+  <data name="Warn_ConfigUnreadable" xml:space="preserve">
+    <value>कॉन्फ़िगरेशन फ़ाइल पढ़ी नहीं जा सकी (संभवतः JSON खराब है); डिफ़ॉल्ट सेटिंग्स के साथ शुरू किया गया। मूल फ़ाइल {0} में सहेजी गई है — ठीक करके पुनः आरंभ करें।</value>
+  </data>
+  <data name="Err_ScriptMissing" xml:space="preserve">
+    <value>स्क्रिप्ट फ़ाइल नहीं मिली (पूरा पथ भरें)</value>
+  </data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve">
+    <value>स्क्रिप्ट नहीं चली: Windows के साथ आने वाली PowerShell यह एन्कोडिंग नहीं पढ़ सकती। स्क्रिप्ट को BOM सहित UTF-8 में सहेजें या PowerShell 7 इस्तेमाल करें।</value>
+  </data>
+  <data name="Mark_Unverified" xml:space="preserve">
+    <value>~ भेजा गया (असत्यापित)</value>
+  </data>
+  <data name="Mark_Exception" xml:space="preserve">
+    <value>त्रुटि: {0}</value>
+  </data>
+  <data name="Note_Policy" xml:space="preserve">
+    <value>नीति</value>
+  </data>
+  <data name="Note_OneTime" xml:space="preserve">
+    <value>एक-बार</value>
+  </data>
+  <data name="Note_System" xml:space="preserve">
+    <value>सिस्टम-महत्वपूर्ण</value>
+  </data>
+  <data name="Note_ActiveSetup" xml:space="preserve">
+    <value>Active Setup</value>
+  </data>
+  <data name="Ed_Title_Group" xml:space="preserve">
+    <value>क्रिया समूह संपादित करें</value>
+  </data>
+  <data name="Ed_GroupHint" xml:space="preserve">
+    <value>समूह अपने आप कभी नहीं चलता — इसे ट्रे मेनू, ग्लोबल शॉर्टकट, स्टार्टअप सूची के «क्रिया समूह» चरण, या शेड्यूल किए गए कार्य से चलाएँ।</value>
+  </data>
+  <data name="Val_GroupName" xml:space="preserve">
+    <value>कृपया समूह का नाम भरें।</value>
+  </data>
+  <data name="Ed_Title_Reminder" xml:space="preserve">
+    <value>शेड्यूल किया गया कार्य संपादित करें</value>
+  </data>
+  <data name="Ed_Trigger" xml:space="preserve">
+    <value>ट्रिगर</value>
+  </data>
+  <data name="Ed_Trig_Time" xml:space="preserve">
+    <value>समय पर</value>
+  </data>
+  <data name="Ed_Trig_Startup" xml:space="preserve">
+    <value>लॉगऑन पर</value>
+  </data>
+  <data name="Ed_Time" xml:space="preserve">
+    <value>समय (HH:mm)</value>
+  </data>
+  <data name="Ed_LoginTiming" xml:space="preserve">
+    <value>लॉगऑन शर्त</value>
+  </data>
+  <data name="Ed_SMode_Any" xml:space="preserve">
+    <value>हमेशा</value>
+  </data>
+  <data name="Ed_SMode_Before" xml:space="preserve">
+    <value>केवल निर्दिष्ट घंटे से पहले</value>
+  </data>
+  <data name="Ed_SMode_After" xml:space="preserve">
+    <value>केवल निर्दिष्ट घंटे के बाद</value>
+  </data>
+  <data name="Ed_Hour" xml:space="preserve">
+    <value>:00</value>
+  </data>
+  <data name="Ed_OnlyBoot" xml:space="preserve">
+    <value>केवल भीतर</value>
+  </data>
+  <data name="Ed_WithinHint" xml:space="preserve">
+    <value>मिनट (बूट के बाद) लॉगऑन गिना जाता है (0 = हर बार खुलने पर)</value>
+  </data>
+  <data name="Ed_Period" xml:space="preserve">
+    <value>अवधि</value>
+  </data>
+  <data name="Ed_Rec_Daily" xml:space="preserve">
+    <value>सप्ताह के दिन अनुसार</value>
+  </data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve">
+    <value>हर N दिन</value>
+  </data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve">
+    <value>मासिक</value>
+  </data>
+  <data name="Ed_Rec_Once" xml:space="preserve">
+    <value>एक बार</value>
+  </data>
+  <data name="Ed_EveryNDays" xml:space="preserve">
+    <value>हर</value>
+  </data>
+  <data name="Ed_AnchorDays" xml:space="preserve">
+    <value>दिन; आरंभ से</value>
+  </data>
+  <data name="Ed_AnchorHint" xml:space="preserve">
+    <value>(yyyy-MM-dd; खाली = आज)</value>
+  </data>
+  <data name="Ed_MonthlyDay" xml:space="preserve">
+    <value>महीने का दिन</value>
+  </data>
+  <data name="Ed_OnceDate" xml:space="preserve">
+    <value>तिथि</value>
+  </data>
+  <data name="Ed_ActPopup" xml:space="preserve">
+    <value>पॉपअप रिमाइंडर</value>
+  </data>
+  <data name="Ed_ActSilent" xml:space="preserve">
+    <value>क्रिया समूह चुपचाप चलाएँ</value>
+  </data>
+  <data name="Ed_SilentGroup" xml:space="preserve">
+    <value>क्रिया समूह चलाएँ</value>
+  </data>
+  <data name="Ed_OnYes_Group" xml:space="preserve">
+    <value>क्रिया समूह चलाएँ</value>
+  </data>
+  <data name="Ed_AutoDismiss" xml:space="preserve">
+    <value>स्वतः बंद (से)</value>
+  </data>
+  <data name="Ed_AutoHint" xml:space="preserve">
+    <value>क्लिक न होने पर स्वयं बंद (0: कार्ड = कभी नहीं, संवाद = 60 सेकंड)</value>
+  </data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve">
+    <value>{0} मिनट बाद सेट, पर रिमाइंडर रुके हुए हैं — रुकावट खत्म होने पर बजेगा</value>
+  </data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve">
+    <value>आज के लिए छोड़ना रद्द: {0}</value>
+  </data>
+  <data name="Toast_SkipToday" xml:space="preserve">
+    <value>आज के लिए छोड़ा: {0}</value>
+  </data>
+  <data name="Toast_QuickSet" xml:space="preserve">
+    <value>{0} मिनट बाद रिमाइंडर सेट ({1})</value>
+  </data>
+  <data name="Quick_Done" xml:space="preserve">
+    <value>{0} मिनट पूरे हुए</value>
+  </data>
+  <data name="Btn_SkipToday" xml:space="preserve">
+    <value>आज छोड़ें</value>
+  </data>
+  <data name="Sum_SkippedToday" xml:space="preserve">
+    <value>{0} · आज छोड़ा</value>
+  </data>
+  <data name="Tray_QuickRemind" xml:space="preserve">
+    <value>त्वरित रिमाइंडर</value>
+  </data>
+  <data name="Ed_RepeatNag" xml:space="preserve">
+    <value>पुष्टि होने तक याद दिलाएँ</value>
+  </data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve">
+    <value>मिनट (0 = कोई दोहराव नहीं), तक</value>
+  </data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve">
+    <value>(HH:mm, खाली = अधिकतम 20 बार दिखेगा)</value>
+  </data>
+  <data name="Ed_LoopEvery" xml:space="preserve">
+    <value>दोहराव चलाना, हर</value>
+  </data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve">
+    <value>मिनट (0 = बंद), तक</value>
+  </data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve">
+    <value>(HH:mm, खाली = दिन का अंत)</value>
+  </data>
+  <data name="Ed_TrigDelay" xml:space="preserve">
+    <value>ट्रिगर के बाद देरी</value>
+  </data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve">
+    <value>से, साथ में यादृच्छिक 0~</value>
+  </data>
+  <data name="Ed_Sec" xml:space="preserve">
+    <value>से</value>
+  </data>
+  <data name="Ed_Grace" xml:space="preserve">
+    <value>छूट (मिनट)</value>
+  </data>
+  <data name="Ed_GraceHint" xml:space="preserve">
+    <value>भीतर समय चूकने पर भी ट्रिगर होता है</value>
+  </data>
+  <data name="Val_TimeFormat" xml:space="preserve">
+    <value>समय HH:mm प्रारूप में होना चाहिए</value>
+  </data>
+  <data name="Val_RepeatUntil" xml:space="preserve">
+    <value>दोहराव की समाप्ति का समय HH:mm में हो (या खाली छोड़ें)</value>
+  </data>
+  <data name="Val_LoopUntil" xml:space="preserve">
+    <value>लूप की समाप्ति का समय HH:mm में हो (या खाली छोड़ें)</value>
+  </data>
+  <data name="Val_Anchor" xml:space="preserve">
+    <value>आरंभ तिथि yyyy-MM-dd होनी चाहिए (या खाली)</value>
+  </data>
+  <data name="Val_OnceDate" xml:space="preserve">
+    <value>तिथि yyyy-MM-dd प्रारूप में होनी चाहिए</value>
+  </data>
+  <data name="Val_OnceDatePast" xml:space="preserve">
+    <value>यह तिथि बीत चुकी है — सहेजने के बाद यह कार्य ट्रिगर नहीं होगा (नई तिथि सेट करें और फिर से सक्षम करें)</value>
+  </data>
+  <data name="Val_SilentNoGroup" xml:space="preserve">
+    <value>«क्रिया समूह चुपचाप चलाएँ» चुना गया है लेकिन अभी तक कोई समूह नहीं चुना गया</value>
+  </data>
+  <data name="Confirm_Title" xml:space="preserve">
+    <value>Clockwork · पुष्टि</value>
+  </data>
+  <data name="Ask_Title" xml:space="preserve">
+    <value>Clockwork · प्रश्न</value>
+  </data>
+  <data name="Confirm_Destructive" xml:space="preserve">
+    <value>क्या आप वाकई «{0}» चलाना चाहते हैं?</value>
+  </data>
+  <data name="Crash_Title" xml:space="preserve">
+    <value>Clockwork · त्रुटि</value>
+  </data>
+  <data name="Crash_Body" xml:space="preserve">
+    <value>Clockwork में त्रुटि आई (लॉग की गई; आमतौर पर जारी रखना सुरक्षित):
 
 {0}
 
-लॉग: {1}</value></data>
-  <data name="Run_Title" xml:space="preserve"><value>Clockwork · चलाएँ</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>शेड्यूल किया गया कार्य</value></data>
-  <data name="Tray_LaunchStopped" xml:space="preserve"><value>स्टार्टअप सूची रोकी गई: {0} चरण पूरे, बाकी छोड़े गए</value></data>
-  <data name="Tray_LaunchWarn" xml:space="preserve"><value>स्टार्टअप सूची पूर्ण: {0} चरण, {1} में चेतावनियाँ (ट्रे → पिछला लॉग देखें)</value></data>
-  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>रोक शॉर्टकट «{0}» पहचाना नहीं गया; मुख्य विंडो में बदलें। ट्रे का «चल रही क्रियाएँ रोकें» अब भी उपलब्ध है।</value></data>
-  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>रोक शॉर्टकट «{0}» रजिस्टर करना विफल (शायद पहले से उपयोग में); ट्रे का «चल रही क्रियाएँ रोकें» अब भी उपलब्ध है।</value></data>
-  <data name="Hotkey_Stopped" xml:space="preserve"><value>चल रही क्रियाओं को रोकने का अनुरोध किया गया।</value></data>
-  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>«{0}» को टॉगल करने के लिए व्यवस्थापक अधिकार चाहिए; Clockwork को व्यवस्थापक के रूप में फिर खोलें।</value></data>
-  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>«{0}» टॉगल विफल: {1}</value></data>
-  <data name="Autostart_Fail" xml:space="preserve"><value>ऑपरेशन विफल: {0}</value></data>
-  <data name="Tab_Settings" xml:space="preserve"><value>सेटिंग्स</value></data>
-  <data name="Settings_General" xml:space="preserve"><value>सामान्य</value></data>
-  <data name="About_CheckUpdate" xml:space="preserve"><value>अपडेट जांचें</value></data>
-  <data name="About_Series" xml:space="preserve"><value>365 ओपन सोर्स प्लान · #020</value></data>
-  <data name="Update_Checking" xml:space="preserve"><value>जाँच रहे हैं…</value></data>
-  <data name="Update_Latest" xml:space="preserve"><value>आप नवीनतम संस्करण पर हैं ({0})</value></data>
-  <data name="Update_Available" xml:space="preserve"><value>नया संस्करण {0} उपलब्ध है। डाउनलोड पर जाएँ?</value></data>
-  <data name="Update_Failed" xml:space="preserve"><value>अपडेट जाँच विफल: {0}</value></data>
-  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>क्लिक करें, फिर शॉर्टकट दबाएँ। Esc रद्द करता है, Del मिटाता है। ट्रे में «चल रही क्रियाएँ रोकें» हमेशा काम करता है।</value></data>
-  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>शॉर्टकट दबाएँ…</value></data>
-  <data name="Sys_Takeover" xml:space="preserve"><value>स्टार्टअप सूची में लें</value></data>
-  <data name="Sys_Delete" xml:space="preserve"><value>सिस्टम से हटाएँ</value></data>
-  <data name="Confirm_DeleteItem" xml:space="preserve"><value>क्या «{0}» हटाना है?</value></data>
-  <data name="Confirm_Keep" xml:space="preserve"><value>रखें</value></data>
-  <data name="Confirm_DeletePage" xml:space="preserve"><value>क्या पेज «{0}» को हटाया जाए? उस पर मौजूद {1} टाइल(स) भी साथ में हट जाएँगी। किसी क्रिया की ओर इंगित करने वाली टाइल केवल उस संदर्भ को हटाती है; क्रिया स्वयं बनी रहती है।</value></data>
-  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>क्या श्रेणी «{0}» को हटाया जाए? इसमें मौजूद {1} पेज हटाए नहीं जाते — वे «{2}» में वापस चले जाते हैं।</value></data>
-  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>क्या स्टार्टअप आइटम «{0}» को सिस्टम से स्थायी रूप से हटाना है? यह क्रिया पूर्ववत नहीं की जा सकती (सिर्फ़ स्टार्टअप पर चलने से रोकने के लिए अनचेक करें)।</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>पोर्ट {0} मुक्त करें? इससे {1} समाप्त हो जाएगी, चाइल्ड प्रोसेस सहित। बिना सहेजा गया काम खो जाएगा।</value></data>
-  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>यह प्रोसेस पोर्ट {0} भी रोके हुए है, जो साथ ही मुक्त हो जाएँगे।</value></data>
-  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>स्टार्टअप आइटम «{0}» को स्टार्टअप सूची में लिया जा चुका है और एक चरण अब भी उसकी शॉर्टकट फ़ाइल की ओर इशारा करता है। सिस्टम से हटाने पर शॉर्टकट भी हट जाएगा, जिससे वह चरण उसे चला नहीं पाएगा। फिर भी हटाएँ?</value></data>
-  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>«{0}» हटाना विफल: {1}</value></data>
-  <data name="Config_ExportSamePath" xml:space="preserve"><value>निर्यात लक्ष्य कॉन्फ़िग फ़ाइल स्वयं नहीं हो सकता — कोई अन्य नाम या स्थान चुनें।</value></data>
-  <data name="Val_SendKeys" xml:space="preserve"><value>भेजी जाने वाली कुंजियों का पाठ मान्य कुंजी क्रम नहीं है: बिना बंद घुंघराले कोष्ठक और अज्ञात कुंजी नाम जाँचें (जैसे {ENTER}; शाब्दिक { को {{} और शाब्दिक } को {}} लिखें)।</value></data>
-  <data name="Val_SearchUrl" xml:space="preserve"><value>खोज URL में {0} होना ज़रूरी है — वहीं खोजा जाने वाला शब्द आता है। इसके बिना यह चरण हर बार वही पेज खोलेगा।</value></data>
-  <data name="Ed_CatchUp" xml:space="preserve"><value>छूटने पर बाद में दिखाएँ (स्लीप/बंद के बाद भी)</value></data>
-  <data name="Unit_Minutes" xml:space="preserve"><value>{0} मिनट</value></data>
-  <data name="Warn_KeyNoMain" xml:space="preserve"><value>हॉटकी «{0}» में मुख्य कुंजी नहीं है; नहीं भेजा गया</value></data>
-  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>अपरिचित कुंजी नाम «{0}» (कई अंकों की संख्याएँ कुंजी नहीं हैं); हॉटकी «{1}» नहीं भेजी गई</value></data>
-  <data name="Warn_KeyUnknown" xml:space="preserve"><value>अपरिचित कुंजी «{0}»; हॉटकी «{1}» नहीं भेजी गई</value></data>
-  <data name="Warn_KeyRejected" xml:space="preserve"><value>हॉटकी «{0}» सिस्टम द्वारा अस्वीकृत (तब होता है जब सामने उच्च-अधिकार विंडो/सुरक्षित डेस्कटॉप हो); कोई असर नहीं</value></data>
-  <data name="Warn_KeyPartial" xml:space="preserve"><value>हॉटकी «{0}» केवल आंशिक रूप से भेजी गई ({1}/{2}); कुंजी-रिलीज़ पुनः भेजी, कोई असर नहीं</value></data>
-  <data name="Warn_TextSendFail" xml:space="preserve"><value>टेक्स्ट भेजें: «{0}» विंडो को सामने नहीं ला सके; नहीं भेजा गया</value></data>
-  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>कॉन्फ़िगरेशन सहेजना विफल: {0} (बदलाव केवल मेमोरी में हैं और पुनरारंभ पर खो जाएँगे)</value></data>
-  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>रिमाइंडर «{0}» द्वारा संदर्भित क्रिया समूह अब मौजूद नहीं है; इस बार कुछ नहीं चला</value></data>
-  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>रिमाइंडर «{0}» द्वारा संदर्भित क्रिया समूह अक्षम है; इस बार कुछ नहीं चला</value></data>
-  <data name="Skip_GroupNotFound" xml:space="preserve"><value>संदर्भित क्रिया समूह नहीं मिला</value></data>
-  <data name="Skip_GroupDisabled" xml:space="preserve"><value>क्रिया समूह «{0}» अक्षम है; छोड़ दिया गया</value></data>
-  <data name="Skip_GroupReentrant" xml:space="preserve"><value>क्रिया समूह में पुनः प्रवेश (चक्रीय संदर्भ या पहले से चल रहा है); छोड़ दिया गया</value></data>
-  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
-  <data name="Toast_GroupCancelled" xml:space="preserve"><value>क्रिया समूह «{0}» को रद्द करने का अनुरोध किया गया।</value></data>
-  <data name="Toast_GroupStarted" xml:space="preserve"><value>क्रिया समूह «{0}» शुरू किया गया।</value></data>
-  <data name="Toast_GroupBusy" xml:space="preserve"><value>क्रिया समूह «{0}» पहले से चल रहा है (कहीं और से शुरू); यह कुंजी इसे रोक नहीं सकती — आपातकालीन रोक हॉटकी का उपयोग करें।</value></data>
-  <data name="Warn_RunBudget" xml:space="preserve"><value>रन 5000-चरण की सीमा पर रुक गया; शेष चरण छोड़ दिए गए (जांचें कि कहीं दोहराव की संख्या बहुत बड़ी तो नहीं है)</value></data>
-  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>«हाँ» पर चलने वाला क्रिया समूह अब मौजूद नहीं है; छोड़ दिया गया</value></data>
-  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>«हाँ» पर चलने वाला क्रिया समूह अक्षम है; छोड़ दिया गया</value></data>
-  <data name="Warn_OnYesFailed" xml:space="preserve"><value>«हाँ» के बाद की क्रिया नहीं चल सकी: {0}</value></data>
-  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>यह आइटम स्टार्टअप सूची में नहीं लिया जा सकता — केवल रजिस्ट्री Run कुंजियाँ और स्टार्टअप फ़ोल्डर आइटम लिए जा सकते हैं।</value></data>
-  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>स्टार्टअप सूची का निष्पादन बाधित: {0}</value></data>
-  <data name="Tray_ViewLog" xml:space="preserve"><value>पिछला स्टार्टअप लॉग देखें</value></data>
-  <data name="Tray_History" xml:space="preserve"><value>हाल के</value></data>
-  <data name="Tray_NoLog" xml:space="preserve"><value>अभी कोई स्टार्टअप लॉग नहीं (पहले स्टार्टअप सूची एक बार चलाएँ)</value></data>
-  <data name="Log_Title" xml:space="preserve"><value>पिछली स्टार्टअप-सूची चलने का लॉग</value></data>
-  <data name="Log_When" xml:space="preserve"><value>समय: {0}</value></data>
-  <data name="Log_Summary" xml:space="preserve"><value>कुल {0} चरण: {1} विफल या चेतावनी, {2} भेजे गए पर जाँच नहीं हो सकी, बाकी सफल</value></data>
-  <data name="Log_UnverNote" xml:space="preserve"><value>(~ का अर्थ है कि कीस्ट्रोक या हॉटकी भेजी गई, पर लक्ष्य ने प्रतिक्रिया दी या नहीं, यह पक्का नहीं)</value></data>
-  <data name="Log_ReadyGate" xml:space="preserve"><value>तैयारी जाँच: {0}s प्रतीक्षा (शेल={1} नेटवर्क={2})</value></data>
-  <data name="Log_ReadyTimeout" xml:space="preserve"><value>, समय समाप्त होने पर भी तैयार नहीं, फिर भी आगे बढ़ा</value></data>
-  <data name="Log_BootDelay" xml:space="preserve"><value>स्टार्टअप विलंब: {0}s</value></data>
-  <data name="Log_BudgetHit" xml:space="preserve"><value>यह चलना {0} चरणों की सीमा तक पहुँच गया; बाकी चरण नहीं चले</value></data>
-  <data name="Log_Nth" xml:space="preserve"><value> ({1} में से {0})</value></data>
-  <data name="Log_GroupBusy" xml:space="preserve"><value>क्रिया समूह «{0}» पहले से चल रहा है (कहीं और से शुरू); इस बार छोड़ा गया</value></data>
-  <data name="Log_GroupMissing" xml:space="preserve"><value>क्रिया समूह नहीं मिला</value></data>
-  <data name="Log_GroupDisabled" xml:space="preserve"><value>क्रिया समूह «{0}» बंद है; छोड़ा गया</value></data>
-  <data name="Log_GroupCycle" xml:space="preserve"><value>चक्रीय संदर्भ; छोड़ा गया</value></data>
-  <data name="Log_RunGroup" xml:space="preserve"><value>क्रिया समूह चलाएँ: {0}</value></data>
-  <data name="Log_Stopped" xml:space="preserve"><value>हाथ से रोका गया; आगे के चरण नहीं चले</value></data>
-  <data name="Log_HdrStopped" xml:space="preserve"><value>यह चलना हाथ से रोका गया (आपात रोक कुंजी या ट्रे का «चल रही क्रियाएँ रोकें»)</value></data>
-  <data name="Err_JsonNull" xml:space="preserve"><value>यह फ़ाइल पार्स करने पर खाली निकलती है — यह कोई कॉन्फ़िगरेशन नहीं है।</value></data>
-  <data name="Err_ClearClipboard" xml:space="preserve"><value>क्लिपबोर्ड साफ़ करने में विफल: {0}</value></data>
-  <data name="Err_SoundNotWav" xml:space="preserve"><value>«{0}» एक .wav फ़ाइल नहीं है। यह चरण केवल wav चलाता है।</value></data>
-  <data name="Err_SoundMissing" xml:space="preserve"><value>ध्वनि फ़ाइल नहीं मिली: «{0}»</value></data>
-  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>रीसायकल बिन खाली करने में विफल: {0}</value></data>
-  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>अज्ञात सिस्टम कमांड: {0}</value></data>
-  <data name="Tray_RunGroup" xml:space="preserve"><value>चलाएँ: {0}</value></data>
-  <data name="Tray_DndResume" xml:space="preserve"><value>रिमाइंडर फिर शुरू करें ({0} मिनट शेष)</value></data>
-  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>आज के अंत तक</value></data>
-  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>आज के अंत तक रिमाइंडर रोक दिए</value></data>
-  <data name="Tray_DndResumeHours" xml:space="preserve"><value>रिमाइंडर फिर चालू करें ({0} घंटे बाकी)</value></data>
-  <data name="Tray_DndMenu" xml:space="preserve"><value>रिमाइंडर रोकें</value></data>
-  <data name="Tray_Hours" xml:space="preserve"><value>{0} घंटे</value></data>
-  <data name="Toast_DndOn" xml:space="preserve"><value>रिमाइंडर {0} घंटे के लिए रोके गए</value></data>
-  <data name="Toast_DndOff" xml:space="preserve"><value>रिमाइंडर फिर शुरू किए गए</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>एकाग्रता मोड</value></data>
-  <data name="Tpl_Meeting" xml:space="preserve"><value>मीटिंग मोड</value></data>
-  <data name="Tpl_EndOfDay" xml:space="preserve"><value>दिन के अंत में</value></data>
-  <data name="Tpl_Bedtime" xml:space="preserve"><value>सोने से पहले</value></data>
-  <data name="Tpl_Away" xml:space="preserve"><value>थोड़ी देर के लिए दूर</value></data>
-  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>क्या आज के सभी कार्य दर्ज कर लिए?</value></data>
-  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>सोने का समय!</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>ब्रेक रिमाइंडर</value></data>
-  <data name="Tpl_Search" xml:space="preserve"><value>त्वरित खोज</value></data>
-  <data name="Tpl_SearchAsk" xml:space="preserve"><value>क्या खोजें?</value></data>
-  <data name="Tpl_SearchVar" xml:space="preserve"><value>कीवर्ड</value></data>
-  <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>उठिए और थोड़ा चलिए</value></data>
-  <data name="Smp_Mute" xml:space="preserve"><value>शुरू होते ही म्यूट करें (उदाहरण · ऑटो-प्ले आवाज़ रोकें)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>अपना ब्राउज़र खोलें (उदाहरण के लिए · उस ऐप को खोलें जिसे आप वास्तव में उपयोग करते हैं)</value></data>
-  <data name="Smp_OpenSite" xml:space="preserve"><value>पसंदीदा साइट खोलें (उदाहरण · केवल कार्यदिवस; अपना मेल या टू-डू)</value></data>
-  <data name="Smp_OpenChat" xml:space="preserve"><value>चैट ऐप खोलें (उदाहरण · मिनिमाइज़ होकर बैकग्राउंड में)</value></data>
-  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Win+D से डेस्कटॉप दिखाएँ (उदाहरण · कुंजी संयोजन भेजें)</value></data>
-  <data name="Smp_RemWater" xml:space="preserve"><value>उठकर थोड़ा पानी पिएँ (उदाहरण)</value></data>
-  <data name="Smp_RemWrapUp" xml:space="preserve"><value>काम समेटने का समय — आज की सूची में कुछ बाकी है? (उदाहरण)</value></data>
-  <data name="Smp_RemBills" xml:space="preserve"><value>इस महीने के बिल और सब्सक्रिप्शन देखें (उदाहरण · हर 1 तारीख)</value></data>
-  <data name="Smp_RemSleep" xml:space="preserve"><value>सोने का समय हो गया (उदाहरण)</value></data>
-  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>इस क्रिया के लिए व्यवस्थापक अधिकार चाहिए। Clockwork को व्यवस्थापक के रूप में फिर से खोलें?</value></data>
-  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>क्रिया समूह «{0}» को {1} रिमाइंडर और {2} चरण संदर्भित कर रहे हैं। हटाने पर ये संदर्भ भी साफ़ हो जाएँगे (रिमाइंडर केवल पॉपअप रहेंगे; संदर्भित चरण हटा दिए जाएँगे)। फिर भी हटाएँ?</value></data>
-  <data name="Btn_Browse" xml:space="preserve"><value>ब्राउज़ करें…</value></data>
-  <data name="Btn_Pick" xml:space="preserve"><value>चुनें…</value></data>
-  <data name="Btn_Capture" xml:space="preserve"><value>कैप्चर</value></data>
-  <data name="Btn_PickDate" xml:space="preserve"><value>तारीख़ चुनें</value></data>
-  <data name="Filter_Browse" xml:space="preserve"><value>प्रोग्राम / स्क्रिप्ट / शॉर्टकट|*.exe;*.bat;*.cmd;*.ps1;*.lnk|सभी फ़ाइलें|*.*</value></data>
-  <data name="Ed_WindowStyle" xml:space="preserve"><value>विंडो शैली</value></data>
-  <data name="WinStyle_Default" xml:space="preserve"><value>डिफ़ॉल्ट (सामान्य विंडो)</value></data>
-  <data name="WinStyle_Minimized" xml:space="preserve"><value>न्यूनतम करके शुरू करें</value></data>
-  <data name="WinStyle_Maximized" xml:space="preserve"><value>अधिकतम करके शुरू करें</value></data>
-  <data name="WinStyle_Hidden" xml:space="preserve"><value>छिपाकर शुरू करें</value></data>
-  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>पहले से चल रहा हो तो विंडो सक्रिय करें (दोबारा न चलाएँ)</value></data>
-  <data name="Ed_ActivateProcess" xml:space="preserve"><value>जिस प्रक्रिया को सक्रिय करना है</value></data>
-  <data name="Ed_AltTargets" xml:space="preserve"><value>वैकल्पिक पथ</value></data>
-  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>प्रति पंक्ति एक पूर्ण पथ; लक्ष्य न होने पर पहला मौजूद पथ उपयोग होगा (भिन्न इंस्टॉल पथ वाली मशीनों के लिए)</value></data>
-  <data name="Picker_Process" xml:space="preserve"><value>प्रक्रिया चुनें</value></data>
-  <data name="Picker_Search" xml:space="preserve"><value>प्रक्रिया नाम / विंडो शीर्षक खोजें</value></data>
-  <data name="Date_Pick" xml:space="preserve"><value>तारीख़ चुनें</value></data>
-  <data name="Capture_Key" xml:space="preserve"><value>कुंजी कैप्चर करें</value></data>
-  <data name="Ed_GroupHotkey" xml:space="preserve"><value>वैश्विक हॉटकी</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>क्लिक करें और कुंजी संयोजन दबाएँ, यह समूह कभी भी चलेगा; चलते समय दोबारा दबाने पर रुक जाएगा; Esc रद्द, Delete साफ़</value></data>
-  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>क्रिया समूह «{0}» की हॉटकी {1} पंजीकृत नहीं हो सकी: संभवतः पहले से उपयोग में है</value></data>
-  <data name="Val_HotkeyDup" xml:space="preserve"><value>हॉटकी {0} पहले से «{1}» द्वारा उपयोग में है; कोई और संयोजन चुनें</value></data>
-  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} सिस्टम-आरक्षित संयोजन है (पंजीकरण से सिस्टम कुंजी छिन जाएगी), इसे हॉटकी नहीं बनाया जा सकता</value></data>
-  <data name="Ed_GroupRepeat" xml:space="preserve"><value>पूरे समूह को दोहराएँ</value></data>
-  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>ट्रे मेन्यू में दिखाएँ</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>राउंड के बीच विलंब (ms)</value></data>
-  <data name="Val_GroupCycle" xml:space="preserve"><value>समूह संदर्भ चक्रीय है ({0}), सहेजने से पहले संदर्भ श्रृंखला तोड़ें</value></data>
-  <data name="Btn_Copy" xml:space="preserve"><value>प्रतिलिपि</value></data>
-  <data name="Side_SelectedRow" xml:space="preserve"><value>चयनित</value></data>
-  <data name="Btn_ExportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन निर्यात करें</value></data>
-  <data name="Btn_ImportConfig" xml:space="preserve"><value>कॉन्फ़िगरेशन आयात करें</value></data>
-  <data name="Config_Exported" xml:space="preserve"><value>कॉन्फ़िगरेशन यहाँ निर्यात किया गया: {0}</value></data>
-  <data name="Config_Imported" xml:space="preserve"><value>कॉन्फ़िगरेशन आयात किया गया। लागू करने के लिए पुनरारंभ हो रहा है।</value></data>
-  <data name="Config_ImportFail" xml:space="preserve"><value>आयात विफल: {0}</value></data>
-  <data name="Config_ImportConfirm" xml:space="preserve"><value>आयात करने से वर्तमान सभी कॉन्फ़िगरेशन (स्टार्टअप सूची / रिमाइंडर / क्रिया समूह / सेटिंग्स) अधिलेखित हो जाएँगे। जारी रखें?</value></data>
-  <data name="Config_Filter" xml:space="preserve"><value>Clockwork कॉन्फ़िगरेशन|*.json|सभी फ़ाइलें|*.*</value></data>
-  <data name="Config_ExportFail" xml:space="preserve"><value>निर्यात विफल: {0}</value></data>
-  <data name="Dup_Suffix" xml:space="preserve"><value> (प्रतिलिपि)</value></data>
-  <data name="Relaunch_Fail" xml:space="preserve"><value>स्वचालित रूप से पुनरारंभ नहीं हो सका। कृपया Clockwork को मैन्युअल रूप से फिर से खोलें। ({0})</value></data>
-  <data name="Vol_micMute" xml:space="preserve"><value>माइक्रोफ़ोन म्यूट करें</value></data>
-  <data name="Vol_micUnmute" xml:space="preserve"><value>माइक्रोफ़ोन अनम्यूट करें</value></data>
-  <data name="Sys_setClipboard" xml:space="preserve"><value>क्लिपबोर्ड टेक्स्ट सेट करें</value></data>
-  <data name="Menu_SecCommon" xml:space="preserve"><value>सामान्य</value></data>
-  <data name="Cmd_copy" xml:space="preserve"><value>कॉपी करें</value></data>
-  <data name="Cmd_paste" xml:space="preserve"><value>पेस्ट करें</value></data>
-  <data name="Cmd_back" xml:space="preserve"><value>पीछे</value></data>
-  <data name="Cmd_forward" xml:space="preserve"><value>आगे</value></data>
-  <data name="Cmd_toBottom" xml:space="preserve"><value>सबसे नीचे जाएँ</value></data>
-  <data name="Win_current" xml:space="preserve"><value>वर्तमान विंडो</value></data>
-  <data name="Win_minimizeFg" xml:space="preserve"><value>वर्तमान विंडो छोटी करें</value></data>
-  <data name="Win_maximizeFg" xml:space="preserve"><value>वर्तमान विंडो बड़ी करें</value></data>
-  <data name="Win_closeFg" xml:space="preserve"><value>वर्तमान विंडो बंद करें</value></data>
-  <data name="Sys_searchSelection" xml:space="preserve"><value>चयनित पाठ खोजें</value></data>
-  <data name="Sys_playSound" xml:space="preserve"><value>ध्वनि बजाएँ (सिस्टम ध्वनि या .wav फ़ाइल)</value></data>
-  <data name="Ed_SearchUrl" xml:space="preserve"><value>खोज URL</value></data>
-  <data name="Ed_SearchEngine" xml:space="preserve"><value>सर्च इंजन</value></data>
-  <data name="Ed_SearchCustom" xml:space="preserve"><value>कस्टम…</value></data>
-  <data name="Err_NoSelection" xml:space="preserve"><value>कोई पाठ चयनित नहीं है। जो खोजना है उसे चुनें, फिर यह चरण चलाएँ।</value></data>
-  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>अभी कोई विंडो नहीं है जिस पर यह लागू हो (सामने Clockwork स्वयं है या डेस्कटॉप)</value></data>
-  <data name="Ed_ProcessHint" xml:space="preserve"><value>वर्तमान विंडो के लिए * लिखें — वही जिसमें आप जेस्चर बनाने या पैनल खोलने से पहले थे। खाली छोड़ने पर यह चरण कुछ नहीं करता।</value></data>
-  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} का अर्थ है खोजे जाने वाले शब्द; वे स्वतः एस्केप हो जाते हैं।</value></data>
-  <data name="Ed_SoundFile" xml:space="preserve"><value>ध्वनि फ़ाइल</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>सिस्टम सूचना ध्वनि के लिए इसे खाली छोड़ दें। या .wav फ़ाइल का पूरा पथ दें।</value></data>
-  <data name="Sys_brightness" xml:space="preserve"><value>स्क्रीन की चमक</value></data>
-  <data name="Sys_notificationsOff" xml:space="preserve"><value>सूचनाएँ बंद करें</value></data>
-  <data name="Sys_notificationsOn" xml:space="preserve"><value>सूचनाएँ चालू करें</value></data>
-  <data name="Sys_displayInternal" xml:space="preserve"><value>डिस्प्ले: केवल पीसी स्क्रीन</value></data>
-  <data name="Sys_displayClone" xml:space="preserve"><value>डिस्प्ले: डुप्लिकेट</value></data>
-  <data name="Sys_displayExtend" xml:space="preserve"><value>डिस्प्ले: विस्तारित</value></data>
-  <data name="Sys_displayExternal" xml:space="preserve"><value>डिस्प्ले: केवल दूसरी स्क्रीन</value></data>
-  <data name="Err_SysCommand" xml:space="preserve"><value>{0} विफल: {1}</value></data>
-  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>यह मशीन उस पावर स्थिति का समर्थन नहीं करती या वह अक्षम है (powercfg /a चलाकर जाँचें)</value></data>
-  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
-  <data name="Ed_ClipText" xml:space="preserve"><value>क्लिपबोर्ड टेक्स्ट</value></data>
-  <data name="Ed_Brightness" xml:space="preserve"><value>चमक (0-100)</value></data>
-  <data name="Ed_BrightnessHint" xml:space="preserve"><value>केवल सिस्टम-नियंत्रित डिस्प्ले (लैपटॉप पैनल) पर काम करता है; बाहरी मॉनिटर समर्थित नहीं हैं।</value></data>
-  <data name="Ed_OnlyAfter" xml:space="preserve"><value>केवल बाद</value></data>
-  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
-  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>प्रारूप H:mm, जैसे 18:30; केवल घंटा (जैसे 18) भी चलेगा; डिफ़ॉल्ट 18:00।</value></data>
-  <data name="Ed_Cond_Any" xml:space="preserve"><value>कोई सीमा नहीं</value></data>
-  <data name="Ed_IfProcess" xml:space="preserve"><value>प्रक्रिया शर्त</value></data>
-  <data name="Ed_IfProc_Running" xml:space="preserve"><value>प्रक्रिया चल रही</value></data>
-  <data name="Ed_IfProc_Not" xml:space="preserve"><value>प्रक्रिया नहीं चल रही</value></data>
-  <data name="Ed_IfPower" xml:space="preserve"><value>पावर शर्त</value></data>
-  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>केवल बिजली से जुड़े होने पर</value></data>
-  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>केवल बैटरी पर</value></data>
-  <data name="Ed_IfPath" xml:space="preserve"><value>पथ मौजूद है</value></data>
-  <data name="Ed_IfPathHint" xml:space="preserve"><value>भरने पर यह चरण तभी चलेगा जब वह फ़ाइल / फ़ोल्डर मौजूद हो; खाली = कोई सीमा नहीं।</value></data>
-  <data name="Sum_After" xml:space="preserve"><value> (केवल {0} के बाद)</value></data>
-  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} चल रहा है)</value></data>
-  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} नहीं चल रहा)</value></data>
-  <data name="Sum_IfAc" xml:space="preserve"><value> (बिजली पर)</value></data>
-  <data name="Sum_IfBattery" xml:space="preserve"><value> (बैटरी पर)</value></data>
-  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} मौजूद)</value></data>
-  <data name="Ed_Trig_Idle" xml:space="preserve"><value>निष्क्रिय होने पर</value></data>
-  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>अनलॉक करने पर</value></data>
-  <data name="Ed_Trig_Lock" xml:space="preserve"><value>लॉक करने पर</value></data>
-  <data name="Ed_Trig_Resume" xml:space="preserve"><value>स्लीप से जागने पर</value></data>
-  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>बिजली से जोड़ने पर</value></data>
-  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>बिजली हटाने पर</value></data>
-  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>बैटरी कम होने पर</value></data>
-  <data name="Ed_IdleMinutes" xml:space="preserve"><value>निष्क्रिय मिनट</value></data>
-  <data name="Ed_IdleHint" xml:space="preserve"><value>इतने मिनट तक कीबोर्ड या माउस न चलने पर एक बार चलता है; लौटने पर गिनती फिर से शुरू होती है।</value></data>
-  <data name="Ed_BatteryPercent" xml:space="preserve"><value>बैटरी इससे कम (%)</value></data>
-  <data name="Ed_BatteryHint" xml:space="preserve"><value>बैटरी पर चलते समय चार्ज इससे नीचे गिरने पर एक बार चलता है; चार्ज करने या प्लग लगाने पर फिर से सक्रिय हो जाता है।</value></data>
-  <data name="Ed_EventHint" xml:space="preserve"><value>घटना होते ही चलता है। नीचे के सप्ताह-दिन अब भी यह सीमित करते हैं कि किन दिनों गिना जाए; छूट और छूटे हुए की भरपाई घटनाओं पर लागू नहीं, इसलिए छिपी हैं।</value></data>
-  <data name="Period_OnEvent" xml:space="preserve"><value>हर बार</value></data>
-  <data name="Time_Idle" xml:space="preserve"><value>निष्क्रिय {0} मिनट</value></data>
-  <data name="Time_LowBattery" xml:space="preserve"><value>बैटरी &lt; {0}%</value></data>
-  <data name="Menu_FromStartMenu" xml:space="preserve"><value>स्टार्ट मेन्यू से चुनें…</value></data>
-  <data name="Picker_StartMenu" xml:space="preserve"><value>स्टार्ट मेन्यू से ऐप चुनें</value></data>
-  <data name="Picker_SearchApp" xml:space="preserve"><value>ऐप का नाम खोजें</value></data>
-  <data name="Picker_MultiHint" xml:space="preserve"><value>Ctrl / Shift से कई चुनें; हर एक सूची में चरण के रूप में जुड़ता है, डिफ़ॉल्ट रूप से बिना टिक के।</value></data>
-  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>स्टार्ट मेन्यू में कोई प्रोग्राम शॉर्टकट नहीं मिला।</value></data>
-  <data name="Tpl_Restore" xml:space="preserve"><value>सामान्य पर लौटें</value></data>
-  <data name="Settings_Boot" xml:space="preserve"><value>स्टार्टअप</value></data>
-  <data name="Settings_Backup" xml:space="preserve"><value>बैकअप</value></data>
-  <data name="Settings_BackupTip" xml:space="preserve"><value>एक ही .json फ़ाइल में निर्यात करता है। आयात करने पर मौजूदा सभी सेटिंग्स बदल जाती हैं।</value></data>
-  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 सेकंड, और केवल तब जब «लॉगिन पर शुरू करें» चालू हो: लॉगऑन के बाद इतनी देर रुककर सूची चलाता है, ताकि शुरुआती भीड़ टल जाए। मैन्युअल रन पर असर नहीं पड़ता।</value></data>
-  <data name="Settings_WaitReady" xml:space="preserve"><value>सिस्टम तैयार होने तक प्रतीक्षा करें (डेस्कटॉप / नेटवर्क)</value></data>
-  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>दोनों तैयार होते ही आगे बढ़ता है, अधिकतम 90 सेकंड प्रतीक्षा करता है; उसके ऊपर ऊपर वाली निश्चित देरी जुड़ती है। जब सूची आपके प्रोग्राम के लिए बहुत जल्दी चले, तब इसे चालू करें।</value></data>
-  <data name="Menu_SecOpen" xml:space="preserve"><value>खोलें</value></data>
-  <data name="Menu_SecControl" xml:space="preserve"><value>प्रोग्राम नियंत्रित करें</value></data>
-  <data name="Menu_SecSystem" xml:space="preserve"><value>सिस्टम और ध्वनि</value></data>
-  <data name="Menu_SecFlow" xml:space="preserve"><value>प्रवाह</value></data>
-  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>लॉगिन पर क्रम और देरी के साथ ऐप खोलना स्टार्टअप सूची में आसान है; «बूट के N मिनट के भीतर ही» या «सिर्फ़ सुबह» जैसी शर्तें ठीक यहीं के लिए हैं।</value></data>
-  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>अभी कोई क्रिया समूह नहीं है — पहले «क्रिया समूह» टैब में एक बनाएँ, फिर यहाँ संदर्भ दें।</value></data>
-  <data name="Ed_CondHeader" xml:space="preserve"><value>शर्तें और दोहराव: {0}</value></data>
-  <data name="Ed_CondAlways" xml:space="preserve"><value>हमेशा चलता है</value></data>
-  <data name="Ed_AdvHeader" xml:space="preserve"><value>उन्नत: {0}</value></data>
-  <data name="Adv_Once" xml:space="preserve"><value>एक बार चलता है</value></data>
-  <data name="Adv_Nag" xml:space="preserve"><value>पुष्टि होने तक हर {0} मिनट में फिर याद दिलाता है</value></data>
-  <data name="Adv_NagUntil" xml:space="preserve"><value>पुष्टि होने तक हर {0} मिनट में याद दिलाता है, अधिकतम {1} तक</value></data>
-  <data name="Adv_Loop" xml:space="preserve"><value>दिन खत्म होने तक हर {0} मिनट में चलता है (पुष्टि से नहीं रुकता)</value></data>
-  <data name="Adv_LoopUntil" xml:space="preserve"><value>{1} तक हर {0} मिनट में चलता है (पुष्टि से नहीं रुकता)</value></data>
-  <data name="Ed_Trig_Busy" xml:space="preserve"><value>लगातार उपयोग पर</value></data>
-  <data name="Ed_Trig_Display" xml:space="preserve"><value>डिस्प्ले बदलने पर</value></data>
-  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>नेटवर्क जुड़ने पर</value></data>
-  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>नेटवर्क टूटने पर</value></data>
-  <data name="Ed_Trig_Usb" xml:space="preserve"><value>USB ड्राइव लगाने पर</value></data>
-  <data name="Time_Busy" xml:space="preserve"><value>{0} मिनट उपयोग</value></data>
-  <data name="Ed_BusyMinutes" xml:space="preserve"><value>उपयोग मिनट</value></data>
-  <data name="Ed_BusyHint" xml:space="preserve"><value>लगातार इतने मिनट काम करने पर एक बार सूचित करता है; पूरा एक मिनट दूर रहने पर गिनती फिर से शुरू हो जाती है।</value></data>
-  <data name="Settings_PanelHotkey" xml:space="preserve"><value>क्विक पैनल कुंजी</value></data>
-  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>माउस के पास टाइल पैनल खोलता है, हर टाइल पर एक क्रिया। Esc रद्द करता है, Del मिटाता है; मिटाने पर भी मध्य बटन दबाकर रखने या ट्रे मेनू से खुलता है।</value></data>
-  <data name="Tray_Panel" xml:space="preserve"><value>क्विक पैनल खोलें</value></data>
-  <data name="Panel_Hint" xml:space="preserve"><value>बंद करने के लिए Esc</value></data>
-  <data name="Panel_Empty" xml:space="preserve"><value>पैनल अभी खाली है। इसमें डाली गई क्रियाएँ यहाँ दिखेंगी।</value></data>
-  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>स्टार्टअप सूची छोड़ दी गई। {0} हटाएँ तो यह फिर से अपने आप चलेगी।</value></data>
-  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>शुरू करते समय Shift दबा था, इसलिए स्टार्टअप सूची छोड़ दी गई। सिर्फ़ इस बार — अगली बार सामान्य रूप से चलेगी।</value></data>
-  <data name="Warn_GroupNotFound" xml:space="preserve"><value>«{0}» नाम का कोई क्रिया समूह नहीं मिला — कुछ नहीं चला।</value></data>
-  <data name="Warn_GroupDisabled" xml:space="preserve"><value>क्रिया समूह «{0}» बंद है — कुछ नहीं चला।</value></data>
-  <data name="Unit_Ms" xml:space="preserve"><value>मिलीसेकंड</value></data>
-  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>पैनल खोलने के लिए माउस का मध्य बटन दबाकर रखें</value></data>
-  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>सामान्य मध्य क्लिक पहले की तरह चलता रहता है — छोटा दबाव जैसा है वैसा ही आगे भेज दिया जाता है। डिफ़ॉल्ट रूप से बंद, क्योंकि इसके लिए ग्लोबल माउस हुक चाहिए।</value></data>
-  <data name="Settings_LongPressMs" xml:space="preserve"><value>दबाए रखने का समय (मिलीसेकंड)</value></data>
-  <data name="Warn_MouseHookFail" xml:space="preserve"><value>माउस हुक इंस्टॉल नहीं हो सका, इसलिए मध्य बटन को दबाकर रखना बंद है। सुरक्षा सॉफ़्टवेयर या ग्रुप पॉलिसी ने रोका हो सकता है; पैनल हॉटकी या ट्रे मेनू से अब भी खुलता है।</value></data>
-  <data name="Settings_Panel" xml:space="preserve"><value>क्विक पैनल</value></data>
-  <data name="Settings_UsePanel" xml:space="preserve"><value>क्विक पैनल इस्तेमाल करें</value></data>
-  <data name="Settings_UsePanelTip" xml:space="preserve"><value>बंद करने पर हॉटकी दूसरे प्रोग्रामों को लौट जाती है, मिडल-बटन हुक नहीं लगता, और ट्रे वाला आइटम भी हट जाता है। आपके पैनल पेज बने रहते हैं — «पैनल प्रबंधित करें…» में उन्हें अब भी व्यवस्थित कर सकते हैं।</value></data>
-  <data name="Settings_UseGestures" xml:space="preserve"><value>माउस जेस्चर इस्तेमाल करें</value></data>
-  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>बंद करने पर दायाँ बटन बिलकुल नहीं देखा जाता और वह सामान्य रूप से काम करता है। जेस्चर खुद «क्रिया समूह» टैब के साइडबार में जेस्चर प्रबंधक से बनाए जाते हैं।</value></data>
-  <data name="Settings_PanelLayout" xml:space="preserve"><value>लेआउट</value></data>
-  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>कॉलम × ऊपरी पंक्तियाँ + निचली पंक्तियाँ तय करती हैं कि एक पेज में कितना आएगा और पैनल कितना चौड़ा होगा। बाकी अगले पेज पर चला जाता है; निचली को 0 करने पर एक ही पट्टी रहती है।</value></data>
-  <data name="Settings_PanelColumns" xml:space="preserve"><value>प्रति पंक्ति टाइल</value></data>
-  <data name="Settings_PanelTileSize" xml:space="preserve"><value>टाइल का आकार</value></data>
-  <data name="Size_compact" xml:space="preserve"><value>सघन</value></data>
-  <data name="Size_normal" xml:space="preserve"><value>सामान्य</value></data>
-  <data name="Size_roomy" xml:space="preserve"><value>विस्तृत</value></data>
-  <data name="Settings_PanelShowOps" xml:space="preserve"><value>अंतर्निहित नियंत्रण दिखाएँ</value></data>
-  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>केवल आइकन</value></data>
-  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>नाम टूलटिप में बने रहते हैं और एक स्क्रीन में कहीं ज़्यादा क्रियाएँ समा जाती हैं।</value></data>
-  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>केवल इस ऐप में</value></data>
-  <data name="Settings_PanelTopRows" xml:space="preserve"><value>ऊपरी पंक्तियाँ</value></data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>निचली पंक्तियाँ</value></data>
-  <data name="Ed_Icon" xml:space="preserve"><value>पैनल आइकन</value></data>
-  <data name="Ed_IconHint" xml:space="preserve"><value>खाली छोड़ने पर यह अपने आप भर जाता है: «ऐप चलाएँ» लक्ष्य का अपना आइकन लेता है, बाकी सबको उनके प्रकार का रेखा-आइकन मिलता है।</value></data>
-  <data name="Btn_Close" xml:space="preserve"><value>बंद करें</value></data>
-  <data name="Panel_Manager" xml:space="preserve"><value>पैनल प्रबंधित करें</value></data>
-  <data name="Panel_Global" xml:space="preserve"><value>कोई भी ऐप</value></data>
-  <data name="Panel_AddPage" xml:space="preserve"><value>पेज जोड़ें</value></data>
-  <data name="Panel_NewPage" xml:space="preserve"><value>नया पेज</value></data>
-  <data name="Panel_AddHere" xml:space="preserve"><value>यहाँ एक क्रिया रखें</value></data>
-  <data name="Panel_NoPages" xml:space="preserve"><value>अभी तक कोई पेज नहीं है। पेज टैब रेल के अंत में + चिह्न एक नया पेज बनाता है; फिर उस पर क्रियाएँ जोड़ें।</value></data>
-  <data name="Panel_Uncategorized" xml:space="preserve"><value>अवर्गीकृत</value></data>
-  <data name="Panel_NewCategory" xml:space="preserve"><value>नई श्रेणी</value></data>
-  <data name="Panel_Category" xml:space="preserve"><value>श्रेणी</value></data>
-  <data name="Panel_Pages" xml:space="preserve"><value>पेज</value></data>
-  <data name="Panel_CategoryHint" xml:space="preserve"><value>यह पेज किस श्रेणी का है। ऊपर की पंक्ति में हर श्रेणी का एक टैब है; कोई चुनने पर उसी श्रेणी के पेज दिखते हैं।</value></data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>ऊपर श्रेणी पर और बाईं ओर पेज पर क्लिक करें। डबल-क्लिक से नाम बदलें, टैब खींचकर क्रम बदलें, किसी श्रेणी पर छोड़ने से वह पेज उसी श्रेणी में चला जाता है; टाइल को टैब पर छोड़ने से वह उस पेज में। टैब पर राइट-क्लिक से नाम बदलें या हटाएँ।</value></data>
-  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>बाएँ टैब दिखाएँ</value></data>
-  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>श्रेणी पंक्ति दिखाएँ</value></data>
-  <data name="Panel_BarsHint" xml:space="preserve"><value>ऊपर से श्रेणी चुनिए, बाईं ओर उसी श्रेणी के पेज दिखते हैं। एक ही श्रेणी हो तो ऊपर की पंक्ति नहीं बनती, और मौजूदा श्रेणी में एक ही पेज हो तो बाईं भी नहीं — ये निशान कई होने पर भी उन्हें छिपाने के लिए हैं। प्रबंधक में श्रेणी पंक्ति हमेशा रहती है; उस पर बना + ही नई श्रेणी बनाने का रास्ता है।</value></data>
-  <data name="Panel_SceneHint" xml:space="preserve"><value>खाली छोड़ें तो पेज हमेशा रहेगा। प्रोसेस नाम भरने पर यह तभी दिखेगा जब पैनल खोलते समय वह ऐप सामने था।</value></data>
-  <data name="Icon_Pick" xml:space="preserve"><value>आइकन चुनें</value></data>
-  <data name="Icon_PickHint" xml:space="preserve"><value>इनके अलावा आप अपनी कोई तस्वीर, या कोई भी exe इस्तेमाल कर सकते हैं — उसका आइकन उधार ले लिया जाएगा।</value></data>
-  <data name="Icon_UseImage" xml:space="preserve"><value>तस्वीर इस्तेमाल करें…</value></data>
-  <data name="Icon_None" xml:space="preserve"><value>अपने आप तय होने दें</value></data>
-  <data name="Panel_Search" xml:space="preserve"><value>कोई क्रिया ढूँढें</value></data>
-  <data name="Panel_SearchNone" xml:space="preserve"><value>इससे कोई क्रिया नहीं मिली। दूसरा शब्द आज़माइए, या Esc दबाकर पैनल पर लौटिए।</value></data>
-  <data name="Panel_HintBack" xml:space="preserve"><value>Esc से वापस</value></data>
-  <data name="Panel_SearchMore" xml:space="preserve"><value>{1} में से पहले {0} ही दिखाए जा रहे हैं। थोड़ा और टाइप करें तो दायरा घटेगा।</value></data>
-  <data name="Settings_Theme" xml:space="preserve"><value>थीम</value></data>
-  <data name="Theme_dark" xml:space="preserve"><value>गहरा</value></data>
-  <data name="Theme_light" xml:space="preserve"><value>हल्का</value></data>
-  <data name="Theme_system" xml:space="preserve"><value>Windows जैसा</value></data>
-  <data name="Settings_ThemeTip" xml:space="preserve"><value>नई थीम लागू करने के लिए Clockwork तुरंत दोबारा चालू होता है। «Windows जैसा» विंडोज़ के ऐप मोड को देखता है।</value></data>
-
+लॉग: {1}</value>
+  </data>
+  <data name="Run_Title" xml:space="preserve">
+    <value>Clockwork · चलाएँ</value>
+  </data>
+  <data name="Tray_ReminderTitle" xml:space="preserve">
+    <value>शेड्यूल किया गया कार्य</value>
+  </data>
+  <data name="Tray_LaunchStopped" xml:space="preserve">
+    <value>स्टार्टअप सूची रोकी गई: {0} चरण पूरे, बाकी छोड़े गए</value>
+  </data>
+  <data name="Tray_LaunchWarn" xml:space="preserve">
+    <value>स्टार्टअप सूची पूर्ण: {0} चरण, {1} में चेतावनियाँ (ट्रे → पिछला लॉग देखें)</value>
+  </data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve">
+    <value>रोक शॉर्टकट «{0}» पहचाना नहीं गया; मुख्य विंडो में बदलें। ट्रे का «चल रही क्रियाएँ रोकें» अब भी उपलब्ध है।</value>
+  </data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve">
+    <value>रोक शॉर्टकट «{0}» रजिस्टर करना विफल (शायद पहले से उपयोग में); ट्रे का «चल रही क्रियाएँ रोकें» अब भी उपलब्ध है।</value>
+  </data>
+  <data name="Hotkey_Stopped" xml:space="preserve">
+    <value>चल रही क्रियाओं को रोकने का अनुरोध किया गया।</value>
+  </data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve">
+    <value>«{0}» को टॉगल करने के लिए व्यवस्थापक अधिकार चाहिए; Clockwork को व्यवस्थापक के रूप में फिर खोलें।</value>
+  </data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve">
+    <value>«{0}» टॉगल विफल: {1}</value>
+  </data>
+  <data name="Autostart_Fail" xml:space="preserve">
+    <value>ऑपरेशन विफल: {0}</value>
+  </data>
+  <data name="Tab_Settings" xml:space="preserve">
+    <value>सेटिंग्स</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>सामान्य</value>
+  </data>
+  <data name="About_CheckUpdate" xml:space="preserve">
+    <value>अपडेट जांचें</value>
+  </data>
+  <data name="About_Series" xml:space="preserve">
+    <value>365 ओपन सोर्स प्लान · #020</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>जाँच रहे हैं…</value>
+  </data>
+  <data name="Update_Latest" xml:space="preserve">
+    <value>आप नवीनतम संस्करण पर हैं ({0})</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>नया संस्करण {0} उपलब्ध है। डाउनलोड पर जाएँ?</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>अपडेट जाँच विफल: {0}</value>
+  </data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve">
+    <value>क्लिक करें, फिर शॉर्टकट दबाएँ। Esc रद्द करता है, Del मिटाता है। ट्रे में «चल रही क्रियाएँ रोकें» हमेशा काम करता है।</value>
+  </data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve">
+    <value>शॉर्टकट दबाएँ…</value>
+  </data>
+  <data name="Sys_Takeover" xml:space="preserve">
+    <value>स्टार्टअप सूची में लें</value>
+  </data>
+  <data name="Sys_Delete" xml:space="preserve">
+    <value>सिस्टम से हटाएँ</value>
+  </data>
+  <data name="Confirm_DeleteItem" xml:space="preserve">
+    <value>क्या «{0}» हटाना है?</value>
+  </data>
+  <data name="Confirm_Keep" xml:space="preserve">
+    <value>रखें</value>
+  </data>
+  <data name="Confirm_DeletePage" xml:space="preserve">
+    <value>क्या पेज «{0}» को हटाया जाए? उस पर मौजूद {1} टाइल(स) भी साथ में हट जाएँगी। किसी क्रिया की ओर इंगित करने वाली टाइल केवल उस संदर्भ को हटाती है; क्रिया स्वयं बनी रहती है।</value>
+  </data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve">
+    <value>क्या श्रेणी «{0}» को हटाया जाए? इसमें मौजूद {1} पेज हटाए नहीं जाते — वे «{2}» में वापस चले जाते हैं।</value>
+  </data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve">
+    <value>क्या स्टार्टअप आइटम «{0}» को सिस्टम से स्थायी रूप से हटाना है? यह क्रिया पूर्ववत नहीं की जा सकती (सिर्फ़ स्टार्टअप पर चलने से रोकने के लिए अनचेक करें)।</value>
+  </data>
+  <data name="Confirm_KillPort" xml:space="preserve">
+    <value>पोर्ट {0} मुक्त करें? इससे {1} समाप्त हो जाएगी, चाइल्ड प्रोसेस सहित। बिना सहेजा गया काम खो जाएगा।</value>
+  </data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve">
+    <value>यह प्रोसेस पोर्ट {0} भी रोके हुए है, जो साथ ही मुक्त हो जाएँगे।</value>
+  </data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve">
+    <value>स्टार्टअप आइटम «{0}» को स्टार्टअप सूची में लिया जा चुका है और एक चरण अब भी उसकी शॉर्टकट फ़ाइल की ओर इशारा करता है। सिस्टम से हटाने पर शॉर्टकट भी हट जाएगा, जिससे वह चरण उसे चला नहीं पाएगा। फिर भी हटाएँ?</value>
+  </data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve">
+    <value>«{0}» हटाना विफल: {1}</value>
+  </data>
+  <data name="Config_ExportSamePath" xml:space="preserve">
+    <value>निर्यात लक्ष्य कॉन्फ़िग फ़ाइल स्वयं नहीं हो सकता — कोई अन्य नाम या स्थान चुनें।</value>
+  </data>
+  <data name="Val_SendKeys" xml:space="preserve">
+    <value>भेजी जाने वाली कुंजियों का पाठ मान्य कुंजी क्रम नहीं है: बिना बंद घुंघराले कोष्ठक और अज्ञात कुंजी नाम जाँचें (जैसे {ENTER}; शाब्दिक { को {{} और शाब्दिक } को {}} लिखें)।</value>
+  </data>
+  <data name="Val_SearchUrl" xml:space="preserve">
+    <value>खोज URL में {0} होना ज़रूरी है — वहीं खोजा जाने वाला शब्द आता है। इसके बिना यह चरण हर बार वही पेज खोलेगा।</value>
+  </data>
+  <data name="Ed_CatchUp" xml:space="preserve">
+    <value>छूटने पर बाद में दिखाएँ (स्लीप/बंद के बाद भी)</value>
+  </data>
+  <data name="Unit_Minutes" xml:space="preserve">
+    <value>{0} मिनट</value>
+  </data>
+  <data name="Warn_KeyNoMain" xml:space="preserve">
+    <value>हॉटकी «{0}» में मुख्य कुंजी नहीं है; नहीं भेजा गया</value>
+  </data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve">
+    <value>अपरिचित कुंजी नाम «{0}» (कई अंकों की संख्याएँ कुंजी नहीं हैं); हॉटकी «{1}» नहीं भेजी गई</value>
+  </data>
+  <data name="Warn_KeyUnknown" xml:space="preserve">
+    <value>अपरिचित कुंजी «{0}»; हॉटकी «{1}» नहीं भेजी गई</value>
+  </data>
+  <data name="Warn_KeyRejected" xml:space="preserve">
+    <value>हॉटकी «{0}» सिस्टम द्वारा अस्वीकृत (तब होता है जब सामने उच्च-अधिकार विंडो/सुरक्षित डेस्कटॉप हो); कोई असर नहीं</value>
+  </data>
+  <data name="Warn_KeyPartial" xml:space="preserve">
+    <value>हॉटकी «{0}» केवल आंशिक रूप से भेजी गई ({1}/{2}); कुंजी-रिलीज़ पुनः भेजी, कोई असर नहीं</value>
+  </data>
+  <data name="Warn_TextSendFail" xml:space="preserve">
+    <value>टेक्स्ट भेजें: «{0}» विंडो को सामने नहीं ला सके; नहीं भेजा गया</value>
+  </data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve">
+    <value>कॉन्फ़िगरेशन सहेजना विफल: {0} (बदलाव केवल मेमोरी में हैं और पुनरारंभ पर खो जाएँगे)</value>
+  </data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve">
+    <value>रिमाइंडर «{0}» द्वारा संदर्भित क्रिया समूह अब मौजूद नहीं है; इस बार कुछ नहीं चला</value>
+  </data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve">
+    <value>रिमाइंडर «{0}» द्वारा संदर्भित क्रिया समूह अक्षम है; इस बार कुछ नहीं चला</value>
+  </data>
+  <data name="Skip_GroupNotFound" xml:space="preserve">
+    <value>संदर्भित क्रिया समूह नहीं मिला</value>
+  </data>
+  <data name="Skip_GroupDisabled" xml:space="preserve">
+    <value>क्रिया समूह «{0}» अक्षम है; छोड़ दिया गया</value>
+  </data>
+  <data name="Skip_GroupReentrant" xml:space="preserve">
+    <value>क्रिया समूह में पुनः प्रवेश (चक्रीय संदर्भ या पहले से चल रहा है); छोड़ दिया गया</value>
+  </data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve">
+    <value>{0}, {1}</value>
+  </data>
+  <data name="Toast_GroupCancelled" xml:space="preserve">
+    <value>क्रिया समूह «{0}» को रद्द करने का अनुरोध किया गया।</value>
+  </data>
+  <data name="Toast_GroupStarted" xml:space="preserve">
+    <value>क्रिया समूह «{0}» शुरू किया गया।</value>
+  </data>
+  <data name="Toast_GroupBusy" xml:space="preserve">
+    <value>क्रिया समूह «{0}» पहले से चल रहा है (कहीं और से शुरू); यह कुंजी इसे रोक नहीं सकती — आपातकालीन रोक हॉटकी का उपयोग करें।</value>
+  </data>
+  <data name="Warn_RunBudget" xml:space="preserve">
+    <value>रन 5000-चरण की सीमा पर रुक गया; शेष चरण छोड़ दिए गए (जांचें कि कहीं दोहराव की संख्या बहुत बड़ी तो नहीं है)</value>
+  </data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve">
+    <value>«हाँ» पर चलने वाला क्रिया समूह अब मौजूद नहीं है; छोड़ दिया गया</value>
+  </data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve">
+    <value>«हाँ» पर चलने वाला क्रिया समूह अक्षम है; छोड़ दिया गया</value>
+  </data>
+  <data name="Warn_OnYesFailed" xml:space="preserve">
+    <value>«हाँ» के बाद की क्रिया नहीं चल सकी: {0}</value>
+  </data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve">
+    <value>यह आइटम स्टार्टअप सूची में नहीं लिया जा सकता — केवल रजिस्ट्री Run कुंजियाँ और स्टार्टअप फ़ोल्डर आइटम लिए जा सकते हैं।</value>
+  </data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve">
+    <value>स्टार्टअप सूची का निष्पादन बाधित: {0}</value>
+  </data>
+  <data name="Tray_ViewLog" xml:space="preserve">
+    <value>पिछला स्टार्टअप लॉग देखें</value>
+  </data>
+  <data name="Tray_History" xml:space="preserve">
+    <value>हाल के</value>
+  </data>
+  <data name="Tray_NoLog" xml:space="preserve">
+    <value>अभी कोई स्टार्टअप लॉग नहीं (पहले स्टार्टअप सूची एक बार चलाएँ)</value>
+  </data>
+  <data name="Log_Title" xml:space="preserve">
+    <value>पिछली स्टार्टअप-सूची चलने का लॉग</value>
+  </data>
+  <data name="Log_When" xml:space="preserve">
+    <value>समय: {0}</value>
+  </data>
+  <data name="Log_Summary" xml:space="preserve">
+    <value>कुल {0} चरण: {1} विफल या चेतावनी, {2} भेजे गए पर जाँच नहीं हो सकी, बाकी सफल</value>
+  </data>
+  <data name="Log_UnverNote" xml:space="preserve">
+    <value>(~ का अर्थ है कि कीस्ट्रोक या हॉटकी भेजी गई, पर लक्ष्य ने प्रतिक्रिया दी या नहीं, यह पक्का नहीं)</value>
+  </data>
+  <data name="Log_ReadyGate" xml:space="preserve">
+    <value>तैयारी जाँच: {0}s प्रतीक्षा (शेल={1} नेटवर्क={2})</value>
+  </data>
+  <data name="Log_ReadyTimeout" xml:space="preserve">
+    <value>, समय समाप्त होने पर भी तैयार नहीं, फिर भी आगे बढ़ा</value>
+  </data>
+  <data name="Log_BootDelay" xml:space="preserve">
+    <value>स्टार्टअप विलंब: {0}s</value>
+  </data>
+  <data name="Log_BudgetHit" xml:space="preserve">
+    <value>यह चलना {0} चरणों की सीमा तक पहुँच गया; बाकी चरण नहीं चले</value>
+  </data>
+  <data name="Log_Nth" xml:space="preserve">
+    <value> ({1} में से {0})</value>
+  </data>
+  <data name="Log_GroupBusy" xml:space="preserve">
+    <value>क्रिया समूह «{0}» पहले से चल रहा है (कहीं और से शुरू); इस बार छोड़ा गया</value>
+  </data>
+  <data name="Log_GroupMissing" xml:space="preserve">
+    <value>क्रिया समूह नहीं मिला</value>
+  </data>
+  <data name="Log_GroupDisabled" xml:space="preserve">
+    <value>क्रिया समूह «{0}» बंद है; छोड़ा गया</value>
+  </data>
+  <data name="Log_GroupCycle" xml:space="preserve">
+    <value>चक्रीय संदर्भ; छोड़ा गया</value>
+  </data>
+  <data name="Log_RunGroup" xml:space="preserve">
+    <value>क्रिया समूह चलाएँ: {0}</value>
+  </data>
+  <data name="Log_Stopped" xml:space="preserve">
+    <value>हाथ से रोका गया; आगे के चरण नहीं चले</value>
+  </data>
+  <data name="Log_HdrStopped" xml:space="preserve">
+    <value>यह चलना हाथ से रोका गया (आपात रोक कुंजी या ट्रे का «चल रही क्रियाएँ रोकें»)</value>
+  </data>
+  <data name="Err_JsonNull" xml:space="preserve">
+    <value>यह फ़ाइल पार्स करने पर खाली निकलती है — यह कोई कॉन्फ़िगरेशन नहीं है।</value>
+  </data>
+  <data name="Err_ClearClipboard" xml:space="preserve">
+    <value>क्लिपबोर्ड साफ़ करने में विफल: {0}</value>
+  </data>
+  <data name="Err_SoundNotWav" xml:space="preserve">
+    <value>«{0}» एक .wav फ़ाइल नहीं है। यह चरण केवल wav चलाता है।</value>
+  </data>
+  <data name="Err_SoundMissing" xml:space="preserve">
+    <value>ध्वनि फ़ाइल नहीं मिली: «{0}»</value>
+  </data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve">
+    <value>रीसायकल बिन खाली करने में विफल: {0}</value>
+  </data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve">
+    <value>अज्ञात सिस्टम कमांड: {0}</value>
+  </data>
+  <data name="Tray_RunGroup" xml:space="preserve">
+    <value>चलाएँ: {0}</value>
+  </data>
+  <data name="Tray_DndResume" xml:space="preserve">
+    <value>रिमाइंडर फिर शुरू करें ({0} मिनट शेष)</value>
+  </data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve">
+    <value>आज के अंत तक</value>
+  </data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve">
+    <value>आज के अंत तक रिमाइंडर रोक दिए</value>
+  </data>
+  <data name="Tray_DndResumeHours" xml:space="preserve">
+    <value>रिमाइंडर फिर चालू करें ({0} घंटे बाकी)</value>
+  </data>
+  <data name="Tray_DndMenu" xml:space="preserve">
+    <value>रिमाइंडर रोकें</value>
+  </data>
+  <data name="Tray_Hours" xml:space="preserve">
+    <value>{0} घंटे</value>
+  </data>
+  <data name="Toast_DndOn" xml:space="preserve">
+    <value>रिमाइंडर {0} घंटे के लिए रोके गए</value>
+  </data>
+  <data name="Toast_DndOff" xml:space="preserve">
+    <value>रिमाइंडर फिर शुरू किए गए</value>
+  </data>
+  <data name="Tpl_Focus" xml:space="preserve">
+    <value>एकाग्रता मोड</value>
+  </data>
+  <data name="Tpl_Meeting" xml:space="preserve">
+    <value>मीटिंग मोड</value>
+  </data>
+  <data name="Tpl_EndOfDay" xml:space="preserve">
+    <value>दिन के अंत में</value>
+  </data>
+  <data name="Tpl_Bedtime" xml:space="preserve">
+    <value>सोने से पहले</value>
+  </data>
+  <data name="Tpl_Away" xml:space="preserve">
+    <value>थोड़ी देर के लिए दूर</value>
+  </data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve">
+    <value>क्या आज के सभी कार्य दर्ज कर लिए?</value>
+  </data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve">
+    <value>सोने का समय!</value>
+  </data>
+  <data name="Tpl_Sedentary" xml:space="preserve">
+    <value>ब्रेक रिमाइंडर</value>
+  </data>
+  <data name="Tpl_Search" xml:space="preserve">
+    <value>त्वरित खोज</value>
+  </data>
+  <data name="Tpl_SearchAsk" xml:space="preserve">
+    <value>क्या खोजें?</value>
+  </data>
+  <data name="Tpl_SearchVar" xml:space="preserve">
+    <value>कीवर्ड</value>
+  </data>
+  <data name="Tpl_SedentaryMsg" xml:space="preserve">
+    <value>उठिए और थोड़ा चलिए</value>
+  </data>
+  <data name="Smp_Mute" xml:space="preserve">
+    <value>शुरू होते ही म्यूट करें (उदाहरण · ऑटो-प्ले आवाज़ रोकें)</value>
+  </data>
+  <data name="Smp_OpenApp" xml:space="preserve">
+    <value>अपना ब्राउज़र खोलें (उदाहरण के लिए · उस ऐप को खोलें जिसे आप वास्तव में उपयोग करते हैं)</value>
+  </data>
+  <data name="Smp_OpenSite" xml:space="preserve">
+    <value>पसंदीदा साइट खोलें (उदाहरण · केवल कार्यदिवस; अपना मेल या टू-डू)</value>
+  </data>
+  <data name="Smp_OpenChat" xml:space="preserve">
+    <value>चैट ऐप खोलें (उदाहरण · मिनिमाइज़ होकर बैकग्राउंड में)</value>
+  </data>
+  <data name="Smp_ShowDesktop" xml:space="preserve">
+    <value>Win+D से डेस्कटॉप दिखाएँ (उदाहरण · कुंजी संयोजन भेजें)</value>
+  </data>
+  <data name="Smp_RemWater" xml:space="preserve">
+    <value>उठकर थोड़ा पानी पिएँ (उदाहरण)</value>
+  </data>
+  <data name="Smp_RemWrapUp" xml:space="preserve">
+    <value>काम समेटने का समय — आज की सूची में कुछ बाकी है? (उदाहरण)</value>
+  </data>
+  <data name="Smp_RemBills" xml:space="preserve">
+    <value>इस महीने के बिल और सब्सक्रिप्शन देखें (उदाहरण · हर 1 तारीख)</value>
+  </data>
+  <data name="Smp_RemSleep" xml:space="preserve">
+    <value>सोने का समय हो गया (उदाहरण)</value>
+  </data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve">
+    <value>इस क्रिया के लिए व्यवस्थापक अधिकार चाहिए। Clockwork को व्यवस्थापक के रूप में फिर से खोलें?</value>
+  </data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve">
+    <value>क्रिया समूह «{0}» को {1} रिमाइंडर और {2} चरण संदर्भित कर रहे हैं। हटाने पर ये संदर्भ भी साफ़ हो जाएँगे (रिमाइंडर केवल पॉपअप रहेंगे; संदर्भित चरण हटा दिए जाएँगे)। फिर भी हटाएँ?</value>
+  </data>
+  <data name="Btn_Browse" xml:space="preserve">
+    <value>ब्राउज़ करें…</value>
+  </data>
+  <data name="Btn_Pick" xml:space="preserve">
+    <value>चुनें…</value>
+  </data>
+  <data name="Btn_Capture" xml:space="preserve">
+    <value>कैप्चर</value>
+  </data>
+  <data name="Btn_PickDate" xml:space="preserve">
+    <value>तारीख़ चुनें</value>
+  </data>
+  <data name="Filter_Browse" xml:space="preserve">
+    <value>प्रोग्राम / स्क्रिप्ट / शॉर्टकट|*.exe;*.bat;*.cmd;*.ps1;*.lnk|सभी फ़ाइलें|*.*</value>
+  </data>
+  <data name="Ed_WindowStyle" xml:space="preserve">
+    <value>विंडो शैली</value>
+  </data>
+  <data name="WinStyle_Default" xml:space="preserve">
+    <value>डिफ़ॉल्ट (सामान्य विंडो)</value>
+  </data>
+  <data name="WinStyle_Minimized" xml:space="preserve">
+    <value>न्यूनतम करके शुरू करें</value>
+  </data>
+  <data name="WinStyle_Maximized" xml:space="preserve">
+    <value>अधिकतम करके शुरू करें</value>
+  </data>
+  <data name="WinStyle_Hidden" xml:space="preserve">
+    <value>छिपाकर शुरू करें</value>
+  </data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve">
+    <value>पहले से चल रहा हो तो विंडो सक्रिय करें (दोबारा न चलाएँ)</value>
+  </data>
+  <data name="Ed_ActivateProcess" xml:space="preserve">
+    <value>जिस प्रक्रिया को सक्रिय करना है</value>
+  </data>
+  <data name="Ed_AltTargets" xml:space="preserve">
+    <value>वैकल्पिक पथ</value>
+  </data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve">
+    <value>प्रति पंक्ति एक पूर्ण पथ; लक्ष्य न होने पर पहला मौजूद पथ उपयोग होगा (भिन्न इंस्टॉल पथ वाली मशीनों के लिए)</value>
+  </data>
+  <data name="Picker_Process" xml:space="preserve">
+    <value>प्रक्रिया चुनें</value>
+  </data>
+  <data name="Picker_Search" xml:space="preserve">
+    <value>प्रक्रिया नाम / विंडो शीर्षक खोजें</value>
+  </data>
+  <data name="Date_Pick" xml:space="preserve">
+    <value>तारीख़ चुनें</value>
+  </data>
+  <data name="Capture_Key" xml:space="preserve">
+    <value>कुंजी कैप्चर करें</value>
+  </data>
+  <data name="Ed_GroupHotkey" xml:space="preserve">
+    <value>वैश्विक हॉटकी</value>
+  </data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
+    <value>क्लिक करें और कुंजी संयोजन दबाएँ, यह समूह कभी भी चलेगा; चलते समय दोबारा दबाने पर रुक जाएगा; Esc रद्द, Delete साफ़</value>
+  </data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
+    <value>क्रिया समूह «{0}» की हॉटकी {1} पंजीकृत नहीं हो सकी: संभवतः पहले से उपयोग में है</value>
+  </data>
+  <data name="Val_HotkeyDup" xml:space="preserve">
+    <value>हॉटकी {0} पहले से «{1}» द्वारा उपयोग में है; कोई और संयोजन चुनें</value>
+  </data>
+  <data name="Hotkey_Reserved" xml:space="preserve">
+    <value>{0} सिस्टम-आरक्षित संयोजन है (पंजीकरण से सिस्टम कुंजी छिन जाएगी), इसे हॉटकी नहीं बनाया जा सकता</value>
+  </data>
+  <data name="Ed_GroupRepeat" xml:space="preserve">
+    <value>पूरे समूह को दोहराएँ</value>
+  </data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve">
+    <value>ट्रे मेन्यू में दिखाएँ</value>
+  </data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve">
+    <value>राउंड के बीच विलंब (ms)</value>
+  </data>
+  <data name="Val_GroupCycle" xml:space="preserve">
+    <value>समूह संदर्भ चक्रीय है ({0}), सहेजने से पहले संदर्भ श्रृंखला तोड़ें</value>
+  </data>
+  <data name="Btn_Copy" xml:space="preserve">
+    <value>प्रतिलिपि</value>
+  </data>
+  <data name="Side_SelectedRow" xml:space="preserve">
+    <value>चयनित</value>
+  </data>
+  <data name="Btn_ExportConfig" xml:space="preserve">
+    <value>कॉन्फ़िगरेशन निर्यात करें</value>
+  </data>
+  <data name="Btn_ImportConfig" xml:space="preserve">
+    <value>कॉन्फ़िगरेशन आयात करें</value>
+  </data>
+  <data name="Config_Exported" xml:space="preserve">
+    <value>कॉन्फ़िगरेशन यहाँ निर्यात किया गया: {0}</value>
+  </data>
+  <data name="Config_Imported" xml:space="preserve">
+    <value>कॉन्फ़िगरेशन आयात किया गया। लागू करने के लिए पुनरारंभ हो रहा है।</value>
+  </data>
+  <data name="Config_ImportFail" xml:space="preserve">
+    <value>आयात विफल: {0}</value>
+  </data>
+  <data name="Config_ImportConfirm" xml:space="preserve">
+    <value>आयात करने से वर्तमान सभी कॉन्फ़िगरेशन (स्टार्टअप सूची / रिमाइंडर / क्रिया समूह / सेटिंग्स) अधिलेखित हो जाएँगे। जारी रखें?</value>
+  </data>
+  <data name="Config_Filter" xml:space="preserve">
+    <value>Clockwork कॉन्फ़िगरेशन|*.json|सभी फ़ाइलें|*.*</value>
+  </data>
+  <data name="Config_ExportFail" xml:space="preserve">
+    <value>निर्यात विफल: {0}</value>
+  </data>
+  <data name="Dup_Suffix" xml:space="preserve">
+    <value> (प्रतिलिपि)</value>
+  </data>
+  <data name="Relaunch_Fail" xml:space="preserve">
+    <value>स्वचालित रूप से पुनरारंभ नहीं हो सका। कृपया Clockwork को मैन्युअल रूप से फिर से खोलें। ({0})</value>
+  </data>
+  <data name="Vol_micMute" xml:space="preserve">
+    <value>माइक्रोफ़ोन म्यूट करें</value>
+  </data>
+  <data name="Vol_micUnmute" xml:space="preserve">
+    <value>माइक्रोफ़ोन अनम्यूट करें</value>
+  </data>
+  <data name="Sys_setClipboard" xml:space="preserve">
+    <value>क्लिपबोर्ड टेक्स्ट सेट करें</value>
+  </data>
+  <data name="Menu_SecCommon" xml:space="preserve">
+    <value>सामान्य</value>
+  </data>
+  <data name="Cmd_copy" xml:space="preserve">
+    <value>कॉपी करें</value>
+  </data>
+  <data name="Cmd_paste" xml:space="preserve">
+    <value>पेस्ट करें</value>
+  </data>
+  <data name="Cmd_back" xml:space="preserve">
+    <value>पीछे</value>
+  </data>
+  <data name="Cmd_forward" xml:space="preserve">
+    <value>आगे</value>
+  </data>
+  <data name="Cmd_toBottom" xml:space="preserve">
+    <value>सबसे नीचे जाएँ</value>
+  </data>
+  <data name="Win_current" xml:space="preserve">
+    <value>वर्तमान विंडो</value>
+  </data>
+  <data name="Win_minimizeFg" xml:space="preserve">
+    <value>वर्तमान विंडो छोटी करें</value>
+  </data>
+  <data name="Win_maximizeFg" xml:space="preserve">
+    <value>वर्तमान विंडो बड़ी करें</value>
+  </data>
+  <data name="Win_closeFg" xml:space="preserve">
+    <value>वर्तमान विंडो बंद करें</value>
+  </data>
+  <data name="Sys_searchSelection" xml:space="preserve">
+    <value>चयनित पाठ खोजें</value>
+  </data>
+  <data name="Sys_playSound" xml:space="preserve">
+    <value>ध्वनि बजाएँ (सिस्टम ध्वनि या .wav फ़ाइल)</value>
+  </data>
+  <data name="Ed_SearchUrl" xml:space="preserve">
+    <value>खोज URL</value>
+  </data>
+  <data name="Ed_SearchEngine" xml:space="preserve">
+    <value>सर्च इंजन</value>
+  </data>
+  <data name="Ed_SearchCustom" xml:space="preserve">
+    <value>कस्टम…</value>
+  </data>
+  <data name="Err_NoSelection" xml:space="preserve">
+    <value>कोई पाठ चयनित नहीं है। जो खोजना है उसे चुनें, फिर यह चरण चलाएँ।</value>
+  </data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve">
+    <value>अभी कोई विंडो नहीं है जिस पर यह लागू हो (सामने Clockwork स्वयं है या डेस्कटॉप)</value>
+  </data>
+  <data name="Ed_ProcessHint" xml:space="preserve">
+    <value>वर्तमान विंडो के लिए * लिखें — वही जिसमें आप जेस्चर बनाने या पैनल खोलने से पहले थे। खाली छोड़ने पर यह चरण कुछ नहीं करता।</value>
+  </data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve">
+    <value>{0} का अर्थ है खोजे जाने वाले शब्द; वे स्वतः एस्केप हो जाते हैं।</value>
+  </data>
+  <data name="Ed_SoundFile" xml:space="preserve">
+    <value>ध्वनि फ़ाइल</value>
+  </data>
+  <data name="Ed_SoundHint" xml:space="preserve">
+    <value>सिस्टम सूचना ध्वनि के लिए इसे खाली छोड़ दें। या .wav फ़ाइल का पूरा पथ दें।</value>
+  </data>
+  <data name="Sys_brightness" xml:space="preserve">
+    <value>स्क्रीन की चमक</value>
+  </data>
+  <data name="Sys_notificationsOff" xml:space="preserve">
+    <value>सूचनाएँ बंद करें</value>
+  </data>
+  <data name="Sys_notificationsOn" xml:space="preserve">
+    <value>सूचनाएँ चालू करें</value>
+  </data>
+  <data name="Sys_displayInternal" xml:space="preserve">
+    <value>डिस्प्ले: केवल पीसी स्क्रीन</value>
+  </data>
+  <data name="Sys_displayClone" xml:space="preserve">
+    <value>डिस्प्ले: डुप्लिकेट</value>
+  </data>
+  <data name="Sys_displayExtend" xml:space="preserve">
+    <value>डिस्प्ले: विस्तारित</value>
+  </data>
+  <data name="Sys_displayExternal" xml:space="preserve">
+    <value>डिस्प्ले: केवल दूसरी स्क्रीन</value>
+  </data>
+  <data name="Err_SysCommand" xml:space="preserve">
+    <value>{0} विफल: {1}</value>
+  </data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve">
+    <value>यह मशीन उस पावर स्थिति का समर्थन नहीं करती या वह अक्षम है (powercfg /a चलाकर जाँचें)</value>
+  </data>
+  <data name="Sum_SysArg" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Ed_ClipText" xml:space="preserve">
+    <value>क्लिपबोर्ड टेक्स्ट</value>
+  </data>
+  <data name="Ed_Brightness" xml:space="preserve">
+    <value>चमक (0-100)</value>
+  </data>
+  <data name="Ed_BrightnessHint" xml:space="preserve">
+    <value>केवल सिस्टम-नियंत्रित डिस्प्ले (लैपटॉप पैनल) पर काम करता है; बाहरी मॉनिटर समर्थित नहीं हैं।</value>
+  </data>
+  <data name="Ed_OnlyAfter" xml:space="preserve">
+    <value>केवल बाद</value>
+  </data>
+  <data name="Ed_HourAfter" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve">
+    <value>प्रारूप H:mm, जैसे 18:30; केवल घंटा (जैसे 18) भी चलेगा; डिफ़ॉल्ट 18:00।</value>
+  </data>
+  <data name="Ed_Cond_Any" xml:space="preserve">
+    <value>कोई सीमा नहीं</value>
+  </data>
+  <data name="Ed_IfProcess" xml:space="preserve">
+    <value>प्रक्रिया शर्त</value>
+  </data>
+  <data name="Ed_IfProc_Running" xml:space="preserve">
+    <value>प्रक्रिया चल रही</value>
+  </data>
+  <data name="Ed_IfProc_Not" xml:space="preserve">
+    <value>प्रक्रिया नहीं चल रही</value>
+  </data>
+  <data name="Ed_IfPower" xml:space="preserve">
+    <value>पावर शर्त</value>
+  </data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve">
+    <value>केवल बिजली से जुड़े होने पर</value>
+  </data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve">
+    <value>केवल बैटरी पर</value>
+  </data>
+  <data name="Ed_IfPath" xml:space="preserve">
+    <value>पथ मौजूद है</value>
+  </data>
+  <data name="Ed_IfPathHint" xml:space="preserve">
+    <value>भरने पर यह चरण तभी चलेगा जब वह फ़ाइल / फ़ोल्डर मौजूद हो; खाली = कोई सीमा नहीं।</value>
+  </data>
+  <data name="Sum_After" xml:space="preserve">
+    <value> (केवल {0} के बाद)</value>
+  </data>
+  <data name="Sum_IfProcRunning" xml:space="preserve">
+    <value> ({0} चल रहा है)</value>
+  </data>
+  <data name="Sum_IfProcNot" xml:space="preserve">
+    <value> ({0} नहीं चल रहा)</value>
+  </data>
+  <data name="Sum_IfAc" xml:space="preserve">
+    <value> (बिजली पर)</value>
+  </data>
+  <data name="Sum_IfBattery" xml:space="preserve">
+    <value> (बैटरी पर)</value>
+  </data>
+  <data name="Sum_IfPath" xml:space="preserve">
+    <value> ({0} मौजूद)</value>
+  </data>
+  <data name="Ed_Trig_Idle" xml:space="preserve">
+    <value>निष्क्रिय होने पर</value>
+  </data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve">
+    <value>अनलॉक करने पर</value>
+  </data>
+  <data name="Ed_Trig_Lock" xml:space="preserve">
+    <value>लॉक करने पर</value>
+  </data>
+  <data name="Ed_Trig_Resume" xml:space="preserve">
+    <value>स्लीप से जागने पर</value>
+  </data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve">
+    <value>बिजली से जोड़ने पर</value>
+  </data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve">
+    <value>बिजली हटाने पर</value>
+  </data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve">
+    <value>बैटरी कम होने पर</value>
+  </data>
+  <data name="Ed_IdleMinutes" xml:space="preserve">
+    <value>निष्क्रिय मिनट</value>
+  </data>
+  <data name="Ed_IdleHint" xml:space="preserve">
+    <value>इतने मिनट तक कीबोर्ड या माउस न चलने पर एक बार चलता है; लौटने पर गिनती फिर से शुरू होती है।</value>
+  </data>
+  <data name="Ed_BatteryPercent" xml:space="preserve">
+    <value>बैटरी इससे कम (%)</value>
+  </data>
+  <data name="Ed_BatteryHint" xml:space="preserve">
+    <value>बैटरी पर चलते समय चार्ज इससे नीचे गिरने पर एक बार चलता है; चार्ज करने या प्लग लगाने पर फिर से सक्रिय हो जाता है।</value>
+  </data>
+  <data name="Ed_EventHint" xml:space="preserve">
+    <value>घटना होते ही चलता है। नीचे के सप्ताह-दिन अब भी यह सीमित करते हैं कि किन दिनों गिना जाए; छूट और छूटे हुए की भरपाई घटनाओं पर लागू नहीं, इसलिए छिपी हैं।</value>
+  </data>
+  <data name="Period_OnEvent" xml:space="preserve">
+    <value>हर बार</value>
+  </data>
+  <data name="Time_Idle" xml:space="preserve">
+    <value>निष्क्रिय {0} मिनट</value>
+  </data>
+  <data name="Time_LowBattery" xml:space="preserve">
+    <value>बैटरी &lt; {0}%</value>
+  </data>
+  <data name="Menu_FromStartMenu" xml:space="preserve">
+    <value>स्टार्ट मेन्यू से चुनें…</value>
+  </data>
+  <data name="Picker_StartMenu" xml:space="preserve">
+    <value>स्टार्ट मेन्यू से ऐप चुनें</value>
+  </data>
+  <data name="Picker_SearchApp" xml:space="preserve">
+    <value>ऐप का नाम खोजें</value>
+  </data>
+  <data name="Picker_MultiHint" xml:space="preserve">
+    <value>Ctrl / Shift से कई चुनें; हर एक सूची में चरण के रूप में जुड़ता है, डिफ़ॉल्ट रूप से बिना टिक के।</value>
+  </data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve">
+    <value>स्टार्ट मेन्यू में कोई प्रोग्राम शॉर्टकट नहीं मिला।</value>
+  </data>
+  <data name="Tpl_Restore" xml:space="preserve">
+    <value>सामान्य पर लौटें</value>
+  </data>
+  <data name="Settings_Boot" xml:space="preserve">
+    <value>स्टार्टअप</value>
+  </data>
+  <data name="Settings_Backup" xml:space="preserve">
+    <value>बैकअप</value>
+  </data>
+  <data name="Settings_BackupTip" xml:space="preserve">
+    <value>एक ही .json फ़ाइल में निर्यात करता है। आयात करने पर मौजूदा सभी सेटिंग्स बदल जाती हैं।</value>
+  </data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve">
+    <value>0-600 सेकंड, और केवल तब जब «लॉगिन पर शुरू करें» चालू हो: लॉगऑन के बाद इतनी देर रुककर सूची चलाता है, ताकि शुरुआती भीड़ टल जाए। मैन्युअल रन पर असर नहीं पड़ता।</value>
+  </data>
+  <data name="Settings_WaitReady" xml:space="preserve">
+    <value>सिस्टम तैयार होने तक प्रतीक्षा करें (डेस्कटॉप / नेटवर्क)</value>
+  </data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve">
+    <value>दोनों तैयार होते ही आगे बढ़ता है, अधिकतम 90 सेकंड प्रतीक्षा करता है; उसके ऊपर ऊपर वाली निश्चित देरी जुड़ती है। जब सूची आपके प्रोग्राम के लिए बहुत जल्दी चले, तब इसे चालू करें।</value>
+  </data>
+  <data name="Menu_SecOpen" xml:space="preserve">
+    <value>खोलें</value>
+  </data>
+  <data name="Menu_SecControl" xml:space="preserve">
+    <value>प्रोग्राम नियंत्रित करें</value>
+  </data>
+  <data name="Menu_SecSystem" xml:space="preserve">
+    <value>सिस्टम और ध्वनि</value>
+  </data>
+  <data name="Menu_SecFlow" xml:space="preserve">
+    <value>प्रवाह</value>
+  </data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve">
+    <value>लॉगिन पर क्रम और देरी के साथ ऐप खोलना स्टार्टअप सूची में आसान है; «बूट के N मिनट के भीतर ही» या «सिर्फ़ सुबह» जैसी शर्तें ठीक यहीं के लिए हैं।</value>
+  </data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve">
+    <value>अभी कोई क्रिया समूह नहीं है — पहले «क्रिया समूह» टैब में एक बनाएँ, फिर यहाँ संदर्भ दें।</value>
+  </data>
+  <data name="Ed_CondHeader" xml:space="preserve">
+    <value>शर्तें और दोहराव: {0}</value>
+  </data>
+  <data name="Ed_CondAlways" xml:space="preserve">
+    <value>हमेशा चलता है</value>
+  </data>
+  <data name="Ed_AdvHeader" xml:space="preserve">
+    <value>उन्नत: {0}</value>
+  </data>
+  <data name="Adv_Once" xml:space="preserve">
+    <value>एक बार चलता है</value>
+  </data>
+  <data name="Adv_Nag" xml:space="preserve">
+    <value>पुष्टि होने तक हर {0} मिनट में फिर याद दिलाता है</value>
+  </data>
+  <data name="Adv_NagUntil" xml:space="preserve">
+    <value>पुष्टि होने तक हर {0} मिनट में याद दिलाता है, अधिकतम {1} तक</value>
+  </data>
+  <data name="Adv_Loop" xml:space="preserve">
+    <value>दिन खत्म होने तक हर {0} मिनट में चलता है (पुष्टि से नहीं रुकता)</value>
+  </data>
+  <data name="Adv_LoopUntil" xml:space="preserve">
+    <value>{1} तक हर {0} मिनट में चलता है (पुष्टि से नहीं रुकता)</value>
+  </data>
+  <data name="Ed_Trig_Busy" xml:space="preserve">
+    <value>लगातार उपयोग पर</value>
+  </data>
+  <data name="Ed_Trig_Display" xml:space="preserve">
+    <value>डिस्प्ले बदलने पर</value>
+  </data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve">
+    <value>नेटवर्क जुड़ने पर</value>
+  </data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve">
+    <value>नेटवर्क टूटने पर</value>
+  </data>
+  <data name="Ed_Trig_Usb" xml:space="preserve">
+    <value>USB ड्राइव लगाने पर</value>
+  </data>
+  <data name="Time_Busy" xml:space="preserve">
+    <value>{0} मिनट उपयोग</value>
+  </data>
+  <data name="Ed_BusyMinutes" xml:space="preserve">
+    <value>उपयोग मिनट</value>
+  </data>
+  <data name="Ed_BusyHint" xml:space="preserve">
+    <value>लगातार इतने मिनट काम करने पर एक बार सूचित करता है; पूरा एक मिनट दूर रहने पर गिनती फिर से शुरू हो जाती है।</value>
+  </data>
+  <data name="Settings_PanelHotkey" xml:space="preserve">
+    <value>क्विक पैनल कुंजी</value>
+  </data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve">
+    <value>माउस के पास टाइल पैनल खोलता है, हर टाइल पर एक क्रिया। Esc रद्द करता है, Del मिटाता है; मिटाने पर भी मध्य बटन दबाकर रखने या ट्रे मेनू से खुलता है।</value>
+  </data>
+  <data name="Tray_Panel" xml:space="preserve">
+    <value>क्विक पैनल खोलें</value>
+  </data>
+  <data name="Panel_Hint" xml:space="preserve">
+    <value>बंद करने के लिए Esc</value>
+  </data>
+  <data name="Panel_Empty" xml:space="preserve">
+    <value>पैनल अभी खाली है। इसमें डाली गई क्रियाएँ यहाँ दिखेंगी।</value>
+  </data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve">
+    <value>स्टार्टअप सूची छोड़ दी गई। {0} हटाएँ तो यह फिर से अपने आप चलेगी।</value>
+  </data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve">
+    <value>शुरू करते समय Shift दबा था, इसलिए स्टार्टअप सूची छोड़ दी गई। सिर्फ़ इस बार — अगली बार सामान्य रूप से चलेगी।</value>
+  </data>
+  <data name="Warn_GroupNotFound" xml:space="preserve">
+    <value>«{0}» नाम का कोई क्रिया समूह नहीं मिला — कुछ नहीं चला।</value>
+  </data>
+  <data name="Warn_GroupDisabled" xml:space="preserve">
+    <value>क्रिया समूह «{0}» बंद है — कुछ नहीं चला।</value>
+  </data>
+  <data name="Unit_Ms" xml:space="preserve">
+    <value>मिलीसेकंड</value>
+  </data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve">
+    <value>पैनल खोलने के लिए माउस का मध्य बटन दबाकर रखें</value>
+  </data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve">
+    <value>सामान्य मध्य क्लिक पहले की तरह चलता रहता है — छोटा दबाव जैसा है वैसा ही आगे भेज दिया जाता है। डिफ़ॉल्ट रूप से बंद, क्योंकि इसके लिए ग्लोबल माउस हुक चाहिए।</value>
+  </data>
+  <data name="Settings_LongPressMs" xml:space="preserve">
+    <value>दबाए रखने का समय (मिलीसेकंड)</value>
+  </data>
+  <data name="Warn_MouseHookFail" xml:space="preserve">
+    <value>माउस हुक इंस्टॉल नहीं हो सका, इसलिए मध्य बटन को दबाकर रखना बंद है। सुरक्षा सॉफ़्टवेयर या ग्रुप पॉलिसी ने रोका हो सकता है; पैनल हॉटकी या ट्रे मेनू से अब भी खुलता है।</value>
+  </data>
+  <data name="Settings_Panel" xml:space="preserve">
+    <value>क्विक पैनल</value>
+  </data>
+  <data name="Settings_UsePanel" xml:space="preserve">
+    <value>क्विक पैनल इस्तेमाल करें</value>
+  </data>
+  <data name="Settings_UsePanelTip" xml:space="preserve">
+    <value>बंद करने पर हॉटकी दूसरे प्रोग्रामों को लौट जाती है, मिडल-बटन हुक नहीं लगता, और ट्रे वाला आइटम भी हट जाता है। आपके पैनल पेज बने रहते हैं — «पैनल प्रबंधित करें…» में उन्हें अब भी व्यवस्थित कर सकते हैं।</value>
+  </data>
+  <data name="Settings_UseGestures" xml:space="preserve">
+    <value>माउस जेस्चर इस्तेमाल करें</value>
+  </data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve">
+    <value>बंद करने पर दायाँ बटन बिलकुल नहीं देखा जाता और वह सामान्य रूप से काम करता है। जेस्चर खुद «क्रिया समूह» टैब के साइडबार में जेस्चर प्रबंधक से बनाए जाते हैं।</value>
+  </data>
+  <data name="Settings_PanelLayout" xml:space="preserve">
+    <value>लेआउट</value>
+  </data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve">
+    <value>कॉलम × ऊपरी पंक्तियाँ + निचली पंक्तियाँ तय करती हैं कि एक पेज में कितना आएगा और पैनल कितना चौड़ा होगा। बाकी अगले पेज पर चला जाता है; निचली को 0 करने पर एक ही पट्टी रहती है।</value>
+  </data>
+  <data name="Settings_PanelColumns" xml:space="preserve">
+    <value>प्रति पंक्ति टाइल</value>
+  </data>
+  <data name="Settings_PanelTileSize" xml:space="preserve">
+    <value>टाइल का आकार</value>
+  </data>
+  <data name="Size_compact" xml:space="preserve">
+    <value>सघन</value>
+  </data>
+  <data name="Size_normal" xml:space="preserve">
+    <value>सामान्य</value>
+  </data>
+  <data name="Size_roomy" xml:space="preserve">
+    <value>विस्तृत</value>
+  </data>
+  <data name="Settings_PanelShowOps" xml:space="preserve">
+    <value>अंतर्निहित नियंत्रण दिखाएँ</value>
+  </data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve">
+    <value>केवल आइकन</value>
+  </data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve">
+    <value>नाम टूलटिप में बने रहते हैं और एक स्क्रीन में कहीं ज़्यादा क्रियाएँ समा जाती हैं।</value>
+  </data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve">
+    <value>केवल इस ऐप में</value>
+  </data>
+  <data name="Settings_PanelTopRows" xml:space="preserve">
+    <value>ऊपरी पंक्तियाँ</value>
+  </data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve">
+    <value>निचली पंक्तियाँ</value>
+  </data>
+  <data name="Ed_Icon" xml:space="preserve">
+    <value>पैनल आइकन</value>
+  </data>
+  <data name="Ed_IconHint" xml:space="preserve">
+    <value>खाली छोड़ने पर यह अपने आप भर जाता है: «ऐप चलाएँ» लक्ष्य का अपना आइकन लेता है, बाकी सबको उनके प्रकार का रेखा-आइकन मिलता है।</value>
+  </data>
+  <data name="Btn_Close" xml:space="preserve">
+    <value>बंद करें</value>
+  </data>
+  <data name="Panel_Manager" xml:space="preserve">
+    <value>पैनल प्रबंधित करें</value>
+  </data>
+  <data name="Panel_Global" xml:space="preserve">
+    <value>कोई भी ऐप</value>
+  </data>
+  <data name="Panel_AddPage" xml:space="preserve">
+    <value>पेज जोड़ें</value>
+  </data>
+  <data name="Panel_NewPage" xml:space="preserve">
+    <value>नया पेज</value>
+  </data>
+  <data name="Panel_AddHere" xml:space="preserve">
+    <value>यहाँ एक क्रिया रखें</value>
+  </data>
+  <data name="Panel_NoPages" xml:space="preserve">
+    <value>अभी तक कोई पेज नहीं है। पेज टैब रेल के अंत में + चिह्न एक नया पेज बनाता है; फिर उस पर क्रियाएँ जोड़ें।</value>
+  </data>
+  <data name="Panel_Uncategorized" xml:space="preserve">
+    <value>अवर्गीकृत</value>
+  </data>
+  <data name="Panel_NewCategory" xml:space="preserve">
+    <value>नई श्रेणी</value>
+  </data>
+  <data name="Panel_Category" xml:space="preserve">
+    <value>श्रेणी</value>
+  </data>
+  <data name="Panel_Pages" xml:space="preserve">
+    <value>पेज</value>
+  </data>
+  <data name="Panel_CategoryHint" xml:space="preserve">
+    <value>यह पेज किस श्रेणी का है। ऊपर की पंक्ति में हर श्रेणी का एक टैब है; कोई चुनने पर उसी श्रेणी के पेज दिखते हैं।</value>
+  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve">
+    <value>ऊपर श्रेणी पर और बाईं ओर पेज पर क्लिक करें। डबल-क्लिक से नाम बदलें, टैब खींचकर क्रम बदलें, किसी श्रेणी पर छोड़ने से वह पेज उसी श्रेणी में चला जाता है; टाइल को टैब पर छोड़ने से वह उस पेज में। टैब पर राइट-क्लिक से नाम बदलें या हटाएँ।</value>
+  </data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve">
+    <value>बाएँ टैब दिखाएँ</value>
+  </data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve">
+    <value>श्रेणी पंक्ति दिखाएँ</value>
+  </data>
+  <data name="Panel_BarsHint" xml:space="preserve">
+    <value>ऊपर से श्रेणी चुनिए, बाईं ओर उसी श्रेणी के पेज दिखते हैं। एक ही श्रेणी हो तो ऊपर की पंक्ति नहीं बनती, और मौजूदा श्रेणी में एक ही पेज हो तो बाईं भी नहीं — ये निशान कई होने पर भी उन्हें छिपाने के लिए हैं। प्रबंधक में श्रेणी पंक्ति हमेशा रहती है; उस पर बना + ही नई श्रेणी बनाने का रास्ता है।</value>
+  </data>
+  <data name="Panel_SceneHint" xml:space="preserve">
+    <value>खाली छोड़ें तो पेज हमेशा रहेगा। प्रोसेस नाम भरने पर यह तभी दिखेगा जब पैनल खोलते समय वह ऐप सामने था।</value>
+  </data>
+  <data name="Icon_Pick" xml:space="preserve">
+    <value>आइकन चुनें</value>
+  </data>
+  <data name="Icon_PickHint" xml:space="preserve">
+    <value>इनके अलावा आप अपनी कोई तस्वीर, या कोई भी exe इस्तेमाल कर सकते हैं — उसका आइकन उधार ले लिया जाएगा।</value>
+  </data>
+  <data name="Icon_UseImage" xml:space="preserve">
+    <value>तस्वीर इस्तेमाल करें…</value>
+  </data>
+  <data name="Icon_None" xml:space="preserve">
+    <value>अपने आप तय होने दें</value>
+  </data>
+  <data name="Panel_Search" xml:space="preserve">
+    <value>कोई क्रिया ढूँढें</value>
+  </data>
+  <data name="Panel_SearchNone" xml:space="preserve">
+    <value>इससे कोई क्रिया नहीं मिली। दूसरा शब्द आज़माइए, या Esc दबाकर पैनल पर लौटिए।</value>
+  </data>
+  <data name="Panel_HintBack" xml:space="preserve">
+    <value>Esc से वापस</value>
+  </data>
+  <data name="Panel_SearchMore" xml:space="preserve">
+    <value>{1} में से पहले {0} ही दिखाए जा रहे हैं। थोड़ा और टाइप करें तो दायरा घटेगा।</value>
+  </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>थीम</value>
+  </data>
+  <data name="Theme_dark" xml:space="preserve">
+    <value>गहरा</value>
+  </data>
+  <data name="Theme_light" xml:space="preserve">
+    <value>हल्का</value>
+  </data>
+  <data name="Theme_system" xml:space="preserve">
+    <value>Windows जैसा</value>
+  </data>
+  <data name="Settings_ThemeTip" xml:space="preserve">
+    <value>नई थीम लागू करने के लिए Clockwork तुरंत दोबारा चालू होता है। «Windows जैसा» विंडोज़ के ऐप मोड को देखता है।</value>
+  </data>
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
-  <data name="Btn_InsertVar" xml:space="preserve"><value>वैरिएबल डालें</value></data>
-  <data name="Ed_Path" xml:space="preserve"><value>पथ</value></data>
-  <data name="Ed_PathHint" xml:space="preserve"><value>%APPDATA% जैसे पर्यावरण चर चलते समय अपने आप विस्तारित होते हैं। { } पर क्लिक करके कोई सामान्य फ़ोल्डर डालें।</value></data>
-  <data name="Kind_path" xml:space="preserve"><value>फ़ाइल या फ़ोल्डर खोलें</value></data>
-  <data name="Sum_OpenPath" xml:space="preserve"><value>{0} खोलें</value></data>
-  <data name="Sys_quickOpen" xml:space="preserve"><value>क्विक ओपन (चयनित पाठ में वेब पता, फ़ाइल पथ, मैग्नेट लिंक या रजिस्ट्री कुंजी स्वतः पहचानें)</value></data>
-  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>चयनित पाठ को नहीं पहचाना जा सका: {0}</value></data>
-  <data name="Err_RegEditBusy" xml:space="preserve"><value>रजिस्ट्री संपादक पहले से चल रहा है और उसे स्वतः बंद नहीं किया जा सका; उसकी विंडो सामने ला दी गई है। कृपया उसे मैन्युअल रूप से बंद करके फिर से प्रयास करें।</value></data>
-  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>क्विक ओपन हॉटकी</value></data>
-  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>किसी भी ऐप में पाठ चुनकर यह कुंजी दबाएँ — वेब पता, फ़ाइल पथ, मैग्नेट लिंक या रजिस्ट्री कुंजी अपने आप पहचानकर खुल जाती है।</value></data>
-  <data name="Gesture_Sensitivity" xml:space="preserve"><value>संवेदनशीलता</value></data>
-  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>उच्च</value></data>
-  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>सामान्य</value></data>
-  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>कम</value></data>
-  <data name="Gesture_Trail" xml:space="preserve"><value>निशान</value></data>
-  <data name="Gesture_Trail_Off" xml:space="preserve"><value>बंद</value></data>
-  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>पतला</value></data>
-  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>सामान्य</value></data>
-  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>मोटा</value></data>
-  <data name="Gesture_App" xml:space="preserve"><value>ऐप चुनें</value></data>
-  <data name="Gesture_AppHint" xml:space="preserve"><value>जेस्चर तभी चलता है जब यह ऐप अग्रभाग में हो। हर ऐप में चलाने के लिए इसे खाली छोड़ें।</value></data>
-  <data name="Var_SecFolders" xml:space="preserve"><value>सामान्य फ़ोल्डर</value></data>
-  <data name="Var_SecEnv" xml:space="preserve"><value>पर्यावरण चर</value></data>
-  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} क्लिक</value></data>
-  <data name="Btn_ResetUsage" xml:space="preserve"><value>क्लिक आँकड़े रीसेट करें</value></data>
-  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>पैनल टाइलों की क्लिक संख्या शून्य पर रीसेट होती है। केवल आँकड़े साफ़ होते हैं; कोई सेटिंग या टाइल नहीं बदलता।</value></data>
-  <data name="Confirm_ResetUsage" xml:space="preserve"><value>सभी पैनल टाइलों के क्लिक आँकड़े साफ़ करें? इसे पूर्ववत नहीं किया जा सकता।</value></data>
-  <data name="Kind_step" xml:space="preserve"><value>स्टार्टअप आइटम चलाएँ</value></data>
-  <data name="Sum_RunRef" xml:space="preserve"><value>स्टार्टअप आइटम चलाएँ: {0}</value></data>
-  <data name="Ed_RefTarget" xml:space="preserve"><value>स्टार्टअप आइटम</value></data>
-  <data name="Ed_RefMissing" xml:space="preserve"><value>(लक्ष्य हटाया गया)</value></data>
-  <data name="Skip_RefNotFound" xml:space="preserve"><value>स्टार्टअप आइटम नहीं मिला</value></data>
-  <data name="Skip_RefDisabled" xml:space="preserve"><value>स्टार्टअप आइटम «{0}» निष्क्रिय है; छोड़ा गया</value></data>
-  <data name="Ed_NoRefsHint" xml:space="preserve"><value>स्टार्टअप सूची खाली है — पहले वहाँ आइटम जोड़ें, फिर यहाँ संदर्भित करें।</value></data>
-  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>«{0}» को {1} पैनल टाइल संदर्भित कर रही हैं। हटाने पर वे टाइलें भी हट जाएँगी। फिर भी हटाएँ?</value></data>
+  <data name="Btn_InsertVar" xml:space="preserve">
+    <value>वैरिएबल डालें</value>
+  </data>
+  <data name="Ed_Path" xml:space="preserve">
+    <value>पथ</value>
+  </data>
+  <data name="Ed_PathHint" xml:space="preserve">
+    <value>%APPDATA% जैसे पर्यावरण चर चलते समय अपने आप विस्तारित होते हैं। { } पर क्लिक करके कोई सामान्य फ़ोल्डर डालें।</value>
+  </data>
+  <data name="Kind_path" xml:space="preserve">
+    <value>फ़ाइल या फ़ोल्डर खोलें</value>
+  </data>
+  <data name="Sum_OpenPath" xml:space="preserve">
+    <value>{0} खोलें</value>
+  </data>
+  <data name="Sys_quickOpen" xml:space="preserve">
+    <value>क्विक ओपन (चयनित पाठ में वेब पता, फ़ाइल पथ, मैग्नेट लिंक या रजिस्ट्री कुंजी स्वतः पहचानें)</value>
+  </data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve">
+    <value>चयनित पाठ को नहीं पहचाना जा सका: {0}</value>
+  </data>
+  <data name="Err_RegEditBusy" xml:space="preserve">
+    <value>रजिस्ट्री संपादक पहले से चल रहा है और उसे स्वतः बंद नहीं किया जा सका; उसकी विंडो सामने ला दी गई है। कृपया उसे मैन्युअल रूप से बंद करके फिर से प्रयास करें।</value>
+  </data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve">
+    <value>क्विक ओपन हॉटकी</value>
+  </data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve">
+    <value>किसी भी ऐप में पाठ चुनकर यह कुंजी दबाएँ — वेब पता, फ़ाइल पथ, मैग्नेट लिंक या रजिस्ट्री कुंजी अपने आप पहचानकर खुल जाती है।</value>
+  </data>
+  <data name="Gesture_Sensitivity" xml:space="preserve">
+    <value>संवेदनशीलता</value>
+  </data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve">
+    <value>उच्च</value>
+  </data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve">
+    <value>सामान्य</value>
+  </data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve">
+    <value>कम</value>
+  </data>
+  <data name="Gesture_Trail" xml:space="preserve">
+    <value>निशान</value>
+  </data>
+  <data name="Gesture_Trail_Off" xml:space="preserve">
+    <value>बंद</value>
+  </data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve">
+    <value>पतला</value>
+  </data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve">
+    <value>सामान्य</value>
+  </data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve">
+    <value>मोटा</value>
+  </data>
+  <data name="Gesture_App" xml:space="preserve">
+    <value>ऐप चुनें</value>
+  </data>
+  <data name="Gesture_AppHint" xml:space="preserve">
+    <value>जेस्चर तभी चलता है जब यह ऐप अग्रभाग में हो। हर ऐप में चलाने के लिए इसे खाली छोड़ें।</value>
+  </data>
+  <data name="Var_SecFolders" xml:space="preserve">
+    <value>सामान्य फ़ोल्डर</value>
+  </data>
+  <data name="Var_SecEnv" xml:space="preserve">
+    <value>पर्यावरण चर</value>
+  </data>
+  <data name="Panel_UsageCount" xml:space="preserve">
+    <value>{0} क्लिक</value>
+  </data>
+  <data name="Btn_ResetUsage" xml:space="preserve">
+    <value>क्लिक आँकड़े रीसेट करें</value>
+  </data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve">
+    <value>पैनल टाइलों की क्लिक संख्या शून्य पर रीसेट होती है। केवल आँकड़े साफ़ होते हैं; कोई सेटिंग या टाइल नहीं बदलता।</value>
+  </data>
+  <data name="Confirm_ResetUsage" xml:space="preserve">
+    <value>सभी पैनल टाइलों के क्लिक आँकड़े साफ़ करें? इसे पूर्ववत नहीं किया जा सकता।</value>
+  </data>
+  <data name="Kind_step" xml:space="preserve">
+    <value>स्टार्टअप आइटम चलाएँ</value>
+  </data>
+  <data name="Sum_RunRef" xml:space="preserve">
+    <value>स्टार्टअप आइटम चलाएँ: {0}</value>
+  </data>
+  <data name="Ed_RefTarget" xml:space="preserve">
+    <value>स्टार्टअप आइटम</value>
+  </data>
+  <data name="Ed_RefMissing" xml:space="preserve">
+    <value>(लक्ष्य हटाया गया)</value>
+  </data>
+  <data name="Skip_RefNotFound" xml:space="preserve">
+    <value>स्टार्टअप आइटम नहीं मिला</value>
+  </data>
+  <data name="Skip_RefDisabled" xml:space="preserve">
+    <value>स्टार्टअप आइटम «{0}» निष्क्रिय है; छोड़ा गया</value>
+  </data>
+  <data name="Ed_NoRefsHint" xml:space="preserve">
+    <value>स्टार्टअप सूची खाली है — पहले वहाँ आइटम जोड़ें, फिर यहाँ संदर्भित करें।</value>
+  </data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve">
+    <value>«{0}» को {1} पैनल टाइल संदर्भित कर रही हैं। हटाने पर वे टाइलें भी हट जाएँगी। फिर भी हटाएँ?</value>
+  </data>
+  <data name="Kind_browserUrl" xml:space="preserve">ब्राउज़र पता पढ़ें</data>
+  <data name="Kind_siteMap" xml:space="preserve">साइट स्रोत फ़ाइल खोलें</data>
+  <data name="Kind_regex" xml:space="preserve">रेगुलर एक्सप्रेशन से निकालें</data>
+  <data name="Kind_replace" xml:space="preserve">पाठ बदलें</data>
+  <data name="Kind_urlDecode" xml:space="preserve">URL डीकोड करें</data>
+  <data name="Menu_SecText" xml:space="preserve">पाठ</data>
+  <data name="Sum_OpenSource" xml:space="preserve">स्रोत फ़ाइल खोलें: {0}</data>
+  <data name="Sum_LocateSource" xml:space="preserve">स्रोत फ़ाइल का स्थान दिखाएँ: {0}</data>
+  <data name="Sum_CurrentUrl" xml:space="preserve">वर्तमान पता</data>
+  <data name="Sum_UrlDecode" xml:space="preserve">डीकोड करें: {0}</data>
+  <data name="Sum_Regex" xml:space="preserve">«{0}» से {1} निकालें</data>
+  <data name="Sum_Replace" xml:space="preserve">{0} को {1} से बदलें</data>
+  <data name="Warn_BrowserUrlNone" xml:space="preserve">ब्राउज़र पता नहीं पढ़ा जा सका। जाँचें कि Chrome या Edge में कोई पेज खुला है (Firefox अभी समर्थित नहीं है)।</data>
+  <data name="Warn_SiteMapBadUrl" xml:space="preserve">यह पते जैसा नहीं लगता: {0}</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">उस पते का डोमेन साइट सूची में नहीं है। clockwork.settings.json की sites में इसे जोड़ें।</data>
+  <data name="Warn_SiteMapBadRoot" xml:space="preserve">साइट «{0}» का स्थानीय फ़ोल्डर मौजूद नहीं है। इसका sourceRoot जाँचें।</data>
+  <data name="Warn_SiteMapNotFound" xml:space="preserve">उस पथ पर मैप हुआ, पर स्थानीय रूप से यह फ़ाइल नहीं है: {0}</data>
+  <data name="Warn_SiteMapOpenFail" xml:space="preserve">फ़ाइल मिल गई, पर उसे खोला नहीं जा सका: {0}</data>
+  <data name="Warn_RegexNoPattern" xml:space="preserve">इस चरण में अभी तक नियमित अभिव्यक्ति नहीं है।</data>
+  <data name="Warn_RegexBadPattern" xml:space="preserve">यह नियमित अभिव्यक्ति अमान्य है: {0}</data>
+  <data name="Warn_RegexNoMatch" xml:space="preserve">नियमित अभिव्यक्ति से कुछ मेल नहीं खाया।</data>
+  <data name="Warn_RegexNoGroup" xml:space="preserve">इस मेल में कैप्चर ग्रुप {0} नहीं है (सबसे ऊँचा {1} है)।</data>
+  <data name="Warn_UrlDecodeBad" xml:space="preserve">इसे डीकोड नहीं किया जा सका: {0}</data>
+  <data name="Ed_BrowserUrlHint" xml:space="preserve">मौजूदा ब्राउज़र के पता पट्टी को पढ़कर बाद के चरणों के लिए पता बनाता है। Chrome और Edge जैसे Chromium ब्राउज़र समर्थित हैं; Firefox अभी समर्थित नहीं है।</data>
+  <data name="Ed_SiteMapAction" xml:space="preserve">कैसे खोलें</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">पता खाली छोड़ दें तो वह स्वतः ब्राउज़र से पढ़ लिया जाएगा। डोमेन → स्थानीय पथ मिलान clockwork.settings.json की sites में हैं।</data>
+  <data name="Ed_RegexPattern" xml:space="preserve">नियमित अभिव्यक्ति</data>
+  <data name="Ed_RegexGroup" xml:space="preserve">कैप्चर ग्रुप</data>
+  <data name="Ed_RegexHint" xml:space="preserve">0 = पूरा मेल; 1 और उससे ऊपर = कौन-सा कोष्ठक समूह। .NET रेगुलर एक्सप्रेशन सिंटैक्स।</data>
+  <data name="Ed_ReplaceWith" xml:space="preserve">इसे बदलें</data>
+  <data name="Val_SiteMapOpen" xml:space="preserve">फ़ाइल खोलें</data>
+  <data name="Val_SiteMapReveal" xml:space="preserve">फ़ाइल एक्सप्लोरर में दिखाएँ</data>
+  <data name="Val_SiteMapNone" xml:space="preserve">केवल पथ निकालें</data>
+  <data name="Sum_SourcePath" xml:space="preserve">केवल पथ निकालें: {0}</data>
+  <data name="Kind_waitKey" xml:space="preserve">कुंजी की प्रतीक्षा करें</data>
+  <data name="Kind_splitLines" xml:space="preserve">पंक्तियों में बाँटें</data>
+  <data name="Kind_math" xml:space="preserve">गणना करें</data>
+  <data name="Kind_skip" xml:space="preserve">छोड़ें</data>
+  <data name="Kind_each" xml:space="preserve">हर एक (लूप)</data>
+  <data name="Sum_WaitKey" xml:space="preserve">कुंजी की प्रतीक्षा: {0}</data>
+  <data name="Sum_SplitLines" xml:space="preserve">पंक्तियाँ बाँटें: {0}</data>
+  <data name="Sum_Math" xml:space="preserve">गणना: {0}</data>
+  <data name="Sum_SkipBlock" xml:space="preserve">इस ब्लॉक का बाकी छोड़ें</data>
+  <data name="Sum_SkipRun" xml:space="preserve">पूरी क्रिया रोकें</data>
+  <data name="Sum_Each" xml:space="preserve">हर एक: {0}</data>
+  <data name="Ed_WaitKeys" xml:space="preserve">किन कुंजियों की प्रतीक्षा करें (अल्पविराम से अलग)</data>
+  <data name="Ed_WaitKeyHint" xml:space="preserve">सेकंड अधिकतम प्रतीक्षा है; 0 = अनिश्चितकाल तक प्रतीक्षा। कुंजी ＂Insert＂ या ＂Escape＂ जैसे नाम से निकलती है, जो अगले चरण की शर्त में सीधे उपयोग की जा सकती है।</data>
+  <data name="Ed_SplitHint" xml:space="preserve">कई पंक्तियों वाले टेक्स्ट को सूची में बदल देता है जिसे ‘हर एक’ लूप देखता है। खाली पंक्तियाँ रह जाती हैं — टर्मिनल में एक-एक करके कमांड टाइप करते समय खाली पंक्ति अक्सर वही होती है जो आप भेजना चाहते थे।</data>
+  <data name="Ed_Expr" xml:space="preserve">अभिव्यक्ति</data>
+  <data name="Ed_MathHint" xml:space="preserve">बाईं ओफ़रेटर दाईं ओर के रूप में लिखें, + - * ÷ के साथ। दोनों तरफ़ {चर} रख सकते हैं, गणना से पहले बदल जाते हैं — जैसे {index}+1।</data>
+  <data name="Ed_SkipMode" xml:space="preserve">कब तक छोड़ें</data>
+  <data name="Ed_SkipHint" xml:space="preserve">＂इस ब्लॉक का बाकी छोड़ें＂ ब्लॉक के बचे कदम छोड़कर बाहर बढ़ता है (लूप में अगला पुनरावृत्ति)। ＂पूरी क्रिया रोकें＂ इस चलन को यहीं समाप्त करता है: आगे कोई कदम नहीं चलेगा।</data>
+  <data name="Ed_EachList" xml:space="preserve">इस सूची को देखें</data>
+  <data name="Ed_EachItem" xml:space="preserve">वर्तमान आइटम का चर</data>
+  <data name="Ed_EachIndex" xml:space="preserve">क्रमांक चर</data>
+  <data name="Ed_EachHint" xml:space="preserve">सूची का नाम पिछले चरण के ＂चर में आउटपुट＂ से आता है (केवल ＂पंक्तियों में बाँटें＂ सूची बनाता है)। दोनों नाम खाली छोड़ें तो वे item और index होंगे। नीचे इंडेंट किए कदम ही लूप का मुख्य भाग हैं।</data>
+  <data name="Val_SkipBlock" xml:space="preserve">ब्लॉक का बाकी छोड़ें</data>
+  <data name="Val_SkipRun" xml:space="preserve">पूरी क्रिया रोकें</data>
+  <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ में {1} चरण हैं। उन्हें भी हटाएँ?</data>
+  <data name="Skip_EachNoList" xml:space="preserve">＂हर एक＂ के लिए चाही गई सूची {0} एक सूची चर नहीं है — पहले वह चरण चलाएँ जो उसे बनाता है (केवल ＂पंक्तियों में बाँटें＂ सूची बनाता है)।</data>
+  <data name="Warn_NoKeysAccepted" xml:space="preserve">इस चरण में प्रतीक्षा करने के लिए कोई कुंजी नहीं है: {0}</data>
+  <data name="Warn_WaitKeyTimeout" xml:space="preserve">{0} सेकंड बीत गए, वह कुंजी कभी नहीं आई।</data>
+  <data name="Warn_SplitNoText" xml:space="preserve">बाँटने के लिए कोई टेक्स्ट नहीं (खाना खाली है और किसी चर का संदर्भ नहीं है)।</data>
+  <data name="Warn_MathBad" xml:space="preserve">गणना नहीं हो सकी: {0}</data>
 </root>

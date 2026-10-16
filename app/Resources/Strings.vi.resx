@@ -1,115 +1,308 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
-  <resheader name="version"><value>2.0</value></resheader>
-  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-
-  <data name="App_Subtitle" xml:space="preserve"><value>Khởi động · Nhắc nhở · Thao tác một chạm</value></data>
-  <data name="Tab_Launch" xml:space="preserve"><value>Danh sách khởi động</value></data>
-  <data name="Tab_Reminder" xml:space="preserve"><value>Tác vụ theo lịch</value></data>
-  <data name="Tab_Group" xml:space="preserve"><value>Nhóm hành động</value></data>
-  <data name="Tab_System" xml:space="preserve"><value>Khởi động hệ thống</value></data>
-  <data name="Tab_Ports" xml:space="preserve"><value>Cổng</value></data>
-  <data name="Launch_Hint" xml:space="preserve"><value>Chạy một lần khi đăng nhập, từ trên xuống · kéo dòng để đổi thứ tự. Muốn chạy theo giờ / sự kiện → Tác vụ theo lịch; muốn chạy bất cứ lúc nào → Nhóm hành động.</value></data>
-  <data name="Reminder_Hint" xml:space="preserve"><value>Kích hoạt đúng giờ, khi đăng nhập hoặc theo sự kiện như mở khóa / cắm sạc — nhắc nhở hoặc chạy nhóm im lặng. Chỉ mở ứng dụng lúc đăng nhập → Danh sách khởi động; chạy thủ công → Nhóm hành động.</value></data>
-  <data name="Group_Hint" xml:space="preserve"><value>Gói một chuỗi thao tác thành nhóm, kích hoạt bất cứ lúc nào bằng phím tắt / khay hệ thống; Danh sách khởi động và Tác vụ theo lịch cũng tham chiếu được. Việc chỉ chạy lúc đăng nhập thì viết thẳng vào Danh sách khởi động sẽ gọn hơn.</value></data>
-  <data name="Group_NoSteps" xml:space="preserve"><value>Chưa có bước nào. Bấm “Thêm” ở trên để tạo bước đầu tiên — bước ở trên cùng chạy trước.</value></data>
-  <data name="Group_Empty" xml:space="preserve"><value>(trống)</value></data>
-  <data name="System_Footer" xml:space="preserve"><value>Chọn/bỏ chọn có hiệu lực ngay (vô hiệu, không xóa; hoàn tác được).</value></data>
-  <data name="System_ShowReadOnlyTip" xml:space="preserve"><value>Mục hệ thống / chính sách / một lần chỉ đọc được ẩn theo mặc định.</value></data>
-  <data name="System_Count" xml:space="preserve"><value>{0} / {1} mục</value></data>
-  <data name="System_Filter" xml:space="preserve"><value>Lọc</value></data>
-  <data name="System_ShowReadOnly" xml:space="preserve"><value>Hiện mục hệ thống / chỉ đọc</value></data>
-  <data name="System_Scanning" xml:space="preserve"><value>Đang quét mục khởi động…</value></data>
-  <data name="System_Refresh" xml:space="preserve"><value>Làm mới</value></data>
-
-  <data name="Ports_ShowAll" xml:space="preserve"><value>Hiện tất cả cổng</value></data>
-  <data name="Ports_ShowAllTip" xml:space="preserve"><value>Khi một tiến trình giữ nhiều cổng, mặc định chỉ hiện cổng hướng ra ngoài. Chọn để liệt kê mọi cổng và bỏ qua bộ lọc phía trên.</value></data>
-  <data name="Ports_DevOnly" xml:space="preserve"><value>Chỉ dịch vụ dự án</value></data>
-  <data name="Ports_DevOnlyTip" xml:space="preserve"><value>Chỉ liệt kê các dịch vụ khởi chạy từ thư mục dự án của bạn, nhận biết qua dấu hiệu như .git hay package.json. Bỏ chọn để thấy những phần mềm đang lắng nghe còn lại.</value></data>
-  <data name="Ports_Footer" xml:space="preserve"><value>Nhấp đúp vào một hàng để mở trong trình duyệt; nhấp chuột phải để giải phóng cổng.</value></data>
-  <data name="Ports_Count" xml:space="preserve"><value>{0} / {1} cổng · tự làm mới mỗi 5 giây</value></data>
-  <data name="Ports_Empty" xml:space="preserve"><value>Không có cổng nào khớp với bộ lọc hiện tại. Trên máy này có {0} cổng đang lắng nghe — đổi bộ lọc hoặc xóa tìm kiếm.</value></data>
-  <data name="System_Empty" xml:space="preserve"><value>Không có mục khởi động nào khớp với bộ lọc hiện tại. Máy này có {0} mục — xóa bộ lọc hoặc bật “Hiện mục hệ thống / chỉ đọc”.</value></data>
-  <data name="Ports_Open" xml:space="preserve"><value>Mở trong trình duyệt</value></data>
-  <data name="Ports_Kill" xml:space="preserve"><value>Giải phóng cổng</value></data>
-  <data name="Ports_AlsoListening" xml:space="preserve"><value>Cũng đang lắng nghe trên {0}</value></data>
-  <data name="Ports_KillFail" xml:space="preserve"><value>Không thể giải phóng cổng {0}: {1}</value></data>
-
-  <data name="Col_Enabled" xml:space="preserve"><value>Bật</value></data>
-  <data name="Col_Kind" xml:space="preserve"><value>Loại</value></data>
-  <data name="Col_Summary" xml:space="preserve"><value>Tóm tắt</value></data>
-  <data name="Col_Delay" xml:space="preserve"><value>Trễ</value></data>
-  <data name="Col_Time" xml:space="preserve"><value>Giờ</value></data>
-  <data name="Col_Period" xml:space="preserve"><value>Chu kỳ</value></data>
-  <data name="Col_Text" xml:space="preserve"><value>Văn bản</value></data>
-  <data name="Col_Name" xml:space="preserve"><value>Tên</value></data>
-  <data name="Col_Steps" xml:space="preserve"><value>Bước</value></data>
-  <data name="Col_Command" xml:space="preserve"><value>Lệnh</value></data>
-  <data name="Col_Source" xml:space="preserve"><value>Nguồn</value></data>
-  <data name="Col_Scope" xml:space="preserve"><value>Phạm vi</value></data>
-  <data name="Col_Hotkey" xml:space="preserve"><value>Phím tắt</value></data>
-  <data name="Gesture_Manager" xml:space="preserve"><value>Cử chỉ chuột</value></data>
-  <data name="Gesture_Enabled" xml:space="preserve"><value>Bật</value></data>
-  <data name="Gesture_Rehook" xml:space="preserve"><value>Gắn lại hook</value></data>
-  <data name="Gesture_RehookHint" xml:space="preserve"><value>Một chương trình khác (trình điều khiển chuột, AutoHotkey, công cụ cử chỉ khác) có thể đứng trước và nuốt mất nút phải — lúc đó ở đây mọi thứ trông vẫn ổn mà nút phải không bao giờ tới. Hook gắn sau được gọi trước, nên gắn lại sẽ giành lại đầu hàng.</value></data>
-  <data name="Gesture_WatchLive" xml:space="preserve"><value>Đang theo dõi nút phải</value></data>
-  <data name="Gesture_WatchOff" xml:space="preserve"><value>Không theo dõi nút phải</value></data>
-  <data name="Gesture_WatchFailed" xml:space="preserve"><value>Windows đã từ chối hook</value></data>
-  <data name="Gesture_WatchStale" xml:space="preserve"><value>Hook đã chết — đang gắn lại</value></data>
-  <data name="Gesture_WatchDeaf" xml:space="preserve"><value>Đã gắn hook nhưng không có đầu vào nào tới — thử chạy với quyền quản trị</value></data>
-  <data name="Gesture_WatchBlocked" xml:space="preserve"><value>Một chương trình khác đang lấy nút phải (AutoHotkey, trình điều khiển chuột…)</value></data>
-  <data name="Gesture_Hint" xml:space="preserve"><value>Giữ nút phải và vẽ một nét, hành động tương ứng sẽ chạy. Nếu chưa có cử chỉ nào, nút phải hoạt động như bình thường.</value></data>
-  <data name="Gesture_Track" xml:space="preserve"><value>Nét</value></data>
-  <data name="Settings_GestureManage" xml:space="preserve"><value>Quản lý cử chỉ…</value></data>
-  <data name="Settings_PanelManage" xml:space="preserve"><value>Quản lý bảng…</value></data>
-  <data name="Gesture_None" xml:space="preserve"><value>Chưa có cử chỉ nào. Bấm “Thêm”, chọn một hành động, rồi vẽ một nét ở bên phải.</value></data>
-  <data name="Ed_GestureDrawHere" xml:space="preserve"><value>Giữ nút trái, vẽ tại đây</value></data>
-  <data name="Val_GestureDup" xml:space="preserve"><value>Cử chỉ {0} đã được “{1}” dùng; hãy vẽ nét khác</value></data>
-  <data name="Col_Port" xml:space="preserve"><value>Cổng</value></data>
-  <data name="Col_Process" xml:space="preserve"><value>Tiến trình</value></data>
-  <data name="Col_Pid" xml:space="preserve"><value>PID</value></data>
-  <data name="Col_Address" xml:space="preserve"><value>Địa chỉ</value></data>
-
-  <data name="Btn_Add" xml:space="preserve"><value>Thêm</value></data>
-  <data name="Btn_AddMenu" xml:space="preserve"><value>Thêm ▾</value></data>
-  <data name="Btn_FromTemplate" xml:space="preserve"><value>Từ một mẫu…</value></data>
-  <data name="Btn_Edit" xml:space="preserve"><value>Sửa</value></data>
-  <data name="Btn_Rename" xml:space="preserve"><value>Đổi tên</value></data>
-  <data name="Btn_Delete" xml:space="preserve"><value>Xóa</value></data>
-  <data name="Btn_Up" xml:space="preserve"><value>↑ Lên</value></data>
-  <data name="A11y_DragHandle" xml:space="preserve"><value>Kéo để sắp xếp lại</value></data>
-  <data name="Btn_Down" xml:space="preserve"><value>↓ Xuống</value></data>
-  <data name="Btn_RunStep" xml:space="preserve"><value>▶ Chạy bước này</value></data>
-  <data name="Btn_RunGroup" xml:space="preserve"><value>▶ Chạy nhóm</value></data>
-  <data name="Btn_StopRun" xml:space="preserve"><value>■ Dừng</value></data>
-  <data name="Btn_Run" xml:space="preserve"><value>▶ Chạy</value></data>
-
-  <data name="Settings_StartupDelay" xml:space="preserve"><value>Trễ khởi động (giây)</value></data>
-  <data name="Settings_StartMinimized" xml:space="preserve"><value>Khởi động thu nhỏ vào khay</value></data>
-  <data name="Settings_StopHotkey" xml:space="preserve"><value>Phím dừng</value></data>
-  <data name="Settings_Language" xml:space="preserve"><value>Ngôn ngữ</value></data>
-  <data name="Settings_LangRestart" xml:space="preserve"><value>Clockwork sẽ khởi động lại ngay để áp dụng ngôn ngữ mới.</value></data>
-
-  <data name="Autostart_Label" xml:space="preserve"><value>Khởi động cùng hệ thống</value></data>
-
-  <data name="Tray_Show" xml:space="preserve"><value>Hiện cửa sổ</value></data>
-  <data name="Tray_Rerun" xml:space="preserve"><value>Chạy lại danh sách khởi động</value></data>
-  <data name="Tray_Stop" xml:space="preserve"><value>Dừng hành động đang chạy</value></data>
-  <data name="Tray_Exit" xml:space="preserve"><value>Thoát</value></data>
-
-  <data name="Reminder_Popup_Yes" xml:space="preserve"><value>Có</value></data>
-  <data name="Reminder_Popup_No" xml:space="preserve"><value>Không</value></data>
-  <data name="Reminder_Popup_Ok" xml:space="preserve"><value>OK</value></data>
-  <data name="Reminder_Popup_Snooze" xml:space="preserve"><value>Hoãn 10 phút</value></data>
-  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve"><value>Tùy chọn hoãn khác</value></data>
-
-  <data name="Kind_app" xml:space="preserve"><value>Mở ứng dụng</value></data>
-  <data name="Kind_keys" xml:space="preserve"><value>Gửi phím</value></data>
-  <data name="Kind_volume" xml:space="preserve"><value>Âm lượng</value></data>
-  <data name="Kind_window" xml:space="preserve"><value>Thao tác cửa sổ</value></data>
-  <data name="Kind_system" xml:space="preserve"><value>Lệnh hệ thống</value></data>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Subtitle" xml:space="preserve">
+    <value>Khởi động · Nhắc nhở · Thao tác một chạm</value>
+  </data>
+  <data name="Tab_Launch" xml:space="preserve">
+    <value>Danh sách khởi động</value>
+  </data>
+  <data name="Tab_Reminder" xml:space="preserve">
+    <value>Tác vụ theo lịch</value>
+  </data>
+  <data name="Tab_Group" xml:space="preserve">
+    <value>Nhóm hành động</value>
+  </data>
+  <data name="Tab_System" xml:space="preserve">
+    <value>Khởi động hệ thống</value>
+  </data>
+  <data name="Tab_Ports" xml:space="preserve">
+    <value>Cổng</value>
+  </data>
+  <data name="Launch_Hint" xml:space="preserve">
+    <value>Chạy một lần khi đăng nhập, từ trên xuống · kéo dòng để đổi thứ tự. Muốn chạy theo giờ / sự kiện → Tác vụ theo lịch; muốn chạy bất cứ lúc nào → Nhóm hành động.</value>
+  </data>
+  <data name="Reminder_Hint" xml:space="preserve">
+    <value>Kích hoạt đúng giờ, khi đăng nhập hoặc theo sự kiện như mở khóa / cắm sạc — nhắc nhở hoặc chạy nhóm im lặng. Chỉ mở ứng dụng lúc đăng nhập → Danh sách khởi động; chạy thủ công → Nhóm hành động.</value>
+  </data>
+  <data name="Group_Hint" xml:space="preserve">
+    <value>Gói một chuỗi thao tác thành nhóm, kích hoạt bất cứ lúc nào bằng phím tắt / khay hệ thống; Danh sách khởi động và Tác vụ theo lịch cũng tham chiếu được. Việc chỉ chạy lúc đăng nhập thì viết thẳng vào Danh sách khởi động sẽ gọn hơn.</value>
+  </data>
+  <data name="Group_NoSteps" xml:space="preserve">
+    <value>Chưa có bước nào. Bấm “Thêm” ở trên để tạo bước đầu tiên — bước ở trên cùng chạy trước.</value>
+  </data>
+  <data name="Group_Empty" xml:space="preserve">
+    <value>(trống)</value>
+  </data>
+  <data name="System_Footer" xml:space="preserve">
+    <value>Chọn/bỏ chọn có hiệu lực ngay (vô hiệu, không xóa; hoàn tác được).</value>
+  </data>
+  <data name="System_ShowReadOnlyTip" xml:space="preserve">
+    <value>Mục hệ thống / chính sách / một lần chỉ đọc được ẩn theo mặc định.</value>
+  </data>
+  <data name="System_Count" xml:space="preserve">
+    <value>{0} / {1} mục</value>
+  </data>
+  <data name="System_Filter" xml:space="preserve">
+    <value>Lọc</value>
+  </data>
+  <data name="System_ShowReadOnly" xml:space="preserve">
+    <value>Hiện mục hệ thống / chỉ đọc</value>
+  </data>
+  <data name="System_Scanning" xml:space="preserve">
+    <value>Đang quét mục khởi động…</value>
+  </data>
+  <data name="System_Refresh" xml:space="preserve">
+    <value>Làm mới</value>
+  </data>
+  <data name="Ports_ShowAll" xml:space="preserve">
+    <value>Hiện tất cả cổng</value>
+  </data>
+  <data name="Ports_ShowAllTip" xml:space="preserve">
+    <value>Khi một tiến trình giữ nhiều cổng, mặc định chỉ hiện cổng hướng ra ngoài. Chọn để liệt kê mọi cổng và bỏ qua bộ lọc phía trên.</value>
+  </data>
+  <data name="Ports_DevOnly" xml:space="preserve">
+    <value>Chỉ dịch vụ dự án</value>
+  </data>
+  <data name="Ports_DevOnlyTip" xml:space="preserve">
+    <value>Chỉ liệt kê các dịch vụ khởi chạy từ thư mục dự án của bạn, nhận biết qua dấu hiệu như .git hay package.json. Bỏ chọn để thấy những phần mềm đang lắng nghe còn lại.</value>
+  </data>
+  <data name="Ports_Footer" xml:space="preserve">
+    <value>Nhấp đúp vào một hàng để mở trong trình duyệt; nhấp chuột phải để giải phóng cổng.</value>
+  </data>
+  <data name="Ports_Count" xml:space="preserve">
+    <value>{0} / {1} cổng · tự làm mới mỗi 5 giây</value>
+  </data>
+  <data name="Ports_Empty" xml:space="preserve">
+    <value>Không có cổng nào khớp với bộ lọc hiện tại. Trên máy này có {0} cổng đang lắng nghe — đổi bộ lọc hoặc xóa tìm kiếm.</value>
+  </data>
+  <data name="System_Empty" xml:space="preserve">
+    <value>Không có mục khởi động nào khớp với bộ lọc hiện tại. Máy này có {0} mục — xóa bộ lọc hoặc bật “Hiện mục hệ thống / chỉ đọc”.</value>
+  </data>
+  <data name="Ports_Open" xml:space="preserve">
+    <value>Mở trong trình duyệt</value>
+  </data>
+  <data name="Ports_Kill" xml:space="preserve">
+    <value>Giải phóng cổng</value>
+  </data>
+  <data name="Ports_AlsoListening" xml:space="preserve">
+    <value>Cũng đang lắng nghe trên {0}</value>
+  </data>
+  <data name="Ports_KillFail" xml:space="preserve">
+    <value>Không thể giải phóng cổng {0}: {1}</value>
+  </data>
+  <data name="Col_Enabled" xml:space="preserve">
+    <value>Bật</value>
+  </data>
+  <data name="Col_Kind" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="Col_Summary" xml:space="preserve">
+    <value>Tóm tắt</value>
+  </data>
+  <data name="Col_Delay" xml:space="preserve">
+    <value>Trễ</value>
+  </data>
+  <data name="Col_Time" xml:space="preserve">
+    <value>Giờ</value>
+  </data>
+  <data name="Col_Period" xml:space="preserve">
+    <value>Chu kỳ</value>
+  </data>
+  <data name="Col_Text" xml:space="preserve">
+    <value>Văn bản</value>
+  </data>
+  <data name="Col_Name" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Col_Steps" xml:space="preserve">
+    <value>Bước</value>
+  </data>
+  <data name="Col_Command" xml:space="preserve">
+    <value>Lệnh</value>
+  </data>
+  <data name="Col_Source" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="Col_Scope" xml:space="preserve">
+    <value>Phạm vi</value>
+  </data>
+  <data name="Col_Hotkey" xml:space="preserve">
+    <value>Phím tắt</value>
+  </data>
+  <data name="Gesture_Manager" xml:space="preserve">
+    <value>Cử chỉ chuột</value>
+  </data>
+  <data name="Gesture_Enabled" xml:space="preserve">
+    <value>Bật</value>
+  </data>
+  <data name="Gesture_Rehook" xml:space="preserve">
+    <value>Gắn lại hook</value>
+  </data>
+  <data name="Gesture_RehookHint" xml:space="preserve">
+    <value>Một chương trình khác (trình điều khiển chuột, AutoHotkey, công cụ cử chỉ khác) có thể đứng trước và nuốt mất nút phải — lúc đó ở đây mọi thứ trông vẫn ổn mà nút phải không bao giờ tới. Hook gắn sau được gọi trước, nên gắn lại sẽ giành lại đầu hàng.</value>
+  </data>
+  <data name="Gesture_WatchLive" xml:space="preserve">
+    <value>Đang theo dõi nút phải</value>
+  </data>
+  <data name="Gesture_WatchOff" xml:space="preserve">
+    <value>Không theo dõi nút phải</value>
+  </data>
+  <data name="Gesture_WatchFailed" xml:space="preserve">
+    <value>Windows đã từ chối hook</value>
+  </data>
+  <data name="Gesture_WatchStale" xml:space="preserve">
+    <value>Hook đã chết — đang gắn lại</value>
+  </data>
+  <data name="Gesture_WatchDeaf" xml:space="preserve">
+    <value>Đã gắn hook nhưng không có đầu vào nào tới — thử chạy với quyền quản trị</value>
+  </data>
+  <data name="Gesture_WatchBlocked" xml:space="preserve">
+    <value>Một chương trình khác đang lấy nút phải (AutoHotkey, trình điều khiển chuột…)</value>
+  </data>
+  <data name="Gesture_Hint" xml:space="preserve">
+    <value>Giữ nút phải và vẽ một nét, hành động tương ứng sẽ chạy. Nếu chưa có cử chỉ nào, nút phải hoạt động như bình thường.</value>
+  </data>
+  <data name="Gesture_Track" xml:space="preserve">
+    <value>Nét</value>
+  </data>
+  <data name="Settings_GestureManage" xml:space="preserve">
+    <value>Quản lý cử chỉ…</value>
+  </data>
+  <data name="Settings_PanelManage" xml:space="preserve">
+    <value>Quản lý bảng…</value>
+  </data>
+  <data name="Gesture_None" xml:space="preserve">
+    <value>Chưa có cử chỉ nào. Bấm “Thêm”, chọn một hành động, rồi vẽ một nét ở bên phải.</value>
+  </data>
+  <data name="Ed_GestureDrawHere" xml:space="preserve">
+    <value>Giữ nút trái, vẽ tại đây</value>
+  </data>
+  <data name="Val_GestureDup" xml:space="preserve">
+    <value>Cử chỉ {0} đã được “{1}” dùng; hãy vẽ nét khác</value>
+  </data>
+  <data name="Col_Port" xml:space="preserve">
+    <value>Cổng</value>
+  </data>
+  <data name="Col_Process" xml:space="preserve">
+    <value>Tiến trình</value>
+  </data>
+  <data name="Col_Pid" xml:space="preserve">
+    <value>PID</value>
+  </data>
+  <data name="Col_Address" xml:space="preserve">
+    <value>Địa chỉ</value>
+  </data>
+  <data name="Btn_Add" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="Btn_AddMenu" xml:space="preserve">
+    <value>Thêm ▾</value>
+  </data>
+  <data name="Btn_FromTemplate" xml:space="preserve">
+    <value>Từ một mẫu…</value>
+  </data>
+  <data name="Btn_Edit" xml:space="preserve">
+    <value>Sửa</value>
+  </data>
+  <data name="Btn_Rename" xml:space="preserve">
+    <value>Đổi tên</value>
+  </data>
+  <data name="Btn_Delete" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="Btn_Up" xml:space="preserve">
+    <value>↑ Lên</value>
+  </data>
+  <data name="A11y_DragHandle" xml:space="preserve">
+    <value>Kéo để sắp xếp lại</value>
+  </data>
+  <data name="Btn_Down" xml:space="preserve">
+    <value>↓ Xuống</value>
+  </data>
+  <data name="Btn_RunStep" xml:space="preserve">
+    <value>▶ Chạy bước này</value>
+  </data>
+  <data name="Btn_RunGroup" xml:space="preserve">
+    <value>▶ Chạy nhóm</value>
+  </data>
+  <data name="Btn_StopRun" xml:space="preserve">
+    <value>■ Dừng</value>
+  </data>
+  <data name="Btn_Run" xml:space="preserve">
+    <value>▶ Chạy</value>
+  </data>
+  <data name="Settings_StartupDelay" xml:space="preserve">
+    <value>Trễ khởi động (giây)</value>
+  </data>
+  <data name="Settings_StartMinimized" xml:space="preserve">
+    <value>Khởi động thu nhỏ vào khay</value>
+  </data>
+  <data name="Settings_StopHotkey" xml:space="preserve">
+    <value>Phím dừng</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="Settings_LangRestart" xml:space="preserve">
+    <value>Clockwork sẽ khởi động lại ngay để áp dụng ngôn ngữ mới.</value>
+  </data>
+  <data name="Autostart_Label" xml:space="preserve">
+    <value>Khởi động cùng hệ thống</value>
+  </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Hiện cửa sổ</value>
+  </data>
+  <data name="Tray_Rerun" xml:space="preserve">
+    <value>Chạy lại danh sách khởi động</value>
+  </data>
+  <data name="Tray_Stop" xml:space="preserve">
+    <value>Dừng hành động đang chạy</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Thoát</value>
+  </data>
+  <data name="Reminder_Popup_Yes" xml:space="preserve">
+    <value>Có</value>
+  </data>
+  <data name="Reminder_Popup_No" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="Reminder_Popup_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Reminder_Popup_Snooze" xml:space="preserve">
+    <value>Hoãn 10 phút</value>
+  </data>
+  <data name="Reminder_Popup_SnoozeMore" xml:space="preserve">
+    <value>Tùy chọn hoãn khác</value>
+  </data>
+  <data name="Kind_app" xml:space="preserve">
+    <value>Mở ứng dụng</value>
+  </data>
+  <data name="Kind_keys" xml:space="preserve">
+    <value>Gửi phím</value>
+  </data>
+  <data name="Kind_volume" xml:space="preserve">
+    <value>Âm lượng</value>
+  </data>
+  <data name="Kind_window" xml:space="preserve">
+    <value>Thao tác cửa sổ</value>
+  </data>
+  <data name="Kind_system" xml:space="preserve">
+    <value>Lệnh hệ thống</value>
+  </data>
   <data name="Kind_url" xml:space="preserve">
     <value>Mở trang web</value>
   </data>
@@ -119,8 +312,12 @@
   <data name="Kind_waitClipboard" xml:space="preserve">
     <value>Chờ khay nhớ tạm</value>
   </data>
-  <data name="Kind_prompt" xml:space="preserve"><value>Dữ liệu do người dùng nhập</value></data>
-  <data name="Kind_choice" xml:space="preserve"><value>Sự lựa chọn của người dùng</value></data>
+  <data name="Kind_prompt" xml:space="preserve">
+    <value>Dữ liệu do người dùng nhập</value>
+  </data>
+  <data name="Kind_choice" xml:space="preserve">
+    <value>Sự lựa chọn của người dùng</value>
+  </data>
   <data name="Sum_OpenUrl" xml:space="preserve">
     <value>Mở {0}</value>
   </data>
@@ -130,9 +327,15 @@
   <data name="Warn_WaitClipboard" xml:space="preserve">
     <value>Khay nhớ tạm không thay đổi trong {0} giây; vẫn tiếp tục</value>
   </data>
-  <data name="Warn_AskNoUi" xml:space="preserve"><value>Bước này cần hỏi bạn một điều gì đó, nhưng trên lộ trình này không có ai để hỏi (lần chạy này không có người theo dõi). Bước này đã bị bỏ qua.</value></data>
-  <data name="Warn_DestructiveNoUi" xml:space="preserve"><value>Bước này xóa dữ liệu không thể hoàn tác và cần bạn xác nhận trước, nhưng trên đường chạy này không có ai để hỏi (lần chạy này không có người theo dõi). Đã bỏ qua.</value></data>
-  <data name="Warn_ChoiceNoOptions" xml:space="preserve"><value>Bước này chưa được cấu hình bất kỳ tùy chọn nào, nên không có tùy chọn nào để lựa chọn. Bước này đã bị bỏ qua.</value></data>
+  <data name="Warn_AskNoUi" xml:space="preserve">
+    <value>Bước này cần hỏi bạn một điều gì đó, nhưng trên lộ trình này không có ai để hỏi (lần chạy này không có người theo dõi). Bước này đã bị bỏ qua.</value>
+  </data>
+  <data name="Warn_DestructiveNoUi" xml:space="preserve">
+    <value>Bước này xóa dữ liệu không thể hoàn tác và cần bạn xác nhận trước, nhưng trên đường chạy này không có ai để hỏi (lần chạy này không có người theo dõi). Đã bỏ qua.</value>
+  </data>
+  <data name="Warn_ChoiceNoOptions" xml:space="preserve">
+    <value>Bước này chưa được cấu hình bất kỳ tùy chọn nào, nên không có tùy chọn nào để lựa chọn. Bước này đã bị bỏ qua.</value>
+  </data>
   <data name="Ed_Url" xml:space="preserve">
     <value>URL</value>
   </data>
@@ -145,13 +348,27 @@
   <data name="Ed_CopySelectionHint" xml:space="preserve">
     <value>Tự nhấn phím sao chép giúp bạn và đưa văn bản đã chọn vào khay nhớ tạm. Các bước sau đọc lại bằng {clipboard}.</value>
   </data>
-  <data name="Ed_AskText" xml:space="preserve"><value>Câu hỏi</value></data>
-  <data name="Ed_AskDefault" xml:space="preserve"><value>Câu trả lời mặc định</value></data>
-  <data name="Ed_Options" xml:space="preserve"><value>Tùy chọn</value></data>
-  <data name="Ed_OptionsHint" xml:space="preserve"><value>Mỗi dòng một mục. Khi chương trình chạy, các mục này sẽ được liệt kê và bạn chọn một mục.</value></data>
-  <data name="Ed_OutputVar" xml:space="preserve"><value>Lưu câu trả lời dưới dạng</value></data>
-  <data name="Ed_OutputVarHint" xml:space="preserve"><value>Các bước tiếp theo sẽ sử dụng {0} để chỉ đến nó. Nếu để trống, bước này sẽ không tạo ra kết quả nào.</value></data>
-  <data name="Ed_OutputVarSample" xml:space="preserve"><value>tên</value></data>
+  <data name="Ed_AskText" xml:space="preserve">
+    <value>Câu hỏi</value>
+  </data>
+  <data name="Ed_AskDefault" xml:space="preserve">
+    <value>Câu trả lời mặc định</value>
+  </data>
+  <data name="Ed_Options" xml:space="preserve">
+    <value>Tùy chọn</value>
+  </data>
+  <data name="Ed_OptionsHint" xml:space="preserve">
+    <value>Mỗi dòng một mục. Khi chương trình chạy, các mục này sẽ được liệt kê và bạn chọn một mục.</value>
+  </data>
+  <data name="Ed_OutputVar" xml:space="preserve">
+    <value>Lưu câu trả lời dưới dạng</value>
+  </data>
+  <data name="Ed_OutputVarHint" xml:space="preserve">
+    <value>Các bước tiếp theo sẽ sử dụng {0} để chỉ đến nó. Nếu để trống, bước này sẽ không tạo ra kết quả nào.</value>
+  </data>
+  <data name="Ed_OutputVarSample" xml:space="preserve">
+    <value>tên</value>
+  </data>
   <data name="Mig_PageMoved" xml:space="preserve">
     <value>Trang bảng “{0}” đã rời khỏi danh sách hành động sang Trang bảng (số ô: {1})</value>
   </data>
@@ -164,594 +381,1789 @@
   <data name="Mig_Title" xml:space="preserve">
     <value>Trang bảng giờ tách riêng</value>
   </data>
-  <data name="Kind_group" xml:space="preserve"><value>Chạy nhóm hành động</value></data>
-  <data name="Kind_message" xml:space="preserve"><value>Thông báo</value></data>
-  <data name="Kind_delay" xml:space="preserve"><value>Độ trễ</value></data>
-  <data name="Kind_text" xml:space="preserve"><value>Gửi văn bản</value></data>
-
-  <data name="Sys_showDesktop" xml:space="preserve"><value>Hiện màn hình nền</value></data>
-  <data name="Sys_lockScreen" xml:space="preserve"><value>Khóa màn hình (nhập mật khẩu khi trở lại)</value></data>
-  <data name="Sys_emptyRecycleBin" xml:space="preserve"><value>Dọn thùng rác</value></data>
-  <data name="Sys_openSettings" xml:space="preserve"><value>Mở Cài đặt Windows</value></data>
-  <data name="Sys_screenshot" xml:space="preserve"><value>Chụp màn hình (chọn vùng)</value></data>
-  <data name="Sys_clearClipboard" xml:space="preserve"><value>Xóa khay nhớ tạm</value></data>
-  <data name="Sys_taskManager" xml:space="preserve"><value>Mở Trình quản lý tác vụ</value></data>
-  <data name="Sys_monitorOff" xml:space="preserve"><value>Tắt màn hình (di chuột để bật lại)</value></data>
-  <data name="Sys_sleep" xml:space="preserve"><value>Ngủ (điện năng thấp, đánh thức nhanh)</value></data>
-  <data name="Sys_hibernate" xml:space="preserve"><value>Ngủ đông (lưu và tắt)</value></data>
-  <data name="Sys_signOut" xml:space="preserve"><value>Đăng xuất (xác nhận)</value></data>
-  <data name="Sys_restart" xml:space="preserve"><value>Khởi động lại (xác nhận)</value></data>
-  <data name="Sys_shutdown" xml:space="preserve"><value>Tắt máy (xác nhận)</value></data>
-
-  <data name="Vol_mute" xml:space="preserve"><value>Tắt tiếng</value></data>
-  <data name="Vol_unmute" xml:space="preserve"><value>Bật tiếng</value></data>
-  <data name="Vol_set" xml:space="preserve"><value>Âm lượng {0}%</value></data>
-  <data name="Win_close" xml:space="preserve"><value>Đóng cửa sổ</value></data>
-  <data name="Win_minimize" xml:space="preserve"><value>Thu nhỏ</value></data>
-  <data name="Win_maximize" xml:space="preserve"><value>Phóng to</value></data>
-  <data name="Cmd_playPause" xml:space="preserve"><value>Phát / tạm dừng</value></data>
-  <data name="Cmd_prevTrack" xml:space="preserve"><value>Bài trước</value></data>
-  <data name="Cmd_nextTrack" xml:space="preserve"><value>Bài tiếp theo</value></data>
-  <data name="Cmd_volUp" xml:space="preserve"><value>Tăng âm lượng</value></data>
-  <data name="Cmd_volDown" xml:space="preserve"><value>Giảm âm lượng</value></data>
-  <data name="Win_topmost" xml:space="preserve"><value>Bật/tắt ghim cửa sổ lên trên</value></data>
-  <data name="Win_topmostFg" xml:space="preserve"><value>Bật/tắt ghim cửa sổ hiện tại lên trên</value></data>
-  <data name="Ed_TopmostHint" xml:space="preserve"><value>Tính năng này áp dụng riêng cho từng cửa sổ: để tắt tính năng này cho một cửa sổ, trước tiên hãy đưa cửa sổ đó lên phía trước.</value></data>
-  <data name="Win_activate" xml:space="preserve"><value>Đưa lên trước</value></data>
-  <data name="Win_sendkey" xml:space="preserve"><value>Lên trước và gửi phím</value></data>
-  <data name="Win_restore" xml:space="preserve"><value>Quay lại cửa sổ trước đó</value></data>
-
-  <data name="Sum_SendKeys" xml:space="preserve"><value>Gửi {0}</value></data>
-  <data name="Sum_Delay_Sec" xml:space="preserve"><value>Trễ {0}s</value></data>
-  <data name="Sum_Delay_Ms" xml:space="preserve"><value>Trễ {0}ms</value></data>
-  <data name="Sum_RunGroup" xml:space="preserve"><value>Chạy nhóm: {0}</value></data>
-  <data name="Sum_Unset" xml:space="preserve"><value>(chưa chỉ định)</value></data>
-  <data name="Sum_Text" xml:space="preserve"><value>Nhập {0}</value></data>
-  <data name="Sum_Ask" xml:space="preserve"><value>Câu hỏi: {0}</value></data>
-  <data name="Sum_ToVar" xml:space="preserve"><value> → {0}</value></data>
-  <data name="Sum_MsgCard" xml:space="preserve"><value>Thẻ: {0}</value></data>
-  <data name="Sum_Before" xml:space="preserve"><value> (chỉ trước {0})</value></data>
-  <data name="Sum_DaysSuffix" xml:space="preserve"><value> ({0})</value></data>
-
-  <data name="Days_EveryDay" xml:space="preserve"><value>Hằng ngày</value></data>
-  <data name="Days_Sep" xml:space="preserve"><value> </value></data>
-  <data name="Days_RangeSep" xml:space="preserve"><value>–</value></data>
-  <data name="List_Sep" xml:space="preserve"><value>, </value></data>
-  <data name="Day_1" xml:space="preserve"><value>T2</value></data>
-  <data name="Day_2" xml:space="preserve"><value>T3</value></data>
-  <data name="Day_3" xml:space="preserve"><value>T4</value></data>
-  <data name="Day_4" xml:space="preserve"><value>T5</value></data>
-  <data name="Day_5" xml:space="preserve"><value>T6</value></data>
-  <data name="Day_6" xml:space="preserve"><value>T7</value></data>
-  <data name="Day_7" xml:space="preserve"><value>CN</value></data>
-
-  <data name="Period_EveryNDays" xml:space="preserve"><value>Mỗi {0} ngày</value></data>
-  <data name="Period_Monthly" xml:space="preserve"><value>Ngày {0} hằng tháng</value></data>
-  <data name="Period_Once" xml:space="preserve"><value>Chỉ một lần {0}</value></data>
-  <data name="Period_EachLogin" xml:space="preserve"><value>Mỗi lần đăng nhập</value></data>
-  <data name="Time_LoopEvery" xml:space="preserve"><value>mỗi {0} phút</value></data>
-  <data name="Time_LoopUntil" xml:space="preserve"><value>đến {0}</value></data>
-  <data name="Time_Startup" xml:space="preserve"><value>Khi đăng nhập</value></data>
-  <data name="Time_Startup_Before" xml:space="preserve"><value>Khi đăng nhập · trước {0}:00</value></data>
-  <data name="Time_Startup_After" xml:space="preserve"><value>Khi đăng nhập · sau {0}:00</value></data>
-
-  <data name="Type_Registry" xml:space="preserve"><value>Registry</value></data>
-  <data name="Type_StartupFolder" xml:space="preserve"><value>Thư mục Khởi động</value></data>
-  <data name="Type_ScheduledTask" xml:space="preserve"><value>Tác vụ theo lịch</value></data>
-  <data name="Scope_Machine" xml:space="preserve"><value>Mọi người dùng</value></data>
-  <data name="Scope_User" xml:space="preserve"><value>Người dùng hiện tại</value></data>
-  <data name="Scope_NeedsAdmin" xml:space="preserve"><value>{0} (cần admin)</value></data>
-
-  <data name="Ed_Ok" xml:space="preserve"><value>OK</value></data>
-  <data name="Ed_Cancel" xml:space="preserve"><value>Hủy</value></data>
-  <data name="Ed_Title_Step" xml:space="preserve"><value>Sửa bước</value></data>
-  <data name="Ed_Type" xml:space="preserve"><value>Loại</value></data>
-  <data name="Ed_Label" xml:space="preserve"><value>Nhãn</value></data>
-  <data name="Ed_Target" xml:space="preserve"><value>Đích</value></data>
-  <data name="Ed_Args" xml:space="preserve"><value>Đối số</value></data>
-  <data name="Ed_WorkDir" xml:space="preserve"><value>Thư mục làm việc</value></data>
-  <data name="Ed_Elevated" xml:space="preserve"><value>Chạy với quyền quản trị</value></data>
-  <data name="Ed_AppHint" xml:space="preserve"><value>Mục tiêu có thể là chương trình (đường dẫn đầy đủ hoặc chỉ tên), lối tắt, script, thư mục, URL, tài liệu hoặc giao thức như ms-settings:.</value></data>
-  <data name="Ed_Combo" xml:space="preserve"><value>Phím tắt</value></data>
-  <data name="Ed_KeysHint" xml:space="preserve"><value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập. Thao tác chuột kèm phím bổ trợ cũng ở đây: cuộn ngay trong ô để ghi lại (giữ Ctrl để phóng to, Shift để cuộn ngang). Nếu chỉ cần cuộn hay nhấp, bước “Chuột” tiện hơn.</value></data>
-  <data name="Ed_MouseHint" xml:space="preserve"><value>Cuộn được gửi tới cửa sổ dưới con trỏ; cú nhấp xảy ra ngay tại vị trí con trỏ đang đứng (ứng dụng này không di chuyển con trỏ). Vì vậy hãy đưa cửa sổ đích ra trước bằng Hành động cửa sổ, hoặc chỉ dùng các thao tác không phụ thuộc vị trí như Lùi/Tiến. Tăng số lần lặp bên dưới để nhấp N lần hay cuộn N nấc, dùng độ trễ sau bước để chỉnh nhịp.</value></data>
-  <data name="Wheel_down" xml:space="preserve"><value>Cuộn xuống</value></data>
-  <data name="Wheel_right" xml:space="preserve"><value>Cuộn sang phải</value></data>
-  <data name="Mouse_forward" xml:space="preserve"><value>Tiến (nút bên)</value></data>
-  <data name="Mouse_back" xml:space="preserve"><value>Lùi (nút bên)</value></data>
-  <data name="Mouse_middleClick" xml:space="preserve"><value>Nhấp giữa</value></data>
-  <data name="Mouse_rightClick" xml:space="preserve"><value>Nhấp phải</value></data>
-  <data name="Mouse_doubleClick" xml:space="preserve"><value>Nhấp đúp</value></data>
-  <data name="Mouse_leftClick" xml:space="preserve"><value>Nhấp trái</value></data>
-  <data name="Wheel_left" xml:space="preserve"><value>Cuộn sang trái</value></data>
-  <data name="Wheel_up" xml:space="preserve"><value>Cuộn lên</value></data>
-  <data name="Kind_mouse" xml:space="preserve"><value>Chuột</value></data>
-  <data name="Ed_Action" xml:space="preserve"><value>Hành động</value></data>
-  <data name="Ed_Level" xml:space="preserve"><value>Âm lượng (0-100)</value></data>
-  <data name="Ed_Process" xml:space="preserve"><value>Tiến trình</value></data>
-  <data name="Ed_SendKey" xml:space="preserve"><value>Gửi phím</value></data>
-  <data name="Ed_WaitWin" xml:space="preserve"><value>Chờ cửa sổ (giây)</value></data>
-  <data name="Ed_PostDelay" xml:space="preserve"><value>Sau khi hiện (giây)</value></data>
-  <data name="Ed_WindowHint" xml:space="preserve"><value>Tên tiến trình không có .exe (VD Weixin / msedge). Đưa lên trước / gửi phím cần lấy nét và có thể không chạy khi khởi động.</value></data>
-  <data name="Ed_RestoreHint" xml:space="preserve"><value>Khôi phục cửa sổ mà bạn đang sử dụng khi hành động này được kích hoạt. Không có mục tiêu nào để chọn cho hành động này.</value></data>
-  <data name="Ed_Command" xml:space="preserve"><value>Lệnh</value></data>
-  <data name="Ed_Text" xml:space="preserve"><value>Văn bản</value></data>
-  <data name="Ed_TextProcess" xml:space="preserve"><value>Tiến trình đích</value></data>
-  <data name="Ed_TextHint" xml:space="preserve"><value>Gõ từng ký tự (xuống dòng = Enter). Để trống tiến trình để gửi tới cửa sổ đang lấy nét (đáng tin nhất).</value></data>
-  <data name="Ed_Message" xml:space="preserve"><value>Thông báo</value></data>
-  <data name="Ed_Speak" xml:space="preserve"><value>Đọc thành tiếng</value></data>
-  <data name="Snd_Both" xml:space="preserve"><value>Âm báo + đọc to</value></data>
-  <data name="Snd_Speak" xml:space="preserve"><value>Đọc to (đọc nội dung)</value></data>
-  <data name="Snd_Sound" xml:space="preserve"><value>Âm báo (một tiếng)</value></data>
-  <data name="Snd_None" xml:space="preserve"><value>Im lặng</value></data>
-  <data name="Ed_SoundMode" xml:space="preserve"><value>Âm thanh</value></data>
-  <data name="Ed_Confirm" xml:space="preserve"><value>Xác nhận Có/Không (Có = tiếp tục, Không = hủy nhóm)</value></data>
-  <data name="Ed_OnYes" xml:space="preserve"><value>Sau “Có”</value></data>
-  <data name="Ed_Present" xml:space="preserve"><value>Hiển thị dạng</value></data>
-  <data name="Present_Dialog" xml:space="preserve"><value>Hộp thoại (chặn)</value></data>
-  <data name="Present_Card" xml:space="preserve"><value>Thẻ (không chặn)</value></data>
-  <data name="Ed_Group" xml:space="preserve"><value>Nhóm hành động</value></data>
-  <data name="Ed_DelayMs" xml:space="preserve"><value>Trễ sau (ms)</value></data>
-  <data name="Ed_Repeat" xml:space="preserve"><value>Số lần lặp</value></data>
-  <data name="Ed_Note" xml:space="preserve"><value>Ghi chú</value></data>
-  <data name="Ed_DaysHeader" xml:space="preserve"><value>Chỉ chạy vào các thứ này (không chọn = hằng ngày)</value></data>
-  <data name="Ed_OnlyBefore" xml:space="preserve"><value>Chỉ trước</value></data>
-  <data name="Ed_BeforeTimeHint" xml:space="preserve"><value>Định dạng H:mm, ví dụ 08:30; chỉ nhập giờ (ví dụ 8) cũng được; mặc định 08:00.</value></data>
-  <data name="Ed_HourBefore" xml:space="preserve"><value></value></data>
-  <data name="Ed_Vol_Set" xml:space="preserve"><value>Đặt âm lượng</value></data>
-  <data name="Ed_OnYes_None" xml:space="preserve"><value>Không</value></data>
-  <data name="Ed_OnYes_Run" xml:space="preserve"><value>Chạy / mở tệp</value></data>
-  <data name="Ed_OnYes_Url" xml:space="preserve"><value>Mở URL</value></data>
-  <data name="Ed_Group_None" xml:space="preserve"><value>(không có)</value></data>
-  <data name="Ed_GroupMissing" xml:space="preserve"><value>(mục tiêu đã bị xóa)</value></data>
-
-  <data name="Warn_SendKeyFail" xml:space="preserve"><value>Gửi phím tới “{0}” thất bại: cửa sổ không hiện hoặc không đưa lên trước được (thường gặp khi khởi động/nền)</value></data>
-  <data name="Warn_WindowNotFound" xml:space="preserve"><value>Không tìm thấy cửa sổ của “{0}” (tiến trình chưa chạy hoặc chưa sẵn sàng?); {1} không có tác dụng</value></data>
-  <data name="Warn_WindowActionFailed" xml:space="preserve"><value>Đã tìm thấy cửa sổ của “{0}” nhưng {1} không có tác dụng (khóa tiền cảnh, cửa sổ từ chối đóng, hoặc nó chạy với quyền quản trị)</value></data>
-  <data name="Warn_RestoreFailed" xml:space="preserve"><value>Không thể quay lại cửa sổ trước đó: cửa sổ đang hiển thị bị khóa, hoặc cửa sổ đó đã biến mất.</value></data>
-  <data name="Warn_UnknownWindowAction" xml:space="preserve"><value>Thao tác cửa sổ không xác định: {0}</value></data>
-  <data name="Warn_NotForCurrentWindow" xml:space="preserve"><value>“Cửa sổ hiện tại” không nhận hành động này ({0}): đưa lên trước là vô nghĩa, còn muốn gửi phím thì dùng bước “Gửi phím”. Đã bỏ qua.</value></data>
-  <data name="Warn_UnknownVolume" xml:space="preserve"><value>Hành động âm lượng không xác định: {0}</value></data>
-  <data name="Warn_UnknownKind" xml:space="preserve"><value>Loại bước không xác định: {0}</value></data>
-  <data name="Warn_SelfSkip" xml:space="preserve"><value>Bỏ qua “{0}”: đích là chính Clockwork (tránh vòng lặp khởi động tự động)</value></data>
-  <data name="Warn_LaunchFail" xml:space="preserve"><value>Khởi chạy thất bại: {0} — {1}</value></data>
-  <data name="Warn_QuickExit" xml:space="preserve"><value>“{0}” đã thoát trong 0,5 giây (mã {1}); có thể khởi chạy thất bại</value></data>
-  <data name="Warn_ConfigUnreadable" xml:space="preserve"><value>Không đọc được tệp cấu hình (nhiều khả năng JSON bị hỏng); đã khởi động với cấu hình mặc định. Bản gốc đã được sao lưu thành {0} — sửa xong khởi động lại là khôi phục được.</value></data>
-  <data name="Err_ScriptMissing" xml:space="preserve"><value>Không tìm thấy tệp script (hãy nhập đường dẫn đầy đủ)</value></data>
-  <data name="Err_ScriptNeedsPwsh" xml:space="preserve"><value>Script không chạy: bản PowerShell đi kèm Windows không đọc được cách mã hóa này. Hãy lưu script dưới dạng UTF-8 có BOM, hoặc dùng PowerShell 7.</value></data>
-  <data name="Mark_Unverified" xml:space="preserve"><value>~ Đã gửi (chưa xác minh)</value></data>
-  <data name="Mark_Exception" xml:space="preserve"><value>Lỗi: {0}</value></data>
-
-  <data name="Note_Policy" xml:space="preserve"><value>Chính sách</value></data>
-  <data name="Note_OneTime" xml:space="preserve"><value>Một lần</value></data>
-  <data name="Note_System" xml:space="preserve"><value>Quan trọng cho hệ thống</value></data>
-  <data name="Note_ActiveSetup" xml:space="preserve"><value>Active Setup</value></data>
-
-  <data name="Ed_Title_Group" xml:space="preserve"><value>Sửa nhóm hành động</value></data>
-  <data name="Ed_GroupHint" xml:space="preserve"><value>Nhóm không bao giờ tự chạy — kích hoạt từ menu khay hệ thống, phím tắt toàn cục, bước Nhóm hành động trong danh sách khởi động, hoặc tác vụ hẹn giờ.</value></data>
-  <data name="Val_GroupName" xml:space="preserve"><value>Vui lòng nhập tên nhóm.</value></data>
-
-  <data name="Ed_Title_Reminder" xml:space="preserve"><value>Sửa tác vụ theo lịch</value></data>
-  <data name="Ed_Trigger" xml:space="preserve"><value>Kích hoạt</value></data>
-  <data name="Ed_Trig_Time" xml:space="preserve"><value>Theo giờ</value></data>
-  <data name="Ed_Trig_Startup" xml:space="preserve"><value>Khi đăng nhập</value></data>
-  <data name="Ed_Time" xml:space="preserve"><value>Giờ (HH:mm)</value></data>
-  <data name="Ed_LoginTiming" xml:space="preserve"><value>Điều kiện đăng nhập</value></data>
-  <data name="Ed_SMode_Any" xml:space="preserve"><value>Luôn luôn</value></data>
-  <data name="Ed_SMode_Before" xml:space="preserve"><value>Chỉ trước giờ đã đặt</value></data>
-  <data name="Ed_SMode_After" xml:space="preserve"><value>Chỉ sau giờ đã đặt</value></data>
-  <data name="Ed_Hour" xml:space="preserve"><value>:00</value></data>
-  <data name="Ed_OnlyBoot" xml:space="preserve"><value>Chỉ trong</value></data>
-  <data name="Ed_WithinHint" xml:space="preserve"><value>phút sau khi khởi động mới tính là đăng nhập (0 = mỗi lần mở)</value></data>
-  <data name="Ed_Period" xml:space="preserve"><value>Chu kỳ</value></data>
-  <data name="Ed_Rec_Daily" xml:space="preserve"><value>Theo thứ</value></data>
-  <data name="Ed_Rec_EveryN" xml:space="preserve"><value>Mỗi N ngày</value></data>
-  <data name="Ed_Rec_Monthly" xml:space="preserve"><value>Hằng tháng</value></data>
-  <data name="Ed_Rec_Once" xml:space="preserve"><value>Một lần</value></data>
-  <data name="Ed_EveryNDays" xml:space="preserve"><value>Mỗi</value></data>
-  <data name="Ed_AnchorDays" xml:space="preserve"><value>ngày; tính từ</value></data>
-  <data name="Ed_AnchorHint" xml:space="preserve"><value>(yyyy-MM-dd; trống = hôm nay)</value></data>
-  <data name="Ed_MonthlyDay" xml:space="preserve"><value>Ngày trong tháng</value></data>
-  <data name="Ed_OnceDate" xml:space="preserve"><value>Ngày</value></data>
-  <data name="Ed_ActPopup" xml:space="preserve"><value>Nhắc bằng cửa sổ bật lên</value></data>
-  <data name="Ed_ActSilent" xml:space="preserve"><value>Âm thầm chạy nhóm hành động</value></data>
-  <data name="Ed_SilentGroup" xml:space="preserve"><value>Chạy nhóm hành động</value></data>
-  <data name="Ed_OnYes_Group" xml:space="preserve"><value>Chạy nhóm hành động</value></data>
-  <data name="Ed_AutoDismiss" xml:space="preserve"><value>Tự đóng (giây)</value></data>
-  <data name="Ed_AutoHint" xml:space="preserve"><value>tự đóng nếu không bấm (0: thẻ = không bao giờ, hộp thoại = 60 giây)</value></data>
-  <data name="Toast_QuickSetDnd" xml:space="preserve"><value>Đã hẹn sau {0} phút, nhưng nhắc nhở đang tạm dừng — sẽ báo khi hết tạm dừng</value></data>
-  <data name="Toast_SkipTodayOff" xml:space="preserve"><value>Đã hủy bỏ qua hôm nay: {0}</value></data>
-  <data name="Toast_SkipToday" xml:space="preserve"><value>Bỏ qua hôm nay: {0}</value></data>
-  <data name="Toast_QuickSet" xml:space="preserve"><value>Đã hẹn nhắc sau {0} phút ({1})</value></data>
-  <data name="Quick_Done" xml:space="preserve"><value>Đã hết {0} phút</value></data>
-  <data name="Btn_SkipToday" xml:space="preserve"><value>Bỏ qua hôm nay</value></data>
-  <data name="Sum_SkippedToday" xml:space="preserve"><value>{0} · bỏ qua hôm nay</value></data>
-  <data name="Tray_QuickRemind" xml:space="preserve"><value>Nhắc nhanh</value></data>
-  <data name="Ed_RepeatNag" xml:space="preserve"><value>Nhắc đến khi xác nhận</value></data>
-  <data name="Ed_RepeatUntilPre" xml:space="preserve"><value>phút (0 = không lặp), đến</value></data>
-  <data name="Ed_RepeatUntilHint" xml:space="preserve"><value>(HH:mm, trống = tối đa 20 lần hiện)</value></data>
-  <data name="Ed_LoopEvery" xml:space="preserve"><value>Chạy lặp lại, mỗi</value></data>
-  <data name="Ed_LoopUntilPre" xml:space="preserve"><value>phút (0 = tắt), đến</value></data>
-  <data name="Ed_LoopUntilHint" xml:space="preserve"><value>(HH:mm, trống = cuối ngày)</value></data>
-  <data name="Ed_TrigDelay" xml:space="preserve"><value>Trễ sau khi kích hoạt</value></data>
-  <data name="Ed_DelaySecPlus" xml:space="preserve"><value>giây, cộng ngẫu nhiên 0~</value></data>
-  <data name="Ed_Sec" xml:space="preserve"><value>giây</value></data>
-  <data name="Ed_Grace" xml:space="preserve"><value>Gia hạn (phút)</value></data>
-  <data name="Ed_GraceHint" xml:space="preserve"><value>vẫn kích hoạt nếu bỏ lỡ giờ trong khoảng</value></data>
-  <data name="Val_TimeFormat" xml:space="preserve"><value>Giờ phải theo định dạng HH:mm</value></data>
-  <data name="Val_RepeatUntil" xml:space="preserve"><value>“Lặp đến” phải là HH:mm (hoặc trống)</value></data>
-  <data name="Val_LoopUntil" xml:space="preserve"><value>“Chạy lặp lại đến” phải là HH:mm (hoặc trống)</value></data>
-  <data name="Val_Anchor" xml:space="preserve"><value>Ngày bắt đầu phải là yyyy-MM-dd (hoặc trống)</value></data>
-  <data name="Val_OnceDate" xml:space="preserve"><value>Ngày phải theo định dạng yyyy-MM-dd</value></data>
-  <data name="Val_OnceDatePast" xml:space="preserve"><value>Ngày đó đã qua — tác vụ này sẽ không kích hoạt sau khi lưu (đặt ngày mới và bật lại để dùng tiếp)</value></data>
-  <data name="Val_SilentNoGroup" xml:space="preserve"><value>Đã chọn “Âm thầm chạy nhóm hành động” nhưng chưa chọn nhóm cụ thể</value></data>
-
-  <data name="Confirm_Title" xml:space="preserve"><value>Clockwork · Xác nhận</value></data>
-  <data name="Ask_Title" xml:space="preserve"><value>Clockwork · Câu hỏi</value></data>
-  <data name="Confirm_Destructive" xml:space="preserve"><value>Bạn có chắc muốn chạy “{0}”?</value></data>
-  <data name="Crash_Title" xml:space="preserve"><value>Clockwork · Lỗi</value></data>
-  <data name="Crash_Body" xml:space="preserve"><value>Clockwork gặp lỗi (đã ghi nhật ký; thường vẫn dùng tiếp được):
+  <data name="Kind_group" xml:space="preserve">
+    <value>Chạy nhóm hành động</value>
+  </data>
+  <data name="Kind_message" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="Kind_delay" xml:space="preserve">
+    <value>Độ trễ</value>
+  </data>
+  <data name="Kind_text" xml:space="preserve">
+    <value>Gửi văn bản</value>
+  </data>
+  <data name="Sys_showDesktop" xml:space="preserve">
+    <value>Hiện màn hình nền</value>
+  </data>
+  <data name="Sys_lockScreen" xml:space="preserve">
+    <value>Khóa màn hình (nhập mật khẩu khi trở lại)</value>
+  </data>
+  <data name="Sys_emptyRecycleBin" xml:space="preserve">
+    <value>Dọn thùng rác</value>
+  </data>
+  <data name="Sys_openSettings" xml:space="preserve">
+    <value>Mở Cài đặt Windows</value>
+  </data>
+  <data name="Sys_screenshot" xml:space="preserve">
+    <value>Chụp màn hình (chọn vùng)</value>
+  </data>
+  <data name="Sys_clearClipboard" xml:space="preserve">
+    <value>Xóa khay nhớ tạm</value>
+  </data>
+  <data name="Sys_taskManager" xml:space="preserve">
+    <value>Mở Trình quản lý tác vụ</value>
+  </data>
+  <data name="Sys_monitorOff" xml:space="preserve">
+    <value>Tắt màn hình (di chuột để bật lại)</value>
+  </data>
+  <data name="Sys_sleep" xml:space="preserve">
+    <value>Ngủ (điện năng thấp, đánh thức nhanh)</value>
+  </data>
+  <data name="Sys_hibernate" xml:space="preserve">
+    <value>Ngủ đông (lưu và tắt)</value>
+  </data>
+  <data name="Sys_signOut" xml:space="preserve">
+    <value>Đăng xuất (xác nhận)</value>
+  </data>
+  <data name="Sys_restart" xml:space="preserve">
+    <value>Khởi động lại (xác nhận)</value>
+  </data>
+  <data name="Sys_shutdown" xml:space="preserve">
+    <value>Tắt máy (xác nhận)</value>
+  </data>
+  <data name="Vol_mute" xml:space="preserve">
+    <value>Tắt tiếng</value>
+  </data>
+  <data name="Vol_unmute" xml:space="preserve">
+    <value>Bật tiếng</value>
+  </data>
+  <data name="Vol_set" xml:space="preserve">
+    <value>Âm lượng {0}%</value>
+  </data>
+  <data name="Win_close" xml:space="preserve">
+    <value>Đóng cửa sổ</value>
+  </data>
+  <data name="Win_minimize" xml:space="preserve">
+    <value>Thu nhỏ</value>
+  </data>
+  <data name="Win_maximize" xml:space="preserve">
+    <value>Phóng to</value>
+  </data>
+  <data name="Cmd_playPause" xml:space="preserve">
+    <value>Phát / tạm dừng</value>
+  </data>
+  <data name="Cmd_prevTrack" xml:space="preserve">
+    <value>Bài trước</value>
+  </data>
+  <data name="Cmd_nextTrack" xml:space="preserve">
+    <value>Bài tiếp theo</value>
+  </data>
+  <data name="Cmd_volUp" xml:space="preserve">
+    <value>Tăng âm lượng</value>
+  </data>
+  <data name="Cmd_volDown" xml:space="preserve">
+    <value>Giảm âm lượng</value>
+  </data>
+  <data name="Win_topmost" xml:space="preserve">
+    <value>Bật/tắt ghim cửa sổ lên trên</value>
+  </data>
+  <data name="Win_topmostFg" xml:space="preserve">
+    <value>Bật/tắt ghim cửa sổ hiện tại lên trên</value>
+  </data>
+  <data name="Ed_TopmostHint" xml:space="preserve">
+    <value>Tính năng này áp dụng riêng cho từng cửa sổ: để tắt tính năng này cho một cửa sổ, trước tiên hãy đưa cửa sổ đó lên phía trước.</value>
+  </data>
+  <data name="Win_activate" xml:space="preserve">
+    <value>Đưa lên trước</value>
+  </data>
+  <data name="Win_sendkey" xml:space="preserve">
+    <value>Lên trước và gửi phím</value>
+  </data>
+  <data name="Win_restore" xml:space="preserve">
+    <value>Quay lại cửa sổ trước đó</value>
+  </data>
+  <data name="Sum_SendKeys" xml:space="preserve">
+    <value>Gửi {0}</value>
+  </data>
+  <data name="Sum_Delay_Sec" xml:space="preserve">
+    <value>Trễ {0}s</value>
+  </data>
+  <data name="Sum_Delay_Ms" xml:space="preserve">
+    <value>Trễ {0}ms</value>
+  </data>
+  <data name="Sum_RunGroup" xml:space="preserve">
+    <value>Chạy nhóm: {0}</value>
+  </data>
+  <data name="Sum_Unset" xml:space="preserve">
+    <value>(chưa chỉ định)</value>
+  </data>
+  <data name="Sum_Text" xml:space="preserve">
+    <value>Nhập {0}</value>
+  </data>
+  <data name="Sum_Ask" xml:space="preserve">
+    <value>Câu hỏi: {0}</value>
+  </data>
+  <data name="Sum_ToVar" xml:space="preserve">
+    <value> → {0}</value>
+  </data>
+  <data name="Sum_MsgCard" xml:space="preserve">
+    <value>Thẻ: {0}</value>
+  </data>
+  <data name="Sum_Before" xml:space="preserve">
+    <value> (chỉ trước {0})</value>
+  </data>
+  <data name="Sum_DaysSuffix" xml:space="preserve">
+    <value> ({0})</value>
+  </data>
+  <data name="Days_EveryDay" xml:space="preserve">
+    <value>Hằng ngày</value>
+  </data>
+  <data name="Days_Sep" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="Days_RangeSep" xml:space="preserve">
+    <value>–</value>
+  </data>
+  <data name="List_Sep" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Day_1" xml:space="preserve">
+    <value>T2</value>
+  </data>
+  <data name="Day_2" xml:space="preserve">
+    <value>T3</value>
+  </data>
+  <data name="Day_3" xml:space="preserve">
+    <value>T4</value>
+  </data>
+  <data name="Day_4" xml:space="preserve">
+    <value>T5</value>
+  </data>
+  <data name="Day_5" xml:space="preserve">
+    <value>T6</value>
+  </data>
+  <data name="Day_6" xml:space="preserve">
+    <value>T7</value>
+  </data>
+  <data name="Day_7" xml:space="preserve">
+    <value>CN</value>
+  </data>
+  <data name="Period_EveryNDays" xml:space="preserve">
+    <value>Mỗi {0} ngày</value>
+  </data>
+  <data name="Period_Monthly" xml:space="preserve">
+    <value>Ngày {0} hằng tháng</value>
+  </data>
+  <data name="Period_Once" xml:space="preserve">
+    <value>Chỉ một lần {0}</value>
+  </data>
+  <data name="Period_EachLogin" xml:space="preserve">
+    <value>Mỗi lần đăng nhập</value>
+  </data>
+  <data name="Time_LoopEvery" xml:space="preserve">
+    <value>mỗi {0} phút</value>
+  </data>
+  <data name="Time_LoopUntil" xml:space="preserve">
+    <value>đến {0}</value>
+  </data>
+  <data name="Time_Startup" xml:space="preserve">
+    <value>Khi đăng nhập</value>
+  </data>
+  <data name="Time_Startup_Before" xml:space="preserve">
+    <value>Khi đăng nhập · trước {0}:00</value>
+  </data>
+  <data name="Time_Startup_After" xml:space="preserve">
+    <value>Khi đăng nhập · sau {0}:00</value>
+  </data>
+  <data name="Type_Registry" xml:space="preserve">
+    <value>Registry</value>
+  </data>
+  <data name="Type_StartupFolder" xml:space="preserve">
+    <value>Thư mục Khởi động</value>
+  </data>
+  <data name="Type_ScheduledTask" xml:space="preserve">
+    <value>Tác vụ theo lịch</value>
+  </data>
+  <data name="Scope_Machine" xml:space="preserve">
+    <value>Mọi người dùng</value>
+  </data>
+  <data name="Scope_User" xml:space="preserve">
+    <value>Người dùng hiện tại</value>
+  </data>
+  <data name="Scope_NeedsAdmin" xml:space="preserve">
+    <value>{0} (cần admin)</value>
+  </data>
+  <data name="Ed_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Ed_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="Ed_Title_Step" xml:space="preserve">
+    <value>Sửa bước</value>
+  </data>
+  <data name="Ed_Type" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="Ed_Label" xml:space="preserve">
+    <value>Nhãn</value>
+  </data>
+  <data name="Ed_Target" xml:space="preserve">
+    <value>Đích</value>
+  </data>
+  <data name="Ed_Args" xml:space="preserve">
+    <value>Đối số</value>
+  </data>
+  <data name="Ed_WorkDir" xml:space="preserve">
+    <value>Thư mục làm việc</value>
+  </data>
+  <data name="Ed_Elevated" xml:space="preserve">
+    <value>Chạy với quyền quản trị</value>
+  </data>
+  <data name="Ed_AppHint" xml:space="preserve">
+    <value>Mục tiêu có thể là chương trình (đường dẫn đầy đủ hoặc chỉ tên), lối tắt, script, thư mục, URL, tài liệu hoặc giao thức như ms-settings:.</value>
+  </data>
+  <data name="Ed_Combo" xml:space="preserve">
+    <value>Phím tắt</value>
+  </data>
+  <data name="Ed_KeysHint" xml:space="preserve">
+    <value>VD: Win+D / Alt+K / Ctrl+Enter / F5. Gửi tới cửa sổ đang lấy nét; hãy đưa đích lên trước. Các tổ hợp do Windows chiếm (Win+D, Win+6…) không bắt được — nhấp đúp vào ô để tự nhập. Thao tác chuột kèm phím bổ trợ cũng ở đây: cuộn ngay trong ô để ghi lại (giữ Ctrl để phóng to, Shift để cuộn ngang). Nếu chỉ cần cuộn hay nhấp, bước “Chuột” tiện hơn.</value>
+  </data>
+  <data name="Ed_MouseHint" xml:space="preserve">
+    <value>Cuộn được gửi tới cửa sổ dưới con trỏ; cú nhấp xảy ra ngay tại vị trí con trỏ đang đứng (ứng dụng này không di chuyển con trỏ). Vì vậy hãy đưa cửa sổ đích ra trước bằng Hành động cửa sổ, hoặc chỉ dùng các thao tác không phụ thuộc vị trí như Lùi/Tiến. Tăng số lần lặp bên dưới để nhấp N lần hay cuộn N nấc, dùng độ trễ sau bước để chỉnh nhịp.</value>
+  </data>
+  <data name="Wheel_down" xml:space="preserve">
+    <value>Cuộn xuống</value>
+  </data>
+  <data name="Wheel_right" xml:space="preserve">
+    <value>Cuộn sang phải</value>
+  </data>
+  <data name="Mouse_forward" xml:space="preserve">
+    <value>Tiến (nút bên)</value>
+  </data>
+  <data name="Mouse_back" xml:space="preserve">
+    <value>Lùi (nút bên)</value>
+  </data>
+  <data name="Mouse_middleClick" xml:space="preserve">
+    <value>Nhấp giữa</value>
+  </data>
+  <data name="Mouse_rightClick" xml:space="preserve">
+    <value>Nhấp phải</value>
+  </data>
+  <data name="Mouse_doubleClick" xml:space="preserve">
+    <value>Nhấp đúp</value>
+  </data>
+  <data name="Mouse_leftClick" xml:space="preserve">
+    <value>Nhấp trái</value>
+  </data>
+  <data name="Wheel_left" xml:space="preserve">
+    <value>Cuộn sang trái</value>
+  </data>
+  <data name="Wheel_up" xml:space="preserve">
+    <value>Cuộn lên</value>
+  </data>
+  <data name="Kind_mouse" xml:space="preserve">
+    <value>Chuột</value>
+  </data>
+  <data name="Ed_Action" xml:space="preserve">
+    <value>Hành động</value>
+  </data>
+  <data name="Ed_Level" xml:space="preserve">
+    <value>Âm lượng (0-100)</value>
+  </data>
+  <data name="Ed_Process" xml:space="preserve">
+    <value>Tiến trình</value>
+  </data>
+  <data name="Ed_SendKey" xml:space="preserve">
+    <value>Gửi phím</value>
+  </data>
+  <data name="Ed_WaitWin" xml:space="preserve">
+    <value>Chờ cửa sổ (giây)</value>
+  </data>
+  <data name="Ed_PostDelay" xml:space="preserve">
+    <value>Sau khi hiện (giây)</value>
+  </data>
+  <data name="Ed_WindowHint" xml:space="preserve">
+    <value>Tên tiến trình không có .exe (VD Weixin / msedge). Đưa lên trước / gửi phím cần lấy nét và có thể không chạy khi khởi động.</value>
+  </data>
+  <data name="Ed_RestoreHint" xml:space="preserve">
+    <value>Khôi phục cửa sổ mà bạn đang sử dụng khi hành động này được kích hoạt. Không có mục tiêu nào để chọn cho hành động này.</value>
+  </data>
+  <data name="Ed_Command" xml:space="preserve">
+    <value>Lệnh</value>
+  </data>
+  <data name="Ed_Text" xml:space="preserve">
+    <value>Văn bản</value>
+  </data>
+  <data name="Ed_TextProcess" xml:space="preserve">
+    <value>Tiến trình đích</value>
+  </data>
+  <data name="Ed_TextHint" xml:space="preserve">
+    <value>Gõ từng ký tự (xuống dòng = Enter). Để trống tiến trình để gửi tới cửa sổ đang lấy nét (đáng tin nhất).</value>
+  </data>
+  <data name="Ed_Message" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="Ed_Speak" xml:space="preserve">
+    <value>Đọc thành tiếng</value>
+  </data>
+  <data name="Snd_Both" xml:space="preserve">
+    <value>Âm báo + đọc to</value>
+  </data>
+  <data name="Snd_Speak" xml:space="preserve">
+    <value>Đọc to (đọc nội dung)</value>
+  </data>
+  <data name="Snd_Sound" xml:space="preserve">
+    <value>Âm báo (một tiếng)</value>
+  </data>
+  <data name="Snd_None" xml:space="preserve">
+    <value>Im lặng</value>
+  </data>
+  <data name="Ed_SoundMode" xml:space="preserve">
+    <value>Âm thanh</value>
+  </data>
+  <data name="Ed_Confirm" xml:space="preserve">
+    <value>Xác nhận Có/Không (Có = tiếp tục, Không = hủy nhóm)</value>
+  </data>
+  <data name="Ed_OnYes" xml:space="preserve">
+    <value>Sau “Có”</value>
+  </data>
+  <data name="Ed_Present" xml:space="preserve">
+    <value>Hiển thị dạng</value>
+  </data>
+  <data name="Present_Dialog" xml:space="preserve">
+    <value>Hộp thoại (chặn)</value>
+  </data>
+  <data name="Present_Card" xml:space="preserve">
+    <value>Thẻ (không chặn)</value>
+  </data>
+  <data name="Ed_Group" xml:space="preserve">
+    <value>Nhóm hành động</value>
+  </data>
+  <data name="Ed_DelayMs" xml:space="preserve">
+    <value>Trễ sau (ms)</value>
+  </data>
+  <data name="Ed_Repeat" xml:space="preserve">
+    <value>Số lần lặp</value>
+  </data>
+  <data name="Ed_Note" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="Ed_DaysHeader" xml:space="preserve">
+    <value>Chỉ chạy vào các thứ này (không chọn = hằng ngày)</value>
+  </data>
+  <data name="Ed_OnlyBefore" xml:space="preserve">
+    <value>Chỉ trước</value>
+  </data>
+  <data name="Ed_BeforeTimeHint" xml:space="preserve">
+    <value>Định dạng H:mm, ví dụ 08:30; chỉ nhập giờ (ví dụ 8) cũng được; mặc định 08:00.</value>
+  </data>
+  <data name="Ed_HourBefore" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Ed_Vol_Set" xml:space="preserve">
+    <value>Đặt âm lượng</value>
+  </data>
+  <data name="Ed_OnYes_None" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="Ed_OnYes_Run" xml:space="preserve">
+    <value>Chạy / mở tệp</value>
+  </data>
+  <data name="Ed_OnYes_Url" xml:space="preserve">
+    <value>Mở URL</value>
+  </data>
+  <data name="Ed_Group_None" xml:space="preserve">
+    <value>(không có)</value>
+  </data>
+  <data name="Ed_GroupMissing" xml:space="preserve">
+    <value>(mục tiêu đã bị xóa)</value>
+  </data>
+  <data name="Warn_SendKeyFail" xml:space="preserve">
+    <value>Gửi phím tới “{0}” thất bại: cửa sổ không hiện hoặc không đưa lên trước được (thường gặp khi khởi động/nền)</value>
+  </data>
+  <data name="Warn_WindowNotFound" xml:space="preserve">
+    <value>Không tìm thấy cửa sổ của “{0}” (tiến trình chưa chạy hoặc chưa sẵn sàng?); {1} không có tác dụng</value>
+  </data>
+  <data name="Warn_WindowActionFailed" xml:space="preserve">
+    <value>Đã tìm thấy cửa sổ của “{0}” nhưng {1} không có tác dụng (khóa tiền cảnh, cửa sổ từ chối đóng, hoặc nó chạy với quyền quản trị)</value>
+  </data>
+  <data name="Warn_RestoreFailed" xml:space="preserve">
+    <value>Không thể quay lại cửa sổ trước đó: cửa sổ đang hiển thị bị khóa, hoặc cửa sổ đó đã biến mất.</value>
+  </data>
+  <data name="Warn_UnknownWindowAction" xml:space="preserve">
+    <value>Thao tác cửa sổ không xác định: {0}</value>
+  </data>
+  <data name="Warn_NotForCurrentWindow" xml:space="preserve">
+    <value>“Cửa sổ hiện tại” không nhận hành động này ({0}): đưa lên trước là vô nghĩa, còn muốn gửi phím thì dùng bước “Gửi phím”. Đã bỏ qua.</value>
+  </data>
+  <data name="Warn_UnknownVolume" xml:space="preserve">
+    <value>Hành động âm lượng không xác định: {0}</value>
+  </data>
+  <data name="Warn_UnknownKind" xml:space="preserve">
+    <value>Loại bước không xác định: {0}</value>
+  </data>
+  <data name="Warn_SelfSkip" xml:space="preserve">
+    <value>Bỏ qua “{0}”: đích là chính Clockwork (tránh vòng lặp khởi động tự động)</value>
+  </data>
+  <data name="Warn_LaunchFail" xml:space="preserve">
+    <value>Khởi chạy thất bại: {0} — {1}</value>
+  </data>
+  <data name="Warn_QuickExit" xml:space="preserve">
+    <value>“{0}” đã thoát trong 0,5 giây (mã {1}); có thể khởi chạy thất bại</value>
+  </data>
+  <data name="Warn_ConfigUnreadable" xml:space="preserve">
+    <value>Không đọc được tệp cấu hình (nhiều khả năng JSON bị hỏng); đã khởi động với cấu hình mặc định. Bản gốc đã được sao lưu thành {0} — sửa xong khởi động lại là khôi phục được.</value>
+  </data>
+  <data name="Err_ScriptMissing" xml:space="preserve">
+    <value>Không tìm thấy tệp script (hãy nhập đường dẫn đầy đủ)</value>
+  </data>
+  <data name="Err_ScriptNeedsPwsh" xml:space="preserve">
+    <value>Script không chạy: bản PowerShell đi kèm Windows không đọc được cách mã hóa này. Hãy lưu script dưới dạng UTF-8 có BOM, hoặc dùng PowerShell 7.</value>
+  </data>
+  <data name="Mark_Unverified" xml:space="preserve">
+    <value>~ Đã gửi (chưa xác minh)</value>
+  </data>
+  <data name="Mark_Exception" xml:space="preserve">
+    <value>Lỗi: {0}</value>
+  </data>
+  <data name="Note_Policy" xml:space="preserve">
+    <value>Chính sách</value>
+  </data>
+  <data name="Note_OneTime" xml:space="preserve">
+    <value>Một lần</value>
+  </data>
+  <data name="Note_System" xml:space="preserve">
+    <value>Quan trọng cho hệ thống</value>
+  </data>
+  <data name="Note_ActiveSetup" xml:space="preserve">
+    <value>Active Setup</value>
+  </data>
+  <data name="Ed_Title_Group" xml:space="preserve">
+    <value>Sửa nhóm hành động</value>
+  </data>
+  <data name="Ed_GroupHint" xml:space="preserve">
+    <value>Nhóm không bao giờ tự chạy — kích hoạt từ menu khay hệ thống, phím tắt toàn cục, bước Nhóm hành động trong danh sách khởi động, hoặc tác vụ hẹn giờ.</value>
+  </data>
+  <data name="Val_GroupName" xml:space="preserve">
+    <value>Vui lòng nhập tên nhóm.</value>
+  </data>
+  <data name="Ed_Title_Reminder" xml:space="preserve">
+    <value>Sửa tác vụ theo lịch</value>
+  </data>
+  <data name="Ed_Trigger" xml:space="preserve">
+    <value>Kích hoạt</value>
+  </data>
+  <data name="Ed_Trig_Time" xml:space="preserve">
+    <value>Theo giờ</value>
+  </data>
+  <data name="Ed_Trig_Startup" xml:space="preserve">
+    <value>Khi đăng nhập</value>
+  </data>
+  <data name="Ed_Time" xml:space="preserve">
+    <value>Giờ (HH:mm)</value>
+  </data>
+  <data name="Ed_LoginTiming" xml:space="preserve">
+    <value>Điều kiện đăng nhập</value>
+  </data>
+  <data name="Ed_SMode_Any" xml:space="preserve">
+    <value>Luôn luôn</value>
+  </data>
+  <data name="Ed_SMode_Before" xml:space="preserve">
+    <value>Chỉ trước giờ đã đặt</value>
+  </data>
+  <data name="Ed_SMode_After" xml:space="preserve">
+    <value>Chỉ sau giờ đã đặt</value>
+  </data>
+  <data name="Ed_Hour" xml:space="preserve">
+    <value>:00</value>
+  </data>
+  <data name="Ed_OnlyBoot" xml:space="preserve">
+    <value>Chỉ trong</value>
+  </data>
+  <data name="Ed_WithinHint" xml:space="preserve">
+    <value>phút sau khi khởi động mới tính là đăng nhập (0 = mỗi lần mở)</value>
+  </data>
+  <data name="Ed_Period" xml:space="preserve">
+    <value>Chu kỳ</value>
+  </data>
+  <data name="Ed_Rec_Daily" xml:space="preserve">
+    <value>Theo thứ</value>
+  </data>
+  <data name="Ed_Rec_EveryN" xml:space="preserve">
+    <value>Mỗi N ngày</value>
+  </data>
+  <data name="Ed_Rec_Monthly" xml:space="preserve">
+    <value>Hằng tháng</value>
+  </data>
+  <data name="Ed_Rec_Once" xml:space="preserve">
+    <value>Một lần</value>
+  </data>
+  <data name="Ed_EveryNDays" xml:space="preserve">
+    <value>Mỗi</value>
+  </data>
+  <data name="Ed_AnchorDays" xml:space="preserve">
+    <value>ngày; tính từ</value>
+  </data>
+  <data name="Ed_AnchorHint" xml:space="preserve">
+    <value>(yyyy-MM-dd; trống = hôm nay)</value>
+  </data>
+  <data name="Ed_MonthlyDay" xml:space="preserve">
+    <value>Ngày trong tháng</value>
+  </data>
+  <data name="Ed_OnceDate" xml:space="preserve">
+    <value>Ngày</value>
+  </data>
+  <data name="Ed_ActPopup" xml:space="preserve">
+    <value>Nhắc bằng cửa sổ bật lên</value>
+  </data>
+  <data name="Ed_ActSilent" xml:space="preserve">
+    <value>Âm thầm chạy nhóm hành động</value>
+  </data>
+  <data name="Ed_SilentGroup" xml:space="preserve">
+    <value>Chạy nhóm hành động</value>
+  </data>
+  <data name="Ed_OnYes_Group" xml:space="preserve">
+    <value>Chạy nhóm hành động</value>
+  </data>
+  <data name="Ed_AutoDismiss" xml:space="preserve">
+    <value>Tự đóng (giây)</value>
+  </data>
+  <data name="Ed_AutoHint" xml:space="preserve">
+    <value>tự đóng nếu không bấm (0: thẻ = không bao giờ, hộp thoại = 60 giây)</value>
+  </data>
+  <data name="Toast_QuickSetDnd" xml:space="preserve">
+    <value>Đã hẹn sau {0} phút, nhưng nhắc nhở đang tạm dừng — sẽ báo khi hết tạm dừng</value>
+  </data>
+  <data name="Toast_SkipTodayOff" xml:space="preserve">
+    <value>Đã hủy bỏ qua hôm nay: {0}</value>
+  </data>
+  <data name="Toast_SkipToday" xml:space="preserve">
+    <value>Bỏ qua hôm nay: {0}</value>
+  </data>
+  <data name="Toast_QuickSet" xml:space="preserve">
+    <value>Đã hẹn nhắc sau {0} phút ({1})</value>
+  </data>
+  <data name="Quick_Done" xml:space="preserve">
+    <value>Đã hết {0} phút</value>
+  </data>
+  <data name="Btn_SkipToday" xml:space="preserve">
+    <value>Bỏ qua hôm nay</value>
+  </data>
+  <data name="Sum_SkippedToday" xml:space="preserve">
+    <value>{0} · bỏ qua hôm nay</value>
+  </data>
+  <data name="Tray_QuickRemind" xml:space="preserve">
+    <value>Nhắc nhanh</value>
+  </data>
+  <data name="Ed_RepeatNag" xml:space="preserve">
+    <value>Nhắc đến khi xác nhận</value>
+  </data>
+  <data name="Ed_RepeatUntilPre" xml:space="preserve">
+    <value>phút (0 = không lặp), đến</value>
+  </data>
+  <data name="Ed_RepeatUntilHint" xml:space="preserve">
+    <value>(HH:mm, trống = tối đa 20 lần hiện)</value>
+  </data>
+  <data name="Ed_LoopEvery" xml:space="preserve">
+    <value>Chạy lặp lại, mỗi</value>
+  </data>
+  <data name="Ed_LoopUntilPre" xml:space="preserve">
+    <value>phút (0 = tắt), đến</value>
+  </data>
+  <data name="Ed_LoopUntilHint" xml:space="preserve">
+    <value>(HH:mm, trống = cuối ngày)</value>
+  </data>
+  <data name="Ed_TrigDelay" xml:space="preserve">
+    <value>Trễ sau khi kích hoạt</value>
+  </data>
+  <data name="Ed_DelaySecPlus" xml:space="preserve">
+    <value>giây, cộng ngẫu nhiên 0~</value>
+  </data>
+  <data name="Ed_Sec" xml:space="preserve">
+    <value>giây</value>
+  </data>
+  <data name="Ed_Grace" xml:space="preserve">
+    <value>Gia hạn (phút)</value>
+  </data>
+  <data name="Ed_GraceHint" xml:space="preserve">
+    <value>vẫn kích hoạt nếu bỏ lỡ giờ trong khoảng</value>
+  </data>
+  <data name="Val_TimeFormat" xml:space="preserve">
+    <value>Giờ phải theo định dạng HH:mm</value>
+  </data>
+  <data name="Val_RepeatUntil" xml:space="preserve">
+    <value>“Lặp đến” phải là HH:mm (hoặc trống)</value>
+  </data>
+  <data name="Val_LoopUntil" xml:space="preserve">
+    <value>“Chạy lặp lại đến” phải là HH:mm (hoặc trống)</value>
+  </data>
+  <data name="Val_Anchor" xml:space="preserve">
+    <value>Ngày bắt đầu phải là yyyy-MM-dd (hoặc trống)</value>
+  </data>
+  <data name="Val_OnceDate" xml:space="preserve">
+    <value>Ngày phải theo định dạng yyyy-MM-dd</value>
+  </data>
+  <data name="Val_OnceDatePast" xml:space="preserve">
+    <value>Ngày đó đã qua — tác vụ này sẽ không kích hoạt sau khi lưu (đặt ngày mới và bật lại để dùng tiếp)</value>
+  </data>
+  <data name="Val_SilentNoGroup" xml:space="preserve">
+    <value>Đã chọn “Âm thầm chạy nhóm hành động” nhưng chưa chọn nhóm cụ thể</value>
+  </data>
+  <data name="Confirm_Title" xml:space="preserve">
+    <value>Clockwork · Xác nhận</value>
+  </data>
+  <data name="Ask_Title" xml:space="preserve">
+    <value>Clockwork · Câu hỏi</value>
+  </data>
+  <data name="Confirm_Destructive" xml:space="preserve">
+    <value>Bạn có chắc muốn chạy “{0}”?</value>
+  </data>
+  <data name="Crash_Title" xml:space="preserve">
+    <value>Clockwork · Lỗi</value>
+  </data>
+  <data name="Crash_Body" xml:space="preserve">
+    <value>Clockwork gặp lỗi (đã ghi nhật ký; thường vẫn dùng tiếp được):
 
 {0}
 
-Nhật ký: {1}</value></data>
-  <data name="Run_Title" xml:space="preserve"><value>Clockwork · Chạy</value></data>
-  <data name="Tray_ReminderTitle" xml:space="preserve"><value>Tác vụ theo lịch</value></data>
-  <data name="Tray_LaunchStopped" xml:space="preserve"><value>Đã dừng danh sách khởi động: xong {0} bước, phần còn lại bỏ qua</value></data>
-  <data name="Tray_LaunchWarn" xml:space="preserve"><value>Hoàn tất danh sách khởi động: {0} bước, {1} có cảnh báo (khay → xem nhật ký gần nhất)</value></data>
-  <data name="Hotkey_Unrecognized" xml:space="preserve"><value>Phím dừng “{0}” không nhận diện được; đổi trong cửa sổ chính. “Dừng” ở khay vẫn dùng được.</value></data>
-  <data name="Hotkey_RegisterFail" xml:space="preserve"><value>Không đăng ký được phím dừng “{0}” (có thể đang bị dùng); “Dừng” ở khay vẫn dùng được.</value></data>
-  <data name="Hotkey_Stopped" xml:space="preserve"><value>Đã yêu cầu dừng các hành động đang chạy.</value></data>
-  <data name="SysMsg_NeedsAdmin" xml:space="preserve"><value>“{0}” cần quyền quản trị để chuyển; mở lại Clockwork với quyền quản trị.</value></data>
-  <data name="SysMsg_ToggleFail" xml:space="preserve"><value>Chuyển “{0}” thất bại: {1}</value></data>
-  <data name="Autostart_Fail" xml:space="preserve"><value>Thao tác thất bại: {0}</value></data>
-  <data name="Tab_Settings" xml:space="preserve"><value>Cài đặt</value></data>
-  <data name="Settings_General" xml:space="preserve"><value>Chung</value></data>
-  <data name="About_CheckUpdate" xml:space="preserve"><value>Kiểm tra cập nhật</value></data>
-  <data name="About_Series" xml:space="preserve"><value>Kế hoạch 365 nguồn mở · #020</value></data>
-  <data name="Update_Checking" xml:space="preserve"><value>Đang kiểm tra…</value></data>
-  <data name="Update_Latest" xml:space="preserve"><value>Bạn đang dùng phiên bản mới nhất ({0})</value></data>
-  <data name="Update_Available" xml:space="preserve"><value>Đã có phiên bản mới {0}. Tới trang tải về?</value></data>
-  <data name="Update_Failed" xml:space="preserve"><value>Kiểm tra cập nhật thất bại: {0}</value></data>
-  <data name="Settings_HotkeyCaptureTip" xml:space="preserve"><value>Bấm rồi nhấn phím tắt. Esc để hủy, Del để xóa. “Dừng” ở khay luôn dùng được.</value></data>
-  <data name="Hotkey_PressPrompt" xml:space="preserve"><value>Nhấn phím tắt…</value></data>
-  <data name="Sys_Takeover" xml:space="preserve"><value>Đưa vào danh sách khởi động</value></data>
-  <data name="Sys_Delete" xml:space="preserve"><value>Xóa khỏi hệ thống</value></data>
-  <data name="Confirm_DeleteItem" xml:space="preserve"><value>Xóa “{0}”?</value></data>
-  <data name="Confirm_Keep" xml:space="preserve"><value>Giữ lại</value></data>
-  <data name="Confirm_DeletePage" xml:space="preserve"><value>Xóa trang “{0}”? Các ô {1} trên trang đó cũng sẽ bị xóa theo. Một ô trỏ đến một hành động chỉ xóa liên kết đó; còn hành động đó vẫn tồn tại.</value></data>
-  <data name="Confirm_DeleteCategory" xml:space="preserve"><value>Xóa danh mục “{0}”? Các trang {1} trong danh mục này sẽ không bị xóa — chúng sẽ được chuyển trở lại “{2}”.</value></data>
-  <data name="Confirm_DeleteSysItem" xml:space="preserve"><value>Xóa vĩnh viễn mục khởi động “{0}” khỏi hệ thống? Thao tác này không thể hoàn tác (nếu chỉ muốn ngăn nó chạy khi khởi động, hãy bỏ chọn).</value></data>
-  <data name="Confirm_KillPort" xml:space="preserve"><value>Giải phóng cổng {0}? Thao tác này kết thúc {1}, cùng các tiến trình con. Mọi thứ chưa lưu sẽ mất.</value></data>
-  <data name="Confirm_KillPortAlso" xml:space="preserve"><value>Tiến trình đó cũng giữ cổng {0}, và cổng đó cũng sẽ được giải phóng.</value></data>
-  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve"><value>Mục khởi động “{0}” đã được đưa vào danh sách khởi động và vẫn có một bước trỏ tới tệp lối tắt của nó. Xóa khỏi hệ thống sẽ xóa cả lối tắt, khiến bước đó không thể khởi chạy nó nữa. Vẫn xóa?</value></data>
-  <data name="SysMsg_DeleteFail" xml:space="preserve"><value>Xóa “{0}” thất bại: {1}</value></data>
-  <data name="Config_ExportSamePath" xml:space="preserve"><value>Đích xuất không thể là chính tệp cấu hình — hãy chọn tên hoặc vị trí khác.</value></data>
-  <data name="Val_SendKeys" xml:space="preserve"><value>Nội dung phím gửi không phải chuỗi phím hợp lệ: kiểm tra dấu ngoặc nhọn chưa đóng và tên phím không xác định (vd. {ENTER}; { nguyên văn viết là {{}, } nguyên văn viết là {}}).</value></data>
-  <data name="Val_SearchUrl" xml:space="preserve"><value>URL tìm kiếm phải có {0} — đó là chỗ đặt từ cần tìm. Thiếu nó, bước này lần nào cũng chỉ mở đúng một trang.</value></data>
-  <data name="Ed_CatchUp" xml:space="preserve"><value>Bù nếu bỏ lỡ (sau khi ngủ/tắt máy)</value></data>
-  <data name="Unit_Minutes" xml:space="preserve"><value>{0} phút</value></data>
-  <data name="Warn_KeyNoMain" xml:space="preserve"><value>Phím tắt “{0}” thiếu phím chính; chưa gửi</value></data>
-  <data name="Warn_KeyMultiDigit" xml:space="preserve"><value>Tên phím không nhận ra “{0}” (số nhiều chữ số không phải là phím); phím tắt “{1}” chưa gửi</value></data>
-  <data name="Warn_KeyUnknown" xml:space="preserve"><value>Phím không nhận ra “{0}”; phím tắt “{1}” chưa gửi</value></data>
-  <data name="Warn_KeyRejected" xml:space="preserve"><value>Phím tắt “{0}” bị hệ thống từ chối (xảy ra khi cửa sổ nâng quyền/màn hình an toàn ở phía trước); không có tác dụng</value></data>
-  <data name="Warn_KeyPartial" xml:space="preserve"><value>Phím tắt “{0}” chỉ được đưa vào một phần ({1}/{2}); đã gửi lại thao tác nhả phím, không có tác dụng</value></data>
-  <data name="Warn_TextSendFail" xml:space="preserve"><value>Gửi văn bản: không thể đưa cửa sổ “{0}” ra trước; chưa gửi</value></data>
-  <data name="Warn_SaveConfigFail" xml:space="preserve"><value>Lưu cấu hình thất bại: {0} (thay đổi chỉ nằm trong bộ nhớ và sẽ mất khi khởi động lại)</value></data>
-  <data name="Warn_SilentGroupMissing" xml:space="preserve"><value>Nhóm hành động mà lời nhắc “{0}” tham chiếu không còn tồn tại; lần này không chạy gì cả</value></data>
-  <data name="Warn_SilentGroupDisabled" xml:space="preserve"><value>Nhóm hành động mà lời nhắc “{0}” tham chiếu đã bị tắt; lần này không chạy gì cả</value></data>
-  <data name="Skip_GroupNotFound" xml:space="preserve"><value>Không tìm thấy nhóm hành động được tham chiếu</value></data>
-  <data name="Skip_GroupDisabled" xml:space="preserve"><value>Nhóm hành động “{0}” đã bị tắt; đã bỏ qua</value></data>
-  <data name="Skip_GroupReentrant" xml:space="preserve"><value>Vào lại nhóm hành động (tham chiếu vòng lặp hoặc đang chạy); đã bỏ qua</value></data>
-  <data name="Toast_GroupStepSkipped" xml:space="preserve"><value>{0}, {1}</value></data>
-  <data name="Toast_GroupCancelled" xml:space="preserve"><value>Đã yêu cầu hủy nhóm hành động “{0}”.</value></data>
-  <data name="Toast_GroupStarted" xml:space="preserve"><value>Đã bắt đầu nhóm hành động “{0}”.</value></data>
-  <data name="Toast_GroupBusy" xml:space="preserve"><value>Nhóm hành động “{0}” đang chạy (được khởi động từ nơi khác); phím này không dừng được nó — hãy dùng phím tắt dừng khẩn cấp.</value></data>
-  <data name="Warn_RunBudget" xml:space="preserve"><value>Quá trình chạy đã dừng tại giới hạn 5000 bước; các bước còn lại đã bị bỏ qua (kiểm tra xem có số lần lặp lại quá lớn không)</value></data>
-  <data name="Warn_OnYesGroupMissing" xml:space="preserve"><value>Nhóm hành động chạy khi bấm “Có” không còn tồn tại; đã bỏ qua</value></data>
-  <data name="Warn_OnYesGroupDisabled" xml:space="preserve"><value>Nhóm hành động chạy khi bấm “Có” đã bị tắt; đã bỏ qua</value></data>
-  <data name="Warn_OnYesFailed" xml:space="preserve"><value>Không chạy được hành động sau khi bấm “Có”: {0}</value></data>
-  <data name="Warn_TakeoverUnsupported" xml:space="preserve"><value>Mục này chưa tiếp quản được; chỉ tiếp quản được khóa Run trong registry và mục trong thư mục Khởi động</value></data>
-  <data name="Warn_LaunchRunCrashed" xml:space="preserve"><value>Chạy danh sách khởi động bị gián đoạn: {0}</value></data>
-  <data name="Tray_ViewLog" xml:space="preserve"><value>Xem nhật ký khởi động lần trước</value></data>
-  <data name="Tray_History" xml:space="preserve"><value>Gần đây</value></data>
-  <data name="Tray_NoLog" xml:space="preserve"><value>Chưa có nhật ký khởi động (hãy chạy danh sách khởi động một lần trước)</value></data>
-  <data name="Log_Title" xml:space="preserve"><value>Nhật ký lần chạy danh sách khởi động gần nhất</value></data>
-  <data name="Log_When" xml:space="preserve"><value>Thời điểm: {0}</value></data>
-  <data name="Log_Summary" xml:space="preserve"><value>Tổng {0} bước: {1} bước lỗi hoặc cảnh báo, {2} bước đã gửi nhưng không kiểm chứng được, số còn lại thành công</value></data>
-  <data name="Log_UnverNote" xml:space="preserve"><value>(~ nghĩa là đã gửi phím hoặc phím tắt, nhưng không xác nhận được đích có phản hồi hay không)</value></data>
-  <data name="Log_ReadyGate" xml:space="preserve"><value>Cổng sẵn sàng: đã chờ {0}s (shell={1} mạng={2})</value></data>
-  <data name="Log_ReadyTimeout" xml:space="preserve"><value>, hết thời gian vẫn chưa sẵn sàng, vẫn tiếp tục</value></data>
-  <data name="Log_BootDelay" xml:space="preserve"><value>Độ trễ khởi động: {0}s</value></data>
-  <data name="Log_BudgetHit" xml:space="preserve"><value>Lần chạy này đã chạm trần {0} bước; các bước còn lại không chạy</value></data>
-  <data name="Log_Nth" xml:space="preserve"><value> ({0}/{1})</value></data>
-  <data name="Log_GroupBusy" xml:space="preserve"><value>Nhóm hành động “{0}” đang chạy (được kích hoạt từ nơi khác); lần này bỏ qua</value></data>
-  <data name="Log_GroupMissing" xml:space="preserve"><value>Không tìm thấy nhóm hành động</value></data>
-  <data name="Log_GroupDisabled" xml:space="preserve"><value>Nhóm hành động “{0}” đang tắt; đã bỏ qua</value></data>
-  <data name="Log_GroupCycle" xml:space="preserve"><value>Tham chiếu vòng; đã bỏ qua</value></data>
-  <data name="Log_RunGroup" xml:space="preserve"><value>Chạy nhóm hành động: {0}</value></data>
-  <data name="Log_Stopped" xml:space="preserve"><value>Đã dừng thủ công; các bước sau không chạy</value></data>
-  <data name="Log_HdrStopped" xml:space="preserve"><value>Lần chạy này bị dừng thủ công (phím dừng khẩn hoặc “Dừng” ở khay hệ thống)</value></data>
-  <data name="Err_JsonNull" xml:space="preserve"><value>Tệp này phân tích ra rỗng — không phải một tệp cấu hình.</value></data>
-  <data name="Err_ClearClipboard" xml:space="preserve"><value>Xóa khay nhớ tạm thất bại: {0}</value></data>
-  <data name="Err_SoundNotWav" xml:space="preserve"><value>“{0}” không phải là tệp .wav. Bước này chỉ phát tệp wav.</value></data>
-  <data name="Err_SoundMissing" xml:space="preserve"><value>Không tìm thấy tệp âm thanh: “{0}”</value></data>
-  <data name="Err_EmptyRecycleBin" xml:space="preserve"><value>Dọn thùng rác thất bại: {0}</value></data>
-  <data name="Err_UnknownSysCmd" xml:space="preserve"><value>Lệnh hệ thống không xác định: {0}</value></data>
-  <data name="Tray_RunGroup" xml:space="preserve"><value>Chạy: {0}</value></data>
-  <data name="Tray_DndResume" xml:space="preserve"><value>Tiếp tục nhắc nhở (còn {0} phút)</value></data>
-  <data name="Tray_DndEndOfDay" xml:space="preserve"><value>Đến hết hôm nay</value></data>
-  <data name="Toast_DndEndOfDay" xml:space="preserve"><value>Đã tạm dừng nhắc đến hết hôm nay</value></data>
-  <data name="Tray_DndResumeHours" xml:space="preserve"><value>Tiếp tục nhắc (còn {0} giờ)</value></data>
-  <data name="Tray_DndMenu" xml:space="preserve"><value>Tạm dừng nhắc nhở</value></data>
-  <data name="Tray_Hours" xml:space="preserve"><value>{0} giờ</value></data>
-  <data name="Toast_DndOn" xml:space="preserve"><value>Đã tạm dừng nhắc nhở {0} giờ</value></data>
-  <data name="Toast_DndOff" xml:space="preserve"><value>Đã tiếp tục nhắc nhở</value></data>
-  <data name="Tpl_Focus" xml:space="preserve"><value>Chế độ tập trung</value></data>
-  <data name="Tpl_Meeting" xml:space="preserve"><value>Chế độ họp</value></data>
-  <data name="Tpl_EndOfDay" xml:space="preserve"><value>Cuối ngày</value></data>
-  <data name="Tpl_Bedtime" xml:space="preserve"><value>Trước khi ngủ</value></data>
-  <data name="Tpl_Away" xml:space="preserve"><value>Rời đi một lát</value></data>
-  <data name="Tpl_EndOfDayMsg" xml:space="preserve"><value>Đã ghi lại hết công việc hôm nay chưa?</value></data>
-  <data name="Tpl_BedtimeMsg" xml:space="preserve"><value>Đến giờ đi ngủ!</value></data>
-  <data name="Tpl_Sedentary" xml:space="preserve"><value>Nhắc nghỉ giải lao</value></data>
-  <data name="Tpl_Search" xml:space="preserve"><value>Tìm kiếm nhanh</value></data>
-  <data name="Tpl_SearchAsk" xml:space="preserve"><value>Tìm kiếm cái gì?</value></data>
-  <data name="Tpl_SearchVar" xml:space="preserve"><value>từ khóa</value></data>
-  <data name="Tpl_SedentaryMsg" xml:space="preserve"><value>Đứng dậy vận động một chút</value></data>
-  <data name="Smp_Mute" xml:space="preserve"><value>Tắt tiếng khi khởi động (ví dụ · tránh tự động phát tiếng)</value></data>
-  <data name="Smp_OpenApp" xml:space="preserve"><value>Mở trình duyệt của bạn (ví dụ: truy cập vào một ứng dụng mà bạn thực sự sử dụng)</value></data>
-  <data name="Smp_OpenSite" xml:space="preserve"><value>Mở trang web (ví dụ · chỉ ngày trong tuần; email hoặc việc cần làm)</value></data>
-  <data name="Smp_OpenChat" xml:space="preserve"><value>Mở ứng dụng chat (ví dụ · thu nhỏ chạy nền)</value></data>
-  <data name="Smp_ShowDesktop" xml:space="preserve"><value>Hiện màn hình nền bằng Win+D (ví dụ · gửi tổ hợp phím)</value></data>
-  <data name="Smp_RemWater" xml:space="preserve"><value>Đứng dậy và uống chút nước (ví dụ)</value></data>
-  <data name="Smp_RemWrapUp" xml:space="preserve"><value>Đến giờ kết thúc — còn việc nào của hôm nay chưa xong? (ví dụ)</value></data>
-  <data name="Smp_RemBills" xml:space="preserve"><value>Kiểm tra hoá đơn và gói đăng ký tháng này (ví dụ · ngày 1)</value></data>
-  <data name="Smp_RemSleep" xml:space="preserve"><value>Đã đến giờ đi ngủ (ví dụ)</value></data>
-  <data name="Confirm_RelaunchAdmin" xml:space="preserve"><value>Thao tác này cần quyền quản trị. Mở lại Clockwork với quyền quản trị?</value></data>
-  <data name="Confirm_DeleteGroupRefs" xml:space="preserve"><value>Nhóm hành động “{0}” đang được {1} lời nhắc và {2} bước tham chiếu. Xóa nó cũng sẽ dọn các tham chiếu này (lời nhắc chỉ còn cửa sổ bật lên; các bước tham chiếu bị gỡ). Vẫn xóa chứ?</value></data>
-  <data name="Btn_Browse" xml:space="preserve"><value>Duyệt…</value></data>
-  <data name="Btn_Pick" xml:space="preserve"><value>Chọn…</value></data>
-  <data name="Btn_Capture" xml:space="preserve"><value>Bắt phím</value></data>
-  <data name="Btn_PickDate" xml:space="preserve"><value>Chọn ngày</value></data>
-  <data name="Filter_Browse" xml:space="preserve"><value>Chương trình / script / lối tắt|*.exe;*.bat;*.cmd;*.ps1;*.lnk|Tất cả tệp|*.*</value></data>
-  <data name="Ed_WindowStyle" xml:space="preserve"><value>Kiểu cửa sổ</value></data>
-  <data name="WinStyle_Default" xml:space="preserve"><value>Mặc định (cửa sổ thường)</value></data>
-  <data name="WinStyle_Minimized" xml:space="preserve"><value>Khởi động thu nhỏ</value></data>
-  <data name="WinStyle_Maximized" xml:space="preserve"><value>Khởi động phóng to</value></data>
-  <data name="WinStyle_Hidden" xml:space="preserve"><value>Khởi động ẩn</value></data>
-  <data name="Ed_ActivateIfRunning" xml:space="preserve"><value>Kích hoạt cửa sổ nếu đang chạy (không mở lại)</value></data>
-  <data name="Ed_ActivateProcess" xml:space="preserve"><value>Tiến trình cần kích hoạt</value></data>
-  <data name="Ed_AltTargets" xml:space="preserve"><value>Đường dẫn dự phòng</value></data>
-  <data name="Ed_AltTargetsHint" xml:space="preserve"><value>Mỗi dòng một đường dẫn đầy đủ; nếu Đích không tồn tại sẽ dùng đường dẫn đầu tiên tồn tại (cho máy có đường dẫn khác nhau)</value></data>
-  <data name="Picker_Process" xml:space="preserve"><value>Chọn tiến trình</value></data>
-  <data name="Picker_Search" xml:space="preserve"><value>Tìm tên tiến trình / tiêu đề cửa sổ</value></data>
-  <data name="Date_Pick" xml:space="preserve"><value>Chọn ngày</value></data>
-  <data name="Capture_Key" xml:space="preserve"><value>Bắt phím</value></data>
-  <data name="Ed_GroupHotkey" xml:space="preserve"><value>Phím tắt toàn cục</value></data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve"><value>Nhấp rồi nhấn tổ hợp phím để chạy nhóm này bất cứ lúc nào; nhấn lại khi đang chạy để dừng. Esc hủy, Delete xóa</value></data>
-  <data name="Hotkey_GroupRegisterFail" xml:space="preserve"><value>Không thể đăng ký phím tắt {1} cho nhóm hành động “{0}”: có thể đã bị chiếm dụng</value></data>
-  <data name="Val_HotkeyDup" xml:space="preserve"><value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value></data>
-  <data name="Hotkey_Reserved" xml:space="preserve"><value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value></data>
-  <data name="Ed_GroupRepeat" xml:space="preserve"><value>Lặp lại toàn bộ nhóm</value></data>
-  <data name="Ed_GroupShowInTray" xml:space="preserve"><value>Hiện trong menu khay</value></data>
-  <data name="Ed_GroupRepeatDelay" xml:space="preserve"><value>độ trễ giữa các vòng (ms)</value></data>
-  <data name="Val_GroupCycle" xml:space="preserve"><value>Có tham chiếu nhóm vòng lặp ({0}), hãy phá vỡ chuỗi tham chiếu trước khi lưu</value></data>
-  <data name="Btn_Copy" xml:space="preserve"><value>Nhân bản</value></data>
-  <data name="Side_SelectedRow" xml:space="preserve"><value>Đã chọn</value></data>
-  <data name="Btn_ExportConfig" xml:space="preserve"><value>Xuất cấu hình</value></data>
-  <data name="Btn_ImportConfig" xml:space="preserve"><value>Nhập cấu hình</value></data>
-  <data name="Config_Exported" xml:space="preserve"><value>Đã xuất cấu hình đến: {0}</value></data>
-  <data name="Config_Imported" xml:space="preserve"><value>Đã nhập cấu hình. Đang khởi động lại để áp dụng.</value></data>
-  <data name="Config_ImportFail" xml:space="preserve"><value>Nhập thất bại: {0}</value></data>
-  <data name="Config_ImportConfirm" xml:space="preserve"><value>Việc nhập sẽ ghi đè toàn bộ cấu hình hiện tại (danh sách khởi động / lời nhắc / nhóm hành động / cài đặt). Tiếp tục?</value></data>
-  <data name="Config_Filter" xml:space="preserve"><value>Cấu hình Clockwork|*.json|Tất cả tệp|*.*</value></data>
-  <data name="Config_ExportFail" xml:space="preserve"><value>Xuất thất bại: {0}</value></data>
-  <data name="Dup_Suffix" xml:space="preserve"><value> (bản sao)</value></data>
-  <data name="Relaunch_Fail" xml:space="preserve"><value>Không thể tự khởi động lại. Vui lòng mở lại Clockwork thủ công. ({0})</value></data>
-  <data name="Vol_micMute" xml:space="preserve"><value>Tắt tiếng micro</value></data>
-  <data name="Vol_micUnmute" xml:space="preserve"><value>Bật tiếng micro</value></data>
-  <data name="Sys_setClipboard" xml:space="preserve"><value>Đặt nội dung khay nhớ tạm</value></data>
-  <data name="Menu_SecCommon" xml:space="preserve"><value>Thường dùng</value></data>
-  <data name="Cmd_copy" xml:space="preserve"><value>Sao chép</value></data>
-  <data name="Cmd_paste" xml:space="preserve"><value>Dán</value></data>
-  <data name="Cmd_back" xml:space="preserve"><value>Quay lại</value></data>
-  <data name="Cmd_forward" xml:space="preserve"><value>Tiến tới</value></data>
-  <data name="Cmd_toBottom" xml:space="preserve"><value>Xuống cuối</value></data>
-  <data name="Win_current" xml:space="preserve"><value>Cửa sổ hiện tại</value></data>
-  <data name="Win_minimizeFg" xml:space="preserve"><value>Thu nhỏ cửa sổ hiện tại</value></data>
-  <data name="Win_maximizeFg" xml:space="preserve"><value>Phóng to cửa sổ hiện tại</value></data>
-  <data name="Win_closeFg" xml:space="preserve"><value>Đóng cửa sổ hiện tại</value></data>
-  <data name="Sys_searchSelection" xml:space="preserve"><value>Tìm văn bản đã chọn</value></data>
-  <data name="Sys_playSound" xml:space="preserve"><value>Phát một âm thanh (âm thanh hệ thống hoặc tệp .wav)</value></data>
-  <data name="Ed_SearchUrl" xml:space="preserve"><value>URL tìm kiếm</value></data>
-  <data name="Ed_SearchEngine" xml:space="preserve"><value>Công cụ tìm kiếm</value></data>
-  <data name="Ed_SearchCustom" xml:space="preserve"><value>Tùy chỉnh…</value></data>
-  <data name="Err_NoSelection" xml:space="preserve"><value>Chưa chọn văn bản. Hãy chọn nội dung cần tìm rồi chạy lại bước này.</value></data>
-  <data name="Warn_NoForegroundWindow" xml:space="preserve"><value>Hiện không có cửa sổ nào để thao tác (phía trước là chính Clockwork hoặc màn hình nền)</value></data>
-  <data name="Ed_ProcessHint" xml:space="preserve"><value>Nhập * để chỉ cửa sổ hiện tại — cửa sổ bạn đang dùng trước khi vẽ cử chỉ hoặc mở bảng. Để trống thì bước này không làm gì cả.</value></data>
-  <data name="Ed_SearchUrlHint" xml:space="preserve"><value>{0} là từ cần tìm; sẽ được tự động mã hóa.</value></data>
-  <data name="Ed_SoundFile" xml:space="preserve"><value>Tệp âm thanh</value></data>
-  <data name="Ed_SoundHint" xml:space="preserve"><value>Để trống ô này để sử dụng âm thanh thông báo mặc định của hệ thống. Hoặc nhập đường dẫn đầy đủ đến tệp .wav.</value></data>
-  <data name="Sys_brightness" xml:space="preserve"><value>Độ sáng màn hình</value></data>
-  <data name="Sys_notificationsOff" xml:space="preserve"><value>Tắt thông báo</value></data>
-  <data name="Sys_notificationsOn" xml:space="preserve"><value>Bật thông báo</value></data>
-  <data name="Sys_displayInternal" xml:space="preserve"><value>Màn hình: chỉ màn hình PC</value></data>
-  <data name="Sys_displayClone" xml:space="preserve"><value>Màn hình: nhân bản</value></data>
-  <data name="Sys_displayExtend" xml:space="preserve"><value>Màn hình: mở rộng</value></data>
-  <data name="Sys_displayExternal" xml:space="preserve"><value>Màn hình: chỉ màn hình phụ</value></data>
-  <data name="Err_SysCommand" xml:space="preserve"><value>{0} thất bại: {1}</value></data>
-  <data name="Err_PowerStateUnavailable" xml:space="preserve"><value>Máy này không hỗ trợ hoặc đã tắt trạng thái nguồn đó (chạy powercfg /a để kiểm tra)</value></data>
-  <data name="Sum_SysArg" xml:space="preserve"><value>{0}: {1}</value></data>
-  <data name="Ed_ClipText" xml:space="preserve"><value>Nội dung khay nhớ tạm</value></data>
-  <data name="Ed_Brightness" xml:space="preserve"><value>Độ sáng (0-100)</value></data>
-  <data name="Ed_BrightnessHint" xml:space="preserve"><value>Chỉ hoạt động với màn hình do hệ thống điều khiển (màn hình laptop); màn hình ngoài không được hỗ trợ.</value></data>
-  <data name="Ed_OnlyAfter" xml:space="preserve"><value>Chỉ sau</value></data>
-  <data name="Ed_HourAfter" xml:space="preserve"><value></value></data>
-  <data name="Ed_AfterTimeHint" xml:space="preserve"><value>Định dạng H:mm, ví dụ 18:30; chỉ nhập giờ (ví dụ 18) cũng được; mặc định 18:00.</value></data>
-  <data name="Ed_Cond_Any" xml:space="preserve"><value>Không giới hạn</value></data>
-  <data name="Ed_IfProcess" xml:space="preserve"><value>Điều kiện tiến trình</value></data>
-  <data name="Ed_IfProc_Running" xml:space="preserve"><value>Tiến trình đang chạy</value></data>
-  <data name="Ed_IfProc_Not" xml:space="preserve"><value>Tiến trình không chạy</value></data>
-  <data name="Ed_IfPower" xml:space="preserve"><value>Điều kiện nguồn điện</value></data>
-  <data name="Ed_IfPower_Ac" xml:space="preserve"><value>Chỉ khi cắm sạc</value></data>
-  <data name="Ed_IfPower_Battery" xml:space="preserve"><value>Chỉ khi dùng pin</value></data>
-  <data name="Ed_IfPath" xml:space="preserve"><value>Đường dẫn tồn tại</value></data>
-  <data name="Ed_IfPathHint" xml:space="preserve"><value>Nếu điền, bước chỉ chạy khi tệp / thư mục đó tồn tại; để trống = không giới hạn.</value></data>
-  <data name="Sum_After" xml:space="preserve"><value> (chỉ sau {0})</value></data>
-  <data name="Sum_IfProcRunning" xml:space="preserve"><value> ({0} đang chạy)</value></data>
-  <data name="Sum_IfProcNot" xml:space="preserve"><value> ({0} không chạy)</value></data>
-  <data name="Sum_IfAc" xml:space="preserve"><value> (cắm sạc)</value></data>
-  <data name="Sum_IfBattery" xml:space="preserve"><value> (dùng pin)</value></data>
-  <data name="Sum_IfPath" xml:space="preserve"><value> ({0} tồn tại)</value></data>
-  <data name="Ed_Trig_Idle" xml:space="preserve"><value>Khi không dùng máy</value></data>
-  <data name="Ed_Trig_Unlock" xml:space="preserve"><value>Khi mở khóa</value></data>
-  <data name="Ed_Trig_Lock" xml:space="preserve"><value>Khi khóa máy</value></data>
-  <data name="Ed_Trig_Resume" xml:space="preserve"><value>Khi thức khỏi chế độ ngủ</value></data>
-  <data name="Ed_Trig_AcPlugged" xml:space="preserve"><value>Khi cắm sạc</value></data>
-  <data name="Ed_Trig_AcUnplugged" xml:space="preserve"><value>Khi rút sạc</value></data>
-  <data name="Ed_Trig_LowBattery" xml:space="preserve"><value>Khi pin yếu</value></data>
-  <data name="Ed_IdleMinutes" xml:space="preserve"><value>Số phút rảnh</value></data>
-  <data name="Ed_IdleHint" xml:space="preserve"><value>Kích hoạt một lần sau bấy nhiêu phút không dùng bàn phím hay chuột; bộ đếm bắt đầu lại khi bạn quay lại.</value></data>
-  <data name="Ed_BatteryPercent" xml:space="preserve"><value>Pin dưới (%)</value></data>
-  <data name="Ed_BatteryHint" xml:space="preserve"><value>Kích hoạt một lần khi dùng pin và mức pin tụt xuống dưới ngưỡng này; sẽ sẵn sàng lại sau khi sạc lên hoặc cắm điện.</value></data>
-  <data name="Ed_EventHint" xml:space="preserve"><value>Chạy ngay khi sự kiện xảy ra. Các ô thứ bên dưới vẫn giới hạn những ngày có hiệu lực; thời gian ân hạn và bù lỡ không áp dụng cho sự kiện nên đã ẩn.</value></data>
-  <data name="Period_OnEvent" xml:space="preserve"><value>Mỗi lần xảy ra</value></data>
-  <data name="Time_Idle" xml:space="preserve"><value>Rảnh {0} phút</value></data>
-  <data name="Time_LowBattery" xml:space="preserve"><value>Pin &lt; {0}%</value></data>
-  <data name="Menu_FromStartMenu" xml:space="preserve"><value>Chọn từ menu Start…</value></data>
-  <data name="Picker_StartMenu" xml:space="preserve"><value>Chọn ứng dụng từ menu Start</value></data>
-  <data name="Picker_SearchApp" xml:space="preserve"><value>Tìm tên ứng dụng</value></data>
-  <data name="Picker_MultiHint" xml:space="preserve"><value>Chọn nhiều bằng Ctrl / Shift; mỗi mục được thêm vào danh sách như một bước, mặc định chưa tích chọn.</value></data>
-  <data name="Picker_StartMenuEmpty" xml:space="preserve"><value>Không tìm thấy lối tắt chương trình nào trong menu Start.</value></data>
-  <data name="Tpl_Restore" xml:space="preserve"><value>Trở lại bình thường</value></data>
-  <data name="Settings_Boot" xml:space="preserve"><value>Khởi động</value></data>
-  <data name="Settings_Backup" xml:space="preserve"><value>Sao lưu</value></data>
-  <data name="Settings_BackupTip" xml:space="preserve"><value>Xuất ra một tệp .json duy nhất. Nhập vào sẽ thay thế toàn bộ cấu hình hiện tại.</value></data>
-  <data name="Settings_StartupDelayTip" xml:space="preserve"><value>0-600 giây và chỉ khi bật “Khởi động cùng hệ thống”: chờ bấy nhiêu sau khi đăng nhập rồi mới chạy danh sách, để tránh lúc máy đang bận. Chạy lại thủ công không bị ảnh hưởng.</value></data>
-  <data name="Settings_WaitReady" xml:space="preserve"><value>Đợi hệ thống sẵn sàng (màn hình nền / mạng)</value></data>
-  <data name="Settings_WaitReadyTip" xml:space="preserve"><value>Đi tiếp ngay khi cả hai sẵn sàng, chờ tối đa 90 giây; độ trễ cố định ở trên được cộng thêm. Bật khi danh sách chạy quá sớm so với phần mềm của bạn.</value></data>
-  <data name="Menu_SecOpen" xml:space="preserve"><value>Mở</value></data>
-  <data name="Menu_SecControl" xml:space="preserve"><value>Điều khiển ứng dụng</value></data>
-  <data name="Menu_SecSystem" xml:space="preserve"><value>Hệ thống &amp; âm thanh</value></data>
-  <data name="Menu_SecFlow" xml:space="preserve"><value>Luồng</value></data>
-  <data name="Ed_LoginSilentHint" xml:space="preserve"><value>Mở ứng dụng lúc đăng nhập với thứ tự và độ trễ thì Danh sách khởi động tiện hơn; còn điều kiện như “chỉ trong N phút sau khi khởi động”, “chỉ buổi sáng” thì đúng là chỗ này.</value></data>
-  <data name="Ed_NoGroupsHint" xml:space="preserve"><value>Chưa có nhóm hành động nào — hãy tạo một nhóm từ mẫu ở thẻ “Nhóm hành động” trước, rồi quay lại đây tham chiếu.</value></data>
-  <data name="Ed_CondHeader" xml:space="preserve"><value>Điều kiện &amp; lặp lại: {0}</value></data>
-  <data name="Ed_CondAlways" xml:space="preserve"><value>luôn chạy</value></data>
-  <data name="Ed_AdvHeader" xml:space="preserve"><value>Nâng cao: {0}</value></data>
-  <data name="Adv_Once" xml:space="preserve"><value>kích hoạt một lần</value></data>
-  <data name="Adv_Nag" xml:space="preserve"><value>nhắc lại mỗi {0} phút đến khi xác nhận</value></data>
-  <data name="Adv_NagUntil" xml:space="preserve"><value>nhắc lại mỗi {0} phút đến khi xác nhận, muộn nhất đến {1}</value></data>
-  <data name="Adv_Loop" xml:space="preserve"><value>chạy mỗi {0} phút đến hết ngày (xác nhận không dừng)</value></data>
-  <data name="Adv_LoopUntil" xml:space="preserve"><value>chạy mỗi {0} phút đến {1} (xác nhận không dừng)</value></data>
-  <data name="Ed_Trig_Busy" xml:space="preserve"><value>Khi dùng liên tục</value></data>
-  <data name="Ed_Trig_Display" xml:space="preserve"><value>Khi màn hình thay đổi</value></data>
-  <data name="Ed_Trig_NetUp" xml:space="preserve"><value>Khi có mạng</value></data>
-  <data name="Ed_Trig_NetDown" xml:space="preserve"><value>Khi mất mạng</value></data>
-  <data name="Ed_Trig_Usb" xml:space="preserve"><value>Khi cắm ổ USB</value></data>
-  <data name="Time_Busy" xml:space="preserve"><value>Dùng {0} phút</value></data>
-  <data name="Ed_BusyMinutes" xml:space="preserve"><value>Số phút dùng</value></data>
-  <data name="Ed_BusyHint" xml:space="preserve"><value>Nhắc một lần sau khi bạn dùng liên tục đủ số phút này; rời máy trọn một phút sẽ tính lại từ đầu.</value></data>
-  <data name="Settings_PanelHotkey" xml:space="preserve"><value>Phím bảng nhanh</value></data>
-  <data name="Settings_PanelHotkeyTip" xml:space="preserve"><value>Mở bảng ô ngay tại con trỏ, mỗi ô một hành động. Esc để hủy, Del để xóa; sau khi xóa vẫn mở được bằng nút giữa chuột hoặc menu khay hệ thống.</value></data>
-  <data name="Tray_Panel" xml:space="preserve"><value>Mở bảng nhanh</value></data>
-  <data name="Panel_Hint" xml:space="preserve"><value>Esc để đóng</value></data>
-  <data name="Panel_Empty" xml:space="preserve"><value>Bảng còn trống. Những hành động bạn đặt vào sẽ hiện ở đây.</value></data>
-  <data name="Warn_StartupSkippedFile" xml:space="preserve"><value>Đã bỏ qua danh sách khởi động. Xoá {0} để nó tự chạy lại.</value></data>
-  <data name="Warn_StartupSkippedShift" xml:space="preserve"><value>Đã bỏ qua danh sách khởi động vì bạn giữ Shift khi mở. Chỉ lần này, lần khởi động sau vẫn chạy như thường.</value></data>
-  <data name="Warn_GroupNotFound" xml:space="preserve"><value>Không có nhóm hành động nào tên “{0}” — không chạy gì cả.</value></data>
-  <data name="Warn_GroupDisabled" xml:space="preserve"><value>Nhóm hành động “{0}” đang tắt — không chạy gì cả.</value></data>
-  <data name="Unit_Ms" xml:space="preserve"><value>ms</value></data>
-  <data name="Settings_MiddleLongPress" xml:space="preserve"><value>Giữ nút giữa chuột để mở bảng</value></data>
-  <data name="Settings_MiddleLongPressTip" xml:space="preserve"><value>Nhấp chuột giữa như thường vẫn dùng được — nhấn ngắn sẽ được gửi lại nguyên vẹn. Mặc định tắt, vì cần một hook chuột toàn cục.</value></data>
-  <data name="Settings_LongPressMs" xml:space="preserve"><value>Thời gian giữ (ms)</value></data>
-  <data name="Warn_MouseHookFail" xml:space="preserve"><value>Không cài được hook chuột nên giữ nút giữa bị tắt. Có thể phần mềm bảo mật hoặc chính sách nhóm đã chặn; bảng vẫn mở được bằng phím tắt hoặc menu khay hệ thống.</value></data>
-  <data name="Settings_Panel" xml:space="preserve"><value>Bảng nhanh</value></data>
-  <data name="Settings_UsePanel" xml:space="preserve"><value>Dùng bảng nhanh</value></data>
-  <data name="Settings_UsePanelTip" xml:space="preserve"><value>Tắt đi thì phím tắt trả lại cho chương trình khác, không gắn hook chuột giữa, và mục trong khay cũng ẩn luôn. Các trang bảng vẫn còn — bạn vẫn sắp xếp được ở “Quản lý bảng…”.</value></data>
-  <data name="Settings_UseGestures" xml:space="preserve"><value>Dùng cử chỉ chuột</value></data>
-  <data name="Settings_UseGesturesTip" xml:space="preserve"><value>Tắt đi thì chuột phải không bị theo dõi chút nào và trở lại như thường. Bản thân các cử chỉ được vẽ trong trình quản lý cử chỉ, từ thanh bên của thẻ “Nhóm hành động”.</value></data>
-  <data name="Settings_PanelLayout" xml:space="preserve"><value>Bố cục</value></data>
-  <data name="Settings_PanelLayoutTip" xml:space="preserve"><value>Số cột × số hàng trên + số hàng dưới quyết định một trang chứa được bao nhiêu và bảng rộng bao nhiêu. Phần dư chuyển sang trang sau; đặt hàng dưới bằng 0 thì chỉ còn một dải.</value></data>
-  <data name="Settings_PanelColumns" xml:space="preserve"><value>Số ô mỗi hàng</value></data>
-  <data name="Settings_PanelTileSize" xml:space="preserve"><value>Cỡ ô</value></data>
-  <data name="Size_compact" xml:space="preserve"><value>Gọn</value></data>
-  <data name="Size_normal" xml:space="preserve"><value>Vừa</value></data>
-  <data name="Size_roomy" xml:space="preserve"><value>Rộng</value></data>
-  <data name="Settings_PanelShowOps" xml:space="preserve"><value>Hiện các nút có sẵn</value></data>
-  <data name="Settings_PanelIconOnly" xml:space="preserve"><value>Chỉ biểu tượng</value></data>
-  <data name="Settings_PanelIconOnlyTip" xml:space="preserve"><value>Tên vẫn nằm trong chú giải, và một màn hình chứa được nhiều hành động hơn hẳn.</value></data>
-  <data name="Ed_GroupPanelForProcess" xml:space="preserve"><value>Chỉ trong ứng dụng này</value></data>
-  <data name="Settings_PanelTopRows" xml:space="preserve"><value>Số hàng trên</value></data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve"><value>Số hàng dưới</value></data>
-  <data name="Ed_Icon" xml:space="preserve"><value>Biểu tượng bảng</value></data>
-  <data name="Ed_IconHint" xml:space="preserve"><value>Để trống thì nó tự điền: “Mở ứng dụng” lấy biểu tượng của chính đích đến, còn lại nhận biểu tượng nét theo loại của mình.</value></data>
-  <data name="Btn_Close" xml:space="preserve"><value>Đóng</value></data>
-  <data name="Panel_Manager" xml:space="preserve"><value>Quản lý bảng</value></data>
-  <data name="Panel_Global" xml:space="preserve"><value>Ứng dụng bất kỳ</value></data>
-  <data name="Panel_AddPage" xml:space="preserve"><value>Thêm trang</value></data>
-  <data name="Panel_NewPage" xml:space="preserve"><value>Trang mới</value></data>
-  <data name="Panel_AddHere" xml:space="preserve"><value>Đặt một hành động vào đây</value></data>
-  <data name="Panel_NoPages" xml:space="preserve"><value>Chưa có trang nào. Dấu + ở cuối thanh tab trang sẽ tạo ra một trang; sau đó, bạn có thể thêm các hành động vào đó.</value></data>
-  <data name="Panel_Uncategorized" xml:space="preserve"><value>Chưa phân loại</value></data>
-  <data name="Panel_NewCategory" xml:space="preserve"><value>Danh mục mới</value></data>
-  <data name="Panel_Category" xml:space="preserve"><value>Danh mục</value></data>
-  <data name="Panel_Pages" xml:space="preserve"><value>Trang</value></data>
-  <data name="Panel_CategoryHint" xml:space="preserve"><value>Trang này thuộc danh mục nào. Hàng trên mỗi danh mục một thẻ; chọn một thẻ chỉ liệt kê các trang của nó.</value></data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Bấm danh mục ở trên, bấm trang ở bên trái. Bấm đúp để đổi tên, kéo thẻ để đổi thứ tự, thả lên một danh mục là chuyển trang đó vào danh mục ấy; thả một ô lên thẻ là chuyển ô vào trang đó. Bấm chuột phải vào thẻ để đổi tên hoặc xóa.</value></data>
-  <data name="Panel_ShowLeftTabs" xml:space="preserve"><value>Hiện thẻ bên trái</value></data>
-  <data name="Panel_ShowTopTabs" xml:space="preserve"><value>Hiện hàng danh mục</value></data>
-  <data name="Panel_BarsHint" xml:space="preserve"><value>Bên trên chọn danh mục, bên trái liệt kê các trang của danh mục đó. Chỉ một danh mục thì hàng trên không được vẽ, và danh mục hiện tại chỉ một trang thì hàng trái cũng vậy — hai ô này dùng để buộc ẩn ngay cả khi có nhiều. Cửa sổ quản lý luôn giữ hàng danh mục: dấu + trên đó là nơi tạo danh mục.</value></data>
-  <data name="Panel_SceneHint" xml:space="preserve"><value>Để trống thì trang luôn có. Điền tên tiến trình thì nó chỉ hiện khi ứng dụng đó đang ở phía trước lúc bạn mở bảng.</value></data>
-  <data name="Icon_Pick" xml:space="preserve"><value>Chọn biểu tượng</value></data>
-  <data name="Icon_PickHint" xml:space="preserve"><value>Ngoài những cái này, bạn có thể dùng ảnh của mình, hoặc bất kỳ exe nào để mượn biểu tượng của nó.</value></data>
-  <data name="Icon_UseImage" xml:space="preserve"><value>Dùng ảnh…</value></data>
-  <data name="Icon_None" xml:space="preserve"><value>Để tự động</value></data>
-  <data name="Panel_Search" xml:space="preserve"><value>Tìm một hành động</value></data>
-  <data name="Panel_SearchNone" xml:space="preserve"><value>Không có hành động nào khớp. Thử từ khác, hoặc bấm Esc để quay lại bảng.</value></data>
-  <data name="Panel_HintBack" xml:space="preserve"><value>Esc quay lại</value></data>
-  <data name="Panel_SearchMore" xml:space="preserve"><value>Đang hiện {0} kết quả đầu trong {1}. Gõ thêm chút nữa để thu hẹp.</value></data>
-  <data name="Settings_Theme" xml:space="preserve"><value>Giao diện</value></data>
-  <data name="Theme_dark" xml:space="preserve"><value>Tối</value></data>
-  <data name="Theme_light" xml:space="preserve"><value>Sáng</value></data>
-  <data name="Theme_system" xml:space="preserve"><value>Theo Windows</value></data>
-  <data name="Settings_ThemeTip" xml:space="preserve"><value>Clockwork khởi động lại ngay để áp dụng giao diện. “Theo Windows” đọc chế độ ứng dụng của Windows.</value></data>
-
+Nhật ký: {1}</value>
+  </data>
+  <data name="Run_Title" xml:space="preserve">
+    <value>Clockwork · Chạy</value>
+  </data>
+  <data name="Tray_ReminderTitle" xml:space="preserve">
+    <value>Tác vụ theo lịch</value>
+  </data>
+  <data name="Tray_LaunchStopped" xml:space="preserve">
+    <value>Đã dừng danh sách khởi động: xong {0} bước, phần còn lại bỏ qua</value>
+  </data>
+  <data name="Tray_LaunchWarn" xml:space="preserve">
+    <value>Hoàn tất danh sách khởi động: {0} bước, {1} có cảnh báo (khay → xem nhật ký gần nhất)</value>
+  </data>
+  <data name="Hotkey_Unrecognized" xml:space="preserve">
+    <value>Phím dừng “{0}” không nhận diện được; đổi trong cửa sổ chính. “Dừng” ở khay vẫn dùng được.</value>
+  </data>
+  <data name="Hotkey_RegisterFail" xml:space="preserve">
+    <value>Không đăng ký được phím dừng “{0}” (có thể đang bị dùng); “Dừng” ở khay vẫn dùng được.</value>
+  </data>
+  <data name="Hotkey_Stopped" xml:space="preserve">
+    <value>Đã yêu cầu dừng các hành động đang chạy.</value>
+  </data>
+  <data name="SysMsg_NeedsAdmin" xml:space="preserve">
+    <value>“{0}” cần quyền quản trị để chuyển; mở lại Clockwork với quyền quản trị.</value>
+  </data>
+  <data name="SysMsg_ToggleFail" xml:space="preserve">
+    <value>Chuyển “{0}” thất bại: {1}</value>
+  </data>
+  <data name="Autostart_Fail" xml:space="preserve">
+    <value>Thao tác thất bại: {0}</value>
+  </data>
+  <data name="Tab_Settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="About_CheckUpdate" xml:space="preserve">
+    <value>Kiểm tra cập nhật</value>
+  </data>
+  <data name="About_Series" xml:space="preserve">
+    <value>Kế hoạch 365 nguồn mở · #020</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Đang kiểm tra…</value>
+  </data>
+  <data name="Update_Latest" xml:space="preserve">
+    <value>Bạn đang dùng phiên bản mới nhất ({0})</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>Đã có phiên bản mới {0}. Tới trang tải về?</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Kiểm tra cập nhật thất bại: {0}</value>
+  </data>
+  <data name="Settings_HotkeyCaptureTip" xml:space="preserve">
+    <value>Bấm rồi nhấn phím tắt. Esc để hủy, Del để xóa. “Dừng” ở khay luôn dùng được.</value>
+  </data>
+  <data name="Hotkey_PressPrompt" xml:space="preserve">
+    <value>Nhấn phím tắt…</value>
+  </data>
+  <data name="Sys_Takeover" xml:space="preserve">
+    <value>Đưa vào danh sách khởi động</value>
+  </data>
+  <data name="Sys_Delete" xml:space="preserve">
+    <value>Xóa khỏi hệ thống</value>
+  </data>
+  <data name="Confirm_DeleteItem" xml:space="preserve">
+    <value>Xóa “{0}”?</value>
+  </data>
+  <data name="Confirm_Keep" xml:space="preserve">
+    <value>Giữ lại</value>
+  </data>
+  <data name="Confirm_DeletePage" xml:space="preserve">
+    <value>Xóa trang “{0}”? Các ô {1} trên trang đó cũng sẽ bị xóa theo. Một ô trỏ đến một hành động chỉ xóa liên kết đó; còn hành động đó vẫn tồn tại.</value>
+  </data>
+  <data name="Confirm_DeleteCategory" xml:space="preserve">
+    <value>Xóa danh mục “{0}”? Các trang {1} trong danh mục này sẽ không bị xóa — chúng sẽ được chuyển trở lại “{2}”.</value>
+  </data>
+  <data name="Confirm_DeleteSysItem" xml:space="preserve">
+    <value>Xóa vĩnh viễn mục khởi động “{0}” khỏi hệ thống? Thao tác này không thể hoàn tác (nếu chỉ muốn ngăn nó chạy khi khởi động, hãy bỏ chọn).</value>
+  </data>
+  <data name="Confirm_KillPort" xml:space="preserve">
+    <value>Giải phóng cổng {0}? Thao tác này kết thúc {1}, cùng các tiến trình con. Mọi thứ chưa lưu sẽ mất.</value>
+  </data>
+  <data name="Confirm_KillPortAlso" xml:space="preserve">
+    <value>Tiến trình đó cũng giữ cổng {0}, và cổng đó cũng sẽ được giải phóng.</value>
+  </data>
+  <data name="Confirm_DeleteSysItemTakenOver" xml:space="preserve">
+    <value>Mục khởi động “{0}” đã được đưa vào danh sách khởi động và vẫn có một bước trỏ tới tệp lối tắt của nó. Xóa khỏi hệ thống sẽ xóa cả lối tắt, khiến bước đó không thể khởi chạy nó nữa. Vẫn xóa?</value>
+  </data>
+  <data name="SysMsg_DeleteFail" xml:space="preserve">
+    <value>Xóa “{0}” thất bại: {1}</value>
+  </data>
+  <data name="Config_ExportSamePath" xml:space="preserve">
+    <value>Đích xuất không thể là chính tệp cấu hình — hãy chọn tên hoặc vị trí khác.</value>
+  </data>
+  <data name="Val_SendKeys" xml:space="preserve">
+    <value>Nội dung phím gửi không phải chuỗi phím hợp lệ: kiểm tra dấu ngoặc nhọn chưa đóng và tên phím không xác định (vd. {ENTER}; { nguyên văn viết là {{}, } nguyên văn viết là {}}).</value>
+  </data>
+  <data name="Val_SearchUrl" xml:space="preserve">
+    <value>URL tìm kiếm phải có {0} — đó là chỗ đặt từ cần tìm. Thiếu nó, bước này lần nào cũng chỉ mở đúng một trang.</value>
+  </data>
+  <data name="Ed_CatchUp" xml:space="preserve">
+    <value>Bù nếu bỏ lỡ (sau khi ngủ/tắt máy)</value>
+  </data>
+  <data name="Unit_Minutes" xml:space="preserve">
+    <value>{0} phút</value>
+  </data>
+  <data name="Warn_KeyNoMain" xml:space="preserve">
+    <value>Phím tắt “{0}” thiếu phím chính; chưa gửi</value>
+  </data>
+  <data name="Warn_KeyMultiDigit" xml:space="preserve">
+    <value>Tên phím không nhận ra “{0}” (số nhiều chữ số không phải là phím); phím tắt “{1}” chưa gửi</value>
+  </data>
+  <data name="Warn_KeyUnknown" xml:space="preserve">
+    <value>Phím không nhận ra “{0}”; phím tắt “{1}” chưa gửi</value>
+  </data>
+  <data name="Warn_KeyRejected" xml:space="preserve">
+    <value>Phím tắt “{0}” bị hệ thống từ chối (xảy ra khi cửa sổ nâng quyền/màn hình an toàn ở phía trước); không có tác dụng</value>
+  </data>
+  <data name="Warn_KeyPartial" xml:space="preserve">
+    <value>Phím tắt “{0}” chỉ được đưa vào một phần ({1}/{2}); đã gửi lại thao tác nhả phím, không có tác dụng</value>
+  </data>
+  <data name="Warn_TextSendFail" xml:space="preserve">
+    <value>Gửi văn bản: không thể đưa cửa sổ “{0}” ra trước; chưa gửi</value>
+  </data>
+  <data name="Warn_SaveConfigFail" xml:space="preserve">
+    <value>Lưu cấu hình thất bại: {0} (thay đổi chỉ nằm trong bộ nhớ và sẽ mất khi khởi động lại)</value>
+  </data>
+  <data name="Warn_SilentGroupMissing" xml:space="preserve">
+    <value>Nhóm hành động mà lời nhắc “{0}” tham chiếu không còn tồn tại; lần này không chạy gì cả</value>
+  </data>
+  <data name="Warn_SilentGroupDisabled" xml:space="preserve">
+    <value>Nhóm hành động mà lời nhắc “{0}” tham chiếu đã bị tắt; lần này không chạy gì cả</value>
+  </data>
+  <data name="Skip_GroupNotFound" xml:space="preserve">
+    <value>Không tìm thấy nhóm hành động được tham chiếu</value>
+  </data>
+  <data name="Skip_GroupDisabled" xml:space="preserve">
+    <value>Nhóm hành động “{0}” đã bị tắt; đã bỏ qua</value>
+  </data>
+  <data name="Skip_GroupReentrant" xml:space="preserve">
+    <value>Vào lại nhóm hành động (tham chiếu vòng lặp hoặc đang chạy); đã bỏ qua</value>
+  </data>
+  <data name="Toast_GroupStepSkipped" xml:space="preserve">
+    <value>{0}, {1}</value>
+  </data>
+  <data name="Toast_GroupCancelled" xml:space="preserve">
+    <value>Đã yêu cầu hủy nhóm hành động “{0}”.</value>
+  </data>
+  <data name="Toast_GroupStarted" xml:space="preserve">
+    <value>Đã bắt đầu nhóm hành động “{0}”.</value>
+  </data>
+  <data name="Toast_GroupBusy" xml:space="preserve">
+    <value>Nhóm hành động “{0}” đang chạy (được khởi động từ nơi khác); phím này không dừng được nó — hãy dùng phím tắt dừng khẩn cấp.</value>
+  </data>
+  <data name="Warn_RunBudget" xml:space="preserve">
+    <value>Quá trình chạy đã dừng tại giới hạn 5000 bước; các bước còn lại đã bị bỏ qua (kiểm tra xem có số lần lặp lại quá lớn không)</value>
+  </data>
+  <data name="Warn_OnYesGroupMissing" xml:space="preserve">
+    <value>Nhóm hành động chạy khi bấm “Có” không còn tồn tại; đã bỏ qua</value>
+  </data>
+  <data name="Warn_OnYesGroupDisabled" xml:space="preserve">
+    <value>Nhóm hành động chạy khi bấm “Có” đã bị tắt; đã bỏ qua</value>
+  </data>
+  <data name="Warn_OnYesFailed" xml:space="preserve">
+    <value>Không chạy được hành động sau khi bấm “Có”: {0}</value>
+  </data>
+  <data name="Warn_TakeoverUnsupported" xml:space="preserve">
+    <value>Mục này chưa tiếp quản được; chỉ tiếp quản được khóa Run trong registry và mục trong thư mục Khởi động</value>
+  </data>
+  <data name="Warn_LaunchRunCrashed" xml:space="preserve">
+    <value>Chạy danh sách khởi động bị gián đoạn: {0}</value>
+  </data>
+  <data name="Tray_ViewLog" xml:space="preserve">
+    <value>Xem nhật ký khởi động lần trước</value>
+  </data>
+  <data name="Tray_History" xml:space="preserve">
+    <value>Gần đây</value>
+  </data>
+  <data name="Tray_NoLog" xml:space="preserve">
+    <value>Chưa có nhật ký khởi động (hãy chạy danh sách khởi động một lần trước)</value>
+  </data>
+  <data name="Log_Title" xml:space="preserve">
+    <value>Nhật ký lần chạy danh sách khởi động gần nhất</value>
+  </data>
+  <data name="Log_When" xml:space="preserve">
+    <value>Thời điểm: {0}</value>
+  </data>
+  <data name="Log_Summary" xml:space="preserve">
+    <value>Tổng {0} bước: {1} bước lỗi hoặc cảnh báo, {2} bước đã gửi nhưng không kiểm chứng được, số còn lại thành công</value>
+  </data>
+  <data name="Log_UnverNote" xml:space="preserve">
+    <value>(~ nghĩa là đã gửi phím hoặc phím tắt, nhưng không xác nhận được đích có phản hồi hay không)</value>
+  </data>
+  <data name="Log_ReadyGate" xml:space="preserve">
+    <value>Cổng sẵn sàng: đã chờ {0}s (shell={1} mạng={2})</value>
+  </data>
+  <data name="Log_ReadyTimeout" xml:space="preserve">
+    <value>, hết thời gian vẫn chưa sẵn sàng, vẫn tiếp tục</value>
+  </data>
+  <data name="Log_BootDelay" xml:space="preserve">
+    <value>Độ trễ khởi động: {0}s</value>
+  </data>
+  <data name="Log_BudgetHit" xml:space="preserve">
+    <value>Lần chạy này đã chạm trần {0} bước; các bước còn lại không chạy</value>
+  </data>
+  <data name="Log_Nth" xml:space="preserve">
+    <value> ({0}/{1})</value>
+  </data>
+  <data name="Log_GroupBusy" xml:space="preserve">
+    <value>Nhóm hành động “{0}” đang chạy (được kích hoạt từ nơi khác); lần này bỏ qua</value>
+  </data>
+  <data name="Log_GroupMissing" xml:space="preserve">
+    <value>Không tìm thấy nhóm hành động</value>
+  </data>
+  <data name="Log_GroupDisabled" xml:space="preserve">
+    <value>Nhóm hành động “{0}” đang tắt; đã bỏ qua</value>
+  </data>
+  <data name="Log_GroupCycle" xml:space="preserve">
+    <value>Tham chiếu vòng; đã bỏ qua</value>
+  </data>
+  <data name="Log_RunGroup" xml:space="preserve">
+    <value>Chạy nhóm hành động: {0}</value>
+  </data>
+  <data name="Log_Stopped" xml:space="preserve">
+    <value>Đã dừng thủ công; các bước sau không chạy</value>
+  </data>
+  <data name="Log_HdrStopped" xml:space="preserve">
+    <value>Lần chạy này bị dừng thủ công (phím dừng khẩn hoặc “Dừng” ở khay hệ thống)</value>
+  </data>
+  <data name="Err_JsonNull" xml:space="preserve">
+    <value>Tệp này phân tích ra rỗng — không phải một tệp cấu hình.</value>
+  </data>
+  <data name="Err_ClearClipboard" xml:space="preserve">
+    <value>Xóa khay nhớ tạm thất bại: {0}</value>
+  </data>
+  <data name="Err_SoundNotWav" xml:space="preserve">
+    <value>“{0}” không phải là tệp .wav. Bước này chỉ phát tệp wav.</value>
+  </data>
+  <data name="Err_SoundMissing" xml:space="preserve">
+    <value>Không tìm thấy tệp âm thanh: “{0}”</value>
+  </data>
+  <data name="Err_EmptyRecycleBin" xml:space="preserve">
+    <value>Dọn thùng rác thất bại: {0}</value>
+  </data>
+  <data name="Err_UnknownSysCmd" xml:space="preserve">
+    <value>Lệnh hệ thống không xác định: {0}</value>
+  </data>
+  <data name="Tray_RunGroup" xml:space="preserve">
+    <value>Chạy: {0}</value>
+  </data>
+  <data name="Tray_DndResume" xml:space="preserve">
+    <value>Tiếp tục nhắc nhở (còn {0} phút)</value>
+  </data>
+  <data name="Tray_DndEndOfDay" xml:space="preserve">
+    <value>Đến hết hôm nay</value>
+  </data>
+  <data name="Toast_DndEndOfDay" xml:space="preserve">
+    <value>Đã tạm dừng nhắc đến hết hôm nay</value>
+  </data>
+  <data name="Tray_DndResumeHours" xml:space="preserve">
+    <value>Tiếp tục nhắc (còn {0} giờ)</value>
+  </data>
+  <data name="Tray_DndMenu" xml:space="preserve">
+    <value>Tạm dừng nhắc nhở</value>
+  </data>
+  <data name="Tray_Hours" xml:space="preserve">
+    <value>{0} giờ</value>
+  </data>
+  <data name="Toast_DndOn" xml:space="preserve">
+    <value>Đã tạm dừng nhắc nhở {0} giờ</value>
+  </data>
+  <data name="Toast_DndOff" xml:space="preserve">
+    <value>Đã tiếp tục nhắc nhở</value>
+  </data>
+  <data name="Tpl_Focus" xml:space="preserve">
+    <value>Chế độ tập trung</value>
+  </data>
+  <data name="Tpl_Meeting" xml:space="preserve">
+    <value>Chế độ họp</value>
+  </data>
+  <data name="Tpl_EndOfDay" xml:space="preserve">
+    <value>Cuối ngày</value>
+  </data>
+  <data name="Tpl_Bedtime" xml:space="preserve">
+    <value>Trước khi ngủ</value>
+  </data>
+  <data name="Tpl_Away" xml:space="preserve">
+    <value>Rời đi một lát</value>
+  </data>
+  <data name="Tpl_EndOfDayMsg" xml:space="preserve">
+    <value>Đã ghi lại hết công việc hôm nay chưa?</value>
+  </data>
+  <data name="Tpl_BedtimeMsg" xml:space="preserve">
+    <value>Đến giờ đi ngủ!</value>
+  </data>
+  <data name="Tpl_Sedentary" xml:space="preserve">
+    <value>Nhắc nghỉ giải lao</value>
+  </data>
+  <data name="Tpl_Search" xml:space="preserve">
+    <value>Tìm kiếm nhanh</value>
+  </data>
+  <data name="Tpl_SearchAsk" xml:space="preserve">
+    <value>Tìm kiếm cái gì?</value>
+  </data>
+  <data name="Tpl_SearchVar" xml:space="preserve">
+    <value>từ khóa</value>
+  </data>
+  <data name="Tpl_SedentaryMsg" xml:space="preserve">
+    <value>Đứng dậy vận động một chút</value>
+  </data>
+  <data name="Smp_Mute" xml:space="preserve">
+    <value>Tắt tiếng khi khởi động (ví dụ · tránh tự động phát tiếng)</value>
+  </data>
+  <data name="Smp_OpenApp" xml:space="preserve">
+    <value>Mở trình duyệt của bạn (ví dụ: truy cập vào một ứng dụng mà bạn thực sự sử dụng)</value>
+  </data>
+  <data name="Smp_OpenSite" xml:space="preserve">
+    <value>Mở trang web (ví dụ · chỉ ngày trong tuần; email hoặc việc cần làm)</value>
+  </data>
+  <data name="Smp_OpenChat" xml:space="preserve">
+    <value>Mở ứng dụng chat (ví dụ · thu nhỏ chạy nền)</value>
+  </data>
+  <data name="Smp_ShowDesktop" xml:space="preserve">
+    <value>Hiện màn hình nền bằng Win+D (ví dụ · gửi tổ hợp phím)</value>
+  </data>
+  <data name="Smp_RemWater" xml:space="preserve">
+    <value>Đứng dậy và uống chút nước (ví dụ)</value>
+  </data>
+  <data name="Smp_RemWrapUp" xml:space="preserve">
+    <value>Đến giờ kết thúc — còn việc nào của hôm nay chưa xong? (ví dụ)</value>
+  </data>
+  <data name="Smp_RemBills" xml:space="preserve">
+    <value>Kiểm tra hoá đơn và gói đăng ký tháng này (ví dụ · ngày 1)</value>
+  </data>
+  <data name="Smp_RemSleep" xml:space="preserve">
+    <value>Đã đến giờ đi ngủ (ví dụ)</value>
+  </data>
+  <data name="Confirm_RelaunchAdmin" xml:space="preserve">
+    <value>Thao tác này cần quyền quản trị. Mở lại Clockwork với quyền quản trị?</value>
+  </data>
+  <data name="Confirm_DeleteGroupRefs" xml:space="preserve">
+    <value>Nhóm hành động “{0}” đang được {1} lời nhắc và {2} bước tham chiếu. Xóa nó cũng sẽ dọn các tham chiếu này (lời nhắc chỉ còn cửa sổ bật lên; các bước tham chiếu bị gỡ). Vẫn xóa chứ?</value>
+  </data>
+  <data name="Btn_Browse" xml:space="preserve">
+    <value>Duyệt…</value>
+  </data>
+  <data name="Btn_Pick" xml:space="preserve">
+    <value>Chọn…</value>
+  </data>
+  <data name="Btn_Capture" xml:space="preserve">
+    <value>Bắt phím</value>
+  </data>
+  <data name="Btn_PickDate" xml:space="preserve">
+    <value>Chọn ngày</value>
+  </data>
+  <data name="Filter_Browse" xml:space="preserve">
+    <value>Chương trình / script / lối tắt|*.exe;*.bat;*.cmd;*.ps1;*.lnk|Tất cả tệp|*.*</value>
+  </data>
+  <data name="Ed_WindowStyle" xml:space="preserve">
+    <value>Kiểu cửa sổ</value>
+  </data>
+  <data name="WinStyle_Default" xml:space="preserve">
+    <value>Mặc định (cửa sổ thường)</value>
+  </data>
+  <data name="WinStyle_Minimized" xml:space="preserve">
+    <value>Khởi động thu nhỏ</value>
+  </data>
+  <data name="WinStyle_Maximized" xml:space="preserve">
+    <value>Khởi động phóng to</value>
+  </data>
+  <data name="WinStyle_Hidden" xml:space="preserve">
+    <value>Khởi động ẩn</value>
+  </data>
+  <data name="Ed_ActivateIfRunning" xml:space="preserve">
+    <value>Kích hoạt cửa sổ nếu đang chạy (không mở lại)</value>
+  </data>
+  <data name="Ed_ActivateProcess" xml:space="preserve">
+    <value>Tiến trình cần kích hoạt</value>
+  </data>
+  <data name="Ed_AltTargets" xml:space="preserve">
+    <value>Đường dẫn dự phòng</value>
+  </data>
+  <data name="Ed_AltTargetsHint" xml:space="preserve">
+    <value>Mỗi dòng một đường dẫn đầy đủ; nếu Đích không tồn tại sẽ dùng đường dẫn đầu tiên tồn tại (cho máy có đường dẫn khác nhau)</value>
+  </data>
+  <data name="Picker_Process" xml:space="preserve">
+    <value>Chọn tiến trình</value>
+  </data>
+  <data name="Picker_Search" xml:space="preserve">
+    <value>Tìm tên tiến trình / tiêu đề cửa sổ</value>
+  </data>
+  <data name="Date_Pick" xml:space="preserve">
+    <value>Chọn ngày</value>
+  </data>
+  <data name="Capture_Key" xml:space="preserve">
+    <value>Bắt phím</value>
+  </data>
+  <data name="Ed_GroupHotkey" xml:space="preserve">
+    <value>Phím tắt toàn cục</value>
+  </data>
+  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
+    <value>Nhấp rồi nhấn tổ hợp phím để chạy nhóm này bất cứ lúc nào; nhấn lại khi đang chạy để dừng. Esc hủy, Delete xóa</value>
+  </data>
+  <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
+    <value>Không thể đăng ký phím tắt {1} cho nhóm hành động “{0}”: có thể đã bị chiếm dụng</value>
+  </data>
+  <data name="Val_HotkeyDup" xml:space="preserve">
+    <value>Phím tắt {0} đã được “{1}” sử dụng; hãy chọn tổ hợp khác</value>
+  </data>
+  <data name="Hotkey_Reserved" xml:space="preserve">
+    <value>{0} là tổ hợp hệ thống dành riêng (đăng ký sẽ chiếm phím hệ thống), không thể dùng làm phím tắt</value>
+  </data>
+  <data name="Ed_GroupRepeat" xml:space="preserve">
+    <value>Lặp lại toàn bộ nhóm</value>
+  </data>
+  <data name="Ed_GroupShowInTray" xml:space="preserve">
+    <value>Hiện trong menu khay</value>
+  </data>
+  <data name="Ed_GroupRepeatDelay" xml:space="preserve">
+    <value>độ trễ giữa các vòng (ms)</value>
+  </data>
+  <data name="Val_GroupCycle" xml:space="preserve">
+    <value>Có tham chiếu nhóm vòng lặp ({0}), hãy phá vỡ chuỗi tham chiếu trước khi lưu</value>
+  </data>
+  <data name="Btn_Copy" xml:space="preserve">
+    <value>Nhân bản</value>
+  </data>
+  <data name="Side_SelectedRow" xml:space="preserve">
+    <value>Đã chọn</value>
+  </data>
+  <data name="Btn_ExportConfig" xml:space="preserve">
+    <value>Xuất cấu hình</value>
+  </data>
+  <data name="Btn_ImportConfig" xml:space="preserve">
+    <value>Nhập cấu hình</value>
+  </data>
+  <data name="Config_Exported" xml:space="preserve">
+    <value>Đã xuất cấu hình đến: {0}</value>
+  </data>
+  <data name="Config_Imported" xml:space="preserve">
+    <value>Đã nhập cấu hình. Đang khởi động lại để áp dụng.</value>
+  </data>
+  <data name="Config_ImportFail" xml:space="preserve">
+    <value>Nhập thất bại: {0}</value>
+  </data>
+  <data name="Config_ImportConfirm" xml:space="preserve">
+    <value>Việc nhập sẽ ghi đè toàn bộ cấu hình hiện tại (danh sách khởi động / lời nhắc / nhóm hành động / cài đặt). Tiếp tục?</value>
+  </data>
+  <data name="Config_Filter" xml:space="preserve">
+    <value>Cấu hình Clockwork|*.json|Tất cả tệp|*.*</value>
+  </data>
+  <data name="Config_ExportFail" xml:space="preserve">
+    <value>Xuất thất bại: {0}</value>
+  </data>
+  <data name="Dup_Suffix" xml:space="preserve">
+    <value> (bản sao)</value>
+  </data>
+  <data name="Relaunch_Fail" xml:space="preserve">
+    <value>Không thể tự khởi động lại. Vui lòng mở lại Clockwork thủ công. ({0})</value>
+  </data>
+  <data name="Vol_micMute" xml:space="preserve">
+    <value>Tắt tiếng micro</value>
+  </data>
+  <data name="Vol_micUnmute" xml:space="preserve">
+    <value>Bật tiếng micro</value>
+  </data>
+  <data name="Sys_setClipboard" xml:space="preserve">
+    <value>Đặt nội dung khay nhớ tạm</value>
+  </data>
+  <data name="Menu_SecCommon" xml:space="preserve">
+    <value>Thường dùng</value>
+  </data>
+  <data name="Cmd_copy" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="Cmd_paste" xml:space="preserve">
+    <value>Dán</value>
+  </data>
+  <data name="Cmd_back" xml:space="preserve">
+    <value>Quay lại</value>
+  </data>
+  <data name="Cmd_forward" xml:space="preserve">
+    <value>Tiến tới</value>
+  </data>
+  <data name="Cmd_toBottom" xml:space="preserve">
+    <value>Xuống cuối</value>
+  </data>
+  <data name="Win_current" xml:space="preserve">
+    <value>Cửa sổ hiện tại</value>
+  </data>
+  <data name="Win_minimizeFg" xml:space="preserve">
+    <value>Thu nhỏ cửa sổ hiện tại</value>
+  </data>
+  <data name="Win_maximizeFg" xml:space="preserve">
+    <value>Phóng to cửa sổ hiện tại</value>
+  </data>
+  <data name="Win_closeFg" xml:space="preserve">
+    <value>Đóng cửa sổ hiện tại</value>
+  </data>
+  <data name="Sys_searchSelection" xml:space="preserve">
+    <value>Tìm văn bản đã chọn</value>
+  </data>
+  <data name="Sys_playSound" xml:space="preserve">
+    <value>Phát một âm thanh (âm thanh hệ thống hoặc tệp .wav)</value>
+  </data>
+  <data name="Ed_SearchUrl" xml:space="preserve">
+    <value>URL tìm kiếm</value>
+  </data>
+  <data name="Ed_SearchEngine" xml:space="preserve">
+    <value>Công cụ tìm kiếm</value>
+  </data>
+  <data name="Ed_SearchCustom" xml:space="preserve">
+    <value>Tùy chỉnh…</value>
+  </data>
+  <data name="Err_NoSelection" xml:space="preserve">
+    <value>Chưa chọn văn bản. Hãy chọn nội dung cần tìm rồi chạy lại bước này.</value>
+  </data>
+  <data name="Warn_NoForegroundWindow" xml:space="preserve">
+    <value>Hiện không có cửa sổ nào để thao tác (phía trước là chính Clockwork hoặc màn hình nền)</value>
+  </data>
+  <data name="Ed_ProcessHint" xml:space="preserve">
+    <value>Nhập * để chỉ cửa sổ hiện tại — cửa sổ bạn đang dùng trước khi vẽ cử chỉ hoặc mở bảng. Để trống thì bước này không làm gì cả.</value>
+  </data>
+  <data name="Ed_SearchUrlHint" xml:space="preserve">
+    <value>{0} là từ cần tìm; sẽ được tự động mã hóa.</value>
+  </data>
+  <data name="Ed_SoundFile" xml:space="preserve">
+    <value>Tệp âm thanh</value>
+  </data>
+  <data name="Ed_SoundHint" xml:space="preserve">
+    <value>Để trống ô này để sử dụng âm thanh thông báo mặc định của hệ thống. Hoặc nhập đường dẫn đầy đủ đến tệp .wav.</value>
+  </data>
+  <data name="Sys_brightness" xml:space="preserve">
+    <value>Độ sáng màn hình</value>
+  </data>
+  <data name="Sys_notificationsOff" xml:space="preserve">
+    <value>Tắt thông báo</value>
+  </data>
+  <data name="Sys_notificationsOn" xml:space="preserve">
+    <value>Bật thông báo</value>
+  </data>
+  <data name="Sys_displayInternal" xml:space="preserve">
+    <value>Màn hình: chỉ màn hình PC</value>
+  </data>
+  <data name="Sys_displayClone" xml:space="preserve">
+    <value>Màn hình: nhân bản</value>
+  </data>
+  <data name="Sys_displayExtend" xml:space="preserve">
+    <value>Màn hình: mở rộng</value>
+  </data>
+  <data name="Sys_displayExternal" xml:space="preserve">
+    <value>Màn hình: chỉ màn hình phụ</value>
+  </data>
+  <data name="Err_SysCommand" xml:space="preserve">
+    <value>{0} thất bại: {1}</value>
+  </data>
+  <data name="Err_PowerStateUnavailable" xml:space="preserve">
+    <value>Máy này không hỗ trợ hoặc đã tắt trạng thái nguồn đó (chạy powercfg /a để kiểm tra)</value>
+  </data>
+  <data name="Sum_SysArg" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Ed_ClipText" xml:space="preserve">
+    <value>Nội dung khay nhớ tạm</value>
+  </data>
+  <data name="Ed_Brightness" xml:space="preserve">
+    <value>Độ sáng (0-100)</value>
+  </data>
+  <data name="Ed_BrightnessHint" xml:space="preserve">
+    <value>Chỉ hoạt động với màn hình do hệ thống điều khiển (màn hình laptop); màn hình ngoài không được hỗ trợ.</value>
+  </data>
+  <data name="Ed_OnlyAfter" xml:space="preserve">
+    <value>Chỉ sau</value>
+  </data>
+  <data name="Ed_HourAfter" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Ed_AfterTimeHint" xml:space="preserve">
+    <value>Định dạng H:mm, ví dụ 18:30; chỉ nhập giờ (ví dụ 18) cũng được; mặc định 18:00.</value>
+  </data>
+  <data name="Ed_Cond_Any" xml:space="preserve">
+    <value>Không giới hạn</value>
+  </data>
+  <data name="Ed_IfProcess" xml:space="preserve">
+    <value>Điều kiện tiến trình</value>
+  </data>
+  <data name="Ed_IfProc_Running" xml:space="preserve">
+    <value>Tiến trình đang chạy</value>
+  </data>
+  <data name="Ed_IfProc_Not" xml:space="preserve">
+    <value>Tiến trình không chạy</value>
+  </data>
+  <data name="Ed_IfPower" xml:space="preserve">
+    <value>Điều kiện nguồn điện</value>
+  </data>
+  <data name="Ed_IfPower_Ac" xml:space="preserve">
+    <value>Chỉ khi cắm sạc</value>
+  </data>
+  <data name="Ed_IfPower_Battery" xml:space="preserve">
+    <value>Chỉ khi dùng pin</value>
+  </data>
+  <data name="Ed_IfPath" xml:space="preserve">
+    <value>Đường dẫn tồn tại</value>
+  </data>
+  <data name="Ed_IfPathHint" xml:space="preserve">
+    <value>Nếu điền, bước chỉ chạy khi tệp / thư mục đó tồn tại; để trống = không giới hạn.</value>
+  </data>
+  <data name="Sum_After" xml:space="preserve">
+    <value> (chỉ sau {0})</value>
+  </data>
+  <data name="Sum_IfProcRunning" xml:space="preserve">
+    <value> ({0} đang chạy)</value>
+  </data>
+  <data name="Sum_IfProcNot" xml:space="preserve">
+    <value> ({0} không chạy)</value>
+  </data>
+  <data name="Sum_IfAc" xml:space="preserve">
+    <value> (cắm sạc)</value>
+  </data>
+  <data name="Sum_IfBattery" xml:space="preserve">
+    <value> (dùng pin)</value>
+  </data>
+  <data name="Sum_IfPath" xml:space="preserve">
+    <value> ({0} tồn tại)</value>
+  </data>
+  <data name="Ed_Trig_Idle" xml:space="preserve">
+    <value>Khi không dùng máy</value>
+  </data>
+  <data name="Ed_Trig_Unlock" xml:space="preserve">
+    <value>Khi mở khóa</value>
+  </data>
+  <data name="Ed_Trig_Lock" xml:space="preserve">
+    <value>Khi khóa máy</value>
+  </data>
+  <data name="Ed_Trig_Resume" xml:space="preserve">
+    <value>Khi thức khỏi chế độ ngủ</value>
+  </data>
+  <data name="Ed_Trig_AcPlugged" xml:space="preserve">
+    <value>Khi cắm sạc</value>
+  </data>
+  <data name="Ed_Trig_AcUnplugged" xml:space="preserve">
+    <value>Khi rút sạc</value>
+  </data>
+  <data name="Ed_Trig_LowBattery" xml:space="preserve">
+    <value>Khi pin yếu</value>
+  </data>
+  <data name="Ed_IdleMinutes" xml:space="preserve">
+    <value>Số phút rảnh</value>
+  </data>
+  <data name="Ed_IdleHint" xml:space="preserve">
+    <value>Kích hoạt một lần sau bấy nhiêu phút không dùng bàn phím hay chuột; bộ đếm bắt đầu lại khi bạn quay lại.</value>
+  </data>
+  <data name="Ed_BatteryPercent" xml:space="preserve">
+    <value>Pin dưới (%)</value>
+  </data>
+  <data name="Ed_BatteryHint" xml:space="preserve">
+    <value>Kích hoạt một lần khi dùng pin và mức pin tụt xuống dưới ngưỡng này; sẽ sẵn sàng lại sau khi sạc lên hoặc cắm điện.</value>
+  </data>
+  <data name="Ed_EventHint" xml:space="preserve">
+    <value>Chạy ngay khi sự kiện xảy ra. Các ô thứ bên dưới vẫn giới hạn những ngày có hiệu lực; thời gian ân hạn và bù lỡ không áp dụng cho sự kiện nên đã ẩn.</value>
+  </data>
+  <data name="Period_OnEvent" xml:space="preserve">
+    <value>Mỗi lần xảy ra</value>
+  </data>
+  <data name="Time_Idle" xml:space="preserve">
+    <value>Rảnh {0} phút</value>
+  </data>
+  <data name="Time_LowBattery" xml:space="preserve">
+    <value>Pin &lt; {0}%</value>
+  </data>
+  <data name="Menu_FromStartMenu" xml:space="preserve">
+    <value>Chọn từ menu Start…</value>
+  </data>
+  <data name="Picker_StartMenu" xml:space="preserve">
+    <value>Chọn ứng dụng từ menu Start</value>
+  </data>
+  <data name="Picker_SearchApp" xml:space="preserve">
+    <value>Tìm tên ứng dụng</value>
+  </data>
+  <data name="Picker_MultiHint" xml:space="preserve">
+    <value>Chọn nhiều bằng Ctrl / Shift; mỗi mục được thêm vào danh sách như một bước, mặc định chưa tích chọn.</value>
+  </data>
+  <data name="Picker_StartMenuEmpty" xml:space="preserve">
+    <value>Không tìm thấy lối tắt chương trình nào trong menu Start.</value>
+  </data>
+  <data name="Tpl_Restore" xml:space="preserve">
+    <value>Trở lại bình thường</value>
+  </data>
+  <data name="Settings_Boot" xml:space="preserve">
+    <value>Khởi động</value>
+  </data>
+  <data name="Settings_Backup" xml:space="preserve">
+    <value>Sao lưu</value>
+  </data>
+  <data name="Settings_BackupTip" xml:space="preserve">
+    <value>Xuất ra một tệp .json duy nhất. Nhập vào sẽ thay thế toàn bộ cấu hình hiện tại.</value>
+  </data>
+  <data name="Settings_StartupDelayTip" xml:space="preserve">
+    <value>0-600 giây và chỉ khi bật “Khởi động cùng hệ thống”: chờ bấy nhiêu sau khi đăng nhập rồi mới chạy danh sách, để tránh lúc máy đang bận. Chạy lại thủ công không bị ảnh hưởng.</value>
+  </data>
+  <data name="Settings_WaitReady" xml:space="preserve">
+    <value>Đợi hệ thống sẵn sàng (màn hình nền / mạng)</value>
+  </data>
+  <data name="Settings_WaitReadyTip" xml:space="preserve">
+    <value>Đi tiếp ngay khi cả hai sẵn sàng, chờ tối đa 90 giây; độ trễ cố định ở trên được cộng thêm. Bật khi danh sách chạy quá sớm so với phần mềm của bạn.</value>
+  </data>
+  <data name="Menu_SecOpen" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="Menu_SecControl" xml:space="preserve">
+    <value>Điều khiển ứng dụng</value>
+  </data>
+  <data name="Menu_SecSystem" xml:space="preserve">
+    <value>Hệ thống &amp; âm thanh</value>
+  </data>
+  <data name="Menu_SecFlow" xml:space="preserve">
+    <value>Luồng</value>
+  </data>
+  <data name="Ed_LoginSilentHint" xml:space="preserve">
+    <value>Mở ứng dụng lúc đăng nhập với thứ tự và độ trễ thì Danh sách khởi động tiện hơn; còn điều kiện như “chỉ trong N phút sau khi khởi động”, “chỉ buổi sáng” thì đúng là chỗ này.</value>
+  </data>
+  <data name="Ed_NoGroupsHint" xml:space="preserve">
+    <value>Chưa có nhóm hành động nào — hãy tạo một nhóm từ mẫu ở thẻ “Nhóm hành động” trước, rồi quay lại đây tham chiếu.</value>
+  </data>
+  <data name="Ed_CondHeader" xml:space="preserve">
+    <value>Điều kiện &amp; lặp lại: {0}</value>
+  </data>
+  <data name="Ed_CondAlways" xml:space="preserve">
+    <value>luôn chạy</value>
+  </data>
+  <data name="Ed_AdvHeader" xml:space="preserve">
+    <value>Nâng cao: {0}</value>
+  </data>
+  <data name="Adv_Once" xml:space="preserve">
+    <value>kích hoạt một lần</value>
+  </data>
+  <data name="Adv_Nag" xml:space="preserve">
+    <value>nhắc lại mỗi {0} phút đến khi xác nhận</value>
+  </data>
+  <data name="Adv_NagUntil" xml:space="preserve">
+    <value>nhắc lại mỗi {0} phút đến khi xác nhận, muộn nhất đến {1}</value>
+  </data>
+  <data name="Adv_Loop" xml:space="preserve">
+    <value>chạy mỗi {0} phút đến hết ngày (xác nhận không dừng)</value>
+  </data>
+  <data name="Adv_LoopUntil" xml:space="preserve">
+    <value>chạy mỗi {0} phút đến {1} (xác nhận không dừng)</value>
+  </data>
+  <data name="Ed_Trig_Busy" xml:space="preserve">
+    <value>Khi dùng liên tục</value>
+  </data>
+  <data name="Ed_Trig_Display" xml:space="preserve">
+    <value>Khi màn hình thay đổi</value>
+  </data>
+  <data name="Ed_Trig_NetUp" xml:space="preserve">
+    <value>Khi có mạng</value>
+  </data>
+  <data name="Ed_Trig_NetDown" xml:space="preserve">
+    <value>Khi mất mạng</value>
+  </data>
+  <data name="Ed_Trig_Usb" xml:space="preserve">
+    <value>Khi cắm ổ USB</value>
+  </data>
+  <data name="Time_Busy" xml:space="preserve">
+    <value>Dùng {0} phút</value>
+  </data>
+  <data name="Ed_BusyMinutes" xml:space="preserve">
+    <value>Số phút dùng</value>
+  </data>
+  <data name="Ed_BusyHint" xml:space="preserve">
+    <value>Nhắc một lần sau khi bạn dùng liên tục đủ số phút này; rời máy trọn một phút sẽ tính lại từ đầu.</value>
+  </data>
+  <data name="Settings_PanelHotkey" xml:space="preserve">
+    <value>Phím bảng nhanh</value>
+  </data>
+  <data name="Settings_PanelHotkeyTip" xml:space="preserve">
+    <value>Mở bảng ô ngay tại con trỏ, mỗi ô một hành động. Esc để hủy, Del để xóa; sau khi xóa vẫn mở được bằng nút giữa chuột hoặc menu khay hệ thống.</value>
+  </data>
+  <data name="Tray_Panel" xml:space="preserve">
+    <value>Mở bảng nhanh</value>
+  </data>
+  <data name="Panel_Hint" xml:space="preserve">
+    <value>Esc để đóng</value>
+  </data>
+  <data name="Panel_Empty" xml:space="preserve">
+    <value>Bảng còn trống. Những hành động bạn đặt vào sẽ hiện ở đây.</value>
+  </data>
+  <data name="Warn_StartupSkippedFile" xml:space="preserve">
+    <value>Đã bỏ qua danh sách khởi động. Xoá {0} để nó tự chạy lại.</value>
+  </data>
+  <data name="Warn_StartupSkippedShift" xml:space="preserve">
+    <value>Đã bỏ qua danh sách khởi động vì bạn giữ Shift khi mở. Chỉ lần này, lần khởi động sau vẫn chạy như thường.</value>
+  </data>
+  <data name="Warn_GroupNotFound" xml:space="preserve">
+    <value>Không có nhóm hành động nào tên “{0}” — không chạy gì cả.</value>
+  </data>
+  <data name="Warn_GroupDisabled" xml:space="preserve">
+    <value>Nhóm hành động “{0}” đang tắt — không chạy gì cả.</value>
+  </data>
+  <data name="Unit_Ms" xml:space="preserve">
+    <value>ms</value>
+  </data>
+  <data name="Settings_MiddleLongPress" xml:space="preserve">
+    <value>Giữ nút giữa chuột để mở bảng</value>
+  </data>
+  <data name="Settings_MiddleLongPressTip" xml:space="preserve">
+    <value>Nhấp chuột giữa như thường vẫn dùng được — nhấn ngắn sẽ được gửi lại nguyên vẹn. Mặc định tắt, vì cần một hook chuột toàn cục.</value>
+  </data>
+  <data name="Settings_LongPressMs" xml:space="preserve">
+    <value>Thời gian giữ (ms)</value>
+  </data>
+  <data name="Warn_MouseHookFail" xml:space="preserve">
+    <value>Không cài được hook chuột nên giữ nút giữa bị tắt. Có thể phần mềm bảo mật hoặc chính sách nhóm đã chặn; bảng vẫn mở được bằng phím tắt hoặc menu khay hệ thống.</value>
+  </data>
+  <data name="Settings_Panel" xml:space="preserve">
+    <value>Bảng nhanh</value>
+  </data>
+  <data name="Settings_UsePanel" xml:space="preserve">
+    <value>Dùng bảng nhanh</value>
+  </data>
+  <data name="Settings_UsePanelTip" xml:space="preserve">
+    <value>Tắt đi thì phím tắt trả lại cho chương trình khác, không gắn hook chuột giữa, và mục trong khay cũng ẩn luôn. Các trang bảng vẫn còn — bạn vẫn sắp xếp được ở “Quản lý bảng…”.</value>
+  </data>
+  <data name="Settings_UseGestures" xml:space="preserve">
+    <value>Dùng cử chỉ chuột</value>
+  </data>
+  <data name="Settings_UseGesturesTip" xml:space="preserve">
+    <value>Tắt đi thì chuột phải không bị theo dõi chút nào và trở lại như thường. Bản thân các cử chỉ được vẽ trong trình quản lý cử chỉ, từ thanh bên của thẻ “Nhóm hành động”.</value>
+  </data>
+  <data name="Settings_PanelLayout" xml:space="preserve">
+    <value>Bố cục</value>
+  </data>
+  <data name="Settings_PanelLayoutTip" xml:space="preserve">
+    <value>Số cột × số hàng trên + số hàng dưới quyết định một trang chứa được bao nhiêu và bảng rộng bao nhiêu. Phần dư chuyển sang trang sau; đặt hàng dưới bằng 0 thì chỉ còn một dải.</value>
+  </data>
+  <data name="Settings_PanelColumns" xml:space="preserve">
+    <value>Số ô mỗi hàng</value>
+  </data>
+  <data name="Settings_PanelTileSize" xml:space="preserve">
+    <value>Cỡ ô</value>
+  </data>
+  <data name="Size_compact" xml:space="preserve">
+    <value>Gọn</value>
+  </data>
+  <data name="Size_normal" xml:space="preserve">
+    <value>Vừa</value>
+  </data>
+  <data name="Size_roomy" xml:space="preserve">
+    <value>Rộng</value>
+  </data>
+  <data name="Settings_PanelShowOps" xml:space="preserve">
+    <value>Hiện các nút có sẵn</value>
+  </data>
+  <data name="Settings_PanelIconOnly" xml:space="preserve">
+    <value>Chỉ biểu tượng</value>
+  </data>
+  <data name="Settings_PanelIconOnlyTip" xml:space="preserve">
+    <value>Tên vẫn nằm trong chú giải, và một màn hình chứa được nhiều hành động hơn hẳn.</value>
+  </data>
+  <data name="Ed_GroupPanelForProcess" xml:space="preserve">
+    <value>Chỉ trong ứng dụng này</value>
+  </data>
+  <data name="Settings_PanelTopRows" xml:space="preserve">
+    <value>Số hàng trên</value>
+  </data>
+  <data name="Settings_PanelBottomRows" xml:space="preserve">
+    <value>Số hàng dưới</value>
+  </data>
+  <data name="Ed_Icon" xml:space="preserve">
+    <value>Biểu tượng bảng</value>
+  </data>
+  <data name="Ed_IconHint" xml:space="preserve">
+    <value>Để trống thì nó tự điền: “Mở ứng dụng” lấy biểu tượng của chính đích đến, còn lại nhận biểu tượng nét theo loại của mình.</value>
+  </data>
+  <data name="Btn_Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="Panel_Manager" xml:space="preserve">
+    <value>Quản lý bảng</value>
+  </data>
+  <data name="Panel_Global" xml:space="preserve">
+    <value>Ứng dụng bất kỳ</value>
+  </data>
+  <data name="Panel_AddPage" xml:space="preserve">
+    <value>Thêm trang</value>
+  </data>
+  <data name="Panel_NewPage" xml:space="preserve">
+    <value>Trang mới</value>
+  </data>
+  <data name="Panel_AddHere" xml:space="preserve">
+    <value>Đặt một hành động vào đây</value>
+  </data>
+  <data name="Panel_NoPages" xml:space="preserve">
+    <value>Chưa có trang nào. Dấu + ở cuối thanh tab trang sẽ tạo ra một trang; sau đó, bạn có thể thêm các hành động vào đó.</value>
+  </data>
+  <data name="Panel_Uncategorized" xml:space="preserve">
+    <value>Chưa phân loại</value>
+  </data>
+  <data name="Panel_NewCategory" xml:space="preserve">
+    <value>Danh mục mới</value>
+  </data>
+  <data name="Panel_Category" xml:space="preserve">
+    <value>Danh mục</value>
+  </data>
+  <data name="Panel_Pages" xml:space="preserve">
+    <value>Trang</value>
+  </data>
+  <data name="Panel_CategoryHint" xml:space="preserve">
+    <value>Trang này thuộc danh mục nào. Hàng trên mỗi danh mục một thẻ; chọn một thẻ chỉ liệt kê các trang của nó.</value>
+  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve">
+    <value>Bấm danh mục ở trên, bấm trang ở bên trái. Bấm đúp để đổi tên, kéo thẻ để đổi thứ tự, thả lên một danh mục là chuyển trang đó vào danh mục ấy; thả một ô lên thẻ là chuyển ô vào trang đó. Bấm chuột phải vào thẻ để đổi tên hoặc xóa.</value>
+  </data>
+  <data name="Panel_ShowLeftTabs" xml:space="preserve">
+    <value>Hiện thẻ bên trái</value>
+  </data>
+  <data name="Panel_ShowTopTabs" xml:space="preserve">
+    <value>Hiện hàng danh mục</value>
+  </data>
+  <data name="Panel_BarsHint" xml:space="preserve">
+    <value>Bên trên chọn danh mục, bên trái liệt kê các trang của danh mục đó. Chỉ một danh mục thì hàng trên không được vẽ, và danh mục hiện tại chỉ một trang thì hàng trái cũng vậy — hai ô này dùng để buộc ẩn ngay cả khi có nhiều. Cửa sổ quản lý luôn giữ hàng danh mục: dấu + trên đó là nơi tạo danh mục.</value>
+  </data>
+  <data name="Panel_SceneHint" xml:space="preserve">
+    <value>Để trống thì trang luôn có. Điền tên tiến trình thì nó chỉ hiện khi ứng dụng đó đang ở phía trước lúc bạn mở bảng.</value>
+  </data>
+  <data name="Icon_Pick" xml:space="preserve">
+    <value>Chọn biểu tượng</value>
+  </data>
+  <data name="Icon_PickHint" xml:space="preserve">
+    <value>Ngoài những cái này, bạn có thể dùng ảnh của mình, hoặc bất kỳ exe nào để mượn biểu tượng của nó.</value>
+  </data>
+  <data name="Icon_UseImage" xml:space="preserve">
+    <value>Dùng ảnh…</value>
+  </data>
+  <data name="Icon_None" xml:space="preserve">
+    <value>Để tự động</value>
+  </data>
+  <data name="Panel_Search" xml:space="preserve">
+    <value>Tìm một hành động</value>
+  </data>
+  <data name="Panel_SearchNone" xml:space="preserve">
+    <value>Không có hành động nào khớp. Thử từ khác, hoặc bấm Esc để quay lại bảng.</value>
+  </data>
+  <data name="Panel_HintBack" xml:space="preserve">
+    <value>Esc quay lại</value>
+  </data>
+  <data name="Panel_SearchMore" xml:space="preserve">
+    <value>Đang hiện {0} kết quả đầu trong {1}. Gõ thêm chút nữa để thu hẹp.</value>
+  </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>Giao diện</value>
+  </data>
+  <data name="Theme_dark" xml:space="preserve">
+    <value>Tối</value>
+  </data>
+  <data name="Theme_light" xml:space="preserve">
+    <value>Sáng</value>
+  </data>
+  <data name="Theme_system" xml:space="preserve">
+    <value>Theo Windows</value>
+  </data>
+  <data name="Settings_ThemeTip" xml:space="preserve">
+    <value>Clockwork khởi động lại ngay để áp dụng giao diện. “Theo Windows” đọc chế độ ứng dụng của Windows.</value>
+  </data>
   <!-- ===== 3.0.1: quick open / path step / gesture sensitivity & trail / variable picker sections ===== -->
-  <data name="Btn_InsertVar" xml:space="preserve"><value>Chèn biến</value></data>
-  <data name="Ed_Path" xml:space="preserve"><value>Đường dẫn</value></data>
-  <data name="Ed_PathHint" xml:space="preserve"><value>Hỗ trợ biến môi trường như %APPDATA%, tự được mở rộng khi chạy. Nhấn { } để chèn thư mục thường dùng.</value></data>
-  <data name="Kind_path" xml:space="preserve"><value>Mở tệp hoặc thư mục</value></data>
-  <data name="Sum_OpenPath" xml:space="preserve"><value>Mở {0}</value></data>
-  <data name="Sys_quickOpen" xml:space="preserve"><value>Mở nhanh (tự động nhận ra URL, đường dẫn tệp, liên kết magnet hoặc khóa Registry trong văn bản đã chọn)</value></data>
-  <data name="Err_QuickOpenUnrecognized" xml:space="preserve"><value>Không nhận ra văn bản đã chọn: {0}</value></data>
-  <data name="Err_RegEditBusy" xml:space="preserve"><value>Trình chỉnh sửa Registry đang chạy và không thể tự động đóng; cửa sổ của nó đã được đưa lên phía trước. Hãy đóng thủ công rồi thử lại.</value></data>
-  <data name="Settings_QuickOpenHotkey" xml:space="preserve"><value>Phím tắt Mở nhanh</value></data>
-  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve"><value>Chọn văn bản trong bất kỳ ứng dụng nào rồi nhấn phím này để tự động nhận biết và mở URL, đường dẫn tệp, liên kết magnet hoặc khóa Registry.</value></data>
-  <data name="Gesture_Sensitivity" xml:space="preserve"><value>Độ nhạy</value></data>
-  <data name="Gesture_Sensitivity_High" xml:space="preserve"><value>Cao</value></data>
-  <data name="Gesture_Sensitivity_Normal" xml:space="preserve"><value>Vừa</value></data>
-  <data name="Gesture_Sensitivity_Low" xml:space="preserve"><value>Thấp</value></data>
-  <data name="Gesture_Trail" xml:space="preserve"><value>Nét bút</value></data>
-  <data name="Gesture_Trail_Off" xml:space="preserve"><value>Tắt</value></data>
-  <data name="Gesture_Trail_Thin" xml:space="preserve"><value>Mảnh</value></data>
-  <data name="Gesture_Trail_Normal" xml:space="preserve"><value>Vừa</value></data>
-  <data name="Gesture_Trail_Thick" xml:space="preserve"><value>Đậm</value></data>
-  <data name="Gesture_App" xml:space="preserve"><value>Chọn ứng dụng</value></data>
-  <data name="Gesture_AppHint" xml:space="preserve"><value>Cử chỉ chỉ kích hoạt khi ứng dụng này ở nền trước. Để trống để dùng trong mọi ứng dụng.</value></data>
-  <data name="Var_SecFolders" xml:space="preserve"><value>Thư mục thường dùng</value></data>
-  <data name="Var_SecEnv" xml:space="preserve"><value>Biến môi trường</value></data>
-  <data name="Panel_UsageCount" xml:space="preserve"><value>{0} lần nhấp</value></data>
-  <data name="Btn_ResetUsage" xml:space="preserve"><value>Xóa thống kê nhấp</value></data>
-  <data name="Btn_ResetUsageTip" xml:space="preserve"><value>Đặt lại số lần nhấp của các ô trong bảng về không. Chỉ xóa thống kê; không thay đổi cài đặt hay ô nào.</value></data>
-  <data name="Confirm_ResetUsage" xml:space="preserve"><value>Xóa thống kê nhấp của mọi ô trong bảng? Thao tác này không thể hoàn tác.</value></data>
-  <data name="Kind_step" xml:space="preserve"><value>Chạy mục khởi động</value></data>
-  <data name="Sum_RunRef" xml:space="preserve"><value>Chạy mục khởi động: {0}</value></data>
-  <data name="Ed_RefTarget" xml:space="preserve"><value>Mục khởi động</value></data>
-  <data name="Ed_RefMissing" xml:space="preserve"><value>(đích đã bị xóa)</value></data>
-  <data name="Skip_RefNotFound" xml:space="preserve"><value>Không tìm thấy mục khởi động</value></data>
-  <data name="Skip_RefDisabled" xml:space="preserve"><value>Mục khởi động “{0}” đang bị tắt; đã bỏ qua</value></data>
-  <data name="Ed_NoRefsHint" xml:space="preserve"><value>Danh sách khởi động đang trống — hãy thêm mục ở đó trước, rồi tham chiếu tại đây.</value></data>
-  <data name="Confirm_DeleteStepRefs" xml:space="preserve"><value>“{0}” đang được {1} ô trong bảng tham chiếu. Xóa sẽ gỡ luôn các ô đó. Vẫn xóa?</value></data>
+  <data name="Btn_InsertVar" xml:space="preserve">
+    <value>Chèn biến</value>
+  </data>
+  <data name="Ed_Path" xml:space="preserve">
+    <value>Đường dẫn</value>
+  </data>
+  <data name="Ed_PathHint" xml:space="preserve">
+    <value>Hỗ trợ biến môi trường như %APPDATA%, tự được mở rộng khi chạy. Nhấn { } để chèn thư mục thường dùng.</value>
+  </data>
+  <data name="Kind_path" xml:space="preserve">
+    <value>Mở tệp hoặc thư mục</value>
+  </data>
+  <data name="Sum_OpenPath" xml:space="preserve">
+    <value>Mở {0}</value>
+  </data>
+  <data name="Sys_quickOpen" xml:space="preserve">
+    <value>Mở nhanh (tự động nhận ra URL, đường dẫn tệp, liên kết magnet hoặc khóa Registry trong văn bản đã chọn)</value>
+  </data>
+  <data name="Err_QuickOpenUnrecognized" xml:space="preserve">
+    <value>Không nhận ra văn bản đã chọn: {0}</value>
+  </data>
+  <data name="Err_RegEditBusy" xml:space="preserve">
+    <value>Trình chỉnh sửa Registry đang chạy và không thể tự động đóng; cửa sổ của nó đã được đưa lên phía trước. Hãy đóng thủ công rồi thử lại.</value>
+  </data>
+  <data name="Settings_QuickOpenHotkey" xml:space="preserve">
+    <value>Phím tắt Mở nhanh</value>
+  </data>
+  <data name="Settings_QuickOpenHotkeyTip" xml:space="preserve">
+    <value>Chọn văn bản trong bất kỳ ứng dụng nào rồi nhấn phím này để tự động nhận biết và mở URL, đường dẫn tệp, liên kết magnet hoặc khóa Registry.</value>
+  </data>
+  <data name="Gesture_Sensitivity" xml:space="preserve">
+    <value>Độ nhạy</value>
+  </data>
+  <data name="Gesture_Sensitivity_High" xml:space="preserve">
+    <value>Cao</value>
+  </data>
+  <data name="Gesture_Sensitivity_Normal" xml:space="preserve">
+    <value>Vừa</value>
+  </data>
+  <data name="Gesture_Sensitivity_Low" xml:space="preserve">
+    <value>Thấp</value>
+  </data>
+  <data name="Gesture_Trail" xml:space="preserve">
+    <value>Nét bút</value>
+  </data>
+  <data name="Gesture_Trail_Off" xml:space="preserve">
+    <value>Tắt</value>
+  </data>
+  <data name="Gesture_Trail_Thin" xml:space="preserve">
+    <value>Mảnh</value>
+  </data>
+  <data name="Gesture_Trail_Normal" xml:space="preserve">
+    <value>Vừa</value>
+  </data>
+  <data name="Gesture_Trail_Thick" xml:space="preserve">
+    <value>Đậm</value>
+  </data>
+  <data name="Gesture_App" xml:space="preserve">
+    <value>Chọn ứng dụng</value>
+  </data>
+  <data name="Gesture_AppHint" xml:space="preserve">
+    <value>Cử chỉ chỉ kích hoạt khi ứng dụng này ở nền trước. Để trống để dùng trong mọi ứng dụng.</value>
+  </data>
+  <data name="Var_SecFolders" xml:space="preserve">
+    <value>Thư mục thường dùng</value>
+  </data>
+  <data name="Var_SecEnv" xml:space="preserve">
+    <value>Biến môi trường</value>
+  </data>
+  <data name="Panel_UsageCount" xml:space="preserve">
+    <value>{0} lần nhấp</value>
+  </data>
+  <data name="Btn_ResetUsage" xml:space="preserve">
+    <value>Xóa thống kê nhấp</value>
+  </data>
+  <data name="Btn_ResetUsageTip" xml:space="preserve">
+    <value>Đặt lại số lần nhấp của các ô trong bảng về không. Chỉ xóa thống kê; không thay đổi cài đặt hay ô nào.</value>
+  </data>
+  <data name="Confirm_ResetUsage" xml:space="preserve">
+    <value>Xóa thống kê nhấp của mọi ô trong bảng? Thao tác này không thể hoàn tác.</value>
+  </data>
+  <data name="Kind_step" xml:space="preserve">
+    <value>Chạy mục khởi động</value>
+  </data>
+  <data name="Sum_RunRef" xml:space="preserve">
+    <value>Chạy mục khởi động: {0}</value>
+  </data>
+  <data name="Ed_RefTarget" xml:space="preserve">
+    <value>Mục khởi động</value>
+  </data>
+  <data name="Ed_RefMissing" xml:space="preserve">
+    <value>(đích đã bị xóa)</value>
+  </data>
+  <data name="Skip_RefNotFound" xml:space="preserve">
+    <value>Không tìm thấy mục khởi động</value>
+  </data>
+  <data name="Skip_RefDisabled" xml:space="preserve">
+    <value>Mục khởi động “{0}” đang bị tắt; đã bỏ qua</value>
+  </data>
+  <data name="Ed_NoRefsHint" xml:space="preserve">
+    <value>Danh sách khởi động đang trống — hãy thêm mục ở đó trước, rồi tham chiếu tại đây.</value>
+  </data>
+  <data name="Confirm_DeleteStepRefs" xml:space="preserve">
+    <value>“{0}” đang được {1} ô trong bảng tham chiếu. Xóa sẽ gỡ luôn các ô đó. Vẫn xóa?</value>
+  </data>
+  <data name="Kind_browserUrl" xml:space="preserve">Đọc địa chỉ trình duyệt</data>
+  <data name="Kind_siteMap" xml:space="preserve">Mở tệp nguồn của trang</data>
+  <data name="Kind_regex" xml:space="preserve">Trích bằng biểu thức chính quy</data>
+  <data name="Kind_replace" xml:space="preserve">Thay văn bản</data>
+  <data name="Kind_urlDecode" xml:space="preserve">Giải mã URL</data>
+  <data name="Menu_SecText" xml:space="preserve">Văn bản</data>
+  <data name="Sum_OpenSource" xml:space="preserve">Mở tệp nguồn: {0}</data>
+  <data name="Sum_LocateSource" xml:space="preserve">Định vị tệp nguồn: {0}</data>
+  <data name="Sum_CurrentUrl" xml:space="preserve">địa chỉ hiện tại</data>
+  <data name="Sum_UrlDecode" xml:space="preserve">Giải mã: {0}</data>
+  <data name="Sum_Regex" xml:space="preserve">Trích {1} từ “{0}”</data>
+  <data name="Sum_Replace" xml:space="preserve">Thay {0} bằng {1}</data>
+  <data name="Warn_BrowserUrlNone" xml:space="preserve">Không đọc được địa chỉ trình duyệt. Hãy chắc rằng Chrome hoặc Edge đang mở một trang (Firefox chưa được hỗ trợ).</data>
+  <data name="Warn_SiteMapBadUrl" xml:space="preserve">Đây không giống một địa chỉ: {0}</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Tên miền của địa chỉ đó không có trong danh sách trang. Hãy thêm vào sites trong clockwork.settings.json.</data>
+  <data name="Warn_SiteMapBadRoot" xml:space="preserve">Thư mục cục bộ của trang “{0}” không tồn tại. Hãy kiểm tra sourceRoot.</data>
+  <data name="Warn_SiteMapNotFound" xml:space="preserve">Đã ánh xạ tới đường dẫn đó, nhưng không có tệp đó cục bộ: {0}</data>
+  <data name="Warn_SiteMapOpenFail" xml:space="preserve">Đã tìm thấy tệp nhưng không mở được: {0}</data>
+  <data name="Warn_RegexNoPattern" xml:space="preserve">Bước này chưa có biểu thức chính quy.</data>
+  <data name="Warn_RegexBadPattern" xml:space="preserve">Biểu thức chính quy không hợp lệ: {0}</data>
+  <data name="Warn_RegexNoMatch" xml:space="preserve">Biểu thức chính quy không khớp với nội dung nào.</data>
+  <data name="Warn_RegexNoGroup" xml:space="preserve">Kết quả khớp đó không có nhóm bắt số {0} (cao nhất là {1}).</data>
+  <data name="Warn_UrlDecodeBad" xml:space="preserve">Không thể giải mã nội dung đó: {0}</data>
+  <data name="Ed_BrowserUrlHint" xml:space="preserve">Đọc thanh địa chỉ của trình duyệt hiện tại và tạo ra một địa chỉ cho các bước sau. Hỗ trợ trình duyệt Chromium như Chrome và Edge; chưa hỗ trợ Firefox.</data>
+  <data name="Ed_SiteMapAction" xml:space="preserve">Cách mở</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Để trống địa chỉ để tự động đọc từ trình duyệt. Ánh xạ tên miền → đường dẫn cục bộ nằm trong sites của clockwork.settings.json.</data>
+  <data name="Ed_RegexPattern" xml:space="preserve">Biểu thức chính quy</data>
+  <data name="Ed_RegexGroup" xml:space="preserve">Nhóm bắt</data>
+  <data name="Ed_RegexHint" xml:space="preserve">0 = toàn bộ kết quả khớp; 1 trở lên = nhóm trong ngoặc nào. Cú pháp biểu thức chính quy của .NET.</data>
+  <data name="Ed_ReplaceWith" xml:space="preserve">Thay bằng</data>
+  <data name="Val_SiteMapOpen" xml:space="preserve">Mở tệp</data>
+  <data name="Val_SiteMapReveal" xml:space="preserve">Hiện trong File Explorer</data>
+  <data name="Val_SiteMapNone" xml:space="preserve">Chỉ tạo đường dẫn</data>
+  <data name="Sum_SourcePath" xml:space="preserve">Chỉ tạo đường dẫn: {0}</data>
+  <data name="Kind_waitKey" xml:space="preserve">Chờ phím</data>
+  <data name="Kind_splitLines" xml:space="preserve">Tách thành các dòng</data>
+  <data name="Kind_math" xml:space="preserve">Tính</data>
+  <data name="Kind_skip" xml:space="preserve">Bỏ qua</data>
+  <data name="Kind_each" xml:space="preserve">Mỗi mục (lặp)</data>
+  <data name="Sum_WaitKey" xml:space="preserve">Chờ phím: {0}</data>
+  <data name="Sum_SplitLines" xml:space="preserve">Tách dòng: {0}</data>
+  <data name="Sum_Math" xml:space="preserve">Tính: {0}</data>
+  <data name="Sum_SkipBlock" xml:space="preserve">Bỏ qua phần còn lại của khối</data>
+  <data name="Sum_SkipRun" xml:space="preserve">Dừng toàn bộ hành động</data>
+  <data name="Sum_Each" xml:space="preserve">Mỗi mục: {0}</data>
+  <data name="Ed_WaitKeys" xml:space="preserve">Các phím cần chờ (phân tách bằng dấu phẩy)</data>
+  <data name="Ed_WaitKeyHint" xml:space="preserve">Số giây là thời gian chờ tối đa; 0 = chờ mãi. Phím sẽ ra dưới dạng tên như ＂Insert＂ hoặc ＂Escape＂, dùng thẳng trong điều kiện của bước sau.</data>
+  <data name="Ed_SplitHint" xml:space="preserve">Chuyển văn bản nhiều dòng thành danh sách để vòng lặp ＂Mỗi mục＂ duyệt qua. Dòng trống được giữ lại — khi gõ từng lệnh vào terminal, dòng trống thường chính là dòng bạn muốn gửi.</data>
+  <data name="Ed_Expr" xml:space="preserve">Biểu thức</data>
+  <data name="Ed_MathHint" xml:space="preserve">Viết dạng ＂trái toán tử phải＂, dùng + - * ÷. Hai bên đều có thể chứa {biến}, được thay trước khi tính — ví dụ {index}+1.</data>
+  <data name="Ed_SkipMode" xml:space="preserve">Bỏ qua đến</data>
+  <data name="Ed_SkipHint" xml:space="preserve">＂Bỏ qua phần còn lại của khối＂ bỏ các bước còn lại của khối rồi đi tiếp ra ngoài (trong vòng lặp là sang lượt kế tiếp). ＂Dừng toàn bộ hành động＂ kết thúc lượt chạy này: không bước nào chạy nữa.</data>
+  <data name="Ed_EachList" xml:space="preserve">Duyệt danh sách này</data>
+  <data name="Ed_EachItem" xml:space="preserve">Biến phần tử hiện tại</data>
+  <data name="Ed_EachIndex" xml:space="preserve">Biến chỉ số</data>
+  <data name="Ed_EachHint" xml:space="preserve">Tên danh sách đến từ ＂xuất ra biến＂ của một bước trước (chỉ ＂Tách thành các dòng＂ tạo ra danh sách). Để trống cả hai tên thì chúng là item và index. Các bước thụt vào bên dưới chính là thân vòng lặp.</data>
+  <data name="Val_SkipBlock" xml:space="preserve">Bỏ qua phần còn lại của khối</data>
+  <data name="Val_SkipRun" xml:space="preserve">Dừng toàn bộ hành động</data>
+  <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ chứa {1} bước. Xóa luôn chúng?</data>
+  <data name="Skip_EachNoList" xml:space="preserve">Danh sách {0} mà ＂Mỗi mục＂ cần không phải biến danh sách — hãy chạy bước tạo ra nó trước (chỉ ＂Tách thành các dòng＂ tạo ra danh sách).</data>
+  <data name="Warn_NoKeysAccepted" xml:space="preserve">Bước này không có phím nào để chờ: {0}</data>
+  <data name="Warn_WaitKeyTimeout" xml:space="preserve">Đã chờ {0} giây mà phím đó không bao giờ được nhấn.</data>
+  <data name="Warn_SplitNoText" xml:space="preserve">Không có văn bản để tách (ô trống và không tham chiếu biến nào).</data>
+  <data name="Warn_MathBad" xml:space="preserve">Không tính được: {0}</data>
 </root>
