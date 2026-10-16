@@ -70,7 +70,17 @@ The most common need, "open my everyday apps at login":
 | **User input** | Pops a box, asks a question, and **saves what you type into a variable**. The question is the text on the box; a default answer is optional (prefilled and selected, so type to replace or press Enter to accept). Esc / Cancel means *don't do this action* and stops the remaining steps — not "carry on with a blank", because the steps after it are usually waiting on that value. Pressing Enter on an empty box is **not** a cancel: that's "I want this one blank". |
 | **User choice** | The same, with a list instead of a text box: one option per line, listed at run time for you to pick one, and the line you picked goes into the variable. Double-clicking an option picks it and confirms. With no options configured it says so and skips, rather than popping an empty list you cannot dismiss with a choice. |
 | **Delay** | Just wait N seconds before the next step; at the top of the list it delays the whole run. |
+| **Split into lines** | Turns multi-line text into a **list** saved to a variable, for an *Each* loop to walk.<br>**Blank lines are kept** — when you type commands into a terminal one at a time, an empty line is often exactly the line you meant to send; dropping it shifts every line number without anything you can see explaining why. |
+| **Calculate** | Evaluates an expression and **saves the result to a variable**. Write it as `{index}+1`, `{total}*2` — either side may hold variables, substituted before the arithmetic.<br>Only the shape `left operator right`, with `+ - * ÷`.<br>**There is deliberately no full expression engine**: precedence, parentheses and functions turn "count something" into a language, and a language needs syntax highlighting, error positions and a documentation section that describes it properly. That isn't worth it for a counter. |
+| **Skip** | Changes control flow and does nothing else. Two modes:<br>**Skip the rest of this block** — the remaining steps in this block don't run, and **the outer run carries on** (inside a loop that means the next iteration).<br>**Stop the whole action** — this run ends here; no further step runs at all, and that propagates all the way up. |
 | **Action** | Run a defined action; set a repeat count to loop the whole group. |
+| **Action** | Run a defined action; set a repeat count to loop the whole group. |
+| **Open site source file** | **Read the article you can see, edit its local source file** — one step. Leave the address **empty and it reads the browser's address bar for you** (the common case; nothing to copy first).<br>It uses a **site map** to land a live URL on a local file: which domain, which local source root, `/` → `\`, `.html` → `.md`, and whether a directory needs renaming (VuePress-style static sites commonly route `src/_posts/x.md` as `/posts/x.html`, which a rule puts back). The map lives under `sites` in `clockwork.settings.json`; see *Site map* below.<br>**Only http / https** counts — no other scheme is mapped, and hosts match **exactly** (no suffix wildcards: `newzone.top` matching `evil-newzone.top` is the accident worth avoiding).<br>Three ways to open it: **open the file** (system default app, so a `.md` lands in your editor) / **show it in File Explorer** / **just produce the path** into a variable without opening. All three read differently on the list, so what it says is what it does.<br>Failures come in four distinct shapes: not an address / the domain isn't configured / the local folder is missing / **the path was computed but there's no such file** (the last one hands you the computed path — usually the post was renamed or deleted). |
+| **Read browser address** | Reads the address bar of the current browser and **saves the address to a variable**.<br>**How it reads:** straight from the window (UI Automation) — no focus, no clipboard. So it works when triggered from a hotkey, a gesture or the panel, even if the console stole focus on the way there.<br>**Chromium browsers only** (Chrome / Edge / Brave / Vivaldi / Opera). Firefox's automation interface doesn't expose a usable value channel by default, so it reads nothing; it says so plainly rather than guessing an address.<br>With several browsers open it takes **the one you were last looking at** (window activation order, not process name). When it can't read anything it says so and never builds a URL out of whatever else happens to be on the clipboard. |
+| **URL decode** | Turns `%E4%B8%AD` back into 中 and **saves it to a variable**.<br>When you need it: the address bar shows Chinese, but the clipboard and your variables hold the encoded form — without decoding you end up building a filename with a `%` in it, then being told the file doesn't exist, with nothing pointing at the real cause. |
+| **Regex extract** | Pulls part of the input out by pattern and **saves it to a variable**. The input box takes `{name}` references.<br>**Capture group**: `0` = the whole match, 1 and up = which parenthesised group. Out of range reports honestly and does **not** fall back to the whole match — that would hand you a path that looks right and isn't, and "file not found" never points back at the reason.<br>A broken pattern or no match at all reports honestly instead of quietly producing an empty string.<br>**An empty pattern is refused**: in .NET it matches at every position, and running one produces something baffling that is much harder to sort out than an error. |
+| **Replace text** | Swaps the part of the input matching a pattern for text you supply, **saved to a variable**. Uses .NET syntax, so `$1` is what the first group captured (pair it with *Regex extract*: take something out, then put it back with `$1`).<br>**Why two steps instead of one with a mode switch**: one step would put "which group" and "replace with what" — two mutually exclusive field sets — on the same panel, and misconfiguring them produces no warning at all. |
+| **Wait for a key** | Waits for you to press **any one** of the keys you list, and **saves the pressed key to a variable**.<br>Write the list comma-separated: `Insert,Escape,F1`. The seconds are **how long to wait at most**; 0 = wait forever.<br>What it produces is the **key name** (`Escape`), not the virtual key code (27) — you'd otherwise have to look a number up, while a name can go straight into the next step's condition.<br>**No hook is installed**; it reads the system-wide key state every 15 ms. So it **doesn't take the hook chain** (nothing else can eat the event), it **still works under a restricted token or a sandbox**, and the cost is at most one poll interval of latency.<br>Before it starts waiting it **waits for the key that triggered this step to be released** — the hotkey is usually still down, and the state stays true as long as it is held, so without that you'd get the hotkey back every single time. |
 
 > **A few caveats**
 > - **Display mode** shells out to Windows' own `DisplaySwitch.exe`, exactly like picking an option under Win+P. The switch takes a second or two to settle, so leave a delay before whatever follows.
@@ -92,6 +102,100 @@ A step whose conditions aren't met is skipped and the list carries on. Condition
 | **Path exists** | If filled in, the step runs only when that file or folder exists: back up once the USB drive is mounted, send the mail once the report has been exported. A folder counts as existing. Accepts the same spellings as **Target**: surrounding quotes and environment variables like `%USERPROFILE%`. |
 
 > Conditions show up in the list's **Summary** column (`(Mon Tue Wed)`, `(after 18:00)`, `(Slack running)`, `(on battery)`, `(E:\backup exists)`) — when a step didn't run, that column is the only clue you have, and you shouldn't need to open the editor to guess.
+
+### Variable conditions
+
+Every step can also carry a **variable compared against a value** condition; when it doesn't hold, the step is skipped — same contract and same consequence as the process / power / path / time conditions.
+
+| Comparison | What it does |
+| --- | --- |
+| Equals / not equals | Exact text match (**case-sensitive**) |
+| Contains / does not contain | Whether the left side contains the right |
+| Greater / less / greater-or-equal / less-or-equal | **Compared as numbers when both sides read as numbers**, otherwise as text (case-insensitive) |
+| Is empty / is not empty | Whether the left side is the empty string |
+
+**Why "greater than" has two meanings behind one option**: `{currentId} > 10` wants a numeric comparison (`"9"` is not greater than `"10"`), while `{filename} > b` wants to compare words. They're the same entry in the same dropdown, so the only usable test is *does it read as a number* — asking the user to declare a type first would require a type system, and there isn't one.
+
+**Naming a variable that doesn't exist means the condition fails**, so the step is skipped. That direction matters: the other way round would let both branches of a variable-driven split run, which is an invisible re-entrance; skipping is at least quiet and predictable.
+
+> The startup list has no variables, so a variable condition there never holds. That isn't a defect — there is nothing to reference at login, and a *Wait for a key* up there would only stall the login.
+
+### Each (loop): run a run of steps many times
+
+*Each* is a **block** — the steps indented under it are the loop body, and they run in order once per iteration.
+
+| Field | Meaning |
+| --- | --- |
+| Loop over this list | The **variable name** holding a list a previous step produced (only *Split into lines* makes one). **Empty = run by the repeat count instead** |
+| Current item variable | Which variable each item goes into; default `item` |
+| Index variable | Which iteration, counting **from 0**; default `index` |
+
+**Putting steps inside the loop**: in the group editor, **select the *Each* step first, then Add** — what you create lands under it. Drag a step out to the side and the indent follows it.
+
+Things the editor takes care of for you:
+
+- **Deleting a block deletes its children too**, and tells you first ("{0} contains {1} steps. Delete them too?"). Removing only the shell would leave the children behind running on their own — outside the place the block was.
+- **Copying a block copies its whole subtree**, remapping parent ids transitively. Copying only the shell gives you an empty copy.
+- **Move up / move down swaps with the previous / next sibling**, taking the entire subtree along.
+
+**Nested loops** can share one `item`: when the inner loop ends, the outer loop's current item comes back. Other variables your loop body accumulates (totals, collected results) **stay outside** — they don't vanish just because the loop ended.
+
+**What "Skip" means inside a loop**: *skip the rest of this block* leaves the rest of this iteration and **moves to the next iteration** (that is `continue`); *stop the whole action* means this loop gets no next iteration either.
+
+A complete example (feed lines into a window one at a time, Insert for the next line, Esc to get out):
+
+```
+User input            ← the multi-line text
+Split into lines → 行
+Each (loop over 行)
+    Wait for a key (Insert / Escape) → 按键
+    Send text to window {item}
+    Skip  (if {按键} = Escape, stop the whole action)
+```
+
+
+### Site map
+
+The *Open site source file* step uses it to land a live URL on a local file. The map lives under `sites` in `clockwork.settings.json` and is **hand-edited** — that's deliberate: it has to survive a long time and only gets touched occasionally, so hiding it deep in the settings page would just make it harder to find.
+
+```jsonc
+"sites": [
+  {
+    "name": "LearnData",                    // a note for yourself
+    "hosts": [ "newzone.top", "www.newzone.top", "localhost:8080" ],
+    "sourceRoot": "D:\\...\\LearnData\\src",
+    "indexFile": "README.md",               // what a directory URL (including the site root /) lands on
+    "pathRules": [
+      { "match": "^posts/", "replace": "_posts/" }
+    ]
+  }
+]
+```
+
+| Field | Meaning |
+| --- | --- |
+| `hosts` | **Exact match, case-insensitive**. Write the port when there is one (`localhost:8080`); no suffix wildcards — a missing real domain costs you one extra line, while `newzone.top` matching `evil-newzone.top` is the accident worth designing against. |
+| `sourceRoot` | The local source root. **A path that doesn't exist is reported at run time** (nothing is silently skipped). |
+| `indexFile` | What a directory URL ends with `/` lands on, default `README.md`. |
+| `pathRules` | Rewrites applied in order. `match` is a regex (.NET syntax, `$1` works), `replace` is the replacement. Add `"enabled": false` to park one without deleting it. |
+
+**An address is handled like this** (the order matters — each step removes one kind of URL shape):
+
+```
+https://newzone.top/posts/2024-03-01-blog_example.html?x=1
+        │
+        ├─ 1. keep the path only; everything after ? and # is dropped
+        ├─ 2. percent-encoding becomes real characters (%E4%B8%AD → 中)
+        ├─ 3. leading slash off; a trailing / gets indexFile appended
+        ├─ 4. .html / .htm / .md stripped, .md appended
+        ├─ 5. pathRules applied in order (^posts/ → _posts/)
+        └─ 6. / becomes \ and the result is joined onto sourceRoot
+             → D:\...\LearnData\src\_posts\2024-03-01-blog_example.md
+```
+
+**Why `pathRules` run at step 5 and not earlier**: some rules only hold once the earlier steps are done (`^posts/` needs the domain gone and the extension swapped). Running them sooner would mean every rule had to spell out things it doesn't care about.
+
+**When you edit it by hand**: the program does not "fix" what you wrote — host casing and a trailing backslash on a path stay exactly as typed. A mistake is reported at run time for you to fix; quietly rewriting a piece of configuration you never wrote is much harder to track down than leaving it alone.
 
 ### Startup delay
 
