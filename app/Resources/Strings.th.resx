@@ -2176,4 +2176,9 @@
   <data name="Ed_JoinHint" xml:space="preserve">รวมรายการแต่ละรายการเป็นข้อความเดียวด้วยตัวคั่นนี้แล้วเก็บลงตัวแปร เว้นว่างไว้ = ต่อกันโดยไม่แทรกอะไร</data>
   <data name="Warn_JoinNoName" xml:space="preserve">ขั้นตอนนี้ยังไม่ได้ระบุรายการใด</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ ไม่ใช่ตัวแปรรายการ — ให้รันขั้นตอนที่สร้างมันก่อน (รายการ หรือ แยกเป็นบรรทัด)</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">ป้อนทีละบรรทัด</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">พิมพ์สิ่งที่ต้องการทีละบรรทัดที่นี่ บรรทัดละหนึ่งรายการ กด Insert เพื่อไปบรรทัดถัดไป กด Esc เพื่อหยุด</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">บรรทัด</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">ปุ่ม</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">เปิดไฟล์ต้นฉบับในเครื่อง</data>
 </root>

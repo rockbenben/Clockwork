@@ -273,8 +273,10 @@ These don't watch the clock, they watch the machine — the task fires the momen
 
 ## Actions
 
-- **Add** opens an empty action straight away. To start from something that already works, use **From a template…** next to it: pick a **built-in template** (Focus mode / Meeting mode / Back to normal / End of day / Bedtime / Stepping away / Time for a break / Quick search), tweak the process names and save.
+- **Add** opens an empty action straight away. To start from something that already works, use **From a template…** next to it: pick a **built-in template** (Focus mode / Meeting mode / Back to normal / End of day / Bedtime / Stepping away / Time for a break / Quick search / **Type line by line** / **Open the local source file**), tweak the process names and save.
   - **Back to normal is the way out.** Muting notifications and muting the mic are stateful — they don't undo themselves. Focus mode and Meeting mode each switch something off, so keep a *Back to normal* around (a hotkey suits it well) to switch them all back on.
+  - **Type line by line is the only interactive template.** Paste a block of multi-line text first, then press `Insert` to send the next line and `Esc` to stop. It shows how a block loop and a variable condition are wired together — the fastest way to adapt looping over a batch to your own action.
+  - **Open the local source file needs a site map first.** It turns the address in your browser into the source file behind it in your local repo. The first run reports that the address' domain isn't in the site map, and that message tells you where to add it.
 - The list shows each group's **step summary** and **hotkey** columns (an empty group's summary reads **(empty)**).
 - A group runs **only one copy at a time** (repeat triggers are skipped — except its hotkey, see "the hotkey is a toggle" below).
 - Trigger it four ways: tray **Run: <group>** · a **global hotkey** · an **action-group step** in the startup list (at boot) · a scheduled task's **On-Yes / silent group**. You can also select a row on the Actions tab and hit **Run** to fire it once by hand.

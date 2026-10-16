@@ -2176,4 +2176,9 @@ Günlük: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Bu ayırıcıyla listenin her öğesini tek metinde birleştirip bir değişkene kaydeder. Boş = araya hiçbir şey koymadan birleştirir.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">Bu adımda henüz hangi liste olduğu yazılı değil.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ bir liste değişkeni değil — önce onu üreten adımı çalıştırın (Liste veya Satırlara böl).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Satır satır yaz</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Satır satır yazılacakları buraya yazın, her satıra bir öğe. Sonraki satır için Insert, durdurmak için Esc.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">satırlar</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">tuş</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Yerel kaynak dosyasını aç</data>
 </root>

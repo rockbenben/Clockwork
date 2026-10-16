@@ -2176,4 +2176,9 @@ Log: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Menggabungkan setiap item daftar menjadi satu teks dengan pemisah ini dan menyimpannya ke variabel. Kosong = disambung tanpa apa pun di antaranya.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">Langkah ini belum menyebut daftar yang mana.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ não é uma variável de lista — execute primeiro o passo que cria uma (Lista ou Dividir em linhas).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Ketik per baris</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Ketik di sini apa yang ingin diketik per baris, satu item per baris. Insert untuk baris berikutnya, Esc untuk berhenti.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">baris</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">tombol</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Buka berkas sumber lokal</data>
 </root>

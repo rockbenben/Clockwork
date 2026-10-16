@@ -5,11 +5,15 @@ public class ActionGroupTemplatesTests
 {
     // 数量是刻意钉死的：收录标准见 ActionGroupTemplates 头部注释（常用 + 演示别处没有的能力）。
     // 曾膨胀到 10 又砍回 7——这条红了说明有人加/删了模板，去核对那份标准，别顺手改数字了事。
+    //
+    // 从 8 到 10 的那两次：逐行输入（块循环 + 变量条件 + 交互输入，三样此前零曝光），
+    // 打开本地源文件（站点映射表 + UIA 读地址栏）。都不是「人人都用」，但各自演示的东西
+    // 整个列表里再没有第二份——这才是这条标准要的。
     [Fact]
     public void Every_template_has_a_name_steps_and_is_enabled()
     {
         var all = ActionGroupTemplates.All();
-        Assert.Equal(8, all.Count);
+        Assert.Equal(10, all.Count);
         Assert.All(all, g => Assert.False(string.IsNullOrWhiteSpace(g.Name)));
         Assert.All(all, g => Assert.NotEmpty(g.Steps));
         Assert.All(all, g => Assert.True(g.Enabled));
@@ -117,5 +121,56 @@ public class ActionGroupTemplatesTests
 
         Assert.True(g.Repeat > 1, "整组重复轮数应大于 1");
         Assert.True(g.RepeatDelayMs > 0, "每轮间隔应大于 0");
+    }
+
+    // 逐行输入是唯一演示块循环的模板，而它的正确性**全在接线上**：
+    // 「等按键」产出变量、「跳出」那条条件读同一个变量，中间差一个字这个模板就退化成
+    // 「按 Insert 把同一行再发一遍」——而它在列表上看着完全正常。
+    //
+    // 变量名从文案表取（与搜索模板同一惯例），所以这一条要防的不只是手滑，
+    // 还有**某门语言改了译名而另一处没跟着改**。
+    [Fact]
+    public void Type_lines_template_wires_the_key_variable_into_its_condition()
+    {
+        var g = ActionGroupTemplates.All()
+            .Single(x => x.Name == Clockwork.I18n.Strings.Get("Tpl_TypeLines"));
+
+        var loop = Assert.Single(g.Steps, s => s.Kind == "each");
+        Assert.False(string.IsNullOrWhiteSpace(loop.Text), "循环没说要遍历哪个列表");
+
+        var wait = Assert.Single(g.Steps, s => s.Kind == "waitKey");
+        Assert.False(string.IsNullOrWhiteSpace(wait.OutputVar), "等按键没产出变量");
+        Assert.Contains("Insert", wait.Text);
+        Assert.Contains("Escape", wait.Text);
+
+        // 条件读的就是那个变量
+        var skip = Assert.Single(g.Steps, s => s.Kind == "skip");
+        Assert.Equal(wait.OutputVar, skip.IfVar);
+        Assert.Equal("eq", skip.IfVarOp);
+        Assert.Equal("Escape", skip.IfVarValue);
+
+        // 「跳出」必须排在「发送文本」**前面**：Esc 停的是「这一行还没发出去」，
+        // 反过来的话每按一次 Esc 都会先把那行敲进去，得按两次才真的停。
+        var send = Assert.Single(g.Steps, s => s.Kind == "text");
+        Assert.True(g.Steps.IndexOf(skip) < g.Steps.IndexOf(send),
+                    "「跳出」排在「发送文本」之后：Esc 会先把这一行敲出去");
+
+        // 三步都在块里，而不是散在外面
+        foreach (var s in new[] { wait, skip, send })
+            Assert.Equal(loop.Id, s.ParentId);
+    }
+
+    // 本地源文件模板只有一个步骤，且网址框**必须留空**——留空就是自动读地址栏。
+    // 填上一个占位网址的话，它就变成了「每次都打开那一个地址」，与模板的用途正相反。
+    [Fact]
+    public void Site_source_template_reads_the_address_bar_on_its_own()
+    {
+        var g = ActionGroupTemplates.All()
+            .Single(x => x.Name == Clockwork.I18n.Strings.Get("Tpl_SiteSource"));
+
+        var step = Assert.Single(g.Steps);
+        Assert.Equal("siteMap", step.Kind);
+        Assert.True(string.IsNullOrWhiteSpace(step.Text), "网址框留空才是自动读地址栏；填了就成了写死的地址");
+        Assert.Equal("open", step.Action);
     }
 }

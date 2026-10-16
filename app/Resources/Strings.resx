@@ -2176,4 +2176,9 @@
   <data name="Ed_JoinHint" xml:space="preserve">把列表里的各项用这个分隔符接成一段文字，存进变量。留空 = 紧挨着接，不插任何东西。</data>
   <data name="Warn_JoinNoName" xml:space="preserve">这一步还没填是哪个列表。</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂不是列表变量。先跑产出列表的那一步（＂列表＂或＂拆分为多行＂）。</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">逐行输入</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">把要逐行输入的内容填在这里，一行一条。按 Insert 送下一行，按 Esc 结束。</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">行</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">按键</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">打开本地源文件</data>
 </root>

@@ -2176,4 +2176,9 @@ Journal : {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Relie les éléments de la liste en un seul texte avec ce séparateur et l’enregistre dans une variable. Vide = concaténé sans rien entre.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">Cette étape n’indique pas encore quelle liste.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂ {0} ＂ n’est pas une variable de liste. Exécutez d’abord l’étape qui en produit une (Liste ou Découper en lignes).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Saisir ligne à ligne</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Saisissez ici ce que vous voulez taper ligne à ligne, un élément par ligne. Insert pour la ligne suivante, Échap pour arrêter.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">lignes</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">touche</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Ouvrir le fichier source local</data>
 </root>

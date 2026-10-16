@@ -8,7 +8,13 @@ namespace Clockwork.Core;
 //
 // 收录标准：常用、且演示至少一样别处没演示的能力。曾经膨胀到 10 个又砍回来（投屏演示与会议重叠 2/3、
 // 夜间护眼的每一步别处都有、截图标注撞系统热键）——模板列表是新用户对「动作组能干什么」的第一印象，
-// 七个各有一手比十个大同小异更有说服力。新模板先过这一关再进来。
+// 十个各有一手比十四个大同小异更有说服力。新模板先过这一关再进来。
+//
+// 「常用」这一条对后两个模板放宽了：逐行输入只对「粘贴被拦」的场景有用，本地源文件只对自建静态站
+// 的人有用。放宽的依据不在使用面，而在**演示面**——它们演示的块循环、变量条件、交互输入、
+// 站点映射表，各自在这个列表里再没有第二份，而标准的后半句（别处没演示的能力）正是为这种
+// 「不是人人用，但只有它会让人看见某项能力」的位置准备的。真正按使用面就该砍掉的那些
+// （与会议重叠、与睡前重叠）仍然砍着。
 public static class ActionGroupTemplates
 {
     public static List<ActionGroup> All() => new()
@@ -91,7 +97,90 @@ public static class ActionGroupTemplates
         // 变量名从文案表取，再拼进地址里：两处写死的话，翻译改了名字而地址没改，
         // 这个模板在那种语言下就静默失效——地址栏里留着一个换不掉的 {关键词}。
         SearchTemplate(),
+
+        // 逐行输入：**唯一演示块循环的模板**，也是唯一一个交互式的。
+        // 收录标准里的「至少一样别处没演示」它占了两样——块循环（久坐提醒演示的是
+        // 整组 Repeat，那是另一回事：没有列表、没有变量、没有条件）和变量条件。
+        //
+        // 顺序是有讲究的：**「跳出」排在「发送文本」前面**。Esc 要停的是「这一行还没发出去」，
+        // 反过来的话每按一次 Esc 都会先把那行敲进去，用户得按两次才能真的停。
+        //
+        // 循环变量用默认的 item / index：它们是 RunVars 内部的约定名，写死在模板里
+        // 反而不如留空——留空由 RunEach 回落到同一个约定，两处不会分叉。
+        TypeLinesTemplate(),
+
+        // 打开本地源文件：看自己博客上的文章、直接改本地那份 Markdown。
+        // 只有一个步骤，因为「打开站点源文件」的网址框**留空就是自动读地址栏**，
+        // 拆成「读地址 → 映射」两步只是把一个变量名推给用户去对，值不值得。
+        //
+        // 它演示的两样别处都没有：UI Automation 读地址栏（读全局键态，不抢钩子链），
+        // 以及「域名 → 本地路径」那张可编辑的站点映射表。
+        //
+        // **没配站点表时它会报错，这是有意的**：那句话（点名 clockwork.settings.json 的
+        // sites、以及要往里加什么）就是这个模板的第一课。用一个假装能用的模板
+        // 把它藏起来，用户会以为功能坏了；而这里报错的那一刻正是他该知道站点表存在的时候。
+        SiteSourceTemplate(),
     };
+
+    // 逐行输入：列表 → 块循环 → 每轮等一个键 → 发一行；Esc 走的是「跳出」。
+    private static ActionGroup TypeLinesTemplate()
+    {
+        var linesVar = Strings.Get("Tpl_LinesVar");
+        var keyVar = Strings.Get("Tpl_KeyVar");
+
+        // 块先建：子步骤的 ParentId 要指到它的 Id，而 Id 是它自己生成的。
+        var loop = new LaunchStep { Kind = "each", Text = linesVar };
+
+        return new ActionGroup
+        {
+            Name = Strings.Get("Tpl_TypeLines"),
+            Icon = "E700",
+            Steps = new()
+            {
+                new LaunchStep
+                {
+                    Kind = "list",
+                    Message = Strings.Get("Tpl_TypeLinesAsk"),
+                    OutputVar = linesVar,
+                },
+                loop,
+                // 等 Insert 或 Esc。输出的是**键名**（Escape），不是 27——
+                // 下一行的条件直接写它，用户不用去查虚拟键码。
+                new LaunchStep
+                {
+                    Kind = "waitKey", ParentId = loop.Id,
+                    Text = "Insert,Escape", OutputVar = keyVar,
+                },
+                // 条件挂在「跳出」这一步上，而不是单独加一个分支步骤：
+                // 按 Insert 时这一条不成立、被跳过，接着执行发文本；
+                // 按 Escape 时它成立，跳出本块（= 进入下一次迭代），发文本那一步被跳过。
+                new LaunchStep
+                {
+                    Kind = "skip", ParentId = loop.Id, Action = "block",
+                    IfVar = keyVar, IfVarOp = "eq", IfVarValue = "Escape",
+                },
+                // 目标进程留空 = 发给当前焦点窗口。用热键或手势触发时焦点还在你要敲的那个窗口；
+                // 填了具体进程名反而更可能指错（该敲的窗口没在前台，它就被送到别处去了）。
+                new LaunchStep
+                {
+                    Kind = "text", ParentId = loop.Id,
+                    Text = "{item}", DelayMs = 60,
+                },
+            },
+        };
+    }
+
+    private static ActionGroup SiteSourceTemplate()
+        => new()
+        {
+            Name = Strings.Get("Tpl_SiteSource"),
+            Icon = "E8F1",
+            Steps = new()
+            {
+                // Text 留空 = 自动读浏览器地址栏，这一步本身什么都不用填。
+                new LaunchStep { Kind = "siteMap", Action = "open" },
+            },
+        };
 
     private static ActionGroup SearchTemplate()
     {

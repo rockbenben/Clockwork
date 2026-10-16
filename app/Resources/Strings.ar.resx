@@ -2176,4 +2176,9 @@
   <data name="Ed_JoinHint" xml:space="preserve">يدمج عناصر القائمة في نص واحد بهذا الفاصل ويحفظه في متغير. فارغ = يُدمج بلا شيء بينهما.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">لم تُحدَّد هذه الخطوة أي قائمة بعد.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ ليس متغير قائمة. نفّذ أولًا الخطوة التي تنتج قائمة (قائمة أو تقسيم إلى أسطر).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">إدخال سطرًا بسطر</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">اكتب هنا ما تريد إدخاله سطرًا بسطر، عنصر واحد في كل سطر. Insert للسطر التالي، Esc للإنهاء.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">أسطر</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">مفتاح</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">فتح ملف المصدر المحلي</data>
 </root>

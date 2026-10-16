@@ -2176,4 +2176,9 @@ Protokoll: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Verbindet die Einträge der Liste mit diesem Trennzeichen zu einem Text und speichert ihn in einer Variablen. Leer = ohne dazwischen direkt aneinander.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">In diesem Schritt steht noch nicht, welche Liste gemeint ist.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ ist keine Listenvariable — führen Sie zuerst den Schritt aus, der eine erzeugt (Liste oder In Zeilen aufteilen).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Zeilenweise eingeben</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Tragen Sie hier ein, was zeilenweise getippt werden soll, ein Eintrag pro Zeile. Einfg für die nächste Zeile, Esc zum Beenden.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">Zeilen</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">Taste</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Lokale Quelldatei öffnen</data>
 </root>

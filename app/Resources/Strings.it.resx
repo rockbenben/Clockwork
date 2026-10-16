@@ -2176,4 +2176,9 @@ Registro: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Unisce gli elementi dell’elenco in un solo testo con questo separatore e lo salva in una variabile. Vuoto = concatenato senza nulla in mezzo.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">Questo passaggio non dice ancora quale elenco.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ non è una variabile di elenco: esegui prima il passo che ne produce una (Elenco o Dividi in righe).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Inserisci riga per riga</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Scrivi qui ciò che vuoi digitare riga per riga, un elemento per riga. Invio per la riga successiva, Esc per finire.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">righe</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">tasto</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Apri il file sorgente locale</data>
 </root>

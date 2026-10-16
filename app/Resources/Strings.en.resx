@@ -2176,4 +2176,9 @@ Log: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Joins the list's items into one piece of text with this separator and saves it to a variable. Empty = concatenated with nothing in between.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">This step has no list named yet.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ isn’t a list variable. Run the step that produces one first (List or Split into lines).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Type line by line</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Paste what you want typed line by line, one item per line. Press Insert for the next line, Esc to stop.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">lines</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">key</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Open the local source file</data>
 </root>

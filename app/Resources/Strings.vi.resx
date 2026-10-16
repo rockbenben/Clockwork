@@ -2176,4 +2176,9 @@ Nhật ký: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Nối từng phần tử của danh sách thành một văn bản bằng dấu này rồi lưu vào biến. Để trống = nối sát, không chèn gì ở giữa.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">Bước này chưa ghi danh sách nào.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ không phải biến danh sách — hãy chạy bước tạo ra nó trước (Danh sách hoặc Tách thành các dòng).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Nhập từng dòng</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Ghi vào đây nội dung bạn muốn nhập từng dòng, mỗi dòng một mục. Insert để sang dòng sau, Esc để dừng.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">dòng</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">phím</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Mở tệp nguồn cục bộ</data>
 </root>

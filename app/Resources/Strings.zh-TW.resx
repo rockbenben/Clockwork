@@ -2176,4 +2176,9 @@
   <data name="Ed_JoinHint" xml:space="preserve">把清單裡的各項用這個分隔符接成一段文字，存進變數。留空 = 緊挨著接，不插任何東西。</data>
   <data name="Warn_JoinNoName" xml:space="preserve">這一步還沒填是哪個清單。</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂不是清單變數。先跑產出清單的那一步（＂清單＂或＂拆分為多行＂）。</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">逐行輸入</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">把要逐行輸入的內容填在這裡，一行一條。按 Insert 送下一行，按 Esc 結束。</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">行</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">按鍵</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">開啟本機原始檔</data>
 </root>

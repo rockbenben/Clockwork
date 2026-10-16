@@ -2176,4 +2176,9 @@ Registro: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Une los elementos de la lista en un solo texto con este separador y lo guarda en una variable. Vacío = se concatena sin nada entre medio.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">Este paso todavía no dice qué lista es.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ no es una variable de lista. Ejecuta antes el paso que produzca una (Lista o Dividir en líneas).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Escribir línea a línea</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Escribe aquí lo que quieres escribir línea a línea, un elemento por línea. Pulsa Insert para la siguiente línea y Esc para terminar.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">líneas</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">tecla</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Abrir el archivo fuente local</data>
 </root>

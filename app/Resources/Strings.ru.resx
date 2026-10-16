@@ -2176,4 +2176,9 @@
   <data name="Ed_JoinHint" xml:space="preserve">Склеивает элементы списка в один текст этим разделителем и сохраняет в переменную. Пусто — склеивает вплотную, ничего не вставляя.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">В этом шаге ещё не указано, какой список.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ не является списком. Сначала выполните шаг, который его создаёт (Список или Разбить на строки).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Ввод построчно</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Введите здесь то, что нужно набрать построчно, по одному элементу в строке. Insert — следующая строка, Esc — закончить.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">строки</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">клавиша</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Открыть локальный исходный файл</data>
 </root>

@@ -2176,4 +2176,9 @@
   <data name="Ed_JoinHint" xml:space="preserve">リストの各項目をこの区切り文字でつないだ 1 本の文字列にし、変数に入れて保存します。空 = 何も挟まずにつなぎます。</data>
   <data name="Warn_JoinNoName" xml:space="preserve">この手順にはまだリスト名がありません。</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂はリスト変数ではありません。先にリストを作る手順を実行してください（リストまたは行に分割）。</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">1 行ずつ入力</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">1 行ずつ入力したい内容を 1 行 1 件で入力してください。Insert で次の行、Esc で終了します。</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">行</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">キー</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">ローカルのソースファイルを開く</data>
 </root>

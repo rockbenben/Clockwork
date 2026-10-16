@@ -2176,4 +2176,9 @@
   <data name="Ed_JoinHint" xml:space="preserve">इस विभाजक से सूची की हर प्रविष्टि को जोड़कर एक टेक्स्ट बनाता है और चर में रखता है। खाली = बीच में कुछ भी डाले बिना जोड़ दिया जाता है।</data>
   <data name="Warn_JoinNoName" xml:space="preserve">इस चरण में अभी तक यह नहीं बताया कि कौन-सी सूची।</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ सूची चर नहीं है — पहले वह चरण चलाएँ जो सूची बनाता है (सूची या पंक्तियों में बाँटें)।</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">एक पंक्ति दर पंक्ति</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">जो बार-बार टाइप करवाना है वह यहाँ लिखें, एक पंक्ति में एक चीज़। अगली पंक्ति के लिए Insert, रोकने के लिए Esc।</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">पंक्तियाँ</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">कुंजी</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">स्थानीय स्रोत फ़ाइल खोलें</data>
 </root>

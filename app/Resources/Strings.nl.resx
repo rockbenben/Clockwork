@@ -2176,4 +2176,9 @@ Log: {1}</value>
   <data name="Ed_JoinHint" xml:space="preserve">Voegt de items van de lijst aan elkaar tot één tekst met dit scheidingsteken en slaat die op in een variabele. Leeg = direct aan elkaar, zonder ertussen.</data>
   <data name="Warn_JoinNoName" xml:space="preserve">Deze stap noemt nog geen lijst.</data>
   <data name="Warn_JoinNoList" xml:space="preserve">＂{0}＂ is geen lijstvariabele — voer eerst de stap uit die er een maakt (Lijst of Opsplitsen in regels).</data>
+  <data name="Tpl_TypeLines" xml:space="preserve">Regel per regel typen</data>
+  <data name="Tpl_TypeLinesAsk" xml:space="preserve">Typ hier wat u regel per regel wilt laten typen, één item per regel. Insert voor de volgende regel, Esc om te stoppen.</data>
+  <data name="Tpl_LinesVar" xml:space="preserve">regels</data>
+  <data name="Tpl_KeyVar" xml:space="preserve">toets</data>
+  <data name="Tpl_SiteSource" xml:space="preserve">Open het lokale bronbestand</data>
 </root>
