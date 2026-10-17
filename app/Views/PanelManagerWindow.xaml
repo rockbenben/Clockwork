@@ -2,22 +2,24 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:Clockwork.I18n"
-        Title="{loc:Loc Panel_Manager}" Width="1180" Height="700" MinWidth="860" MinHeight="460"
+        Title="{loc:Loc Panel_Manager}" Width="880" SizeToContent="Height" MaxHeight="392" MinWidth="720" MinHeight="360"
         WindowStartupLocation="CenterOwner" Background="{StaticResource BrushInk}">
-    <!-- 面板管理器：**它长得就是那个面板，只是可以编辑**。
-         左栏选**场景**（全局 / 每个程序），顶栏选**分类**，右边把这一组下的**所有页并排**摆出来
-         ——照 Quicker 的「场景与动作管理」：左一列场景（带应用自己的图标），右一片动作页卡片。
+    <!-- 面板管理器：**它就是面板本身，只是可以编辑**。
+         同样的两条页签栏、同样的分带、同样尺寸的格子——所以「这儿看到什么样，
+         呼出来就是什么样」不是一句承诺，是同一套画法跑了两遍。
+         页签解决了「哪个动作放哪一页」：所有页的名字始终在眼前，
+         而要挪，就把格子拖到那一页的页签上。
 
-         为什么左栏从「页」换成「场景」：左栏原来列的是页，于是「绑给哪个程序」这件事只活在
-         页眉那一颗按钮上，一屏十几个页就是十几个 `code.exe` `Code.exe` 的等宽字符串。
-         而「在 VS Code 里弹出来和在资源管理器里弹出来不该是同一批动作」是面板最值钱的一条规则，
-         它值得占左栏第一等公民——**改的是左栏里那一列的顺序，而不是一颗按钮上的字段**。
+         **「只在哪个程序上出现」不是一个导航维度**，是每一页自己的一个字段（默认任何程序），
+         摆在那一页的页眉上。它曾经是窗口顶上一整条筛选栏，于是绑给别的程序的页
+         在别的场景里整批看不见——「我那一页去哪了」只能靠想起自己给它绑过程序。
 
-         分类这一维**不让位**：它与场景是两件事（一页 = 类别 × 场景）。Quicker 只有场景，
-         那是它的动作库组织方式不同，不是它更高明。所以两条导航都在，各管一维。 -->
+         与主窗口的三个列表页刻意不同：那边是「一行一条、看得清参数」的表格，
+         这里是「所见即所得的格子」，因为要判断的是版面而不是字段。
+         真要改某一格的参数，点它就打开的还是主界面那个步骤编辑器——两套界面，一套编辑器。 -->
     <Grid Margin="14">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>      <!-- 顶部分类栏 + 当前这一组的页 -->
+            <RowDefinition Height="*"/>      <!-- 两条页签栏 + 当前那一页 -->
             <RowDefinition Height="Auto"/>   <!-- 外观控制条 -->
             <RowDefinition Height="Auto"/>   <!-- 底栏 -->
         </Grid.RowDefinitions>
@@ -48,21 +50,13 @@
             </Border>
             <ScrollViewer x:Name="RailScroll" Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled" Margin="0,0,10,0">
-                <StackPanel>
-                    <!-- 筛选框。场景多了以后左栏要滚，而「我要找绑在 VS Code 上的那一页」这件事
-                         不该靠滚动完成。空 = 不过滤。 -->
-                    <TextBox x:Name="SceneFilterBox" AutomationProperties.Name="{loc:Loc Panel_Filter}"
-                             Height="28" Margin="0,0,0,8" ToolTip="{loc:Loc Panel_FilterTip}"
-                             TextChanged="SceneFilterBox_TextChanged"/>
-                    <StackPanel x:Name="PageRail" AutomationProperties.Name="{loc:Loc Panel_Scenes}"/>
-                </StackPanel>
+                <StackPanel x:Name="PageRail" AutomationProperties.Name="{loc:Loc Panel_Pages}"/>
             </ScrollViewer>
-            <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                          AutomationProperties.Name="{loc:Loc Panel_Pages}">
-                <!-- 横排：这一组下的**所有页并排**（照 Quicker 的动作页卡片）。
-                     居中只在放得下时成立——放不下时左对齐并出横向滚动条，
-                     居中 + 横向滚动条会把最左边那页推到视野外，而它恰恰是你刚建的那一页。 -->
-                <StackPanel x:Name="Pages" Orientation="Horizontal"/>
+            <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <!-- 卡片居中，不跟着窗口拉伸：这一格**就是**面板的样子（列数 × 行数的格子阵），
+                     拉宽它就不再是所见即所得，用户在这儿看到的宽度骗了他。
+                     宽度富余时让它成为一块居中的留白，而不是左半边有内容、右半边一整片空。 -->
+                <StackPanel x:Name="Pages" HorizontalAlignment="Center"/>
             </ScrollViewer>
         </Grid>
 

@@ -1,5 +1,3 @@
-using System.IO;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -72,11 +70,8 @@ public partial class PanelManagerWindow : Window
     private PanelPage? _open;
     // 这一屏画出来的页。换页时不必再算一遍 BuildPages，也让 RenderBody 能独立于 RenderPages 跑。
     private List<PanelPageView> _shown = new();
-    // 当前在看哪一类（空串 = 未分类那一格）。
+    // 当前在看哪一类（空串 = 未分类那一格）。左栏列的就是这一类里的页。
     private string _cat = "";
-    // 当前在看哪个场景（空串 = 全局，别的就是那个进程名）。左栏列的是场景，右边并排摆的是
-    // 「这一类 × 这一场景」下的所有页——两个维度各由一条栏管，互不换位。
-    private string _scene = "";
     // 本次打开期间新建、**还没有页**的那一类。分类没有自己的存储（它从页的 Tab 上涌现），
     // 所以一类要等第一张页进来才真的存在——在那之前只能由这个字段让它在顶栏上占一格。
     // 第一张页一进来就清掉（那时它已经从页上涌现出来了）；一张页都没放就关窗，它自然不存在。
@@ -177,14 +172,9 @@ public partial class PanelManagerWindow : Window
         // 「+」常驻：**新建分类的唯一入口**。没它的话，一个还没分过类的面板顶栏上只有
         // 「未分类」一格，而「怎么加一类」在界面上没有任何痕迹——上一版正是栽在这里。
         TopTabBar.Children.Add(MakeAddCategory());
-
-        // 左栏：**场景**，不是页。一屏十几个页就是十几个 `code.exe`，而「在 VS Code 里
-        // 弹出来和别处弹出来不该是同一批动作」才是面板最值钱的一条规则。
-        // 分类那一维没让位（顶栏），两维各管各的：一页 = 类别 × 场景。
-        var scenes = BuildScenes(pages);
-        if (!scenes.Any(s => PanelLayout.SameCategory(s, _scene))) _scene = scenes.FirstOrDefault() ?? "";
-        foreach (var s in scenes) PageRail.Children.Add(MakeSceneRow(s, pages));
+        foreach (var p in PanelLayout.PagesIn(pages, _cat)) PageRail.Children.Add(MakeTab(p));
         // 「+」常驻，理由与顶栏那颗一字不差：**新建页的就地入口**。
+        // 没它的话，你正看着左栏，而「再来一页」的按钮在窗口另一头的底部工具条上。
         PageRail.Children.Add(MakeAddPage());
         PaintTabs();
 
@@ -213,7 +203,8 @@ public partial class PanelManagerWindow : Window
             MaxWidth = 320,
         });
 
-    /// <summary>一页的右键菜单：改名 / 删除 / 左右移 / 本页设置。</summary>
+    /// <summary>一页的右键菜单：改名 / 删除。挂在页签和页眉上。</summary>
+    //
     // 右键那个东西本身找它的操作，是几乎所有带页签的界面的共同约定，也是人第一下会试的。
     //
     // **它现在是真的删除，所以走删除确认。** 从前这里叫「从面板移除」、不弹确认，
@@ -225,40 +216,10 @@ public partial class PanelManagerWindow : Window
         var rename = new MenuItem { Header = Strings.Get("Btn_Rename") };
         rename.Click += (_, _) => { _open = _renaming = owner; RenderPages(); };
         menu.Items.Add(rename);
-
-        // 左右移：页在配置里的先后就是面板上的翻页顺序，而「把它挪到前一页后面」
-        // 此前没有任何入口（只能拖到左栏页签上，而拖拽在页与页之间是换位不是移动）。
-        var left = new MenuItem { Header = Strings.Get("Panel_MoveLeft") };
-        left.Click += (_, _) => MovePage(owner, -1);
-        menu.Items.Add(left);
-        var right = new MenuItem { Header = Strings.Get("Panel_MoveRight") };
-        right.Click += (_, _) => MovePage(owner, +1);
-        menu.Items.Add(right);
-        menu.Items.Add(new Separator());
-
         var remove = new MenuItem { Header = Strings.Get("Btn_Delete") };
         remove.Click += (_, _) => DeletePage(owner);
         menu.Items.Add(remove);
         return menu;
-    }
-
-    /// <summary>把一页在**同分类同场景**内左右挪一位。挪不动就是菜单项灰着。</summary>
-    // 范围只限同分类同场景：跨分类挪是「改它的归类」，跨场景挪是「改它的绑定」，
-    // 那是两件不同的事，藏在这个菜单里会让人以为挪了就是挪了。
-    private void MovePage(PanelPage owner, int delta)
-    {
-        var sib = PanelLayout.PagesIn(_shown, _cat)
-                              .Where(p => string.Equals(SceneOf(p), _scene, StringComparison.OrdinalIgnoreCase))
-                              .Select(p => p.Source).OfType<PanelPage>().ToList();
-        int i = sib.IndexOf(owner);
-        int j = i + delta;
-        if (i < 0 || j < 0 || j >= sib.Count) return;
-        int at = _config.PanelPages.IndexOf(owner);
-        int to = _config.PanelPages.IndexOf(sib[j]);
-        if (at < 0 || to < 0) return;
-        (_config.PanelPages[at], _config.PanelPages[to]) = (_config.PanelPages[to], _config.PanelPages[at]);
-        _open = owner;
-        Commit();
     }
 
     /// <summary>一个分类的右键菜单：重命名 / 解散。挂在顶栏那一格上。</summary>
@@ -536,149 +497,13 @@ public partial class PanelManagerWindow : Window
         RenderBody();
     }
 
-    // 左栏一格 = 一个场景（"" 是全局，别的就是那个进程名）。
-    // **过滤按进程名与页名一起做**：用户找的往往不是「哪个场景」，而是「那个叫什么的一页」，
-    // 而它在场景里被折叠着。只按进程名筛的话，输入页名什么也不出来。
-    private List<string> BuildScenes(List<PanelPageView> pages)
-    {
-        var q = (SceneFilterBox?.Text ?? "").Trim();
-        bool Hit(string label, string proc, int n)
-        {
-            if (q.Length == 0) return true;
-            bool In(string s) => s.Contains(q, StringComparison.OrdinalIgnoreCase);
-            return In(label) || In(proc) || Strings.Lf("Panel_ScenePages", n).Contains(q, StringComparison.OrdinalIgnoreCase);
-        }
-
-        var scenes = new List<string>();
-        // 「全局」永远排第一：它是默认场景，筛掉了也要在（否则筛任何东西都会先把它弄没）。
-        if (Hit(Strings.Get("Panel_Global"), "", pages.Count(p => SceneOf(p) == "")))
-            scenes.Add("");
-        foreach (var proc in pages.Select(SceneOf).Where(s => s.Length > 0).Distinct(StringComparer.OrdinalIgnoreCase))
-        {
-            var n = pages.Count(p => string.Equals(SceneOf(p), proc, StringComparison.OrdinalIgnoreCase));
-            if (Hit(proc, proc, n)) scenes.Add(proc);
-        }
-        return scenes;
-    }
-
-    private static string SceneOf(PanelPageView p) => StepHelpers.ToProcessName(p.Source?.ForProcess ?? "").Trim();
-
-    // 一个场景在左栏里那一行：应用自己的图标 + 进程名 + 它底下有几页。
-    // **图标是真的那个程序的图标**，不是一枚通用字形——一屏十几行全是等宽的
-    // `code.exe` / `Code.exe` 时，认得出的是图形（Quicker 那一列就是这么做的）。
-    private Button MakeSceneRow(string scene, List<PanelPageView> pages)
-    {
-        int n = pages.Count(p => string.Equals(SceneOf(p), scene, StringComparison.OrdinalIgnoreCase));
-        var row = new Grid();
-        row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-
-        // 全局没有程序可借图标：用那枚「所有应用」的方阵，与 Quicker 的「全局」一致。
-        var host = new ContentControl { Width = 22, Height = 22, VerticalAlignment = VerticalAlignment.Center, Focusable = false };
-        IconVisual.Fill(host, PanelIcon.Resolve(null, null, SceneImageFor(scene)), 16,
-                        (Brush)FindResource("BrushAccentText"));
-        Grid.SetColumn(host, 0);
-        row.Children.Add(host);
-
-        var texts = new StackPanel { Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
-        texts.Children.Add(new TextBlock
-        {
-            Text = scene.Length > 0 ? scene : Strings.Get("Panel_Global"),
-            FontSize = 12,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-        });
-        texts.Children.Add(new TextBlock
-        {
-            Text = Strings.Lf("Panel_ScenePages", n),
-            FontSize = 10.5,
-            Foreground = (Brush)FindResource("BrushFaint"),
-        });
-        Grid.SetColumn(texts, 1);
-        row.Children.Add(texts);
-
-        var b = new Button
-        {
-            // **样式必须显式钉 PanelPageTab。** 主题里那个隐式 Button 样式是给字符串内容准备的，
-            // 拿它去装一个 Grid 会被当成「无从显示的对象」直接画成 ToString()——
-            // 左栏于是显示出一行字面量 "System.Windows.Controls.Grid"（第一版就这么渲染的）。
-            // 这一列以前列的是页签，样式也是同一句，两处不同时换。
-            Style = (Style)FindResource("PanelPageTab"),
-            Content = row,
-            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch,
-            Tag = new SceneRef(scene),
-            ToolTip = scene.Length > 0 ? scene : Strings.Get("Panel_Global"),
-        };
-        b.Click += (_, _) => ShowScene(scene);
-        System.Windows.Automation.AutomationProperties.SetName(b,
-            scene.Length > 0 ? scene : Strings.Get("Panel_Global"));
-        return b;
-    }
-
-    private sealed record SceneRef(string Scene);
-
-    /// <summary>把「绑哪个程序」换成那个程序真正的图标，取不到就回退通用字形。</summary>
-    // 两条路，先准后省：正在跑的进程走 MainModule（最准）；没在跑的交给 LaunchTarget，
-    // 它按 PATH / 开始菜单找，与「运行程序」那一步同一套解析。
-    // **两条都拿不到就回退字形，不猜**——猜出来的图标比没有图标更坏：
-    // 它看着像一个确定的程序，而它其实什么都不是。
-    private static string? SceneImageFor(string scene)
-    {
-        if (scene.Length == 0) return null;
-        var bare = Path.GetFileNameWithoutExtension(scene);
-        if (bare.Length == 0) return null;
-        try
-        {
-            foreach (var p in Process.GetProcessesByName(bare))
-            {
-                try
-                {
-                    var f = p.MainModule?.FileName;
-                    if (!string.IsNullOrEmpty(f)) return f;
-                }
-                catch { /* 提权进程读不到 MainModule，跳过这一个 */ }
-                finally { p.Dispose(); }
-            }
-        }
-        catch { }
-        var exe = bare + ".exe";
-        var resolved = LaunchTarget.ResolveLaunchTarget(exe, "", blocking: false);
-        return resolved.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? resolved : null;
-    }
-
-    private void ShowScene(string scene)
-    {
-        if (PanelLayout.SameCategory(scene, _scene)) return;
-        _scene = scene;
-        // 切到这一场景的第一页，与 ShowCategory 同一个口径：先换维再找页。
-        _open = PanelLayout.PagesIn(_shown, _cat)
-                          .FirstOrDefault(p => string.Equals(SceneOf(p), scene, StringComparison.OrdinalIgnoreCase))
-                          ?.Source ?? _open;
-        RenderPages();
-    }
-
-    private void SceneFilterBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        // 空 = 不过滤。筛选只藏左栏那些行，不动右边的卡片：
-        // 把「你现在看着的」也一起筛掉，改一个字整屏就空了。
-        if (IsLoaded) RenderPages();
-    }
-
     private void RenderBody()
     {
         Pages.Children.Clear();
-        // **这一组下的所有页并排**，不是只画一页（照 Quicker 的动作页卡片）。
-        // 原来只画 `_open` 那一页，于是「把这一步从一页挪到另一页」只能拖到左栏的页签上——
-        // 而那一页此刻根本不在屏上，拖过去之前你得先记住它叫什么。
-        var mine = PanelLayout.PagesIn(_shown, _cat)
-                           .Where(p => string.Equals(SceneOf(p), _scene, StringComparison.OrdinalIgnoreCase))
-                           .ToList();
-        if (mine.Count == 0) { RenderEmptyCat(); return; }
-        foreach (var p in mine)
-        {
-            var card = MakePageCard(p);
-            card.Margin = new Thickness(0, 0, 14, 0);
-            Pages.Children.Add(card);
-        }
+        if (_shown.FirstOrDefault(p => ReferenceEquals(p.Source, _open)) is { } cur)
+            Pages.Children.Add(MakePageCard(cur));
+        else
+            RenderEmptyCat();
     }
 
     // 选中态与面板同一套涂法（PaintRails）：左栏是竖杠 + 淡底，上栏是下划线 + 强调色字。
@@ -689,9 +514,11 @@ public partial class PanelManagerWindow : Window
         foreach (var child in PageRail.Children)
             if (child is Button b)
             {
-                // 左栏现在是场景：看的是 `_scene`，不是 `_open`（那是页，右边摆着的那几张）。
-                // 「+」那颗没有 Tag，模式匹配把它挡在外面。
-                bool on = b.Tag is SceneRef s && PanelLayout.SameCategory(s.Scene, _scene);
+                // `_open != null` 不能省：「+」那颗没有 Tag，而 `_open` 在空分类上、
+                // 以及刚删掉当前页之后就是 null——ReferenceEquals(null, null) 为真，
+                // 于是那颗「+」会被涂成当前页（强调边 + 淡底 + 亮字）。
+                // 顶栅那颗没事只是因为下面那个循环写的是 `b.Tag is string c`，模式匹配把它挡了。
+                bool on = _open != null && ReferenceEquals(b.Tag, _open);
                 b.BorderBrush = on ? (Brush)FindResource("BrushAccent") : Brushes.Transparent;
                 b.Foreground = (Brush)FindResource(on ? "BrushPaper" : "BrushMuted");
                 b.Background = on ? (Brush)FindResource("BrushAccentTint") : Brushes.Transparent;
@@ -1043,7 +870,7 @@ public partial class PanelManagerWindow : Window
         if (owner != null) b.Tag = new CellRef(owner, null);
         b.ToolTip = Strings.Get("Panel_AddHere");
         SetCellIcon(b, new PanelIconSpec(PanelIconKind.Glyph, char.ConvertFromUtf32(0xE710), ""), System.Math.Round(Metrics.GlyphFont * 1.25));
-        b.Click += (_, _) => { if (!_dragging && owner != null) AddStep(owner, b); };
+        b.Click += (_, _) => { if (!_dragging && owner != null) AddStep(owner); };
         return b;
     }
 
@@ -1323,27 +1150,13 @@ public partial class PanelManagerWindow : Window
         Commit();
     }
 
-    private void AddStep(PanelPage p, FrameworkElement? anchor)
+    private void AddStep(PanelPage p)
     {
-        // **先选类型，别直接开编辑器。** 此前点了空格子直接进「运行程序」的编辑器：
-        // 想要「打开网址」的人得先接受一个错的东西、再打开类型下拉改回来——多一步、还多一次迷惑。
-        // 面板上放什么就是这一步本身，所以类型是这一步的第一问，不是编辑器里的一个设置项。
-        //
-        // 菜单与启动清单、手势管理器共用同一份分节与图标（见 StepMenu），三处不各排一版。
-        var menu = StepMenu.Build((kind, seed) =>
-        {
-            var step = StepEditorWindow.Edit(this, seed, kind, _config.ActionGroups, _config.LaunchSteps);
-            if (step == null) return;
-            p.Steps.Add(step);
-            Commit();
-        }, presets: true);
-
-        if (anchor != null)
-        {
-            menu.PlacementTarget = anchor;
-            menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-        }
-        menu.IsOpen = true;
+        // 以「运行程序」开场：它是最常放上面板的一类，而编辑器顶上就是类型下拉，想换当场换。
+        var s = StepEditorWindow.Edit(this, null, "app", _config.ActionGroups, _config.LaunchSteps);
+        if (s == null) return;
+        p.Steps.Add(s);
+        Commit();
     }
 
     private void DeleteStep(PanelPage p, LaunchStep s)
