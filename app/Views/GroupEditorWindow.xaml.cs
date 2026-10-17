@@ -8,6 +8,8 @@ using Clockwork.I18n;
 using Clockwork.Native;
 using Clockwork.ViewModels;
 using static Clockwork.Views.EditorUi;
+// UseWindowsForms 的全局 using 让 KeyEventArgs 撞名，显式钉到 WPF（同 GestureTrailWindow 的惯例）。
+using WpfKeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Clockwork.Views;
 
@@ -50,6 +52,8 @@ public partial class GroupEditorWindow : Window
         KeyCaptureBox.Attach(HotkeyBox, HotkeyCapture.KeyCaptureMode.Hotkey, null,
             () => _hotkey, combo => _hotkey = combo);
         foreach (var s in group.Steps) _rows.Add(new StepRowVm(Clone(s), () => { }));
+        BuildSectionBox();
+        RebuildToolbox();
         RebuildRows();
         Steps.ItemsSource = _rows;
         // 空态跟着集合走，而不是跟着某一个按钮的点击走：加、删、复制、拖拽之后都可能是零行，
@@ -74,6 +78,13 @@ public partial class GroupEditorWindow : Window
 
     private int Sel => Steps.SelectedIndex;
 
+    /// <summary>截图 harness 专用：把右栏切到某一页。</summary>
+    // 存在的理由是 TabControl 的固有行为：**它只把选中页的内容交给键盘导航**，
+    // 非选中页里的控件拿不到焦点（这也正是它该有的行为）。焦点环探针要验的是
+    // 「那个 CheckBox 聚焦时有没有环」，所以探针得先翻到它所在的那一页——
+    // 否则量到的是「一个拿不到焦点的控件」，等于什么都没验。
+    internal void SelectSideTabForShots(int index) => SideTabs.SelectedIndex = index;
+
     private void BrowseGroupIcon_Click(object sender, RoutedEventArgs e)
     { if (IconPickerWindow.Pick(this, _groupIcon) is string s) { _groupIcon = s; RefreshGroupIcon(); } }
 
@@ -82,6 +93,12 @@ public partial class GroupEditorWindow : Window
         IconVisual.Fill(GroupIconBtn, PanelIcon.Resolve(_groupIcon, null), 24,
                         (System.Windows.Media.Brush)FindResource("BrushPaper"));
         GroupIconBtn.ToolTip = _groupIcon.Length > 0 ? _groupIcon : Strings.Get("Icon_None");
+        IconNameBox.Text = _groupIcon.Length > 0 ? _groupIcon : Strings.Get("Icon_None");
+        // 「外观」那一页顶上那块大预览。字形放大到 44 是面板上那一枚的六倍——
+        // 挑图标是看着挑的，而选择器那一格只有 46px，照着它挑等于凭记忆挑。
+        if (IconPreview != null)
+            IconVisual.Fill(IconPreview, PanelIcon.Resolve(_groupIcon, null), 44,
+                            (System.Windows.Media.Brush)FindResource("BrushAccentText"));
     }
 
     private void SyncEmptyHint()
@@ -145,6 +162,8 @@ public partial class GroupEditorWindow : Window
 
         var idx = keep == null ? -1 : IndexOfStep(keep);
         if (idx >= 0) Steps.SelectedIndex = idx;
+        // 变量面板跟着走：它列的就是这些步骤的 OutputVar，重排完的集合才是准的。
+        RebuildVars();
     }
 
     /// <summary>把新步骤挂到当前选中的块下面（选中的不是块就挂顶层）。</summary>
@@ -158,22 +177,147 @@ public partial class GroupEditorWindow : Window
     // 选组下拉排除本组：直环在挑选时就选不出来；间接环（A→B→A）由 Ok_Click 的 FindCycle 拦。
     private IReadOnlyList<ActionGroup> StepGroups => _groups.Where(g => g.Id != _original.Id).ToList();
 
-    private void SAdd_Click(object sender, RoutedEventArgs e)
+    // ---- 模块工具箱（左侧那一列） ----
+    //
+    // 从「新增 ▾」一个下拉搬过来的。分节与 Quicker 的模块分类同源（StepDisplay.StepKindSections）。
+    // 三条约定：
+    //   · **「全部」里每种类型只出现一次**（按主节排）。分节表允许一个类型属于多节
+    //     （同 Quicker 的「个别模块会属于多个分类」），而在「全部」视图里同一个类型
+    //     出现两次只是看着像 bug。选定某一节时才按那一节的成员列——那才是多归属有意义的地方。
+    //   · **搜索认标签也认类型 id**：界面上是译文，配置文件里是 kind，搜 `regex` 能搜到「正则提取」，
+    //     搜「正则」也能。不做拼音首字母（Quicker 那样做要带一整张拼音表，
+    //     而这个程序的中文标签本身短到可以直接输）。
+    //   · **双击添加**，与 Quicker 一致（拖放另说，见 DevChecks 的说明：本程序步骤表只做了上下拖拽）。
+
+    private const string PresetSection = "Menu_SecPreset";
+    private const string AllSection = "";          // 「全部」
+    private List<ToolItem> _toolItems = new();
+
+    private static IEnumerable<string> AllKindsOrdered()
     {
-        // 与启动清单同一份意图分节菜单（StepMenu），别在两处各排一版。
-        var menu = StepMenu.Build((k, seed) =>
-        {
-            var step = StepEditorWindow.Edit(this, seed, k, StepGroups);
-            if (step == null) return;
-            step.ParentId = ParentIdForNewStep() ?? "";
-            int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
-            _rows.Insert(pos, new StepRowVm(step, () => { }));
-            RebuildRows();
-            Steps.SelectedIndex = IndexOfStep(step);
-        });
-        menu.PlacementTarget = SAdd;
-        menu.IsOpen = true;
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var (_, kinds) in StepDisplay.StepKindSections)
+            foreach (var k in kinds) if (seen.Add(k)) yield return k;
     }
+
+    private void BuildSectionBox()
+    {
+        var box = new List<SectionItem>
+        {
+            new SectionItem(AllSection, Strings.Get("Tbx_All")),
+            // 「常用预设」是**填好字段的成品**（复制 = Ctrl+C 那一类），与「常用」节里那些
+            // 「先挑类型再自己配」不是一回事，两者同名会让人以为是一张表里的同一批。
+            new SectionItem(PresetSection, Strings.Get("Menu_SecPreset")),
+        };
+        foreach (var (sec, _) in StepDisplay.StepKindSections) box.Add(new SectionItem(sec, Strings.Get(sec)));
+        SectionBox.ItemsSource = box;
+        SectionBox.SelectedIndex = 0;
+    }
+
+    private void RebuildToolbox()
+    {
+        var section = (SectionBox.SelectedItem as SectionItem)?.Key ?? AllSection;
+        var q = SearchBox.Text.Trim();
+        var items = new List<ToolItem>();
+
+        if (section == AllSection || section == PresetSection)
+            foreach (var (labelKey, kind, arg) in StepDisplay.CommonPresets)
+                items.Add(new ToolItem(Strings.Get(labelKey), kind, StepDisplay.MakePreset(kind, arg)));
+
+        if (section != PresetSection)
+        {
+            if (section == AllSection)
+            {
+                // 「全部」：每种类型一次，按主节顺序（节内不重复，跨节去重）。
+                foreach (var k in AllKindsOrdered()) items.Add(new ToolItem(StepDisplay.StepKindLabel(k), k, null));
+            }
+            else
+            {
+                // 指定某一节：就列那一节的成员，此时重复是这一节的本意（用户是按这一节找的）。
+                foreach (var (sec, kinds) in StepDisplay.StepKindSections)
+                    if (sec == section)
+                        foreach (var k in kinds) items.Add(new ToolItem(StepDisplay.StepKindLabel(k), k, null));
+            }
+        }
+
+        if (q.Length > 0)
+            items = items.Where(i => (i.Label ?? "").Contains(q, StringComparison.OrdinalIgnoreCase)
+                                  || i.Kind.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        _toolItems = items;
+        Toolbox.ItemsSource = items;
+        ToolboxEmpty.Visibility = items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => RebuildToolbox();
+    private void SectionBox_SelectionChanged(object sender, SelectionChangedEventArgs e) => RebuildToolbox();
+
+    private void Toolbox_DoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (Toolbox.SelectedItem is ToolItem it) AddStepOf(it);
+    }
+
+    private void Toolbox_KeyDown(object sender, WpfKeyEventArgs e)
+    {
+        // 回车 = 添加。工具箱是常驻的，敲完关键词手还在键盘上，
+        // 为了加一步去够一次鼠标是这个界面最贵的一次多余动作。
+        if (e.Key == Key.Enter && Toolbox.SelectedItem is ToolItem it) { AddStepOf(it); e.Handled = true; }
+    }
+
+    private void AddStepOf(ToolItem it)
+    {
+        var step = StepEditorWindow.Edit(this, it.Seed, it.Kind, StepGroups);
+        if (step == null) return;
+        step.ParentId = ParentIdForNewStep() ?? "";
+        int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
+        _rows.Insert(pos, new StepRowVm(step, () => { }));
+        RebuildRows();
+        Steps.SelectedIndex = IndexOfStep(step);
+    }
+
+    // ---- 变量面板（右侧那一列） ----
+    //
+    // 列的是「这一组里产出过的变量」，即各步骤 OutputVar 的并集，按出现顺序。
+    // 它不新增任何能力——变量本来就在步骤的「输出到变量」那行里——只是把散在
+    // N 个步骤对话框里的那 N 个名字收到一处，顺带标出它是谁产出的。
+    // 双击复制 `{名字}`：写下一步的文本框时要打的花括号，抄一次比手敲一次准。
+
+    private void RebuildVars()
+    {
+        var list = new List<VarItem>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var r in _rows)
+        {
+            var v = (r.Step.OutputVar ?? "").Trim();
+            if (v.Length == 0 || !seen.Add(v)) continue;
+            list.Add(new VarItem(v, r.KindLabel));
+        }
+        VarList.ItemsSource = list;
+        VarsEmptyHint.Visibility = list.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void VarList_DoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (VarList.SelectedItem is not VarItem v) return;
+        try { System.Windows.Clipboard.SetText("{" + v.Name + "}"); }
+        catch { /* 剪贴板被别的进程占着就算了：这是便利功能，不该弹窗 */ }
+    }
+
+    // 分类项。**ToString 必须覆写成 Label**：下拉渲染的是 item 的 ToString，
+    // 而 DisplayMemberPath 在本项目的 ComboBoxItem 模板（Theme.xaml 里那个裸 ContentPresenter）
+    // 下吃不到——第一次渲染出来的是一行 "SectionItem { Key = , Label = 全部 }"。
+    private sealed record SectionItem(string Key, string Label)
+    {
+        public override string ToString() => Label;
+    }
+
+    // 图标走面板那张字形表（PanelGlyph.ForKind）：工具箱、菜单、面板格子是同一枚图标。
+    private sealed record ToolItem(string Label, string Kind, LaunchStep? Seed)
+    {
+        public string Glyph => PanelGlyph.ForKind(Kind);
+    }
+
+    private sealed record VarItem(string Name, string KindLabel);
 
     private void SEdit_Click(object sender, RoutedEventArgs e)
     {

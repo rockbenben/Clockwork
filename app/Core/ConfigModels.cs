@@ -213,6 +213,19 @@ public sealed class Reminder
     public int BatteryPercent { get; set; } = 20;
 }
 
+/// <summary>一份被用户改过的内置模板。key 是 <see cref="ActionGroupTemplates.Templates"/> 里的那个。</summary>
+// 只有「改过」才落盘：没改过的模板由代码提供，升级后自动跟着变（内置模板随版本加步骤时，
+// 用户没动过的那份理应一起变）。改过的以这份为准，删掉这条即恢复默认。
+public sealed class TemplateOverride
+{
+    public string Key { get; set; } = "";
+
+    /// <summary>改后的内容。</summary>
+    // 存的是整份动作组而不是「只存改动」：模板之间不共享步骤，差量算出来的代价
+    // （版本一升级全对不上）远大于多存几行字。
+    public ActionGroup Group { get; set; } = new();
+}
+
 public sealed class ActionGroup
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -312,8 +325,7 @@ public sealed class PanelPage
 
 public sealed class AppSettings
 {
-    public int TickSeconds { get; set; } = 30;
-    public bool StartMinimized { get; set; }
+    public int TickSeconds { get; set; } = 30;    public bool StartMinimized { get; set; }
     public bool StartupWaitForReady { get; set; }
     public int StartupDelaySeconds { get; set; } = 30;
     public string StopHotkey { get; set; } = "Ctrl+Alt+Q";
@@ -443,6 +455,12 @@ public sealed class RootConfig
     // 与 RunVars 分开存，理由见 SiteMap.cs 的注释：那张表要长期存在、要手改，
     // 而 RunVars 是一次运行内的变量，跑完即焚。
     public List<SiteEntry> Sites { get; set; } = new();
+
+    /// <summary>用户改过的内置模板，按 <see cref="ActionGroupTemplates.Templates"/> 的 key 认领。</summary>
+    // 内置模板本身在代码里（ActionGroupTemplates），这里只存**用户改过的那一份**：
+    // 没改过的模板不占配置，升级带来新步骤时它会跟着变；改过的就以用户的为准。
+    // 按 key 而不是按名字认领——名字是本地化的，同一个模板在 19 种语言下是 19 个字符串。
+    public List<TemplateOverride> Templates { get; set; } = new();
 
     // 页上的格子要指回动作的 Id，所以动作得先建出来、再传给 DefaultPanelPages——
     // 两边各调一次 DefaultActionGroups() 的话，Id 是新 Guid，面板上两格全指向不存在的动作。
@@ -577,9 +595,11 @@ public sealed class RootConfig
     // 启用但不带热键——组不会自己跑，禁用只会让托盘里多两条灰的；而开箱占用全局组合键太越界。
     public static List<ActionGroup> DefaultActionGroups()
     {
-        var all = ActionGroupTemplates.All();
-        var names = new[] { Strings.Get("Tpl_Away"), Strings.Get("Tpl_EndOfDay") };
-        var picked = names.Select(n => all.FirstOrDefault(g => g.Name == n))
+        // 按 key 挑，不按 Name：Name 是 resx 里那个 Tpl_ 键的译文，按名字挑就得先把译文读出来，
+        // 而一次改名或一次漏译都会让首启预置的动作**凭空消失**，用户还以为是自己删的。
+        // key 是模板身份本身，与语言无关。
+        var keys = new[] { "away", "endOfDay" };
+        var picked = keys.Select(k => ActionGroupTemplates.BuiltIn(k))
                           .Where(g => g != null).Select(g => g!)
                           .ToList();
         // 显式进托盘：首启时没有任何提醒/热键指向它们，托盘和面板是仅有的顺手入口。

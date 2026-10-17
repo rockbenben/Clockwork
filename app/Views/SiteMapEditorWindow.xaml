@@ -1,0 +1,179 @@
+<Window x:Class="Clockwork.Views.SiteMapEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:Clockwork.I18n"
+        Title="{loc:Loc Site_Title}" Width="880" Height="640" MinWidth="720" MinHeight="480"
+        WindowStartupLocation="CenterOwner" Background="{StaticResource BrushInk}"
+        ShowInTaskbar="False">
+    <!-- 这张表以前只能手改 clockwork.settings.json 的 sites。理由不是「配置就该手改」，
+         而是那时没有界面——一张只有域名与路径的表，控件化的收益看着不大。
+         而「打开本地源文件」那个模板一落地就不对了：用户点了模板、报错告诉他去改配置文件，
+         一条需要手写正则与绝对路径的路，中间隔着记事本与 JSON 语法。
+
+         三条排版上的规矩都来自同一个道理——这张表的每一格都要能被手打：
+         域名写全、路径从「浏览…」里选、改写规则的正则两边分开填，而不是把一整条塞进一个框里
+         用分隔符切开（分隔符本身会出现在正则里，^posts/ 这种规则遇上它就被切坏了）。 -->
+    <Grid Margin="18,16,18,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>      <!-- 说明 -->
+            <RowDefinition Height="*"/>         <!-- 左列表 / 右编辑 -->
+            <RowDefinition Height="Auto"/>      <!-- 确定 / 取消 -->
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="{loc:Loc Site_Hint}" Style="{StaticResource FieldHint}"
+                   TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="270"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ===== 左：站点清单 ===== -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{loc:Loc Site_ColName}" Style="{StaticResource GroupLabel}" Margin="2,0,0,4"/>
+
+                <Border Grid.Row="1" Style="{StaticResource ListPanel}">
+                    <Grid>
+                        <!-- 禁排序：匹配按**列表顺序**找（SiteMap.FindByHost），排一下语义就变了，
+                             而界面上完全看不出这一点。与步骤表禁排序同一条理由。 -->
+                        <DataGrid x:Name="SiteList" AutomationProperties.Name="{loc:Loc Site_Title}"
+                                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                                  CanUserSortColumns="False" HeadersVisibility="Column" SelectionMode="Single">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{loc:Loc Col_Name}" Binding="{Binding Name}" Width="Auto" MinWidth="90"
+                                                    IsReadOnly="True" ElementStyle="{StaticResource CellEllipsis}"/>
+                                <DataGridTextColumn Header="{loc:Loc Site_ColHosts}" Binding="{Binding HostsText}" Width="*"
+                                                    IsReadOnly="True" ElementStyle="{StaticResource CellEllipsis}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock x:Name="EmptyHint" Text="{loc:Loc Site_Empty}" Style="{StaticResource Hint}"
+                                   Visibility="Collapsed" TextWrapping="Wrap" MaxWidth="220" TextAlignment="Center"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- 换行而不是一行四个：标签长度不可控（俄语/德语实测都折行），
+                     散着放会让「添加」孤零零留在行尾而删除/上移/下移折到下一行，
+                     一眼看不出那几个是一组（同 GroupEditorWindow 里那组按钮的结论）。 -->
+                <WrapPanel Grid.Row="2" Margin="0,10,0,0">
+                    <Button Content="{loc:Loc Site_Add}" Style="{StaticResource PrimaryButton}" Padding="12,4" Click="Add_Click"/>
+                    <Button Content="{loc:Loc Btn_Delete}" Padding="12,4" Margin="8,0,0,0" Click="Del_Click"/>
+                    <Button Content="{loc:Loc Btn_Up}" Padding="12,4" Margin="8,0,0,0" Click="Up_Click"/>
+                    <Button Content="{loc:Loc Btn_Down}" Padding="12,4" Margin="8,0,0,0" Click="Down_Click"/>
+                </WrapPanel>
+            </Grid>
+
+            <!-- ===== 右：选中站点的字段 ===== -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                          Style="{StaticResource FormScroll}">
+            <StackPanel x:Name="Editor">
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="104"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{loc:Loc Site_Name}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top" Margin="0,2,10,0"/>
+                    <TextBox Grid.Column="1" x:Name="NameBox" AutomationProperties.Name="{loc:Loc Site_Name}" Height="28"
+                             LostFocus="Field_Changed"/>
+                </Grid>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="104"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{loc:Loc Site_Hosts}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top" Margin="0,2,10,0"/>
+                    <StackPanel Grid.Column="1">
+                        <!-- 一行一个域名，而不是逗号分隔：域名里不会出现逗号，逗号却可能出现在
+                             「我用逗号写了三个域名」这种写法里，于是分隔符与内容撞车。 -->
+                        <TextBox x:Name="HostsBox" AutomationProperties.Name="{loc:Loc Site_Hosts}" Height="72"
+                                 AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="NoWrap"
+                                 LostFocus="Field_Changed"/>
+                        <TextBlock Text="{loc:Loc Site_HostsTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="104"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{loc:Loc Site_Root}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top" Margin="0,2,10,0"/>
+                    <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                        <TextBox x:Name="RootBox" AutomationProperties.Name="{loc:Loc Site_Root}" Height="28" LostFocus="Field_Changed"/>
+                        <TextBlock x:Name="RootMissing" Text="{loc:Loc Site_RootMissing}" Style="{StaticResource FieldHint}"
+                                   Visibility="Collapsed" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <Button Grid.Column="2" Content="{loc:Loc Site_Browse}" VerticalAlignment="Top" Click="Browse_Click"/>
+                </Grid>
+                <TextBlock Text="{loc:Loc Site_RootTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" Margin="114,4,0,0"/>
+
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="104"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{loc:Loc Site_Index}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top" Margin="0,2,10,0"/>
+                    <StackPanel Grid.Column="1">
+                        <TextBox x:Name="IndexBox" AutomationProperties.Name="{loc:Loc Site_Index}" Height="28" LostFocus="Field_Changed"/>
+                        <TextBlock Text="{loc:Loc Site_IndexTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ===== 路径改写：一行一条规则，正则与替换分开两个框 =====
+                     不做成「match => replace」那种一行文本：分隔符会出现在正则里
+                     （^posts/ → _posts/ 这种规则里一个 => 都不必有，可正则里出现它毫不稀奇），
+                     而切错了不会报错，只会让某条路径悄悄映射到不存在的地方。 -->
+                <Grid Margin="0,16,0,0">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="104"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{loc:Loc Site_Rules}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top" Margin="0,2,10,0"/>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="{loc:Loc Site_RulesTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                        <!-- 表头：两个框各自要占多宽在下面就写死了，这一行只是让它们对得上 -->
+                        <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{loc:Loc Site_Match}" Style="{StaticResource GroupLabel}"/>
+                            <TextBlock Grid.Column="2" Text="{loc:Loc Site_Replace}" Style="{StaticResource GroupLabel}"/>
+                        </Grid>
+
+                        <ItemsControl x:Name="Rules">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- Text 双向绑定直接写回规则对象（TextBox 默认 LostFocus 回写），
+                                             所以「确定」时不需要再把界面上的值抄一遍——
+                                             抄一遍就多一个「忘了抄哪一栏」的机会。 -->
+                                        <TextBox Grid.Column="0" Height="26" Text="{Binding Match, UpdateSourceTrigger=LostFocus}"
+                                                 AutomationProperties.Name="{loc:Loc Site_Match}"/>
+                                        <TextBox Grid.Column="2" Height="26" Text="{Binding Replace, UpdateSourceTrigger=LostFocus}"
+                                                 AutomationProperties.Name="{loc:Loc Site_Replace}"/>
+                                        <Button Grid.Column="4" Content="{loc:Loc Btn_Delete}" Padding="10,2" MinWidth="0"
+                                                CommandParameter="{Binding}" Click="RuleDel_Click"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Content="{loc:Loc Site_RuleAdd}" HorizontalAlignment="Left" Padding="12,4" Margin="0,4,0,0" Click="RuleAdd_Click"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource DialogPrimaryButton}" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
+            <Button Content="{loc:Loc Ed_Cancel}" Style="{StaticResource DialogButton}" Click="Cancel_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -220,7 +220,8 @@ public static class ConfigStore
         cfg.Gestures ??= new();
 
         // 站点映射表。与上面那些集合同一条底线：只补 null，绝不替用户改写他写下的内容。
-        // 这张表是**手改**的（见 SiteMap.cs），所以：
+        // 这张表**不再手改**（设置页里有一张专门的表，见 SiteMapEditorWindow），
+        // 但老配置里那份手写内容还得照原样读进来——启动时静默「修好」一份他没写过的东西最坏。
         //   域名不做小写化、不去空白、不排序——"NewZone.top" 和 "newzone.top" 都是用户的原意，
         //     匹配那边本来就大小写不敏感，改写只会让他下次看不懂自己写过什么；
         //   sourceRoot 不 TrimEnd('\')——Path.Combine 自己会处理，而存盘上的形态是给他看的；
@@ -245,6 +246,21 @@ public static class ConfigStore
         }
 
         normalized |= cfg.Gestures.RemoveAll(s => s is null) > 0;
+
+        // 用户改过的模板。**认不出的 key 一律丢掉**：它多半来自一个已经删掉的模板
+        // （或手改 json 写错了），留着的话它既不会出现在模板列表里、又一直占着配置。
+        // 同理，空 key 与重复 key 只留第一条。
+        cfg.Templates ??= new();
+        normalized |= cfg.Templates.RemoveAll(t => t is null) > 0;
+        var known = ActionGroupTemplates.Templates.Select(t => t.Key).ToHashSet();
+        normalized |= cfg.Templates.RemoveAll(t =>
+        {
+            t.Group ??= new();
+            t.Group.Steps ??= new();
+            return string.IsNullOrWhiteSpace(t.Key) || !known.Contains(t.Key);
+        }) > 0;
+        normalized |= cfg.Templates.RemoveAll(t => t.Key.Length > 0
+            && cfg.Templates.IndexOf(t) != cfg.Templates.FindIndex(x => x.Key == t.Key)) > 0;
         foreach (var st in cfg.Gestures)
         {
             st.ForProcess ??= "";

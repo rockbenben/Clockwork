@@ -2,177 +2,241 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:Clockwork.I18n"
-        Title="{loc:Loc Ed_Title_Group}" Width="720" Height="640" WindowStartupLocation="CenterOwner"
+        Title="{loc:Loc Ed_Title_Group}" Width="1180" Height="720" WindowStartupLocation="CenterOwner"
         Background="{StaticResource BrushInk}"
-        ShowInTaskbar="False" MinWidth="600" MinHeight="460">
-    <!-- IsSharedSizeScope：让「新增」那一格与下方按钮列那一格共用宽度（SharedSizeGroup="StepRail"）。
-         这两格分处两行不同的 Grid，各自算宽度就必然对不齐；而它们在视觉上是同一列按钮。
-         此前是靠两处都写死 Width=104 手动同步的——按钮列改成随语言自适应之后那个约定就断了，
-         德语实测「新增」比「编辑」窄了一大截、左右缘全错开。交给共享尺寸组，谁也不用记住那个数字。
-         注意别让任何元素 ColumnSpan 跨过共享列（设置页实测会把布局转成无限循环），这里没有。 -->
-    <Grid Margin="18,16,18,16" Grid.IsSharedSizeScope="True">
+        ShowInTaskbar="False" MinWidth="940" MinHeight="560">
+    <!-- 左中右三列，照 Quicker 的组合动作编辑器（getquicker.net/kc/help/doc/xaction-editor）：
+           左侧模块工具箱（分类 + 搜索）、中间步骤定义、右侧变量与外观。
+
+         为什么从「新增 ▾」一个下拉换成常驻工具箱：
+           下拉只有展开的那一瞬间在屏上，而**找步骤这件事本身就要看**——
+           上一次那版把 29 种类型分进 7 节，节名是自造的（「取值」那一节 Quicker 根本没有），
+           而下拉长过工作区时末尾几项被悄悄藏进滚动箭头（见 StepMenu 的注释）。
+           常驻工具箱把「这一节有哪些步骤」摊在眼前，还能搜。
+
+         三列各自滚动：任何一列的内容变长都不该把另外两列推出窗口。
+         「确定 / 取消」留在最下面那行，任何高度下都点得着（1366×768 @150% 的可用高度只有 464）。 -->
+    <Grid Margin="16,14,16,14">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>      <!-- 主体：整体可滚 -->
-            <RowDefinition Height="Auto"/>   <!-- 确定 / 取消：钉在底部，任何高度下都点得着 -->
+            <RowDefinition Height="Auto"/>   <!-- 表头：名称 / 热键 / 重复 -->
+            <RowDefinition Height="*"/>      <!-- 三列主体 -->
+            <RowDefinition Height="Auto"/>   <!-- 确定 / 取消 -->
         </Grid.RowDefinitions>
 
-        <!-- 主体套一层滚动条。**这不是保险，是量出来的**：
-             1366×768 @150% 的可用高度只有 464，而这个窗口光表头就吃掉 270 上下——
-             实测那一档下步骤表被压到只剩一行表头，一条步骤都看不见，也就没法编。
-             整体可滚之后，窗口再矮也只是要滚一下，而不是有一块内容从此够不着。
-             「确定 / 取消」留在外面：它们是任何高度下都必须点得着的东西，不该跟着内容滚走。 -->
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>   <!-- 名称 + 热键 -->
-                <RowDefinition Height="Auto"/>   <!-- 说明 -->
-                <RowDefinition Height="Auto"/>   <!-- 「步骤」小标题 + 添加 -->
-                <RowDefinition Height="*"/>      <!-- 步骤序列（主体）-->
-            </Grid.RowDefinitions>
+        <!-- ===== 表头：名称 + 热键（重复与托盘挪到右栏「选项」那一页） ===== -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="76"/>
+                <ColumnDefinition Width="*" MinWidth="180"/>
+                <ColumnDefinition Width="Auto" MinWidth="96"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Col_Name}" Style="{StaticResource FieldLabel}" Margin="0,6,10,0"/>
+                <TextBox   Grid.Row="0" Grid.Column="1" x:Name="NameBox" AutomationProperties.Name="{loc:Loc Col_Name}" Height="30" Margin="0,0,16,8"/>
 
-        <!-- ===== 表头：名称 + 全局热键 ===== -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Col_Name}" Style="{StaticResource FieldLabel}"/>
-            <TextBox   Grid.Row="0" Grid.Column="1" x:Name="NameBox" AutomationProperties.Name="{loc:Loc Col_Name}" Height="30" Margin="0,0,0,8"/>
-
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="{loc:Loc Ed_GroupHotkey}" Style="{StaticResource FieldLabel}"/>
-            <!-- Grid（Auto|*）而非横向 StackPanel：StackPanel 给子元素无限可用宽度，说明文字只能靠
-                 写死的 MaxWidth 换行——340 是凭空定的，实测把「即停下。」断成「即停 / 下。」，
-                 而右边还空着两百多像素。交给列宽决定，窗口宽窄都在正确的位置断。 -->
-            <Grid Grid.Row="1" Grid.Column="1">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="HotkeyBox" AutomationProperties.Name="{loc:Loc Ed_GroupHotkey}" Width="170" Height="30" Style="{StaticResource HotkeyCapture}"/>
-                <TextBlock Grid.Column="1" Text="{loc:Loc Ed_GroupHotkeyHint}" Style="{StaticResource Hint}" VerticalAlignment="Center"
-                           Margin="12,0,0,0" TextWrapping="Wrap"/>
-            </Grid>
-
-            <!-- 顶对齐，不居中：右边那块在德语下会折成三行，而这个标签只有一行。
-                 居中的话它落在第二行旁边——也就是紧挨着两个复选框，而它标的是第一行那个次数框。
-                 实测德语 820 宽下就是这个样子：标签比它自己的输入框低了三十几像素。 -->
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Ed_GroupRepeat}" Style="{StaticResource FieldLabel}"
-                       VerticalAlignment="Top" Margin="0,14,0,0"/>
-            <!-- WrapPanel 而非横向 StackPanel：正是本文件上面那条注释说的坑——横向 StackPanel
-                 给子元素无限可用宽度，排不下不会换行、直接被右缘裁掉。
-                 实测德语 820 宽下最后那个复选框被切成「Im Infobereich-Menü anzeig」。
-
-                 **换行的单位是「一组」，不是「一个控件」。** 每个标签连同它的输入框各自包在一个
-                 横向 StackPanel 里，断点只可能落在组与组之间。散着放的时候实测德语下
-                 「仅在此程序上显示」这个标签留在了上一行的行尾，而它的输入框折到了下一行——
-                 被裁掉半个词看得出是被裁了，拆成两行却看着像两个不相干的东西。 -->
-            <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0,8,0,0">
-                <!-- 「重复 N 轮，每轮间隔 M 毫秒」是一句话，中间断开就不成话了。
-                     单位并入 Ed_GroupRepeatDelay 文案（各语言自带 ms 缩写，同 Ed_DelayMs）：
-                     写死的 "ms" 阿拉伯语/俄语用户会看到一截拉丁字母。 -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-                    <TextBox x:Name="GroupRepeatBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeat}" Width="60" Height="28"/>
-                    <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,0"/>
-                    <TextBox x:Name="GroupRepeatDelayBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeatDelay}" Width="80" Height="28"/>
-                </StackPanel>
-                <!-- 托盘显示开关与「整组重复」同排：都是「这个组怎么被用」的属性，不占额外一行；
-                     窄到放不下时它整个掉到下一行，而不是被裁掉半个词。 -->
-                <CheckBox x:Name="ShowInTrayChk" Content="{loc:Loc Ed_GroupShowInTray}" VerticalAlignment="Center" Margin="24,0,0,6"/>
-                <!-- 这里曾经还有「作为面板的一页」和「仅在此程序上显示」两项。它们随着
-                     面板页独立成实体一起搬走了：一个动作不再会「是」一页，页有自己的名字、
-                     分类和场景，全在面板管理器的页眉上就地改。 -->
-                <!-- 本组被别处引用时（group 步骤）用的图标。设一次，所有指向它的格子都跟着。
-                     显示图标本身，不显示码位——原值退到 ToolTip 里。 -->
-                <StackPanel Orientation="Horizontal" Margin="24,0,0,6">
-                    <TextBlock Text="{loc:Loc Ed_Icon}" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <Button x:Name="GroupIconBtn" Width="46" Height="38"
-                            ContentTemplate="{x:Null}" ToolTip="{loc:Loc Icon_Pick}"
-                            AutomationProperties.Name="{loc:Loc Icon_Pick}" Click="BrowseGroupIcon_Click"/>
-                </StackPanel>
-            </WrapPanel>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{loc:Loc Ed_GroupHotkey}" Style="{StaticResource FieldLabel}" Margin="0,6,10,0"/>
+            <TextBox   Grid.Column="3" x:Name="HotkeyBox" AutomationProperties.Name="{loc:Loc Ed_GroupHotkey}" Height="30" Margin="0,0,16,8" Style="{StaticResource HotkeyCapture}"/>
+            <!-- 「进托盘」留在表头，**不进右栏的「选项」那一页**：TabControl 只把选中页交给键盘
+                 导航，一颗待在非选中页里的 CheckBox 既拿不到焦点环（冒烟自查的焦点探针直接判它坏），
+                 键盘用户也要先翻页才够得到它。开关是全局行为，不属于「这一页的设置」。 -->
+            <CheckBox Grid.Column="3" Grid.Row="1" x:Name="ShowInTrayChk"
+                      Content="{loc:Loc Ed_GroupShowInTray}" VerticalAlignment="Top" Margin="0,10,0,0"/>
         </Grid>
 
-        <!-- 动作组只定义动作，触发在别处引用 -->
-        <TextBlock Grid.Row="1" Text="{loc:Loc Ed_GroupHint}" Style="{StaticResource Hint}" FontSize="{StaticResource FsMicro}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <!-- ===== 三列主体 ===== -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="252"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="236"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- ===== 「步骤」小标题（刻字面板标签）+ 添加按钮 ===== -->
-        <Grid Grid.Row="2" Margin="0,16,0,6">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" SharedSizeGroup="StepRail"/></Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{loc:Loc Col_Steps}" Style="{StaticResource GroupLabel}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
-            <!-- 这颗「新增」就摞在「编辑 / 删除 / 复制」正上方，宽度必须与它们一致，否则一列按钮的左右缘都对不齐。
-                 靠共享尺寸组 StepRail 自动取齐（见窗口根 Grid 的说明），不再两处各写死一个 104。
-                 Stretch：让它填满共享列，而不是按自身内容缩在里面。 -->
-            <Button Grid.Column="1" x:Name="SAdd" Content="{loc:Loc Btn_AddMenu}" Style="{StaticResource PrimaryButton}"
-                    HorizontalAlignment="Stretch" Height="30" Padding="4,0" Margin="14,0,0,0" Click="SAdd_Click"/>
-        </Grid>
-
-        <!-- ===== 步骤序列：强调色轨 · 类型徽标 · 摘要 · 延时（与启动清单同一套仪表化列表）===== -->
-        <Grid Grid.Row="3" MinHeight="132">   <!-- 至少露出三行步骤：再少就只剩表头，看不出这一组在干什么 -->
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" SharedSizeGroup="StepRail"/></Grid.ColumnDefinitions>
-
-            <Border Grid.Column="0" Style="{StaticResource ListPanel}">
+            <!--  左：模块工具箱  -->
+            <Border Grid.Column="0" Style="{StaticResource ListPanel}" Padding="0">
                 <Grid>
-                <!-- 禁点表头排序：步骤顺序即执行顺序，排序会让选中索引与模型错位（与主窗口三列表同理） -->
-                <DataGrid x:Name="Steps" AutomationProperties.Name="{loc:Loc Col_Steps}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
-                          HeadersVisibility="Column" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="SEdit_Click">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="24" CanUserResize="False" CellTemplate="{StaticResource RailCell}" CellStyle="{StaticResource RailCellStyle}"/>
-                        <DataGridTemplateColumn Header="{loc:Loc Col_Kind}" Width="Auto" MinWidth="104">
-                            <DataGridTemplateColumn.CellTemplate>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{loc:Loc Tbx_Title}" Style="{StaticResource GroupLabel}" Margin="10,10,10,0"/>
+
+                    <!-- 搜索 + 分类各占一格，**不是一行两个**：标签长度不受控，
+                         俄语「Сбросить фильтр」实测折行，而一行两个会让整列跟着变宽。 -->
+                    <StackPanel Grid.Row="1" Margin="10,6,10,8">
+                        <TextBox x:Name="SearchBox" AutomationProperties.Name="{loc:Loc Tbx_Search}"
+                                 Height="28" ToolTip="{loc:Loc Tbx_SearchTip}"
+                                 TextChanged="SearchBox_TextChanged"/>
+                        <!-- DisplayMemberPath 不是可省的：不设的话 ComboBox 渲染的是 record 的
+                             ToString()，下拉里就是一行 "SectionItem { Key = , Label = 全部 }"。
+                             截图矩阵第一次渲染这一扇窗时抓到的正是它。 -->
+                        <ComboBox x:Name="SectionBox" AutomationProperties.Name="{loc:Loc Tbx_Section}"
+                                  DisplayMemberPath="Label"
+                                  Height="28" Margin="0,6,0,0" SelectionChanged="SectionBox_SelectionChanged"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="2">
+                        <ListBox x:Name="Toolbox" AutomationProperties.Name="{loc:Loc Tbx_Title}"
+                                 Background="Transparent" BorderThickness="0"
+                                 MouseDoubleClick="Toolbox_DoubleClick"
+                                 KeyDown="Toolbox_KeyDown">
+                            <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <!-- Margin 来自 StepRowVm.IndentMargin：块里的子步骤按层级缩进。
-                                         平铺的 DataGrid 靠这一列的缩进表达归属（见 StepTree 的注释）。 -->
-                                    <Border Style="{StaticResource KindChipCell}" Margin="{Binding IndentMargin}">
-                                        <TextBlock Text="{Binding KindLabel}" Style="{StaticResource KindChip}"/>
-                                    </Border>
+                                    <!-- 图标 + 名字，和面板上那一格是同一张字形表（PanelGlyph）。
+                                         前景色不写死：ListBoxItem 的选中态会改 Foreground，
+                                         而 Foreground 是继承属性，文字与图标一起跟着变。 -->
+                                    <StackPanel Orientation="Horizontal" Margin="10,4">
+                                        <TextBlock Text="{Binding Glyph}" FontFamily="Segoe MDL2 Assets" FontSize="13.5"
+                                                   Width="22" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Label}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
                                 </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"
-                                            ElementStyle="{StaticResource CellEllipsis}"/>
-                        <DataGridTextColumn Header="{loc:Loc Col_Delay}" Binding="{Binding DelayText}" Width="Auto" MinWidth="72"
-                                            IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <!-- 空态叠在同一格里，不占布局：新建一个动作再打开编辑器，看到的不该是一块
-                     只有表头的 132px 空表格——那既没说坏在哪，也没说下一步做什么。
-                     出现条件由代码跟着 _rows 的变更同步（增删/复制/导入都走同一条）。 -->
-                <TextBlock x:Name="StepsEmptyHint" Text="{loc:Loc Group_NoSteps}" Style="{StaticResource Hint}"
-                           Visibility="Collapsed" TextWrapping="Wrap" MaxWidth="360" TextAlignment="Center"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TextBlock x:Name="ToolboxEmpty" Text="{loc:Loc Tbx_Empty}" Style="{StaticResource Hint}"
+                                   Visibility="Collapsed" TextWrapping="Wrap" MaxWidth="200" TextAlignment="Center"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
                 </Grid>
             </Border>
 
-            <!-- 选中步骤的操作：编辑 / 删除 / 上移 / 下移（次级操作靠边，主操作「添加」在小标题旁）-->
-            <!-- 套滞动条：窗口高度被 FitToWorkArea 按工作区封顶后，这一列（7 个按钮，且
-                 「运行这一步 / 运行整组」的标签在西语下会折成两行）比 * 行还高，末尾按钮会被窗口底边切掉半个。
-                 与设置页左栏同一条结论：收紧间距只是把悬崖往后挪一格，滞动条才不挑窗口大小。 -->
-            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <!-- 宽度随语言自己长，不写死 104：那个数字是照中文标签量的。
-                 俄语实测这六行（七个按钮）里有三行放不下要折行——上移/下移各两行、「运行这一步」三行、
-                 「运行整组」两行，合计 10 行文字；摞起来超出可用高度，滚动条把最后两个按钮从字当中切开
-                 （820x566 实测切在「Выполнить」的字腰上）。
-                 约束是标签长度而不是竖向空间：让它一行放得下，同样六行按钮就只剩 6 行文字。
-                 MinWidth 保住中文下的手感（实测中文表格宽度 683px 一分未变），
-                 MaxWidth 挡住某个语言把步骤表挤瘦（德语最狠，820 窗口下表格 666→583px）。 -->
-            <StackPanel MinWidth="104" MaxWidth="190" Margin="14,0,0,0">
-                <Button Content="{loc:Loc Btn_Edit}" Margin="0,0,0,8" Click="SEdit_Click"/>
-                <Button Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,0,0,8" Click="SDel_Click"/>
-                <Button Content="{loc:Loc Btn_Copy}" Margin="0,0,0,8" Click="SCopy_Click"/>
-                <Grid Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Content="{loc:Loc Btn_Up}" Padding="0,5" Margin="0,0,3,0" Click="SUp_Click"/>
-                    <Button Grid.Column="1" Content="{loc:Loc Btn_Down}" Padding="0,5" Margin="3,0,0,0" Click="SDown_Click"/>
+            <!--  中：步骤  -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{loc:Loc Col_Steps}" Style="{StaticResource GroupLabel}" Margin="2,0,0,6"/>
+
+                <Grid Grid.Row="1" MinHeight="132">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Style="{StaticResource ListPanel}">
+                        <Grid>
+                            <!-- 禁表头排序：步骤顺序即执行顺序，排序会让选中索引与模型错位。 -->
+                            <DataGrid x:Name="Steps" AutomationProperties.Name="{loc:Loc Col_Steps}" AutoGenerateColumns="False"
+                                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
+                                      HeadersVisibility="Column" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="SEdit_Click">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Width="24" CanUserResize="False" CellTemplate="{StaticResource RailCell}" CellStyle="{StaticResource RailCellStyle}"/>
+                                    <DataGridTemplateColumn Header="{loc:Loc Col_Kind}" Width="Auto" MinWidth="104">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <!-- Margin 来自 StepRowVm.IndentMargin：块里的子步骤按层级缩进。 -->
+                                                <Border Style="{StaticResource KindChipCell}" Margin="{Binding IndentMargin}">
+                                                    <TextBlock Text="{Binding KindLabel}" Style="{StaticResource KindChip}"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="{loc:Loc Col_Summary}" Binding="{Binding Summary}" Width="*" IsReadOnly="True"
+                                                        ElementStyle="{StaticResource CellEllipsis}"/>
+                                    <DataGridTextColumn Header="{loc:Loc Col_Delay}" Binding="{Binding DelayText}" Width="Auto" MinWidth="72"
+                                                        IsReadOnly="True" ElementStyle="{StaticResource DelayCol}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock x:Name="StepsEmptyHint" Text="{loc:Loc Ed_StepsEmpty}" Style="{StaticResource Hint}"
+                                       Visibility="Collapsed" TextWrapping="Wrap" MaxWidth="340" TextAlignment="Center"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- 套滞动条：窗口高度被 FitToWorkArea 封顶后，这一列（6 个按钮）比步骤表还高，
+                         末尾按钮会被底边切掉半个（与设置页左栏同一条结论）。 -->
+                    <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel MinWidth="104" MaxWidth="190" Margin="14,0,0,0">
+                        <Button Content="{loc:Loc Btn_Edit}" Margin="0,0,0,8" Click="SEdit_Click"/>
+                        <Button Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,0,0,8" Click="SDel_Click"/>
+                        <Button Content="{loc:Loc Btn_Copy}" Margin="0,0,0,8" Click="SCopy_Click"/>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="{loc:Loc Btn_Up}" Padding="0,5" Margin="0,0,3,0" Click="SUp_Click"/>
+                            <Button Grid.Column="1" Content="{loc:Loc Btn_Down}" Padding="0,5" Margin="3,0,0,0" Click="SDown_Click"/>
+                        </Grid>
+                        <Button x:Name="SRunStep" Content="{loc:Loc Btn_RunStep}" Style="{StaticResource RunButton}" Margin="0,8,0,2" Click="SRunStep_Click"/>
+                        <Button x:Name="SRunGroup" Content="{loc:Loc Btn_RunGroup}" Style="{StaticResource RunButton}" Margin="0,2,0,2" Click="SRunGroup_Click"/>
+                    </StackPanel>
+                    </ScrollViewer>
                 </Grid>
-                <!-- 两个试跑按钮保持纵向、各占一行。试过并排两列（照抄上移/下移的写法）：中文标签就已经
-                     折成「▶ 运行 / 这一步」两行，德语俄语只会更长——折行后单个按钮反而比纵向两行更高，
-                     可读性和这一列其余单行按钮的节奏也全乱了。这里的约束不是竖向空间，是标签长度。 -->
-                <Button x:Name="SRunStep" Content="{loc:Loc Btn_RunStep}" Style="{StaticResource RunButton}" Margin="0,10,0,2" Click="SRunStep_Click"/>
-                <Button x:Name="SRunGroup" Content="{loc:Loc Btn_RunGroup}" Style="{StaticResource RunButton}" Margin="0,4,0,2" Click="SRunGroup_Click"/>
-            </StackPanel>
-            </ScrollViewer>
+            </Grid>
+
+            <!--  右：变量 / 外观 / 选项 三张 tab（同 Quicker 组合动作编辑器的右栏）。
+                 分 tab 而不是把三件事纵向堆在一列里：堆起来时「外观」永远是那一列最下面的一块，
+                 而改图标恰恰是**建动作时最常要改**的一项——它得和你正在想的东西同时可见。 -->
+            <Border Grid.Column="4" Style="{StaticResource ListPanel}" Padding="0">
+                <TabControl x:Name="SideTabs">
+                    <TabItem Header="{loc:Loc Ed_Vars}">
+                        <Grid Margin="12,8,12,0">
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                            <!-- 表头复用现成的列标题键：左边那格是变量名，右边那格是产出它的那一步的类型。
+                                 没有这一行，「行    列表（多行输入）」读起来像一句话，
+                                 而不是「变量叫行，由列表这一步产出」。 -->
+                            <Grid Grid.Row="0" Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{loc:Loc Col_Name}" Style="{StaticResource GroupLabel}"/>
+                                <TextBlock Grid.Column="1" Text="{loc:Loc Col_Kind}" Style="{StaticResource GroupLabel}"/>
+                            </Grid>
+                            <ListBox x:Name="VarList" Grid.Row="1" AutomationProperties.Name="{loc:Loc Ed_Vars}"
+                                     Background="Transparent" BorderThickness="0"
+                                     MouseDoubleClick="VarList_DoubleClick">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,5">
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding KindLabel}" Style="{StaticResource KindChip}" Margin="10,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <TextBlock x:Name="VarsEmptyHint" Text="{loc:Loc Ed_VarsEmpty}" Style="{StaticResource Hint}"
+                                       Visibility="Collapsed" TextWrapping="Wrap" TextAlignment="Center"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Header="{loc:Loc Ed_Appearance}">
+                        <StackPanel Margin="12,12,12,12">
+                            <!-- 大预览：图标那一格在面板上只有 88px，这里给的是它的三倍多。
+                                 挑图标是**看着挑**的（「这个形状像不像我要的那个」），
+                                 而下面那颗按钮只有 46px——照着它挑等于凭记忆挑。 -->
+                            <!-- ContentControl 而不是 Border：IconVisual.Fill 要的是一个宿主。
+                                 边框与内边距挂在外面那个 Border 上。 -->
+                            <Border Height="132" Style="{StaticResource ListPanel}"
+                                    Background="{StaticResource BrushInk}" Margin="0,0,0,12">
+                                <ContentControl x:Name="IconPreview" Focusable="False"/>
+                            </Border>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="GroupIconBtn" Width="46" Height="38" ContentTemplate="{x:Null}"
+                                        ToolTip="{loc:Loc Icon_Pick}" AutomationProperties.Name="{loc:Loc Icon_Pick}"
+                                        Click="BrowseGroupIcon_Click"/>
+                                <TextBlock x:Name="IconNameBox" Style="{StaticResource Hint}" VerticalAlignment="Center"
+                                           Margin="10,0,0,0" TextTrimming="CharacterEllipsis" MaxWidth="120"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem Header="{loc:Loc Ed_Options}">
+                        <StackPanel Margin="12,12,12,12">
+                            <TextBlock Text="{loc:Loc Ed_GroupRepeat}" Style="{StaticResource FieldLabel}" Margin="0,0,0,6"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="GroupRepeatBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeat}" Width="56" Height="28"/>
+                                <TextBlock Text="{loc:Loc Ed_GroupRepeatDelay}" VerticalAlignment="Center" Margin="10,0,6,0"/>
+                                <TextBox x:Name="GroupRepeatDelayBox" AutomationProperties.Name="{loc:Loc Ed_GroupRepeatDelay}" Width="72" Height="28"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+            </Border>
         </Grid>
-        </Grid>
-        </ScrollViewer>
 
         <!-- ===== 确定 / 取消 ===== -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
             <Button Content="{loc:Loc Ed_Ok}" Style="{StaticResource DialogPrimaryButton}" Margin="0,0,10,0" Click="Ok_Click" IsDefault="True"/>
             <Button Content="{loc:Loc Ed_Cancel}" Style="{StaticResource DialogButton}" Click="Cancel_Click" IsCancel="True"/>
         </StackPanel>

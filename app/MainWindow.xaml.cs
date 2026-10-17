@@ -415,9 +415,19 @@ public partial class MainWindow : Window
         base.OnClosing(e);
     }
 
-    // —— 配置导入/导出 ——
-    private void ExportConfig_Click(object sender, RoutedEventArgs e)
+    // —— 站点映射表 ——
+    // 改完立刻落盘：这张表是 siteMap 步骤运行时要查的，而那条步骤多半是被面板格子或手势
+    // 触发的——用户改完映射表不是为了「配置里好看」，是为了下一步就能用。
+    private void SiteMap_Click(object sender, RoutedEventArgs e)
     {
+        if (_config == null || AppInstance == null) return;
+        if (Views.SiteMapEditorWindow.Edit(this, _config.Sites) is not List<SiteEntry> edited) return;
+        _config.Sites = edited;
+        AppInstance.SaveConfig();
+    }
+
+    // —— 配置导入/导出 ——
+    private void ExportConfig_Click(object sender, RoutedEventArgs e)    {
         var cfgPath = AppInstance?.ConfigFilePath;
         if (string.IsNullOrEmpty(cfgPath) || !File.Exists(cfgPath)) return;
         var dlg = new Microsoft.Win32.SaveFileDialog   // 限定 Win32：与 WinForms 同名类消歧义（沿用 Pickers 惯例）
@@ -744,21 +754,49 @@ public partial class MainWindow : Window
     // 直接开一个空动作的编辑器，不先弹菜单——只有一种东西可建（同「定时任务」那一页）。
     private void GAdd_Click(object sender, RoutedEventArgs e) => AddGroupFrom(new ActionGroup { Name = "" });
 
-    // 内置模板。每次现生成新 id，选中即开编辑器预填，按需改进程名再保存。
+    // 内置模板。选中即开编辑器预填，按需改进程名再保存。
     // 它们此前和「空白动作」挤在同一个菜单里，于是每建一个动作都要先从 9 项里挑第 1 项。
+    //
+    // 现在是一扇管理器：除了「添加为新动作」，还能**改模板本身**（此前只能添加，改不了），
+    // 以及把改过的模板恢复默认。改过的存进 RootConfig.Templates，按内置模板的 key 认领——
+    // 不按名字，因为名字是本地化的，同一个模板在 19 种语言下是 19 个字符串。
     private void GTemplate_Click(object sender, RoutedEventArgs e)
     {
-        var menu = new ContextMenu();
-        foreach (var t in ActionGroupTemplates.All())
+        if (_config == null || AppInstance == null) return;
+        // 一个循环：修改 / 恢复默认之后回到管理器接着挑，添加则走到头（新建的动作要自己编辑）。
+        while (true)
         {
-            var tt = t;
-            var mi = new MenuItem { Header = tt.Name };
-            mi.Click += (_, _) => AddGroupFrom(tt);
-            menu.Items.Add(mi);
+            var pick = Views.TemplateManagerWindow.Show(this, _config);
+            if (pick == null || pick.Group == null && pick.Action == Views.TemplateManagerWindow.TemplateAction.None) return;
+
+            switch (pick.Action)
+            {
+                case Views.TemplateManagerWindow.TemplateAction.Instantiate:
+                    AddGroupFrom(pick.Group!);
+                    return;
+
+                case Views.TemplateManagerWindow.TemplateAction.Edit:
+                {
+                    // 模板的「组名 / 重复 / 托盘 / 图标」与普通动作同一套编辑器，不另写一个模板编辑器：
+                    // 那些字段两边一模一样，各写一份就等于两处都会漂。
+                    var edited = Views.GroupEditorWindow.Edit(this, pick.Group!, Groups, FunctionHotkeys());
+                    if (edited == null) continue;                       // 取消，回到管理器
+                    var ov = _config.Templates.FirstOrDefault(t => t.Key == pick.Key);
+                    if (ov == null) _config.Templates.Add(new TemplateOverride { Key = pick.Key, Group = edited });
+                    else ov.Group = edited;
+                    AppInstance.SaveConfig();
+                    continue;
+                }
+
+                case Views.TemplateManagerWindow.TemplateAction.Reset:
+                    _config.Templates.RemoveAll(t => t.Key == pick.Key);
+                    AppInstance.SaveConfig();
+                    continue;
+
+                default:
+                    return;
+            }
         }
-        menu.PlacementTarget = GTemplate;
-        menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-        menu.IsOpen = true;
     }
 
     // 本程序自己占着的全局键，交给动作编辑器查重用。**加了新的功能键就往这儿添一行**——

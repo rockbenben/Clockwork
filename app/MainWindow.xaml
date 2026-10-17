@@ -657,6 +657,27 @@
                                     <TextBlock Grid.Column="2" Text="{loc:Loc Settings_BackupTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="16,6,0,0"/>
                                 </Grid>
 
+                                <!-- ===== 站点映射表 =====
+                                     自成一节而不是塞进「常规」：它管的是一整张表（域名 → 本地路径 + 改写规则），
+                                     与旁边那些「一个输入框」的设置项不同量级，混在一起两边都不好读。
+                                     放在导入导出**之后**：这张表多半是导出备份之后才发现要改的。 -->
+                                <Border Height="1" Background="{StaticResource BrushLine}" Margin="0,14,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,13,0,11">
+                                    <Border Width="3" Height="16" Background="{StaticResource BrushAccent}" CornerRadius="1.5" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{loc:Loc Site_Title}" FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="{StaticResource FsTitle}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Grid Margin="0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="112" SharedSizeGroup="SetLabel"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="200" MaxWidth="330"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{loc:Loc Site_SettingsRow}" Style="{StaticResource FieldLabel}" VerticalAlignment="Top"/>
+                                    <Button Grid.Column="1" VerticalAlignment="Top" x:Name="SiteMapBtn" MaxWidth="330"
+                                            Content="{loc:Loc Site_Open}" Click="SiteMap_Click" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Column="2" Text="{loc:Loc Site_SettingsTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="16,6,0,0"/>
+                                </Grid>
+
                                 <!-- ===== 快捷面板 =====
                                      单独开一节而不是塞进「常规」：这里有六项，且全都只影响那一个浮层——
                                      混在急停键、语言、导入导出中间时，读的人分不出哪几行是一伙的。
