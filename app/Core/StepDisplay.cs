@@ -79,45 +79,48 @@ public static class StepDisplay
     // 所以类型下拉只在面板语境（编辑器拿到清单引用）时把它追加进去，其余语境连看见都看不见。
     public const string RefKind = "step";
 
-    // 「新增 ▾」菜单的意图分节。平铺十个机制名时，新用户不知道「关掉微信」该点「窗口动作」还是
-    // 「发送按键」——分节按「你想对什么做事」组织，机制名降到节内。节顺序即菜单顺序。
-    // 必须恰好覆盖 StepKinds（有测试盯着）：漏一个那种步骤就没了入口，重一个会出现两条同名菜单项。
+    // 「新增」菜单与动作组工具箱的**分节索引**：按用户意图 / 操作对象分组，只此一份。
     //
-    // **分法照着 Quicker 的模块分类来，不是照着"实现上像不像"。** 早先那版把新增的东西
-    // 一股脑塞进一个「流程」节，于是那一节里同时住着三种互不相干的东西：
-    // 取值（用户输入 / 取选中的文字）、数据处理（拆分文本为列表）、控制流（每个 / 跳出）。
-    // 找「把一段文字拆成多行」的人不会去「流程」里翻——他脑子里是"处理文字"；
-    // 找「跳出」的人也不会去「流程」里翻，因为那一节里一半的东西跟他要找的毫无关系。
-    // Quicker 早就是这个分法（官方帮助里的「文本处理相关模块」「程序流控制模块」
-    // 「界面交互相关模块」是三节），跟着它省得让用户自己发明分类。
+    // **分法照着 Quicker 的模块分类来（getquicker.net/KC/Help「组合动作模块说明」），不是照着
+    // "实现上像不像"。** 关键的三条与上一版不同：
+    //
+    //   1. **日常的原子操作聚在「常用」一节**：打开网址、运行程序、发送文本、获取选中的文字、
+    //      用户输入、提示消息、等待时间——正是 Quicker「常用模块」那一节的东西。上一版把它们
+    //      散进「打开 / 控制 / 取值」三节，于是「等两秒」和「取选中的文字」永远不在同一页。
+    //   2. **其余各节按操作对象分**（界面交互 / 文本处理 / 剪贴板 / 文件与路径 / 系统与窗口 / 计算），
+    //      名字就是 Quicker 的节名，不另发明。上一版的「取值」是自造的：Quicker 没有这一节，
+    //      「获取当前浏览器网址」在它那儿属于 **Win系统操作**。
+    //   3. **程序流控制里只剩结构**：每个 / 跳出。**「等待时间」不在里面**——它在 Quicker 的
+    //      常用模块里，上一版把它塞进流程控制是错的（用户报过一次）。
+    //
+    // **这张表是索引，不是划分**：一个步骤类型可以出现在多节里（Quicker 官方原话：「个别模块会
+    // 属于多个分类」）。所以「用户输入」既在「常用」也在「界面交互」，「获取选中的文字」既在
+    // 「常用」也在「剪贴板」。对应的断言盯的是**每种类型至少出现在一节**，不再盯「恰好一次」。
+    //
+    // 「动作组」自成一节且排在最前：想找它的人不会去别的节里翻，而面板上的「运行动作」格子
+    // 与启动清单的「选现有动作组」都靠它。
     public static readonly (string SectionKey, string[] Kinds)[] StepKindSections =
     {
-        // 「动作组」自成一节，且排在最前——它原来埋在「流程」的第三项，和延时、消息并列。
-        // 那是**归错了类**：延时和消息是流程原语，而「跑一个已有的动作组」是复用，
-        // 想找它的人不会去「流程」里翻。实测反馈正是「启动清单和手势应该支持选现有动作组」——
-        // 功能一直都在，只是没人找得到。
-        // 节标题借 Tab_Group（「动作组」，已 18 语），不为一个标题再造一条文案。
+        ("Menu_SecCommon", new[] { "url", "app", "text", "copySelection", "prompt", "choice", "list", "message", "delay", "waitClipboard" }),
+        ("Menu_SecUI", new[] { "prompt", "choice", "list", "waitKey", "message" }),
+        ("Menu_SecClip", new[] { "copySelection", "waitClipboard" }),
+        ("Menu_SecText", new[] { "regex", "replace", "urlDecode", "splitLines", "join" }),
+        // 「网址 → 本地文件」也在这一节：它产出的是一个本地路径，按对象分就该在这儿，
+        // 而不是一个和「打开网址 / 打开文件夹」并排的「打开」原语（见 SiteSourceTemplate 的注释）。
+        ("Menu_SecFile", new[] { "path", "siteMap" }),
+        ("Menu_SecSys", new[] { "window", "keys", "mouse", "browserUrl", "system", "volume" }),
+        ("Menu_SecCalc", new[] { "math" }),
+        ("Menu_SecCtrl", new[] { "each", "skip" }),
         ("Tab_Group", new[] { "group" }),
-        ("Menu_SecOpen", new[] { "app", "url", "path", "siteMap" }),
-        ("Menu_SecControl", new[] { "window", "keys", "mouse", "text" }),
-        ("Menu_SecSystem", new[] { "volume", "system" }),
-
-        // 取值：这一节的每一步都**只产出一个值、本身什么都不做**，产出之后交给后面的步骤。
-        // 放在一起是因为用户找的是"我想要的东西从哪儿进来"——单行文字（用户输入）、挑一项、
-        // 一叠条目（列表）、选中的文字、浏览器地址、等我按一下。
-        // 「消息」也在这一节：它和「用户输入」是同一族（都跟用户打交道），只是不读出东西。
-        // 「等剪贴板变化」同理——它也不产出文本，等的是一个"外部把值放进来了"这件事发生。
-        ("Menu_SecValue", new[] { "prompt", "choice", "list", "copySelection", "waitClipboard", "browserUrl", "waitKey", "message" }),
-
-        // 文本处理：不碰用户、不碰系统，只把一段文字变成另一段。
-        // 拼接（join）放这儿而不是"取值"：它不产生新东西，只把已有的列表收拾成一段。
-        ("Menu_SecText", new[] { "splitLines", "urlDecode", "regex", "replace", "math", "join" }),
-
-        // 流程控制：这三步**本体什么都不做**，只改"接下来跑哪几步"。它们和取值、处理
-        // 放在一起过，于是"跳出本块"和"取选中的文字"成了邻居，而这两件事毫无关系。
-        // 循环（每个）在这里，因为它是执行结构而不是动作——同 Quicker 的「程序流控制模块」。
-        ("Menu_SecCtrl", new[] { "each", "skip", "delay" }),
     };
+
+    /// <summary>一个步骤类型出现在哪几节，按 <see cref="StepKindSections"/> 的节序。</summary>
+    // 工具箱的搜索结果要按节分组显示，而搜索框只有一份——分组这件事靠它。
+    public static IEnumerable<string> SectionsOf(string kind)
+        => StepKindSections.Where(s => s.Kinds.Contains(kind)).Select(s => s.SectionKey);
+
+    /// <summary>这个类型归哪一节（「仅在一节出现时」的场合用；多节时取第一节，即最常用的那个）。</summary>
+    public static string PrimarySectionOf(string kind) => SectionsOf(kind).DefaultIfEmpty("").First();
 
     // 「常用」——一份预填好的步骤。它们**没有任何新的执行路径**：每一条都只是既有类型
     // （keys / window / system）填好字段的样子，选完照样进同一个步骤编辑器，进去还能改。

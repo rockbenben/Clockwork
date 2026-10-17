@@ -4,14 +4,20 @@ using Xunit;
 // UX 一轮加的三样纯逻辑：菜单意图分节、摘要修饰段（折叠条标题用）、催促/循环行为句。
 public class UxSummaryTests
 {
-    // 分节必须恰好覆盖 StepKinds：漏 = 那种步骤没了入口；重 = 菜单出现两条同名项。
-    // 新增步骤类型时这条会先红——它逼你想清楚新类型属于哪个意图节。
+    // 分节必须**至少**覆盖 StepKinds：漏一种 = 那种步骤没了入口。
+    //
+    // **不再要求「恰好一次」。** 一个类型可以出现在多节里——那是照着 Quicker 官方模块分类来的
+    // （原话：「个别模块会属于多个分类」），而「用户输入」这种既是常用又属界面交互、
+    // 「获取选中的文字」既在常用又属剪贴板，落在两节里都是对的。
+    // 工具箱的「全部」视图按主节去重（见 GroupEditorWindow.RebuildToolbox），
+    // 所以多归属不会让同一张列表里出现两条一样的项。
     [Fact]
-    public void Menu_sections_cover_all_step_kinds_exactly_once()
+    public void Menu_sections_cover_every_step_kind_at_least_once()
     {
         var flat = StepDisplay.StepKindSections.SelectMany(s => s.Kinds).ToList();
-        Assert.Equal(flat.Count, flat.Distinct().Count());
-        Assert.Equal(StepDisplay.StepKinds.OrderBy(x => x), flat.OrderBy(x => x));
+        foreach (var k in StepDisplay.StepKinds) Assert.Contains(k, flat);
+        // 分节表里不该出现目录里没有的类型（那种键拼错了，跑起来会静默不执行）。
+        foreach (var k in flat) Assert.Contains(k, StepDisplay.StepKinds);
     }
 
     [Fact]

@@ -5,8 +5,12 @@ using Clockwork.I18n;
 
 namespace Clockwork.Views;
 
-// 「新增 ▾」步骤菜单：按用户意图分节（打开 / 控制程序 / 系统与声音 / 流程），
-// 启动清单与动作组编辑器共用——分节结构在 StepDisplay.StepKindSections，只此一份。
+// 「新增 ▾」步骤菜单：按用户意图分节（照 Quicker 的模块分类，见 StepDisplay.StepKindSections），
+// 启动清单与手势管理器共用——分节结构在 StepDisplay.StepKindSections，只此一份。
+//
+// 这个下拉现在是**快捷路径而不是唯一入口**：动作组编辑器左侧有一只常驻的模块工具箱
+// （分类 + 搜索，能看到一整节里有哪些步骤）。启动清单与手势要的是「三秒加一步」，
+// 那里一只常驻工具箱是负担，所以这两处仍用下拉。两处共用同一份分节，不会各自排一版。
 //
 // **每一节是一个子菜单**，顶层只有意图词。这不是排版偏好，是量出来的（见 DevChecks.CheckStepMenuFits）：
 // 平铺时 15 个类型 + 5 个小节头 + 5 条分隔线是一堵 26 行、721px 高的墙，
@@ -20,16 +24,26 @@ public static class StepMenu
 {
     // pick：选中一项后的回调，收 (kind, seed)。seed 为 null 表示「从这个类型新建」——
     // 交给步骤编辑器按类型填默认值；非 null 是「常用」里预填好的那一份，编辑器直接拿它当初值。
-    // firstOpenItem：插在「打开」节最前面的额外项——启动清单把「从开始菜单选择…」放这儿，
+    // firstOpenItem：插在「常用」节最前面的额外项——启动清单把「从开始菜单选择…」放这儿，
     // 它语义上就是「打开」的一种，且是零配置那条路，理应排最前。
-    // presets：是否显示「常用」那一节。开机清单关掉它（见 StepDisplay.CommonPresets 的说明）。
-    public static ContextMenu Build(Action<string, LaunchStep?> pick, MenuItem? firstOpenItem = null, bool presets = true)
+    // presets：是否显示「常用预设」那一节。开机清单关掉它（见 StepDisplay.CommonPresets 的说明）。
+    // headerItems：整份菜单最前面那一组（「新建空白动作 / 从模板…」，见 Quicker 的动作添加菜单）。
+    //   它与「挑一个步骤类型」不是一回事——前两件造的是**动作**，后面造的是**步骤**，
+    //   混在一列里读的人得先想一遍自己要的是哪一个。传 null 就没有那一组。
+    public static ContextMenu Build(Action<string, LaunchStep?> pick, MenuItem? firstOpenItem = null,
+                                   bool presets = true, IEnumerable<MenuItem>? headerItems = null)
     {
         var menu = new ContextMenu();
-        // 「常用」排最前：它是预填好的成品，比「先挑一个类型再自己配」短得多。
+        if (headerItems != null)
+        {
+            foreach (var h in headerItems) menu.Items.Add(h);
+            // 分隔线：两组东西之间没有共同上级，不隔开的话读起来是同一列。
+            if (menu.Items.Count > 0) menu.Items.Add(new Separator());
+        }
+        // 「常用预设」排最前：它是预填好的成品，比「先挑一个类型再自己配」短得多。
         if (presets)
         {
-            var common = new MenuItem { Header = Strings.Get("Menu_SecCommon") };
+            var common = new MenuItem { Header = Strings.Get("Menu_SecPreset") };
             foreach (var item in PresetItems(pick)) common.Items.Add(item);
             menu.Items.Add(common);
         }
@@ -37,13 +51,30 @@ public static class StepMenu
         {
             var items = SectionItems(sectionKey, pick, firstOpenItem).ToList();
             // 只有一项的节直接摆在顶层，不套一层子菜单——为一项开一层，那个 ▸ 是在承诺
-            // 里面还有别的东西，而展开只有它自己。（「动作」节就是这一种。）
+            // 里面还有别的东西，而展开只有它自己。（「动作组」节就是这一种。）
             if (items.Count == 1) { menu.Items.Add(items[0]); continue; }
             var sec = new MenuItem { Header = Strings.Get(sectionKey) };
             foreach (var it in items) sec.Items.Add(it);
             menu.Items.Add(sec);
         }
         return menu;
+    }
+
+    /// <summary>给菜单项配上面板那枚图标。</summary>
+    // 与面板格子走同一张字形表（PanelGlyph），这样「这一项会做什么」与「它跑起来是什么图标」是同一个。
+    // **字体必须显式钉**：码位落在 Unicode 私用区，不钉就渲染成一个看不出所以然的空框（踩过）。
+    private static MenuItem WithGlyph(MenuItem mi, string kind)
+    {
+        mi.Icon = new System.Windows.Controls.TextBlock
+        {
+            Text = PanelGlyph.ForKind(kind),
+            FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
+            FontSize = 14,
+            HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+            Foreground = (System.Windows.Media.Brush?)System.Windows.Application.Current
+                ?.TryFindResource("BrushAccentText"),
+        };
+        return mi;
     }
 
     /// <summary>某一节里那一串菜单项，每次调用都是新的一份。</summary>
@@ -54,17 +85,20 @@ public static class StepMenu
     public static IEnumerable<MenuItem> SectionItems(string sectionKey, Action<string, LaunchStep?> pick,
                                                      MenuItem? firstOpenItem = null)
     {
-        // 「从开始菜单选择…」语义上就是「打开」的一种，跟着进那一节，排最前（零配置那条路）。
-        if (sectionKey == "Menu_SecOpen" && firstOpenItem != null) yield return firstOpenItem;
+        // 「从开始菜单选择…」语义上就是「打开」的一种，跟着「常用」那一节（这一节现在放的是
+        // 日常原子操作：打开网址 / 运行程序 / 发送文本），排最前（零配置那条路）。
+        if (sectionKey == "Menu_SecCommon" && firstOpenItem != null) yield return firstOpenItem;
         var section = StepDisplay.StepKindSections.FirstOrDefault(x => x.SectionKey == sectionKey);
         foreach (var kind in section.Kinds ?? Array.Empty<string>())
         {
             var k = kind;
             var mi = new MenuItem { Header = StepDisplay.StepKindLabel(k) };
             mi.Click += (_, _) => pick(k, null);
-            yield return mi;
+            yield return WithGlyph(mi, k);
         }
-        if (sectionKey == "Menu_SecOpen")
+        // 「常用文件夹」跟着「文件与路径」那一节：它们都是「打开一个本地位置」，
+        // 放在「网址映射」旁边才是一条路（同一个来源的东西该在一张表里）。
+        if (sectionKey == "Menu_SecFile")
         {
             bool isZh = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
             var foldersMenu = new MenuItem { Header = Strings.Get("Var_SecFolders") };
@@ -73,7 +107,7 @@ public static class StepMenu
                 var f = folder;
                 var item = new MenuItem { Header = f.Name, InputGestureText = f.Expression, ToolTip = f.Resolved };
                 item.Click += (_, _) => pick("path", new LaunchStep { Kind = "path", Target = f.Expression, Label = f.Name });
-                foldersMenu.Items.Add(item);
+                foldersMenu.Items.Add(WithGlyph(item, "path"));
             }
             yield return foldersMenu;
         }
@@ -88,7 +122,7 @@ public static class StepMenu
             var (k, a) = (kind, arg);
             var item = new MenuItem { Header = Strings.Get(labelKey) };
             item.Click += (_, _) => pick(k, StepDisplay.MakePreset(k, a));
-            yield return item;
+            yield return WithGlyph(item, k);
         }
     }
 }

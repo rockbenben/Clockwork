@@ -8,11 +8,13 @@ using Xunit;
 public class PathStepTests
 {
     [Fact]
-    public void It_is_in_the_catalogue_and_the_open_section()
+    public void It_is_in_the_catalogue_and_the_file_section()
     {
         Assert.Contains("path", StepDisplay.StepKinds);
+        // 按对象分节（照 Quicker 的「文件操作相关模块」）：它产出的是一个本地路径，
+        // 与「网址 → 本地文件」那个映射步骤同属一节，而不再与「打开网址」并排。
         Assert.Contains(StepDisplay.StepKindSections,
-            sec => sec.SectionKey == "Menu_SecOpen" && sec.Kinds.Contains("path"));
+            sec => sec.SectionKey == "Menu_SecFile" && sec.Kinds.Contains("path"));
     }
 
     // 路径原样写进摘要：D:\Work 与 E:\Work 的区别全在前缀上，像 app 那样只取叶子名就分不开了。

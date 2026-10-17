@@ -64,21 +64,25 @@ public class GroupReferenceTests
         Assert.Equal("我自己起的名字", app.Label);
     }
 
-    // 「动作组」必须自成一节且排在最前：它原来埋在「流程」第三项，想找的人翻不到。
+    // 「动作组」必须自成一节：它原来埋在「流程」第三项，想找的人翻不到。
+    // **不再钉「排在最前」**：分节改成照 Quicker 的模块分类排之后，最前面那一格是「常用」
+    // （打开网址 / 运行程序 / 发送文本那一批日常原子操作）。「动作组」是复用而不是日常动作，
+    // 排到末位反而更符合它在那张表里的位置——而它只有一节，工具箱与菜单里都一眼找得到。
     [Fact]
-    public void Group_kind_is_its_own_first_menu_section()
+    public void Group_kind_is_its_own_section_and_appears_nowhere_else()
     {
-        var first = StepDisplay.StepKindSections[0];
-        Assert.Equal("Tab_Group", first.SectionKey);
-        Assert.Equal(new[] { "group" }, first.Kinds);
-        Assert.DoesNotContain("group", StepDisplay.StepKindSections.Skip(1).SelectMany(s => s.Kinds));
+        var withGroup = StepDisplay.StepKindSections.Where(s => s.Kinds.Contains("group")).ToList();
+        Assert.Single(withGroup);
+        Assert.Equal("Tab_Group", withGroup[0].SectionKey);
+        // 只归一节，且那一节里只有它（别把别的东西塞进「动作组」里）
+        Assert.Equal(new[] { "group" }, withGroup[0].Kinds);
     }
 
-    // 十种类型一个不少——分节重排最容易把某一种漏在外面，那种漏法界面上只表现为「菜单里少一项」。
+    // 每种类型都还得从菜单/工具箱里够得着：分节是索引，「至少出现一次」是底线。
     [Fact]
     public void Every_kind_is_still_reachable_from_the_menu()
     {
-        var inMenu = StepDisplay.StepKindSections.SelectMany(s => s.Kinds).OrderBy(x => x);
-        Assert.Equal(StepDisplay.StepKinds.OrderBy(x => x), inMenu);
+        var inMenu = StepDisplay.StepKindSections.SelectMany(s => s.Kinds).Distinct();
+        Assert.Equal(StepDisplay.StepKinds.OrderBy(x => x), inMenu.OrderBy(x => x));
     }
 }
