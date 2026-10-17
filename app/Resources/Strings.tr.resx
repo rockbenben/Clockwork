@@ -1747,9 +1747,6 @@ Günlük: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Sistem ve ses</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Akış</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Açılışta uygulamaları sırayla ve gecikmeyle açmak Başlangıç listesinde daha kolaydır; «açılıştan sonraki N dakika içinde» veya «yalnızca sabah» gibi koşullar ise tam buraya göredir.</value>
   </data>
@@ -2157,7 +2154,7 @@ Günlük: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Bu listeyi gez</data>
   <data name="Ed_EachItem" xml:space="preserve">Geçerli öğe değişkeni</data>
   <data name="Ed_EachIndex" xml:space="preserve">Sıra değişkeni</data>
-  <data name="Ed_EachHint" xml:space="preserve">Liste adı, önceki bir adımın ＂değişkene çıkar＂ çıktısından gelir (yalnızca ＂Satırlara böl＂ bir liste üretir). İki adı da boş bırakırsanız item ve index olur. Aşağıda girintili adımlar döngünün gövdesidir.</data>
+  <data name="Ed_EachHint" xml:space="preserve">सूची का नाम पिछले चरण के 'चर में आउटपुट' से आता है ('सूची' और 'पंक्तियों में बाँटें' दोनों सूची बनाते हैं)। दोनों नाम खाली छोड़ें तो वे item और index होंगे। नीचे इंडेंट किए कदम ही लूप का मुख्य भाग हैं।</data>
   <data name="Val_SkipBlock" xml:space="preserve">Bloğun kalanını atla</data>
   <data name="Val_SkipRun" xml:space="preserve">Tüm eylemi durdur</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ içinde {1} adım var. Onlar da silinsin mi?</data>
@@ -2181,4 +2178,6 @@ Günlük: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">satırlar</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tuş</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Yerel kaynak dosyasını aç</data>
+  <data name="Menu_SecValue" xml:space="preserve">Değer al</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Akış denetimi</data>
 </root>

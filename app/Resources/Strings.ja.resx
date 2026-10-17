@@ -1747,9 +1747,6 @@
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>システムとサウンド</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>フロー</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>ログイン時に順序や遅延つきでアプリを開くなら起動リストのほうが向いています。「起動後 N 分以内のみ」「午前のみ」のような条件付きなら、ここが適切です。</value>
   </data>
@@ -2157,7 +2154,7 @@
   <data name="Ed_EachList" xml:space="preserve">このリストを回す</data>
   <data name="Ed_EachItem" xml:space="preserve">現在の項目の変数名</data>
   <data name="Ed_EachIndex" xml:space="preserve">連番の変数名</data>
-  <data name="Ed_EachHint" xml:space="preserve">リスト名は前のステップの＂変数へ出力＂から来ます（リストを作るのは＂行に分割＂だけ）。2つの変数名を空にすれば item と index になります。下にインデントして並ぶステップがループ本体です。</data>
+  <data name="Ed_EachHint" xml:space="preserve">リスト名は前の手順の「変数へ出力」から来ます（リストと「行に分割」のどちらもリストを作ります）。2つの変数名を空にすると item と index になります。下にインデントして並ぶステップがループ本体です。</data>
   <data name="Val_SkipBlock" xml:space="preserve">このブロックの残りをスキップ</data>
   <data name="Val_SkipRun" xml:space="preserve">アクション全体を中止</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂の中に {1} ステップあります。まとめて削除しますか？</data>
@@ -2181,4 +2178,6 @@
   <data name="Tpl_LinesVar" xml:space="preserve">行</data>
   <data name="Tpl_KeyVar" xml:space="preserve">キー</data>
   <data name="Tpl_SiteSource" xml:space="preserve">ローカルのソースファイルを開く</data>
+  <data name="Menu_SecValue" xml:space="preserve">値を取る</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">実行の流れ</data>
 </root>

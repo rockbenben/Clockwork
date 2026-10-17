@@ -1747,9 +1747,6 @@ Log: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>System &amp; sound</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Flow</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Opening apps at login with ordering and delays is easier on the Startup List; gates like “only within N minutes of boot” or “mornings only” are exactly what this place is for.</value>
   </data>
@@ -2157,7 +2154,7 @@ Log: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Loop over this list</data>
   <data name="Ed_EachItem" xml:space="preserve">Current item variable</data>
   <data name="Ed_EachIndex" xml:space="preserve">Index variable</data>
-  <data name="Ed_EachHint" xml:space="preserve">The list name comes from an earlier step’s ＂output to variable＂ (only ＂Split into lines＂ produces a list). Leave both variable names empty and they are item and index. The indented steps below are the loop body.</data>
+  <data name="Ed_EachHint" xml:space="preserve">The list name comes from an earlier step’s output variable (both List and Split into lines produce one). Leave both variable names empty and they are item and index. The indented steps below are the loop body.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Skip rest of block</data>
   <data name="Val_SkipRun" xml:space="preserve">Stop the whole action</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ contains {1} steps. Delete them too?</data>
@@ -2181,4 +2178,6 @@ Log: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">lines</data>
   <data name="Tpl_KeyVar" xml:space="preserve">key</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Open the local source file</data>
+  <data name="Menu_SecValue" xml:space="preserve">Values</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Flow control</data>
 </root>

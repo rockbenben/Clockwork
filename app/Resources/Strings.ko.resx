@@ -1747,9 +1747,6 @@
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>시스템·소리</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>흐름</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>순서·지연을 두고 로그인 때 앱을 열려면 시작 목록이 더 편합니다. “부팅 후 N분 이내만” “오전만” 같은 조건이 필요하면 여기가 맞습니다.</value>
   </data>
@@ -2157,7 +2154,7 @@
   <data name="Ed_EachList" xml:space="preserve">이 목록을 순회</data>
   <data name="Ed_EachItem" xml:space="preserve">현재 항목 변수명</data>
   <data name="Ed_EachIndex" xml:space="preserve">순번 변수명</data>
-  <data name="Ed_EachHint" xml:space="preserve">목록 이름은 앞 단계의 ‘변수로 출력’에서 옵니다(목록을 만드는 것은 ‘줄로 나누기’뿐입니다). 두 변수명을 비우면 각각 item과 index가 됩니다. 아래에 들여쓰기된 단계들이 반복문 본문입니다.</data>
+  <data name="Ed_EachHint" xml:space="preserve">목록 이름은 앞 단계의 ‘변수로 출력’에서 옵니다(목록과 ‘줄로 나누기’ 모두 목록을 만듭니다). 두 변수명을 비우면 각각 item과 index가 됩니다. 아래에 들여쓰기된 단계들이 반복문 본문입니다.</data>
   <data name="Val_SkipBlock" xml:space="preserve">이 블록의 나머지 건너뛰기</data>
   <data name="Val_SkipRun" xml:space="preserve">전체 작업 중단</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ 안에 {1}단계가 있습니다. 함께 삭제할까요?</data>
@@ -2181,4 +2178,6 @@
   <data name="Tpl_LinesVar" xml:space="preserve">줄</data>
   <data name="Tpl_KeyVar" xml:space="preserve">키</data>
   <data name="Tpl_SiteSource" xml:space="preserve">로컬 원본 파일 열기</data>
+  <data name="Menu_SecValue" xml:space="preserve">값 얻기</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">실행 흐름</data>
 </root>

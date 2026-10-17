@@ -1747,9 +1747,6 @@
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>النظام والصوت</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>التسلسل</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>فتح التطبيقات عند تسجيل الدخول بترتيب وتأخير أسهل في قائمة البدء؛ أما شروط مثل «فقط خلال N دقيقة من الإقلاع» أو «صباحًا فقط» فهي بالضبط لما هنا.</value>
   </data>
@@ -2157,7 +2154,7 @@
   <data name="Ed_EachList" xml:space="preserve">مرّر على هذه القائمة</data>
   <data name="Ed_EachItem" xml:space="preserve">متغير العنصر الحالي</data>
   <data name="Ed_EachIndex" xml:space="preserve">متغير الفهرس</data>
-  <data name="Ed_EachHint" xml:space="preserve">اسم القائمة يأتي من ＂إخراج إلى متغير＂ في خطوة سابقة (خطوة ＂تقسيم إلى أسطر＂ وحدها تنتج قائمة). اترك الاسمين فارغين فيكونان item و index. والخطوات ذات المسافة البادئة أدناه هي جسم الحلقة.</data>
+  <data name="Ed_EachHint" xml:space="preserve">اسم القائمة يأتي من إخراج متغيّر في خطوة سابقة (كلا «قائمة» و«تقسيم إلى أسطر» ينتج قائمة). اترك الاسمين فارغين فيكونان item و index. والخطوات ذات المسافة البادئة أدناه هي جسم الحلقة.</data>
   <data name="Val_SkipBlock" xml:space="preserve">تخطّي بقية الكتلة</data>
   <data name="Val_SkipRun" xml:space="preserve">إيقاف الإجراء بالكامل</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">يحتوي ＂{0}＂ على {1} خطوة. هل تحذفها أيضًا؟</data>
@@ -2181,4 +2178,6 @@
   <data name="Tpl_LinesVar" xml:space="preserve">أسطر</data>
   <data name="Tpl_KeyVar" xml:space="preserve">مفتاح</data>
   <data name="Tpl_SiteSource" xml:space="preserve">فتح ملف المصدر المحلي</data>
+  <data name="Menu_SecValue" xml:space="preserve">الحصول على القيم</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">التحكم في التدفق</data>
 </root>

@@ -344,12 +344,16 @@ public partial class StepEditorWindow : Window
         Vis(PanMath, kind == "math");
         Vis(PanSkip, kind == "skip");
         Vis(PanEach, kind == "each");
-        // 「输出到变量」跟着**会产出值的类型**走，不跟着单个面板走——三种类型共用这一行。
-        // 列出全部七种：browserUrl / siteMap / urlDecode / regex / replace 与原有的两种问句、
-        // 取选中的文字。这行漏一个，那一步就产不出值，而界面上没有任何地方提示过它本该产出。
+        // 「输出到变量」跟着**会产出值的类型**走，不跟着单个面板走——多类共用这一行。
+        // 漏一个，那一步就产不出值，而界面上没有任何地方提示过它本该产出：
+        // 用户填完了、看着像配好了，跑起来却什么都没发生。
+        //
+        // **「列表」与「合」必须在这里。** 漏掉它们的症状最难自查——面板画得好好地，
+        // 用户把多行填进去、把分隔符也填了，没有任何地方提示「你没地方存这个值」，
+        // 而下一步的「每个」只会报「这个名字不是列表」。截图才看得见那一行不见了。
         Vis(PanOutputVar, kind is "prompt" or "choice" or "copySelection"
                            or "browserUrl" or "siteMap" or "urlDecode" or "regex" or "replace"
-                           or "waitKey" or "splitLines" or "math");
+                           or "waitKey" or "splitLines" or "math" or "list" or "join");
         // 说明里带上当前的变量名，好让「下一步怎么引用它」有个照着抄的样子：
         // 只写「用 {名字} 引用」的话，用户还得自己把名字代进去一次，而那一步正是最容易写错的。
         OutputVarHint.Text = Strings.Lf("Ed_OutputVarHint",

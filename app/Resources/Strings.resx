@@ -1747,9 +1747,6 @@
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>系统与声音</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>流程</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>开机开软件、要顺序和延迟 → 「我的启动清单」更顺手；要「仅开机 N 分钟内」「仅上午」这类门控 → 留在这里是对的。</value>
   </data>
@@ -2157,7 +2154,7 @@
   <data name="Ed_EachList" xml:space="preserve">遍历这个列表</data>
   <data name="Ed_EachItem" xml:space="preserve">当前项变量名</data>
   <data name="Ed_EachIndex" xml:space="preserve">序号变量名</data>
-  <data name="Ed_EachHint" xml:space="preserve">列表名来自上一步的「输出到变量」（只有「拆分为多行」会产出列表）。两个变量名留空则分别是 item 与 index。下面缩进的那几步就是循环体。</data>
+  <data name="Ed_EachHint" xml:space="preserve">列表名来自上一步的「输出到变量」（「列表」与「拆分为多行」都会产出列表）。两个变量名留空则分别是 item 与 index。下面缩进的那几步就是循环体。</data>
   <data name="Val_SkipBlock" xml:space="preserve">跳出本块剩余步骤</data>
   <data name="Val_SkipRun" xml:space="preserve">中止整个动作</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">「{0}」里有 {1} 步。一并删掉吗？</data>
@@ -2181,4 +2178,6 @@
   <data name="Tpl_LinesVar" xml:space="preserve">行</data>
   <data name="Tpl_KeyVar" xml:space="preserve">按键</data>
   <data name="Tpl_SiteSource" xml:space="preserve">打开本地源文件</data>
+  <data name="Menu_SecValue" xml:space="preserve">取值</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">流程控制</data>
 </root>

@@ -1747,9 +1747,6 @@ Protokoll: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>System &amp; Ton</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Ablauf</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Apps bei der Anmeldung mit Reihenfolge und Verzögerung öffnet die Startliste bequemer; Bedingungen wie „nur innerhalb N Minuten nach dem Start“ oder „nur vormittags“ gehören genau hierher.</value>
   </data>
@@ -2157,7 +2154,7 @@ Protokoll: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Diese Liste durchlaufen</data>
   <data name="Ed_EachItem" xml:space="preserve">Variable des aktuellen Elements</data>
   <data name="Ed_EachIndex" xml:space="preserve">Variable für den Index</data>
-  <data name="Ed_EachHint" xml:space="preserve">Der Listenname stammt aus einer früheren ＂Ausgabe in Variable＂ (nur ＂In Zeilen aufteilen＂ erzeugt eine Liste). Bleiben beide Variablennamen leer, heißen sie item und index. Die eingerückten Schritte darunter sind der Schleifenkörper.</data>
+  <data name="Ed_EachHint" xml:space="preserve">Der Listenname stammt aus einer früheren „Ausgabe in Variable“ (sowohl Liste als auch In Zeilen aufteilen erzeugen eine). Bleiben beide Variablennamen leer, heißen sie item und index. Die eingerückten Schritte darunter sind der Schleifenkörper.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Rest des Blocks überspringen</data>
   <data name="Val_SkipRun" xml:space="preserve">Gesamte Aktion abbrechen</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ enthält {1} Schritte. Diese ebenfalls löschen?</data>
@@ -2181,4 +2178,6 @@ Protokoll: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">Zeilen</data>
   <data name="Tpl_KeyVar" xml:space="preserve">Taste</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Lokale Quelldatei öffnen</data>
+  <data name="Menu_SecValue" xml:space="preserve">Werte holen</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Ablaufsteuerung</data>
 </root>

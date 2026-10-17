@@ -1747,9 +1747,6 @@ Registro: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Sistema e audio</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Flusso</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Per aprire app all'accesso con ordine e ritardi è più comodo l'Elenco di avvio; condizioni come «solo entro N minuti dall'avvio» o «solo al mattino» sono esattamente per questo posto.</value>
   </data>
@@ -2157,7 +2154,7 @@ Registro: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Scorri questo elenco</data>
   <data name="Ed_EachItem" xml:space="preserve">Variabile dell’elemento corrente</data>
   <data name="Ed_EachIndex" xml:space="preserve">Variabile dell’indice</data>
-  <data name="Ed_EachHint" xml:space="preserve">Il nome dell’elenco viene da una ＂uscita in variabile＂ di un passo precedente (solo ＂Dividi in righe＂ produce un elenco). Lascia vuoti entrambi i nomi: saranno item e index. I passi rientrati sotto sono il corpo del ciclo.</data>
+  <data name="Ed_EachHint" xml:space="preserve">Il nome dell’elenco viene da una precedente «uscita in variabile» (sia Elenco sia Dividi in righe ne producono una). Lascia vuoti entrambi i nomi: saranno item e index. I passi rientrati sotto sono il corpo del ciclo.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Salta il resto del blocco</data>
   <data name="Val_SkipRun" xml:space="preserve">Interrompi tutta l’azione</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ contiene {1} passaggi. Eliminarli anche?</data>
@@ -2181,4 +2178,6 @@ Registro: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">righe</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tasto</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Apri il file sorgente locale</data>
+  <data name="Menu_SecValue" xml:space="preserve">Ottieni valori</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Controllo di flusso</data>
 </root>

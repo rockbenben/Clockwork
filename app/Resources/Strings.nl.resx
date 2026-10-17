@@ -1747,9 +1747,6 @@ Log: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Systeem en geluid</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Verloop</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Apps openen bij aanmelden met volgorde en vertraging gaat makkelijker via de Opstartlijst; voorwaarden als “alleen binnen N minuten na opstarten” of “alleen 's ochtends” horen juist hier.</value>
   </data>
@@ -2157,7 +2154,7 @@ Log: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Deze lijst doorlopen</data>
   <data name="Ed_EachItem" xml:space="preserve">Variabele voor het huidige item</data>
   <data name="Ed_EachIndex" xml:space="preserve">Variabele voor de index</data>
-  <data name="Ed_EachHint" xml:space="preserve">De lijstnaam komt van een eerdere stap met ＂naar variabele＂ (alleen ＂Opsplitsen in regels＂ maakt een lijst). Laat beide namen leeg, dan zijn het item en index. De ingesprongen stappen hieronder zijn de lusinhoud.</data>
+  <data name="Ed_EachHint" xml:space="preserve">De lijstnaam komt van de uitvoer naar een variabele bij een eerdere stap (zowel Lijst als Opsplitsen in regels maakt er één). Laat beide namen leeg, dan zijn het item en index. De ingesprongen stappen hieronder zijn de lusinhoud.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Rest van blok overslaan</data>
   <data name="Val_SkipRun" xml:space="preserve">Hele actie stoppen</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ bevat {1} stappen. Die ook verwijderen?</data>
@@ -2181,4 +2178,6 @@ Log: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">regels</data>
   <data name="Tpl_KeyVar" xml:space="preserve">toets</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Open het lokale bronbestand</data>
+  <data name="Menu_SecValue" xml:space="preserve">Waarden ophalen</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Stroomregeling</data>
 </root>

@@ -1747,9 +1747,6 @@ Journal : {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Système et son</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Déroulement</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Pour ouvrir des applis à la connexion avec ordre et délais, la Liste de démarrage est plus pratique ; des conditions comme « seulement N minutes après le démarrage » ou « le matin seulement » sont exactement ce qui se règle ici.</value>
   </data>
@@ -2157,7 +2154,7 @@ Journal : {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Parcourir cette liste</data>
   <data name="Ed_EachItem" xml:space="preserve">Variable de l’élément courant</data>
   <data name="Ed_EachIndex" xml:space="preserve">Variable d’index</data>
-  <data name="Ed_EachHint" xml:space="preserve">Le nom de la liste vient d’une ＂ sortie vers variable ＂ d’une étape antérieure (seul ＂ Découper en lignes ＂ produit une liste). Laissez les deux noms vides et ils vaudront item et index. Les étapes indentées ci-dessous forment le corps de la boucle.</data>
+  <data name="Ed_EachHint" xml:space="preserve">Le nom de la liste vient de la sortie vers variable d’une étape antérieure (Liste comme Découper en lignes en produisent une). Laissez les deux noms vides et ils vaudront item et index. Les étapes indentées ci-dessous forment le corps de la boucle.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Passer le reste du bloc</data>
   <data name="Val_SkipRun" xml:space="preserve">Arrêter toute l’action</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂ {0} ＂ contient {1} étapes. Les supprimer aussi ?</data>
@@ -2181,4 +2178,6 @@ Journal : {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">lignes</data>
   <data name="Tpl_KeyVar" xml:space="preserve">touche</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Ouvrir le fichier source local</data>
+  <data name="Menu_SecValue" xml:space="preserve">Obtenir des valeurs</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Contrôle de flux</data>
 </root>

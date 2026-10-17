@@ -1747,9 +1747,6 @@
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>सिस्टम और ध्वनि</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>प्रवाह</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>लॉगिन पर क्रम और देरी के साथ ऐप खोलना स्टार्टअप सूची में आसान है; «बूट के N मिनट के भीतर ही» या «सिर्फ़ सुबह» जैसी शर्तें ठीक यहीं के लिए हैं।</value>
   </data>
@@ -2157,7 +2154,7 @@
   <data name="Ed_EachList" xml:space="preserve">इस सूची को देखें</data>
   <data name="Ed_EachItem" xml:space="preserve">वर्तमान आइटम का चर</data>
   <data name="Ed_EachIndex" xml:space="preserve">क्रमांक चर</data>
-  <data name="Ed_EachHint" xml:space="preserve">सूची का नाम पिछले चरण के ＂चर में आउटपुट＂ से आता है (केवल ＂पंक्तियों में बाँटें＂ सूची बनाता है)। दोनों नाम खाली छोड़ें तो वे item और index होंगे। नीचे इंडेंट किए कदम ही लूप का मुख्य भाग हैं।</data>
+  <data name="Ed_EachHint" xml:space="preserve">सूची का नाम पिछले चरण के ‘चर में आउटपुट’ से आता है (‘सूची’ और ‘पंक्तियों में बाँटें’ दोनों सूची बनाते हैं)। दोनों नाम खाली छोड़ें तो वे item और index होंगे। नीचे इंडेंट किए कदम ही लूप का मुख्य भाग हैं।</data>
   <data name="Val_SkipBlock" xml:space="preserve">ब्लॉक का बाकी छोड़ें</data>
   <data name="Val_SkipRun" xml:space="preserve">पूरी क्रिया रोकें</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ में {1} चरण हैं। उन्हें भी हटाएँ?</data>
@@ -2181,4 +2178,6 @@
   <data name="Tpl_LinesVar" xml:space="preserve">पंक्तियाँ</data>
   <data name="Tpl_KeyVar" xml:space="preserve">कुंजी</data>
   <data name="Tpl_SiteSource" xml:space="preserve">स्थानीय स्रोत फ़ाइल खोलें</data>
+  <data name="Menu_SecValue" xml:space="preserve">मान लेना</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">प्रवाह नियंत्रण</data>
 </root>

@@ -1747,9 +1747,6 @@ Registro: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Sistema y sonido</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Flujo</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Para abrir apps al iniciar sesión con orden y retardos, la Lista de inicio es más cómoda; condiciones como «solo en los N minutos tras arrancar» o «solo por la mañana» son exactamente para esto.</value>
   </data>
@@ -2157,7 +2154,7 @@ Registro: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Recorrer esta lista</data>
   <data name="Ed_EachItem" xml:space="preserve">Variable del elemento actual</data>
   <data name="Ed_EachIndex" xml:space="preserve">Variable del índice</data>
-  <data name="Ed_EachHint" xml:space="preserve">El nombre de la lista viene de una ＂salida a variable＂ de un paso anterior (solo ＂Dividir en líneas＂ produce una lista). Deja vacíos ambos nombres y serán item e index. Los pasos con sangría de abajo son el cuerpo del bucle.</data>
+  <data name="Ed_EachHint" xml:space="preserve">El nombre de la lista viene de la salida a variable de un paso anterior (tanto Lista como Dividir en líneas producen una). Deja vacíos ambos nombres y serán item e index. Los pasos con sangría de abajo son el cuerpo del bucle.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Omitir el resto del bloque</data>
   <data name="Val_SkipRun" xml:space="preserve">Detener toda la acción</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ contiene {1} pasos. ¿Borrarlos también?</data>
@@ -2181,4 +2178,6 @@ Registro: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">líneas</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tecla</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Abrir el archivo fuente local</data>
+  <data name="Menu_SecValue" xml:space="preserve">Obtener valores</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Control de flujo</data>
 </root>

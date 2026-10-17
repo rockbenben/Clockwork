@@ -1747,9 +1747,6 @@
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>ระบบและเสียง</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>โฟลว์</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>ถ้าจะเปิดแอปตอนเข้าระบบพร้อมลำดับและหน่วงเวลา รายการเริ่มต้นสะดวกกว่า แต่เงื่อนไขอย่าง «เฉพาะภายใน N นาทีหลังเปิดเครื่อง» หรือ «เฉพาะตอนเช้า» คือหน้าที่ของตรงนี้</value>
   </data>
@@ -2157,7 +2154,7 @@
   <data name="Ed_EachList" xml:space="preserve">วนผ่านรายการนี้</data>
   <data name="Ed_EachItem" xml:space="preserve">ตัวแปรของรายการปัจจุบัน</data>
   <data name="Ed_EachIndex" xml:space="preserve">ตัวแปรลำดับ</data>
-  <data name="Ed_EachHint" xml:space="preserve">ชื่อรายการมาจาก ＂ส่งออกไปยังตัวแปร＂ ของขั้นก่อนหน้า (มีเพียง ＂แยกเป็นบรรทัด＂ เท่านั้นที่สร้างรายการได้) เว้นว่างทั้งสองชื่อไว้ ก็จะเป็น item และ index ขั้นตอนที่เยื้องด้านล่างคือเนื้อหาของลูป</data>
+  <data name="Ed_EachHint" xml:space="preserve">ชื่อรายการมาจากผลลัพธ์ไปยังตัวแปรของขั้นก่อนหน้า (ทั้ง «รายการ» และ «แยกเป็นบรรทัด» สร้างรายการได้ทั้งคู่) เว้นว่างทั้งสองชื่อไว้ ก็จะเป็น item และ index ขั้นตอนที่เยื้องด้านล่างคือเนื้อหาของลูป</data>
   <data name="Val_SkipBlock" xml:space="preserve">ข้ามส่วนที่เหลือของบล็อก</data>
   <data name="Val_SkipRun" xml:space="preserve">หยุดการทำงานทั้งหมด</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ มี {1} ขั้นตอน ลบด้วยเลยไหม</data>
@@ -2181,4 +2178,6 @@
   <data name="Tpl_LinesVar" xml:space="preserve">บรรทัด</data>
   <data name="Tpl_KeyVar" xml:space="preserve">ปุ่ม</data>
   <data name="Tpl_SiteSource" xml:space="preserve">เปิดไฟล์ต้นฉบับในเครื่อง</data>
+  <data name="Menu_SecValue" xml:space="preserve">รับค่า</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">ควบคุมการทำงาน</data>
 </root>

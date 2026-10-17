@@ -474,6 +474,28 @@ public partial class App
                 new LaunchStep { Kind = "url", Target = "https://www.bing.com/search?q={clipboard}" }, groups)),
             ("StepEditorCopySelection", () => new StepEditorWindow(new LaunchStep { Kind = "copySelection" }, groups)),
             ("StepEditorWaitClipboard", () => new StepEditorWindow(new LaunchStep { Kind = "waitClipboard", Level = 5 }, groups)),
+            // 「交互式流程」那批新面板。这几个的面板此前**一次都没被渲染过**，而这一档最容易出问题：
+            // 面板本身就是它那一节的全部版面（没有「主行 + 副行」的层次可借），塌了只会表现为
+            // 编辑器里一小块空白或一行挤在一起的字，而那只有看图才知道——Build 绿、smoke 绿都盖不住，
+            // 因为 smoke 构造的是空步骤（Kind=""），那种情况下任何面板都不画。
+            ("StepEditorList", () => new StepEditorWindow(
+                new LaunchStep { Kind = "list", Message = LongestOf("Ed_"), OutputVar = "行" }, groups)),
+            ("StepEditorJoin", () => new StepEditorWindow(
+                new LaunchStep { Kind = "join", Text = "结果", Separator = ",", OutputVar = "串" }, groups)),
+            // 「每个」是这个编辑器里最高的一档：三个输入框 + 一段说明 + 底下的「输出到变量」行。
+            // 最高的一档恰恰最该拍——它塌了的时候界面看着还不像坏了，只是矮了一截。
+            ("StepEditorEach", () => new StepEditorWindow(
+                new LaunchStep { Kind = "each", Text = "行" }, groups)),
+            ("StepEditorSiteMap", () => new StepEditorWindow(
+                new LaunchStep { Kind = "siteMap", Target = "https://newzone.top/blog.html", Action = "reveal" }, groups)),
+            ("StepEditorWaitKey", () => new StepEditorWindow(
+                new LaunchStep { Kind = "waitKey", Text = "Insert,Escape", Level = 0, OutputVar = "按键" }, groups)),
+            ("StepEditorSkip", () => new StepEditorWindow(
+                new LaunchStep { Kind = "skip", Action = "block" }, groups)),
+            ("StepEditorMath", () => new StepEditorWindow(
+                new LaunchStep { Kind = "math", Text = "{index}+1", OutputVar = "n" }, groups)),
+            ("StepEditorRegex", () => new StepEditorWindow(
+                new LaunchStep { Kind = "regex", Text = "{关键词}", Pattern = "^(\\w+)", OutputVar = "词" }, groups)),
             // 两个问句类型：一个是「提示语 + 默认值」两行，一个是「提示语 + 多行选项 + 说明」三段，
             // 而两者下面都还挂着共用的「输出到变量」那一行。三段拼起来是这个编辑器里最高的一档面板。
             ("StepEditorPrompt", () => new StepEditorWindow(
@@ -870,10 +892,12 @@ public partial class App
     }
 
     // 十四条页签、同一叠：撑高面板的那种配置。
+    // 分节名取自 StepKindSections 里真实在用的那几个（Menu_SecFlow 已随分节重构删掉，
+    // 这里跟着换成了 Menu_SecCtrl —— 留着一条没人引用的文案键，早晚会有人照着它去改错地方）。
     private static IReadOnlyList<PanelTilePage> LongRailPages()
     {
         string[] keys = { "Tab_Launch", "Tab_Group", "Tab_Reminder", "Tab_Settings", "Tab_System", "Tab_Ports",
-                          "Menu_SecOpen", "Menu_SecControl", "Menu_SecSystem", "Menu_SecFlow",
+                          "Menu_SecOpen", "Menu_SecControl", "Menu_SecSystem", "Menu_SecCtrl",
                           "Panel_Global", "Panel_Uncategorized", "Kind_app", "Kind_keys" };
         return keys.Select(k => new PanelTilePage(
             Strings.Get(k),

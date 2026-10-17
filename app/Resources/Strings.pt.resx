@@ -1747,9 +1747,6 @@ Registro: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Sistema e som</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Fluxo</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Abrir apps no login com ordem e atrasos é mais fácil na Lista de inicialização; condições como «só nos N minutos após arrancar» ou «só de manhã» — é exatamente para isso que este local serve.</value>
   </data>
@@ -2157,7 +2154,7 @@ Registro: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Percorrer esta lista</data>
   <data name="Ed_EachItem" xml:space="preserve">Variável do item atual</data>
   <data name="Ed_EachIndex" xml:space="preserve">Variável do índice</data>
-  <data name="Ed_EachHint" xml:space="preserve">O nome da lista vem de uma ＂saída em variável＂ de um passo anterior (só ＂Dividir em linhas＂ produz uma lista). Deixe os dois nomes vazios e eles serão item e index. Os passos recuados abaixo são o corpo do laço.</data>
+  <data name="Ed_EachHint" xml:space="preserve">O nome da lista vem da saída em variável de um passo anterior (tanto Lista quanto Dividir em linhas produzem uma). Deixe os dois nomes vazios e eles serão item e index. Os passos recuados abaixo são o corpo do laço.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Pular o resto do bloco</data>
   <data name="Val_SkipRun" xml:space="preserve">Parar toda a ação</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ contém {1} passos. Apagá-los também?</data>
@@ -2181,4 +2178,6 @@ Registro: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">linhas</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tecla</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Abrir o arquivo-fonte local</data>
+  <data name="Menu_SecValue" xml:space="preserve">Obter valores</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Controle de fluxo</data>
 </root>

@@ -1747,9 +1747,6 @@ Nhật ký: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Hệ thống &amp; âm thanh</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Luồng</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Mở ứng dụng lúc đăng nhập với thứ tự và độ trễ thì Danh sách khởi động tiện hơn; còn điều kiện như “chỉ trong N phút sau khi khởi động”, “chỉ buổi sáng” thì đúng là chỗ này.</value>
   </data>
@@ -2157,7 +2154,7 @@ Nhật ký: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Duyệt danh sách này</data>
   <data name="Ed_EachItem" xml:space="preserve">Biến phần tử hiện tại</data>
   <data name="Ed_EachIndex" xml:space="preserve">Biến chỉ số</data>
-  <data name="Ed_EachHint" xml:space="preserve">Tên danh sách đến từ ＂xuất ra biến＂ của một bước trước (chỉ ＂Tách thành các dòng＂ tạo ra danh sách). Để trống cả hai tên thì chúng là item và index. Các bước thụt vào bên dưới chính là thân vòng lặp.</data>
+  <data name="Ed_EachHint" xml:space="preserve">Tên danh sách đến từ kết quả xuất ra biến của một bước trước (cả Danh sách lẫn Tách thành các dòng đều tạo ra danh sách). Để trống cả hai tên thì chúng là item và index. Các bước thụt vào bên dưới chính là thân vòng lặp.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Bỏ qua phần còn lại của khối</data>
   <data name="Val_SkipRun" xml:space="preserve">Dừng toàn bộ hành động</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ chứa {1} bước. Xóa luôn chúng?</data>
@@ -2181,4 +2178,6 @@ Nhật ký: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">dòng</data>
   <data name="Tpl_KeyVar" xml:space="preserve">phím</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Mở tệp nguồn cục bộ</data>
+  <data name="Menu_SecValue" xml:space="preserve">Lấy giá trị</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Điều khiển luồng</data>
 </root>

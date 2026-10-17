@@ -1747,9 +1747,6 @@
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Система и звук</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Поток</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Открывать программы при входе с порядком и задержками удобнее в Списке запуска; условия вроде «только в первые N минут после загрузки» или «только утром» — как раз для этого места.</value>
   </data>
@@ -2157,7 +2154,7 @@
   <data name="Ed_EachList" xml:space="preserve">Пройти по этому списку</data>
   <data name="Ed_EachItem" xml:space="preserve">Переменная текущего элемента</data>
   <data name="Ed_EachIndex" xml:space="preserve">Переменная номера</data>
-  <data name="Ed_EachHint" xml:space="preserve">Имя списка берётся из ＂вывода в переменную＂ на одном из предыдущих шагов (список даёт только ＂Разбить на строки＂). Оставьте оба имени пустыми — будут item и index. Шаги с отступом ниже и есть тело цикла.</data>
+  <data name="Ed_EachHint" xml:space="preserve">Имя списка берётся из «вывода в переменную» на одном из предыдущих шагов (список создают и «Список», и «Разбить на строки»). Оставьте оба имени пустыми — будут item и index. Шаги с отступом ниже и есть тело цикла.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Пропустить остаток блока</data>
   <data name="Val_SkipRun" xml:space="preserve">Остановить всё действие</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ содержит {1} шагов. Удалить их тоже?</data>
@@ -2181,4 +2178,6 @@
   <data name="Tpl_LinesVar" xml:space="preserve">строки</data>
   <data name="Tpl_KeyVar" xml:space="preserve">клавиша</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Открыть локальный исходный файл</data>
+  <data name="Menu_SecValue" xml:space="preserve">Получение значений</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Управление выполнением</data>
 </root>

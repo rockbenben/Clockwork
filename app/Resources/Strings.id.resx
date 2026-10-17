@@ -1747,9 +1747,6 @@ Log: {1}</value>
   <data name="Menu_SecSystem" xml:space="preserve">
     <value>Sistem &amp; suara</value>
   </data>
-  <data name="Menu_SecFlow" xml:space="preserve">
-    <value>Alur</value>
-  </data>
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Membuka aplikasi saat masuk dengan urutan dan jeda lebih mudah di Daftar startup; syarat seperti “hanya dalam N menit setelah nyala” atau “hanya pagi hari” memang tempatnya di sini.</value>
   </data>
@@ -2157,7 +2154,7 @@ Log: {1}</value>
   <data name="Ed_EachList" xml:space="preserve">Telusuri daftar ini</data>
   <data name="Ed_EachItem" xml:space="preserve">Variabel item saat ini</data>
   <data name="Ed_EachIndex" xml:space="preserve">Variabel indeks</data>
-  <data name="Ed_EachHint" xml:space="preserve">Nama daftar berasal dari ＂keluarkan ke variabel＂ pada langkah sebelumnya (hanya ＂Pisahkan menjadi baris＂ yang menghasilkan daftar). Biarkan kedua nama kosong, keduanya menjadi item dan index. Langkah berindentasi di bawah itulah badan loop.</data>
+  <data name="Ed_EachHint" xml:space="preserve">Nama daftar berasal dari keluaran ke variabel pada langkah sebelumnya (baik Daftar maupun Pisahkan menjadi baris menghasilkan daftar). Biarkan kedua nama kosong, keduanya menjadi item dan index. Langkah berindentasi di bawah itulah badan loop.</data>
   <data name="Val_SkipBlock" xml:space="preserve">Lewati sisa blok</data>
   <data name="Val_SkipRun" xml:space="preserve">Hentikan seluruh tindakan</data>
   <data name="Confirm_DeleteBlockWithSteps" xml:space="preserve">＂{0}＂ berisi {1} langkah. Hapus juga?</data>
@@ -2181,4 +2178,6 @@ Log: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">baris</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tombol</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Buka berkas sumber lokal</data>
+  <data name="Menu_SecValue" xml:space="preserve">Ambil nilai</data>
+  <data name="Menu_SecCtrl" xml:space="preserve">Kontrol alur</data>
 </root>
