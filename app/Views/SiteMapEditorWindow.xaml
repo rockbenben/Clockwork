@@ -66,8 +66,12 @@
                 <WrapPanel Grid.Row="2" Margin="0,10,0,0">
                     <Button Content="{loc:Loc Site_Add}" Style="{StaticResource PrimaryButton}" Padding="12,4" Click="Add_Click"/>
                     <Button Content="{loc:Loc Btn_Delete}" Padding="12,4" Margin="8,0,0,0" Click="Del_Click"/>
-                    <Button Content="{loc:Loc Btn_Up}" Padding="12,4" Margin="8,0,0,0" Click="Up_Click"/>
-                    <Button Content="{loc:Loc Btn_Down}" Padding="12,4" Margin="8,0,0,0" Click="Down_Click"/>
+                    <!-- 上移/下移是**一对**：折行只该发生在「加/删」这一组与它之间，
+                         不该把这对拆开（实测 zh-CN 下正好拆开，↓下移孤零零落到第二行）。 -->
+                    <StackPanel Orientation="Horizontal" Margin="8,0,0,0">
+                        <Button Content="{loc:Loc Btn_Up}" Padding="12,4" Click="Up_Click"/>
+                        <Button Content="{loc:Loc Btn_Down}" Padding="12,4" Margin="8,0,0,0" Click="Down_Click"/>
+                    </StackPanel>
                 </WrapPanel>
             </Grid>
 

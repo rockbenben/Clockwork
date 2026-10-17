@@ -194,7 +194,11 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-                            <TextBlock x:Name="VarsEmptyHint" Text="{loc:Loc Ed_VarsEmpty}" Style="{StaticResource Hint}"
+                            <!-- **必须显式落 Grid.Row="1"**：不写就默认进 Row 0，而 Row 0 是那张
+                                 Auto 表头行——这一段提示会跟列标题挤在同一行里叠着画，
+                                 头两行还互相压印（实测截图）。 -->
+                            <TextBlock x:Name="VarsEmptyHint" Grid.Row="1" Text="{loc:Loc Ed_VarsEmpty}"
+                                       Style="{StaticResource Hint}"
                                        Visibility="Collapsed" TextWrapping="Wrap" TextAlignment="Center"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>

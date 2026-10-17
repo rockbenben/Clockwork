@@ -190,9 +190,14 @@
                                             <!-- 标题顶格、箭头挂行尾（Win11 展开卡的布局）：表单标签已全部左对齐在 0 轨，
                                                  标题若前置箭头就会被顶出半个字宽，成为全表单唯一不在轨上的一行。
                                                  试过反过来给箭头留定宽槽位、把折叠区内自由行也缩进对齐箭头槽——
-                                                 那是在右对齐标签的锯齿左缘上打补丁，两条轨永远差一口气；左对齐后一条轨就够了。 -->
+                                                 那是在右对齐标签的锯齿左缘上打补丁，两条轨永远差一口气；左对齐后一条轨就够了。
+
+                                                 MaxWidth="560" 必须配 HorizontalAlignment="Left"：默认的 Stretch
+                                                 撞上 MaxWidth 会把这一块**居中**放进 * 列，标题于是飘到中间、
+                                                 箭头留在行尾，中间空一大段（实测截图）。 -->
                                             <TextBlock x:Name="hdr" Grid.Column="0" Text="{Binding Header, RelativeSource={RelativeSource AncestorType=Expander}}"
-                                                       TextWrapping="Wrap" MaxWidth="560" FontSize="{StaticResource FsBody}" Foreground="{StaticResource BrushMuted}"/>
+                                                       TextWrapping="Wrap" MaxWidth="560" HorizontalAlignment="Left"
+                                                       FontSize="{StaticResource FsBody}" Foreground="{StaticResource BrushMuted}"/>
                                             <TextBlock x:Name="Chevron" Grid.Column="1" Text="▸" FontSize="{StaticResource FsMicro}" Margin="8,1,2,0"
                                                        VerticalAlignment="Top" Foreground="{StaticResource BrushAccentText}"/>
                                         </Grid>

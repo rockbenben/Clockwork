@@ -680,7 +680,14 @@ public partial class App
             ("GroupEditorFilled", () => new GroupEditorWindow(new ActionGroup
             {
                 Name = Strings.Get("Tpl_TypeLines"),
-                Steps = ActionGroupTemplates.All().First(g => g.Name == Strings.Get("Tpl_TypeLines")).Steps,
+                // **按稳定 key 取，不是按本地化名。** 原来写的是
+                // `All().First(g => g.Name == Strings.Get("Tpl_TypeLines"))`，于是：
+                //   · Name 是 18 语本地化字符串，拿它当身份迟早对不上；
+                //   · 更要命的是 Templates 是 **static readonly**，名字在类型首次初始化那一刻
+                //     就按当时的文化冻结了，而截图循环每种语言都会切 CurrentUICulture——
+                //     两边的语言一旦对不上，First() 直接抛 InvalidOperationException，
+                //     整轮矩阵中途夭折（实测）。
+                Steps = ActionGroupTemplates.BuiltIn("typeLines")?.Steps ?? new(),
             }, groups, NoFunctionHotkeys)),
             // 站点映射表：一条真站点（含端口的域名、两条改写规则）。空表只拍得到空态提示，
             // 而这一扇窗真正难排版的是右栏——四个字段加一张规则表，德语俄语下一列有多高。
