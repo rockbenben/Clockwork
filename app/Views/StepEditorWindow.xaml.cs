@@ -21,6 +21,13 @@ public partial class StepEditorWindow : Window
     public LaunchStep? Result { get; private set; }
 
     public StepEditorWindow(LaunchStep step, IReadOnlyList<ActionGroup> groups, IReadOnlyList<LaunchStep>? listItems = null)
+        : this(step, groups, listItems, insideGroup: false) { }
+
+    /// <param name="insideGroup">这一条是加进**某个复杂动作的步骤序列**里的。
+    /// 语境决定类型下拉给多少：动作组里给全套，单独一格（面板 / 开机清单 / 手势）只给原子步骤——
+    /// 「每个」「跳出」「正则提取」那一族单独放一处没有意义（见 StepDisplay.BlockOnlyKinds）。</param>
+    public StepEditorWindow(LaunchStep step, IReadOnlyList<ActionGroup> groups, IReadOnlyList<LaunchStep>? listItems,
+                            bool insideGroup)
     {
         InitializeComponent();
         Native.DarkWindow.Apply(this);
@@ -29,7 +36,12 @@ public partial class StepEditorWindow : Window
         _listItems = listItems;
         _original = step;
 
-        FillCombo(KindCombo, (listItems != null ? StepDisplay.StepKinds.Append(StepDisplay.RefKind) : StepDisplay.StepKinds)
+        // 手改过的配置里可能有块内类型，而它恰好是在单步语境里打开的——那种步骤**照样要能编辑**，
+        // 否则用户删不掉它、也改不成别的。所以筛的是「新建时能选到的」，不是「打开时看得见的」。
+        var offered = StepDisplay.KindsFor(insideGroup).ToList();
+        if (!offered.Contains(step.Kind)) offered.Add(step.Kind);
+
+        FillCombo(KindCombo, (listItems != null ? offered.Append(StepDisplay.RefKind) : offered)
                              .Select(k => (StepDisplay.StepKindLabel(k), k)).ToArray(), step.Kind);
         FillCombo(VolActionCombo, new[]
         {
@@ -722,8 +734,9 @@ public partial class StepEditorWindow : Window
     }
     // 打开编辑器，返回编辑后的新步骤（取消→null）。step 为 null=新建指定 kind。
     // listItems 非 null=面板语境：类型下拉追加「引用启动项」（见 _listItems 的说明）。
+    // insideGroup=加进某个复杂动作的步骤序列：类型下拉给全套（默认 false=单独一格，只给原子步骤）。
     public static LaunchStep? Edit(Window? owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups,
-                                   IReadOnlyList<LaunchStep>? listItems = null)
+                                   IReadOnlyList<LaunchStep>? listItems = null, bool insideGroup = false)
     {
         // Level 是个**共用的数值位**：音量用 0-100（模型默认 50 是给它挑的），
         // 「等剪贴板变化」借了同一个位置但量纲是秒（1-60，意图默认 5，见 ClampWaitSeconds）。
@@ -736,7 +749,7 @@ public partial class StepEditorWindow : Window
             Action = kind == "volume" ? "set" : (kind == "window" ? "close" : (kind == "mouse" ? "down" : "")),
             Level = kind == "waitClipboard" ? StepHelpers.ClampWaitSeconds(0) : new LaunchStep().Level,
         };
-        var dlg = new StepEditorWindow(s, groups, listItems) { Owner = owner };
+        var dlg = new StepEditorWindow(s, groups, listItems, insideGroup) { Owner = owner };
         // owner 为 null 时必须自己找位置、自己保证看得见：这两个入口都能从**面板**进来
         // （面板一格右键 → 编辑；主窗口收在托盘时 App 传的就是 null），而面板此刻已经自己关掉了。
         // 不兜底的话，WindowStartupLocation=CenterOwner 没有 owner 可居中、Topmost 也没置，

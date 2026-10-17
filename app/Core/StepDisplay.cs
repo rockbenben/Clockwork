@@ -99,6 +99,28 @@ public static class StepDisplay
     //
     // 「动作组」自成一节且排在最前：想找它的人不会去别的节里翻，而面板上的「运行动作」格子
     // 与启动清单的「选现有动作组」都靠它。
+    /// <summary>只有在复杂动作的步骤序列里才说得通的那些类型。</summary>
+    // 「每个」「跳出」「算一步」「正则提取」这一族**单独放一处是没意义的**：它们自己不碰
+    // 屏幕也不产出可看的东西，存在的理由是夹在别的步骤之间改一改数据或改一改走向。
+    // 把它们列在面板格子 / 开机清单 / 手势的「类型」下拉里，用户得先自己判断
+    // 「我这条会用到循环吗」才敢往下翻——而那个判断此刻还没有答案（还没编动作）。
+    //
+    // 与 Quicker 的分法一致：那边把「每个 / 重复 / 跳出 / 停止」单列为程序流控制，
+    // 它们属于组合动作，不属于基础动作。
+    public static readonly string[] BlockOnlyKinds =
+    {
+        "each", "skip", "math", "splitLines", "join", "regex", "replace", "urlDecode", "list",
+    };
+
+    /// <summary>这个类型能否单独当一格用（面板格子 / 开机清单 / 手势）。</summary>
+    public static bool IsAtomic(string? kind) => !BlockOnlyKinds.Contains(kind ?? "");
+
+    /// <summary>按语境取类型清单：动作组里给全的，单步语境只给原子步骤。</summary>
+    // 顺序沿用 StepKinds 的规范序，两边筛出来的顺序因此一致——用户从动作组里看到
+    // 「每个」在「跳出」之后，从单步语境看到的那一截也是同一个顺序。
+    public static IEnumerable<string> KindsFor(bool insideGroup)
+        => insideGroup ? StepKinds : StepKinds.Where(IsAtomic);
+
     public static readonly (string SectionKey, string[] Kinds)[] StepKindSections =
     {
         ("Menu_SecCommon", new[] { "url", "app", "text", "copySelection", "prompt", "choice", "list", "message", "delay", "waitClipboard" }),

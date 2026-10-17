@@ -109,7 +109,9 @@ public class StepRefWiringTests
     public void Editor_exposes_the_ref_type_only_in_panel_context()
     {
         var src = Read("Views", "StepEditorWindow.xaml.cs");
-        Assert.Contains("listItems != null ? StepDisplay.StepKinds.Append(StepDisplay.RefKind)", src);
+        // 「引用启动项」只加在**面板语境**（listItems 非 null）——与「类型按语境收窄」是两次
+        // 独立的筛选：一次按语境少给类型，一次按语境多给这一项。别把它们并成一句话。
+        Assert.Contains("listItems != null ? offered.Append(StepDisplay.RefKind) : offered", src);
         Assert.Contains("case \"step\": r.RefId = ComboVal(RefCombo)", src);
         var xaml = Read("Views", "StepEditorWindow.xaml");
         Assert.Contains("x:Name=\"PanRef\"", xaml);

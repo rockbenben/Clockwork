@@ -266,7 +266,7 @@ public partial class GroupEditorWindow : Window
 
     private void AddStepOf(ToolItem it)
     {
-        var step = StepEditorWindow.Edit(this, it.Seed, it.Kind, StepGroups);
+        var step = StepEditorWindow.Edit(this, it.Seed, it.Kind, StepGroups, insideGroup: true);
         if (step == null) return;
         step.ParentId = ParentIdForNewStep() ?? "";
         int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
@@ -324,7 +324,7 @@ public partial class GroupEditorWindow : Window
         int i = Sel;
         if (i < 0 || i >= _rows.Count) return;
         var step = _rows[i].Step;
-        var edited = StepEditorWindow.Edit(this, step, step.Kind, StepGroups);
+        var edited = StepEditorWindow.Edit(this, step, step.Kind, StepGroups, insideGroup: true);
         if (edited != null) { _rows[i] = new StepRowVm(edited, () => { }); Steps.SelectedIndex = i; }
     }
 
