@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Bündeln Sie eine Routine und starten Sie sie jederzeit per Hotkey / Infobereich; Startliste und geplante Aufgaben können sie referenzieren. Was nur bei der Anmeldung läuft, ist als einfacher Startlisten-Schritt simpler.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Noch keine Schritte. Klicken Sie oben auf „Hinzufügen“, um den ersten anzulegen — was oben steht, läuft zuerst.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(leer)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Aktionsgruppe bearbeiten</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Eine Gruppe läuft nie von selbst — lösen Sie sie über das Infobereichsmenü, ein globales Tastenkürzel, einen Aktionsgruppen-Schritt in der Startliste oder eine geplante Aufgabe aus.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Bitte einen Gruppennamen eingeben.</value>
   </data>
@@ -1432,9 +1428,7 @@ Protokoll: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Globaler Hotkey</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Klicken und Tastenkombination drücken, um diese Gruppe jederzeit auszuführen; erneut drücken, während sie läuft, stoppt sie. Esc bricht ab, Entf löscht</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>Tastenkombination {1} für Aktionsgruppe „{0}“ konnte nicht registriert werden: möglicherweise bereits belegt</value>
   </data>
@@ -1738,15 +1732,9 @@ Protokoll: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Geht weiter, sobald beides bereit ist, wartet höchstens 90 s; die feste Verzögerung oben kommt zusätzlich dazu. Einschalten, wenn die Liste zu früh für Ihre Programme läuft.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Öffnen</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Programme steuern</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>System &amp; Ton</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Apps bei der Anmeldung mit Reihenfolge und Verzögerung öffnet die Startliste bequemer; Bedingungen wie „nur innerhalb N Minuten nach dem Start“ oder „nur vormittags“ gehören genau hierher.</value>
   </data>
@@ -1939,9 +1927,7 @@ Protokoll: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Zu welcher Kategorie diese Seite gehört. Die obere Reihe hat je einen Reiter pro Kategorie; ein Klick zeigt nur deren Seiten.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Oben eine Kategorie anklicken, links eine Seite. Doppelklick benennt um, Ziehen sortiert Reiter um, auf eine Kategorie gezogen wandert die Seite dorthin; eine Kachel auf einen Reiter gezogen wandert auf jene Seite. Rechtsklick auf einen Reiter benennt ihn um oder löscht ihn.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Oben die Kategorie, links das Szenario wählen — rechts stehen die Seiten dieser Gruppe nebeneinander. Eine Kachel direkt auf eine andere Karte ziehen, um sie dorthin zu verschieben; ein Kartentitel anklicken, um ihn umzubenennen; eine Szenario-Zeile rechts anklicken für Umbenennen, Löschen und Verschieben.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Linke Reiter anzeigen</value>
   </data>
@@ -2124,7 +2110,7 @@ Protokoll: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Das konnte nicht dekodiert werden: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Liest die Adressleiste des aktuellen Browsers und erzeugt eine Adresse für die folgenden Schritte. Unterstützt Chromium-Browser wie Chrome und Edge; Firefox wird noch nicht unterstützt.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Öffnen wie</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Lassen Sie die Adresse leer, um sie automatisch aus dem Browser zu lesen. Die Zuordnungen Domain → lokaler Pfad stehen unter sites in clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Adresse eingeben ({name}-Platzhalter funktionieren). Um der gerade gezeigten Seite zu folgen, legen Sie zuerst einen Schritt „Browser-Adresse lesen“ an, lassen Sie ihn die Adresse in eine Variable schreiben und tragen Sie dann {diese Variable} hier ein. Die Zuordnung Domain → lokaler Pfad wird unter Einstellungen → Website-Zuordnung bearbeitet.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Regulärer Ausdruck</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Erfassungsgruppe</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = die gesamte Übereinstimmung; 1 und höher = welche Klammer. .NET-Regex-Syntax.</data>
@@ -2178,6 +2164,63 @@ Protokoll: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">Zeilen</data>
   <data name="Tpl_KeyVar" xml:space="preserve">Taste</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Lokale Quelldatei öffnen</data>
-  <data name="Menu_SecValue" xml:space="preserve">Werte holen</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Ablaufsteuerung</data>
+  <data name="Menu_SecUI" xml:space="preserve">Bedienung</data>
+  <data name="Menu_SecClip" xml:space="preserve">Zwischenablage</data>
+  <data name="Menu_SecFile" xml:space="preserve">Dateien und Pfade</data>
+  <data name="Menu_SecSys" xml:space="preserve">System und Fenster</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Rechnen</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Fertige Vorlagen</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">Dieser Schritt hat keine URL. Tragen Sie oben eine ein; soll die URL der aktuellen Seite folgen, fügen Sie zuerst einen Schritt „Browser-Adresse lesen“ hinzu, schreiben Sie ihn in eine Variable und tragen Sie hier {Variablenname} ein.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">Adresse</data>
+  <data name="Tbx_Title" xml:space="preserve">Modulwerkzeugkasten</data>
+  <data name="Tbx_Search" xml:space="preserve">Schritte suchen…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Schrittname oder Typ eingeben, der Werkzeugkasten filtert sofort. Doppelklick oder Eingabetaste fügt hinzu.</data>
+  <data name="Tbx_Section" xml:space="preserve">Kategorie</data>
+  <data name="Tbx_All" xml:space="preserve">Alle</data>
+  <data name="Tbx_Empty" xml:space="preserve">Keine passenden Schritte</data>
+  <data name="Ed_Vars" xml:space="preserve">Variablen</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">Diese Gruppe hat noch keine Variablen. Setzen Sie bei einem Schritt „In Variable speichern“, erscheint sie hier. Doppelklick kopiert {Name}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Darstellung</data>
+  <data name="Site_Title" xml:space="preserve">Website-Zuordnung</data>
+  <data name="Site_Hint" xml:space="preserve">Der Schritt „Webseite → lokale Quelldatei“ schlägt in dieser Tabelle nach. Fügen Sie eine Website mit Domain und lokalem Quellordner hinzu.</data>
+  <data name="Site_Add" xml:space="preserve">Website hinzufügen</data>
+  <data name="Site_NewName" xml:space="preserve">Neue Website</data>
+  <data name="Site_ColName" xml:space="preserve">Name</data>
+  <data name="Site_ColHosts" xml:space="preserve">Domains</data>
+  <data name="Site_Name" xml:space="preserve">Name</data>
+  <data name="Site_Hosts" xml:space="preserve">Domains</data>
+  <data name="Site_HostsTip" xml:space="preserve">Eines pro Zeile. Mit Port vollständig, z. B. localhost:8080. Keine Platzhalter: example.com enthält evil-example.com nicht.</data>
+  <data name="Site_Root" xml:space="preserve">Lokaler Quellordner</data>
+  <data name="Site_RootTip" xml:space="preserve">Dieser Pfad muss zur Ordnerstruktur der Website passen, damit die Zuordnung auf echte Quelldateien zeigt.</data>
+  <data name="Site_Browse" xml:space="preserve">Durchsuchen…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Dieser Ordner fehlt</data>
+  <data name="Site_Index" xml:space="preserve">Index-Datei des Ordners</data>
+  <data name="Site_IndexTip" xml:space="preserve">Wird der Ordner selbst aufgerufen (die URL endet ohne Dateinamen), öffnet diese Datei.</data>
+  <data name="Site_Rules" xml:space="preserve">Pfade umschreiben</data>
+  <data name="Site_RulesTip" xml:space="preserve">Werden der Reihe nach angewendet. Liegt die Website unter /posts/ und der Quellcode unter _posts/, eine Regel hinzufügen: ^posts/ ersetzen durch _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Umschreibregel hinzufügen</data>
+  <data name="Site_Match" xml:space="preserve">Treffer (regex)</data>
+  <data name="Site_Replace" xml:space="preserve">Ersetzen</data>
+  <data name="Site_Empty" xml:space="preserve">Noch keine Website. Auf „Website hinzufügen“ klicken und Domain und lokalen Quellordner eintragen.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Domain → lokaler Pfad</data>
+  <data name="Site_Open" xml:space="preserve">Website-Tabelle öffnen…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">Die Tabelle für den Schritt „Webseite → lokale Quelldatei“.</data>
+  <data name="TplMgr_Title" xml:space="preserve">Aktionsgruppen-Vorlagen</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Eine Vorlage ist eine fertige Aktion. Geänderte Vorlagen werden gespeichert und weiterverwendet; „Zurücksetzen“ stellt die eingebaute wieder her.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Als neue Aktion</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Vorlage bearbeiten</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Zurücksetzen</data>
+  <data name="TplMgr_Badge" xml:space="preserve">geändert</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} Schritte</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} Schritte · geändert</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Keine Vorlagen</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">Diese Aktion hat noch keine Schritte. Wählen Sie links aus der Modulwerkzeugkasten einen aus.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Szenarien</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} Seiten</data>
+  <data name="Panel_Filter" xml:space="preserve">Szenarien filtern…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Linke Spalte nach Prozess- oder Seitenname filtern. Leer = kein Filter.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Eine Seite nach links</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Eine Seite nach rechts</data>
 </root>

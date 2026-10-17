@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Gói một chuỗi thao tác thành nhóm, kích hoạt bất cứ lúc nào bằng phím tắt / khay hệ thống; Danh sách khởi động và Tác vụ theo lịch cũng tham chiếu được. Việc chỉ chạy lúc đăng nhập thì viết thẳng vào Danh sách khởi động sẽ gọn hơn.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Chưa có bước nào. Bấm “Thêm” ở trên để tạo bước đầu tiên — bước ở trên cùng chạy trước.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(trống)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Sửa nhóm hành động</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Nhóm không bao giờ tự chạy — kích hoạt từ menu khay hệ thống, phím tắt toàn cục, bước Nhóm hành động trong danh sách khởi động, hoặc tác vụ hẹn giờ.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Vui lòng nhập tên nhóm.</value>
   </data>
@@ -1432,9 +1428,7 @@ Nhật ký: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Phím tắt toàn cục</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Nhấp rồi nhấn tổ hợp phím để chạy nhóm này bất cứ lúc nào; nhấn lại khi đang chạy để dừng. Esc hủy, Delete xóa</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>Không thể đăng ký phím tắt {1} cho nhóm hành động “{0}”: có thể đã bị chiếm dụng</value>
   </data>
@@ -1738,15 +1732,9 @@ Nhật ký: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Đi tiếp ngay khi cả hai sẵn sàng, chờ tối đa 90 giây; độ trễ cố định ở trên được cộng thêm. Bật khi danh sách chạy quá sớm so với phần mềm của bạn.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Mở</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Điều khiển ứng dụng</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>Hệ thống &amp; âm thanh</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Mở ứng dụng lúc đăng nhập với thứ tự và độ trễ thì Danh sách khởi động tiện hơn; còn điều kiện như “chỉ trong N phút sau khi khởi động”, “chỉ buổi sáng” thì đúng là chỗ này.</value>
   </data>
@@ -1939,9 +1927,7 @@ Nhật ký: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Trang này thuộc danh mục nào. Hàng trên mỗi danh mục một thẻ; chọn một thẻ chỉ liệt kê các trang của nó.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Bấm danh mục ở trên, bấm trang ở bên trái. Bấm đúp để đổi tên, kéo thẻ để đổi thứ tự, thả lên một danh mục là chuyển trang đó vào danh mục ấy; thả một ô lên thẻ là chuyển ô vào trang đó. Bấm chuột phải vào thẻ để đổi tên hoặc xóa.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Chọn nhóm ở trên và kịch bản ở bên trái; các trang của nhóm đó nằm cạnh nhau bên phải. Kéo một ô thẳng lên thẻ khác để chuyển nó sang đó, bấm vào tiêu đề thẻ để đổi tên, và bấm chuột phải vào một dòng kịch bản để đổi tên, xoá hoặc dời chỗ.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Hiện thẻ bên trái</value>
   </data>
@@ -2124,7 +2110,7 @@ Nhật ký: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Không thể giải mã nội dung đó: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Đọc thanh địa chỉ của trình duyệt hiện tại và tạo ra một địa chỉ cho các bước sau. Hỗ trợ trình duyệt Chromium như Chrome và Edge; chưa hỗ trợ Firefox.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Cách mở</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Để trống địa chỉ để tự động đọc từ trình duyệt. Ánh xạ tên miền → đường dẫn cục bộ nằm trong sites của clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Điền một địa chỉ (dùng được {tên} làm ký hiệu). Để theo địa chỉ trang đang mở, hãy thêm trước một bước 'Đọc địa chỉ trình duyệt' để ghi địa chỉ vào một biến, rồi điền {biến đó} vào đây. Ánh xạ tên miền → đường dẫn cục bộ được sửa trong Cài đặt → Bản đồ trang.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Biểu thức chính quy</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Nhóm bắt</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = toàn bộ kết quả khớp; 1 trở lên = nhóm trong ngoặc nào. Cú pháp biểu thức chính quy của .NET.</data>
@@ -2178,6 +2164,63 @@ Nhật ký: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">dòng</data>
   <data name="Tpl_KeyVar" xml:space="preserve">phím</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Mở tệp nguồn cục bộ</data>
-  <data name="Menu_SecValue" xml:space="preserve">Lấy giá trị</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Điều khiển luồng</data>
+  <data name="Menu_SecUI" xml:space="preserve">Tương tác giao diện</data>
+  <data name="Menu_SecClip" xml:space="preserve">Khay nhớ tạm</data>
+  <data name="Menu_SecFile" xml:space="preserve">Tệp &amp; đường dẫn</data>
+  <data name="Menu_SecSys" xml:space="preserve">Hệ thống &amp; cửa sổ</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Tính</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Preset thường dùng</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">Bước này chưa có địa chỉ. Hãy điền một địa chỉ ở trên; muốn địa chỉ bám theo trang đang mở thì thêm bước “Đọc địa chỉ trình duyệt”, lưu kết quả ra biến, rồi điền {tên biến} ở đây.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">địa chỉ</data>
+  <data name="Tbx_Title" xml:space="preserve">Hộp công cụ mô-đun</data>
+  <data name="Tbx_Search" xml:space="preserve">Tìm bước…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Gõ tên hoặc loại bước, hộp công cụ lọc ngay lập tức. Bấm đúp hoặc nhấn Enter để thêm.</data>
+  <data name="Tbx_Section" xml:space="preserve">Danh mục</data>
+  <data name="Tbx_All" xml:space="preserve">Tất cả</data>
+  <data name="Tbx_Empty" xml:space="preserve">Không có bước nào khớp</data>
+  <data name="Ed_Vars" xml:space="preserve">Biến</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">Nhóm này chưa có biến nào. Hãy đặt “kết quả xuất ra biến” cho một bước bất kỳ, biến đó sẽ hiện ở đây. Bấm đúp để sao chép {tên}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Giao diện</data>
+  <data name="Site_Title" xml:space="preserve">Bảng ánh xạ trang</data>
+  <data name="Site_Hint" xml:space="preserve">Bước “Mở tệp nguồn của trang” tra cứu theo bảng này. Thêm một trang, điền tên miền và thư mục gốc nguồn cục bộ là dùng được ngay.</data>
+  <data name="Site_Add" xml:space="preserve">Thêm trang</data>
+  <data name="Site_NewName" xml:space="preserve">Trang mới</data>
+  <data name="Site_ColName" xml:space="preserve">Tên</data>
+  <data name="Site_ColHosts" xml:space="preserve">Tên miền</data>
+  <data name="Site_Name" xml:space="preserve">Tên</data>
+  <data name="Site_Hosts" xml:space="preserve">Tên miền</data>
+  <data name="Site_HostsTip" xml:space="preserve">Mỗi dòng một mục. Nếu có cổng thì ghi đủ, ví dụ localhost:8080. Không dùng ký tự đại diện: example.com không chứa evil-example.com.</data>
+  <data name="Site_Root" xml:space="preserve">Thư mục gốc nguồn cục bộ</data>
+  <data name="Site_RootTip" xml:space="preserve">Đường dẫn này phải khớp với cấu trúc thư mục của trang thật, khi đó tệp được ánh xạ mới rơi đúng vào nguồn thật.</data>
+  <data name="Site_Browse" xml:space="preserve">Duyệt…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Thư mục đó không tồn tại</data>
+  <data name="Site_Index" xml:space="preserve">Tệp chỉ mục</data>
+  <data name="Site_IndexTip" xml:space="preserve">Khi địa chỉ trỏ thẳng tới chính thư mục đó (không có tên tệp ở cuối địa chỉ), tệp này sẽ được mở.</data>
+  <data name="Site_Rules" xml:space="preserve">Viết lại đường dẫn</data>
+  <data name="Site_RulesTip" xml:space="preserve">Áp dụng lần lượt theo thứ tự. Ví dụ bản đang chạy dùng /posts/ còn mã nguồn nằm ở _posts/, thì thêm một quy tắc: khớp ^posts/, thay bằng _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Thêm quy tắc</data>
+  <data name="Site_Match" xml:space="preserve">Khớp (biểu thức chính quy)</data>
+  <data name="Site_Replace" xml:space="preserve">Thay bằng</data>
+  <data name="Site_Empty" xml:space="preserve">Chưa có trang nào. Bấm “Thêm trang”, rồi điền tên miền và thư mục gốc nguồn cục bộ.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Tên miền → đường dẫn cục bộ</data>
+  <data name="Site_Open" xml:space="preserve">Mở bảng trang…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">Đây là bảng mà bước “Mở tệp nguồn của trang” dùng.</data>
+  <data name="TplMgr_Title" xml:space="preserve">Mẫu nhóm hành động</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Mẫu là một hành động dựng sẵn. Mẫu bạn đã sửa sẽ được lưu lại, và lần thêm sau sẽ dùng bản bạn sửa; “Khôi phục mặc định” đưa nó về bản đi kèm.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Thêm thành hành động mới</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Sửa mẫu</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Khôi phục mặc định</data>
+  <data name="TplMgr_Badge" xml:space="preserve">Đã sửa</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} bước</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} bước · đã sửa</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Không có mẫu</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">Hành động này chưa có bước nào. Hãy chọn một bước trong Hộp công cụ mô-đun bên trái.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Kịch bản</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} trang</data>
+  <data name="Panel_Filter" xml:space="preserve">Lọc kịch bản…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Lọc cột bên trái theo tên tiến trình hoặc tên trang. Để trống = không lọc.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Chuyển sang trang bên trái</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Chuyển sang trang bên phải</data>
 </root>

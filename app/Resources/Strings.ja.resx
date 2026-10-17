@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>一連のアクションをグループにまとめ、ホットキー / トレイからいつでも実行。起動リストや定時タスクからも参照できます。ログイン時に一度だけなら、直接起動リストに書くほうが簡単です。</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>ステップはまだありません。上の「追加」で最初のステップを追加してください。上にあるほど先に実行されます。</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>（空）</value>
   </data>
@@ -849,9 +847,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>アクショングループを編集</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>グループが自動で実行されることはありません。トレイメニュー、グローバルホットキー、起動リストの「アクショングループ」ステップ、または定時タスクから実行します。</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>グループ名を入力してください。</value>
   </data>
@@ -1438,9 +1434,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>グローバルホットキー</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>クリックしてキーの組み合わせを押すと、いつでもこのグループを実行できます。実行中にもう一度押すと中止します。Esc でキャンセル、Delete でクリア</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>アクショングループ「{0}」のホットキー {1} を登録できませんでした：既に使用されている可能性があります</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>両方そろい次第すぐ進みます（最大 90 秒）。そのうえで上の固定待機時間が加算されます。起動が早すぎてアプリが立ち上がらないときにオンにしてください。</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>開く</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>アプリを操作</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>システムとサウンド</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>ログイン時に順序や遅延つきでアプリを開くなら起動リストのほうが向いています。「起動後 N 分以内のみ」「午前のみ」のような条件付きなら、ここが適切です。</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>このページの分類。上の列は分類ごとに 1 タブで、選ぶとその分類のページだけが並びます。</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>上で分類を、左でページをクリックします。ダブルクリックで名前を変更、タブはドラッグで並べ替え、分類の上に落とせばそのページはその分類へ移ります。タイルをタブに落とすとそのページへ移ります。タブを右クリックすると名前の変更と削除ができます。</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>上は分類、左はシーンを選びます。右にそのグループのページが並べて表示されます。タイルを別のカードへ直接ドラッグするとそのページへ移動します。カード名をクリックするとその場で名前が変わり、シーンの行を右クリックすると名前変更・削除・左右への移動ができます。</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>左のタブを表示</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">この内容はデコードできません：{0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">現在のブラウザのアドレスバーを読み取り、以降のステップで使えるアドレスを生成します。Chrome / Edge などの Chromium 系ブラウザに対応。Firefox は未対応です。</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">開く方法</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">アドレス欄は空のままで構いません（自動でブラウザから読み取ります）。ドメイン → ローカルパスの対応は設定ファイル clockwork.settings.json の sites に書きます。</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">アドレスを入力します（{名前} のプレースホルダーも使えます）。表示中のページのアドレスに追従するには、先に「ブラウザーのアドレスを読み取る」手順を置き、アドレスを変数に書き出してから、ここに {その変数} を入れてください。ドメイン → ローカルパスの対応は「設定 → サイトマップ」で編集します。</data>
   <data name="Ed_RegexPattern" xml:space="preserve">正規表現</data>
   <data name="Ed_RegexGroup" xml:space="preserve">取得するグループ</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = 的整体一致、1 以降 = 何番目の括弧の中身。.NET の正規表現構文です。</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">行</data>
   <data name="Tpl_KeyVar" xml:space="preserve">キー</data>
   <data name="Tpl_SiteSource" xml:space="preserve">ローカルのソースファイルを開く</data>
-  <data name="Menu_SecValue" xml:space="preserve">値を取る</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">実行の流れ</data>
+  <data name="Menu_SecUI" xml:space="preserve">画面操作</data>
+  <data name="Menu_SecClip" xml:space="preserve">クリップボード</data>
+  <data name="Menu_SecFile" xml:space="preserve">ファイルとパス</data>
+  <data name="Menu_SecSys" xml:space="preserve">システムとウィンドウ</data>
+  <data name="Menu_SecCalc" xml:space="preserve">計算</data>
+  <data name="Menu_SecPreset" xml:space="preserve">よく使うプリセット</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">この手順にはまだアドレスがありません。上でアドレスを入力してください。現在のページに追従させたい場合は、まず「ブラウザのアドレスを読み取る」を追加して変数に書き出し、ここに {変数名} を入力します。</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">アドレス</data>
+  <data name="Tbx_Title" xml:space="preserve">モジュールツールボックス</data>
+  <data name="Tbx_Search" xml:space="preserve">ステップを検索…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">ステップ名または種類を入力すると、その場で絞り込まれます。ダブルクリックまたは Enter で追加します。</data>
+  <data name="Tbx_Section" xml:space="preserve">分類</data>
+  <data name="Tbx_All" xml:space="preserve">すべて</data>
+  <data name="Tbx_Empty" xml:space="preserve">該当するステップはありません</data>
+  <data name="Ed_Vars" xml:space="preserve">変数</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">このグループにはまだ変数がありません。どのステップでも「変数へ出力」を設定すると、ここに現れます。ダブルクリックで {名前} をコピーできます。</data>
+  <data name="Ed_Appearance" xml:space="preserve">外観</data>
+  <data name="Site_Title" xml:space="preserve">サイト対応表</data>
+  <data name="Site_Hint" xml:space="preserve">「サイトのソースファイルを開く」手順はこの表でアドレスを引きます。サイトを追加して、ドメインとローカルソースルートを入力すれば使えます。</data>
+  <data name="Site_Add" xml:space="preserve">サイトを追加</data>
+  <data name="Site_NewName" xml:space="preserve">新しいサイト</data>
+  <data name="Site_ColName" xml:space="preserve">名前</data>
+  <data name="Site_ColHosts" xml:space="preserve">ドメイン</data>
+  <data name="Site_Name" xml:space="preserve">名前</data>
+  <data name="Site_Hosts" xml:space="preserve">ドメイン</data>
+  <data name="Site_HostsTip" xml:space="preserve">1 行に 1 つ。ポート番号は省略せず記入してください（例：localhost:8080）。ワイルドカードは使いません：example.com に evil-example.com は含まれません。</data>
+  <data name="Site_Root" xml:space="preserve">ローカルソースルート</data>
+  <data name="Site_RootTip" xml:space="preserve">このパスは公開サイトのディレクトリ構成と一致している必要があります。そうしないと、マップしたファイルが実際のソースに当たりません。</data>
+  <data name="Site_Browse" xml:space="preserve">参照…</data>
+  <data name="Site_RootMissing" xml:space="preserve">このフォルダーは存在しません</data>
+  <data name="Site_Index" xml:space="preserve">ディレクトリのインデックスファイル</data>
+  <data name="Site_IndexTip" xml:space="preserve">アドレスがディレクトリそのもの（末尾にファイル名がない）を指したとき、このファイルを開きます。</data>
+  <data name="Site_Rules" xml:space="preserve">パス書き換え</data>
+  <data name="Site_RulesTip" xml:space="preserve">順番に一つずつ適用します。公開側が /posts/、ソースが _posts/ なら、^posts/ に一致して _posts/ に置換するルールを追加します。</data>
+  <data name="Site_RuleAdd" xml:space="preserve">書き換えルールを追加</data>
+  <data name="Site_Match" xml:space="preserve">一致（正規表現）</data>
+  <data name="Site_Replace" xml:space="preserve">置換先</data>
+  <data name="Site_Empty" xml:space="preserve">まだサイトがありません。「サイトを追加」をクリックして、ドメインとローカルソースルートを入力してください。</data>
+  <data name="Site_SettingsRow" xml:space="preserve">ドメイン → ローカルパス</data>
+  <data name="Site_Open" xml:space="preserve">サイト対応表を開く…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">「サイトのソースファイルを開く」手順が使う表です。</data>
+  <data name="TplMgr_Title" xml:space="preserve">アクショングループのテンプレート</data>
+  <data name="TplMgr_Hint" xml:space="preserve">テンプレートはすぐ使える完成済みのアクションです。編集したテンプレートは保存され、以後はそれを使用します。「既定に戻す」で同梱版に戻せます。</data>
+  <data name="TplMgr_Add" xml:space="preserve">新しいアクションとして追加</data>
+  <data name="TplMgr_Edit" xml:space="preserve">テンプレートを編集</data>
+  <data name="TplMgr_Reset" xml:space="preserve">既定に戻す</data>
+  <data name="TplMgr_Badge" xml:space="preserve">変更済み</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} ステップ</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} ステップ・変更済み</data>
+  <data name="TplMgr_Empty" xml:space="preserve">テンプレートがありません</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">この動作にはまだ手順がありません。左のモジュールツールボックスから選んで追加してください。</data>
+  <data name="Panel_Scenes" xml:space="preserve">シーン</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} ページ</data>
+  <data name="Panel_Filter" xml:space="preserve">シーンを絞り込み…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">プロセス名またはページ名で左側を絞り込みます。空欄 = 絞り込まない。</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">1 ページ左へ</data>
+  <data name="Panel_MoveRight" xml:space="preserve">1 ページ右へ</data>
 </root>

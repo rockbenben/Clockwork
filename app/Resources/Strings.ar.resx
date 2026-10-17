@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>اجمع سلسلة إجراءات في مجموعة وشغّلها في أي وقت عبر اختصار / علبة النظام؛ ويمكن لقائمة البدء والمهام المجدولة الإشارة إليها أيضًا. ما يعمل عند تسجيل الدخول فقط يكون أبسط كخطوات مباشرة في قائمة البدء.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>لا توجد خطوات بعد. انقر «إضافة» أعلاه لإنشاء أول خطوة؛ ما يكون في الأعلى يُنفَّذ أولاً.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(فارغ)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>تعديل مجموعة الإجراءات</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>المجموعة لا تعمل من تلقاء نفسها — شغّلها من قائمة شريط المهام أو اختصار عام أو خطوة «مجموعة إجراءات» في قائمة البدء أو مهمة مجدولة.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>يرجى إدخال اسم المجموعة.</value>
   </data>
@@ -1432,9 +1428,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>اختصار عام</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>انقر ثم اضغط مجموعة مفاتيح لتشغيل هذه المجموعة في أي وقت؛ واضغطها مرة أخرى أثناء التشغيل لإيقافها؛ Esc للإلغاء وDelete للمسح</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>تعذّر تسجيل الاختصار {1} لمجموعة الإجراءات «{0}»: قد يكون مستخدمًا بالفعل</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>يتابع فور جاهزية الاثنين، بانتظار 90 ثانية كحد أقصى، ثم يُضاف التأخير الثابت أعلاه فوق ذلك. فعِّله عندما تعمل القائمة مبكرًا جدًا بالنسبة لبرامجك.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>فتح</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>التحكم في البرامج</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>النظام والصوت</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>فتح التطبيقات عند تسجيل الدخول بترتيب وتأخير أسهل في قائمة البدء؛ أما شروط مثل «فقط خلال N دقيقة من الإقلاع» أو «صباحًا فقط» فهي بالضبط لما هنا.</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>التصنيف الذي تنتمي إليه هذه الصفحة. الصف العلوي فيه تبويب لكل تصنيف، واختيار أحدها يعرض صفحاته وحدها.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>انقر تصنيفًا في الأعلى وصفحةً على اليسار. النقر المزدوج يعيد التسمية، وسحب التبويبات يعيد ترتيبها، وإفلات تبويب على تصنيف ينقل صفحته إليه؛ وإفلات مربّع على تبويب ينقله إلى تلك الصفحة. والنقر بالزر الأيمن على تبويب يعيد تسميته أو يحذفه.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>اختر التصنيف في الأعلى والمشهد في اليسار؛ تظهر صفحات تلك المجموعة جنبًا إلى جنب في اليمين. اسحب مربعًا مباشرة إلى بطاقة أخرى لنقله إليها، وانقر على عنوان البطاقة لإعادة تسميتها، وانقر بزر الفأرة الأيمن على صف المشهد لإعادة التسمية أو الحذف أو النقل.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>إظهار تبويبات اليسار</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">تعذّر فك ترميز ذلك: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">يقرأ شريط العنوان في المتصفح الحالي وينتج عنوانًا للخطوات التالية. يدعم متصفحات Chromium مثل Chrome وEdge؛ ولا يدعم Firefox بعد.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">طريقة الفتح</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">اترك العنوان فارغًا ليُقرأ من المتصفح تلقائيًا. تتطابقات النطاق ← المسار المحلي في sites داخل clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">أدخل عنوانًا (تعمل العناصر النائبة {name}). لمتابعة الصفحة التي أمامك، أضف أولًا خطوة «قراءة عنوان المتصفح» لتكتب العنوان في متغيّر، ثم ضع {ذلك المتغيّر} هنا. تُحرَّر مطابقة النطاق ← المسار المحلي في الإعدادات ← خريطة المواقع.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">تعبير نمطي</data>
   <data name="Ed_RegexGroup" xml:space="preserve">مجموعة الالتقاط</data>
   <data name="Ed_RegexHint" xml:space="preserve">٠ = المطابقة كاملة؛ 1 فما فوق = المجموعة بين قوسين. صيغة تعبير نمطي من .NET.</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">أسطر</data>
   <data name="Tpl_KeyVar" xml:space="preserve">مفتاح</data>
   <data name="Tpl_SiteSource" xml:space="preserve">فتح ملف المصدر المحلي</data>
-  <data name="Menu_SecValue" xml:space="preserve">الحصول على القيم</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">التحكم في التدفق</data>
+  <data name="Menu_SecUI" xml:space="preserve">الواجهة</data>
+  <data name="Menu_SecClip" xml:space="preserve">الحافظة</data>
+  <data name="Menu_SecFile" xml:space="preserve">الملفات والمسارات</data>
+  <data name="Menu_SecSys" xml:space="preserve">النظام والنوافذ</data>
+  <data name="Menu_SecCalc" xml:space="preserve">حساب</data>
+  <data name="Menu_SecPreset" xml:space="preserve">الإعدادات الجاهزة</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">لا يوجد عنوان في هذه الخطوة. اكتب عنوانًا في الأعلى؛ وإذا أردت أن يتبع العنوان الصفحة الحالية، فأضف أولًا خطوة «قراءة عنوان المتصفح»، واكتبه في متغيّر، ثم ضع {متغير} هنا.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">العنوان</data>
+  <data name="Tbx_Title" xml:space="preserve">صندوق الأدوات</data>
+  <data name="Tbx_Search" xml:space="preserve">ابحث عن خطوات…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">اكتب اسم الخطوة أو نوعها فيُصفّي صندوق الأدوات فورًا. انقر نقرًا مزدوجًا أو اضغط Enter لإضافتها.</data>
+  <data name="Tbx_Section" xml:space="preserve">التصنيف</data>
+  <data name="Tbx_All" xml:space="preserve">الكل</data>
+  <data name="Tbx_Empty" xml:space="preserve">لا توجد خطوات مطابقة</data>
+  <data name="Ed_Vars" xml:space="preserve">المتغيرات</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">لا توجد متغيّرات في هذه المجموعة بعد. عيّن «حفظ الإجابة باسم» لأي خطوة فتظهر هنا. انقر نقرًا مزدوجًا لنسخ {الاسم}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">المظهر</data>
+  <data name="Site_Title" xml:space="preserve">جدول ربط المواقع</data>
+  <data name="Site_Hint" xml:space="preserve">ترجع خطوة «فتح ملف مصدر الموقع» إلى هذا الجدول. أضف موقعًا، ثم املأ نطاقه وجذر ملفاته المصدرية المحلية فيصبح صالحًا للاستخدام.</data>
+  <data name="Site_Add" xml:space="preserve">إضافة موقع</data>
+  <data name="Site_NewName" xml:space="preserve">موقع جديد</data>
+  <data name="Site_ColName" xml:space="preserve">الاسم</data>
+  <data name="Site_ColHosts" xml:space="preserve">النطاق</data>
+  <data name="Site_Name" xml:space="preserve">الاسم</data>
+  <data name="Site_Hosts" xml:space="preserve">النطاق</data>
+  <data name="Site_HostsTip" xml:space="preserve">نطاق واحد في كل سطر. اذكر المنفذ كاملًا إن وُجد، مثل localhost:8080. لا توجد بدائل عامة: example.com لا تشمل evil-example.com.</data>
+  <data name="Site_Root" xml:space="preserve">جذر الملفات المصدرية المحلية</data>
+  <data name="Site_RootTip" xml:space="preserve">يجب أن يطابق هذا المسار بنية المجلدات في الموقع المنشور، وعندئذٍ فقط تقع الملفات المرتبطة على المصادر الحقيقية.</data>
+  <data name="Site_Browse" xml:space="preserve">استعراض…</data>
+  <data name="Site_RootMissing" xml:space="preserve">هذا المجلد غير موجود</data>
+  <data name="Site_Index" xml:space="preserve">ملف المجلد</data>
+  <data name="Site_IndexTip" xml:space="preserve">عندما يشير العنوان إلى المجلد نفسه (بلا اسم ملف في نهايته)، يُفتح هذا الملف.</data>
+  <data name="Site_Rules" xml:space="preserve">إعادة كتابة المسارات</data>
+  <data name="Site_RulesTip" xml:space="preserve">تُطبَّق بالترتيب. مثلًا إذا كان المسار في الموقع /posts/ والمصادر في _posts/، فأضف قاعدة: نمط المطابقة ^posts/، والنص البديل _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">إضافة قاعدة</data>
+  <data name="Site_Match" xml:space="preserve">المطابقة (تعبير نمطي)</data>
+  <data name="Site_Replace" xml:space="preserve">الاستبدال</data>
+  <data name="Site_Empty" xml:space="preserve">لا توجد مواقع بعد. انقر «إضافة موقع»، واملأ النطاق وجذر الملفات المصدرية المحلية.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">النطاق ← المسار المحلي</data>
+  <data name="Site_Open" xml:space="preserve">فتح جدول المواقع…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">الجدول الذي تستخدمه خطوة «فتح ملف مصدر الموقع».</data>
+  <data name="TplMgr_Title" xml:space="preserve">قوالب مجموعات الإجراءات</data>
+  <data name="TplMgr_Hint" xml:space="preserve">القالب إجراء جاهز. القوالب المعدّلة تُحفظ، ومن ثم يُضاف ما تعدّله؛ و«استعادة الافتراضي» تعيد القالب إلى نسخته المدمجة.</data>
+  <data name="TplMgr_Add" xml:space="preserve">إضافة كإجراء جديد</data>
+  <data name="TplMgr_Edit" xml:space="preserve">تعديل القالب</data>
+  <data name="TplMgr_Reset" xml:space="preserve">استعادة الافتراضي</data>
+  <data name="TplMgr_Badge" xml:space="preserve">معدّل</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} خطوة</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} خطوة · معدّل</data>
+  <data name="TplMgr_Empty" xml:space="preserve">لا توجد قوالب</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">لا توجد خطوات في هذا الإجراء بعد. اختر واحدة من صندوق الأدوات على اليسار.</data>
+  <data name="Panel_Scenes" xml:space="preserve">المشاهد</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} صفحة</data>
+  <data name="Panel_Filter" xml:space="preserve">تصفية المشاهد…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">صفّر العمود الأيسر باسم العملية أو الصفحة. اتركه فارغًا بلا تصفية.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">نقل صفحة إلى اليسار</data>
+  <data name="Panel_MoveRight" xml:space="preserve">نقل صفحة إلى اليمين</data>
 </root>

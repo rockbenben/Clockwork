@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Raggruppa una routine e lanciala quando vuoi con scorciatoia / barra; anche l'Elenco di avvio e le Attività pianificate possono richiamarla. Ciò che gira solo all'accesso è più semplice come passi dell'Elenco di avvio.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Ancora nessun passaggio. Clicca «Aggiungi» in alto per creare il primo: quello che sta in cima viene eseguito per primo.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(vuoto)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Modifica gruppo di azioni</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Un gruppo non parte mai da solo: avvialo dal menu nella barra delle applicazioni, con una scorciatoia globale, da un passo Gruppo di azioni nella lista di avvio o da un'attività pianificata.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Inserisci un nome per il gruppo.</value>
   </data>
@@ -1432,9 +1428,7 @@ Registro: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Scorciatoia globale</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Fai clic e premi una combinazione di tasti per eseguire questo gruppo in qualsiasi momento; premila di nuovo mentre è in esecuzione per fermarlo. Esc annulla, Canc cancella</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>Impossibile registrare la scorciatoia {1} del gruppo di azioni «{0}»: potrebbe essere già in uso</value>
   </data>
@@ -1738,15 +1732,9 @@ Registro: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Prosegue appena entrambi sono pronti, con un'attesa massima di 90 s; il ritardo fisso qui sopra si somma. Attivalo se l'elenco parte troppo presto per i tuoi programmi.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Aprire</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Controllare programmi</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>Sistema e audio</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Per aprire app all'accesso con ordine e ritardi è più comodo l'Elenco di avvio; condizioni come «solo entro N minuti dall'avvio» o «solo al mattino» sono esattamente per questo posto.</value>
   </data>
@@ -1939,9 +1927,7 @@ Registro: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>A quale categoria appartiene questa pagina. La fila in alto ha una scheda per categoria; sceglierne una elenca solo le sue pagine.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Sopra clicchi una categoria, a sinistra una pagina. Doppio clic per rinominare, trascina le schede per riordinarle, lasciane una su una categoria per spostarci quella pagina; lascia un riquadro su una scheda per spostarlo in quella pagina. Clic destro su una scheda per rinominarla o eliminarla.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Scegli la categoria in alto e lo scenario a sinistra; le pagine di quel gruppo stanno una accanto all'altra a destra. Trascina una tessera direttamente su un'altra scheda per spostarla lì, fai clic sul titolo di una scheda per rinominarla e fai clic destro su una riga di scenario per rinominare, eliminare o spostare.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Mostra le schede a sinistra</value>
   </data>
@@ -2124,7 +2110,7 @@ Registro: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Impossibile decodificare: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Legge la barra degli indirizzi del browser corrente e produce un indirizzo per i passaggi successivi. Supporta i browser Chromium come Chrome ed Edge; Firefox non è ancora supportato.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Come aprire</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Lascia vuoto l’indirizzo per leggerlo automaticamente dal browser. Le corrispondenze dominio → percorso locale stanno in sites, dentro clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Inserisci un indirizzo (i segnaposto {nome} funzionano). Per seguire la pagina che hai davanti, aggiungi prima un passaggio «Leggi l'indirizzo del browser» che scrive l'indirizzo in una variabile e qui metti {quella variabile}. La corrispondenza dominio → percorso locale si modifica in Impostazioni → Mappa dei siti.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Espressione regolare</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Gruppo di acquisizione</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = l’intera corrispondenza; da 1 in poi = quale gruppo tra parentesi. Sintassi regex .NET.</data>
@@ -2178,6 +2164,63 @@ Registro: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">righe</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tasto</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Apri il file sorgente locale</data>
-  <data name="Menu_SecValue" xml:space="preserve">Ottieni valori</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Controllo di flusso</data>
+  <data name="Menu_SecUI" xml:space="preserve">Interfaccia</data>
+  <data name="Menu_SecClip" xml:space="preserve">Appunti</data>
+  <data name="Menu_SecFile" xml:space="preserve">File e percorsi</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistema e finestre</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Calcolo</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Preimpostazioni</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">Questo passaggio non ha un indirizzo. Scrivi-ne uno sopra; se vuoi che l’indirizzo segua la pagina corrente, aggiungi prima un passo «Leggi indirizzo del browser», salvalo in una variabile e qui scrivi {variable}.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">indirizzo</data>
+  <data name="Tbx_Title" xml:space="preserve">Cassetta degli strumenti dei moduli</data>
+  <data name="Tbx_Search" xml:space="preserve">Cerca un passo…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Scrivi il nome o il tipo di un passo e la cassetta filtra subito. Fai doppio clic o premi Invio per aggiungere.</data>
+  <data name="Tbx_Section" xml:space="preserve">Categoria</data>
+  <data name="Tbx_All" xml:space="preserve">Tutto</data>
+  <data name="Tbx_Empty" xml:space="preserve">Nessun passo corrispondente</data>
+  <data name="Ed_Vars" xml:space="preserve">Variabili</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">Questo gruppo non ha ancora variabili. Imposta «uscita in variabile» su un qualsiasi passaggio e comparirà qui. Fai doppio clic per copiare {nome}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Aspetto</data>
+  <data name="Site_Title" xml:space="preserve">Tabella di corrispondenza dei siti</data>
+  <data name="Site_Hint" xml:space="preserve">Il passaggio «Apri il file sorgente del sito» usa questa tabella. Aggiungi un sito, compila il dominio e la radice del codice locale: è pronto.</data>
+  <data name="Site_Add" xml:space="preserve">Aggiungi sito</data>
+  <data name="Site_NewName" xml:space="preserve">Nuovo sito</data>
+  <data name="Site_ColName" xml:space="preserve">Nome</data>
+  <data name="Site_ColHosts" xml:space="preserve">Domini</data>
+  <data name="Site_Name" xml:space="preserve">Nome</data>
+  <data name="Site_Hosts" xml:space="preserve">Domini</data>
+  <data name="Site_HostsTip" xml:space="preserve">Uno per riga. Scrivi la porta per esteso, per esempio localhost:8080. Nessun carattere jolly: example.com non include evil-example.com.</data>
+  <data name="Site_Root" xml:space="preserve">Radice dei sorgenti locali</data>
+  <data name="Site_RootTip" xml:space="preserve">Questo percorso deve corrispondere all’alberatura del sito online: così i file mappati finiranno sul vero codice sorgente.</data>
+  <data name="Site_Browse" xml:space="preserve">Sfoglia…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Questa cartella non esiste</data>
+  <data name="Site_Index" xml:space="preserve">File della cartella</data>
+  <data name="Site_IndexTip" xml:space="preserve">Quando si raggiunge la cartella stessa (l’indirizzo non finisce con un nome di file), si apre questo file.</data>
+  <data name="Site_Rules" xml:space="preserve">Riscrittura dei percorsi</data>
+  <data name="Site_RulesTip" xml:space="preserve">Si applicano in ordine. Ad esempio, se online c’è /posts/ e il codice sorgente è in _posts/, aggiungine una: corrispondenza con ^posts/, sostituzione con _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Aggiungi regola</data>
+  <data name="Site_Match" xml:space="preserve">Corrispondenza (regex)</data>
+  <data name="Site_Replace" xml:space="preserve">Sostituisci con</data>
+  <data name="Site_Empty" xml:space="preserve">Ancora nessun sito. Fai clic su «Aggiungi sito» e compila dominio e radice dei sorgenti locali.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Dominio → percorso locale</data>
+  <data name="Site_Open" xml:space="preserve">Apri tabella dei siti…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">La tabella usata dal passaggio «Apri il file sorgente del sito».</data>
+  <data name="TplMgr_Title" xml:space="preserve">Modelli di gruppi di azioni</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Un modello è un’azione già pronta. Le modifiche vengono salvate, quindi i prossimi aggiunti useranno la tua versione; «Torna alla normalità» ripristina quella integrata.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Aggiungi come azione</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Modifica modello</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Torna alla normalità</data>
+  <data name="TplMgr_Badge" xml:space="preserve">Modificato</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} passi</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} passi · Modificato</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Nessun modello</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">Questa azione non ha ancora passaggi. Scegline uno dalla Cassetta degli strumenti dei moduli a sinistra.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Scenari</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} pagine</data>
+  <data name="Panel_Filter" xml:space="preserve">Filtra scenari…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Filtra la colonna di sinistra per nome di processo o di pagina. Vuoto = nessun filtro.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Sposta di una pagina a sinistra</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Sposta di una pagina a destra</data>
 </root>

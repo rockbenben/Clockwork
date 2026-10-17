@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>把一串操作打包成一个动作，可通过热键或托盘随时一键触发，也可被启动清单和定时任务引用。只在开机跑一次的，直接写进「我的启动清单」更省事。</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>还没有步骤。点上面「新增」加第一步；谁在上面就先跑谁。</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>（空）</value>
   </data>
@@ -849,9 +847,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>编辑动作</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>动作不会自己运行。可从托盘菜单、全局热键、启动清单里的「运行动作」步骤或定时任务触发。</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>请填写动作名称。</value>
   </data>
@@ -1438,9 +1434,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>全局热键</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>点击后按下组合键，随时一键运行这个动作；运行中再按一次即停下。Esc 取消，Del 清空。</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>动作「{0}」的热键 {1} 注册失败：可能已被其他程序或热键占用</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>就绪即走，最多等 90 秒，然后再叠加上面的固定延迟。开机太早、软件起不来时打开它。</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>打开</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>控制程序</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>系统与声音</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>开机开软件、要顺序和延迟 → 「我的启动清单」更顺手；要「仅开机 N 分钟内」「仅上午」这类门控 → 留在这里是对的。</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>这一页归哪一类。顶栏一格一类，点了只列这一类里的页。</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>上边点分类，左边点页。双击改名，拖页签换先后，拖到分类上就归进那一类；格子拖到页签上就搬进那一页。右键页签可重命名或删除。</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>上边点分类，左边点场景，右边这一组下的页并排摆着。格子直接拖到另一张卡上就搬进那一页；点卡片标题可就地改名，右键那一行有改名、删除、左右移。</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>显示左侧页签</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">无法解码这段内容：{0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">读当前浏览器的地址栏，产出一个网址给后面的步骤用。支持 Chrome / Edge 等 Chromium 系浏览器，暂不支持 Firefox。</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">打开方式</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">网址留空 = 自动读浏览器地址栏。域名 → 本地路径的对应关系写在配置文件 clockwork.settings.json 的 sites 里。</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">要填一个网址（可以写 {名字} 占位）。想让网址跟着当前页面走，先加一步「读浏览器地址」把地址写进变量，再在这里填 {那个变量}。域名 → 本地路径的对应关系在「设置 → 站点映射表」里改。</data>
   <data name="Ed_RegexPattern" xml:space="preserve">正则表达式</data>
   <data name="Ed_RegexGroup" xml:space="preserve">取第几组</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = 整个匹配，1 起 = 第几个括号里的内容。正则采用 .NET 语法。</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">行</data>
   <data name="Tpl_KeyVar" xml:space="preserve">按键</data>
   <data name="Tpl_SiteSource" xml:space="preserve">打开本地源文件</data>
-  <data name="Menu_SecValue" xml:space="preserve">取值</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">流程控制</data>
+  <data name="Menu_SecUI" xml:space="preserve">界面交互</data>
+  <data name="Menu_SecClip" xml:space="preserve">剪贴板</data>
+  <data name="Menu_SecFile" xml:space="preserve">文件与路径</data>
+  <data name="Menu_SecSys" xml:space="preserve">系统与窗口</data>
+  <data name="Menu_SecCalc" xml:space="preserve">计算</data>
+  <data name="Menu_SecPreset" xml:space="preserve">常用预设</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">这一步没有网址。请在上面填一个网址；想让网址跟着当前页面走，先加一步「读取浏览器地址栏」，把它写进变量，再在这里填 {变量名}。</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">地址</data>
+  <data name="Tbx_Title" xml:space="preserve">模块工具箱</data>
+  <data name="Tbx_Search" xml:space="preserve">搜索步骤…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">输入步骤名或类型，工具箱当场过滤。双击或按回车添加。</data>
+  <data name="Tbx_Section" xml:space="preserve">分类</data>
+  <data name="Tbx_All" xml:space="preserve">全部</data>
+  <data name="Tbx_Empty" xml:space="preserve">没有匹配的步骤</data>
+  <data name="Ed_Vars" xml:space="preserve">变量</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">这一组还没有变量。给任意一步设「输出到变量」，它就会出现在这里。双击可复制 {名字}。</data>
+  <data name="Ed_Appearance" xml:space="preserve">外观</data>
+  <data name="Site_Title" xml:space="preserve">站点映射表</data>
+  <data name="Site_Hint" xml:space="preserve">「网址 → 本地源文件」步骤按这张表来查。加一个站点，填上域名和本地源码根就能用了。</data>
+  <data name="Site_Add" xml:space="preserve">添加站点</data>
+  <data name="Site_NewName" xml:space="preserve">新站点</data>
+  <data name="Site_ColName" xml:space="preserve">名称</data>
+  <data name="Site_ColHosts" xml:space="preserve">域名</data>
+  <data name="Site_Name" xml:space="preserve">名称</data>
+  <data name="Site_Hosts" xml:space="preserve">域名</data>
+  <data name="Site_HostsTip" xml:space="preserve">一行一个。带端口的写全，例如 localhost:8080。不做通配：example.com 不含 evil-example.com。</data>
+  <data name="Site_Root" xml:space="preserve">本地源码根</data>
+  <data name="Site_RootTip" xml:space="preserve">这条路径要和线上的目录结构对得上，映射出来的文件才会落在真实的源码上。</data>
+  <data name="Site_Browse" xml:space="preserve">浏览…</data>
+  <data name="Site_RootMissing" xml:space="preserve">这个目录不存在</data>
+  <data name="Site_Index" xml:space="preserve">目录落到哪个文件</data>
+  <data name="Site_IndexTip" xml:space="preserve">访问到目录本身时（网址末尾没有文件名），打开这个文件。</data>
+  <data name="Site_Rules" xml:space="preserve">路径改写</data>
+  <data name="Site_RulesTip" xml:space="preserve">按顺序依次套用。比如线上是 /posts/、源码放在 _posts/，就加一条：匹配 ^posts/，替换成 _posts/。</data>
+  <data name="Site_RuleAdd" xml:space="preserve">添加改写规则</data>
+  <data name="Site_Match" xml:space="preserve">匹配（正则）</data>
+  <data name="Site_Replace" xml:space="preserve">替换</data>
+  <data name="Site_Empty" xml:space="preserve">还没有站点。点「添加站点」，填上域名和本地源码根。</data>
+  <data name="Site_SettingsRow" xml:space="preserve">域名 → 本地路径</data>
+  <data name="Site_Open" xml:space="preserve">打开站点表…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">「网址 → 本地源文件」步骤用的那张表。</data>
+  <data name="TplMgr_Title" xml:space="preserve">动作组模板</data>
+  <data name="TplMgr_Hint" xml:space="preserve">模板是一份现成的动作。改过的模板会保存下来，以后添加都用你改的那份；「恢复默认」把它退回内置的那份。</data>
+  <data name="TplMgr_Add" xml:space="preserve">添加为新动作</data>
+  <data name="TplMgr_Edit" xml:space="preserve">修改模板</data>
+  <data name="TplMgr_Reset" xml:space="preserve">恢复默认</data>
+  <data name="TplMgr_Badge" xml:space="preserve">已修改</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} 个步骤</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} 个步骤 · 已修改</data>
+  <data name="TplMgr_Empty" xml:space="preserve">没有模板</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">这一组还没有步骤。从左边的模块工具箱里挑一个加进来。</data>
+  <data name="Panel_Scenes" xml:space="preserve">场景</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} 页</data>
+  <data name="Panel_Filter" xml:space="preserve">筛选场景…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">按进程名或页名过滤左栏。空 = 不过滤。</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">左移一页</data>
+  <data name="Panel_MoveRight" xml:space="preserve">右移一页</data>
 </root>

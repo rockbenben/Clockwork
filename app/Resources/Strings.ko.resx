@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>여러 동작을 그룹으로 묶어 단축키 / 트레이에서 언제든 실행하세요. 시작 목록과 예약 작업에서도 참조할 수 있습니다. 로그인 때 한 번만 실행할 거라면 시작 목록에 바로 적는 편이 간단합니다.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>아직 단계가 없습니다. 위 “추가”를 눌러 첫 단계를 더하세요. 위에 있는 것이 먼저 실행됩니다.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(비어 있음)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>동작 그룹 편집</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>그룹은 스스로 실행되지 않습니다. 트레이 메뉴, 전역 단축키, 시작 목록의 '동작 그룹' 단계 또는 예약 작업에서 실행하세요.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>그룹 이름을 입력하세요.</value>
   </data>
@@ -1432,9 +1428,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>전역 단축키</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>클릭 후 키 조합을 누르면 언제든 이 그룹을 실행합니다. 실행 중에 다시 누르면 중지합니다. Esc 취소, Delete 지우기</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>동작 그룹 “{0}”의 단축키 {1} 등록 실패: 이미 사용 중일 수 있습니다</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>둘 다 준비되면 바로 진행하며 최대 90초까지 기다립니다. 그 뒤에 위의 고정 지연이 더해집니다. 너무 일찍 실행돼 프로그램이 뜨지 않을 때 켜세요.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>열기</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>앱 제어</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>시스템·소리</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>순서·지연을 두고 로그인 때 앱을 열려면 시작 목록이 더 편합니다. “부팅 후 N분 이내만” “오전만” 같은 조건이 필요하면 여기가 맞습니다.</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>이 페이지가 속한 분류입니다. 위쪽 줄은 분류마다 탭이 하나씩이며, 고르면 그 분류의 페이지만 나열됩니다.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>위에서 분류를, 왼쪽에서 페이지를 누릅니다. 두 번 누르면 이름이 바뀌고, 탭을 끌면 순서가 바뀌며, 분류 위에 놓으면 그 페이지가 그 분류로 옮겨집니다. 타일을 탭에 놓으면 그 페이지로 옮겨집니다. 탭을 오른쪽 클릭하면 이름을 바꾸거나 삭제할 수 있습니다.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>위에서 분류, 왼쪽에서 시나리오를 고르면 오른쪽에 그 그룹의 페이지가 나란히 놓입니다. 타일을 다른 카드로 바로 끌어 옮기면 그 페이지로 이동합니다. 카드 제목을 클릭하면 바로 이름을 고칠 수 있고, 시나리오 행을 우클릭하면 이름 바꾸기·삭제·좌우 이동이 나옵니다.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>왼쪽 탭 표시</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">이 내용을 디코드할 수 없습니다: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">현재 브라우저의 주소 표시줄을 읽어 뒤 단계에서 쓸 주소를 만듭니다. Chrome / Edge 등 Chromium 系 브라우저를 지원하며 Firefox는 아직 지원되지 않습니다.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">여는 방식</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">주소를 비워 두면 브라우저에서 자동으로 읽습니다. 도메인 → 로컬 경로 대응은 clockwork.settings.json의 sites에 적습니다.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">주소를 입력하세요({이름} 자리 표시자를 쓸 수 있습니다). 지금 보고 있는 페이지의 주소를 따라가려면 먼저 '브라우저 주소 읽기' 단계를 두고 주소를 변수에 기록한 다음, 여기에 {그 변수}를 넣으세요. 도메인 → 로컬 경로 대응은 설정 → 사이트 맵에서 고칩니다.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">정규식</data>
   <data name="Ed_RegexGroup" xml:space="preserve">가져올 그룹</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = 전체 일치, 1 이상 = 몇 번째 괄호 내용. .NET 정규식 구문을 사용합니다.</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">줄</data>
   <data name="Tpl_KeyVar" xml:space="preserve">키</data>
   <data name="Tpl_SiteSource" xml:space="preserve">로컬 원본 파일 열기</data>
-  <data name="Menu_SecValue" xml:space="preserve">값 얻기</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">실행 흐름</data>
+  <data name="Menu_SecUI" xml:space="preserve">화면 상호작용</data>
+  <data name="Menu_SecClip" xml:space="preserve">클립보드</data>
+  <data name="Menu_SecFile" xml:space="preserve">파일과 경로</data>
+  <data name="Menu_SecSys" xml:space="preserve">시스템과 창</data>
+  <data name="Menu_SecCalc" xml:space="preserve">계산</data>
+  <data name="Menu_SecPreset" xml:space="preserve">자주 쓰는 프리셋</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">이 단계에는 주소가 없습니다. 위에 주소를 입력하세요. 주소가 현재 페이지를 따라가게 하려면 먼저 “브라우저 주소 읽기” 단계를 추가해 변수에 저장한 뒤 여기에 {변수 이름}을 입력하세요.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">주소</data>
+  <data name="Tbx_Title" xml:space="preserve">모듈 도구 상자</data>
+  <data name="Tbx_Search" xml:space="preserve">단계 검색…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">단계 이름이나 유형을 입력하면 도구 상자가 바로 거릅니다. 두 번 클릭하거나 Enter를 누르면 추가됩니다.</data>
+  <data name="Tbx_Section" xml:space="preserve">분류</data>
+  <data name="Tbx_All" xml:space="preserve">전체</data>
+  <data name="Tbx_Empty" xml:space="preserve">일치하는 단계가 없습니다</data>
+  <data name="Ed_Vars" xml:space="preserve">변수</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">이 그룹에는 아직 변수가 없습니다. 아무 단계에나 “변수로 저장”을 설정하면 여기에 나타납니다. 두 번 클릭하면 {이름}을 복사합니다.</data>
+  <data name="Ed_Appearance" xml:space="preserve">외관</data>
+  <data name="Site_Title" xml:space="preserve">사이트 매핑</data>
+  <data name="Site_Hint" xml:space="preserve">“웹페이지 → 로컬 원본 파일” 단계가 이 표를 참조합니다. 사이트를 추가하고 도메인과 로컬 소스 루트를 입력하면 됩니다.</data>
+  <data name="Site_Add" xml:space="preserve">사이트 추가</data>
+  <data name="Site_NewName" xml:space="preserve">새 사이트</data>
+  <data name="Site_ColName" xml:space="preserve">이름</data>
+  <data name="Site_ColHosts" xml:space="preserve">도메인</data>
+  <data name="Site_Name" xml:space="preserve">이름</data>
+  <data name="Site_Hosts" xml:space="preserve">도메인</data>
+  <data name="Site_HostsTip" xml:space="preserve">한 줄에 하나씩 입력합니다. 포트가 있으면 끝까지 입력하세요(예: localhost:8080). 와일드카드는 쓰지 않습니다: example.com에는 evil-example.com이 포함되지 않습니다.</data>
+  <data name="Site_Root" xml:space="preserve">로컬 소스 루트</data>
+  <data name="Site_RootTip" xml:space="preserve">이 경로가 온라인의 폴더 구조와 맞아야 매핑된 파일이 실제 소스에 닿습니다.</data>
+  <data name="Site_Browse" xml:space="preserve">찾아보기…</data>
+  <data name="Site_RootMissing" xml:space="preserve">이 폴더가 없습니다</data>
+  <data name="Site_Index" xml:space="preserve">폴더의 인덱스 파일</data>
+  <data name="Site_IndexTip" xml:space="preserve">폴더 주소로 바로 접근할 때(URL 끝에 파일명이 없으면) 이 파일을 엽니다.</data>
+  <data name="Site_Rules" xml:space="preserve">경로 바꾸기</data>
+  <data name="Site_RulesTip" xml:space="preserve">위에서부터 순서대로 적용됩니다. 예: 온라인이 /posts/이고 소스가 _posts/에 있으면, 일치 ^posts/ → 바꾸기 _posts/ 규칙을 추가하세요.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">바꾸기 규칙 추가</data>
+  <data name="Site_Match" xml:space="preserve">일치(정규식)</data>
+  <data name="Site_Replace" xml:space="preserve">바꾸기</data>
+  <data name="Site_Empty" xml:space="preserve">아직 사이트가 없습니다. [사이트 추가]를 눌러 도메인과 로컬 소스 루트를 입력하세요.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">도메인 → 로컬 경로</data>
+  <data name="Site_Open" xml:space="preserve">사이트 표 열기…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">“웹페이지 → 로컬 원본 파일” 단계가 쓰는 표입니다.</data>
+  <data name="TplMgr_Title" xml:space="preserve">동작 그룹 템플릿</data>
+  <data name="TplMgr_Hint" xml:space="preserve">템플릿은 준비된 동작입니다. 수정한 템플릿은 저장되어 이후 추가할 때도 그 버전을 쓰고, [기본값 복원]으로 내장 버전으로 되돌립니다.</data>
+  <data name="TplMgr_Add" xml:space="preserve">새 동작으로 추가</data>
+  <data name="TplMgr_Edit" xml:space="preserve">템플릿 편집</data>
+  <data name="TplMgr_Reset" xml:space="preserve">기본값 복원</data>
+  <data name="TplMgr_Badge" xml:space="preserve">수정됨</data>
+  <data name="TplMgr_Detail" xml:space="preserve">단계 {0}개</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">단계 {0}개 · 수정됨</data>
+  <data name="TplMgr_Empty" xml:space="preserve">템플릿이 없습니다</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">이 작업에는 아직 단계가 없습니다. 왼쪽 모듈 도구 상자에서 하나 골라 추가하세요.</data>
+  <data name="Panel_Scenes" xml:space="preserve">시나리오</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0}개 페이지</data>
+  <data name="Panel_Filter" xml:space="preserve">시나리오 필터…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">프로세스 이름이나 페이지 이름으로 왼쪽 목록을 거릅니다. 비우면 전체.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">한 페이지 왼쪽으로</data>
+  <data name="Panel_MoveRight" xml:space="preserve">한 페이지 오른쪽으로</data>
 </root>

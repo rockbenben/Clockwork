@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Bundel een routine en start die op elk moment via sneltoets / systeemvak; de Opstartlijst en Geplande taken kunnen ernaar verwijzen. Iets dat alleen bij aanmelden draait, is simpeler als gewone opstartlijst-stappen.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Nog geen stappen. Klik hierboven op “Toevoegen” om de eerste te maken — wat boven staat, loopt eerst.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(leeg)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Actiegroep bewerken</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Een groep start nooit vanzelf — start hem via het systeemvakmenu, een globale sneltoets, een Actiegroep-stap in de opstartlijst of een geplande taak.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Voer een groepsnaam in.</value>
   </data>
@@ -1432,9 +1428,7 @@ Log: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Globale sneltoets</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Klik en druk op een toetsencombinatie om deze groep altijd uit te voeren; druk opnieuw terwijl hij loopt om te stoppen. Esc annuleert, Delete wist</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>Sneltoets {1} voor actiegroep “{0}” kon niet worden geregistreerd: mogelijk al in gebruik</value>
   </data>
@@ -1738,15 +1732,9 @@ Log: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Gaat verder zodra beide klaar zijn, met maximaal 90 s wachten; de vaste vertraging hierboven komt daar nog bij. Zet dit aan als de lijst te vroeg draait voor uw programma's.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Openen</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Programma's besturen</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>Systeem en geluid</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Apps openen bij aanmelden met volgorde en vertraging gaat makkelijker via de Opstartlijst; voorwaarden als “alleen binnen N minuten na opstarten” of “alleen 's ochtends” horen juist hier.</value>
   </data>
@@ -1939,9 +1927,7 @@ Log: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Tot welke categorie deze pagina behoort. De bovenste rij heeft één tabblad per categorie; er een kiezen toont alleen die pagina’s.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Bovenaan klikt u een categorie, links een pagina. Dubbelklik om te hernoemen, sleep tabbladen om ze te ordenen en laat er een op een categorie los om die pagina daarheen te verplaatsen; laat een tegel op een tabblad los om die naar die pagina te verplaatsen. Rechtsklik op een tabblad om het te hernoemen of te verwijderen.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Kies bovenaan de categorie en links het scenario; rechts staan de pagina's van die groep naast elkaar. Sleep een tegel recht naar een andere kaart om hem te verplaatsen, klik op een kaarttitel om die te hernoemen, en klik met rechts op een scenariorij voor hernoemen, verwijderen en verplaatsen.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Linkertabbladen tonen</value>
   </data>
@@ -2124,7 +2110,7 @@ Log: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Dat kon niet worden gedecodeerd: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Leest de adresbalk van de huidige browser en levert een adres voor latere stappen. Ondersteunt Chromium-browsers zoals Chrome en Edge; Firefox wordt nog niet ondersteund.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Hoe openen</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Laat het adres leeg om het automatisch uit de browser te lezen. Domein → lokaal pad staat bij sites in clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Vul een adres in ({name}-placeholders werken). Volg de pagina die u nu ziet door eerst een stap 'Browseradres lezen' toe te voegen, die het adres naar een variabele schrijft, en zet hier dan {die variabele}. De koppeling domein → lokaal pad bewerkt u bij Instellingen → Sitemap.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Reguliere expressie</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Opvanggroep</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = de volledige overeenkomst; 1 en hoger = welke groep tussen haakjes. .NET-regexsyntaxis.</data>
@@ -2178,6 +2164,63 @@ Log: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">regels</data>
   <data name="Tpl_KeyVar" xml:space="preserve">toets</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Open het lokale bronbestand</data>
-  <data name="Menu_SecValue" xml:space="preserve">Waarden ophalen</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Stroomregeling</data>
+  <data name="Menu_SecUI" xml:space="preserve">Interactie</data>
+  <data name="Menu_SecClip" xml:space="preserve">Klembord</data>
+  <data name="Menu_SecFile" xml:space="preserve">Bestanden en paden</data>
+  <data name="Menu_SecSys" xml:space="preserve">Systeem en vensters</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Rekenen</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Kant-en-klare sjablonen</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">Deze stap heeft geen URL. Vul hierboven een URL in; laat de URL de huidige pagina volgen, voeg dan eerst een stap ‘Browseradres lezen’ toe, zet die in een variabele en vul hier {variabelenaam} in.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">Adres</data>
+  <data name="Tbx_Title" xml:space="preserve">Modulewerkzeugkasten</data>
+  <data name="Tbx_Search" xml:space="preserve">Stappen zoeken…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Typ een stapnaam of -type; de werkzeugkast filtert meteen. Dubbelklik of Enter voegt toe.</data>
+  <data name="Tbx_Section" xml:space="preserve">Categorie</data>
+  <data name="Tbx_All" xml:space="preserve">Alle</data>
+  <data name="Tbx_Empty" xml:space="preserve">Geen passende stappen</data>
+  <data name="Ed_Vars" xml:space="preserve">Variabelen</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">Deze groep heeft nog geen variabelen. Stel bij een stap ‘Opslaan in variabele’ in, dan verschijnt die hier. Dubbelklik om {naam} te kopiëren.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Uiterlijk</data>
+  <data name="Site_Title" xml:space="preserve">Sitemap</data>
+  <data name="Site_Hint" xml:space="preserve">De stap ‘Webpagina → lokaal bronbestand’ zoekt in deze tabel op. Voeg een site toe met domein en lokale bronmap.</data>
+  <data name="Site_Add" xml:space="preserve">Site toevoegen</data>
+  <data name="Site_NewName" xml:space="preserve">Nieuwe site</data>
+  <data name="Site_ColName" xml:space="preserve">Naam</data>
+  <data name="Site_ColHosts" xml:space="preserve">Domeinen</data>
+  <data name="Site_Name" xml:space="preserve">Naam</data>
+  <data name="Site_Hosts" xml:space="preserve">Domeinen</data>
+  <data name="Site_HostsTip" xml:space="preserve">Eén per regel. Met poort volledig, bv. localhost:8080. Geen jokertekens: example.com bevat evil-example.com niet.</data>
+  <data name="Site_Root" xml:space="preserve">Lokale bronmap</data>
+  <data name="Site_RootTip" xml:space="preserve">Dit pad moet overeenkomen met de mappenstructuur van de site, zodat de toewijzing echte bronbestanden raakt.</data>
+  <data name="Site_Browse" xml:space="preserve">Bladeren…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Deze map bestaat niet</data>
+  <data name="Site_Index" xml:space="preserve">Indexbestand van de map</data>
+  <data name="Site_IndexTip" xml:space="preserve">Wordt de map zelf opgevraagd (de URL eindigt zonder bestandsnaam), dan opent dit bestand.</data>
+  <data name="Site_Rules" xml:space="preserve">Paden herschrijven</data>
+  <data name="Site_RulesTip" xml:space="preserve">Ze worden op volgorde toegepast. Ligt de site op /posts/ en de broncode in _posts/, voeg dan een regel toe: ^posts/ vervangen door _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Herschrijfregel toevoegen</data>
+  <data name="Site_Match" xml:space="preserve">Overeenkomst (regex)</data>
+  <data name="Site_Replace" xml:space="preserve">Vervangen</data>
+  <data name="Site_Empty" xml:space="preserve">Nog geen sites. Klik op Site toevoegen en vul domein en lokale bronmap in.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Domein → lokaal pad</data>
+  <data name="Site_Open" xml:space="preserve">Sitemaptabel openen…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">De tabel voor de stap ‘Webpagina → lokaal bronbestand’.</data>
+  <data name="TplMgr_Title" xml:space="preserve">Actiegroepssjablonen</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Een sjabloon is een kant-en-klare actie. Gewijzigde sjablonen worden bewaard en verder gebruikt; ‘Terugzetten’ zet de ingebouwde terug.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Als nieuwe actie</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Sjabloon bewerken</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Terugzetten</data>
+  <data name="TplMgr_Badge" xml:space="preserve">gewijzigd</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} stappen</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} stappen · gewijzigd</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Geen sjablonen</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">Deze actie heeft nog geen stappen. Kies er een uit de Modulewerkzeugkasten links.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Scenario's</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} pagina's</data>
+  <data name="Panel_Filter" xml:space="preserve">Scenario's filteren…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Filter de linker kolom op proces- of paginanaam. Leeg = geen filter.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Eén pagina naar links</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Eén pagina naar rechts</data>
 </root>

@@ -53,8 +53,10 @@ public class HintQuotesItsOwnLabelTests
         ("Tab_Reminder", "Launch_Hint"),
         ("Tab_Launch", "Reminder_Hint"),
         ("Tab_Launch", "Group_Hint"),
-        // 空态那句指着「新增」那颗按钮说话；按钮改名，这句话必须跟着改（18 份一起）。
-        ("Btn_Add", "Group_NoSteps"),
+        // 空态那句指着**模块工具箱**说话（「从左边的模块工具箱里挑一个加进来」），
+        // 它不再指那颗「新增」按钮——动作编辑器改成常驻工具箱之后，按钮已经不在这一步的路径上了。
+        // 配的是它真正引用的那块：改名时这句话必须跟着改（18 份一起）。
+        ("Tbx_Title", "Ed_StepsEmpty"),
     };
 
     public static IEnumerable<object[]> References =>

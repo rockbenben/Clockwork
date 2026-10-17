@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Kemas serangkaian aksi menjadi grup, jalankan kapan saja lewat pintasan / baki; Daftar startup dan Tugas terjadwal juga bisa merujuknya. Yang hanya berjalan saat masuk lebih sederhana ditulis langsung di Daftar startup.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Belum ada langkah. Klik “Tambah” di atas untuk membuat langkah pertama; yang di atas jalan lebih dulu.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(kosong)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Edit grup aksi</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Grup tidak pernah berjalan sendiri — jalankan dari menu baki, pintasan global, langkah Jalankan grup aksi di daftar startup, atau tugas terjadwal.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Silakan isi nama grup.</value>
   </data>
@@ -1432,9 +1428,7 @@ Log: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Tombol pintas global</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Klik lalu tekan kombinasi tombol untuk menjalankan grup ini kapan saja; tekan lagi saat berjalan untuk menghentikannya. Esc membatalkan, Delete menghapus</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>Gagal mendaftarkan tombol pintas {1} untuk grup aksi “{0}”: mungkin sudah dipakai</value>
   </data>
@@ -1738,15 +1732,9 @@ Log: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Lanjut begitu keduanya siap, menunggu maksimal 90 dtk, lalu jeda tetap di atas ditambahkan. Nyalakan bila daftar berjalan terlalu awal bagi program Anda.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Buka</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Kendalikan aplikasi</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>Sistem &amp; suara</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Membuka aplikasi saat masuk dengan urutan dan jeda lebih mudah di Daftar startup; syarat seperti “hanya dalam N menit setelah nyala” atau “hanya pagi hari” memang tempatnya di sini.</value>
   </data>
@@ -1939,9 +1927,7 @@ Log: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Kategori halaman ini. Baris atas berisi satu tab per kategori; memilih satu hanya menampilkan halaman kategori itu.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Klik kategori di atas, halaman di kiri. Klik ganda untuk mengganti nama, seret tab untuk mengurutkan, jatuhkan satu di sebuah kategori untuk memindahkan halaman itu ke sana; jatuhkan kotak di sebuah tab untuk memindahkannya ke halaman itu. Klik kanan tab untuk mengganti namanya atau menghapusnya.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Pilih kategori di atas dan skenario di kiri; halaman grup itu tersusun berdampingan di kanan. Seret satu ubin langsung ke kartu lain untuk memindahkannya ke sana, klik judul kartu untuk mengganti namanya, dan klik kanan baris skenario untuk mengganti nama, menghapus, atau menggesernya.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Tampilkan tab kiri</value>
   </data>
@@ -2124,7 +2110,7 @@ Log: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Tidak bisa mendekode itu: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Membaca bilah alamat peramban saat ini dan menghasilkan alamat untuk langkah-langkah berikutnya. Mendukung peramban Chromium seperti Chrome dan Edge; Firefox belum didukung.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Cara membuka</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Biarkan alamat kosong untuk dibaca otomatis dari peramban. Pemetaan domain → jalur lokal ada di sites pada clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Isi alamatnya (placeholder {nama} berfungsi). Untuk mengikuti halaman yang sedang Anda lihat, tambahkan dulu langkah 'Baca alamat peramban' yang menulis alamat ke sebuah variabel, lalu taruh {variabel itu} di sini. Pasangan domain → path lokal disunting di Pengaturan → Peta situs.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Ekspresi reguler</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Grup tangkap</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = keseluruhan kecocokan; 1 ke atas = grup kurung Capture. Sintaks regex .NET.</data>
@@ -2178,6 +2164,63 @@ Log: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">baris</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tombol</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Buka berkas sumber lokal</data>
-  <data name="Menu_SecValue" xml:space="preserve">Ambil nilai</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Kontrol alur</data>
+  <data name="Menu_SecUI" xml:space="preserve">Interaksi UI</data>
+  <data name="Menu_SecClip" xml:space="preserve">Clipboard</data>
+  <data name="Menu_SecFile" xml:space="preserve">Berkas &amp; jalur</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistem &amp; jendela</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Hitung</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Preset umum</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">Langkah ini belum punya alamat. Isi alamat di atas; agar alamat ikut halaman yang sedang terbuka, tambahkan langkah “Baca alamat browser” lebih dulu, simpan hasilnya ke variabel, lalu di sini tulis {nama variabel}.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">alamat</data>
+  <data name="Tbx_Title" xml:space="preserve">Kotak alat modul</data>
+  <data name="Tbx_Search" xml:space="preserve">Cari langkah…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Ketik nama atau jenis langkah, kotak alat langsung menyaring. Klik ganda atau tekan Enter untuk menambah.</data>
+  <data name="Tbx_Section" xml:space="preserve">Kategori</data>
+  <data name="Tbx_All" xml:space="preserve">Semua</data>
+  <data name="Tbx_Empty" xml:space="preserve">Tidak ada langkah yang cocok</data>
+  <data name="Ed_Vars" xml:space="preserve">Variabel</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">Grup ini belum punya variabel. Tetapkan “keluaran ke variabel” pada langkah mana pun, lalu variabel itu muncul di sini. Klik ganda untuk menyalin {nama}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Tampilan</data>
+  <data name="Site_Title" xml:space="preserve">Tabel pemetaan situs</data>
+  <data name="Site_Hint" xml:space="preserve">Langkah “Buka berkas sumber situs” mencari lewat tabel ini. Tambahkan satu situs, isi domain dan akar sumber lokal, lalu langsung bisa dipakai.</data>
+  <data name="Site_Add" xml:space="preserve">Tambah situs</data>
+  <data name="Site_NewName" xml:space="preserve">Situs baru</data>
+  <data name="Site_ColName" xml:space="preserve">Nama</data>
+  <data name="Site_ColHosts" xml:space="preserve">Domain</data>
+  <data name="Site_Name" xml:space="preserve">Nama</data>
+  <data name="Site_Hosts" xml:space="preserve">Domain</data>
+  <data name="Site_HostsTip" xml:space="preserve">Satu per baris. Tulis lengkap bila ada port, misalnya localhost:8080. Tanpa wildcard: example.com tidak memuat evil-example.com.</data>
+  <data name="Site_Root" xml:space="preserve">Akar sumber lokal</data>
+  <data name="Site_RootTip" xml:space="preserve">Jalur ini harus cocok dengan struktur folder situs yang sebenarnya, agar berkas yang dipetakan mendarat pada sumber aslinya.</data>
+  <data name="Site_Browse" xml:space="preserve">Telusuri…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Folder itu tidak ada</data>
+  <data name="Site_Index" xml:space="preserve">Berkas indeks</data>
+  <data name="Site_IndexTip" xml:space="preserve">Saat alamatnya menunjuk ke folder itu sendiri (tanpa nama berkas di akhir), yang dibuka adalah berkas ini.</data>
+  <data name="Site_Rules" xml:space="preserve">Tulis ulang jalur</data>
+  <data name="Site_RulesTip" xml:space="preserve">Diterapkan satu per satu sesuai urutan. Contohnya bila situs yang berjalan memakai /posts/ dan sumbernya ada di _posts/, tambahkan satu aturan: cocokkan ^posts/, ganti dengan _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Tambah aturan</data>
+  <data name="Site_Match" xml:space="preserve">Cocokkan (regex)</data>
+  <data name="Site_Replace" xml:space="preserve">Ganti dengan</data>
+  <data name="Site_Empty" xml:space="preserve">Belum ada situs. Klik “Tambah situs”, lalu isi domain dan akar sumber lokal.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Domain → jalur lokal</data>
+  <data name="Site_Open" xml:space="preserve">Buka tabel situs…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">Inilah tabel yang dipakai langkah “Buka berkas sumber situs”.</data>
+  <data name="TplMgr_Title" xml:space="preserve">Templat grup aksi</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Templat adalah satu tindakan yang sudah jadi. Templat yang Anda ubah disimpan, dan penambahan berikutnya memakai versi Anda; “Kembalikan ke bawaan” mengembalikannya ke versi bawaan.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Tambah sebagai tindakan baru</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Ubah templat</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Kembalikan ke bawaan</data>
+  <data name="TplMgr_Badge" xml:space="preserve">Diubah</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} langkah</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} langkah · diubah</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Tidak ada templat</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">Tindakan ini belum punya langkah. Pilih satu dari Kotak alat modul di sebelah kiri.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Skenario</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} halaman</data>
+  <data name="Panel_Filter" xml:space="preserve">Filter skenario…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Saring kolom kiri berdasarkan nama proses atau halaman. Kosong = tanpa filter.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Pindahkan satu halaman ke kiri</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Pindahkan satu halaman ke kanan</data>
 </root>

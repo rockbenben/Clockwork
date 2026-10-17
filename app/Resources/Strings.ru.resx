@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Соберите набор действий в группу и запускайте её в любой момент горячей клавишей / из трея; Список запуска и Задачи по расписанию могут ссылаться на неё. То, что нужно только при входе, проще записать прямо в Список запуска.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Шагов пока нет. Нажмите «Добавить» выше, чтобы создать первый: что стоит наверху, то и выполняется первым.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(пусто)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Изменить группу действий</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Группа никогда не запускается сама — запустите её из меню в трее, глобальной горячей клавишей, шагом «Группа действий» в списке запуска или запланированной задачей.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Введите имя группы.</value>
   </data>
@@ -1432,9 +1428,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Глобальная горячая клавиша</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Нажмите на поле, затем сочетание клавиш — группа запустится в любой момент; повторное нажатие во время выполнения остановит её. Esc — отмена, Delete — очистить</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>Не удалось зарегистрировать горячую клавишу {1} для группы действий «{0}»: возможно, она уже занята</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Продолжает, как только оба готовы, ожидая не более 90 с; затем добавляется фиксированная задержка выше. Включите, если список запускается слишком рано для ваших программ.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Открыть</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Управление программами</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>Система и звук</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Открывать программы при входе с порядком и задержками удобнее в Списке запуска; условия вроде «только в первые N минут после загрузки» или «только утром» — как раз для этого места.</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>К какой категории относится эта страница. В верхнем ряду по вкладке на категорию; выбранная показывает только свои страницы.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Сверху щёлкают категорию, слева — страницу. Двойной щелчок переименовывает, вкладки перетаскиваются для порядка, брошенная на категорию переносит туда страницу; плитка, брошенная на вкладку, переезжает на ту страницу. Правый щелчок по вкладке переименует или удалит её.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Сверху выберите категорию, слева — сценарий; страницы этой группы лежат рядом справа. Перетащите плитку прямо на другую карточку, чтобы перенести её туда, щёлкните по названию карточки, чтобы переименовать, и щёлкните правой кнопкой по строке сценария, чтобы переименовать, удалить или сдвинуть.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Показывать вкладки слева</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Не удалось декодировать: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Читает адресную строку текущего браузера и создаёт адрес для следующих шагов. Поддерживаются браузеры на Chromium (Chrome, Edge); Firefox пока не поддерживается.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Как открыть</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Оставьте адрес пустым, чтобы он читался из браузера автоматически. Соответствия домен → локальный путь заданы в sites в clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Укажите адрес (подстановки {имя} работают). Чтобы адрес шёл за текущей страницей, сначала добавьте шаг «Прочитать адрес браузера», пусть он запишет адрес в переменную, и подставьте здесь {эту переменную}. Соответствие «домен → локальный путь» меняется в Параметры → Карта сайтов.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Регулярное выражение</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Группа захвата</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = всё совпадение; 1 и выше = какая группа в скобках. Синтаксис регулярных выражений .NET.</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">строки</data>
   <data name="Tpl_KeyVar" xml:space="preserve">клавиша</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Открыть локальный исходный файл</data>
-  <data name="Menu_SecValue" xml:space="preserve">Получение значений</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Управление выполнением</data>
+  <data name="Menu_SecUI" xml:space="preserve">Интерфейс</data>
+  <data name="Menu_SecClip" xml:space="preserve">Буфер обмена</data>
+  <data name="Menu_SecFile" xml:space="preserve">Файлы и пути</data>
+  <data name="Menu_SecSys" xml:space="preserve">Система и окна</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Вычислить</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Частые пресеты</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">У этого шага нет адреса. Впишите его выше; чтобы адрес шёл за текущей страницей, сначала добавьте шаг «Прочитать адрес браузера», запишите его в переменную, а здесь укажите {переменная}.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">адрес</data>
+  <data name="Tbx_Title" xml:space="preserve">Панель инструментов</data>
+  <data name="Tbx_Search" xml:space="preserve">Поиск шагов…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Введите название или тип шага — панель инструментов отфильтрует сразу. Двойной щелчок или Enter добавляет шаг.</data>
+  <data name="Tbx_Section" xml:space="preserve">Категория</data>
+  <data name="Tbx_All" xml:space="preserve">Все</data>
+  <data name="Tbx_Empty" xml:space="preserve">Подходящих шагов нет</data>
+  <data name="Ed_Vars" xml:space="preserve">Переменные</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">В этой группе пока нет переменных. Задайте «Сохранить ответ как» любому шагу — и она появится здесь. Двойной щелчок копирует {имя}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Внешний вид</data>
+  <data name="Site_Title" xml:space="preserve">Таблица сайтов</data>
+  <data name="Site_Hint" xml:space="preserve">Шаг «Открыть исходный файл сайта» ищет по этой таблице. Добавьте сайт, укажите домен и корень локальных исходников — и он готов.</data>
+  <data name="Site_Add" xml:space="preserve">Добавить сайт</data>
+  <data name="Site_NewName" xml:space="preserve">Новый сайт</data>
+  <data name="Site_ColName" xml:space="preserve">Имя</data>
+  <data name="Site_ColHosts" xml:space="preserve">Домен</data>
+  <data name="Site_Name" xml:space="preserve">Имя</data>
+  <data name="Site_Hosts" xml:space="preserve">Домен</data>
+  <data name="Site_HostsTip" xml:space="preserve">По одному в строке. Порт указывайте полностью, например localhost:8080. Подстановочных знаков нет: example.com не включает evil-example.com.</data>
+  <data name="Site_Root" xml:space="preserve">Корень локальных исходников</data>
+  <data name="Site_RootTip" xml:space="preserve">Путь должен совпадать со структурой папок на сайте — только тогда сопоставленные файлы попадут в настоящие исходники.</data>
+  <data name="Site_Browse" xml:space="preserve">Обзор…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Такой папки нет</data>
+  <data name="Site_Index" xml:space="preserve">Файл для папки</data>
+  <data name="Site_IndexTip" xml:space="preserve">Когда адрес указывает на саму папку (в конце нет имени файла), открывается этот файл.</data>
+  <data name="Site_Rules" xml:space="preserve">Перезапись путей</data>
+  <data name="Site_RulesTip" xml:space="preserve">Применяются по порядку. Например, на сайте путь /posts/, а исходники лежат в _posts/ — добавьте правило: совпадение ^posts/, заменить на _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Добавить правило</data>
+  <data name="Site_Match" xml:space="preserve">Совпадение (регулярное выражение)</data>
+  <data name="Site_Replace" xml:space="preserve">Заменить</data>
+  <data name="Site_Empty" xml:space="preserve">Сайтов пока нет. Нажмите «Добавить сайт», укажите домен и корень локальных исходников.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Домен → локальный путь</data>
+  <data name="Site_Open" xml:space="preserve">Открыть таблицу сайтов…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">Таблица, которую использует шаг «Открыть исходный файл сайта».</data>
+  <data name="TplMgr_Title" xml:space="preserve">Шаблоны групп действий</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Шаблон — это готовое действие. Изменённые шаблоны сохраняются и дальше добавляются именно они; «Сбросить» возвращает встроенный.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Добавить как новое действие</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Изменить шаблон</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Сбросить</data>
+  <data name="TplMgr_Badge" xml:space="preserve">Изменён</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} шагов</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} шагов · Изменён</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Шаблонов нет</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">В этом действии пока нет шагов. Выберите шаг в списке «Панель инструментов» слева.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Сценарии</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} стр.</data>
+  <data name="Panel_Filter" xml:space="preserve">Фильтр сценариев…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Фильтрует левый столбец по имени процесса или страницы. Пусто — без фильтра.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Сдвинуть на страницу влево</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Сдвинуть на страницу вправо</data>
 </root>

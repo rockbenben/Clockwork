@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Bir dizi eylemi gruplayın, kısayol / tepsiden istediğiniz an çalıştırın; Başlangıç listesi ve Zamanlanmış görevler de gruba başvurabilir. Yalnızca açılışta çalışacak şeyleri doğrudan Başlangıç listesine yazmak daha kolaydır.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Henüz adım yok. İlkini oluşturmak için yukarıdaki «Ekle»ye tıklayın — üstte olan önce çalışır.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(boş)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Eylem grubunu düzenle</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Bir grup asla kendi kendine çalışmaz — tepsi menüsünden, genel kısayoldan, başlangıç listesindeki Eylem grubu adımından veya zamanlanmış görevden çalıştırın.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Lütfen bir grup adı girin.</value>
   </data>
@@ -1432,9 +1428,7 @@ Günlük: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Genel kısayol tuşu</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Tıklayıp bir tuş kombinasyonuna basın; bu grubu istediğiniz an çalıştırır. Çalışırken tekrar basmak durdurur. Esc iptal eder, Delete temizler</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>«{0}» eylem grubunun {1} kısayolu kaydedilemedi: başka bir yerde kullanılıyor olabilir</value>
   </data>
@@ -1738,15 +1732,9 @@ Günlük: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>İkisi de hazır olur olmaz devam eder, en fazla 90 sn bekler; yukarıdaki sabit gecikme bunun üstüne eklenir. Liste programlarınız için çok erken çalışıyorsa açın.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Aç</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Programları kontrol et</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>Sistem ve ses</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Açılışta uygulamaları sırayla ve gecikmeyle açmak Başlangıç listesinde daha kolaydır; «açılıştan sonraki N dakika içinde» veya «yalnızca sabah» gibi koşullar ise tam buraya göredir.</value>
   </data>
@@ -1939,9 +1927,7 @@ Günlük: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Bu sayfanın kategorisi. Üst sıra her kategori için bir sekme taşır; birini seçmek yalnızca o kategorinin sayfalarını listeler.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Yukarıdan kategoriye, soldan sayfaya tıklayın. Çift tıklamak adını değiştirir, sekmeler sürüklenerek sıralanır, birini bir kategoriye bırakmak o sayfayı oraya taşır; bir kutuyu sekmeye bırakmak onu o sayfaya taşır. Sekmeye sağ tıklayarak adını değiştirin ya da sayfayı silin.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Üstten kategoriyi, soldan senaryoyu seçin; o grubun sayfaları sağda yan yana durur. Bir kutucuğu doğrudan başka bir kartın üzerine sürükleyerek oraya taşıyın, bir kart başlığına tıklayarak adını değiştirin, bir senaryo satırına sağ tıklayarak ad değiştirin, silin veya kaydırın.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Soldaki sekmeleri göster</value>
   </data>
@@ -2124,7 +2110,7 @@ Günlük: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Bu çözülemedi: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Geçerli tarayıcının adres çubuğunu okur ve sonraki adımlar için bir adres üretir. Chrome ve Edge gibi Chromium tarayıcıları desteklenir; Firefox henüz desteklenmiyor.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Nasıl açılır</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Adresi boş bırakın; tarayıcıdan otomatik okunur. Alan adı → yerel yol eşlemeleri clockwork.settings.json içindeki sites bölümündedir.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Bir adres girin ({ad} yer tutucuları çalışır). Şu anda baktığınız sayfayı izlemek için önce «Tarayıcı adresini oku» adımını ekleyin; adresi bir değişkene yazsın, sonra buraya {o değişken} yazın. Alan adı → yerel yol eşlemesi Ayarlar → Site haritası altında düzenlenir.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Normal ifade</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Yakalama grubu</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = eşleşmenin tamamı; 1 ve üzeri = hangi parantez grubu. .NET normal ifade sözdizimi.</data>
@@ -2178,6 +2164,63 @@ Günlük: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">satırlar</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tuş</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Yerel kaynak dosyasını aç</data>
-  <data name="Menu_SecValue" xml:space="preserve">Değer al</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Akış denetimi</data>
+  <data name="Menu_SecUI" xml:space="preserve">Arayüz</data>
+  <data name="Menu_SecClip" xml:space="preserve">Pano</data>
+  <data name="Menu_SecFile" xml:space="preserve">Dosyalar ve yollar</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistem ve pencere</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Hesapla</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Yaygın ön ayarlar</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">Bu adımın adresi yok. Yukarıya bir adres yazın; adresin geçerli sayfayı izlemesini istiyorsanız önce «Tarayıcı adresini oku» adımını ekleyin, adresi bir değişkene yazın ve buraya {değişken} yazın.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">adres</data>
+  <data name="Tbx_Title" xml:space="preserve">Araç kutusu</data>
+  <data name="Tbx_Search" xml:space="preserve">Adım ara…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Bir adımın adını ya da türünü yazın; araç kutusu anında süzer. Çift tıklama veya Enter ekler.</data>
+  <data name="Tbx_Section" xml:space="preserve">Kategori</data>
+  <data name="Tbx_All" xml:space="preserve">Tümü</data>
+  <data name="Tbx_Empty" xml:space="preserve">Eşleşen adım yok</data>
+  <data name="Ed_Vars" xml:space="preserve">Değişkenler</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">Bu grupta henüz değişken yok. Herhangi bir adımda «Cevabı şu şekilde kaydet» ayarlayın, değişken burada görünür. Çift tıklayarak {ad} değerini kopyalayın.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Görünüm</data>
+  <data name="Site_Title" xml:space="preserve">Site eşleme tablosu</data>
+  <data name="Site_Hint" xml:space="preserve">«Sitenin kaynak dosyasını aç» adımı bu tabloya bakar. Bir site ekleyip alan adı ile yerel kaynak kökünü doldurun, hemen kullanılır olur.</data>
+  <data name="Site_Add" xml:space="preserve">Site ekle</data>
+  <data name="Site_NewName" xml:space="preserve">Yeni site</data>
+  <data name="Site_ColName" xml:space="preserve">Ad</data>
+  <data name="Site_ColHosts" xml:space="preserve">Alan adı</data>
+  <data name="Site_Name" xml:space="preserve">Ad</data>
+  <data name="Site_Hosts" xml:space="preserve">Alan adı</data>
+  <data name="Site_HostsTip" xml:space="preserve">Her satıra bir tane. Port varsa tamamını yazın, örneğin localhost:8080. Joker karakter yok: example.com, evil-example.com'i kapsamaz.</data>
+  <data name="Site_Root" xml:space="preserve">Yerel kaynak kökü</data>
+  <data name="Site_RootTip" xml:space="preserve">Bu yol, sitedeki klasör yapısıyla örtüşmeli; ancak o zaman eşlenen dosyalar gerçek kaynak dosyalarının üzerine düşer.</data>
+  <data name="Site_Browse" xml:space="preserve">Gözat…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Bu klasör yok</data>
+  <data name="Site_Index" xml:space="preserve">Klasörün dosyası</data>
+  <data name="Site_IndexTip" xml:space="preserve">Adres doğrudan klasörü gösterdiğinde (adresin sonunda dosya adı yok), bu dosya açılır.</data>
+  <data name="Site_Rules" xml:space="preserve">Yol yeniden yazma</data>
+  <data name="Site_RulesTip" xml:space="preserve">Sırayla uygulanır. Örneğin sitede /posts/, kaynaklarda _posts/ ise şu kuralı ekleyin: eşleştir ^posts/, değiştir _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Kural ekle</data>
+  <data name="Site_Match" xml:space="preserve">Eşleştir (normal ifade)</data>
+  <data name="Site_Replace" xml:space="preserve">Değiştir</data>
+  <data name="Site_Empty" xml:space="preserve">Henüz site yok. «Site ekle» düğmesine tıklayıp alan adı ile yerel kaynak kökünü doldurun.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Alan adı → yerel yol</data>
+  <data name="Site_Open" xml:space="preserve">Site tablosunu aç…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">«Sitenin kaynak dosyasını aç» adımının kullandığı tablo.</data>
+  <data name="TplMgr_Title" xml:space="preserve">Eylem grubu şablonları</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Şablon hazır bir eylemdir. Değiştirdiğiniz şablonlar kaydedilir ve bundan sonra eklenen onlardır; «Varsayılanlara dön» şablonu yerleşik hâline geri getirir.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Yeni eylem olarak ekle</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Şablonu düzenle</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Varsayılanlara dön</data>
+  <data name="TplMgr_Badge" xml:space="preserve">Değiştirildi</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} adım</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} adım · Değiştirildi</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Şablon yok</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">Bu eylemin henüz adımı yok. Soldaki Araç kutusu içinden birini seçin.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Senaryolar</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} sayfa</data>
+  <data name="Panel_Filter" xml:space="preserve">Senaryoları filtrele…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Sol sütunu süreç veya sayfa adına göre filtreler. Boş = filtre yok.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Bir sayfa sola taşı</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Bir sayfa sağa taşı</data>
 </root>

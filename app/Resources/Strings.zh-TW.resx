@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>把一串操作打包成一個動作，可透過快捷鍵或系統匣隨時一鍵觸發，也可被啟動清單和定時任務引用。只在開機跑一次的，直接寫進「我的啟動清單」更省事。</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>還沒有步驟。點上面「新增」加第一步；誰在上面就先跑誰。</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>（空）</value>
   </data>
@@ -849,9 +847,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>編輯動作</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>動作不會自己執行。可從系統匣選單、全域快速鍵、啟動清單裡的「執行動作」步驟或定時任務觸發。</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>請填寫動作名稱。</value>
   </data>
@@ -1438,9 +1434,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>全域快速鍵</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>點擊後按下組合鍵，隨時一鍵執行這個動作；執行中再按一次即停下。Esc 取消，Del 清空。</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>動作「{0}」的快速鍵 {1} 註冊失敗：可能已被其他程式或快速鍵佔用</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>就緒即走，最多等 90 秒，然後再疊加上面的固定延遲。開機太早、軟體起不來時開啟它。</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>開啟</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>控制程式</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>系統與音效</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>開機開軟體、要順序和延遲 → 「我的啟動清單」更順手；要「僅開機 N 分鐘內」「僅上午」這類門控 → 留在這裡是對的。</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>這一頁歸哪一類。頂列一格一類，點了只列這一類裡的頁。</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>上邊點分類，左邊點頁。雙擊改名，拖頁籤換先後，拖到分類上就歸進那一類；格子拖到頁籤上就搬進那一頁。右鍵頁籤可重新命名或刪除。</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>上邊點分類，左邊點場景，右邊這一組下的頁並排擺著。格子直接拖到另一張卡上就搬進那一頁；點卡片標題可就地改名，右鍵那一列有改名、刪除、左右移。</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>顯示左側頁籤</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">無法解碼這段內容：{0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">讀取目前瀏覽器的網址列，產生一個網址給後面的步驟用。支援 Chrome / Edge 等 Chromium 系瀏覽器，暫不支援 Firefox。</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">開啟方式</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">網址留空 = 自動讀取瀏覽器網址列。網域 → 本機路徑的對應關係寫在設定檔 clockwork.settings.json 的 sites 裡。</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">要填一個網址（可以寫 {名字} 占位）。想讓網址跟著目前頁面走，先加一步「讀瀏覽器網址」把網址寫進變數，再在這裡填 {那個變數}。網域 → 本機路徑的對應關係在「設定 → 網站對應表」裡改。</data>
   <data name="Ed_RegexPattern" xml:space="preserve">正則表達式</data>
   <data name="Ed_RegexGroup" xml:space="preserve">取第幾組</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = 整個比對，1 起 = 第幾個括號裡的內容。正則採用 .NET 語法。</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">行</data>
   <data name="Tpl_KeyVar" xml:space="preserve">按鍵</data>
   <data name="Tpl_SiteSource" xml:space="preserve">開啟本機原始檔</data>
-  <data name="Menu_SecValue" xml:space="preserve">取值</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">流程控制</data>
+  <data name="Menu_SecUI" xml:space="preserve">介面互動</data>
+  <data name="Menu_SecClip" xml:space="preserve">剪貼簿</data>
+  <data name="Menu_SecFile" xml:space="preserve">檔案與路徑</data>
+  <data name="Menu_SecSys" xml:space="preserve">系統與視窗</data>
+  <data name="Menu_SecCalc" xml:space="preserve">計算</data>
+  <data name="Menu_SecPreset" xml:space="preserve">常用預設</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">這一步還沒有網址。請在上面填一個；想讓網址跟著目前頁面走，先加一步「讀瀏覽器網址」，把它寫進變數，再在這裡填 {變數名}。</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">網址</data>
+  <data name="Tbx_Title" xml:space="preserve">模組工具箱</data>
+  <data name="Tbx_Search" xml:space="preserve">搜尋步驟…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">輸入步驟名稱或類型，工具箱會當場篩選。雙擊或按 Enter 加入。</data>
+  <data name="Tbx_Section" xml:space="preserve">分類</data>
+  <data name="Tbx_All" xml:space="preserve">全部</data>
+  <data name="Tbx_Empty" xml:space="preserve">沒有符合的步驟</data>
+  <data name="Ed_Vars" xml:space="preserve">變數</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">這一組還沒有變數。任一步驟設了「輸出到變數」，就會出現在這裡。雙擊可複製 {名字}。</data>
+  <data name="Ed_Appearance" xml:space="preserve">外觀</data>
+  <data name="Site_Title" xml:space="preserve">網站對應表</data>
+  <data name="Site_Hint" xml:space="preserve">「開啟網站原始檔」步驟靠這張表來查。加一個網站，填上網域與本機原始碼根，就能用了。</data>
+  <data name="Site_Add" xml:space="preserve">新增網站</data>
+  <data name="Site_NewName" xml:space="preserve">新網站</data>
+  <data name="Site_ColName" xml:space="preserve">名稱</data>
+  <data name="Site_ColHosts" xml:space="preserve">網域</data>
+  <data name="Site_Name" xml:space="preserve">名稱</data>
+  <data name="Site_Hosts" xml:space="preserve">網域</data>
+  <data name="Site_HostsTip" xml:space="preserve">一行一個。要帶連接埠就寫完整，例如 localhost:8080。不做萬用字元：example.com 不含 evil-example.com。</data>
+  <data name="Site_Root" xml:space="preserve">本機原始碼根</data>
+  <data name="Site_RootTip" xml:space="preserve">這條路徑要和線上的目錄結構對得上，映射出來的檔案才會落在真正的原始碼上。</data>
+  <data name="Site_Browse" xml:space="preserve">瀏覽…</data>
+  <data name="Site_RootMissing" xml:space="preserve">這個資料夾不存在</data>
+  <data name="Site_Index" xml:space="preserve">目錄對應的檔案</data>
+  <data name="Site_IndexTip" xml:space="preserve">網址直接指到目錄本身（結尾沒有檔名）時，就開啟這個檔案。</data>
+  <data name="Site_Rules" xml:space="preserve">路徑改寫</data>
+  <data name="Site_RulesTip" xml:space="preserve">照順序逐一套用。例如線上是 /posts/、原始碼放在 _posts/，就加一條：比對 ^posts/，取代成 _posts/。</data>
+  <data name="Site_RuleAdd" xml:space="preserve">新增改寫規則</data>
+  <data name="Site_Match" xml:space="preserve">比對（正則）</data>
+  <data name="Site_Replace" xml:space="preserve">取代為</data>
+  <data name="Site_Empty" xml:space="preserve">還沒有網站。點「新增網站」，填上網域與本機原始碼根。</data>
+  <data name="Site_SettingsRow" xml:space="preserve">網域 → 本機路徑</data>
+  <data name="Site_Open" xml:space="preserve">開啟網站對應表…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">「開啟網站原始檔」步驟用的那一張表。</data>
+  <data name="TplMgr_Title" xml:space="preserve">動作範本</data>
+  <data name="TplMgr_Hint" xml:space="preserve">範本是一份現成的動作。改過的範本會存下來，之後新增都用你改的那份；「恢復預設」可退回內建的那份。</data>
+  <data name="TplMgr_Add" xml:space="preserve">新增為新動作</data>
+  <data name="TplMgr_Edit" xml:space="preserve">編輯範本</data>
+  <data name="TplMgr_Reset" xml:space="preserve">恢復預設</data>
+  <data name="TplMgr_Badge" xml:space="preserve">已修改</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} 個步驟</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} 個步驟 · 已修改</data>
+  <data name="TplMgr_Empty" xml:space="preserve">沒有範本</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">這一組還沒有步驟。從左邊的模組工具箱挑一個加進來。</data>
+  <data name="Panel_Scenes" xml:space="preserve">場景</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} 頁</data>
+  <data name="Panel_Filter" xml:space="preserve">篩選場景…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">按處理程序名或頁名篩選左欄。空 = 不篩選。</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">左移一頁</data>
+  <data name="Panel_MoveRight" xml:space="preserve">右移一頁</data>
 </root>

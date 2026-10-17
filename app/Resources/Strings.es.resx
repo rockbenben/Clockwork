@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Agrupa una rutina y dispárala cuando quieras con atajo / bandeja; la Lista de inicio y las Tareas programadas también pueden referenciarla. Lo que solo corre al iniciar sesión es más simple como pasos de la Lista de inicio.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>Aún no hay pasos. Pulsa «Añadir» de arriba para crear el primero; lo que está arriba se ejecuta primero.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(vacío)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Editar grupo de acciones</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>Un grupo nunca se ejecuta solo: actívalo desde el menú de la bandeja, un atajo global, un paso de grupo de acciones en la lista de inicio o una tarea programada.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Introduce un nombre de grupo.</value>
   </data>
@@ -1432,9 +1428,7 @@ Registro: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Atajo global</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Haz clic y pulsa una combinación de teclas para ejecutar este grupo en cualquier momento; púlsala de nuevo mientras se ejecuta para detenerlo. Esc cancela, Supr borra</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>No se pudo registrar el atajo {1} del grupo de acciones «{0}»: puede que ya esté en uso</value>
   </data>
@@ -1738,15 +1732,9 @@ Registro: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Continúa en cuanto ambos están listos, con un máximo de 90 s, y luego se suma el retardo fijo de arriba. Actívalo si la lista se ejecuta demasiado pronto para tus programas.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Abrir</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Controlar programas</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>Sistema y sonido</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Para abrir apps al iniciar sesión con orden y retardos, la Lista de inicio es más cómoda; condiciones como «solo en los N minutos tras arrancar» o «solo por la mañana» son exactamente para esto.</value>
   </data>
@@ -1939,9 +1927,7 @@ Registro: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>A qué categoría pertenece esta página. La fila superior tiene una pestaña por categoría; al elegir una se listan solo sus páginas.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Arriba pulsas una categoría, a la izquierda una página. Doble clic para renombrar, arrastra pestañas para reordenar y suéltalas en una categoría para llevar esa página allí; suelta un mosaico en una pestaña para moverlo a esa página. Clic derecho en una pestaña para renombrarla o eliminarla.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Elige la categoría arriba y el escenario a la izquierda; las páginas de ese grupo quedan una al lado de la otra a la derecha. Arrastra una baldosa directamente sobre otra tarjeta para moverla ahí, haz clic en el título de una tarjeta para renombrarla y haz clic derecho en una fila de escenario para renombrar, eliminar o desplazar.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Mostrar las pestañas de la izquierda</value>
   </data>
@@ -2124,7 +2110,7 @@ Registro: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">No se pudo decodificar eso: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Lee la barra de direcciones del navegador actual y produce una dirección para los pasos posteriores. Admite navegadores Chromium como Chrome y Edge; Firefox aún no es compatible.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Cómo abrir</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Deja la dirección vacía para leerla del navegador automáticamente. Las correspondencias dominio → ruta local están en sites, dentro de clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Escribe una dirección (se admiten marcadores {nombre}). Para seguir la página que tienes abierta, añade primero un paso «Leer la dirección del navegador» que escriba la dirección en una variable y pon aquí {esa variable}. La correspondencia dominio → ruta local se edita en Ajustes → Mapa de sitios.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Expresión regular</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Grupo de captura</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = toda la coincidencia; 1 en adelante = qué grupo entre paréntesis. Sintaxis de regex de .NET.</data>
@@ -2178,6 +2164,63 @@ Registro: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">líneas</data>
   <data name="Tpl_KeyVar" xml:space="preserve">tecla</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Abrir el archivo fuente local</data>
-  <data name="Menu_SecValue" xml:space="preserve">Obtener valores</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Control de flujo</data>
+  <data name="Menu_SecUI" xml:space="preserve">Interfaz</data>
+  <data name="Menu_SecClip" xml:space="preserve">Portapapeles</data>
+  <data name="Menu_SecFile" xml:space="preserve">Archivos y rutas</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistema y ventanas</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Cálculo</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Preajustes</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">Este paso no tiene dirección. Escribe una arriba; si quieres que la dirección siga la página actual, añade antes un paso «Leer dirección del navegador», guárdalo en una variable y aquí pon {variable}.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">dirección</data>
+  <data name="Tbx_Title" xml:space="preserve">Caja de herramientas de módulos</data>
+  <data name="Tbx_Search" xml:space="preserve">Buscar un paso…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Escribe el nombre o el tipo de un paso y la caja filtra al momento. Haz doble clic o pulsa Enter para añadir.</data>
+  <data name="Tbx_Section" xml:space="preserve">Categoría</data>
+  <data name="Tbx_All" xml:space="preserve">Todo</data>
+  <data name="Tbx_Empty" xml:space="preserve">Ningún paso coincide</data>
+  <data name="Ed_Vars" xml:space="preserve">Variables</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">Este grupo aún no tiene variables. Da «salida a variable» a cualquier paso y aparecerá aquí. Haz doble clic para copiar {nombre}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Apariencia</data>
+  <data name="Site_Title" xml:space="preserve">Tabla de correspondencia de sitios</data>
+  <data name="Site_Hint" xml:space="preserve">El paso «Abrir archivo fuente del sitio» usa esta tabla. Añade un sitio, rellena su dominio y su raíz de código local, y listo.</data>
+  <data name="Site_Add" xml:space="preserve">Añadir sitio</data>
+  <data name="Site_NewName" xml:space="preserve">Nuevo sitio</data>
+  <data name="Site_ColName" xml:space="preserve">Nombre</data>
+  <data name="Site_ColHosts" xml:space="preserve">Dominios</data>
+  <data name="Site_Name" xml:space="preserve">Nombre</data>
+  <data name="Site_Hosts" xml:space="preserve">Dominios</data>
+  <data name="Site_HostsTip" xml:space="preserve">Uno por línea. Escribe el puerto entero, por ejemplo localhost:8080. Sin comodines: example.com no incluye evil-example.com.</data>
+  <data name="Site_Root" xml:space="preserve">Raíz del código local</data>
+  <data name="Site_RootTip" xml:space="preserve">Esta ruta debe coincidir con la estructura de carpetas del sitio en línea: así los archivos mapeados caerán sobre el código fuente real.</data>
+  <data name="Site_Browse" xml:space="preserve">Examinar…</data>
+  <data name="Site_RootMissing" xml:space="preserve">Esa carpeta no existe</data>
+  <data name="Site_Index" xml:space="preserve">Archivo de la carpeta</data>
+  <data name="Site_IndexTip" xml:space="preserve">Cuando se llega a la carpeta en sí (la dirección no acaba en nombre de archivo), se abre este archivo.</data>
+  <data name="Site_Rules" xml:space="preserve">Reescritura de rutas</data>
+  <data name="Site_RulesTip" xml:space="preserve">Se aplican en orden. Por ejemplo, si en línea está /posts/ y el código fuente está en _posts/, añade una: que coincida con ^posts/ y se sustituya por _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Añadir regla</data>
+  <data name="Site_Match" xml:space="preserve">Coincidencia (regex)</data>
+  <data name="Site_Replace" xml:space="preserve">Reemplazar por</data>
+  <data name="Site_Empty" xml:space="preserve">Todavía no hay sitios. Pulsa «Añadir sitio» y rellena el dominio y la raíz del código local.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Dominio → ruta local</data>
+  <data name="Site_Open" xml:space="preserve">Abrir tabla de sitios…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">La tabla que usa el paso «Abrir archivo fuente del sitio».</data>
+  <data name="TplMgr_Title" xml:space="preserve">Plantillas de grupos de acciones</data>
+  <data name="TplMgr_Hint" xml:space="preserve">Una plantilla es una acción ya hecha. Tus cambios se guardan, así que los próximos añadidos usarán la tuya; «Volver a la normalidad» recupera la integrada.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Añadir como acción</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Editar plantilla</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Volver a la normalidad</data>
+  <data name="TplMgr_Badge" xml:space="preserve">Modificado</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} pasos</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} pasos · Modificado</data>
+  <data name="TplMgr_Empty" xml:space="preserve">Sin plantillas</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">Esta acción aún no tiene pasos. Elige uno en la Caja de herramientas de módulos de la izquierda.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Escenarios</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} páginas</data>
+  <data name="Panel_Filter" xml:space="preserve">Filtrar escenarios…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Filtra la columna izquierda por nombre de proceso o de página. Vacío = sin filtro.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Mover una página a la izquierda</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Mover una página a la derecha</data>
 </root>

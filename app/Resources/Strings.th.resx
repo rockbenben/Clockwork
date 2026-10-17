@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>รวมชุดการทำงานเป็นกลุ่ม สั่งได้ทุกเมื่อด้วยคีย์ลัด / เมนูถาด รายการเริ่มต้นและงานตามกำหนดเวลาก็อ้างอิงได้ ถ้าจะรันแค่ตอนเปิดเครื่อง เขียนลงรายการเริ่มต้นตรง ๆ ง่ายกว่า</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>ยังไม่มีขั้นตอน กด «เพิ่ม» ข้างบนเพื่อเพิ่มขั้นตอนแรก อะไรอยู่ด้านบนจะทำงานก่อน</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(ว่าง)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>แก้ไขกลุ่มการทำงาน</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>กลุ่มจะไม่ทำงานเอง — สั่งจากเมนูถาดระบบ คีย์ลัดส่วนกลาง ขั้นตอน «เรียกใช้กลุ่มการทำงาน» ในรายการเริ่มต้น หรืองานตามเวลา</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>โปรดกรอกชื่อกลุ่ม</value>
   </data>
@@ -1432,9 +1428,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>ปุ่มลัดส่วนกลาง</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>คลิกแล้วกดปุ่มลัดเพื่อเรียกใช้กลุ่มนี้ได้ทุกเมื่อ; กดซ้ำขณะกำลังทำงานเพื่อหยุด; Esc ยกเลิก, Delete ล้าง</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>ลงทะเบียนปุ่มลัด {1} ของกลุ่มการทำงาน «{0}» ไม่สำเร็จ: อาจถูกใช้งานอยู่แล้ว</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>ไปต่อทันทีที่ทั้งสองพร้อม รอไม่เกิน 90 วินาที แล้วจึงบวกหน่วงเวลาคงที่ด้านบนเพิ่ม เปิดไว้เมื่อรายการรันเร็วเกินไปจนโปรแกรมยังไม่ขึ้น</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>เปิด</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>ควบคุมโปรแกรม</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>ระบบและเสียง</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>ถ้าจะเปิดแอปตอนเข้าระบบพร้อมลำดับและหน่วงเวลา รายการเริ่มต้นสะดวกกว่า แต่เงื่อนไขอย่าง «เฉพาะภายใน N นาทีหลังเปิดเครื่อง» หรือ «เฉพาะตอนเช้า» คือหน้าที่ของตรงนี้</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>หน้านี้อยู่ในหมวดใด แถวบนมีแท็บละหนึ่งหมวด เลือกแล้วจะแสดงเฉพาะหน้าในหมวดนั้น</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>คลิกหมวดด้านบน คลิกหน้าด้านซ้าย ดับเบิลคลิกเพื่อเปลี่ยนชื่อ ลากแท็บเพื่อจัดลำดับ ปล่อยลงบนหมวดเพื่อย้ายหน้านั้นเข้าหมวด และปล่อยไทล์ลงบนแท็บเพื่อย้ายเข้าหน้านั้น คลิกขวาที่แท็บเพื่อเปลี่ยนชื่อหรือลบ</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>เลือกหมวดด้านบนและฉากทางซ้าย หน้าของกลุ่มนั้นจะเรียงเคียงกันทางขวา ลากช่องไปวางบนการ์ดอื่นเพื่อย้ายไปที่นั่น คลิกชื่อการ์ดเพื่อเปลี่ยนชื่อ และคลิกขวาที่แถวของฉากเพื่อเปลี่ยนชื่อ ลบ หรือเลื่อน</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>แสดงแท็บด้านซ้าย</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">ถอดรหัสสิ่งนั้นไม่ได้: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">อ่านแถบที่อยู่ของเบราว์เซอร์ปัจจุบันและสร้างที่อยู่สำหรับขั้นตอนถัดไป รองรับเบราว์เซอร์ Chromium เช่น Chrome และ Edge (ยังไม่รองรับ Firefox)</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">วิธีเปิด</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">เว้นว่างไว้เพื่อให้อ่านจากเบราว์เซอร์อัตโนมัติ การแมปโดเมน → พาธในเครื่องอยู่ใน sites ของ clockwork.settings.json</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">กรอกที่อยู่ (ใช้ {ชื่อ} เป็นตัวแทนได้) หากต้องการให้อยู่ตามหน้าที่เปิดอยู่ ให้เพิ่มขั้นตอน 'อ่านที่อยู่จากเบราว์เซอร์' ให้เขียนที่อยู่ลงตัวแปร แล้วใส่ {ตัวแปรนั้น} ที่นี่ การจับคู่โดเมน → พาธในเครื่องแก้ไขได้ที่ การตั้งค่า → แผนผังเว็บไซต์</data>
   <data name="Ed_RegexPattern" xml:space="preserve">นิพจน์ปกติ</data>
   <data name="Ed_RegexGroup" xml:space="preserve">กลุ่มการจับ</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = การจับคู่ทั้งหมด; 1 ขึ้นไป = กลุ่มในวงเล็บที่เท่าไร ใช้ไวยากรณ์นิพจน์ปกติของ .NET</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">บรรทัด</data>
   <data name="Tpl_KeyVar" xml:space="preserve">ปุ่ม</data>
   <data name="Tpl_SiteSource" xml:space="preserve">เปิดไฟล์ต้นฉบับในเครื่อง</data>
-  <data name="Menu_SecValue" xml:space="preserve">รับค่า</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">ควบคุมการทำงาน</data>
+  <data name="Menu_SecUI" xml:space="preserve">การโต้ตอบ</data>
+  <data name="Menu_SecClip" xml:space="preserve">คลิปบอร์ด</data>
+  <data name="Menu_SecFile" xml:space="preserve">ไฟล์และพาธ</data>
+  <data name="Menu_SecSys" xml:space="preserve">ระบบและหน้าต่าง</data>
+  <data name="Menu_SecCalc" xml:space="preserve">คำนวณ</data>
+  <data name="Menu_SecPreset" xml:space="preserve">พรีเซ็ตที่ใช้บ่อย</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">ขั้นตอนนี้ยังไม่มีที่อยู่ ใส่ที่อยู่ไว้ด้านบน ถ้าอยากให้ที่อยู่ตามหน้าที่เปิดอยู่ ให้เพิ่มขั้นตอน «อ่านที่อยู่เบราว์เซอร์» ก่อน เก็บผลลัพธ์ไว้ในตัวแปร แล้วค่อยใส่ {ชื่อตัวแปร} ที่นี่</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">ที่อยู่</data>
+  <data name="Tbx_Title" xml:space="preserve">กล่องเครื่องมือโมดูล</data>
+  <data name="Tbx_Search" xml:space="preserve">ค้นหาขั้น…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">พิมพ์ชื่อหรือชนิดของขั้นตอน กล่องเครื่องมือจะกรองให้ทันที ดับเบิลคลิกหรือกด Enter เพื่อเพิ่ม</data>
+  <data name="Tbx_Section" xml:space="preserve">หมวด</data>
+  <data name="Tbx_All" xml:space="preserve">ทั้งหมด</data>
+  <data name="Tbx_Empty" xml:space="preserve">ไม่มีขั้นตอนที่ตรงกัน</data>
+  <data name="Ed_Vars" xml:space="preserve">ตัวแปร</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">กลุ่มนี้ยังไม่มีตัวแปร ตั้ง «ผลลัพธ์ไปยังตัวแปร» ให้กับขั้นตอนใดก็ได้ แล้วตัวแปรนั้นจะมาอยู่ที่นี่ ดับเบิลคลิกเพื่อคัดลอก {ชื่อ}</data>
+  <data name="Ed_Appearance" xml:space="preserve">รูปลักษณ์</data>
+  <data name="Site_Title" xml:space="preserve">ตารางแมปเว็บไซต์</data>
+  <data name="Site_Hint" xml:space="preserve">ขั้นตอน «เปิดไฟล์ต้นฉบับของเว็บไซต์» จะดูจากตารางนี้ เพิ่มเว็บไซต์หนึ่งรายการแล้วใส่โดเมนกับรากไฟล์ต้นฉบับในเครื่อง ก็ใช้ได้ทันที</data>
+  <data name="Site_Add" xml:space="preserve">เพิ่มเว็บไซต์</data>
+  <data name="Site_NewName" xml:space="preserve">เว็บไซต์ใหม่</data>
+  <data name="Site_ColName" xml:space="preserve">ชื่อ</data>
+  <data name="Site_ColHosts" xml:space="preserve">โดเมน</data>
+  <data name="Site_Name" xml:space="preserve">ชื่อ</data>
+  <data name="Site_Hosts" xml:space="preserve">โดเมน</data>
+  <data name="Site_HostsTip" xml:space="preserve">หนึ่งบรรทัดหนึ่งรายการ ถ้ามีพอร์ตให้เขียนให้ครบ เช่น localhost:8080 ไม่ใช้ไวลด์การ์ด: example.com ไม่รวม evil-example.com</data>
+  <data name="Site_Root" xml:space="preserve">รากไฟล์ต้นฉบับในเครื่อง</data>
+  <data name="Site_RootTip" xml:space="preserve">พาธนี้ต้องตรงกับโครงสร้างโฟลเดอร์ของเว็บที่ใช้งานจริง ไฟล์ที่แมปจึงจะตกลงบนต้นฉบับจริง</data>
+  <data name="Site_Browse" xml:space="preserve">เรียกดู…</data>
+  <data name="Site_RootMissing" xml:space="preserve">ไม่พบโฟลเดอร์นี้</data>
+  <data name="Site_Index" xml:space="preserve">ไฟล์ดัชนี</data>
+  <data name="Site_IndexTip" xml:space="preserve">เมื่อที่อยู่ชี้มาที่ตัวโฟลเดอร์เอง (ท้ายที่อยู่ไม่มีชื่อไฟล์) จะเปิดไฟล์นี้แทน</data>
+  <data name="Site_Rules" xml:space="preserve">เขียนพาธใหม่</data>
+  <data name="Site_RulesTip" xml:space="preserve">จะเรียงใช้ทีละข้อตามลำดับ เช่น ของที่ใช้งานจริงอยู่ที่ /posts/ แต่ต้นฉบับอยู่ใน _posts/ ให้เพิ่มกฎหนึ่งข้อ: จับคู่ ^posts/ แล้วแทนที่เป็น _posts/</data>
+  <data name="Site_RuleAdd" xml:space="preserve">เพิ่มกฎ</data>
+  <data name="Site_Match" xml:space="preserve">จับคู่ (นิพจน์ปกติ)</data>
+  <data name="Site_Replace" xml:space="preserve">แทนที่ด้วย</data>
+  <data name="Site_Empty" xml:space="preserve">ยังไม่มีเว็บไซต์ กด «เพิ่มเว็บไซต์» แล้วใส่โดเมนกับรากไฟล์ต้นฉบับในเครื่อง</data>
+  <data name="Site_SettingsRow" xml:space="preserve">โดเมน → พาธในเครื่อง</data>
+  <data name="Site_Open" xml:space="preserve">เปิดตารางเว็บไซต์…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">นี่คือตารางที่ขั้นตอน «เปิดไฟล์ต้นฉบับของเว็บไซต์» ใช้</data>
+  <data name="TplMgr_Title" xml:space="preserve">แม่แบบกลุ่มการทำงาน</data>
+  <data name="TplMgr_Hint" xml:space="preserve">แม่แบบคือชุดการทำงานที่ทำเสร็จพร้อมใช้ แม่แบบที่คุณแก้ไว้จะถูกบันทึกไว้ การเพิ่มครั้งต่อไปจะใช้ของที่คุณแก้ไว้นั้น ส่วน «คืนค่าเริ่มต้น» จะพากลับไปใช้ของที่มากับโปรแกรม</data>
+  <data name="TplMgr_Add" xml:space="preserve">เพิ่มเป็นการทำงานใหม่</data>
+  <data name="TplMgr_Edit" xml:space="preserve">แก้ไขแม่แบบ</data>
+  <data name="TplMgr_Reset" xml:space="preserve">คืนค่าเริ่มต้น</data>
+  <data name="TplMgr_Badge" xml:space="preserve">แก้แล้ว</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} ขั้น</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} ขั้น · แก้แล้ว</data>
+  <data name="TplMgr_Empty" xml:space="preserve">ไม่มีแม่แบบ</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">การกระทำนี้ยังไม่มีขั้นตอน เลือกจากกล่องเครื่องมือโมดูลทางซ้าย</data>
+  <data name="Panel_Scenes" xml:space="preserve">ฉาก</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} หน้า</data>
+  <data name="Panel_Filter" xml:space="preserve">กรองฉาก…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">กรองคอลัมน์ซ้ายด้วยชื่อกระบวนการหรือชื่อหน้า เว้นว่าง = ไม่กรอง</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">เลื่อนไปหน้าทางซ้าย</data>
+  <data name="Panel_MoveRight" xml:space="preserve">เลื่อนไปหน้าทางขวา</data>
 </root>

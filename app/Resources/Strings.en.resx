@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>Bundle a routine and fire it any time via hotkey / tray; the Startup List and Scheduled tasks can reference it too. Something that only runs at login is simpler as plain Startup List steps.</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>No steps yet. Click “Add” above to make the first one — whatever is on top runs first.</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(empty)</value>
   </data>
@@ -849,9 +847,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>Edit Action</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>An action never runs on its own — trigger it from the tray menu, a global hotkey, a Run action step in the startup list, or a scheduled task.</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>Please give the action a name.</value>
   </data>
@@ -1438,9 +1434,7 @@ Log: {1}</value>
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>Global hotkey</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>Click, then press a key combo to run this group anytime; press it again while it runs to stop it. Esc cancels, Del clears it.</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>Failed to register hotkey {1} for action “{0}”: it may already be in use</value>
   </data>
@@ -1738,15 +1732,9 @@ Log: {1}</value>
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>Goes as soon as both are ready, waiting at most 90 s, then the fixed delay above is added on top. Turn this on when the list runs too early for your apps.</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>Control apps</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>System &amp; sound</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>Opening apps at login with ordering and delays is easier on the Startup List; gates like “only within N minutes of boot” or “mornings only” are exactly what this place is for.</value>
   </data>
@@ -1939,9 +1927,7 @@ Log: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Which category this page belongs to. The top row has one tab per category; picking one lists just its pages.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>Click a category above, a page on the left. Double-click to rename, drag tabs to reorder, drop one on a category to move that page into it; drop a tile on a tab to move it into that page. Right-click a tab to rename or delete it.</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>Pick a category on top and a scene on the left; that group's pages sit side by side on the right. Drag a tile straight onto another card to move it there, click a card title to rename it, and right-click a scene row to rename, delete or shift it.</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Show the left tabs</value>
   </data>
@@ -2124,7 +2110,7 @@ Log: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Couldn’t decode that: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Reads the address bar of the current browser and produces an address for later steps. Supports Chromium browsers such as Chrome and Edge; Firefox isn’t supported yet.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">How to open</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Leave the address empty to read the browser automatically. Domain → local path mappings live under sites in clockwork.settings.json.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Fill in an address ({name} placeholders work). To follow whatever page you're on, add a Read browser address step first, have it write the address to a variable, then put {that variable} here. The domain → local path mapping is edited under Settings → Site map.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Regular expression</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Capture group</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = the whole match; 1 and up = which parenthesised group. .NET regex syntax.</data>
@@ -2178,6 +2164,63 @@ Log: {1}</value>
   <data name="Tpl_LinesVar" xml:space="preserve">lines</data>
   <data name="Tpl_KeyVar" xml:space="preserve">key</data>
   <data name="Tpl_SiteSource" xml:space="preserve">Open the local source file</data>
-  <data name="Menu_SecValue" xml:space="preserve">Values</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">Flow control</data>
+  <data name="Menu_SecUI" xml:space="preserve">Interface</data>
+  <data name="Menu_SecClip" xml:space="preserve">Clipboard</data>
+  <data name="Menu_SecFile" xml:space="preserve">Files &amp; paths</data>
+  <data name="Menu_SecSys" xml:space="preserve">System &amp; windows</data>
+  <data name="Menu_SecCalc" xml:space="preserve">Calculate</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Presets</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">This step has no address yet. Put one in above; to have it follow whatever page you’re on, add a “Read browser address” step, save that to a variable, and put {variable name} here.</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">address</data>
+  <data name="Tbx_Title" xml:space="preserve">Module toolbox</data>
+  <data name="Tbx_Search" xml:space="preserve">Search steps…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">Type a step name or type and the toolbox filters as you go. Double-click or press Enter to add it.</data>
+  <data name="Tbx_Section" xml:space="preserve">Category</data>
+  <data name="Tbx_All" xml:space="preserve">All</data>
+  <data name="Tbx_Empty" xml:space="preserve">No matching steps</data>
+  <data name="Ed_Vars" xml:space="preserve">Variables</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">This action has no variables yet. Give any step an output variable and it shows up here. Double-click to copy {name}.</data>
+  <data name="Ed_Appearance" xml:space="preserve">Appearance</data>
+  <data name="Site_Title" xml:space="preserve">Site mappings</data>
+  <data name="Site_Hint" xml:space="preserve">The “Open site source file” step looks addresses up in this table. Add a site, fill in its domain and local source root, and it works.</data>
+  <data name="Site_Add" xml:space="preserve">Add site</data>
+  <data name="Site_NewName" xml:space="preserve">New site</data>
+  <data name="Site_ColName" xml:space="preserve">Name</data>
+  <data name="Site_ColHosts" xml:space="preserve">Domains</data>
+  <data name="Site_Name" xml:space="preserve">Name</data>
+  <data name="Site_Hosts" xml:space="preserve">Domains</data>
+  <data name="Site_HostsTip" xml:space="preserve">One per line. Write the port in full, e.g. localhost:8080. No wildcards: example.com does not cover evil-example.com.</data>
+  <data name="Site_Root" xml:space="preserve">Local source root</data>
+  <data name="Site_RootTip" xml:space="preserve">This path has to match the directory layout of the live site, or the mapped file won’t land on the real source.</data>
+  <data name="Site_Browse" xml:space="preserve">Browse…</data>
+  <data name="Site_RootMissing" xml:space="preserve">That folder doesn’t exist</data>
+  <data name="Site_Index" xml:space="preserve">Directory index file</data>
+  <data name="Site_IndexTip" xml:space="preserve">When the URL points at the directory itself (no file name at the end), this is the file that opens.</data>
+  <data name="Site_Rules" xml:space="preserve">Path rewrites</data>
+  <data name="Site_RulesTip" xml:space="preserve">Applied in order. Say the live site serves /posts/ and the source lives in _posts/ — add one rule matching ^posts/ and replacing it with _posts/.</data>
+  <data name="Site_RuleAdd" xml:space="preserve">Add rewrite rule</data>
+  <data name="Site_Match" xml:space="preserve">Match (regex)</data>
+  <data name="Site_Replace" xml:space="preserve">Replace</data>
+  <data name="Site_Empty" xml:space="preserve">No sites yet. Click “Add site” and fill in a domain and local source root.</data>
+  <data name="Site_SettingsRow" xml:space="preserve">Domain → local path</data>
+  <data name="Site_Open" xml:space="preserve">Open site mappings…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">The table the “Open site source file” step uses.</data>
+  <data name="TplMgr_Title" xml:space="preserve">Action group templates</data>
+  <data name="TplMgr_Hint" xml:space="preserve">A template is a ready-made action. Edits to a template are saved, and later additions use your version; “Reset” puts the built-in one back.</data>
+  <data name="TplMgr_Add" xml:space="preserve">Add as new action</data>
+  <data name="TplMgr_Edit" xml:space="preserve">Edit template</data>
+  <data name="TplMgr_Reset" xml:space="preserve">Reset</data>
+  <data name="TplMgr_Badge" xml:space="preserve">Modified</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} steps</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} steps · Modified</data>
+  <data name="TplMgr_Empty" xml:space="preserve">No templates</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">This action has no steps yet. Pick one from the Module toolbox on the left.</data>
+  <data name="Panel_Scenes" xml:space="preserve">Scenes</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} pages</data>
+  <data name="Panel_Filter" xml:space="preserve">Filter scenes…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">Filter the left column by process or page name. Empty = no filter.</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">Move left one page</data>
+  <data name="Panel_MoveRight" xml:space="preserve">Move right one page</data>
 </root>

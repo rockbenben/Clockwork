@@ -39,9 +39,7 @@
   <data name="Group_Hint" xml:space="preserve">
     <value>क्रियाओं की शृंखला को समूह बनाएँ, हॉटकी / ट्रे से कभी भी चलाएँ; स्टार्टअप सूची और शेड्यूल किए गए कार्य भी इसका संदर्भ ले सकते हैं। जो सिर्फ़ लॉगिन पर चलना है, उसे सीधे स्टार्टअप सूची में लिखना आसान है।</value>
   </data>
-  <data name="Group_NoSteps" xml:space="preserve">
-    <value>अभी कोई चरण नहीं हैं। पहला चरण जोड़ने के लिए ऊपर «जोड़ें» दबाएँ — जो ऊपर है, व पहले चलता है।</value>
-  </data>
+
   <data name="Group_Empty" xml:space="preserve">
     <value>(खाली)</value>
   </data>
@@ -843,9 +841,7 @@
   <data name="Ed_Title_Group" xml:space="preserve">
     <value>क्रिया समूह संपादित करें</value>
   </data>
-  <data name="Ed_GroupHint" xml:space="preserve">
-    <value>समूह अपने आप कभी नहीं चलता — इसे ट्रे मेनू, ग्लोबल शॉर्टकट, स्टार्टअप सूची के «क्रिया समूह» चरण, या शेड्यूल किए गए कार्य से चलाएँ।</value>
-  </data>
+
   <data name="Val_GroupName" xml:space="preserve">
     <value>कृपया समूह का नाम भरें।</value>
   </data>
@@ -1432,9 +1428,7 @@
   <data name="Ed_GroupHotkey" xml:space="preserve">
     <value>वैश्विक हॉटकी</value>
   </data>
-  <data name="Ed_GroupHotkeyHint" xml:space="preserve">
-    <value>क्लिक करें और कुंजी संयोजन दबाएँ, यह समूह कभी भी चलेगा; चलते समय दोबारा दबाने पर रुक जाएगा; Esc रद्द, Delete साफ़</value>
-  </data>
+
   <data name="Hotkey_GroupRegisterFail" xml:space="preserve">
     <value>क्रिया समूह «{0}» की हॉटकी {1} पंजीकृत नहीं हो सकी: संभवतः पहले से उपयोग में है</value>
   </data>
@@ -1738,15 +1732,9 @@
   <data name="Settings_WaitReadyTip" xml:space="preserve">
     <value>दोनों तैयार होते ही आगे बढ़ता है, अधिकतम 90 सेकंड प्रतीक्षा करता है; उसके ऊपर ऊपर वाली निश्चित देरी जुड़ती है। जब सूची आपके प्रोग्राम के लिए बहुत जल्दी चले, तब इसे चालू करें।</value>
   </data>
-  <data name="Menu_SecOpen" xml:space="preserve">
-    <value>खोलें</value>
-  </data>
-  <data name="Menu_SecControl" xml:space="preserve">
-    <value>प्रोग्राम नियंत्रित करें</value>
-  </data>
-  <data name="Menu_SecSystem" xml:space="preserve">
-    <value>सिस्टम और ध्वनि</value>
-  </data>
+
+
+
   <data name="Ed_LoginSilentHint" xml:space="preserve">
     <value>लॉगिन पर क्रम और देरी के साथ ऐप खोलना स्टार्टअप सूची में आसान है; «बूट के N मिनट के भीतर ही» या «सिर्फ़ सुबह» जैसी शर्तें ठीक यहीं के लिए हैं।</value>
   </data>
@@ -1939,9 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>यह पेज किस श्रेणी का है। ऊपर की पंक्ति में हर श्रेणी का एक टैब है; कोई चुनने पर उसी श्रेणी के पेज दिखते हैं।</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve">
-    <value>ऊपर श्रेणी पर और बाईं ओर पेज पर क्लिक करें। डबल-क्लिक से नाम बदलें, टैब खींचकर क्रम बदलें, किसी श्रेणी पर छोड़ने से वह पेज उसी श्रेणी में चला जाता है; टाइल को टैब पर छोड़ने से वह उस पेज में। टैब पर राइट-क्लिक से नाम बदलें या हटाएँ।</value>
-  </data>
+  <data name="Panel_ManagerHint" xml:space="preserve"><value>ऊपर से श्रेणी और बाईं ओर से परिदृश्य चुनें; उस समूह के पृष्ठ दाईं ओर साथ-साथ दिखेंगे। किसी टाइल को सीधे दूसरी कार्ड पर खींचकर उसे वहाँ ले जाएँ, कार्ड के शीर्षक पर क्लिक करके नाम बदलें, और परिदृश्य पंक्ति पर दाएँ क्लिक करके नाम बदलें, हटाएँ या खिसकाएँ।</value></data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>बाएँ टैब दिखाएँ</value>
   </data>
@@ -2124,7 +2110,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">इसे डीकोड नहीं किया जा सका: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">मौजूदा ब्राउज़र के पता पट्टी को पढ़कर बाद के चरणों के लिए पता बनाता है। Chrome और Edge जैसे Chromium ब्राउज़र समर्थित हैं; Firefox अभी समर्थित नहीं है।</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">कैसे खोलें</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">पता खाली छोड़ दें तो वह स्वतः ब्राउज़र से पढ़ लिया जाएगा। डोमेन → स्थानीय पथ मिलान clockwork.settings.json की sites में हैं।</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">पता भरें ({नाम} प्लेसहोल्डर भी चलते हैं)। जो पेज अभी खुला है उसका पता पाने के लिए पहले 'ब्राउज़र पता पढ़ें' चरण जोड़ें, उसे पते को एक वेरिएबल में लिखने दें, फिर यहाँ {उस वेरिएबल} भरें। डोमेन → स्थानीय पथ का मिलान सेटिंग्स → साइट मैप में बदला जाता है।</data>
   <data name="Ed_RegexPattern" xml:space="preserve">नियमित अभिव्यक्ति</data>
   <data name="Ed_RegexGroup" xml:space="preserve">कैप्चर ग्रुप</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = पूरा मेल; 1 और उससे ऊपर = कौन-सा कोष्ठक समूह। .NET रेगुलर एक्सप्रेशन सिंटैक्स।</data>
@@ -2178,6 +2164,63 @@
   <data name="Tpl_LinesVar" xml:space="preserve">पंक्तियाँ</data>
   <data name="Tpl_KeyVar" xml:space="preserve">कुंजी</data>
   <data name="Tpl_SiteSource" xml:space="preserve">स्थानीय स्रोत फ़ाइल खोलें</data>
-  <data name="Menu_SecValue" xml:space="preserve">मान लेना</data>
+
   <data name="Menu_SecCtrl" xml:space="preserve">प्रवाह नियंत्रण</data>
+  <data name="Menu_SecUI" xml:space="preserve">इंटरफ़ेस क्रिया</data>
+  <data name="Menu_SecClip" xml:space="preserve">क्लिपबोर्ड</data>
+  <data name="Menu_SecFile" xml:space="preserve">फ़ाइलें और पथ</data>
+  <data name="Menu_SecSys" xml:space="preserve">सिस्टम और विंडो</data>
+  <data name="Menu_SecCalc" xml:space="preserve">गणना</data>
+  <data name="Menu_SecPreset" xml:space="preserve">आम प्रीसेट</data>
+  <data name="Warn_SiteMapNoUrl" xml:space="preserve">इस चरण में अभी कोई पता नहीं है। ऊपर कोई पता भरें; पता वर्तमान पेज के साथ चलना चाहिए तो पहले «ब्राउज़र पता पढ़ें» चरण जोड़कर उसे चर में लिखें, फिर यहाँ {चर का नाम} भरें।</data>
+  <data name="Tpl_UrlVar" xml:space="preserve">पता</data>
+  <data name="Tbx_Title" xml:space="preserve">मॉड्यूल टूलबॉक्स</data>
+  <data name="Tbx_Search" xml:space="preserve">चरण खोजें…</data>
+  <data name="Tbx_SearchTip" xml:space="preserve">चरण का नाम या प्रकार लिखें, टूलबॉक्स तुरंत छँट जाता है। जोड़ने के लिए डबल-क्लिक करें या Enter दबाएँ।</data>
+  <data name="Tbx_Section" xml:space="preserve">श्रेणी</data>
+  <data name="Tbx_All" xml:space="preserve">सभी</data>
+  <data name="Tbx_Empty" xml:space="preserve">कोई चरण नहीं मिला</data>
+  <data name="Ed_Vars" xml:space="preserve">चर</data>
+  <data name="Ed_VarsEmpty" xml:space="preserve">इस समूह में अभी कोई चर नहीं है। किसी भी चरण का «चर में आउटपुट» तय करें, वह यहाँ दिखने लगेगा। {नाम} कॉपी करने के लिए डबल-क्लिक करें।</data>
+  <data name="Ed_Appearance" xml:space="preserve">रूप</data>
+  <data name="Site_Title" xml:space="preserve">साइट मैप तालिका</data>
+  <data name="Site_Hint" xml:space="preserve">«साइट स्रोत फ़ाइल खोलें» चरण इसी तालिका से देखता है। कोई साइट जोड़कर डोमेन और स्थानीय स्रोत जड़ भर दें, काम चल पड़ेगा।</data>
+  <data name="Site_Add" xml:space="preserve">साइट जोड़ें</data>
+  <data name="Site_NewName" xml:space="preserve">नई साइट</data>
+  <data name="Site_ColName" xml:space="preserve">नाम</data>
+  <data name="Site_ColHosts" xml:space="preserve">डोमेन</data>
+  <data name="Site_Name" xml:space="preserve">नाम</data>
+  <data name="Site_Hosts" xml:space="preserve">डोमेन</data>
+  <data name="Site_HostsTip" xml:space="preserve">एक पंक्ति में एक। पोर्ट हो तो पूरा लिखें, जैसे localhost:8080। वाइल्डकार्ड नहीं होता: example.com में evil-example.com नहीं आता।</data>
+  <data name="Site_Root" xml:space="preserve">स्थानीय स्रोत जड़</data>
+  <data name="Site_RootTip" xml:space="preserve">यह पथ लाइव साइट के फ़ोल्डर संरचना से मेल खानी चाहिए, तभी मैप हुई फ़ाइलें असली स्रोत पर पहुँचेंगी।</data>
+  <data name="Site_Browse" xml:space="preserve">ब्राउज़ करें…</data>
+  <data name="Site_RootMissing" xml:space="preserve">यह फ़ोल्डर मौजूद नहीं है</data>
+  <data name="Site_Index" xml:space="preserve">इंडेक्स फ़ाइल</data>
+  <data name="Site_IndexTip" xml:space="preserve">जब पता सीधे फ़ोल्डर पर जाता है (पते के अंत में कोई फ़ाइल नाम नहीं होता), तब यही फ़ाइल खुलती है।</data>
+  <data name="Site_Rules" xml:space="preserve">पथ पुनर्लेखन</data>
+  <data name="Site_RulesTip" xml:space="preserve">क्रम से एक-एक करके लागू होते हैं। जैसे लाइव पर /posts/ है और स्रोत _posts/ में, तो एक नियम जोड़ें: ^posts/ से मेल खाए, _posts/ में बदल दें।</data>
+  <data name="Site_RuleAdd" xml:space="preserve">नियम जोड़ें</data>
+  <data name="Site_Match" xml:space="preserve">मिलान (रेगेक्स)</data>
+  <data name="Site_Replace" xml:space="preserve">इसे बदलें</data>
+  <data name="Site_Empty" xml:space="preserve">अभी कोई साइट नहीं। «साइट जोड़ें» पर क्लिक करके डोमेन और स्थानीय स्रोत जड़ भरें।</data>
+  <data name="Site_SettingsRow" xml:space="preserve">डोमेन → स्थानीय पथ</data>
+  <data name="Site_Open" xml:space="preserve">साइट तालिका खोलें…</data>
+  <data name="Site_SettingsTip" xml:space="preserve">यही वह तालिका है जिसे «साइट स्रोत फ़ाइल खोलें» चरण इस्तेमाल करता है।</data>
+  <data name="TplMgr_Title" xml:space="preserve">क्रिया समूह टेम्पलेट</data>
+  <data name="TplMgr_Hint" xml:space="preserve">टेम्पलेट एक तैयार क्रिया है। आपका बदला हुआ टेम्पलेट सहेजा रहता है, आगे जोड़ते समय वही आपका बदला हुआ वाला लगेगा; «डिफ़ॉल्ट बहाल करें» उसे अंतर्निहित वापस ले आता है।</data>
+  <data name="TplMgr_Add" xml:space="preserve">नई क्रिया जोड़ें</data>
+  <data name="TplMgr_Edit" xml:space="preserve">टेम्पलेट संपादित करें</data>
+  <data name="TplMgr_Reset" xml:space="preserve">डिफ़ॉल्ट बहाल करें</data>
+  <data name="TplMgr_Badge" xml:space="preserve">बदला गया</data>
+  <data name="TplMgr_Detail" xml:space="preserve">{0} चरण</data>
+  <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} चरण · बदला गया</data>
+  <data name="TplMgr_Empty" xml:space="preserve">कोई टेम्पलेट नहीं</data>
+  <data name="Ed_StepsEmpty" xml:space="preserve">इस क्रिया में अभी कोई चरण नहीं है। बाईं ओर के मॉड्यूल टूलबॉक्स से एक चुनें।</data>
+  <data name="Panel_Scenes" xml:space="preserve">परिदृश्य</data>
+  <data name="Panel_ScenePages" xml:space="preserve">{0} पृष्ठ</data>
+  <data name="Panel_Filter" xml:space="preserve">परिदृश्य छाँटें…</data>
+  <data name="Panel_FilterTip" xml:space="preserve">बाईं सूची को प्रक्रिया या पृष्ठ के नाम से छाँटें। खाली = बिना छँटाई।</data>
+  <data name="Panel_MoveLeft" xml:space="preserve">एक पृष्ठ बाईं ओर</data>
+  <data name="Panel_MoveRight" xml:space="preserve">एक पृष्ठ दाईं ओर</data>
 </root>
