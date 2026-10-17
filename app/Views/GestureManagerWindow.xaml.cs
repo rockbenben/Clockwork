@@ -222,13 +222,27 @@ public partial class GestureManagerWindow : Window
     // 新条目先落进列表但还没有轨迹——右边画完才真正生效（没轨迹的条目不会被钩子看见）。
     private void Add_Click(object sender, RoutedEventArgs e)
     {
+        // 手势是最常用来跑一整串动作的地方，所以它也得能**当场编**那个动作——
+        // 与面板管理器、浮动面板同一组入口（见 StepMenu.Build 的 headerItems 说明）。
+        // 没有它时想跑一个复杂动作只能先去动作标签页建好、再回来挑：为一个手势要多开两个窗。
+        var compound = new MenuItem { Header = Strings.Get("Panel_NewCompound") };
+        compound.Click += (_, _) =>
+        {
+            var g = GroupEditorWindow.Edit(this, new ActionGroup { Name = Strings.Get("Panel_NewCompound") },
+                                           _config.ActionGroups, _config.Settings.FunctionHotkeys());
+            if (g == null) return;
+            _config.ActionGroups.Add(g);
+            Steps.Add(new LaunchStep { Kind = "group", GroupId = g.Id });
+            Commit(Steps[^1]);
+        };
+
         var menu = StepMenu.Build((kind, seed) =>
         {
             var made = StepEditorWindow.Edit(this, seed, kind, _config.ActionGroups);
             if (made == null) return;
             Steps.Add(made);
             Commit(made);
-        });
+        }, headerItems: new[] { compound });
         menu.PlacementTarget = AddBtn;
         menu.IsOpen = true;
     }

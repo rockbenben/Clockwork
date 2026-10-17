@@ -31,7 +31,8 @@ public static class StepMenu
     //   它与「挑一个步骤类型」不是一回事——前两件造的是**动作**，后面造的是**步骤**，
     //   混在一列里读的人得先想一遍自己要的是哪一个。传 null 就没有那一组。
     public static ContextMenu Build(Action<string, LaunchStep?> pick, MenuItem? firstOpenItem = null,
-                                   bool presets = true, IEnumerable<MenuItem>? headerItems = null)
+                                   bool presets = true, IEnumerable<MenuItem>? headerItems = null,
+                                   bool insideGroup = false)
     {
         var menu = new ContextMenu();
         if (headerItems != null)
@@ -49,7 +50,9 @@ public static class StepMenu
         }
         foreach (var (sectionKey, _) in StepDisplay.StepKindSections)
         {
-            var items = SectionItems(sectionKey, pick, firstOpenItem).ToList();
+            var items = SectionItems(sectionKey, pick, firstOpenItem, insideGroup).ToList();
+            // 筛完可能整节空了（节表一改就会发生）：留一个点开什么都没有的子菜单，比不显示更糟。
+            if (items.Count == 0) continue;
             // 只有一项的节直接摆在顶层，不套一层子菜单——为一项开一层，那个 ▸ 是在承诺
             // 里面还有别的东西，而展开只有它自己。（「动作组」节就是这一种。）
             if (items.Count == 1) { menu.Items.Add(items[0]); continue; }
@@ -83,7 +86,7 @@ public static class StepMenu
     // 无声的滚动箭头。冒烟自查拿这批项另建一个菜单去量（DevChecks.CheckStepMenuFits），
     // 量的必须是真的这些项——照着行数估算迟早和实际对不上。
     public static IEnumerable<MenuItem> SectionItems(string sectionKey, Action<string, LaunchStep?> pick,
-                                                     MenuItem? firstOpenItem = null)
+                                                     MenuItem? firstOpenItem = null, bool insideGroup = false)
     {
         // 「从开始菜单选择…」语义上就是「打开」的一种，跟着「常用」那一节（这一节现在放的是
         // 日常原子操作：打开网址 / 运行程序 / 发送文本），排最前（零配置那条路）。
@@ -91,6 +94,8 @@ public static class StepMenu
         var section = StepDisplay.StepKindSections.FirstOrDefault(x => x.SectionKey == sectionKey);
         foreach (var kind in section.Kinds ?? Array.Empty<string>())
         {
+            // 单步语境不放块内类型进来——理由见 StepDisplay.BlockOnlyKinds。
+            if (!insideGroup && !StepDisplay.IsAtomic(kind)) continue;
             var k = kind;
             var mi = new MenuItem { Header = StepDisplay.StepKindLabel(k) };
             mi.Click += (_, _) => pick(k, null);

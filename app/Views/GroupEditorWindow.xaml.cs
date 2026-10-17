@@ -28,7 +28,9 @@ public partial class GroupEditorWindow : Window
 
     // 组内步骤可选类型：现含「group」——组可嵌套引用组（部分步骤循环 = 子组引用 ×N）。
     // 环引用由保存时 FindCycle DFS 拦（主防线），运行期重入集兜手改 json。
-    private static readonly string[] Kinds = StepDisplay.StepKinds;
+    // （工具箱的分节与清单在 StepDisplay.StepKindSections / StepKinds，那里是唯一定义；
+    //   这里曾经另存一份 Kinds 字段，常态流程改动工具箱时被回退带走、它却没人用——
+    //   两份并存的唯一效果是让人以为改一处就够。）
 
     public GroupEditorWindow(ActionGroup group, IReadOnlyList<ActionGroup> groups,
                              IReadOnlyList<(string Key, string Owner)> functionHotkeys)

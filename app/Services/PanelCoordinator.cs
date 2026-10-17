@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using Clockwork.Core;
 using Clockwork.Engine;
 using Clockwork.I18n;
@@ -274,14 +275,36 @@ internal sealed class PanelCoordinator
         {
             _panel?.Dismiss();
             var owner = DialogOwner?.Invoke();
-            // 以「运行程序」开场：它是最常放上面板的一类，而编辑器顶上就是类型下拉，
-            // 想加别的类型当场换即可——不必先弹一层「选类型」再弹编辑器。
-            // 传 _config.LaunchSteps：面板语境独有的「引用启动项」类型靠它现身（见 StepDisplay.RefKind）。
-            var s = Views.StepEditorWindow.Edit(owner, null, "app", _config.ActionGroups, _config.LaunchSteps);
-            if (s == null) return;
-            page.Steps.Add(s);
-            _saveConfig();
-            RefreshMainGroupRows?.Invoke();
+            var config = _cfg();
+
+            // **与管理器同一个分流**（见 PanelManagerWindow.AddStep 与 Quicker 的格子菜单）：
+            // 「加一个步骤」与「做一个复杂动作」是两种东西，此前这里只有前者——直接开
+            // 「运行程序」的编辑器，于是浮动面板上根本没有编复杂动作的入口，那条路只在管理器里有。
+            var compound = new MenuItem { Header = Strings.Get("Panel_NewCompound") };
+            compound.Click += (_, _) =>
+            {
+                var g = Views.GroupEditorWindow.Edit(
+                    owner, new ActionGroup { Name = Strings.Get("Panel_NewCompound") },
+                    config.ActionGroups, config.Settings.FunctionHotkeys());
+                if (g == null) return;
+                config.ActionGroups.Add(g);
+                page.Steps.Add(new LaunchStep { Kind = "group", GroupId = g.Id });
+                _saveConfig();
+                RefreshMainGroupRows?.Invoke();
+            };
+
+            var menu = Views.StepMenu.Build((kind, seed) =>
+            {
+                // 传 _config.LaunchSteps：面板语境独有的「引用启动项」类型靠它现身（见 StepDisplay.RefKind）。
+                var s = Views.StepEditorWindow.Edit(owner, seed, kind, config.ActionGroups, config.LaunchSteps);
+                if (s == null) return;
+                page.Steps.Add(s);
+                _saveConfig();
+                RefreshMainGroupRows?.Invoke();
+            }, presets: true, headerItems: new[] { compound });
+
+            if (owner != null) menu.PlacementTarget = owner;
+            menu.IsOpen = true;
         };
     }
 
