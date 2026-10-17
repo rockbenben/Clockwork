@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:Clockwork.I18n"
-        Title="{loc:Loc Panel_Manager}" Width="880" SizeToContent="Height" MaxHeight="392" MinWidth="720" MinHeight="360"
+        Title="{loc:Loc Panel_Manager}" Width="720" SizeToContent="Height" MaxHeight="392" MinWidth="640" MinHeight="360"
         WindowStartupLocation="CenterOwner" Background="{StaticResource BrushInk}">
     <!-- 面板管理器：**它就是面板本身，只是可以编辑**。
          同样的两条页签栏、同样的分带、同样尺寸的格子——所以「这儿看到什么样，
@@ -13,6 +13,12 @@
          **「只在哪个程序上出现」不是一个导航维度**，是每一页自己的一个字段（默认任何程序），
          摆在那一页的页眉上。它曾经是窗口顶上一整条筛选栏，于是绑给别的程序的页
          在别的场景里整批看不见——「我那一页去哪了」只能靠想起自己给它绑过程序。
+
+         宽度是**按内容定的，不是按屏幕定的**：卡片那一块的宽度由格子阵算出
+         （PanelMetrics.GridWidth），不随窗口长——把窗拉宽不会让卡片变宽，只会在它两边
+         多出两条黑边。880 那一档实测下来，卡片只占中间三分之一，左边是窄页签栏、
+         右边是一整片空，看着像没画完。720 让窗贴着内容走；真要更多地方，拖宽它，
+         卡片仍是那个大小，而那两条黑边正好说明「版面就这么宽，不会跟着窗长」。
 
          与主窗口的三个列表页刻意不同：那边是「一行一条、看得清参数」的表格，
          这里是「所见即所得的格子」，因为要判断的是版面而不是字段。
@@ -116,25 +122,22 @@
             </WrapPanel>
         </Border>
 
+        <!-- 页脚独占一行，不与按钮抢宽度。上一版文案与按钮同处一行，* 列被「关闭」挤掉大半，
+             于是一句操作说明被压成两行、末字「移。」孤零零挂在第二行（实测截图）。
+             这句话教的是**拖拽手势**——看界面看不出来的那一类，它该有整行的宽度。 -->
         <Grid Grid.Row="2" Margin="0,12,0,0">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-            <!-- 这里曾经有一颗「添加面板页」。两条栏各自末尾都有「+」之后它就是第二个入口了，
-                 而且在窗口另一头——你正看着左栏，按钮却在这儿。删掉。 -->
-            <!-- 直接放进 * 列，不套 WrapPanel：**WrapPanel 给子元素的可用宽度是无限的**，
-                 于是 TextWrapping 永不触发，只能靠 MaxWidth 兜——而 820 宽下 * 列减掉「关闭」
-                 就只剩 ~600，写死的 MaxWidth="700" 会让这句话钻到按钮底下（实测：末尾「右键页签…」
-                 被按钮压掉）。交给 * 列量宽度，换行才真的会发生。
-                 与端口 / 系统启动项两处页脚同一条处理，那边的注释记着同一个坑。
-                 这四句话不精简：它们教的全是拖拽手势——看界面看不出来的那一类，正该留在页脚。 -->
+            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Panel_ManagerHint}" Style="{StaticResource FieldHint}"
+                       TextWrapping="Wrap" Margin="0,0,14,0"/>
             <!-- 清空点击统计。只在有数据时出现（App 传进来的字典为空就是隐藏）。
                  **它必须占自己的列**：曾和指路文案同放 * 列右对齐，于是文案的第二行
                  直接从按钮底下穿过去（用户实报「底部叠在一起了」——有统计数据时才现形，
                  默认配置的截图永远截不到）。列一独立，* 列自动让宽，换行点自己会算。 -->
-            <TextBlock Grid.Column="0" Text="{loc:Loc Panel_ManagerHint}" Style="{StaticResource FieldHint}"
-                       TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,14,0"/>
-            <Button Grid.Column="1" x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32"
+            <Button Grid.Row="0" Grid.Column="1" x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32"
                     MinWidth="104" Margin="0,0,12,0" Click="ResetUsage_Click" Visibility="Collapsed" ToolTip="{loc:Loc Btn_ResetUsageTip}"/>
-            <Button Grid.Column="2" Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32" Click="Close_Click"/>
+            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{loc:Loc Btn_Close}" MinWidth="88"
+                    Height="32" HorizontalAlignment="Right" Margin="0,10,0,0" Click="Close_Click"/>
         </Grid>
     </Grid>
 </Window>
