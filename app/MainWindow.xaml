@@ -227,7 +227,7 @@
                         <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                         <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ListPanel}">
                         <DataGrid x:Name="GridGroup" AutomationProperties.Name="{loc:Loc Tab_Group}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"
-                                  CanUserDeleteRows="False" SelectionMode="Single" AllowDrop="True" MouseDoubleClick="GridGroup_DoubleClick">
+                                  CanUserDeleteRows="False" SelectionMode="Extended" AllowDrop="True" MouseDoubleClick="GridGroup_DoubleClick">
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="{loc:Loc Btn_Copy}" Click="GCopy_Click"/>
@@ -262,6 +262,12 @@
                                  用得不多（认识一遍就够），但必须看得见——步骤编辑器里「还没有动作」那句
                                  提示指的就是这条路。 -->
                             <Button x:Name="GTemplate" Content="{loc:Loc Btn_FromTemplate}" Margin="0,3" Click="GTemplate_Click"/>
+                            <!-- 「组合成一个动作」：多选几行 → 一颗按钮。它必须在 GroupRowOps **外面**——
+                                 那一组要选中行才亮，而多选的前提恰恰是先选中好几行。
+                                 组合出来的不是复制，是引用：每一步都是 group 类型，指向原来那个动作，
+                                 所以原动作改了，组合里的那一段跟着改；原来那个被删了才需要处理。 -->
+                            <Button x:Name="GCombine" Content="{loc:Loc Btn_Combine}" Margin="0,3"
+                                    IsEnabled="False" ToolTip="{loc:Loc Btn_CombineTip}" Click="GCombine_Click"/>
                             <StackPanel x:Name="GroupRowOps" IsEnabled="False">
                                 <Button x:Name="GEdit" Content="{loc:Loc Btn_Edit}" Margin="0,3" Click="GEdit_Click"/>
                                 <Button x:Name="GDel" Content="{loc:Loc Btn_Delete}" Style="{StaticResource DangerButton}" Margin="0,3" Click="GDel_Click"/>

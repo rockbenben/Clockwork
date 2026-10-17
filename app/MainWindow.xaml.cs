@@ -67,7 +67,15 @@ public partial class MainWindow : Window
 
         _groups = new GroupListVm(config, save);
         GridGroup.ItemsSource = _groups.Rows;
-        GridGroup.SelectionChanged += (s, e) => { _groups.SelectedIndex = GridGroup.SelectedIndex; GroupRowOps.IsEnabled = GridGroup.SelectedIndex >= 0; };
+        // 动作列表是**多选**的：编辑/删除/上移/下移/运行仍旧只作用于**当前行**（SelectedItem 就是
+        // 最后点的那一行，和所有表格一样），多选只为「组合成一个动作」那一条路存在。
+        // 两组按钮因此各有各的判据，不能共用一个 IsEnabled。
+        GridGroup.SelectionChanged += (s, e) =>
+        {
+            _groups.SelectedIndex = GridGroup.SelectedIndex;
+            GroupRowOps.IsEnabled = GridGroup.SelectedIndex >= 0;
+            SyncCombineBtn();
+        };
         Views.DataGridReorder.Attach(GridGroup, (from, to) => { _groups.MoveTo(from, to); SyncSel(GridGroup, _groups); });
         AttachRowContextMenu(GridGroup);   // 右键先选中该行，见该方法的注释
 
@@ -810,6 +818,33 @@ public partial class MainWindow : Window
                 (_config.Settings.PanelHotkey, Strings.Get("Settings_PanelHotkey")),
                 (_config.Settings.QuickOpenHotkey, Strings.Get("Settings_QuickOpenHotkey")),
             };
+
+    // 多选够两个才亮：选一个去「组合」没有意义（那只是复制，而「复制」已经有了）。
+    private void SyncCombineBtn() => GCombine.IsEnabled = GridGroup.SelectedItems.Count >= 2;
+
+    /// <summary>把选中的几个动作**引用**成一个新动作（Quicker 的「新建组合动作」）。</summary>
+    // 引用而不是复制：每一步都是 group 类型，指向原来那个动作。原动作改了组合里的那一段跟着改；
+    // 组合里存的是 id 而不是内容，所以原动作被别的动作引用着也不会因为这次组合而多出一份。
+    //
+    // **按列表里的顺序排，不按点选的顺序**：用户看到的是那一列，他心里的顺序也是那一列。
+    // 按点选顺序排会得到一个他没预期的次序，而界面上没有任何提示说它被重排过。
+    private void GCombine_Click(object sender, RoutedEventArgs e)
+    {
+        if (_groups == null) return;
+        var picked = GridGroup.SelectedItems.Cast<GroupRowVm>().Select(r => r.Group).ToList();
+        if (picked.Count < 2) return;
+        var ordered = _groups.Rows.Select(r => r.Group).Where(picked.Contains).ToList();
+
+        var composed = new ActionGroup
+        {
+            Name = Strings.Lf("Group_CombinedName", picked.Count),
+            Steps = ordered.Select(g => new LaunchStep { Kind = "group", GroupId = g.Id }).ToList(),
+        };
+        // 直接开编辑器而不是就地落库：组合出来的东西多半还要调（插延时、插等待、改名字），
+        // 而编辑器顶上就是名字与步骤——「先开再存」比「先存再点编辑」少一次来回。
+        var edited = Views.GroupEditorWindow.Edit(this, composed, Groups, FunctionHotkeys());
+        if (edited != null) { _groups.Add(edited); SyncSel(GridGroup, _groups); }
+    }
 
     private void AddGroupFrom(ActionGroup template)
     {
