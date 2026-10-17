@@ -664,6 +664,45 @@ public partial class App
             ("ReminderEditorLogin", () => new ReminderEditorWindow(
                 new Reminder { Trigger = "startup", StartupHourMode = "before", StartupWithinMinutes = 30 }, groups)),
             ("GroupEditor", () => new GroupEditorWindow(new ActionGroup(), groups, NoFunctionHotkeys)),
+            // 三列编辑器里**有东西**的那一态。空组拍不出两件事：
+            //   · 右侧变量面板是空的（它列的是各步骤的 OutputVar，空组一列都没有）；
+            //   · 左侧工具箱与中间步骤表之间看不出层级——缩进、块循环、以及一条
+            //     正在被选中的步骤。工具箱那一列本身在任何一态都在，但「变量/外观」
+            //     与块缩进只有这一档拍得见。
+            ("GroupEditorFilled", () => new GroupEditorWindow(new ActionGroup
+            {
+                Name = Strings.Get("Tpl_TypeLines"),
+                Steps = ActionGroupTemplates.All().First(g => g.Name == Strings.Get("Tpl_TypeLines")).Steps,
+            }, groups, NoFunctionHotkeys)),
+            // 站点映射表：一条真站点（含端口的域名、两条改写规则）。空表只拍得到空态提示，
+            // 而这一扇窗真正难排版的是右栏——四个字段加一张规则表，德语俄语下一列有多高。
+            ("SiteMapEditor", () => new Views.SiteMapEditorWindow(new List<SiteEntry>
+            {
+                new SiteEntry
+                {
+                    Name = "LearnData",
+                    Hosts = new() { "newzone.top", "www.newzone.top", "localhost:8080" },
+                    SourceRoot = @"D:\Backup\Projects\LearnData\src",
+                    IndexFile = "README.md",
+                    PathRules = new()
+                    {
+                        new SitePathRule { Match = "^posts/", Replace = "_posts/" },
+                        new SitePathRule { Match = "^blog\\.html$", Replace = "blog.md" },
+                    },
+                },
+            })),
+            // 模板管理器：十份模板，其中一份是**用户改过的**——「已修改」那颗角标与
+            // 「恢复默认」那颗灰掉的按钮只有这一档拍得到。
+            ("TemplateManager", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.Templates.Add(new TemplateOverride
+                {
+                    Key = "siteSource",
+                    Group = ActionGroupTemplates.BuiltIn("siteSource")!,
+                });
+                return new Views.TemplateManagerWindow(cfg);
+            }),
 // 手势管理器：带两条已绑手势进去，才截得到箭头与摘要。
             // 一条 group（跑整组）、一条 system（只作为手势存在的动作）——这两种正是这个界面要能同时装下的。
             // 斜角箭头 ↖↗↙↘ 有没有字形只能靠渲染验（同 MDL2 码位——缺字形不抛异常，只画成空心方块）。
@@ -897,7 +936,7 @@ public partial class App
     private static IReadOnlyList<PanelTilePage> LongRailPages()
     {
         string[] keys = { "Tab_Launch", "Tab_Group", "Tab_Reminder", "Tab_Settings", "Tab_System", "Tab_Ports",
-                          "Menu_SecOpen", "Menu_SecControl", "Menu_SecSystem", "Menu_SecCtrl",
+                          "Menu_SecUI", "Menu_SecClip", "Menu_SecText", "Menu_SecCtrl",
                           "Panel_Global", "Panel_Uncategorized", "Kind_app", "Kind_keys" };
         return keys.Select(k => new PanelTilePage(
             Strings.Get(k),
@@ -1240,7 +1279,17 @@ public partial class App
                 {
                     // 有些对话框自带宽度比矩阵最窄档还小（提醒编辑器 640 < 820）：矩阵测的
                     // 「最窄」其实比用户实际看到的更宽，窄态溢出永远抓不到。这类窗口按自身宽度补一档。
-                    double native = make().Width;
+                    //
+                    // **`make()` 不是纯构造，量完宽度必须把那扇窗关掉。** GestureTrail 那档的
+                    // 5 个 Point() 里第 2 个就触发 ShowGated，把一扇满屏、置顶、点不着的覆盖窗
+                    // 摆到了用户屏幕上；而覆盖窗不在这批截图的范围里，于是矩阵跑完照样「全绿」，
+                    // 屏幕上却留着一扇窗——每种语言一扇（2026-10-17 报的就是这个：
+                    // 一条蓝色 L 形轨迹赖在屏幕上不走，那是 (300,200)→(540,440) 那几个探针点）。
+                    // 同一批 make() 的正式那一份在下面被 Close 掉（try 末尾一处、catch 里一处），
+                    // 只有这次量宽度的临时那一份是漏的——它连 try 都没进。
+                    var probe = make();
+                    double native = probe.Width;
+                    try { probe.Close(); } catch { }   // 关不掉也不能让整轮矩阵挂在这上面
                     var ws = native > 0 && native < widths[0] ? widths.Append(native).ToArray() : widths;
                     foreach (var wa in waHeights)
                         foreach (var ww in ws)
