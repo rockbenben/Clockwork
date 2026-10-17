@@ -2226,4 +2226,5 @@ Log: {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Samenvoegen tot één actie</data>
   <data name="Btn_CombineTip" xml:space="preserve">Selecteer twee of meer acties en voeg ze in lijstvolgorde samen tot één nieuwe actie. Wijzigingen in de originele acties blijven meelopen.</data>
   <data name="Group_CombinedName" xml:space="preserve">Combinatie van {0} acties</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Nieuwe samengestelde actie…</data>
 </root>

@@ -2226,4 +2226,5 @@
   <data name="Btn_Combine" xml:space="preserve">하나의 작업으로 묶기</data>
   <data name="Btn_CombineTip" xml:space="preserve">두 개 이상의 작업을 골라 목록 순서대로 하나의 복합 작업으로 잇습니다. 원본 작업을 고치면 내용도 따라 바뀝니다.</data>
   <data name="Group_CombinedName" xml:space="preserve">{0}개 작업 조합</data>
+  <data name="Panel_NewCompound" xml:space="preserve">복합 작업 새로 만들기…</data>
 </root>

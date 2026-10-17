@@ -2226,4 +2226,5 @@ Log: {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Gabungkan menjadi satu tindakan</data>
   <data name="Btn_CombineTip" xml:space="preserve">Pilih dua tindakan atau lebih lalu rangkai sesuai urutan daftar menjadi satu tindakan baru. Tindakan aslinya tetap bisa disunting.</data>
   <data name="Group_CombinedName" xml:space="preserve">Kombinasi {0} tindakan</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Tindakan gabungan baru…</data>
 </root>

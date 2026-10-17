@@ -2226,4 +2226,5 @@ Protokoll: {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Zu einer Aktion zusammenfassen</data>
   <data name="Btn_CombineTip" xml:space="preserve">Zwei oder mehr Aktionen auswählen und in Listenreihenfolge zu einer neuen Aktion verketten. Änderungen an den Originalen wirken sich sofort aus.</data>
   <data name="Group_CombinedName" xml:space="preserve">Kombination aus {0} Aktionen</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Neue komplexe Aktion…</data>
 </root>

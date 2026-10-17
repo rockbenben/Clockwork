@@ -870,7 +870,7 @@ public partial class PanelManagerWindow : Window
         if (owner != null) b.Tag = new CellRef(owner, null);
         b.ToolTip = Strings.Get("Panel_AddHere");
         SetCellIcon(b, new PanelIconSpec(PanelIconKind.Glyph, char.ConvertFromUtf32(0xE710), ""), System.Math.Round(Metrics.GlyphFont * 1.25));
-        b.Click += (_, _) => { if (!_dragging && owner != null) AddStep(owner); };
+        b.Click += (_, _) => { if (!_dragging && owner != null) AddStep(owner, b); };
         return b;
     }
 
@@ -1150,13 +1150,40 @@ public partial class PanelManagerWindow : Window
         Commit();
     }
 
-    private void AddStep(PanelPage p)
+    /// <summary>往一页上加一格。**第一次点击就分流**：加一个步骤，还是做一个复杂动作。</summary>
+    // 此前点了空格子直接进「运行程序」的编辑器：想要「打开网址」的人得先接受一个错的东西，
+    // 再打开类型下拉改回来；而「在 VS Code 里弹出我自己做的那套流程」在这条路上**根本不存在**——
+    // 复杂动作只能先去动作标签页建好，再回面板上找一个已有的动作格。Quicker 的格子菜单顶上
+    // 就是「新建基础动作 / 新建组合动作」两组，本菜单照它分。
+    //
+    // 复杂动作走**引用**而不是复制：格子存的是 id，那个动作之后怎么改，这一格跟着变。
+    private void AddStep(PanelPage p, FrameworkElement? anchor)
     {
-        // 以「运行程序」开场：它是最常放上面板的一类，而编辑器顶上就是类型下拉，想换当场换。
-        var s = StepEditorWindow.Edit(this, null, "app", _config.ActionGroups, _config.LaunchSteps);
-        if (s == null) return;
-        p.Steps.Add(s);
-        Commit();
+        var compound = new MenuItem { Header = Strings.Get("Panel_NewCompound") };
+        compound.Click += (_, _) =>
+        {
+            var g = GroupEditorWindow.Edit(this, new ActionGroup { Name = Strings.Get("Panel_NewCompound") },
+                                           _config.ActionGroups, _config.Settings.FunctionHotkeys());
+            if (g == null) return;
+            _config.ActionGroups.Add(g);
+            p.Steps.Add(new LaunchStep { Kind = "group", GroupId = g.Id });
+            Commit();
+        };
+
+        var menu = StepMenu.Build((kind, seed) =>
+        {
+            var step = StepEditorWindow.Edit(this, seed, kind, _config.ActionGroups, _config.LaunchSteps);
+            if (step == null) return;
+            p.Steps.Add(step);
+            Commit();
+        }, presets: true, headerItems: new[] { compound });
+
+        if (anchor != null)
+        {
+            menu.PlacementTarget = anchor;
+            menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+        }
+        menu.IsOpen = true;
     }
 
     private void DeleteStep(PanelPage p, LaunchStep s)

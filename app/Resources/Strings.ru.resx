@@ -2226,4 +2226,5 @@
   <data name="Btn_Combine" xml:space="preserve">Объединить в одно действие</data>
   <data name="Btn_CombineTip" xml:space="preserve">Выберите два или более действий и соедините их в порядке списка в одно новое действие. Исходные остаются редактируемыми.</data>
   <data name="Group_CombinedName" xml:space="preserve">Комбинация из {0} действий</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Новое составное действие…</data>
 </root>

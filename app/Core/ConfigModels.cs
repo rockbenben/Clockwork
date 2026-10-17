@@ -405,6 +405,17 @@ public sealed class AppSettings
     // 名字仍在 ToolTip 上，所以这不是「藏起信息」，是「把信息挪到需要时才看」。
     public bool PanelIconOnly { get; set; }
 
+    /// <summary>本程序自己占着的全局功能键（键 → 属于谁），给动作编辑器查重用。</summary>
+    // 只有一处清单，**加了新的功能键就往这儿添一行**：各调用点各抄一份的年代已经出过事
+    // （面板键加进来的那一轮就漏抄过一处，于是面板与急停键可以撞在一起而没人拦）。
+    // 放在这儿而不是某个窗口里，是因为查重需要它的不止一扇窗。
+    public IReadOnlyList<(string Key, string Owner)> FunctionHotkeys() => new[]
+    {
+        (StopHotkey, Clockwork.I18n.Strings.Get("Settings_StopHotkey")),
+        (PanelHotkey, Clockwork.I18n.Strings.Get("Settings_PanelHotkey")),
+        (QuickOpenHotkey, Clockwork.I18n.Strings.Get("Settings_QuickOpenHotkey")),
+    };
+
     /// <summary>面板数据模型的版本。迁移完成后写上，用来保证那次改写只发生一次。</summary>
     //
     // 为什么需要一个显式版本号，而不是靠"看字段长什么样"来判断：迁移会把老的「整组一格」组

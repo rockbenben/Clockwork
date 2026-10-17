@@ -2226,4 +2226,5 @@
   <data name="Btn_Combine" xml:space="preserve">รวมเป็นการกระทำเดียว</data>
   <data name="Btn_CombineTip" xml:space="preserve">เลือกการกระทำสองรายการขึ้นไป แล้วต่อกันตามลำดับในรายการเป็นการกระทำใหม่ ต้นฉบับยังแก้ไขได้</data>
   <data name="Group_CombinedName" xml:space="preserve">รวม {0} การกระทำ</data>
+  <data name="Panel_NewCompound" xml:space="preserve">สร้างการกระทำแบบซับซ้อน…</data>
 </root>

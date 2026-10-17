@@ -2226,4 +2226,5 @@ Nhật ký: {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Gộp thành một hành động</data>
   <data name="Btn_CombineTip" xml:space="preserve">Chọn hai hành động trở lên rồi nối chúng theo thứ tự trong danh sách thành một hành động mới. Các hành động gốc vẫn sửa được.</data>
   <data name="Group_CombinedName" xml:space="preserve">Kết hợp {0} hành động</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Hành động phức tạp mới…</data>
 </root>

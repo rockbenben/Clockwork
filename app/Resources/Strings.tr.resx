@@ -2226,4 +2226,5 @@ Günlük: {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Tek eyleme birleştir</data>
   <data name="Btn_CombineTip" xml:space="preserve">İki veya daha fazla eylem seçin; liste sırasına göre tek bir yeni eylemde zincirleyin. Özgün eylemler düzenlenebilir kalır.</data>
   <data name="Group_CombinedName" xml:space="preserve">{0} eylemin birleşimi</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Yeni bileşik eylem…</data>
 </root>

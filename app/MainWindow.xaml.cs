@@ -810,14 +810,7 @@ public partial class MainWindow : Window
     // 本程序自己占着的全局键，交给动作编辑器查重用。**加了新的功能键就往这儿添一行**——
     // 漏了不会报错，只会在某天变成一条按了没反应的热键（面板键加进来的那一轮就漏过一次）。
     private IReadOnlyList<(string Key, string Owner)> FunctionHotkeys()
-        => _config == null
-            ? System.Array.Empty<(string, string)>()
-            : new[]
-            {
-                (_config.Settings.StopHotkey, Strings.Get("Settings_StopHotkey")),
-                (_config.Settings.PanelHotkey, Strings.Get("Settings_PanelHotkey")),
-                (_config.Settings.QuickOpenHotkey, Strings.Get("Settings_QuickOpenHotkey")),
-            };
+        => _config?.Settings.FunctionHotkeys() ?? Array.Empty<(string, string)>();
 
     // 多选够两个才亮：选一个去「组合」没有意义（那只是复制，而「复制」已经有了）。
     private void SyncCombineBtn() => GCombine.IsEnabled = GridGroup.SelectedItems.Count >= 2;

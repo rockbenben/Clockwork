@@ -2226,4 +2226,5 @@
   <data name="Btn_Combine" xml:space="preserve">组合为一个动作</data>
   <data name="Btn_CombineTip" xml:space="preserve">选中两个以上的动作，把它们按列表顺序串成一个新的复杂动作。原动作改动会跟着变。</data>
   <data name="Group_CombinedName" xml:space="preserve">{0} 个动作组合</data>
+  <data name="Panel_NewCompound" xml:space="preserve">新建复杂动作…</data>
 </root>

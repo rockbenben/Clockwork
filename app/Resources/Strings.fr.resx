@@ -2226,4 +2226,5 @@ Journal : {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Réunir en une seule action</data>
   <data name="Btn_CombineTip" xml:space="preserve">Sélectionnez deux actions ou plus et enchaînez-les, dans l'ordre de la liste, en une nouvelle action. Les actions d'origine restent modifiables.</data>
   <data name="Group_CombinedName" xml:space="preserve">Combinaison de {0} actions</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Nouvelle action complexe…</data>
 </root>

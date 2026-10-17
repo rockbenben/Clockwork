@@ -2226,4 +2226,5 @@ Log: {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Combine into one action</data>
   <data name="Btn_CombineTip" xml:space="preserve">Select two or more actions and chain them into one compound action, in list order. The originals stay editable and flow through.</data>
   <data name="Group_CombinedName" xml:space="preserve">Combination of {0} actions</data>
+  <data name="Panel_NewCompound" xml:space="preserve">New compound action…</data>
 </root>

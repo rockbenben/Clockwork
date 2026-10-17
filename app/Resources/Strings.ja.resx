@@ -2226,4 +2226,5 @@
   <data name="Btn_Combine" xml:space="preserve">1 つのアクションにまとめる</data>
   <data name="Btn_CombineTip" xml:space="preserve">2 つ以上のアクションを選び、一覧の順にひとつの複雑なアクションへ連ねます。元のアクションを編集すると内容も追従します。</data>
   <data name="Group_CombinedName" xml:space="preserve">{0} 個のアクションの組合せ</data>
+  <data name="Panel_NewCompound" xml:space="preserve">複雑なアクションを新規作成…</data>
 </root>

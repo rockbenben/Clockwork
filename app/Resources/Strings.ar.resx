@@ -2226,4 +2226,5 @@
   <data name="Btn_Combine" xml:space="preserve">دمجها في إجراء واحد</data>
   <data name="Btn_CombineTip" xml:space="preserve">اختر إجراءين أو أكثر وسلسلها بترتيب القائمة في إجراء جديد واحد. تبقى الإجراءات الأصلية قابلة للتعديل.</data>
   <data name="Group_CombinedName" xml:space="preserve">دمج {0} إجراءات</data>
+  <data name="Panel_NewCompound" xml:space="preserve">إجراء مركّب جديد…</data>
 </root>

@@ -2226,4 +2226,5 @@ Registro: {1}</value>
   <data name="Btn_Combine" xml:space="preserve">Combinar en una acción</data>
   <data name="Btn_CombineTip" xml:space="preserve">Selecciona dos o más acciones y encadénalas, en el orden de la lista, en una sola acción nueva. Las originales siguen siendo editables.</data>
   <data name="Group_CombinedName" xml:space="preserve">Combinación de {0} acciones</data>
+  <data name="Panel_NewCompound" xml:space="preserve">Nueva acción compleja…</data>
 </root>
