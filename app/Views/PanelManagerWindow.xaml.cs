@@ -104,6 +104,9 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
             ? Visibility.Visible : Visibility.Collapsed;
         LoadPanelLook();
         RenderPages();
+        // 构造时左栏的页签刚填上去，量到的宽度未必是最终那一份（换语言/换版面都会变）；
+        // 显示之后再按排版后的实际宽度重算一次封顶值。见 CapWidthToContent。
+        Loaded += (_, _) => CapWidthToContent();
     }
 
     // 这个格子被点过几次。没有 = 从未统计过（角标不画）。
@@ -188,6 +191,53 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         RailScroll.Visibility = Visibility.Visible;
 
         RenderBody();
+        CapWidthToContent();
+    }
+
+    /// <summary>把窗口宽度封在「左栏 + 卡片」这一块的宽度上：
+    /// 卡片右边**永远不出现黑边**。</summary>
+    // 这一扇窗是 SizeToContent="Width,Height"，而 **SizeToContent 量子元素时给的可用宽度
+    // 是无限的**。于是有三样东西会按「无限宽」报出自己那一行的整行宽度，把窗口一路撑开，
+    // 而卡片（4 列标准档 360px）不跟着长——多出来的全是黑边：
+    //   外观条    WrapPanel，约 468px 的单行
+    //   顶栏页签  WrapPanel，分类一多就长
+    //   页脚那句话 TextWrapping="Wrap"，但无限宽下它不折行，约 966px
+    // （它们各自的 MaxWidth 都必须落在自己身上；写在 Border 或外层 Grid 上没用。）
+    //
+    // 封顶值 = 左栏 + 10（右 Margin 的缝）+ 格子阵宽度。三个元素都封在这个数上，
+    // 于是没有一样能把窗口撑得比卡片更宽；配合那一列改成 Auto（不吞富余宽度），
+    // 窗口宽度就恰好等于内容宽度，OS 边框那几像素落在 Width 之外，不用拿常数去凑。
+    //
+    // 为什么不写死 Width：Window.Width 是含 OS 边框的外框尺寸，内容会少掉边框那么宽，
+    // 卡片反而被挤出一截滚动条。
+    private void CapWidthToContent()
+    {
+        // 左栏是 Auto 列，量的是内容宽度。但**不能量 ActualWidth**：构造函数里调到这里时
+        // 整扇窗还没显示，ActualWidth 是 0（实测）。直接对它 Measure 一次就量得到。
+        RailScroll.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+        double rail = RailScroll.DesiredSize.Width;
+        if (rail <= 1) rail = RailScroll.ActualWidth;
+        if (rail <= 1) rail = 140;   // 量不到时的兜底；Loaded 之后会重算一次
+
+        double card = PanelMetrics.GridWidth(_config.Settings.PanelTileSize,
+                                             _config.Settings.PanelIconOnly,
+                                             PanelMetrics.ClampColumns(_config.Settings.PanelColumns));
+        double main = rail + 10 + card;
+
+        // 封顶值要减掉外层自己吃掉的那些：Border 的 Padding（12 两侧 + 边框 1 两侧）算在外层，
+        // 所以 WrapPanel 报 main 宽，整条 Border 反而报 main+26，窗口又比卡片宽一截。
+        AppearanceBar.MaxWidth = main - 26;
+        TopTabBar.MaxWidth = main;   // 顶栏那条 Border 只有下边框，横向不吃宽度
+
+        // 页脚那句指路文字要和右边那颗按钮同处一行，得给它留出按钮那一列
+        // （按钮不一定在：没有点击统计时它是 Collapsed，不占位）。
+        double btnCol = 0;
+        if (ResetUsageBtn.Visibility == Visibility.Visible)
+        {
+            ResetUsageBtn.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            btnCol = ResetUsageBtn.DesiredSize.Width + 12;   // 右 Margin
+        }
+        ManagerHint.MaxWidth = Math.Max(120, main - btnCol - 14);   // 14 = 它自己的右 Margin
     }
 
     // 这一类里一张页都没有时，中间画一句「往这儿放第一页」而不是留一片空白。
