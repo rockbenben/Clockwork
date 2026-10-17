@@ -209,16 +209,19 @@ public static class StepRunner
                 return ActionResult.Empty;
             }
 
-            // 网址 → 本地源文件。这是「看见线上文章、改它的源文件」那一整件事。
+            // 网址 → 本地源文件。**网址必须填**（可以写 {变量} 引用上一步的产出）。
             //
-            // 网址来源两选一：文本框里写了就走占位替换（可以引用上一步 browserUrl 的产出），
-            // **留空才去读地址栏**。留空即现读是有意的：一整条「读地址 → 映射 → 打开」
-            // 就三步，中间那个变量不必留在用户的配置里。
+            // 「留空就自动读浏览器地址栏」曾经在这一步里。那是个隐式约定：界面上看不出这一步
+            // 会去读地址栏，也看不出它读的是哪个浏览器——而它把**两件事**（读地址 + 映射）
+            // 塞进了一个名叫「映射」的通用原语里。用户要的是「改这篇文章的源文件」，
+            // 那是一整件事，属于模板层；工具箱里的步骤该只干一件。
+            //
+            // 现在读地址是独立的一步（browserUrl），「打开本地源文件」模板把两步拼起来：
+            // 原子操作在模板里，通用步骤在工具箱里，各归各位（与 StepKindSections 同一口径）。
             case "siteMap":
             {
                 var url = Fill(s.Text, urlEncode: false, vars).Trim();
-                if (url.Length == 0) url = (BrowserUrlReader.Read() ?? "").Trim();
-                if (url.Length == 0) return ActionResult.Warn("Warn_BrowserUrlNone");
+                if (url.Length == 0) return ActionResult.Warn("Warn_SiteMapNoUrl");
 
                 var mapped = SiteMap.Resolve(sites, url);
                 if (!mapped.Ok)

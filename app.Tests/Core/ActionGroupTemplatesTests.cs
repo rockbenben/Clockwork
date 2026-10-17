@@ -160,17 +160,30 @@ public class ActionGroupTemplatesTests
             Assert.Equal(loop.Id, s.ParentId);
     }
 
-    // 本地源文件模板只有一个步骤，且网址框**必须留空**——留空就是自动读地址栏。
-    // 填上一个占位网址的话，它就变成了「每次都打开那一个地址」，与模板的用途正相反。
+    // 本地源文件模板是**两步**：读地址栏 → 映射并打开。
+    //
+    // 它此前只有一步，而那一步的网址框「留空 = 自动读地址栏」——一步干了两件事，
+    // 而界面上看不出这一步会去读地址栏、也看不出它读的是哪个浏览器。
+    // 拆开之后，工具箱里两个都是通用原语（想映射手打的网址不必先读一次地址栏），
+    // 「看一眼线上文章、改它的源文件」这一整件事在模板层拼出来。
+    //
+    // 变量名两边必须对得上：browserUrl 写进去的那一格，siteMap 要真的引用它。
+    // 两处分开写死的话，某种语言的译名一改，这个模板在那种语言下就静默失效。
     [Fact]
-    public void Site_source_template_reads_the_address_bar_on_its_own()
+    public void Site_source_template_reads_the_address_bar_then_maps_it()
     {
         var g = ActionGroupTemplates.All()
             .Single(x => x.Name == Clockwork.I18n.Strings.Get("Tpl_SiteSource"));
 
-        var step = Assert.Single(g.Steps);
-        Assert.Equal("siteMap", step.Kind);
-        Assert.True(string.IsNullOrWhiteSpace(step.Text), "网址框留空才是自动读地址栏；填了就成了写死的地址");
-        Assert.Equal("open", step.Action);
+        Assert.Equal(2, g.Steps.Count);
+
+        var read = g.Steps[0];
+        Assert.Equal("browserUrl", read.Kind);
+        Assert.False(string.IsNullOrWhiteSpace(read.OutputVar), "读出来的地址要有落脚点");
+
+        var map = g.Steps[1];
+        Assert.Equal("siteMap", map.Kind);
+        Assert.Equal("open", map.Action);
+        Assert.Equal("{" + read.OutputVar + "}", map.Text);
     }
 }
