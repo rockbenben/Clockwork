@@ -2217,10 +2217,13 @@
   <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} ステップ・変更済み</data>
   <data name="TplMgr_Empty" xml:space="preserve">テンプレートがありません</data>
   <data name="Ed_StepsEmpty" xml:space="preserve">この動作にはまだ手順がありません。左のモジュールツールボックスから選んで追加してください。</data>
-  <data name="Panel_Scenes" xml:space="preserve">シーン</data>
-  <data name="Panel_ScenePages" xml:space="preserve">{0} ページ</data>
-  <data name="Panel_Filter" xml:space="preserve">シーンを絞り込み…</data>
-  <data name="Panel_FilterTip" xml:space="preserve">プロセス名またはページ名で左側を絞り込みます。空欄 = 絞り込まない。</data>
-  <data name="Panel_MoveLeft" xml:space="preserve">1 ページ左へ</data>
-  <data name="Panel_MoveRight" xml:space="preserve">1 ページ右へ</data>
+
+
+
+
+
+
+  <data name="Btn_Combine" xml:space="preserve">1 つのアクションにまとめる</data>
+  <data name="Btn_CombineTip" xml:space="preserve">2 つ以上のアクションを選び、一覧の順にひとつの複雑なアクションへ連ねます。元のアクションを編集すると内容も追従します。</data>
+  <data name="Group_CombinedName" xml:space="preserve">{0} 個のアクションの組合せ</data>
 </root>

@@ -2217,10 +2217,13 @@ Nhật ký: {1}</value>
   <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} bước · đã sửa</data>
   <data name="TplMgr_Empty" xml:space="preserve">Không có mẫu</data>
   <data name="Ed_StepsEmpty" xml:space="preserve">Hành động này chưa có bước nào. Hãy chọn một bước trong Hộp công cụ mô-đun bên trái.</data>
-  <data name="Panel_Scenes" xml:space="preserve">Kịch bản</data>
-  <data name="Panel_ScenePages" xml:space="preserve">{0} trang</data>
-  <data name="Panel_Filter" xml:space="preserve">Lọc kịch bản…</data>
-  <data name="Panel_FilterTip" xml:space="preserve">Lọc cột bên trái theo tên tiến trình hoặc tên trang. Để trống = không lọc.</data>
-  <data name="Panel_MoveLeft" xml:space="preserve">Chuyển sang trang bên trái</data>
-  <data name="Panel_MoveRight" xml:space="preserve">Chuyển sang trang bên phải</data>
+
+
+
+
+
+
+  <data name="Btn_Combine" xml:space="preserve">Gộp thành một hành động</data>
+  <data name="Btn_CombineTip" xml:space="preserve">Chọn hai hành động trở lên rồi nối chúng theo thứ tự trong danh sách thành một hành động mới. Các hành động gốc vẫn sửa được.</data>
+  <data name="Group_CombinedName" xml:space="preserve">Kết hợp {0} hành động</data>
 </root>

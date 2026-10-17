@@ -2217,10 +2217,13 @@ Registro: {1}</value>
   <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} passi · Modificato</data>
   <data name="TplMgr_Empty" xml:space="preserve">Nessun modello</data>
   <data name="Ed_StepsEmpty" xml:space="preserve">Questa azione non ha ancora passaggi. Scegline uno dalla Cassetta degli strumenti dei moduli a sinistra.</data>
-  <data name="Panel_Scenes" xml:space="preserve">Scenari</data>
-  <data name="Panel_ScenePages" xml:space="preserve">{0} pagine</data>
-  <data name="Panel_Filter" xml:space="preserve">Filtra scenari…</data>
-  <data name="Panel_FilterTip" xml:space="preserve">Filtra la colonna di sinistra per nome di processo o di pagina. Vuoto = nessun filtro.</data>
-  <data name="Panel_MoveLeft" xml:space="preserve">Sposta di una pagina a sinistra</data>
-  <data name="Panel_MoveRight" xml:space="preserve">Sposta di una pagina a destra</data>
+
+
+
+
+
+
+  <data name="Btn_Combine" xml:space="preserve">Combina in un'unica azione</data>
+  <data name="Btn_CombineTip" xml:space="preserve">Seleziona due o più azioni e concatenale, nell'ordine dell'elenco, in una sola nuova azione. Le originali restano modificabili.</data>
+  <data name="Group_CombinedName" xml:space="preserve">Combinazione di {0} azioni</data>
 </root>

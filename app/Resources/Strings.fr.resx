@@ -2217,10 +2217,13 @@ Journal : {1}</value>
   <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} étapes · Modifié</data>
   <data name="TplMgr_Empty" xml:space="preserve">Aucun modèle</data>
   <data name="Ed_StepsEmpty" xml:space="preserve">Cette action n'a encore aucune étape. Choisissez-en une dans la Boîte à outils des modules à gauche.</data>
-  <data name="Panel_Scenes" xml:space="preserve">Scénarios</data>
-  <data name="Panel_ScenePages" xml:space="preserve">{0} pages</data>
-  <data name="Panel_Filter" xml:space="preserve">Filtrer les scénarios…</data>
-  <data name="Panel_FilterTip" xml:space="preserve">Filtre la colonne de gauche par nom de processus ou de page. Vide = aucun filtre.</data>
-  <data name="Panel_MoveLeft" xml:space="preserve">Déplacer d'une page vers la gauche</data>
-  <data name="Panel_MoveRight" xml:space="preserve">Déplacer d'une page vers la droite</data>
+
+
+
+
+
+
+  <data name="Btn_Combine" xml:space="preserve">Réunir en une seule action</data>
+  <data name="Btn_CombineTip" xml:space="preserve">Sélectionnez deux actions ou plus et enchaînez-les, dans l'ordre de la liste, en une nouvelle action. Les actions d'origine restent modifiables.</data>
+  <data name="Group_CombinedName" xml:space="preserve">Combinaison de {0} actions</data>
 </root>

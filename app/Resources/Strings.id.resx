@@ -2217,10 +2217,13 @@ Log: {1}</value>
   <data name="TplMgr_DetailCustomized" xml:space="preserve">{0} langkah · diubah</data>
   <data name="TplMgr_Empty" xml:space="preserve">Tidak ada templat</data>
   <data name="Ed_StepsEmpty" xml:space="preserve">Tindakan ini belum punya langkah. Pilih satu dari Kotak alat modul di sebelah kiri.</data>
-  <data name="Panel_Scenes" xml:space="preserve">Skenario</data>
-  <data name="Panel_ScenePages" xml:space="preserve">{0} halaman</data>
-  <data name="Panel_Filter" xml:space="preserve">Filter skenario…</data>
-  <data name="Panel_FilterTip" xml:space="preserve">Saring kolom kiri berdasarkan nama proses atau halaman. Kosong = tanpa filter.</data>
-  <data name="Panel_MoveLeft" xml:space="preserve">Pindahkan satu halaman ke kiri</data>
-  <data name="Panel_MoveRight" xml:space="preserve">Pindahkan satu halaman ke kanan</data>
+
+
+
+
+
+
+  <data name="Btn_Combine" xml:space="preserve">Gabungkan menjadi satu tindakan</data>
+  <data name="Btn_CombineTip" xml:space="preserve">Pilih dua tindakan atau lebih lalu rangkai sesuai urutan daftar menjadi satu tindakan baru. Tindakan aslinya tetap bisa disunting.</data>
+  <data name="Group_CombinedName" xml:space="preserve">Kombinasi {0} tindakan</data>
 </root>
