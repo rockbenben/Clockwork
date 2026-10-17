@@ -30,6 +30,19 @@ public class StepContextWiringTests
             .ToArray();
     }
 
+    /// <summary>开发期自查用的代码，不参与「界面上有几处打开口」这件事的计数。</summary>
+    //
+    // **只有 DevChecks.cs 一个，而且排除必须写死成文件名而不是目录。**
+    // 它是截图矩阵：replace / urlDecode / splitLines 那几个类型在 BlockOnlyKinds 里，
+    // 也就是说它们只出现在复杂动作的步骤序列中。要把「复杂动作语境下的类型下拉」拍下来，
+    // 这几个变体就必须自己传 insideGroup: true——那不是产品界面上的第五个入口，
+    // 是给已经存在的那个入口补一张没拍过的图。
+    //
+    // 写成目录（比如「凡文件名含 Dev 的都排除」）会让下一个自查文件自动豁免，
+    // 于是真多出一个打开口时也查不出来。所以这里按名字点名，且下面那条断言同时盯住
+    // 「排除名单不许变长」。
+    private static readonly string[] NotProductSurface = { "DevChecks.cs" };
+
     // 菜单那一层必须真的筛。编辑器筛了而菜单没筛，用户点的第一下仍然是 29 项。
     [Fact]
     public void The_add_step_menu_filters_by_context_too()
@@ -59,8 +72,25 @@ public class StepContextWiringTests
         var hits = AppSources()
             .SelectMany(f => File.ReadAllLines(f).Select(l => (File: Path.GetFileName(f), Line: l)))
             .Where(x => x.Line.Contains("insideGroup: true"))
+            .Where(x => !NotProductSurface.Contains(x.File))
             .ToList();
         Assert.All(hits, x => Assert.Equal("GroupEditorWindow.xaml.cs", x.File));
         Assert.True(hits.Count >= 2, $"动作编辑器里两处调用应当都开着，却只找到 {hits.Count} 处");
+    }
+
+    // 排除名单本身也要被盯着：每多一个名字，就多一处「这里其实是个真的界面入口，
+    // 但测试已经不查了」。截图夹具需要 insideGroup: true 是唯一正当理由，
+    // 而那只有三个类型（replace / urlDecode / splitLines）需要，且只在 DevChecks.cs 里。
+    [Fact]
+    public void The_dev_only_exclusion_list_is_exactly_one_file()
+    {
+        Assert.Equal(new[] { "DevChecks.cs" }, NotProductSurface);
+        // 名单里的文件必须**真的**用到 insideGroup: true，否则就是一条白豁免。
+        foreach (var name in NotProductSurface)
+        {
+            var any = AppSources().Where(f => Path.GetFileName(f) == name)
+                .Any(f => File.ReadAllText(f).Contains("insideGroup: true"));
+            Assert.True(any, $"{name} 在排除名单里却没有真的用到 insideGroup: true —— 这条豁免已经过期");
+        }
     }
 }

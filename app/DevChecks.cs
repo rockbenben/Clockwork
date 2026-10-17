@@ -498,6 +498,66 @@ public partial class App
                 new LaunchStep { Kind = "siteMap", Target = "https://newzone.top/blog.html", Action = "reveal" }, groups)),
             ("StepEditorWaitKey", () => new StepEditorWindow(
                 new LaunchStep { Kind = "waitKey", Text = "Insert,Escape", Level = 0, OutputVar = "按键" }, groups)),
+
+            // ── 剩下那 9 种类型的编辑器面板，此前**一次都没有被渲染过** ──
+            //
+            // 补它们的理由和上面那批一样，但更硬：**这 9 种每一种在 StepEditorWindow 里都有
+            // 自己的专属面板**（PanMouse / PanText / PanVolume / PanBrowserUrl / PanMessage /
+            // PanReplace / PanUrlDecode / PanSplitLines），而每一种的版式都各不相同——
+            // 一行、两行、带下拉、带开关、带联动行。「没有截图」在这种面板上不是「没验过」，
+            // 是「面板塌了只有看图才知道」：Build 绿、smoke 绿都盖不住，因为 smoke 构造的是
+            // Kind="" 的空步骤，那种情况下任何面板都不画。
+            //
+            // 样例值一律填**有内容的**，不留空：空面板和「这一格该有值却没画出来」在图上一样，
+            // 只有填了值才分得开。占位符（{clipboard}）也照样填——它最容易被编辑器当普通文字吃掉，
+            // 而那正是要拍的东西。
+            //
+            // 逐条说明为什么这一种值得单独占一档：
+            //   mouse   一行：一个下拉 + 一句说明，那句说明是最长的 Ed_ 串之一。
+            //   text    两行：正文 + 目标程序。
+            //   volume  **联动**：音量档那一行只在动作是「设为」时才出现（VolLevelRow），
+            //           是这个编辑器里少见的「一行会凭空多出来」的交互，必须拍。
+            //   browserUrl  **没有自己的字段**：面板里只有一句说明，值全靠「输出到变量」。
+            //           「一个只有说明、没有输入框的面板」塌了就是一片空白，最难自查。
+            //   message 三段 + 联动：提示方式（弹窗/卡片）决定后面两行是否出现，另有朗读、
+            //           自动关闭、确认后做什么三行——这是全编辑器最长的一档。
+            //   replace / urlDecode / splitLines  这一族在 BlockOnlyKinds 里（只在复杂动作里出现），
+            //           所以要传 insideGroup: true——否则拍出来的是「面板语境」的窄下拉，
+            //           与用户实际在复杂动作里看到的不是同一个东西。
+            //   delay   **没有专属面板**：它复用每一步都有的「运行后延时」框，运行期也是靠
+            //           那个统一字段（StepRunner 的 case "delay"）。恰恰因为没有专属面板，
+            //           这一档唯一能拍的就是「它确实没有多出来的东西」。
+            ("StepEditorMouse", () => new StepEditorWindow(
+                new LaunchStep { Kind = "mouse", Action = "rightClick" }, groups)),
+            ("StepEditorText", () => new StepEditorWindow(
+                new LaunchStep { Kind = "text", Text = "看这个：{clipboard}", Process = "notepad" }, groups)),
+            ("StepEditorVolume", () => new StepEditorWindow(
+                new LaunchStep { Kind = "volume", Action = "set", Level = 70 }, groups)),
+            ("StepEditorBrowserUrl", () => new StepEditorWindow(
+                new LaunchStep { Kind = "browserUrl", OutputVar = "网址" }, groups)),
+            // OnYes.Type 的合法值只有 none / run / url（StepEditorWindow 里那张 FillCombo 是唯一出处）。
+            // 这里取 url：一来「点了是之后打开某个地址」是这一族里最常被配的一种，
+            // 二来只有非 none 才会把目标输入框那一行放出来（UpdateMessageRows 判的是 != "none"），
+            // 于是这一档能同时拍到「下拉选中」与「目标框出现」两件事。
+            ("StepEditorMessage", () => new StepEditorWindow(
+                new LaunchStep
+                {
+                    Kind = "message", Message = "这批图导完了吗？", Speak = true, Confirm = true,
+                    PopupSeconds = 8,
+                    OnYes = new OnYes { Type = "url", Target = @"D:\Reports\done.txt" },
+                }, groups)),
+            ("StepEditorReplace", () => new StepEditorWindow(
+                new LaunchStep { Kind = "replace", Text = "{clipboard}", Pattern = @"\s+", Replace = " ", OutputVar = "行" },
+                groups, null, insideGroup: true)),
+            ("StepEditorUrlDecode", () => new StepEditorWindow(
+                new LaunchStep { Kind = "urlDecode", Text = "a%20b%2Bc%3Dd", OutputVar = "解码" },
+                groups, null, insideGroup: true)),
+            ("StepEditorSplitLines", () => new StepEditorWindow(
+                new LaunchStep { Kind = "splitLines", Text = "{clipboard}", OutputVar = "行" },
+                groups, null, insideGroup: true)),
+            ("StepEditorDelay", () => new StepEditorWindow(
+                new LaunchStep { Kind = "delay", DelayMs = 2000 }, groups)),
+
             ("StepEditorSkip", () => new StepEditorWindow(
                 new LaunchStep { Kind = "skip", Action = "block" }, groups)),
             ("StepEditorMath", () => new StepEditorWindow(
