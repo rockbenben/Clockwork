@@ -46,7 +46,7 @@ namespace Clockwork.Views;
 //   · 拖页签换页的先后；**拖到顶栏某一格上** = 把这一页归进那一类。
 //   · 拖格子在页内换位置；**拖到某条页签上** = 把这一步搬进那一页。
 //     跨页搬东西不因为「一次只看一页」而变难，反而更短：页签一直都在眼前，不用先滚过去找。
-public partial class PanelManagerWindow : Window
+public partial class PanelManagerWindow : Window, App.INaturalWidthShot
 {
     /// <summary>一个格子指向谁：它属于哪一页，以及是哪一步（空 = 这是页尾的空位）。</summary>
     private sealed record CellRef(PanelPage Page, LaunchStep? Step);

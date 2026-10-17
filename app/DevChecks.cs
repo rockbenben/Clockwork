@@ -47,6 +47,14 @@ public partial class App
     // 截图/冒烟用：本程序占着的功能键清单留空——这些变体只验版面，不验查重。
     private static readonly (string Key, string Owner)[] NoFunctionHotkeys = System.Array.Empty<(string, string)>();
 
+    /// <summary>实现它的窗口**按自己的自然宽度**渲染，不吃截图矩阵的宽度档。</summary>
+    // 矩阵对每一扇窗都设 w.Width = ww，而那一类窗的自然宽度正是它要展示的东西：
+    // 面板管理器是 SizeToContent，宽度由最宽的那一行决定，被拉到 1040 之后
+    // 「窗被那一行撑开、卡片两侧一片黑」就再也看不见了——它正是这么漏出矩阵的。
+    // 与 BeginRenameForShots / SelectSideTabForShots 同一类：只有截图进得去的状态，
+    // 就得给它一条静态入口，不然它等于没被看过。
+    internal interface INaturalWidthShot { }
+
     // 推迟到消息循环转起来（ApplicationIdle）再跑，而不是在 OnStartup 里当场跑：
     // OnStartup 阶段 Application.Run 的循环还没起转，Show() 只把建 HWND/Loaded 的活排进队列，
     // 窗口 hwnd=0、ActualWidth=0（实测 84/84 全零）；就地 Dispatcher.Invoke 泵到 Loaded 档也救不回来。
@@ -1304,7 +1312,12 @@ public partial class App
                                     : System.Windows.FlowDirection.LeftToRight;
                                 w.Show();
                                 w.MaxHeight = wa;   // 必须 Show 之后设，否则被 FitToWorkArea 按真实显示器算的值覆盖
-                                if (w.MinWidth <= ww) w.Width = ww;   // 窗口自己的 MinWidth 优先，不提供它不允许的尺寸
+                                                                // 窗口自己的 MinWidth 优先，不提供它不允许的尺寸。
+                                // 实现了 INaturalWidthShot 的窗口**跳过**这一句：那一类窗的自然宽度
+                                // 本身就是它要展示的东西（面板管理器按内容定宽，SizeToContent 说了算），
+                                // 被矩阵强行拉到 820/1040 之后，窗宽由最宽的那一行决定这件事就看不见了——
+                                // 「卡片两侧一大片黑」正是这么漏出截图矩阵的。
+                                if (w.MinWidth <= ww && w is not INaturalWidthShot) w.Width = ww;
                                 PumpToIdle();
                                 w.UpdateLayout();
 
