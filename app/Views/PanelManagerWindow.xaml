@@ -78,7 +78,17 @@
              呼出方式（面板键、长按中键）留在设置页：那是记忆与冲突问题，不是看得见的问题。 -->
         <Border Grid.Row="1" Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}"
                 BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,10,0,0">
-            <WrapPanel>
+            <!-- **MaxWidth 必须落在 WrapPanel 自己身上，光写在外层 Border 上不管用。**
+                 这正是本文件页脚注释记着的那个坑：WrapPanel 量子元素时可用宽度是**无限的**，
+                 于是这一行永远报「一行排得下」，窗口的 SizeToContent 就被它按单行宽度撑开——
+                 而这一行（约 900px）比卡片（4 列标准档约 360px）宽得多，多出来的全是空白。
+
+                 所以这一行的宽度上限只能由它自己报给外层。给了上限它就折成两行，
+                 窗口的自然宽度回到卡片那一档；用户仍可拖宽（长标签的语言折行位置也会跟着动）。
+                 窗口本身给的是 Width 而不是 MaxWidth：卡片的宽度由格子阵算出、不随窗长，
+                 限死最大宽度只会得到一扇拖不大、也不比现在省地方的窗。 -->
+            <WrapPanel MaxWidth="620">
+
                 <TextBlock Text="{loc:Loc Settings_PanelLayout}" Style="{StaticResource FieldHint}" VerticalAlignment="Bottom"
                            Margin="0,0,10,6" ToolTip="{loc:Loc Settings_PanelLayoutTip}"/>
                 <!-- 读作「4 列 × 上 3 行 + 下 4 行」：符号本身就是这个几何关系，且不需要翻译。
