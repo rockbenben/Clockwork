@@ -1927,7 +1927,7 @@ Log: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Kategori halaman ini. Baris atas berisi satu tab per kategori; memilih satu hanya menampilkan halaman kategori itu.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Pilih kategori di atas dan skenario di kiri; halaman grup itu tersusun berdampingan di kanan. Seret satu ubin langsung ke kartu lain untuk memindahkannya ke sana, klik judul kartu untuk mengganti namanya, dan klik kanan baris skenario untuk mengganti nama, menghapus, atau menggesernya.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Pilih kategori di atas dan halaman di kiri; di tengah ada halaman yang sedang kamu sunting, di kanan ada pengaturan tampilan (langsung berlaku). Seret satu ubin ke tab halaman untuk memindahkannya ke sana, klik judul kartu untuk mengganti namanya, dan klik kanan baris halaman untuk mengganti nama atau menghapus.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Tampilkan tab kiri</value>
   </data>

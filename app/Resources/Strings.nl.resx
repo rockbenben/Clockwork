@@ -1927,7 +1927,7 @@ Log: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Tot welke categorie deze pagina behoort. De bovenste rij heeft één tabblad per categorie; er een kiezen toont alleen die pagina’s.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Kies bovenaan de categorie en links het scenario; rechts staan de pagina's van die groep naast elkaar. Sleep een tegel recht naar een andere kaart om hem te verplaatsen, klik op een kaarttitel om die te hernoemen, en klik met rechts op een scenariorij voor hernoemen, verwijderen en verplaatsen.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Kies bovenaan de categorie en links de pagina; in het midden staat de pagina die je bewerkt, rechts de weergave-instellingen (die werken meteen). Sleep een tegel op een paginatabblad om hem daarheen te verplaatsen, klik op een kaarttitel om die te hernoemen, en klik met rechts op een paginarij voor hernoemen of verwijderen.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Linkertabbladen tonen</value>
   </data>

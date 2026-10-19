@@ -1927,7 +1927,7 @@ Journal : {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>La catégorie de cette page. La rangée du haut a un onglet par catégorie ; en choisir un n’affiche que ses pages.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Choisissez la catégorie en haut et le scénario à gauche ; les pages de ce groupe sont posées côte à côte à droite. Faites glisser une tuile directement sur une autre carte pour l'y déplacer, cliquez sur le titre d'une carte pour la renommer, et faites un clic droit sur une ligne de scénario pour renommer, supprimer ou déplacer.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Choisissez la catégorie en haut et la page à gauche ; au milieu se trouve la page en cours de modification, à droite les réglages d'apparence (effet immédiat). Faites glisser une tuile sur un onglet de page pour l'y déplacer, cliquez sur le titre d'une carte pour la renommer, et faites un clic droit sur une ligne de page pour renommer ou supprimer.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Afficher les onglets de gauche</value>
   </data>

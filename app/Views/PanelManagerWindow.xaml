@@ -30,8 +30,7 @@
          真要改某一格的参数，点它就打开的还是主界面那个步骤编辑器——两套界面，一套编辑器。 -->
     <Grid Margin="14">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>      <!-- 两条页签栏 + 当前那一页 -->
-            <RowDefinition Height="Auto"/>   <!-- 外观控制条 -->
+            <RowDefinition Height="*"/>      <!-- 两条页签栏 + 当前那一页 + 外观列 -->
             <RowDefinition Height="Auto"/>   <!-- 底栏 -->
         </Grid.RowDefinitions>
 
@@ -44,7 +43,7 @@
              四页就是四堵七行的格子墙，滚两屏才看得完，而面板上你一次只看见一页。
              页签把这两件事同时办了：所有页的**名字**始终在眼前（归属一眼可见），
              而格子只画当前这一页。要把一个动作挪到别页，拖到那一页的页签上放手即可。 -->
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" ClipToBounds="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -53,10 +52,12 @@
                 <ColumnDefinition Width="Auto"/>
                 <!-- 见下面那个 ScrollViewer：Auto = 这一列恰好等于卡片。 -->
                 <ColumnDefinition Width="Auto"/>
+                <!-- 外观列：竖着的一列控件，见下面那个 Border。 -->
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <!-- 顶栏压在最上面并跨满两列，左栏在它下面——与面板同一个几何关系。 -->
+            <!-- 顶栏压在最上面并跨满三列，左栏在它下面——与面板同一个几何关系。 -->
             <!-- 与面板同一条基线（说明见 QuickPanelWindow.xaml）。 -->
-            <Border x:Name="TopTabRow" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,8"
+            <Border x:Name="TopTabRow" Grid.Row="0" Grid.ColumnSpan="3" Margin="0,0,0,8"
                     BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
                 <WrapPanel x:Name="TopTabBar" AutomationProperties.Name="{loc:Loc Panel_Category}"/>
             </Border>
@@ -72,81 +73,105 @@
                      而 \* 会把窗口多出来的宽度全吞进来、再由居中平分到卡片两边——
                      那两条黑边就是这么来的（实测：4 列标准档下列宽 592、卡片 373，
                      左右各空出约 110px）。窗口整体宽度由 CapWidthToContent()
-                     按「左栏 + 卡片」定出来，那三个会漏宽度的元素也各自封顶。 -->
+                     按「左栏 + 卡片 + 外观列」定出来，那三个会漏宽度的元素也各自封顶。 -->
                 <StackPanel x:Name="Pages" HorizontalAlignment="Center"/>
             </ScrollViewer>
+
+            <!-- ── 外观列 ──
+                 面板的外观：**放在能看见它的地方**。这四项（版面 / 格子尺寸 / 只显示图标 / 显示自带操作）
+                 原来在设置页，而它们是纯视觉选择 —— 光看下拉判断不了，只能靠「改 → 关设置 → 按热键 → 看 → 再改」盲调。
+                 这个窗口本来就是面板的所见即所得预览，改一下、预览重画、当场看到。
+
+                 为什么不放进面板本身：面板刻意是一次性的（失焦即关、Esc 即关、点一格先关自己再执行），
+                 放设置进去要给这三条关闭路径逐条开例外，而「面板一定会自己消失」这个保证
+                 比就地调设置值钱得多 —— 它是浮在所有窗口之上的，关不掉才是真事故。
+                 呼出方式（面板键、长按中键）留在设置页：那是记忆与冲突问题，不是看得见的问题。
+
+                 **它从「卡片底下那条横条」搬到了「卡片右边那一列」，是为了把窗变宽。**
+                 原来那条横条自己就有一行那么宽（版面 + 四个下拉 + 四个勾），于是它成了整扇窗最宽的东西，
+                 而真正的卡片比它窄——窗被一条设置栏撑成竖长条，卡片却只占中间一小块。
+                 实测那时的窗是 521×586（宽高比 0.89，一眼就是「窄而长」）。
+                 竖过来之后：卡片左边是左栏、右边是这一列，窗宽由三者相加决定（实测 700 上下），
+                 而横条腾出来的那 90 像素全部让给卡片——卡片本来就被切掉了一半（7 行只看得见 3 行多）。
+
+                 **四个下拉竖排时那对「×」「+」去掉了。** 横排时它们读作「4 列 × 上 3 行 + 下 4 行」，
+                 是这套数字唯一的一句速记；竖排之后它们成了悬在行尾的噪声，而**卡片本身就是那张图**
+                 ——四列、上带几行下带几行，眼睛就在旁边看着。所以三个标签各自说清是哪三个数就够了。 -->
+            <Border x:Name="AppearanceBox" Grid.Row="1" Grid.Column="2" Background="{StaticResource BrushSlate}"
+                    BorderBrush="{StaticResource BrushLine}" BorderThickness="1" CornerRadius="8"
+                    Padding="12,10" Margin="14,0,0,0" VerticalAlignment="Stretch">
+                <!-- **这一列自己会滚。** 它的高度由内容定（四个下拉 + 四个勾），而窗口的高度
+                     是被工作区封顶的（FitToWorkArea：小屏只剩 460 出头）。内容比可用高度高时，
+                     底下那几颗勾就掉到窗外去了——不是被遮住，是**够不着**：
+                     实测 1366×768@150% 那一档，最后一颗「显示分类栏」整个不见了。
+                     而这一列的高度本来就随语言变（德语那句"Eigene Aktionen anzeigen"比中文长，
+                     长的会折行、于是更高），所以它不能靠"排得下"来保平安，只能让它自己滚。
+
+                     宽度由 CapWidthToContent() 按内容量好后写死（见那里）：多留出一份竖滚动条的位置，
+                     滚动条出现时它占掉的是那一份，而不是内容。 -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel x:Name="AppearanceCol">
+                        <TextBlock Text="{loc:Loc Settings_PanelLayout}" Style="{StaticResource FieldHint}"
+                                   Margin="0,0,0,8" ToolTip="{loc:Loc Settings_PanelLayoutTip}"/>
+                        <!-- 标签在左、框在右。三个行数的名字各自说清是哪三个数（见上面那段：速记的活由卡片干了）。 -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Settings_PanelColumns}"
+                                       Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Row="0" Grid.Column="1" x:Name="PanelColumnsCombo" Width="58" Height="28"
+                                      Margin="10,0,0,4" SelectionChanged="Look_Changed"
+                                      ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                                      AutomationProperties.Name="{loc:Loc Settings_PanelColumns}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{loc:Loc Settings_PanelTopRows}"
+                                       Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="PanelTopRowsCombo" Width="54" Height="28"
+                                      Margin="10,0,0,4" SelectionChanged="Look_Changed"
+                                      ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                                      AutomationProperties.Name="{loc:Loc Settings_PanelTopRows}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Settings_PanelBottomRows}"
+                                       Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Row="2" Grid.Column="1" x:Name="PanelBottomRowsCombo" Width="54" Height="28"
+                                      Margin="10,0,0,4" SelectionChanged="Look_Changed"
+                                      ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                                      AutomationProperties.Name="{loc:Loc Settings_PanelBottomRows}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="{loc:Loc Settings_PanelTileSize}"
+                                       Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Row="3" Grid.Column="1" x:Name="PanelTileSizeCombo" Width="100" Height="28"
+                                      Margin="10,0,0,0" SelectionChanged="Look_Changed"
+                                      AutomationProperties.Name="{loc:Loc Settings_PanelTileSize}"/>
+                        </Grid>
+                        <!-- 两条导航栏的开关。它们**空着本来就不画**（只有一页没有页签栏、只有一类没有分类栏），
+                             所以这两个勾的实际用途是「我知道有好几页，但我就是不想看见那条栏」。 -->
+                        <CheckBox x:Name="PanelIconOnlyChk" Content="{loc:Loc Settings_PanelIconOnly}"
+                                  Margin="0,12,0,0" ToolTip="{loc:Loc Settings_PanelIconOnlyTip}" Click="Look_Changed"/>
+                        <CheckBox x:Name="PanelShowOpsChk" Content="{loc:Loc Settings_PanelShowOps}"
+                                  Margin="0,8,0,0" Click="Look_Changed"/>
+                        <CheckBox x:Name="PanelLeftTabsChk" Content="{loc:Loc Panel_ShowLeftTabs}"
+                                  Margin="0,8,0,0" ToolTip="{loc:Loc Panel_BarsHint}" Click="Look_Changed"/>
+                        <CheckBox x:Name="PanelTopTabsChk" Content="{loc:Loc Panel_ShowTopTabs}"
+                                  Margin="0,8,0,0" ToolTip="{loc:Loc Panel_BarsHint}" Click="Look_Changed"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
         </Grid>
 
         <!-- ── 底：新增与关闭 ── -->
-        <!-- 面板的外观：**放在能看见它的地方**。
-             这四项（版面 / 格子尺寸 / 只显示图标 / 显示自带操作）原来在设置页，
-             而它们是纯视觉选择 —— 光看下拉判断不了，只能靠「改 → 关设置 → 按热键 → 看 → 再改」盲调。
-             这个窗口本来就是面板的所见即所得预览，改一下、预览重画、当场看到。
-
-             为什么不放进面板本身：面板刻意是一次性的（失焦即关、Esc 即关、点一格先关自己再执行），
-             放设置进去要给这三条关闭路径逐条开例外，而「面板一定会自己消失」这个保证
-             比就地调设置值钱得多 —— 它是浮在所有窗口之上的，关不掉才是真事故。
-             呼出方式（面板键、长按中键）留在设置页：那是记忆与冲突问题，不是看得见的问题。 -->
-        <Border Grid.Row="1" Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}"
-                BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,10,0,0">
-            <!-- **MaxWidth 必须落在 WrapPanel 自己身上，光写在外层 Border 上不管用。**
-                 这正是本文件页脚注释记着的那个坑：WrapPanel 量子元素时可用宽度是**无限的**，
-                 于是这一行永远报「一行排得下」，窗口的 SizeToContent 就被它按单行宽度撑开——
-                 而这一行（约 900px）比卡片（4 列标准档约 380px）宽得多，多出来的全是空白。
-
-                 上限由 CapWidthToContent() 按主区（页签栏 + 卡片）的实际宽度给，
-                 这里给的 620 只是首帧的值：换版面、换格子档位、换语言之后它都会跟着重算。
-                 顺序不能反——先让它按主区折好，窗口的 SizeToContent 才量到正确的宽度；
-                 反过来（拿这一行的宽度去撑窗口）就又是右边空出一大片。 -->
-            <WrapPanel x:Name="AppearanceBar" MaxWidth="620">
-
-                <TextBlock Text="{loc:Loc Settings_PanelLayout}" Style="{StaticResource FieldHint}" VerticalAlignment="Bottom"
-                           Margin="0,0,10,6" ToolTip="{loc:Loc Settings_PanelLayoutTip}"/>
-                <!-- 读作「4 列 × 上 3 行 + 下 4 行」：符号本身就是这个几何关系，且不需要翻译。
-                     符号留下，但每个下拉各自带一个微型字段名——光看「4 × 3 + 4」，
-                     三个数字里哪个是列、哪个是上带，要点开 ToolTip 才知道，而那一步没人会做。
-                     名字用的就是三个下拉本来就带着的朗读名（同一批键，不多一份文案）。 -->
-                <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{loc:Loc Settings_PanelColumns}" Style="{StaticResource FieldMicroLabel}"/>
-                    <ComboBox x:Name="PanelColumnsCombo" Width="58" Height="28" SelectionChanged="Look_Changed"
-                              ToolTip="{loc:Loc Settings_PanelLayoutTip}"
-                              AutomationProperties.Name="{loc:Loc Settings_PanelColumns}"/>
-                </StackPanel>
-                <TextBlock Text="×" Style="{StaticResource FieldHint}" VerticalAlignment="Bottom" Margin="6,0,6,8"/>
-                <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{loc:Loc Settings_PanelTopRows}" Style="{StaticResource FieldMicroLabel}"/>
-                    <ComboBox x:Name="PanelTopRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
-                              ToolTip="{loc:Loc Settings_PanelLayoutTip}"
-                              AutomationProperties.Name="{loc:Loc Settings_PanelTopRows}"/>
-                </StackPanel>
-                <TextBlock Text="+" Style="{StaticResource FieldHint}" VerticalAlignment="Bottom" Margin="6,0,6,8"/>
-                <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{loc:Loc Settings_PanelBottomRows}" Style="{StaticResource FieldMicroLabel}"/>
-                    <ComboBox x:Name="PanelBottomRowsCombo" Width="54" Height="28" SelectionChanged="Look_Changed"
-                              ToolTip="{loc:Loc Settings_PanelLayoutTip}"
-                              AutomationProperties.Name="{loc:Loc Settings_PanelBottomRows}"/>
-                </StackPanel>
-                <StackPanel VerticalAlignment="Bottom" Margin="14,0,0,0">
-                    <TextBlock Text="{loc:Loc Settings_PanelTileSize}" Style="{StaticResource FieldMicroLabel}"/>
-                    <ComboBox x:Name="PanelTileSizeCombo" Width="100" Height="28" SelectionChanged="Look_Changed"
-                              AutomationProperties.Name="{loc:Loc Settings_PanelTileSize}"/>
-                </StackPanel>
-                <CheckBox x:Name="PanelIconOnlyChk" Content="{loc:Loc Settings_PanelIconOnly}" VerticalAlignment="Center" Margin="18,0,0,0"
-                          ToolTip="{loc:Loc Settings_PanelIconOnlyTip}" Click="Look_Changed"/>
-                <CheckBox x:Name="PanelShowOpsChk" Content="{loc:Loc Settings_PanelShowOps}" VerticalAlignment="Center" Margin="18,0,0,0" Click="Look_Changed"/>
-                <!-- 两条导航栏的开关。它们**空着本来就不画**（只有一页没有页签栏、只有一类没有分类栏），
-                     所以这两个勾的实际用途是「我知道有好几页，但我就是不想看见那条栏」。 -->
-                <CheckBox x:Name="PanelLeftTabsChk" Content="{loc:Loc Panel_ShowLeftTabs}" VerticalAlignment="Center" Margin="18,0,0,0"
-                          ToolTip="{loc:Loc Panel_BarsHint}" Click="Look_Changed"/>
-                <CheckBox x:Name="PanelTopTabsChk" Content="{loc:Loc Panel_ShowTopTabs}" VerticalAlignment="Center" Margin="18,0,0,0"
-                          ToolTip="{loc:Loc Panel_BarsHint}" Click="Look_Changed"/>
-            </WrapPanel>
-        </Border>
+        <!-- 面板的外观那一列在主区右边（见上面 AppearanceBox），理由与它的文案都写在那儿。
+             底栏只剩一句指路的话与「关闭」——它们都要整行的宽度，挤在卡片下面各占一行才读得通。 -->
 
         <!-- 页脚独占一行，不与按钮抢宽度。上一版文案与按钮同处一行，* 列被「关闭」挤掉大半，
              于是一句操作说明被压成两行、末字「移。」孤零零挂在第二行（实测截图）。
              这句话教的是**拖拽手势**——看界面看不出来的那一类，它该有整行的宽度。 -->
-        <Grid Grid.Row="2" Margin="0,12,0,0">
+        <Grid Grid.Row="1" Margin="0,12,0,0">
             <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
             <!-- TextWrapping=Wrap 只在**可用宽度有限**时才折行；SizeToContent 宽度测量的是

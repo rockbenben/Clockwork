@@ -1927,7 +1927,7 @@ Registro: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>A qué categoría pertenece esta página. La fila superior tiene una pestaña por categoría; al elegir una se listan solo sus páginas.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Elige la categoría arriba y el escenario a la izquierda; las páginas de ese grupo quedan una al lado de la otra a la derecha. Arrastra una baldosa directamente sobre otra tarjeta para moverla ahí, haz clic en el título de una tarjeta para renombrarla y haz clic derecho en una fila de escenario para renombrar, eliminar o desplazar.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Elige la categoría arriba y la página a la izquierda; en el medio está la página que estás editando y a la derecha los ajustes de aspecto (surten efecto al instante). Arrastra una baldosa hasta una pestaña de página para moverla allí, haz clic en el título de una tarjeta para renombrarla y haz clic derecho en una fila de página para renombrarla o eliminarla.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Mostrar las pestañas de la izquierda</value>
   </data>

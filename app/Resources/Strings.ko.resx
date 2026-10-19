@@ -1927,7 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>이 페이지가 속한 분류입니다. 위쪽 줄은 분류마다 탭이 하나씩이며, 고르면 그 분류의 페이지만 나열됩니다.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>위에서 분류, 왼쪽에서 시나리오를 고르면 오른쪽에 그 그룹의 페이지가 나란히 놓입니다. 타일을 다른 카드로 바로 끌어 옮기면 그 페이지로 이동합니다. 카드 제목을 클릭하면 바로 이름을 고칠 수 있고, 시나리오 행을 우클릭하면 이름 바꾸기·삭제·좌우 이동이 나옵니다.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">위에서 분류, 왼쪽에서 페이지를 고르세요. 가운데는 지금 고치는 페이지, 오른쪽은 모양 설정(즉시 반영됩니다)입니다. 타일을 왼쪽의 페이지 탭으로 끌어 옮기면 그 페이지로 이동합니다. 카드 제목을 클릭하면 바로 이름을 고칠 수 있고, 페이지 행을 우클릭하면 이름 바꾸기·삭제가 나옵니다.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>왼쪽 탭 표시</value>
   </data>

@@ -1927,7 +1927,7 @@ Günlük: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Bu sayfanın kategorisi. Üst sıra her kategori için bir sekme taşır; birini seçmek yalnızca o kategorinin sayfalarını listeler.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Üstten kategoriyi, soldan senaryoyu seçin; o grubun sayfaları sağda yan yana durur. Bir kutucuğu doğrudan başka bir kartın üzerine sürükleyerek oraya taşıyın, bir kart başlığına tıklayarak adını değiştirin, bir senaryo satırına sağ tıklayarak ad değiştirin, silin veya kaydırın.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Üstten kategoriyi, soldan sayfayı seçin; ortada üzerinde çalıştığınız sayfa, sağda ise görünüm ayarları (anında etki eder) var. Bir kutucuğu sayfa sekmesinin üzerine sürükleyerek oraya taşıyın, bir kart başlığına tıklayarak adını değiştirin, bir sayfa satırına sağ tıklayarak ad değiştirin veya silin.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Soldaki sekmeleri göster</value>
   </data>

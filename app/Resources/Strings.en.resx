@@ -1927,7 +1927,7 @@ Log: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Which category this page belongs to. The top row has one tab per category; picking one lists just its pages.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Pick a category on top and a scene on the left; that group's pages sit side by side on the right. Drag a tile straight onto another card to move it there, click a card title to rename it, and right-click a scene row to rename, delete or shift it.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Pick a category on top and a page on the left; the page you are editing sits in the middle, and the appearance controls are on the right — they take effect at once. Drag a tile onto a page tab to move it to that page, click a card title to rename it, and right-click a page row to rename or delete it.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Show the left tabs</value>
   </data>

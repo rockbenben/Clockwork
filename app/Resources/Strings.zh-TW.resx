@@ -1927,7 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>這一頁歸哪一類。頂列一格一類，點了只列這一類裡的頁。</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>上邊點分類，左邊點場景，右邊這一組下的頁並排擺著。格子直接拖到另一張卡上就搬進那一頁；點卡片標題可就地改名，右鍵那一列有改名、刪除、左右移。</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">上邊點分類，左邊點頁，中間是當前這一頁，右邊改外觀（當場見效）。格子拖到左欄的頁籤上就搬進那一頁；點卡片標題可就地改名，右鍵左欄那一列有改名、刪除。</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>顯示左側頁籤</value>
   </data>

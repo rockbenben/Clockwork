@@ -1927,7 +1927,7 @@ Registro: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>A quale categoria appartiene questa pagina. La fila in alto ha una scheda per categoria; sceglierne una elenca solo le sue pagine.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Scegli la categoria in alto e lo scenario a sinistra; le pagine di quel gruppo stanno una accanto all'altra a destra. Trascina una tessera direttamente su un'altra scheda per spostarla lì, fai clic sul titolo di una scheda per rinominarla e fai clic destro su una riga di scenario per rinominare, eliminare o spostare.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Scegli la categoria in alto e la pagina a sinistra; al centro c'è la pagina che stai modificando, a destra le impostazioni di aspetto (hanno effetto subito). Trascina una tessera su una scheda di pagina per spostarla lì, fai clic sul titolo di una scheda per rinominarla e fai clic destro su una riga di pagina per rinominarla o eliminarla.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Mostra le schede a sinistra</value>
   </data>

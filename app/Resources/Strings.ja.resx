@@ -1927,7 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>このページの分類。上の列は分類ごとに 1 タブで、選ぶとその分類のページだけが並びます。</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>上は分類、左はシーンを選びます。右にそのグループのページが並べて表示されます。タイルを別のカードへ直接ドラッグするとそのページへ移動します。カード名をクリックするとその場で名前が変わり、シーンの行を右クリックすると名前変更・削除・左右への移動ができます。</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">上は分類、左はページを選びます。中央にいま編集中のページ、右に外観の設定（すぐ反映されます）。タイルを左のページのタブへドラッグするとそのページへ移動します。カード名をクリックするとその場で名前が変わり、ページの行を右クリックすると名前変更・削除ができます。</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>左のタブを表示</value>
   </data>

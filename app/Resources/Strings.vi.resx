@@ -1927,7 +1927,7 @@ Nhật ký: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Trang này thuộc danh mục nào. Hàng trên mỗi danh mục một thẻ; chọn một thẻ chỉ liệt kê các trang của nó.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Chọn nhóm ở trên và kịch bản ở bên trái; các trang của nhóm đó nằm cạnh nhau bên phải. Kéo một ô thẳng lên thẻ khác để chuyển nó sang đó, bấm vào tiêu đề thẻ để đổi tên, và bấm chuột phải vào một dòng kịch bản để đổi tên, xoá hoặc dời chỗ.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Chọn nhóm ở trên và trang ở bên trái; ở giữa là trang bạn đang sửa, bên phải là các tuỳ chọn hiển thị (có hiệu lực ngay). Kéo một ô thẻ lên tab trang để chuyển nó sang trang đó, bấm vào tiêu đề thẻ để đổi tên, và bấm chuột phải vào một dòng trang để đổi tên hoặc xoá.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Hiện thẻ bên trái</value>
   </data>

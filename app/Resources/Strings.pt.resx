@@ -1927,7 +1927,7 @@ Registro: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>A que categoria esta página pertence. A fileira de cima tem uma aba por categoria; escolher uma lista apenas as suas páginas.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Escolha a categoria em cima e o cenário à esquerda; as páginas desse grupo ficam lado a lado à direita. Arraste um bloco direto sobre outro cartão para movê-lo para lá, clique no título de um cartão para renomeá-lo e clique com o botão direito numa linha de cenário para renomear, excluir ou mover.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Escolha a categoria em cima e a página à esquerda; ao centro fica a página que está a editar e à direita as opções de aspeto (têm efeito imediato). Arraste um bloco até uma separador de página para o mover para lá, clique no título de um cartão para o renomear e clique com o botão direito numa linha de página para renomear ou eliminar.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Mostrar as abas da esquerda</value>
   </data>

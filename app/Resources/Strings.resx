@@ -1927,7 +1927,7 @@
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>这一页归哪一类。顶栏一格一类，点了只列这一类里的页。</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>上边点分类，左边点场景，右边这一组下的页并排摆着。格子直接拖到另一张卡上就搬进那一页；点卡片标题可就地改名，右键那一行有改名、删除、左右移。</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">上边点分类，左边点页，中间是当前这一页，右边改外观（当场见效）。格子拖到左栏的页签上就搬进那一页；点卡片标题可就地改名，右键左栏那一行有改名、删除。</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>显示左侧页签</value>
   </data>

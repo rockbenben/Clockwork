@@ -1927,7 +1927,7 @@ Protokoll: {1}</value>
   <data name="Panel_CategoryHint" xml:space="preserve">
     <value>Zu welcher Kategorie diese Seite gehört. Die obere Reihe hat je einen Reiter pro Kategorie; ein Klick zeigt nur deren Seiten.</value>
   </data>
-  <data name="Panel_ManagerHint" xml:space="preserve"><value>Oben die Kategorie, links das Szenario wählen — rechts stehen die Seiten dieser Gruppe nebeneinander. Eine Kachel direkt auf eine andere Karte ziehen, um sie dorthin zu verschieben; ein Kartentitel anklicken, um ihn umzubenennen; eine Szenario-Zeile rechts anklicken für Umbenennen, Löschen und Verschieben.</value></data>
+  <data name="Panel_ManagerHint" xml:space="preserve">Oben die Kategorie, links die Seite wählen — in der Mitte steht die gerade bearbeitete Seite, rechts die Darstellung (sie wirkt sofort). Eine Kachel auf einen Seitenreiter ziehen, um sie dorthin zu verschieben; ein Kartentitel anklicken, um ihn umzubenennen; eine Seitenzeile rechts anklicken für Umbenennen und Löschen.</data>
   <data name="Panel_ShowLeftTabs" xml:space="preserve">
     <value>Linke Reiter anzeigen</value>
   </data>

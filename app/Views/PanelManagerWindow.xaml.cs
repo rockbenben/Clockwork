@@ -186,7 +186,7 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         // 因为那时页签只是把名字重复一遍，而面板上也没有什么可新建的。
         //
         // 也**不看那两个「显示页签栏」的勾**：在这扇窗里页签是唯一的换页手段，
-        // 关掉就换不了页了。那两个勾管的是呼出来的面板，就在下面那条外观栏里，隔着两厘米。
+        // 关掉就换不了页了。那两个勾管的是呼出来的面板，就在右边那一列外观里，隔着一格宽。
         TopTabRow.Visibility = Visibility.Visible;
         RailScroll.Visibility = Visibility.Visible;
 
@@ -194,19 +194,23 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         CapWidthToContent();
     }
 
-    /// <summary>把窗口宽度封在「左栏 + 卡片」这一块的宽度上：
+    /// <summary>把窗口宽度封在「左栏 + 卡片 + 外观列」这一块的宽度上：
     /// 卡片右边**永远不出现黑边**。</summary>
     // 这一扇窗是 SizeToContent="Width,Height"，而 **SizeToContent 量子元素时给的可用宽度
-    // 是无限的**。于是有三样东西会按「无限宽」报出自己那一行的整行宽度，把窗口一路撑开，
+    // 是无限的**。于是有几样东西会按「无限宽」报出自己那一行的整行宽度，把窗口一路撑开，
     // 而卡片（4 列标准档 360px）不跟着长——多出来的全是黑边：
-    //   外观条    WrapPanel，约 468px 的单行
     //   顶栏页签  WrapPanel，分类一多就长
     //   页脚那句话 TextWrapping="Wrap"，但无限宽下它不折行，约 966px
     // （它们各自的 MaxWidth 都必须落在自己身上；写在 Border 或外层 Grid 上没用。）
     //
-    // 封顶值 = 左栏 + 10（右 Margin 的缝）+ 格子阵宽度。三个元素都封在这个数上，
-    // 于是没有一样能把窗口撑得比卡片更宽；配合那一列改成 Auto（不吞富余宽度），
-    // 窗口宽度就恰好等于内容宽度，OS 边框那几像素落在 Width 之外，不用拿常数去凑。
+    // **外观控制条从前也是其中之一**（横排一条 WrapPanel，单行约 468px，比卡片还宽）。
+    // 现在它竖在卡片右边那一列里，宽度由内容定、不再报整行，于是它从「撑宽窗口的那一个」
+    // 变成了「窗口宽度的一部分」——窗因此宽了一截，而卡片把腾出来的高度全拿到了。
+    //
+    // 封顶值 = 左栏 + 10（右 Margin 的缝）+ 格子阵宽度 + 14（外观列左 Margin）+ 外观列宽。
+    // 这几样都封在这个数上，于是没有一样能把窗口撑得比内容更宽；配合那几列改成 Auto
+    // （不吞富余宽度），窗口宽度就恰好等于内容宽度，OS 边框那几像素落在 Width 之外，
+    // 不用拿常数去凑。
     //
     // 为什么不写死 Width：Window.Width 是含 OS 边框的外框尺寸，内容会少掉边框那么宽，
     // 卡片反而被挤出一截滚动条。
@@ -222,11 +226,25 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         double card = PanelMetrics.GridWidth(_config.Settings.PanelTileSize,
                                              _config.Settings.PanelIconOnly,
                                              PanelMetrics.ClampColumns(_config.Settings.PanelColumns));
-        double main = rail + 10 + card;
 
-        // 封顶值要减掉外层自己吃掉的那些：Border 的 Padding（12 两侧 + 边框 1 两侧）算在外层，
-        // 所以 WrapPanel 报 main 宽，整条 Border 反而报 main+26，窗口又比卡片宽一截。
-        AppearanceBar.MaxWidth = main - 26;
+        // 外观列：宽度由它**里头的**内容定，而不是由 Border 定。
+        //
+        // 量的是 AppearanceCol（内容）而不是 AppearanceBox（外面那层）：我们要的是内容有多宽，
+        // 再加上两份"外面自己吃掉的"——Border 的内边距与边框，以及**竖滚动条的那一格**。
+        // 滚动条那一份必须先留着：它出现时会占掉视口的宽度，而视口一旦比内容窄，
+        // 内容就被从右边切掉一截（实测那一格宽的复选框会少掉半个字）。
+        // 多留的那一份在没有滚动条时只是右边空一点，看不出来。
+        AppearanceCol.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+        double content = AppearanceCol.DesiredSize.Width;
+        double chrome = AppearanceBox.Padding.Left + AppearanceBox.Padding.Right
+                     + AppearanceBox.BorderThickness.Left + AppearanceBox.BorderThickness.Right;
+        double look = content + SystemParameters.VerticalScrollBarWidth + chrome;
+        if (look <= 1) look = 180;   // 量不到时的兜底
+        // 宽度写死在这一格上：Border 一旦自己按内容定宽，滚动条一出现就把内容切掉一截。
+        AppearanceBox.Width = look;
+
+        double main = rail + 10 + card + 14 + look;
+
         TopTabBar.MaxWidth = main;   // 顶栏那条 Border 只有下边框，横向不吃宽度
 
         // 页脚那句指路文字要和右边那颗按钮同处一行，得给它留出按钮那一列
