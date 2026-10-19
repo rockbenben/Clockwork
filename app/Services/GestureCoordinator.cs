@@ -714,7 +714,11 @@ internal sealed class GestureCoordinator
         }, gesture, RunByGesture,
             trailPoint: TrailPoint, trailEnd: TrailEnd,
             unmatched: GestureUnmatched, moveTolerancePhysical: middleTolerance,
-            probe: _probe);
+            probe: _probe,
+            // 「这个程序里不接管手势」的名单：命中时整笔右键原样放行，
+            // 那个程序自己管右键（远程桌面、虚拟机、游戏、3D 视口…）。
+            // 判据是纯函数（GestureGate.IsIgnoredApp），钩子那边只负责把进程名问出来。
+            ignoredApp: name => GestureGate.IsIgnoredApp(name, _config.Settings.GestureIgnoreApps));
         _mouseHookMs = ms;
         _mouseHookGesture = wantGesture;
         _mouseHookMinLeg = minLeg;

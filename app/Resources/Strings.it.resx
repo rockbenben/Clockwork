@@ -2227,4 +2227,9 @@ Registro: {1}</value>
   <data name="Btn_CombineTip" xml:space="preserve">Seleziona due o più azioni e concatenale, nell'ordine dell'elenco, in una sola nuova azione. Le originali restano modificabili.</data>
   <data name="Group_CombinedName" xml:space="preserve">Combinazione di {0} azioni</data>
   <data name="Panel_NewCompound" xml:space="preserve">Nuova azione composta…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">App ignorate…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">App ignorate ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">In queste app le gesture non vengono gestite: il pulsante destro va direttamente al programma.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">App senza gesti</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">Un nome di processo per riga (ad esempio mstsc, vmware). In queste app Clockwork non tocca il pulsante destro: va direttamente al programma.</data>
 </root>

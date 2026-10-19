@@ -2227,4 +2227,9 @@
   <data name="Btn_CombineTip" xml:space="preserve">เลือกการกระทำสองรายการขึ้นไป แล้วต่อกันตามลำดับในรายการเป็นการกระทำใหม่ ต้นฉบับยังแก้ไขได้</data>
   <data name="Group_CombinedName" xml:space="preserve">รวม {0} การกระทำ</data>
   <data name="Panel_NewCompound" xml:space="preserve">สร้างการกระทำแบบซับซ้อน…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">แอปที่ไม่สนใจ…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">แอปที่ไม่สนใจ ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">ในแอปเหล่านี้จะไม่มีการจับจั้มเกสเตอร์ ปุ่มขวาจะส่งตรงไปยังโปรแกรม</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">แอปที่ไม่ใช้จั้มเกสเตอร์</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">พิมพ์ชื่อโปรเซสทีละบรรทัด เช่น mstsc, vmware ในแอปเหล่านี้ Clockwork จะไม่แตะปุ่มขวาเลย ปุ่มจะส่งตรงไปยังโปรแกรม</data>
 </root>

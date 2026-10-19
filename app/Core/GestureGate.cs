@@ -80,6 +80,53 @@ public sealed class GestureGate
         => masterOn && gestures != null
         && gestures.Any(s => s != null && s.Enabled && !string.IsNullOrEmpty(Normalize(s.Gesture)));
 
+    /// <summary>这个程序是不是在「手势不接管」的名单里。</summary>
+    //
+    // 名单存的是**裸进程名**，与步骤上的 ForProcess 同一套写法（见 StepHelpers.ToProcessName）：
+    // 「chrome」「chrome.exe」「C:\Program Files\Chrome\chrome.exe」三者是同一个名字。
+    // 比对不分大小写——Windows 的进程名本身就不分大小写，而用户手打时常常大小写不一。
+    //
+    // **名单是空的 → 到处都接管**（这是默认，也是从前唯一的行为）。
+    // **进程名认不出来（空串）→ 不接管名单这一格判为「不忽略」**，取向是「读不到就当没这条名单」：
+    // 反过来（读不到就当忽略）会让手势在**每一个**刚切过去的窗口里都失效，
+    // 而名字解析走的是后台探针（HookProbe.ProcessName），未命中时只差几十毫秒——
+    // 为了那几十毫秒把整个功能关掉，代价太大。
+    //
+    // 判据放在这儿（纯函数、有测试）而不是钩子回调里：那边碰 Win32，断言够不着。
+    public static bool IsIgnoredApp(string? processName, IEnumerable<string>? ignoreList)
+    {
+        if (ignoreList == null) return false;
+        var name = StepHelpers.ToProcessName(processName ?? "");
+        if (name.Length == 0) return false;
+        foreach (var raw in ignoreList)
+        {
+            var n = StepHelpers.ToProcessName(raw ?? "");
+            if (n.Length == 0) continue;   // 空行不是一条名单
+            if (string.Equals(n, name, StringComparison.OrdinalIgnoreCase)) return true;
+        }
+        return false;
+    }
+
+    /// <summary>把一段手打的文本读成一份干净的名单。</summary>
+    //
+    // 用户在多行框里一行一个地敲，格式一定是乱的：带路径、带 .exe、大小写不一、重复项、空行。
+    // 而名单是**拿来比对**的（见 IsIgnoredApp）——存成 "Chrome.exe" 与 "chrome" 两条，
+    // 看上去只是重复，实际上会让「名单里明明有它、却还在接管」这种症状变得极难查。
+    // 所以读进来就地归一，跟分应用绑定（ForProcess）走同一套写法（StepHelpers.ToProcessName）。
+    public static List<string> ParseIgnoreList(string? text)
+    {
+        var list = new List<string>();
+        foreach (var raw in (text ?? "").Split(new[] { '\r', '\n', ',', ';', ' ' },
+                                            StringSplitOptions.RemoveEmptyEntries))
+        {
+            var name = StepHelpers.ToProcessName(raw);
+            if (name.Length == 0) continue;
+            if (list.Any(x => string.Equals(x, name, StringComparison.OrdinalIgnoreCase))) continue;
+            list.Add(name);
+        }
+        return list;
+    }
+
     /// <summary>按手势路径与当前目标进程匹配步骤。优先命中特定应用绑定的手势，未命中时回退到全局手势。</summary>
     public static LaunchStep? Match(IEnumerable<LaunchStep>? gestures, string path, string? targetProcess = null)
     {

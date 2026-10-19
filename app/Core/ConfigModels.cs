@@ -436,6 +436,22 @@ public sealed class AppSettings
     // 鼠标手势轨迹宽度/显示方式："off"（不显笔迹）| "thin"（细）| "normal"（标准）| "thick"（粗）。
     public string GestureTrailWidth { get; set; } = "normal";
 
+    /// <summary>这些程序里**根本不接管手势**：右键完全交给程序自己。</summary>
+    //
+    // 与「分应用绑定」（步骤上的 ForProcess）是一对，缺一不可：
+    //   · ForProcess 说的是「在这个程序里，↑ 是另一件事」（同一个形状换个意思）；
+    //   · 这一格说的是「在这个程序里，根本不要画」（整件事不成立）。
+    // 后者从前没有，于是只有一条出路：把总开关关掉——而那是全局的，把其它程序里的手势也一起关了。
+    //
+    // **为什么这一格是常事而不是边角**：远程桌面、虚拟机、游戏、3D 视口、画图软件，
+    // 这些地方程序自己就管右键（多义右键、右键旋转、右键拖拽），我们插一脚只会碍事。
+    // 别的工具（WGestures / StrokesPlus / Quicker）都有这一份「按程序排除」的名单，
+    // 而本项目的用户指南从前把这条写成了「人家的长处、我们的取舍」——那是一个可以补上的取舍。
+    //
+    // 存的是**裸进程名**（与 ForProcess 同一套写法，见 StepHelpers.ToProcessName）：
+    // 「chrome」与「chrome.exe」等价，带路径也等价。判据在 GestureGate.IsIgnoredApp（纯函数、有测试）。
+    public List<string> GestureIgnoreApps { get; set; } = new();
+
     public int PanelSchema { get; set; }
     public string Language { get; set; } = "";   // 空=跟随系统显示语言（App 启动时解析成具体 code 并落盘）
 

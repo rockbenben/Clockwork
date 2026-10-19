@@ -113,13 +113,27 @@
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,14,0,0">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <!-- 两列：左边那列按余量伸缩，右边那列是「关闭」。这一分是**为了窄窗不压字**——
+                 窗能被拖到 640 宽（MinWidth），而这排东西的宽度随语言变：俄语那一行
+                 「Чувствительность […] След […] Игнорируемые приложения…」在 640 下放不下，
+                 挤在同一个 Grid 单元里会直接压在「关闭」按钮上。
+                 分成两列之后，那排设置在窄窗里**换行**（WrapPanel），而「关闭」始终在自己的列里。 -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <WrapPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="{loc:Loc Gesture_Sensitivity}" VerticalAlignment="Center" Margin="0,0,6,0" Style="{StaticResource FieldHint}"/>
                 <ComboBox x:Name="SensitivityCbo" Width="110" SelectionChanged="Sensitivity_Changed" Margin="0,0,16,0"/>
                 <TextBlock Text="{loc:Loc Gesture_Trail}" VerticalAlignment="Center" Margin="0,0,6,0" Style="{StaticResource FieldHint}"/>
-                <ComboBox x:Name="TrailWidthCbo" Width="90" SelectionChanged="TrailWidth_Changed"/>
-            </StackPanel>
-            <Button Content="{loc:Loc Btn_Close}" HorizontalAlignment="Right" Width="96"
+                <ComboBox x:Name="TrailWidthCbo" Width="90" SelectionChanged="TrailWidth_Changed" Margin="0,0,16,0"/>
+                <!-- 「这些程序里根本不接管手势」的名单。摆在这一排里是因为它与灵敏度、笔迹一样
+                     是**全局**的手势设置（不是某一条手势的属性），而这排就是全局手势设置那一排。
+                     按钮上带当前份数：名单是空的与不空，差别大到界面上必须看得出来。 -->
+                <Button x:Name="IgnoreAppsBtn" MinWidth="0" Padding="10,3" VerticalAlignment="Center"
+                        Content="{loc:Loc Gesture_IgnoreApps}" Click="IgnoreApps_Click"/>
+            </WrapPanel>
+            <Button Grid.Row="0" Grid.Column="1" Content="{loc:Loc Btn_Close}" Width="96" Margin="16,0,0,0"
                     IsCancel="True" Click="Close_Click"/>
         </Grid>
     </Grid>

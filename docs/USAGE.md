@@ -550,6 +550,13 @@ Hold the **right button**, draw a stroke, release, and the matching action runs.
   works without it (just pause first), so reach for this when you want the button left strictly alone: a program that
   does its own thing with a held right button, or another gesture tool doing the drawing. It takes effect
   immediately, no restart.
+- **Some programs opt out entirely.** **Ignored apps…** at the bottom of the gesture manager lists the programs where
+  Clockwork does not take the right button **at all**: the press, the release and the menu all belong to the program,
+  exactly as if gestures were switched off. That is for the places that manage the right button themselves — Remote
+  Desktop, virtual machines, games, 3D viewports, drawing programs — where a gesture in the way is worse than no
+  gesture. One process name per line (`mstsc`, `vmware`); `chrome` and `chrome.exe` are the same name, with or
+  without a path. It is **per program**, not global: every other app keeps its gestures. Use this list to hand the
+  right button back to one program, rather than turning the master switch off for all of them.
 - **With no gestures the right button is untouched.** The global mouse hook is only installed while the master switch
   is on *and* at least one enabled gesture exists.
 - **Draw it twice and it runs twice.** The Run buttons carry a double-fire guard (the toast takes a second to appear, so an impatient double-click would run the step twice); **gestures skip that guard** — a gesture takes a second of deliberate drawing, so drawing it twice is deliberate, and toggling on-top with ↖ (pin, then release) is exactly that. The guard is silent when it bites, which on a gesture would read as "I drew it twice and the second one vanished".
@@ -582,8 +589,8 @@ appears**.
 
 Two things come with it: those tools have spent far longer than we have on stroke recognition, and **the right button
 is never touched at all** — no hook, so right-drag needs no pause and nothing can go wrong with a program that has its
-own ideas about a held right button. Most of them also offer per-application exclusion lists, whereas the trade-off
-here is "simple, with the cost stated up front".
+own ideas about a held right button. They also tend to offer finer switches; the one thing they call "exclude per
+application" Clockwork has now too (see **Ignored apps…** above) — theirs is just usually dressed up more.
 
 The other way round holds too: the built-in gestures are enough on their own — ten samples work out of the box, with
 no gesture tool to install first.

@@ -150,6 +150,11 @@ public static class ConfigStore
         if (sens is not ("low" or "normal" or "high")) { cfg.Settings.GestureSensitivity = "normal"; normalized = true; }
         var trail = (cfg.Settings.GestureTrailWidth ?? "").Trim().ToLowerInvariant();
         if (trail is not ("off" or "thin" or "normal" or "thick")) { cfg.Settings.GestureTrailWidth = "normal"; normalized = true; }
+        // 「不接管手势的程序」那份名单：json 显式 null 会盖掉模型里的空表默认，
+        // 而它下游有两处要数它（管理器按钮上的份数、编辑框里预填的那几行）——null 在那儿就是 NRE。
+        // 同上面那些集合同一条底线：只补 null，绝不替用户改写他写下的内容
+        //（名字的归一在写入口那一侧做，见 GestureGate.ParseIgnoreList）。
+        cfg.Settings.GestureIgnoreApps ??= new();
         cfg.ActionGroups = OrDefault(cfg.ActionGroups, def.ActionGroups);
         // PanelPages 也在这里补，**不能留给下面的 FillPanelPageDefaults**。
         // 那个方法末尾确实有一句 `cfg.PanelPages ??= new()`，但它排在 MigratePanelPages 之后，

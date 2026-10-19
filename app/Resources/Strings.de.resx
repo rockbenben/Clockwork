@@ -2227,4 +2227,9 @@ Protokoll: {1}</value>
   <data name="Btn_CombineTip" xml:space="preserve">Zwei oder mehr Aktionen auswählen und in Listenreihenfolge zu einer neuen Aktion verketten. Änderungen an den Originalen wirken sich sofort aus.</data>
   <data name="Group_CombinedName" xml:space="preserve">Kombination aus {0} Aktionen</data>
   <data name="Panel_NewCompound" xml:space="preserve">Neue komplexe Aktion…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">Ignorierte Apps…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">Ignorierte Apps ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">In diesen Apps werden Gesten nicht übernommen – die rechte Taste geht direkt an das Programm.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">Apps, in denen Gesten aus sind</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">Ein Prozessname pro Zeile (zum Beispiel mstsc, vmware). In diesen Apps lässt Clockwork die rechte Taste vollständig in Ruhe – sie geht direkt an das Programm.</data>
 </root>

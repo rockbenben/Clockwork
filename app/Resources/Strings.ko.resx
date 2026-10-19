@@ -2227,4 +2227,9 @@
   <data name="Btn_CombineTip" xml:space="preserve">두 개 이상의 작업을 골라 목록 순서대로 하나의 복합 작업으로 잇습니다. 원본 작업을 고치면 내용도 따라 바뀝니다.</data>
   <data name="Group_CombinedName" xml:space="preserve">{0}개 작업 조합</data>
   <data name="Panel_NewCompound" xml:space="preserve">복합 작업 새로 만들기…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">무시할 앱…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">무시할 앱({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">이 앱에서는 제스처를 사용하지 않습니다. 오른쪽 버튼은 그대로 프로그램에 전달됩니다.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">제스처를 사용하지 않을 앱</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">한 줄에 프로세스 이름 하나씩(예: mstsc, vmware). 이 앱들에서 Clockwork는 오른쪽 버튼을 전혀 건드리지 않고 그대로 프로그램에 전달합니다.</data>
 </root>

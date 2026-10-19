@@ -2227,4 +2227,9 @@
   <data name="Btn_CombineTip" xml:space="preserve">اختر إجراءين أو أكثر وسلسلها بترتيب القائمة في إجراء جديد واحد. تبقى الإجراءات الأصلية قابلة للتعديل.</data>
   <data name="Group_CombinedName" xml:space="preserve">دمج {0} إجراءات</data>
   <data name="Panel_NewCompound" xml:space="preserve">إجراء مركّب جديد…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">التطبيقات المستبعدة…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">التطبيقات المستبعدة ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">لا تُلتقط الإيماءات في هذه التطبيقات — يذهب الزر الأيمن إلى البرنامج مباشرة.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">التطبيقات التي لا تعمل فيها الإيماءات</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">اسم عملية في كل سطر (مثل mstsc أو vmware). في هذه التطبيقات لا يلمس Clockwork الزر الأيمن إطلاقًا — يذهب إلى البرنامج كما هو.</data>
 </root>

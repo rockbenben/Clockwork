@@ -246,6 +246,10 @@ public sealed class MouseHook : IDisposable
     // 「这次注入送不送得进去」的探子。单测注入用，生产走 `Win32.InputNotBlockedNow`。
     private readonly Func<bool> _canInject;
 
+    // 「这个程序里不接管手势吗」。名单判据在 GestureGate.IsIgnoredApp（纯函数、有测试），
+    // 这里只负责在按下那一刻把进程名问出来（读后台探针的缓存，不做跨进程查询）。
+    private readonly Func<string, bool> _ignoredApp;
+
     /// <param name="holdMs">按住多久算长按；&lt;=0 表示不管中键（只做手势）。</param>
     /// <param name="fire">判定为长按时要做的事（唤出面板）。会经 <paramref name="post"/> 派发，不在回调里直接跑。</param>
     /// <param name="post">把动作投到 UI 队列的方式（App 传 Dispatcher.BeginInvoke）。</param>
@@ -266,15 +270,20 @@ public sealed class MouseHook : IDisposable
     /// <param name="probe">把「这一下能不能接管」「起笔窗是谁家的程序」两句交给后台线程算的探针
     ///（生产传 <see cref="HookProbe"/>；为 null 时退回同步实现，只在单测里成立）。
     /// 传对象而不是两个委托，是因为它同时管着生命周期与「答案是哪一次算出来的」这件事。</param>
+    /// <param name="ignoredApp">这个程序里**不接管手势**吗（参数是进程名）。
+    /// 名单判据在 <see cref="GestureGate.IsIgnoredApp"/>（纯函数、有测试）。
+    /// 命中名单时整笔放行：右键完全交给程序自己，一个字节都不碰。</param>
     public MouseHook(int holdMs, Action fire, Action<Action> post,
                      GestureGate? gesture = null, Action<string, IntPtr>? fireGesture = null,
                      Action<int, int, bool>? trailPoint = null, Action? trailEnd = null,
                      Action<string>? unmatched = null, Func<bool>? modifierHeld = null,
                      int moveTolerancePhysical = 0, Func<bool>? canInject = null,
                      HookProbe? probe = null,
-                     Func<uint, string>? procNameForPid = null, Func<uint, bool>? mayEngage = null)
+                     Func<uint, string>? procNameForPid = null, Func<uint, bool>? mayEngage = null,
+                     Func<string, bool>? ignoredApp = null)
     {
         _trailPoint = trailPoint ?? ((_, _, _) => { });
+        _ignoredApp = ignoredApp ?? (_ => false);
         _trailEnd = trailEnd ?? (() => { });
         _gate = holdMs > 0
             ? new LongPressGate(holdMs, moveTolerancePhysical <= 0 ? 6 : moveTolerancePhysical)
@@ -1125,6 +1134,36 @@ public sealed class MouseHook : IDisposable
                     _owedRightClick = false;
                     return Chain(code, wParam, lParam);
                 }
+                // **这个程序在「不接管手势」名单里 → 整笔放行，一个字节都不碰。**
+                //
+                // 名单是用户自己列的（远程桌面、虚拟机、游戏、3D 视口……那些地方程序自己就管右键）。
+                // 判据是纯函数（GestureGate.IsIgnoredApp），这里只负责把进程名问出来。
+                //
+                // 问的是**前台窗口**的进程名，与分应用手势绑定（ForProcess）同一口径：
+                // 「我现在在哪个程序里」这一个问题，全应用只问一次、只答一次。
+                //
+                // 读缓存（探针后台算好的），不做跨进程查询——那一句在回调里能到秒级（见类头）。
+                // **认不出名字时按「不在名单里」处理**：反过来会让手势在每一个刚切过去的窗口里
+                // 都失效，而名字解析只差几十毫秒（见 GestureGate.IsIgnoredApp 的注释）。
+                string? downProc = null;
+                if (msg == WM_RBUTTONDOWN)
+                {
+                    _gesturePid = Win32.ForegroundPid();
+                    // 进程名这一句要 OpenProcess，而它在回调路径上实测能到秒级（见 HookProbe 类头）。
+                    // 读的是探针的缓存（冷缓存时排一次后台解析，这一格第一次真可能慢），
+                    // 所以它仍带着自己的计时格：哪一次真的慢了，日志里得有个名字。
+                    long p1 = Core.UiStallWatch.Begin();
+                    try { downProc = _procNameForPid(_gesturePid); }
+                    finally { Core.UiStallWatch.End("hook-proc-name", p1); }
+                    if (downProc.Length > 0 && _ignoredApp(downProc))
+                    {
+                        // 作废旧欠账：这一笔根本没接管，没有按下被吞，也就没有要还的账。
+                        _owedRightClick = false;
+                        // 收掉可能还挂在屏上的上一笔笔迹：这一笔不画了，但上一笔的线不能留在屏幕上。
+                        try { _post(_trailEnd); } catch { }
+                        return Chain(code, wParam, lParam);
+                    }
+                }
                 // 起笔窗口在**按下那一刻**解析：此刻光标压着的窗就是这笔手势划在谁身上，
                 // 与轨迹起点同一坐标。回调只做纯查询，不碰 UI。
                 // 「微秒级」这句此前是断言、没量过；而日志里有一条 `hook-callback took 6469ms
@@ -1150,12 +1189,11 @@ public sealed class MouseHook : IDisposable
                 var gv = msg == WM_RBUTTONDOWN ? _gesture.OnRightDown(data.X, data.Y) : _gesture.OnRightUp();
                 if (msg == WM_RBUTTONDOWN)
                 {
-                    // 只查一次 pid（纯 user32），进程名交给 HookProbe 的缓存——那一句要 OpenProcess，
-                    // 在这条回调路径上实测能到秒级（见 HookProbe 类头）。
-                    long p0 = Core.UiStallWatch.Begin();
-                    _gesturePid = Win32.ForegroundPid();
-                    _gesture.ContextProcess = _procNameForPid(_gesturePid);
-                    Core.UiStallWatch.End("hook-proc-name", p0);
+                    // 进程名在上面问过一次了（downProc），这里直接用——**不再问一遍**。
+                    // 问的那一句要 OpenProcess，在这条回调路径上实测能到秒级（见 HookProbe 类头）；
+                    // 而 OnRightDown 刚把 ContextProcess 清空（它描述的是新的一笔），
+                    // 所以这里必须补上，但值是同一个，不必重新去探针里取。
+                    _gesture.ContextProcess = downProc;
                 }
                 // 屏幕上那条看得见的笔迹，起止都在这里派（一律走 _post，绝不在回调里碰 UI）。
                 //

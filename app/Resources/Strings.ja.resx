@@ -2227,4 +2227,9 @@
   <data name="Btn_CombineTip" xml:space="preserve">2 つ以上のアクションを選び、一覧の順にひとつの複雑なアクションへ連ねます。元のアクションを編集すると内容も追従します。</data>
   <data name="Group_CombinedName" xml:space="preserve">{0} 個のアクションの組合せ</data>
   <data name="Panel_NewCompound" xml:space="preserve">複雑なアクションを新規作成…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">無視するアプリ…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">無視するアプリ（{0}）</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">これらのアプリではジェスチャーを使いません。右ボタンはそのままプログラムに渡ります。</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">ジェスチャーを使わないアプリ</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">1行に1つ、プロセス名（例：mstsc、vmware）。これらのアプリでは Clockwork は右ボタンに一切触れません。そのままプログラムに渡ります。</data>
 </root>

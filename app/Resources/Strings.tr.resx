@@ -2227,4 +2227,9 @@ Günlük: {1}</value>
   <data name="Btn_CombineTip" xml:space="preserve">İki veya daha fazla eylem seçin; liste sırasına göre tek bir yeni eylemde zincirleyin. Özgün eylemler düzenlenebilir kalır.</data>
   <data name="Group_CombinedName" xml:space="preserve">{0} eylemin birleşimi</data>
   <data name="Panel_NewCompound" xml:space="preserve">Yeni bileşik eylem…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">Yok sayılan uygulamalar…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">Yok sayılan uygulamalar ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">Bu uygulamalarda hareketler yakalanmaz — sağ tuş doğrudan programa gider.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">Hareket kullanılmayan uygulamalar</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">Her satıra bir işlem adı (örneğin mstsc, vmware). Bu uygulamalarda Clockwork sağ tuşa hiç dokunmaz — tuş doğrudan programa gider.</data>
 </root>

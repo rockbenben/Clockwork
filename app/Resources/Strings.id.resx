@@ -2227,4 +2227,9 @@ Log: {1}</value>
   <data name="Btn_CombineTip" xml:space="preserve">Pilih dua tindakan atau lebih lalu rangkai sesuai urutan daftar menjadi satu tindakan baru. Tindakan aslinya tetap bisa disunting.</data>
   <data name="Group_CombinedName" xml:space="preserve">Kombinasi {0} tindakan</data>
   <data name="Panel_NewCompound" xml:space="preserve">Tindakan gabungan baru…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">Aplikasi diabaikan…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">Aplikasi diabaikan ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">Di aplikasi ini gestur tidak diambil — tombol kanan langsung ke programnya.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">Aplikasi tanpa gestur</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">Satu nama proses per baris (misalnya mstsc, vmware). Di aplikasi ini Clockwork sama sekali tidak menyentuh tombol kanan — ia langsung ke programnya.</data>
 </root>

@@ -2227,4 +2227,9 @@ Log: {1}</value>
   <data name="Btn_CombineTip" xml:space="preserve">Selecteer twee of meer acties en voeg ze in lijstvolgorde samen tot één nieuwe actie. Wijzigingen in de originele acties blijven meelopen.</data>
   <data name="Group_CombinedName" xml:space="preserve">Combinatie van {0} acties</data>
   <data name="Panel_NewCompound" xml:space="preserve">Nieuwe samengestelde actie…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">Genegeerde apps…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">Genegeerde apps ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">In deze apps worden geen gebaren herkend — de rechtermuisknop gaat rechtstreeks naar het programma.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">Apps zonder gebaren</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">Eén procesnaam per regel (bijvoorbeeld mstsc, vmware). In deze apps raakt Clockwork de rechtermuisknop niet — die gaat rechtstreeks naar het programma.</data>
 </root>

@@ -426,6 +426,34 @@ public class ConfigStoreTests : IDisposable
         Assert.Equal("新名字", cfg.PanelPages[0].Steps[0].Label);
     }
 
+    // —— 「不接管手势的程序」那份名单 ——
+    //
+    // json 显式 null 会盖掉模型里的空表默认，而它下游有两处要数它
+    // （管理器按钮上的份数、编辑框里预填的那几行）——null 在那儿就是 NRE。
+    // 同其它那些集合同一条底线：只补 null，绝不替用户改写他写下的内容。
+    [Fact]
+    public void Normalize_fills_a_null_gesture_ignore_list()
+    {
+        var cfg = new RootConfig();
+        cfg.Settings.GestureIgnoreApps = null!;          // json 里写 "gestureIgnoreApps": null
+        ConfigStore.Normalize(cfg);
+        Assert.NotNull(cfg.Settings.GestureIgnoreApps);
+        Assert.Empty(cfg.Settings.GestureIgnoreApps);
+    }
+
+    // 名单要真的存得下来、读得回去：它存的是设置里的一格，序列化漏了它，
+    // 用户填的名单就会在每次重启后消失——而那正是「明明填了却不生效」最难查的一种。
+    [Fact]
+    public void The_gesture_ignore_list_survives_a_save_and_load()
+    {
+        var path = Path.Combine(_dir, "ignore.json");
+        var cfg = RootConfig.Default();
+        cfg.Settings.GestureIgnoreApps = new List<string> { "mstsc", "vmware" };
+        ConfigStore.Write(cfg, path);
+        var back = ConfigStore.Read(path);
+        Assert.Equal(new[] { "mstsc", "vmware" }, back.Settings.GestureIgnoreApps);
+    }
+
     // —— 「在托盘菜单显示」的迁移 ——
     // 老配置里没有 showInTray 字段，读进来是 null。若直接当 false，升级后老用户托盘里的
     // 动作组会一起消失、看着像功能坏了；故 Normalize 一律补 true 保持升级前的外观。

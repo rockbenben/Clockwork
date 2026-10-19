@@ -2227,4 +2227,9 @@
   <data name="Btn_CombineTip" xml:space="preserve">选中两个以上的动作，把它们按列表顺序串成一个新的复杂动作。原动作改动会跟着变。</data>
   <data name="Group_CombinedName" xml:space="preserve">{0} 个动作组合</data>
   <data name="Panel_NewCompound" xml:space="preserve">新建复杂动作…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">不接管手势的程序…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">不接管手势的程序（{0}）</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">在这些程序里完全不接管手势：右键原样交给程序自己。</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">不接管手势的程序</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">一行一个进程名（例如 mstsc、vmware）。在这些程序里，Clockwork 完全不碰右键，右键原样交给程序自己。</data>
 </root>

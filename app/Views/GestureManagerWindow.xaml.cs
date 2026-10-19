@@ -57,6 +57,7 @@ public partial class GestureManagerWindow : Window
         GesturesOnChk.IsChecked = _config.Settings.GesturesEnabled;
         PaintWatchState();
         PopulateSettings();
+        PaintIgnoreApps();
         Reload(null);
     }
 
@@ -422,4 +423,42 @@ public partial class GestureManagerWindow : Window
     }
 
     private void Close_Click(object sender, RoutedEventArgs e) => Close();
+
+    // 「这些程序里根本不接管手势」的名单。
+    //
+    // 为什么要它：从前只有一个总开关——要在一个程序里让出右键，就得把**所有**程序里的手势一起关掉。
+    // 而远程桌面、虚拟机、游戏、3D 视口这些地方，程序自己就管右键，我们插一脚只会碍事。
+    // 别的工具都有这一份「按程序排除」的名单，这里补上。
+    //
+    // 编辑方式是一张多行文本卡（一行一个程序名）：名单通常只有一两条，而逐个从「选程序」对话框里
+    // 挑要开好几轮。存的是**裸进程名**（与分应用绑定同一套写法，见 StepHelpers.ToProcessName），
+    // 「chrome」与「chrome.exe」等价。
+    private void IgnoreApps_Click(object sender, RoutedEventArgs e)
+    {
+        var current = string.Join("\n", _config.Settings.GestureIgnoreApps);
+        var edited = BrandDialog.AskMulti(this, Strings.Get("Gesture_IgnoreTitle"),
+                                          Strings.Get("Gesture_IgnoreMessage"), current);
+        if (edited == null) return;   // 取消：名单一个字都没动
+        _config.Settings.GestureIgnoreApps = GestureGate.ParseIgnoreList(edited);
+        _save();
+        PaintIgnoreApps();
+    }
+
+    // 名单的归一在 Core.GestureGate.ParseIgnoreList（纯函数、有测试）：
+    // 去掉首尾空白与路径、去掉 .exe 后缀（与分应用绑定同一套写法）、去掉重复项、去掉空行。
+    // 用户在多行框里手打，格式一定是乱的；而名单是**拿来比对**的，
+    // 存成 "Chrome.exe" 与 "chrome" 两条会让「关掉了却还在接管」这种症状变得极难查。
+
+    // 按钮上带当前份数：名单是空的与不空，差别大到界面上必须看得出来。
+    // 名单里的名字也进提示——那张卡里的正文说得清规矩，悬停里能直接看到「现在有哪几个」。
+    private void PaintIgnoreApps()
+    {
+        var list = _config.Settings.GestureIgnoreApps;
+        IgnoreAppsBtn.Content = list.Count > 0
+            ? Strings.Lf("Gesture_IgnoreAppsN", list.Count)
+            : Strings.Get("Gesture_IgnoreApps");
+        IgnoreAppsBtn.ToolTip = list.Count > 0
+            ? string.Join(", ", list)
+            : Strings.Get("Gesture_IgnoreHint");
+    }
 }

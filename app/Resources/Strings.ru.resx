@@ -2227,4 +2227,9 @@
   <data name="Btn_CombineTip" xml:space="preserve">Выберите два или более действий и соедините их в порядке списка в одно новое действие. Исходные остаются редактируемыми.</data>
   <data name="Group_CombinedName" xml:space="preserve">Комбинация из {0} действий</data>
   <data name="Panel_NewCompound" xml:space="preserve">Новое составное действие…</data>
+  <data name="Gesture_IgnoreApps" xml:space="preserve">Игнорируемые приложения…</data>
+  <data name="Gesture_IgnoreAppsN" xml:space="preserve">Игнорируемые приложения ({0})</data>
+  <data name="Gesture_IgnoreHint" xml:space="preserve">В этих приложениях жесты не распознаются — правая кнопка передаётся программе как есть.</data>
+  <data name="Gesture_IgnoreTitle" xml:space="preserve">Приложения без жестов</data>
+  <data name="Gesture_IgnoreMessage" xml:space="preserve">По одному имени процесса в строке (например, mstsc, vmware). В этих приложениях Clockwork не трогает правую кнопку — она передаётся программе как есть.</data>
 </root>
