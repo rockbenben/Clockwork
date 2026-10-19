@@ -16,14 +16,29 @@ internal static class EditorUi
 
     public static string ComboVal(ComboBox cb) => (cb.SelectedItem as ComboBoxItem)?.Tag as string ?? "";
 
-    public static void FillCombo(ComboBox cb, (string Label, string Val)[] items, string selected)
+    /// <summary>填一个下拉，并挑中其中一项。</summary>
+    /// <param name="selected">要挑中的值。表里没有它就算「挑不中」。</param>
+    /// <param name="fallback">挑不中时改挑哪一项。**不给就落回第一项**（枚举类下拉的合理兜底）。
+    /// 给了就按它挑——「挑不中时该落回哪一项」是**设计**，不是项的顺序该管的事。
+    ///
+    /// 为什么要这一格：Action 那一格是共用的，量纲随类型变（见 StepHelpers.DefaultActionFor）。
+    /// 一条「关掉窗口」的步骤改成「音量」时，音量那个下拉里没有「关掉窗口」这一项，
+    /// 落回第一项就成了「静音」——而「静音」是**第一项恰好排在前面**，不是谁定的。
+    /// 同一类型在「新建」与「换类型」两条路上起手不一样，就是这么来的。</param>
+    public static void FillCombo(ComboBox cb, (string Label, string Val)[] items, string selected, string? fallback = null)
     {
         cb.Items.Clear();
         int sel = 0;
+        bool found = false;
         for (int i = 0; i < items.Length; i++)
         {
             cb.Items.Add(new ComboBoxItem { Content = items[i].Label, Tag = items[i].Val });
-            if (items[i].Val == selected) sel = i;
+            if (items[i].Val == selected) { sel = i; found = true; }
+        }
+        if (!found && fallback != null)
+        {
+            for (int i = 0; i < items.Length; i++)
+                if (items[i].Val == fallback) { sel = i; break; }
         }
         cb.SelectedIndex = items.Length > 0 ? sel : -1;
     }
@@ -62,6 +77,25 @@ internal static class EditorUi
     // 整数解析：解析失败或越界回退 fallback。
     public static int ParseOr(string? s, int fallback, int min = int.MinValue, int max = int.MaxValue)
         => int.TryParse((s ?? "").Trim(), out var n) && n >= min && n <= max ? n : fallback;
+
+    /// <summary>开一扇模态编辑窗。owner 为空时自己找位置、自己保证看得见。</summary>
+    ///
+    /// 为什么要有这一格：这两个入口都能从**面板**进来（面板一格右键 → 编辑；
+    /// 主窗口收在托盘时 App 传的就是 null），而面板此刻已经自己关掉了。
+    /// 不兜底的话，WindowStartupLocation=CenterOwner 没有 owner 可居中、Topmost 也没置，
+    /// 于是模态开在任意位置、压在所有窗口后面 —— 用户看到面板消失、什么都没出现，
+    /// 而一个模态框正拦着后续操作。
+    ///
+    /// 收在一处是因为这段推理从前被抄了两份（步骤编辑器、动作组编辑器），
+    /// 而它是最容易被「顺手改掉」的那种：少一句 Topmost，症状是「面板一点就没了」。
+    ///
+    /// 品牌卡片没有并进来：它的判据是**多一条**的（owner 在但不可见时也要自己找位置，
+    /// 且还要抢前台，见 BrandDialog.Make），不是同一份。
+    public static bool? ShowModal(Window dlg, Window? owner)
+    {
+        if (owner == null) { dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen; dlg.Topmost = true; }
+        return dlg.ShowDialog();
+    }
 
     // 解析「仅 N 前 / 仅 N 后」阈值 "HH:mm"（时 0..23、分 0..59）；只填小时("8")也认，缺分作 0；
     // 非法整体回退 fallbackHour:00（「前」用 8、「后」用 18，与模型默认一致）。

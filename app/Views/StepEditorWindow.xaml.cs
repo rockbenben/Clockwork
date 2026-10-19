@@ -47,12 +47,13 @@ public partial class StepEditorWindow : Window
         {
             (Strings.Get("Vol_mute"), "mute"), (Strings.Get("Vol_unmute"), "unmute"), (Strings.Get("Ed_Vol_Set"), "set"),
             (Strings.Get("Vol_micMute"), "micMute"), (Strings.Get("Vol_micUnmute"), "micUnmute"),
-        }, string.IsNullOrEmpty(step.Action) ? "mute" : step.Action);
+        }, step.Action, StepHelpers.DefaultActionFor("volume"));
         // 下拉项直接由 StepDisplay.MouseActions 生成：动作 id / 文案 / 伪键只此一张表，
         // 加一个动作只改那张表，编辑器、摘要、执行三处自动跟上，不会出现「选得到但跑不了」。
         FillCombo(MouseActCombo, StepDisplay.MouseActions.Select(m => (Strings.Get(m.LabelKey), m.Action)).ToArray(),
-                  StepDisplay.MouseActions.Any(m => m.Action == step.Action) ? step.Action : "down");
-        FillCombo(WinActionCombo, StepDisplay.WindowActionMap().Select(kv => (kv.Value, kv.Key)).ToArray(), string.IsNullOrEmpty(step.Action) ? "close" : step.Action);
+                  step.Action, StepHelpers.DefaultActionFor("mouse"));
+        FillCombo(WinActionCombo, StepDisplay.WindowActionMap().Select(kv => (kv.Value, kv.Key)).ToArray(),
+                  step.Action, StepHelpers.DefaultActionFor("window"));
         // siteMap 的打开方式。三档的 id 与 StepRunner 那支的 mode、StepDisplay.SiteMapActionOf 的
         // 归一结果同一批字面量——三处各写一份的话，改动只落一处，清单上就会写着「定位」而实际打开了文件。
         FillCombo(SiteMapActionCombo, new[]
@@ -61,6 +62,9 @@ public partial class StepEditorWindow : Window
             (Strings.Get("Val_SiteMapReveal"), "reveal"),
             (Strings.Get("Val_SiteMapNone"), "none"),
         }, StepDisplay.SiteMapActionOf(step));
+        // 跳过的两档：判据**不分大小写**（"RUN" 也认），与其它几个下拉的精确匹配不同——
+        // 这里是手改 json 最容易写成大写的一处，而「跳过一整段」与「跳过一次运行」是两件事。
+        // 它的默认档恰好就是第一项，所以不需要 DefaultActionFor 那一格来兜。
         FillCombo(SkipModeCombo, new[]
         {
             (Strings.Get("Val_SkipBlock"), "block"),
@@ -732,30 +736,50 @@ public partial class StepEditorWindow : Window
         }
         preview.Visibility = Visibility.Collapsed;
     }
-    // 打开编辑器，返回编辑后的新步骤（取消→null）。step 为 null=新建指定 kind。
-    // listItems 非 null=面板语境：类型下拉追加「引用启动项」（见 _listItems 的说明）。
-    // insideGroup=加进某个复杂动作的步骤序列：类型下拉给全套（默认 false=单独一格，只给原子步骤）。
-    public static LaunchStep? Edit(Window? owner, LaunchStep? step, string kind, IReadOnlyList<ActionGroup> groups,
-                                   IReadOnlyList<LaunchStep>? listItems = null, bool insideGroup = false)
+    /// <summary>新建一步：<paramref name="kind"/> 决定它是什么、初始值是什么。
+    /// 返回编辑后的新步骤（取消 → null）。</summary>
+    /// <param name="seed">「常用」里预填好的那一份（非空时编辑器直接拿它当初值），没有就 null。</param>
+    /// <param name="listItems">非 null = 面板语境：类型下拉追加「引用启动项」（见 _listItems 的说明）。</param>
+    /// <param name="insideGroup">加进某个复杂动作的步骤序列：类型下拉给全套（默认 false = 单独一格，只给原子步骤）。</param>
+    public static LaunchStep? Create(Window? owner, string kind, LaunchStep? seed,
+                                     IReadOnlyList<ActionGroup> groups,
+                                     IReadOnlyList<LaunchStep>? listItems = null, bool insideGroup = false)
     {
         // Level 是个**共用的数值位**：音量用 0-100（模型默认 50 是给它挑的），
         // 「等剪贴板变化」借了同一个位置但量纲是秒（1-60，意图默认 5，见 ClampWaitSeconds）。
         // 于是新建一个「等剪贴板」步骤时，模型默认的 50 会原样通过夹取（它只改 <1 的），
         // 预填 50、保存 50——一个默认就等 50 秒的步骤，而这个文件里「5」这个意图值出现了两次。
         // 在新建这一处按类型给初值：改夹取会同时改掉音量那一档的语义。
-        var s = step ?? new LaunchStep
+        //
+        // Action 那一格的初值也走同一处（StepHelpers.DefaultActionFor），
+        // 与「换类型」那条路共用——见那处注释：同一个类型在两条路上起手不一样，
+        // 差的是「音量」那一条（新建是「设到几成」，换类型曾落到「静音」，因为它是下拉的第一项）。
+        var s = seed ?? new LaunchStep
         {
             Kind = kind,
-            Action = kind == "volume" ? "set" : (kind == "window" ? "close" : (kind == "mouse" ? "down" : "")),
+            Action = StepHelpers.DefaultActionFor(kind),
             Level = kind == "waitClipboard" ? StepHelpers.ClampWaitSeconds(0) : new LaunchStep().Level,
         };
-        var dlg = new StepEditorWindow(s, groups, listItems, insideGroup) { Owner = owner };
-        // owner 为 null 时必须自己找位置、自己保证看得见：这两个入口都能从**面板**进来
-        // （面板一格右键 → 编辑；主窗口收在托盘时 App 传的就是 null），而面板此刻已经自己关掉了。
-        // 不兜底的话，WindowStartupLocation=CenterOwner 没有 owner 可居中、Topmost 也没置，
-        // 于是模态开在任意位置、压在所有窗口后面 —— 用户看到面板消失、什么都没出现，
-        // 而一个模态框正拦着后续操作。BrandDialog 与面板管理器都已经这么兜了（同款说明见那两处）。
-        if (owner == null) { dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen; dlg.Topmost = true; }
-        return dlg.ShowDialog() == true ? dlg.Result : null;
+        return Show(owner, s, groups, listItems, insideGroup);
+    }
+
+    /// <summary>编辑已有的一步。类型就是**它自己的类型**，调用方不必（也不该）再说一遍。
+    /// 返回编辑后的新步骤（取消 → null）。</summary>
+    ///
+    /// 从前这一格叫 `Edit(owner, step, kind, groups, …)`，而 kind 那一格只在 step 为 null 时才有意义
+    /// （新建）——编辑已有的一步时它**从头到尾没被读过**。于是六个调用点各自写着 `step.Kind`，
+    /// 看着像「调用方在指定类型」，实际是「我怕忘了才抄一遍」；而它把「类型由谁说了算」
+    /// 这件事说成了两处。两件事一起办：拆成 Create（新建，类型是参数）与 Edit（编辑，类型是步骤自己的）。
+    public static LaunchStep? Edit(Window? owner, LaunchStep step,
+                                   IReadOnlyList<ActionGroup> groups,
+                                   IReadOnlyList<LaunchStep>? listItems = null, bool insideGroup = false)
+        => Show(owner, step, groups, listItems, insideGroup);
+
+    private static LaunchStep? Show(Window? owner, LaunchStep step, IReadOnlyList<ActionGroup> groups,
+                                    IReadOnlyList<LaunchStep>? listItems, bool insideGroup)
+    {
+        var dlg = new StepEditorWindow(step, groups, listItems, insideGroup) { Owner = owner };
+        // owner 为 null 时自己找位置、自己保证看得见（理由见 EditorUi.ShowModal）。
+        return EditorUi.ShowModal(dlg, owner) == true ? dlg.Result : null;
     }
 }

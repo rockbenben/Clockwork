@@ -108,6 +108,31 @@ public class StepHelpersTests
     public void ClampStartupDelay_bounds(int input, int expected)
         => Assert.Equal(expected, StepHelpers.ClampStartupDelay(input));
 
+    // —— DefaultActionFor：一个类型起手时那一格该是什么 ——
+    //
+    // Action 是一格共用的，量纲随类型变（音量记「静音/设到几成」，窗口记「关掉/最小化」，
+    // 鼠标记「按下/双击」）。而「新建」与「换类型」这两条路从前各答各的：
+    // 新建一个「音量」给的是「设到几成」，把一条「关掉窗口」改成「音量」却落到「静音」——
+    // 那个落回是**下拉项的顺序**决定的，看着像设计，其实不是。
+    // 现在两条路都走这一份。
+    [Theory]
+    [InlineData("volume", "set")]
+    [InlineData("window", "close")]
+    [InlineData("mouse", "down")]
+    [InlineData("system", "")]
+    [InlineData("text", "")]
+    [InlineData("", "")]
+    public void DefaultActionFor_is_the_starting_action_of_a_kind(string kind, string expected)
+        => Assert.Equal(expected, StepHelpers.DefaultActionFor(kind));
+
+    // 「音量」起手必须是「设到几成」而不是「静音」——「静音」只是那个下拉的第一项。
+    [Fact]
+    public void The_volume_step_starts_at_set_not_at_the_first_item_of_its_combo()
+    {
+        Assert.Equal("set", StepHelpers.DefaultActionFor("volume"));
+        Assert.NotEqual("mute", StepHelpers.DefaultActionFor("volume"));
+    }
+
     // —— MessageFormOf：Present="card" 压过一切；空值沿用旧推导（老配置行为不变） ——
     [Fact] public void MsgForm_default_is_info()
         => Assert.Equal(MessageForm.Info, StepHelpers.MessageFormOf(new LaunchStep { Kind = "message", Message = "hi" }));

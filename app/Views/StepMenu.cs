@@ -1,5 +1,7 @@
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using Clockwork.Core;
 using Clockwork.I18n;
 
@@ -61,6 +63,22 @@ public static class StepMenu
             menu.Items.Add(sec);
         }
         return menu;
+    }
+
+    /// <summary>把「新增 ▾」菜单摆在某个东西下面并打开。</summary>
+    ///
+    /// 收在一处是因为四个入口各写一遍「摆哪儿 + 怎么开」，而它们**本来就该是同一件事**：
+    /// 启动清单、手势管理器、面板管理器、浮窗面板，四处都是「点那颗 ▾ → 挑一个类型 → 开编辑器」。
+    /// 摆法只有两种（贴着按钮、贴着面板本身），差别是 placement，其余一样。
+    public static void OpenAt(FrameworkElement? anchor, ContextMenu menu,
+                              PlacementMode placement = PlacementMode.MousePoint)
+    {
+        if (anchor != null)
+        {
+            menu.PlacementTarget = anchor;
+            menu.Placement = placement;
+        }
+        menu.IsOpen = true;
     }
 
     /// <summary>给菜单项配上面板那枚图标。</summary>

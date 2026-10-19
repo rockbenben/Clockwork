@@ -1210,7 +1210,7 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
     // 可以被这一格指过去的动作。页在那儿没有位置：一格指向一页是没有意义的。
     private void EditStep(PanelPage p, LaunchStep s)
     {
-        var edited = StepEditorWindow.Edit(this, s, s.Kind, _config.ActionGroups, _config.LaunchSteps);
+        var edited = StepEditorWindow.Edit(this, s, _config.ActionGroups, _config.LaunchSteps);
         if (edited == null) return;
         int i = p.Steps.IndexOf(s);
         if (i < 0) return;
@@ -1240,18 +1240,13 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
 
         var menu = StepMenu.Build((kind, seed) =>
         {
-            var step = StepEditorWindow.Edit(this, seed, kind, _config.ActionGroups, _config.LaunchSteps);
+            var step = StepEditorWindow.Create(this, kind, seed, _config.ActionGroups, _config.LaunchSteps);
             if (step == null) return;
             p.Steps.Add(step);
             Commit();
         }, presets: true, headerItems: new[] { compound });
 
-        if (anchor != null)
-        {
-            menu.PlacementTarget = anchor;
-            menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-        }
-        menu.IsOpen = true;
+        StepMenu.OpenAt(anchor, menu, System.Windows.Controls.Primitives.PlacementMode.Bottom);
     }
 
     private void DeleteStep(PanelPage p, LaunchStep s)

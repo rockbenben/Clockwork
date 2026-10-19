@@ -232,7 +232,7 @@ internal sealed class PanelCoordinator
         {
             _panel?.Dismiss();
             var owner = DialogOwner?.Invoke();
-            var edited = Views.StepEditorWindow.Edit(owner, target, target.Kind, _config.ActionGroups);
+            var edited = Views.StepEditorWindow.Edit(owner, target, _config.ActionGroups);
             if (edited == null) return;
             int ti = _config.LaunchSteps.IndexOf(target);
             if (ti < 0) return;   // 期间清单里被删了：格子变悬空引用，由 RunStep 那路如实报
@@ -243,7 +243,7 @@ internal sealed class PanelCoordinator
         }
         _panel?.Dismiss();
         var edOwner = DialogOwner?.Invoke();
-        var editedItem = Views.StepEditorWindow.Edit(edOwner, it.Step, it.Step.Kind, _config.ActionGroups, _config.LaunchSteps);
+        var editedItem = Views.StepEditorWindow.Edit(edOwner, it.Step, _config.ActionGroups, _config.LaunchSteps);
         if (editedItem == null) return;
         int i = it.Page.Steps.IndexOf(it.Step);
         if (i < 0) return;   // 期间被别处删了：什么都不做，好过把它又插回去
@@ -296,15 +296,14 @@ internal sealed class PanelCoordinator
             var menu = Views.StepMenu.Build((kind, seed) =>
             {
                 // 传 _config.LaunchSteps：面板语境独有的「引用启动项」类型靠它现身（见 StepDisplay.RefKind）。
-                var s = Views.StepEditorWindow.Edit(owner, seed, kind, config.ActionGroups, config.LaunchSteps);
+                var s = Views.StepEditorWindow.Create(owner, kind, seed, config.ActionGroups, config.LaunchSteps);
                 if (s == null) return;
                 page.Steps.Add(s);
                 _saveConfig();
                 RefreshMainGroupRows?.Invoke();
             }, presets: true, headerItems: new[] { compound });
 
-            if (owner != null) menu.PlacementTarget = owner;
-            menu.IsOpen = true;
+            Views.StepMenu.OpenAt(owner, menu);
         };
     }
 

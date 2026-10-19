@@ -631,11 +631,10 @@ public partial class MainWindow : Window
         // 复制哪段文字、最小化哪个窗口。开机那一刻没人在场，答案不存在。
         var menu = Views.StepMenu.Build((k, seed) =>
         {
-            var step = Views.StepEditorWindow.Edit(this, seed, k, _config?.ActionGroups ?? new List<ActionGroup>());
+            var step = Views.StepEditorWindow.Create(this, k, seed, _config?.ActionGroups ?? new List<ActionGroup>());
             if (step != null) { _launch?.Add(step); SyncSelection(); }
         }, firstOpenItem: fromMenu, presets: false);
-        menu.PlacementTarget = LAdd;
-        menu.IsOpen = true;
+        Views.StepMenu.OpenAt(LAdd, menu);
     }
 
     // 从开始菜单批量加：选中的每一项都建一条「启动程序」步骤，目标就是那个 .lnk。
@@ -654,7 +653,7 @@ public partial class MainWindow : Window
     {
         var sel = _launch?.SelectedStep;
         if (sel == null) return;
-        var edited = Views.StepEditorWindow.Edit(this, sel, sel.Kind, _config?.ActionGroups ?? new List<ActionGroup>());
+        var edited = Views.StepEditorWindow.Edit(this, sel, _config?.ActionGroups ?? new List<ActionGroup>());
         if (edited != null) { _launch?.ReplaceSelected(edited); SyncSelection(); }
     }
 

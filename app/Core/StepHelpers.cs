@@ -110,4 +110,25 @@ public static class StepHelpers
         => s.Present == "card" ? MessageForm.Card
          : (s.Confirm || (s.OnYes != null && s.OnYes.Type != "none")) ? MessageForm.Confirm
          : MessageForm.Info;
+
+    /// <summary>一个类型起手时的默认动作（写在 Action 那一格里的值）。</summary>
+    //
+    // **Action 是一格共用的数值位，量纲随类型变**：音量用它记「静音/设到几成」，
+    // 窗口用它记「关掉/最小化」，鼠标用它记「按下/双击」，跳过用它记「跳到哪一段」。
+    // 于是「这一格该是什么」只有一处说了算——就是这里。
+    //
+    // 为什么值得收成一处：**新建与换类型这两条路原本各答各的。**
+    // 新建一个「音量」步骤，编辑器给它的是「设到几成」（set）；而把一条「关掉窗口」改成「音量」，
+    // 音量那个下拉里没有「关掉窗口」这一项，于是它落回**第一项**——「静音」。
+    // 同一个类型，两种起手，而那个落回是**下拉项的顺序**决定的，看着像设计，其实不是。
+    // 现在两条路都走这里：换类型时新类型的那一格起手就是它的默认动作。
+    //
+    // 用不上的类型返回空串（那一格对它们没有意义）。
+    public static string DefaultActionFor(string kind) => kind switch
+    {
+        "volume" => "set",     // 「设到几成」——比「静音」更像一个可调的默认
+        "window" => "close",
+        "mouse" => "down",
+        _ => "",
+    };
 }

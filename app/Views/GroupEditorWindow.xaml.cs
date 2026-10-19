@@ -268,7 +268,7 @@ public partial class GroupEditorWindow : Window
 
     private void AddStepOf(ToolItem it)
     {
-        var step = StepEditorWindow.Edit(this, it.Seed, it.Kind, StepGroups, insideGroup: true);
+        var step = StepEditorWindow.Create(this, it.Kind, it.Seed, StepGroups, insideGroup: true);
         if (step == null) return;
         step.ParentId = ParentIdForNewStep() ?? "";
         int pos = StepHelpers.InsertPosition(Sel, _rows.Count);
@@ -326,7 +326,7 @@ public partial class GroupEditorWindow : Window
         int i = Sel;
         if (i < 0 || i >= _rows.Count) return;
         var step = _rows[i].Step;
-        var edited = StepEditorWindow.Edit(this, step, step.Kind, StepGroups, insideGroup: true);
+        var edited = StepEditorWindow.Edit(this, step, StepGroups, insideGroup: true);
         if (edited != null) { _rows[i] = new StepRowVm(edited, () => { }); Steps.SelectedIndex = i; }
     }
 
@@ -613,12 +613,8 @@ public partial class GroupEditorWindow : Window
                                    IReadOnlyList<(string Key, string Owner)> functionHotkeys)
     {
         var dlg = new GroupEditorWindow(group ?? new ActionGroup { Name = "" }, groups, functionHotkeys) { Owner = owner };
-        // owner 为 null 时必须自己找位置、自己保证看得见：这两个入口都能从**面板**进来
-        // （面板一格右键 → 编辑；主窗口收在托盘时 App 传的就是 null），而面板此刻已经自己关掉了。
-        // 不兜底的话，WindowStartupLocation=CenterOwner 没有 owner 可居中、Topmost 也没置，
-        // 于是模态开在任意位置、压在所有窗口后面 —— 用户看到面板消失、什么都没出现，
-        // 而一个模态框正拦着后续操作。BrandDialog 与面板管理器都已经这么兜了（同款说明见那两处）。
-        if (owner == null) { dlg.WindowStartupLocation = WindowStartupLocation.CenterScreen; dlg.Topmost = true; }
-        return dlg.ShowDialog() == true ? dlg.Result : null;
+        // owner 为 null 时自己找位置、自己保证看得见（理由与那段兜底见 EditorUi.ShowModal：
+        // 这两个入口都能从**面板**进来，而面板此刻已经自己关掉了）。
+        return EditorUi.ShowModal(dlg, owner) == true ? dlg.Result : null;
     }
 }

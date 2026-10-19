@@ -240,19 +240,18 @@ public partial class GestureManagerWindow : Window
 
         var menu = StepMenu.Build((kind, seed) =>
         {
-            var made = StepEditorWindow.Edit(this, seed, kind, _config.ActionGroups);
+            var made = StepEditorWindow.Create(this, kind, seed, _config.ActionGroups);
             if (made == null) return;
             Steps.Add(made);
             Commit(made);
         }, headerItems: new[] { compound });
-        menu.PlacementTarget = AddBtn;
-        menu.IsOpen = true;
+        StepMenu.OpenAt(AddBtn, menu);
     }
 
     private void Edit_Click(object sender, RoutedEventArgs e)
     {
         if (Current is not { } step) return;
-        var edited = StepEditorWindow.Edit(this, step, step.Kind, _config.ActionGroups);
+        var edited = StepEditorWindow.Edit(this, step, _config.ActionGroups);
         if (edited == null) return;
         // 编辑器返回的是**重建**出来的新对象，就地换掉列表里那一个（轨迹已由它自己带回来）。
         int i = Steps.IndexOf(step);
