@@ -2232,4 +2232,5 @@ Protokoll: {1}</value>
   <data name="Gesture_IgnoreHint" xml:space="preserve">In diesen Apps werden Gesten nicht übernommen – die rechte Taste geht direkt an das Programm.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Apps, in denen Gesten aus sind</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Ein Prozessname pro Zeile (zum Beispiel mstsc, vmware). In diesen Apps lässt Clockwork die rechte Taste vollständig in Ruhe – sie geht direkt an das Programm.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Aktionsnamen beim Zeichnen anzeigen</data>
 </root>

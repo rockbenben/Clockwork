@@ -2232,4 +2232,5 @@ Nhật ký: {1}</value>
   <data name="Gesture_IgnoreHint" xml:space="preserve">Trong các ứng dụng này, cử chỉ hoàn toàn không được nhận — chuột phải đi thẳng về ứng dụng.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Ứng dụng không dùng cử chỉ</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Mỗi dòng một tên tiến trình (ví dụ mstsc, vmware). Trong các ứng dụng này, Clockwork không đụng tới chuột phải — nó đi thẳng về ứng dụng.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Hiện tên hành động khi đang vẽ</data>
 </root>

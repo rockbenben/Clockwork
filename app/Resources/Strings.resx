@@ -2232,4 +2232,5 @@
   <data name="Gesture_IgnoreHint" xml:space="preserve">在这些程序里完全不接管手势：右键原样交给程序自己。</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">不接管手势的程序</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">一行一个进程名（例如 mstsc、vmware）。在这些程序里，Clockwork 完全不碰右键，右键原样交给程序自己。</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">认出轨迹时在旁边显示这一步要做的事</data>
 </root>

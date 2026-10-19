@@ -2232,4 +2232,5 @@ Registro: {1}</value>
   <data name="Gesture_IgnoreHint" xml:space="preserve">Nestes aplicativos os gestos não são capturados — o botão direito vai direto para o programa.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Aplicativos sem gestos</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Um nome de processo por linha (por exemplo, mstsc, vmware). Nestes aplicativos o Clockwork não encosta no botão direito — ele vai direto para o programa.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Mostrar o nome da ação enquanto desenha</data>
 </root>

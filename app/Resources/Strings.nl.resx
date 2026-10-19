@@ -2232,4 +2232,5 @@ Log: {1}</value>
   <data name="Gesture_IgnoreHint" xml:space="preserve">In deze apps worden geen gebaren herkend — de rechtermuisknop gaat rechtstreeks naar het programma.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Apps zonder gebaren</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Eén procesnaam per regel (bijvoorbeeld mstsc, vmware). In deze apps raakt Clockwork de rechtermuisknop niet — die gaat rechtstreeks naar het programma.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Naam van de actie tonen tijdens het tekenen</data>
 </root>

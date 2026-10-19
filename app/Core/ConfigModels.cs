@@ -452,6 +452,17 @@ public sealed class AppSettings
     // 「chrome」与「chrome.exe」等价，带路径也等价。判据在 GestureGate.IsIgnoredApp（纯函数、有测试）。
     public List<string> GestureIgnoreApps { get; set; } = new();
 
+    /// <summary>画到一半认出某条手势时，笔迹旁边报一句「这将要做的事」。</summary>
+    //
+    // 为什么需要这一格：笔迹「亮了」只说明**认出形状了**，不说明**认出的是哪一个动作**。
+    // 而手势是**分应用**的——同一个 ↑ 在浏览器里是「搜索」、在编辑器里是「复制」，
+    // 于是「亮了」这件事本身是有歧义的：用户知道认出来了，却不知道松手会发生什么。
+    // 一个不确定的反馈比没有反馈更糟：它让人以为已经知道会发生什么，于是不再确认。
+    //
+    // 默认开：分应用绑定一开，「亮了但不知道是哪件事」就从罕见变成常态。
+    // 这一格是**可关的**：有人要那种极简的「只有一条线」的手感，翻掉它即可。
+    public bool GestureShowActionLabel { get; set; } = true;
+
     public int PanelSchema { get; set; }
     public string Language { get; set; } = "";   // 空=跟随系统显示语言（App 启动时解析成具体 code 并落盘）
 

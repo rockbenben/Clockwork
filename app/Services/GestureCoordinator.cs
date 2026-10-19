@@ -418,13 +418,13 @@ internal sealed class GestureCoordinator
     // 500ms 的一笔在 60Hz 上约 30 个点。14MB/帧 × 30 帧 ≈ 420MB/笔，摊到每帧约 1.4ms
     //（按 10GB/s 的拷贝带宽），**够不上「把 UI 线程按住数秒」的量级**——渲染压力真有那么大时，
     // 证据在卡顿行的 alloc= 增量里，不在这条注释里。
-    private void TrailPoint(int x, int y, bool armed)
+    private void TrailPoint(int x, int y, bool armed, LaunchStep? hit)
     {
         // **先锁存再干活**：卡顿可能就发生在下面那句调用里面，而卡顿行是解卡之后才写的
         //（见 _trailUpSinceStall）。放在前面，这一笔开头那一下就已经把「窗亮着」记下了。
         _trailUpSinceStall |= _trail?.IsVisible == true;
         long t0 = Core.UiStallWatch.Begin();
-        try { _trail?.Point(x, y, armed); }
+        try { _trail?.Point(x, y, armed, hit); }
         finally { Core.UiStallWatch.End("trail-point", t0); }
         // 再锁一次：第一个采样点不显窗（第 2 个才 Show），所以「本句把它点亮」也要算进来。
         _trailUpSinceStall |= _trail?.IsVisible == true;
@@ -663,14 +663,23 @@ internal sealed class GestureCoordinator
         int middleTolerance = wantPress
             ? Math.Max(6, (int)Math.Round(6 * Win32.PrimaryScale()))
             : 0;
-        if (wantGesture && _trail != null) _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
+        if (wantGesture && _trail != null)
+        {
+            _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
+            // 笔迹旁那句「这将是哪件事」是**另一件事**（可关），与笔迹本身分开管。
+            _trail.ShowActionLabel(_config.Settings.GestureShowActionLabel);
+        }
         if (_mouseHook != null && _mouseHookMs == ms && _mouseHookGesture == wantGesture
             && _mouseHookMinLeg == minLeg && _mouseHookTolerance == middleTolerance) return;   // 已经是想要的状态
         DisposeMouseHook("reapply");
         var gesture = wantGesture
             // liveEveryPoints: 8 —— LiveMatch 只为笔迹变色服务，按新采样点节流（判据与理由见
             // GestureGate.LiveMatch）。测试里的 gate 默认不节流，语义保持「每点即答」。
-            ? new GestureGate((p, proc) => GestureGate.Match(_config.Gestures, p, proc) != null, minLeg, liveEveryPoints: 8)
+            //
+            // 用**解析版**构造器（返回命中的那一步，而不是一个 bool）：笔迹旁要报「这将是哪件事」，
+            // 而手势是分应用的——同一个 ↑ 在浏览器里是「搜索」、在编辑器里是「复制」，
+            // 于是「亮了」本身是有歧义的，只答一个 bool 就把那点信息丢掉了。
+            ? new GestureGate((p, proc) => GestureGate.Match(_config.Gestures, p, proc), minLeg, liveEveryPoints: 8)
             : null;
         // 覆盖窗跟着 gate 走：装了手势才建，卸了就关——没配手势的人不该多出一扇窗，哪怕它是隐藏的。
         if (wantGesture)
@@ -687,6 +696,7 @@ internal sealed class GestureCoordinator
             ApplyStallWatch(true);
             _trail ??= new Views.GestureTrailWindow();
             _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
+            _trail.ShowActionLabel(_config.Settings.GestureShowActionLabel);
             // 探针跟钩子同起同收。**起在钩子装上之前**：钩子一装上就可能收到右键，
             // 而那一刻它要问的两句答案得有人在算。
             _probe ??= new Native.HookProbe();

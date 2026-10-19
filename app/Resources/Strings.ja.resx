@@ -2232,4 +2232,5 @@
   <data name="Gesture_IgnoreHint" xml:space="preserve">これらのアプリではジェスチャーを使いません。右ボタンはそのままプログラムに渡ります。</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">ジェスチャーを使わないアプリ</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">1行に1つ、プロセス名（例：mstsc、vmware）。これらのアプリでは Clockwork は右ボタンに一切触れません。そのままプログラムに渡ります。</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">軌跡を認識したときに実行する操作を表示する</data>
 </root>

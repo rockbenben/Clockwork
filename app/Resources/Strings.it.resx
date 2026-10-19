@@ -2232,4 +2232,5 @@ Registro: {1}</value>
   <data name="Gesture_IgnoreHint" xml:space="preserve">In queste app le gesture non vengono gestite: il pulsante destro va direttamente al programma.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">App senza gesti</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Un nome di processo per riga (ad esempio mstsc, vmware). In queste app Clockwork non tocca il pulsante destro: va direttamente al programma.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Mostra il nome dell’azione mentre tracci</data>
 </root>

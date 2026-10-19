@@ -113,6 +113,10 @@
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,14,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <!-- 两列：左边那列按余量伸缩，右边那列是「关闭」。这一分是**为了窄窗不压字**——
                  窗能被拖到 640 宽（MinWidth），而这排东西的宽度随语言变：俄语那一行
                  「Чувствительность […] След […] Игнорируемые приложения…」在 640 下放不下，
@@ -133,6 +137,10 @@
                 <Button x:Name="IgnoreAppsBtn" MinWidth="0" Padding="10,3" VerticalAlignment="Center"
                         Content="{loc:Loc Gesture_IgnoreApps}" Click="IgnoreApps_Click"/>
             </WrapPanel>
+            <!-- 笔迹旁那句「这将要做的事」。**它与笔迹本身是两件事**：笔迹回答「我画到哪了」，
+                 这一句回答「松手会发生什么」，所以它有自己的开关。 -->
+            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="ShowActionLabelChk" Content="{loc:Loc Gesture_ShowActionLabel}"
+                      VerticalAlignment="Center" Margin="0,10,0,0" Click="ShowActionLabel_Changed"/>
             <Button Grid.Row="0" Grid.Column="1" Content="{loc:Loc Btn_Close}" Width="96" Margin="16,0,0,0"
                     IsCancel="True" Click="Close_Click"/>
         </Grid>

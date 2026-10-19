@@ -2232,4 +2232,5 @@
   <data name="Gesture_IgnoreHint" xml:space="preserve">इन ऐप्स में जेस्चर नहीं लिए जाते — दायाँ बटन सीधे प्रोग्राम को जाता है।</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">वे ऐप जहाँ जेस्चर बंद हैं</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">हर पंक्ति में एक प्रोसेस नाम (जैसे mstsc, vmware)। इन ऐप्स में Clockwork दायाँ बटन को बिल्कुल नहीं छूता — वह सीधे प्रोग्राम को जाता है।</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">खींचते समय क्रिया का नाम दिखाएँ</data>
 </root>

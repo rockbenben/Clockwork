@@ -2232,4 +2232,5 @@
   <data name="Gesture_IgnoreHint" xml:space="preserve">لا تُلتقط الإيماءات في هذه التطبيقات — يذهب الزر الأيمن إلى البرنامج مباشرة.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">التطبيقات التي لا تعمل فيها الإيماءات</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">اسم عملية في كل سطر (مثل mstsc أو vmware). في هذه التطبيقات لا يلمس Clockwork الزر الأيمن إطلاقًا — يذهب إلى البرنامج كما هو.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">أظهر اسم الإجراء أثناء الرسم</data>
 </root>

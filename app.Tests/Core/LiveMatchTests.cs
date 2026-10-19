@@ -73,4 +73,79 @@ public class LiveMatchTests
         g.OnRightUp();
         Assert.False(g.LiveMatch());
     }
+
+    // ── 命中的是**哪一条** ──
+    //
+    // 笔迹「亮了」只说明认出了**形状**，不说明认出了**哪一个动作**。而手势是分应用的——
+    // 同一个 ↑ 在浏览器里是「搜索」、在编辑器里是「复制」，于是「亮了」本身是有歧义的。
+    // 笔迹旁要报「这将是哪件事」，就得知道命中的是哪一条，而 bool 把这个信息丢掉了。
+    //
+    // 这一族用的是**解析版**构造器（回调返回命中的那一步）。只答「匹不匹配」的那一档
+    // 本来就不知道是哪一条，如实答 null——那不是缺陷，是那一档的能力边界。
+
+    private static LaunchStep Step(string gesture) => new() { Gesture = gesture, Label = gesture };
+
+    [Fact]
+    public void The_matched_step_is_reported()
+    {
+        var hit = Step("D");
+        var g = new GestureGate((p, _) => p == "D" ? hit : null, MinLeg);
+        g.OnRightDown(500, 500);
+        for (int i = 1; i <= 30; i++) g.OnMove(500, 500 + i * 5);
+        Assert.True(g.LiveMatch());
+        Assert.Same(hit, g.LiveStep);
+    }
+
+    // 没命中的时候这一格是空的——它答的是「哪一条」，不是「有没有」。
+    [Fact]
+    public void No_step_is_reported_when_nothing_matches()
+    {
+        var g = new GestureGate((p, _) => (LaunchStep?)null, MinLeg);
+        g.OnRightDown(500, 500);
+        for (int i = 1; i <= 30; i++) g.OnMove(500, 500 + i * 5);
+        Assert.False(g.LiveMatch());
+        Assert.Null(g.LiveStep);
+    }
+
+    // 继续画会换成另一条：这一格描述的是**此刻这一串**的命中结果。
+    [Fact]
+    public void The_reported_step_follows_the_shape_as_it_grows()
+    {
+        var up = Step("U");
+        var upDown = Step("UD");
+        var g = new GestureGate((p, _) => p == "U" ? up : p == "UD" ? upDown : null, MinLeg);
+        g.OnRightDown(500, 500);
+        for (int i = 1; i <= 40; i++) g.OnMove(500, 500 - i * 5);   // 只画了 ↑
+        Assert.True(g.LiveMatch());
+        Assert.Same(up, g.LiveStep);
+        for (int i = 1; i <= 30; i++) g.OnMove(502, 300 + i * 5);   // 补上 ↓
+        Assert.True(g.LiveMatch());
+        Assert.Same(upDown, g.LiveStep);
+    }
+
+    // 新的一笔开始时上一笔的结论必须作废：它描述的是「刚画的那一笔」，
+    // 活得比那一笔久就会骗人（松手判定读的是此刻的形状，而这一格报的是上一笔的动作）。
+    [Fact]
+    public void A_new_stroke_clears_the_reported_step()
+    {
+        var hit = Step("D");
+        var g = new GestureGate((p, _) => p == "D" ? hit : null, MinLeg);
+        g.OnRightDown(500, 500);
+        for (int i = 1; i <= 30; i++) g.OnMove(500, 500 + i * 5);
+        Assert.True(g.LiveMatch());
+        Assert.Same(hit, g.LiveStep);
+        g.OnRightDown(500, 500);
+        Assert.Null(g.LiveStep);
+    }
+
+    // 只答「匹不匹配」的那一档：这一格如实为空，而不是去猜一条。
+    [Fact]
+    public void The_bool_constructor_reports_no_step()
+    {
+        var g = new GestureGate(p => p == "D", MinLeg);
+        g.OnRightDown(500, 500);
+        for (int i = 1; i <= 30; i++) g.OnMove(500, 500 + i * 5);
+        Assert.True(g.LiveMatch());
+        Assert.Null(g.LiveStep);
+    }
 }

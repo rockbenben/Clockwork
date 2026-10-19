@@ -295,7 +295,7 @@ public class StallProbeWiringTests
         AssertWraps(Body(Src("app", "Services", "GestureCoordinator.cs"), "private void DisposeMouseHook"),
                     "hook-dispose:", "_mouseHook.Dispose()");
         AssertWraps(Body(Src("app", "Services", "GestureCoordinator.cs"), "private void TrailPoint"),
-                    "trail-point", "_trail?.Point(x, y, armed)");
+                    "trail-point", "_trail?.Point(x, y, armed, hit)");
         AssertWraps(Body(Src("app", "Services", "GestureCoordinator.cs"), "private void TrailEnd"),
                     "trail-finish", "_trail?.Finish()");
     }

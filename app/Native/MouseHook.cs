@@ -125,7 +125,9 @@ public sealed class MouseHook : IDisposable
     // 单独留一格是因为进程名在按下那一刻多半还没算出来，抬起前要按同一个 pid 再问一次
     // （见 CallbackCore 里那段「抬起那一刻再问一次」）。
     private uint _gesturePid;
-    private readonly Action<int, int, bool> _trailPoint;   // 第三个参数：画到此刻已经命中了吗（笔迹据此变色）
+    private readonly Action<int, int, bool, LaunchStep?> _trailPoint;
+    // 第三个参数：画到此刻已经命中了吗（笔迹据此变色）；第四个：命中的是**哪一条**（笔迹据此报「这将是哪件事」）。
+    // 第四个只在用了解析版构造器时非空——只答「匹不匹配」的那一档本来就知道不了是哪一条，如实答 null。
     private readonly Action _trailEnd;
     private readonly Action<Action> _post;
     private readonly Func<bool> _modifierHeld;
@@ -149,6 +151,9 @@ public sealed class MouseHook : IDisposable
     private readonly object _trailLock = new();
     private int _trailX, _trailY;
     private bool _trailArmed;
+    // 命中的是哪一条。合帧时它跟着坐标一起换掉——它是**这一串**的属性：
+    // 继续画下去可能换成另一条，笔迹旁那句「这将是哪件事」也得跟着换。
+    private LaunchStep? _trailHit;
     private int _trailQueued;
 
     // 委托必须由本对象持有：SetWindowsHookEx 只存了个裸函数指针，GC 不知道它被引用着。
@@ -256,10 +261,13 @@ public sealed class MouseHook : IDisposable
     /// <param name="gesture">右键手势的判定器；null 表示不监听右键——没配手势时右键必须一根毫毛都不动。</param>
     /// <param name="fireGesture">手势命中时要做的事，参数是方向串与起笔点所在的顶层窗口句柄（取不到为 Zero）。
     /// 同 fire，经 post 派发；句柄在按下那一刻解析，动作里的「当前窗口」打它而不是前台窗口。</param>
-    /// <param name="trailPoint">屏幕上那条笔迹又画到了哪（物理像素），以及**画到此刻是否已经命中**。
+    /// <param name="trailPoint">屏幕上那条笔迹又画到了哪（物理像素），**画到此刻是否已经命中**，
+    /// 以及命中的是**哪一条**（没命中为 null）。
     /// 同样经 post——低级钩子回调里有 LowLevelHooksTimeout 的预算，绝不在这里碰 UI。
     /// 命中与否在回调线程上算完（GestureGate.LiveMatch，纯计算、微秒级）再把结论捎过去：
-    /// 把 gate 的内部状态交给 UI 线程去读，会撞上「钩子线程正往里加采样点」的竞态。</param>
+    /// 把 gate 的内部状态交给 UI 线程去读，会撞上「钩子线程正往里加采样点」的竞态。
+    /// 第四个参数是那一条**步骤**，不是它的文案：文案要查 i18n 资源，而首次加载卫星程序集
+    /// 可能要几毫秒——那几毫秒落在钩子回调里，是 300ms 预算上最不该花的那笔。</param>
     /// <param name="trailEnd">笔迹收笔（抬起、或钩子卸载）。</param>
     /// <param name="unmatched">画出来了却没绑任何东西时报一声，参数是画出来的方向串。</param>
     /// <param name="modifierHeld">修饰键按住判定（单测注入用，生产留空查物理键态）。</param>
@@ -275,14 +283,14 @@ public sealed class MouseHook : IDisposable
     /// 命中名单时整笔放行：右键完全交给程序自己，一个字节都不碰。</param>
     public MouseHook(int holdMs, Action fire, Action<Action> post,
                      GestureGate? gesture = null, Action<string, IntPtr>? fireGesture = null,
-                     Action<int, int, bool>? trailPoint = null, Action? trailEnd = null,
+                     Action<int, int, bool, LaunchStep?>? trailPoint = null, Action? trailEnd = null,
                      Action<string>? unmatched = null, Func<bool>? modifierHeld = null,
                      int moveTolerancePhysical = 0, Func<bool>? canInject = null,
                      HookProbe? probe = null,
                      Func<uint, string>? procNameForPid = null, Func<uint, bool>? mayEngage = null,
                      Func<string, bool>? ignoredApp = null)
     {
-        _trailPoint = trailPoint ?? ((_, _, _) => { });
+        _trailPoint = trailPoint ?? ((_, _, _, _) => { });
         _ignoredApp = ignoredApp ?? (_ => false);
         _trailEnd = trailEnd ?? (() => { });
         _gate = holdMs > 0
@@ -512,9 +520,9 @@ public sealed class MouseHook : IDisposable
     private void Arm(bool on) => Set(_alarm, on ? _holdMs : System.Threading.Timeout.Infinite);
 
     // 笔迹采样点合帧（见字段处注释）。Callback（钩子线程）调用，只更新最新值、至多排一个 drain。
-    private void ScheduleTrail(int x, int y, bool armed)
+    private void ScheduleTrail(int x, int y, bool armed, LaunchStep? hit)
     {
-        lock (_trailLock) { _trailX = x; _trailY = y; _trailArmed = armed; }
+        lock (_trailLock) { _trailX = x; _trailY = y; _trailArmed = armed; _trailHit = hit; }
         if (Interlocked.Exchange(ref _trailQueued, 1) == 0)
         {
             // _post 在调度器关闭时会抛：把号放回去，免得标志永远卡在 1、下一笔一笔都画不出来。
@@ -529,8 +537,9 @@ public sealed class MouseHook : IDisposable
         Volatile.Write(ref _trailQueued, 0);
         int x, y;
         bool armed;
-        lock (_trailLock) { x = _trailX; y = _trailY; armed = _trailArmed; }
-        _trailPoint(x, y, armed);
+        LaunchStep? hit;
+        lock (_trailLock) { x = _trailX; y = _trailY; armed = _trailArmed; hit = _trailHit; }
+        _trailPoint(x, y, armed, hit);
     }
 
     /// <summary>距离回调最后一次被叫到过了多久（毫秒）。从没被叫到过时返回 long.MaxValue。</summary>
@@ -1222,7 +1231,7 @@ public sealed class MouseHook : IDisposable
                 // 于是一条已经记成 Swallow 的事件实际上 Pass 了下去，gate 的状态与真实发生的事分家。
                 // 笔迹画不画得出来是小事，裁决对不上号是大事。（定时器里那两处已经是这么写的。）
                 // 起点单独排一次 Finish 在前、起点 drain 在后：FIFO 保证旧笔先收、新笔才落第一点。
-                if (msg == WM_RBUTTONDOWN) { try { _post(_trailEnd); } catch { } ScheduleTrail(data.X, data.Y, false); }
+                if (msg == WM_RBUTTONDOWN) { try { _post(_trailEnd); } catch { } ScheduleTrail(data.X, data.Y, false, null); }
                 else { try { _post(_trailEnd); } catch { } }
                 switch (gv)
                 {
@@ -1290,7 +1299,11 @@ public sealed class MouseHook : IDisposable
                     // 命中与否在**钩子线程**上算完再捎过去：LiveMatch 是纯计算，且按新采样点节流
                     // gate 状态只在这条线程上读写，不存在竞态（旧实现里这条线程就是 UI 线程）。
                     // 投递走合帧：一笔几百个采样点不会往 UI 队列塞几百次整屏分层窗重合成。
-                    ScheduleTrail(data.X, data.Y, _gesture.LiveMatch());
+                    bool armed = _gesture.LiveMatch();
+                    // 命中的是**哪一条**也一起捎过去：笔迹旁那句「这将是哪件事」要靠它。
+                    // 捎的是**步骤**而不是文案——文案要查 i18n 资源，那件事留给 UI 线程做
+                    // （见构造器 trailPoint 的注释）。
+                    ScheduleTrail(data.X, data.Y, armed, armed ? _gesture.LiveStep : null);
                 }
             }
             if (_gate == null) return Chain(code, wParam, lParam);

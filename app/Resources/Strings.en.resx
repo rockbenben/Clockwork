@@ -2232,4 +2232,5 @@ Log: {1}</value>
   <data name="Gesture_IgnoreHint" xml:space="preserve">Gestures are not taken over in these apps — the right button goes straight to the program.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Apps where gestures are off</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">One process name per line (for example mstsc, vmware). In these apps Clockwork leaves the right button completely alone — it goes straight to the program.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Show the action name while drawing</data>
 </root>

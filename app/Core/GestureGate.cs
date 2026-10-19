@@ -183,6 +183,13 @@ public sealed class GestureGate
     }
 
     private readonly Func<string, string?, bool> _matches;
+    // 「画出这一串时命中了**哪一个**动作」。为空表示调用方只关心「匹不匹配」。
+    //
+    // 为什么多出这一格：笔迹「亮了」只说明认出了**形状**，不说明认出了**哪一个动作**。
+    // 而手势是分应用的——同一个 ↑ 在浏览器里是「搜索」、在编辑器里是「复制」，
+    // 于是「亮了」本身是有歧义的。笔迹旁边要能报出「这将是哪件事」，
+    // 就得知道命中的是哪一条，而 bool 把这个信息丢掉了。
+    private readonly Func<string, string?, LaunchStep?>? _resolve;
     private readonly int _minLegPx;
     private readonly int _stepPx;
 
@@ -232,6 +239,9 @@ public sealed class GestureGate
     private readonly int _liveEvery;
     private int _liveAt = int.MinValue / 2;    // 上次真算时的 _pts.Count；初值让第一次问必答（不会溢出：点数控在 1024）
     private bool _live;
+    // 命中的是**哪一条**（只在解析版构造器下有值）。与 _live 同一份缓存、同一个节流窗口：
+    // 它描述的是「此刻这一串」的结果，所以继续画下去它会跟着翻。
+    private LaunchStep? _liveStep;
     /// <summary>LiveMatch 真的重跑了 Analyze 的次数。节流是否生效唯一的可观测面，测试靠它钉。</summary>
     public int LiveComputations { get; private set; }
 
@@ -275,6 +285,26 @@ public sealed class GestureGate
         _liveEvery = liveEveryPoints < 0 ? 0 : liveEveryPoints;
     }
 
+    /// <param name="resolve">画出这一串时命中了哪一条手势（没命中返回 null）。</param>
+    /// <param name="minLegPx">一条腿至少这么长才算数。短于它的（拐角混合、手抖）并入邻居。
+    /// 采样间隔取它的四分之一：采样越细，拐角的混合占的比重越小。</param>
+    /// <param name="liveEveryPoints">LiveMatch 节流：距上次真算不足这么多**新采样点**时复用上次的结论。
+    /// 0 = 不节流（默认；测试与一切按「每点即答」写的调用方照旧）。生产接线传 8（见 GestureCoordinator）。</param>
+    ///
+    /// 这一档比上面那个「只答匹不匹配」的强：它答得出**是哪一件事**，
+    /// 于是笔迹旁能报出「这将要做的事」——分应用绑定一开，「亮了」本身是有歧义的（见 _resolve 字段注释）。
+    /// 上面那一档保留给不关心命中的调用方（多数是测试）：它们要的本来就是一个 bool。
+    public GestureGate(Func<string, string?, LaunchStep?> resolve, int minLegPx = 40, int liveEveryPoints = 0)
+    {
+        _resolve = resolve;
+        // bool 那一档由 resolve 派生，两条路永远答同一个问题——否则「松手时按它判、发不发」与
+        // 「画到一半按它判、亮不亮」可能给出两个答案，而那正是最难查的一种不一致。
+        _matches = (p, proc) => resolve(p, proc) != null;
+        _minLegPx = minLegPx < 12 ? 12 : minLegPx;
+        _stepPx = Math.Max(4, _minLegPx / 4);
+        _liveEvery = liveEveryPoints < 0 ? 0 : liveEveryPoints;
+    }
+
     public bool Pending => _pending;
 
     /// <summary>已记下的采样点数。屏幕上那条笔迹靠它判断「刚才这一下有没有新点」——
@@ -311,16 +341,36 @@ public sealed class GestureGate
         _liveAt = _pts.Count;
         LiveComputations++;
         var p = Analyze();
-        _live = p.Length > 0 && _matches(p, targetProcess ?? ContextProcess);
+        var proc = targetProcess ?? ContextProcess;
+        if (_resolve != null)
+        {
+            // 命中的是**哪一个**动作也一并记下：笔迹旁要报「这将是哪件事」（见 _resolve 字段注释）。
+            _liveStep = p.Length > 0 ? _resolve(p, proc) : null;
+            _live = _liveStep != null;
+        }
+        else
+        {
+            _liveStep = null;
+            _live = p.Length > 0 && _matches(p, proc);
+        }
         return _live;
     }
+
+    /// <summary>画到此刻为止命中的是**哪一条**手势（没命中为 null）。</summary>
+    //
+    // 只在用了解析版构造器（返回 LaunchStep 的那一档）时非空——只答「匹不匹配」的那一档
+    // 本来就不知道是哪一条，如实答 null。
+    //
+    // 它描述的是**此刻这一串**的命中结果：继续画下去可能换成另一条，于是这一格会跟着翻。
+    // 新的一笔开始时（OnRightDown）立刻清空——它绝不能活得比它描述的那一笔久。
+    public LaunchStep? LiveStep => _liveStep;
 
     public PressVerdict OnRightDown(int x, int y)
     {
         // 重复按下（上一次的抬起被丢了）：按新的重新起算，与 LongPressGate 同理。
         _pending = true;
         ContextProcess = null;
-        _liveAt = int.MinValue / 2; _live = false;   // 新一笔：LiveMatch 的节流缓存作废，第一次问必须真算
+        _liveAt = int.MinValue / 2; _live = false; _liveStep = null;   // 新一笔：LiveMatch 的节流缓存作废，第一次问必须真算
         // **Path 必须一起清掉。** 它描述的是「刚画完的那一笔」，一旦活得比那一笔久就会骗人：
         // 上层对 Swallow 这一档读它去报「你画的 X 没绑动作」，而按下本身也返回 Swallow，
         // 于是右键**点一下**都会拿上一笔的残留再弹一次提示。调阈值治不了——那串不是这次画的。
@@ -501,7 +551,7 @@ public sealed class GestureGate
     public void Reset()
     {
         _pending = false; ContextProcess = null; Path = ""; _pts.Clear();
-        _liveAt = int.MinValue / 2; _live = false;   // 与按下同规矩：缓存不许活得比它描述的那一笔久
+        _liveAt = int.MinValue / 2; _live = false; _liveStep = null;   // 与按下同规矩：缓存不许活得比它描述的那一笔久
     }
 
     // 两个角之间的最短夹角（度），处理 ±180 的绕回。

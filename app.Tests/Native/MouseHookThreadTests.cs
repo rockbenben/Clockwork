@@ -141,7 +141,7 @@ public class MouseHookThreadTests
         var points = new List<(int X, int Y, bool Armed)>();
         var ends = 0;
         var hook = new MouseHook(0, () => { }, posted.Add, gesture: gate,
-            trailPoint: (x, y, armed) => points.Add((x, y, armed)),
+            trailPoint: (x, y, armed, hit) => points.Add((x, y, armed)),
             trailEnd: () => ends++);
 
         // 按下：先收上一笔、再落起点，两个独立操作。

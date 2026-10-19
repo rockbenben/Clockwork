@@ -79,6 +79,26 @@ public sealed class GestureTrailWindow : Window
     };
 
     private readonly Border _note;
+    // 画到一半、已经认出某条手势时，笔迹旁那句「这将是哪件事」。
+    //
+    // 为什么需要它：笔迹「亮了」只说明认出了**形状**，不说明认出了**哪一个动作**。
+    // 而手势是分应用的——同一个 ↑ 在浏览器里是「搜索」、在编辑器里是「复制」，
+    // 于是「亮了」本身是有歧义的：用户知道认出来了，却不知道松手会发生什么。
+    // 一个不确定的反馈比没有反馈更糟——它让人以为已经知道会是什么，于是不再确认。
+    //
+    // **就地点在光标旁边，与那条线同一块地方**：不弹卡、不出声、不闪，
+    // 只是线旁边多了一行小字，眼睛本来就在那儿。
+    // 收笔即消失（它描述的是「正在画的那一笔」，那一笔结束了它就没有对象了）。
+    private readonly TextBlock _hintText = new()
+    {
+        FontSize = 15,
+        FontWeight = FontWeights.SemiBold,
+        Foreground = new SolidColorBrush(Color.FromRgb(0xF2, 0xF5, 0xFA)),
+    };
+    private readonly Border _hint;
+    // 这一格可关（AppSettings.GestureShowActionLabel）：有人要那种「只有一条线」的手感。
+    private bool _hintEnabled = true;
+    private string? _hintShown;   // 上一次摆出来的那句，变了才重摆（摆一次要重排一次版）
     private readonly System.Windows.Threading.DispatcherTimer _noteTimer = new();
     // 收笔之后**推迟**藏窗用的表。为什么要推迟，见 HideSoon——那是「上一笔的轨迹又回来了」
     // 唯一的解，也是这扇窗上最容易被人顺手改回 `Hide()` 的一处。
@@ -137,6 +157,16 @@ public sealed class GestureTrailWindow : Window
             Child = _noteText,
             Visibility = Visibility.Collapsed,
         };
+        // 那句「这将是哪件事」用同一块底子，但小一号——它是**从属于笔迹**的一句，
+        // 不是另一条消息。药丸（没绑上时的那句）比它重要一级，所以字号大一号。
+        _hint = new Border
+        {
+            Background = new SolidColorBrush(Color.FromArgb(0xCC, 0x1C, 0x1E, 0x22)),
+            CornerRadius = new CornerRadius(6),
+            Padding = new Thickness(9, 3, 9, 3),
+            Child = _hintText,
+            Visibility = Visibility.Collapsed,
+        };
         // 药丸到时收掉药丸，窗也一起藏——收笔后窗本就该藏着（见 Finish）。藏之前先让空画面
         // 合成出去，理由与收笔那条一模一样（见 HideSoon）：藏的那一刻位图里留的是什么，
         // 下一笔开头贴到屏上的就是什么——药丸同样是「上一笔留下的东西」。
@@ -153,6 +183,7 @@ public sealed class GestureTrailWindow : Window
         var canvas = new Canvas();
         canvas.Children.Add(_halo);
         canvas.Children.Add(_core);
+        canvas.Children.Add(_hint);
         canvas.Children.Add(_note);
         Content = canvas;
     }
@@ -225,6 +256,40 @@ public sealed class GestureTrailWindow : Window
         _noteText.Text = "";
     }
 
+    /// <summary>摆出（或收掉）笔迹旁那句「这将是哪件事」。</summary>
+    // 摆在光标旁边，与那条线同一块地方：眼睛本来就在那儿。
+    // 收笔即收（见 Finish）——它描述的是「正在画的那一笔」，那一笔结束了它就没有对象了。
+    private void UpdateHint(string? label, double x, double y)
+    {
+        if (!_hintEnabled || string.IsNullOrEmpty(label))
+        {
+            HideHint();
+            return;
+        }
+        // 换了句子才重排一次版：摆一次要 Measure 一次，而一笔能来几百个点。
+        if (_hintShown != label) { _hintText.Text = label; _hintShown = label; }
+        if (_hint.Visibility != Visibility.Visible) _hint.Visibility = Visibility.Visible;
+        _hint.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        Canvas.SetLeft(_hint, x + 16);
+        Canvas.SetTop(_hint, y + 16);
+    }
+
+    private void HideHint()
+    {
+        _hint.Visibility = Visibility.Collapsed;
+        _hintShown = null;
+    }
+
+    /// <summary>要不要在笔迹旁报一句「这将是哪件事」（AppSettings.GestureShowActionLabel）。</summary>
+    //
+    // 关掉是**只关这一句**，不是关掉整个笔迹：笔迹本身是另一件事（看得见自己画到哪了），
+    // 由 GestureTrailWidth 管。两件事各自可选。
+    public void ShowActionLabel(bool on)
+    {
+        _hintEnabled = on;
+        if (!on) HideHint();
+    }
+
     /// <summary>显示窗口，但先把整窗 <see cref="UIElement.Opacity"/> 压到 0、下一轮调度再淡回 1。</summary>
     //
     // 藏→重显那一帧，DWM 会先把这扇窗**上次合成的位图**（上一笔那条线）重新顶到屏上，WPF 随后才
@@ -285,7 +350,8 @@ public sealed class GestureTrailWindow : Window
     // 第二个点到位才真正显示：右键**点一下**（没画）只会有起点这一个点，
     // 那时闪出一条线，等于把「右键菜单」变成「屏幕上闪一下再出菜单」。
     /// <param name="armed">画到此刻已经命中某条手势了吗——命中就把笔迹点亮，松手之前就看得见。</param>
-    public void Point(int px, int py, bool armed = false)
+    /// <param name="hit">命中的是**哪一条**（没命中为 null）。笔迹旁那句「这将是哪件事」靠它。</param>
+    public void Point(int px, int py, bool armed = false, Core.LaunchStep? hit = null)
     {
         // **命中就变色。** 从前这条线从头到尾一个样，画对没画对只有松手才知道；
         // 而手势最缺的正是「按下去之前的确认」。Quicker 的手册把这一条写在触发说明里：
@@ -313,6 +379,11 @@ public sealed class GestureTrailWindow : Window
         double x = (px - _originX) / _scale, y = (py - _originY) / _scale;
         _last = new Point(x, y);
         _hasLast = true;
+        // 「这将是哪件事」：**先算这句文案，再决定画不画线**。
+        // 算文案在 UI 线程上做（StepDisplay.StepTitle 要查 i18n 资源），
+        // 而文案算出来是空的时候这一格就该是空的——那正是「没认出来」。
+        string? label = armed && hit != null ? Core.StepDisplay.StepTitle(hit) : null;
+        UpdateHint(label, x, y);
         if (_disabled) return;
         long tAdd = Core.UiStallWatch.Begin();
         try
@@ -345,6 +416,7 @@ public sealed class GestureTrailWindow : Window
     {
         _placed = false;
         SetArmed(false);   // 复位，否则下一笔起手就是亮的（还什么都没画呢）
+        HideHint();        // 那句「这将是哪件事」跟着这一笔一起结束
         _halo.Points.Clear();
         _core.Points.Clear();
         // **`_hasLast` / `_last` 故意不清。** 紧跟着的 Note() 靠它们把「你画的是这个」

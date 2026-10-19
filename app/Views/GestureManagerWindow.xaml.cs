@@ -57,6 +57,7 @@ public partial class GestureManagerWindow : Window
         GesturesOnChk.IsChecked = _config.Settings.GesturesEnabled;
         PaintWatchState();
         PopulateSettings();
+        ShowActionLabelChk.IsChecked = _config.Settings.GestureShowActionLabel;
         PaintIgnoreApps();
         Reload(null);
     }
@@ -422,7 +423,14 @@ public partial class GestureManagerWindow : Window
         }
     }
 
-    private void Close_Click(object sender, RoutedEventArgs e) => Close();
+    // 笔迹旁那句「这将要做的事」。改了当场生效（_save 末尾会重装钩子，
+    // 而笔迹窗的开关是 ApplyMouseHook 顺手推过去的，见 GestureCoordinator）。
+    private void ShowActionLabel_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_loadingSettings) return;
+        _config.Settings.GestureShowActionLabel = ShowActionLabelChk.IsChecked == true;
+        _save();
+    }
 
     // 「这些程序里根本不接管手势」的名单。
     //
@@ -461,4 +469,6 @@ public partial class GestureManagerWindow : Window
             ? string.Join(", ", list)
             : Strings.Get("Gesture_IgnoreHint");
     }
+
+    private void Close_Click(object sender, RoutedEventArgs e) => Close();
 }

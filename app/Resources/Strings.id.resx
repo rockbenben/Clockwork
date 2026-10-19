@@ -2232,4 +2232,5 @@ Log: {1}</value>
   <data name="Gesture_IgnoreHint" xml:space="preserve">Di aplikasi ini gestur tidak diambil — tombol kanan langsung ke programnya.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Aplikasi tanpa gestur</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Satu nama proses per baris (misalnya mstsc, vmware). Di aplikasi ini Clockwork sama sekali tidak menyentuh tombol kanan — ia langsung ke programnya.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Tampilkan nama tindakan saat menggambar</data>
 </root>

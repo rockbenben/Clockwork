@@ -2232,4 +2232,5 @@
   <data name="Gesture_IgnoreHint" xml:space="preserve">이 앱에서는 제스처를 사용하지 않습니다. 오른쪽 버튼은 그대로 프로그램에 전달됩니다.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">제스처를 사용하지 않을 앱</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">한 줄에 프로세스 이름 하나씩(예: mstsc, vmware). 이 앱들에서 Clockwork는 오른쪽 버튼을 전혀 건드리지 않고 그대로 프로그램에 전달합니다.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">그리는 동안 실행할 작업 이름 표시</data>
 </root>

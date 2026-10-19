@@ -100,7 +100,7 @@ public class GestureIgnoreAppTests
             mayEngage: _ => true,
             procNameForPid: _ => "mstsc",
             ignoredApp: proc => GestureGate.IsIgnoredApp(proc, new[] { "mstsc" }),
-            trailPoint: (x, y, armed) => points++,
+            trailPoint: (x, y, armed, hit) => points++,
             trailEnd: () => ends++);
         Assert.False(Swallowed(Send(hook, WM_RBUTTONDOWN, 200, 200)));
         Assert.Equal(0, points);

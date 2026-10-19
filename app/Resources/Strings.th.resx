@@ -2232,4 +2232,5 @@
   <data name="Gesture_IgnoreHint" xml:space="preserve">ในแอปเหล่านี้จะไม่มีการจับจั้มเกสเตอร์ ปุ่มขวาจะส่งตรงไปยังโปรแกรม</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">แอปที่ไม่ใช้จั้มเกสเตอร์</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">พิมพ์ชื่อโปรเซสทีละบรรทัด เช่น mstsc, vmware ในแอปเหล่านี้ Clockwork จะไม่แตะปุ่มขวาเลย ปุ่มจะส่งตรงไปยังโปรแกรม</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">แสดงชื่อคำสั่งขณะวาด</data>
 </root>

@@ -2232,4 +2232,5 @@
   <data name="Gesture_IgnoreHint" xml:space="preserve">В этих приложениях жесты не распознаются — правая кнопка передаётся программе как есть.</data>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Приложения без жестов</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">По одному имени процесса в строке (например, mstsc, vmware). В этих приложениях Clockwork не трогает правую кнопку — она передаётся программе как есть.</data>
+  <data name="Gesture_ShowActionLabel" xml:space="preserve">Показывать название действия во время рисования</data>
 </root>

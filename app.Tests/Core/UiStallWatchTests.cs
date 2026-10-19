@@ -487,7 +487,7 @@ public class UiStallWatchTests
     public void The_trail_latch_is_set_before_the_call_and_also_on_finish()
     {
         var app = AppCode();
-        int p = app.IndexOf("private void TrailPoint(int x, int y, bool armed)");
+        int p = app.IndexOf("private void TrailPoint(int x, int y, bool armed, LaunchStep? hit)");
         Assert.True(p >= 0, "找不到 TrailPoint");
         var pointBody = app.Substring(p, 900);
         int latch = pointBody.IndexOf("_trailUpSinceStall |= ");
