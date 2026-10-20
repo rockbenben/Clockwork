@@ -33,18 +33,24 @@ jobs:
 
       # minimum-expected-tests 是 Microsoft.Testing.Platform 自带的守卫，防「静默 0 测试」：
       # 适配器没加载好时，一个用例不跑却退出 0，绿灯骗人。它取代了原先那段手写解析 .trx 的脚本；
-      # 让 xunit.v3 跑在 MTP 上的两个属性见测试工程的 csproj。实测双向：传 1 通过，传 99999 退出 1。
+      # 让 xunit.v3 跑在 MTP 上的那几处在测试工程的 csproj 与仓库根的 global.json 里。
+      # 实测双向：传 1 通过，传 99999 退出 9（MTP 的「没达到最少用例数」退出码）。
+      #
+      # **`--project` 而不是位置参数**：MTP 模式（global.json 里 "test": { "runner": ... }）
+      # 是 .NET 10 SDK 自带的新 dotnet test 体验，官方文档给的就是这种写法。
+      # 位置参数现在也还认，但那是兼容路径，不是推荐路径。
       - name: Test
         shell: pwsh
         run: |
-          dotnet test app.Tests/Clockwork.Tests.csproj --no-build -c Release -- --minimum-expected-tests 1
+          dotnet test --project app.Tests/Clockwork.Tests.csproj --no-build -c Release -- --minimum-expected-tests 1
           if ($LASTEXITCODE -ne 0) {
-            # MTP 只往 stdout 打汇总行（「Failed: 2, Passed: 1919」），失败用例的名字和断言细节全在
-            # TestResults 里的 .log 文件里。不 dump 出来，红的树只告诉我们「挂了两个」，等于不知道该
-            # 修哪一个——v3.1.2 首发就是卡在这：同一个 commit 在 main 上是绿的，tag 上连挂两次，
-            # 而日志里连一个用例名都没有。
-            Get-ChildItem app.Tests/bin/Release/net10.0-windows/TestResults/*.log -ErrorAction SilentlyContinue |
-              ForEach-Object { "===== $($_.Name) ====="; Get-Content $_ -ErrorAction SilentlyContinue }
+            # 失败用例的名字与断言细节**直接打在上面的 stdout 里**（MTP 2.x 的行为：
+            # 用例名、Expected/Actual、栈全在，不需要另找文件）。
+            # 所以这里只需要把非零退出码变成红灯。
+            #
+            # 早先这段是从 TestResults/*.log 里 dump 的（v3.1.2 首发就是卡在那：日志里连一个
+            # 用例名都没有）。MTP 2 起那个文件**不再更新**——继续 dump 只会掏出一份上一次
+            # 跑剩的旧日志，比不 dump 更误导人。所以这段 dump 被删掉了，不是被挪走了。
             exit 1
           }
 

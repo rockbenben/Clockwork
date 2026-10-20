@@ -17,9 +17,14 @@
       VSTest 那侧的零件，已无事可做，一并移除。
       代价：IDE 里发现测试需要 MTP 支持（VS 17.14+ / 较新 Rider）。要用 Test Explorer 就把
       Microsoft.NET.Test.Sdk + xunit.runner.visualstudio 加回来，命令行不受影响。
+
+      **TestingPlatformDotnetTestSupport 没有了**：那是「让 VSTest 模式下的 dotnet test 去跑 MTP 程序」
+      的开关，而 MTP 2 起这条路在 .NET 10 SDK 上已被移除（不加 global.json 就会报
+      「Testing with VSTest target is no longer supported by Microsoft.Testing.Platform on .NET 10 SDK
+      and later」）。现在走的是 .NET 10 SDK 自带的 MTP 模式：仓库根的 global.json 里
+      "test": { "runner": "Microsoft.Testing.Platform" } 把它选上，这条模式只认 MTP 程序。
     -->
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <!-- xUnit1051：v3 新增的分析器，要求把 TestContext.Current.CancellationToken 传给一切接受
          CancellationToken 的调用，好让测试更快响应取消。整套跑完 9 秒、CI 上也没人去取消它，
          为此改 20 处调用点纯属噪音换噪音。真要做长耗时测试再打开。 -->
@@ -31,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.v3" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>

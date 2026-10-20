@@ -3,10 +3,17 @@
 C#/.NET WPF. You need the **.NET 10 SDK**; everything else comes from the repo.
 
 ```powershell
-dotnet test app.Tests/Clockwork.Tests.csproj                                              # xunit.v3 on Microsoft.Testing.Platform
+dotnet test --project app.Tests/Clockwork.Tests.csproj                            # xunit.v3 on Microsoft.Testing.Platform
 dotnet publish app/Clockwork.csproj -c Release -p:PublishProfile=win-x64                  # self-contained
 dotnet publish app/Clockwork.csproj -c Release -p:PublishProfile=win-x64-needs-dotnet10   # needs .NET 10 Desktop Runtime
 ```
+
+`dotnet test` runs in **Microsoft.Testing.Platform mode** — the repo's `global.json` selects it
+(`"test": { "runner": "Microsoft.Testing.Platform" }`). That is the mode the .NET 10 SDK ships for
+MTP test apps, and the only one left: running MTP under the old VSTest mode was removed in MTP 2.
+In this mode the project goes in as `--project` (the positional form still works, but that is the
+compatibility path), and MTP's own options follow `--` — `-- --minimum-expected-tests 1` is the
+guard against a run that silently executes zero tests.
 
 The publish output is `app/bin/Release/publish/Clockwork.exe` (the needs-dotnet10 build lands in `publish-needs-dotnet10/`) — single-file either way, with everything shaped by the profiles under `app/Properties/PublishProfiles/`. The default carries the .NET runtime inside and is compressed; the `needs-dotnet10` profile drops both (compression only exists for self-contained bundles) and leaves an exe that needs the runtime installed.
 
@@ -60,6 +67,8 @@ Adding a UI string means adding the key to `Strings.resx` **and** to all 17 sate
 ## CI and releases
 
 GitHub Actions builds, runs every test and then both `--smoke` and `--selftest` on a Windows runner for each push and PR. Pushing a `v*` tag (e.g. `v2.0.0`) builds, stamps the file version from the tag, creates a GitHub Release and attaches four assets: `Clockwork-<tag>-win-x64.zip` (self-contained) and `Clockwork-<tag>-win-x64-needs-dotnet10.zip` (framework-dependent), each holding one `Clockwork.exe`; that framework-dependent build attached raw under the plain name `Clockwork.exe` for one-click download-and-run; and `SHA256SUMS.txt` covering all three. Every downloadable also gets a GitHub build-provenance attestation — `gh attestation verify <file> -R rockbenben/Clockwork` proves it was built by this repository's workflow, which is a stronger claim than a checksum that sits on the same release page as the files it checks. Release runs only after the test job passes (`needs:`), so a red tree can't produce one.
+
+**Dependabot keeps the two dependency sets moving** (`.github/dependabot.yml`): the four GitHub Actions in `ci.yml` and the NuGet packages the test project uses. The action upgrades are grouped and stay inside a major — a major bump changes behaviour and is a decision, not an update. The NuGet ones are deliberately *not* grouped: MTP and xunit.v3 move as one chain (MTP v1 → v2 took xunit.v3 across a major too, and that upgrade needed a source change — `CollectionBehavior` → `Parallelization`), so one package per PR keeps the blast radius obvious.
 
 ## Docs
 
