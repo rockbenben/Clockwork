@@ -320,7 +320,12 @@ public static class StepRunner
                         string.IsNullOrWhiteSpace(s.Text) ? Strings.Get("Sum_Unset") : string.Join(", ", unknown));
 
                 // 超时秒数 0 = 不限时。限时用 waitClipboard 同一个夹取（1..60），不另造一套刻度。
-                var secs = StepHelpers.ClampWaitSeconds(s.WaitKeySeconds);
+                //
+                // **0 必须原样传下去**：ClampWaitSeconds 把 0 夹成 5（那一档的量纲是「至少等这么久」，
+                // 0 秒等于不等），于是「0 = 一直等」这个选项从来就没生效过——
+                // 下面那句 `secs == 0 ? 0 : …` 永远走不到，而编辑器那一行的说明写着「填 0 = 一直等」。
+                // 夹取只管 1..60 这一段，0 单独放行（见 StepHelpers.ClampWaitKeySeconds）。
+                var secs = StepHelpers.ClampWaitKeySeconds(s.WaitKeySeconds);
                 var vk = KeyWaiter.Wait(ok.Select(k => k.Vk).ToArray(), secs == 0 ? 0 : secs * 1000, cancel);
 
                 // 取消（急停 / 这次运行的闸）与超时**分别说话**：前者是用户主动叫停，后者是「一直没按」。

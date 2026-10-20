@@ -303,7 +303,11 @@ public partial class StepEditorWindow : Window
         RegexGroupBox.Text = Math.Max(0, s.RegexGroup).ToString();
         ReplaceInputBox.Text = s.Text; ReplacePatternBox.Text = s.Pattern; ReplaceWithBox.Text = s.Replace;
         WaitKeysBox.Text = s.Text;
-        WaitKeySecondsBox.Text = StepHelpers.ClampWaitSeconds(s.WaitKeySeconds).ToString();
+        // **0 原样显示，不夹成 5。** 这一档的 0 = 一直等（说明里写着「填 0 = 一直等」），
+        // 而 ClampWaitSeconds 把 0 夹成 5（那一档的量纲是「至少等这么久」）——
+        // 于是「一直等」在打开这个框的那一刻就被改成了「等 5 秒」，按确定就存成 5 秒。
+        // 越界的值（> 60）照旧夹一下，夹完显示的就是真会跑的那个数。
+        WaitKeySecondsBox.Text = StepHelpers.ClampWaitKeySeconds(s.WaitKeySeconds).ToString();
         SplitTextBox.Text = s.Text;
         MathExprBox.Text = s.Text;
         EachListCombo.Text = s.Text;
@@ -463,6 +467,16 @@ public partial class StepEditorWindow : Window
         // 身份也不能丢：这是面板点击统计（Core.PanelUsageStore）的键。丢一次就是重新发一个，
         // 那个格子改个参数就变成「从未点过」，之前的计数直接归零、且不报错。
         r.Id = _original.Id;
+        // **层级更不能丢。** 这一步在块里的位置是「它属于哪一段」：抹掉它等于把这一步
+        // 从循环里拽出来，而界面上它还缩在那一段里（缩进是另一次重排算的，不看 ParentId）。
+        // 编辑器里没有管层级的控件——层级归动作组编辑器那棵树——所以从原件带过来。
+        r.ParentId = _original.ParentId;
+        // 变量条件同理，而且**它决定这一步跑不跑**：编辑器里没有这一行的控件
+        // （那是模板与手改配置才写得出来的），漏掉它就是「打开再保存，条件悄悄没了」——
+        // 出厂的模板里就有这种步骤（循环里的「按 Escape 才跳过」）。
+        r.IfVar = _original.IfVar;
+        r.IfVarOp = _original.IfVarOp;
+        r.IfVarValue = _original.IfVarValue;
 
         switch (kind)
         {

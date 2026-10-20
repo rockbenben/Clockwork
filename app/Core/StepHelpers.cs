@@ -69,6 +69,15 @@ public static class StepHelpers
     // 夹到 1..60：0 秒等于不等（那就别放这一步），60 秒以上不像等剪贴板，像挂住了。
     public static int ClampWaitSeconds(int seconds) => seconds < 1 ? 5 : (seconds > 60 ? 60 : seconds);
 
+    /// <summary>「等按键」那一档的超时秒数：0 = 一直等，其余 1..60。</summary>
+    //
+    // **0 必须单独放行。** ClampWaitSeconds 把 0 夹成 5（那一档的量纲是「至少等这么久」，
+    // 0 秒等于不等），而「等按键」这一档的 0 恰恰是**不限时**——编辑器那一行的说明写着
+    // 「填 0 = 一直等」，KeyWaiter 也认 0（timeoutMs=0 = 不限时）。
+    // 两边都认 0，中间这一夹却把它变成了 5：那个选项从来就没生效过。
+    // 于是这一档单独有个夹取：0 放行，其余走同一把 1..60 的尺子。
+    public static int ClampWaitKeySeconds(int seconds) => seconds <= 0 ? 0 : ClampWaitSeconds(seconds);
+
     public static int ClampStartupDelay(int seconds) => Math.Clamp(seconds, 0, 600);
 
     // 中键长按阀值夹取：150..2000 ms。同样设置页与消费侧共用。
