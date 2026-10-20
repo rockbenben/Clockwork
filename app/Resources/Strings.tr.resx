@@ -2241,7 +2241,7 @@ Günlük: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Her satıra bir işlem adı (örneğin mstsc, vmware). Bu uygulamalarda Clockwork sağ tuşa hiç dokunmaz — tuş doğrudan programa gider.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Çizerken eylemin adını göster</data>
   <data name="Mig_StepParams" xml:space="preserve">{0} adımın ortak kullandığı eylem ve sayı, tür başına alanlara ayrıldı (her adımın yaptığı değişmedi)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">İz görünümü</data>
+
   <data name="Gesture_Style" xml:space="preserve">Biçim</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Klasik</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
@@ -2250,4 +2250,10 @@ Günlük: {1}</value>
   <data name="Gesture_Style_Dots" xml:space="preserve">Noktalar</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">İzi soldur</data>
   <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} yalnızca {1} içinde</data>
+  <data name="Gesture_Search" xml:space="preserve">Hareket ara</data>
+  <data name="Gesture_Settings" xml:space="preserve">Hareket ayarları</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Program ekle…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Hareketlerin kapalı olduğu programlar:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(henüz yok)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">Eşleşen hareket yok. Başka bir kelime dene.</data>
 </root>

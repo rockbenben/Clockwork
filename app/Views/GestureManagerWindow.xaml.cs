@@ -35,8 +35,17 @@ public partial class GestureManagerWindow : Window
     // 画布只有 196×150 DIP，一条腿撑死一百多，而 4K 屏上按 2.5% 算出来是 96——
     // 那样在这块板子上根本画不出第二个方向。这里的坐标也是 DIP 不是物理像素，与缩放无关。
     private readonly GestureGate _draw = new(_ => true, 40);
+    // 画布上那一笔的渲染器：**与屏幕上那条线是同一个**（GestureTrailRenderer）。
+    // 早先画布画的是一根普通的强调色折线，于是「笔迹外观」里挑的样式在这一步完全看不见——
+    // 所见即所得断在了「画手势」这一格，而这一格恰恰是用户唯一会去挑样式的地方。
+    //
+    // **它不点亮**：画布上这一笔是**正在被定义**的那一条，它此刻还没绑任何动作，
+    // 点亮等于说「这一划已经认出来了」——那是没有的。而屏幕上那条线点亮，
+    // 是因为它已经命中了某条已绑的手势（见 GestureTrailWindow 的 SetArmed）。
+    private readonly GestureTrailRenderer _trail;
+    // 全部手势（未按搜索词过滤）。列表是按它过滤出来的，搜索词一变就重排一次。
+    private List<Row> _rows = new();
     private bool _loading;
-    private bool _loadingSettings;
 
     public GestureManagerWindow(RootConfig config, System.Action save)
     {
@@ -54,14 +63,18 @@ public partial class GestureManagerWindow : Window
         // 这一条截图测不出来：--shots harness 会无条件给每扇窗设 MaxHeight，
         // 于是「窗口自己忘了封顶」在图里永远是正常的（DevChecks 顶部那段注释记着这个盲区）。
         WindowSizing.FitToWorkArea(this);
+        _trail = new GestureTrailRenderer(
+            GestureTrailStyles.Resolve(_config.Settings.GestureTrailStyle),
+            GestureTrailWidths.Resolve(_config.Settings.GestureTrailWidth),
+            (System.Windows.Media.Brush)FindResource("BrushAccentText"),
+            new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xE6, 0xEF, 0xFF)),
+            _config.Settings.GestureTrailFade);
+        GestureTrailHost.Children.Add(_trail.Surface);
         GesturesOnChk.IsChecked = _config.Settings.GesturesEnabled;
         // 按钮上的字在这儿设（不写在 XAML 里）：那个「…」是「会打开另一扇窗」的记号，
         // 而它得排在本地化词**之后**——RTL 下省略号该在前，可那句本程序还不支持。
-        AppearanceBtn.Content = Strings.Get("Gesture_Appearance") + "…";
+        SettingsBtn.Content = Strings.Get("Gesture_Settings") + "…";
         PaintWatchState();
-        PopulateSettings();
-        ShowActionLabelChk.IsChecked = _config.Settings.GestureShowActionLabel;
-        PaintIgnoreApps();
         Reload(null);
     }
 
@@ -163,7 +176,11 @@ public partial class GestureManagerWindow : Window
                 {
                     Text = proc,
                     FontSize = 10.5,
-                    Foreground = (System.Windows.Media.Brush)FindResource("BrushPaperMuted"),
+                    // BrushPaperMuted **这个键从来不存在**（全仓库只有这一处提到它），
+                    // 而 FindResource 找不到键是**抛异常**，不是返回 null——
+                    // 于是「绑了分应用手势」的那一行一建就炸。
+                    // 截图矩阵看不到它：默认的几条手势没有分应用绑定，这条分支压根没走到过。
+                    Foreground = (System.Windows.Media.Brush)FindResource("BrushMuted"),
                 }
             };
             line.Children.Add(badge);
@@ -177,8 +194,21 @@ public partial class GestureManagerWindow : Window
         // 直接塞 ListBoxItem 而不是走 ItemTemplate：笔迹是画出来的（Path 几何），
         // 每行的形状都不一样，模板里没法用绑定表达——这本来就是代码画的东西。
         Bound.ItemsSource = null;
+        _rows = Steps.Select(x => new Row(x)).ToList();
+        ApplyFilter(select);
+        _loading = false;
+        SyncButtons();
+        PaintGesture();
+    }
+
+    // 搜索：按动作名、箭头串与摘要过滤，命中的行才进列表。
+    // **「一条都没剩」时那句提示要分两种**：「这里还没有手势」与
+    // 「这里有手势、只是都不叫这个词」是两件事，补救也完全不同。
+    private void ApplyFilter(LaunchStep? select = null)
+    {
+        var rows = _rows.Where(Matches).ToList();
         Bound.Items.Clear();
-        foreach (var r in Steps.Select(x => new Row(x)))
+        foreach (var r in rows)
             Bound.Items.Add(new ListBoxItem { Content = BuildRow(r), Tag = r, ToolTip = r.Detail });
         // 没有指定就选第一条：不选的话右边画布是禁用的，水印却写着「按住左键在此画」——
         // 一句你照做不了的指令。永远选中一条，那个死状态就不存在了。
@@ -186,10 +216,29 @@ public partial class GestureManagerWindow : Window
             ? Bound.Items.Cast<ListBoxItem>().FirstOrDefault()
             : Bound.Items.Cast<ListBoxItem>().FirstOrDefault(it => it.Tag is Row r && ReferenceEquals(r.Step, select))
               ?? Bound.Items.Cast<ListBoxItem>().FirstOrDefault();
-        EmptyNote.Visibility = Steps.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-        _loading = false;
-        SyncButtons();
-        PaintGesture();
+        EmptyNote.Visibility = rows.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
+        EmptyNote.Text = _rows.Count == 0 ? Strings.Get("Gesture_None") : Strings.Get("Gesture_SearchNone");
+    }
+
+    // 名字、形状与摘要都算：用户记得的可能是「哪个动作」，也可能是「哪条形状」。
+    // 形状那一项用箭头串（↑↓）——界面上画的与列表里显示的都是它。
+    private bool Matches(Row r)
+    {
+        var q = SearchBox.Text.Trim();
+        if (q.Length == 0) return true;
+        return r.Title.Contains(q, StringComparison.CurrentCultureIgnoreCase)
+            || GestureGate.Arrows(r.Step.Gesture).Contains(q, StringComparison.CurrentCultureIgnoreCase)
+            || r.Detail.Contains(q, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        // 水印：框里有字就藏起来（同画布与工具箱的做法）。
+        SearchHint.Visibility = SearchBox.Text.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
+        if (_loading) return;
+        // 先把当前选中项记下来：ApplyFilter 会清空列表，之后就取不到了。
+        var cur = Current;
+        ApplyFilter(cur);
     }
 
     private void SyncButtons()
@@ -322,8 +371,8 @@ public partial class GestureManagerWindow : Window
         GestureCanvas.CaptureMouse();
         var pt = e.GetPosition(GestureCanvas);
         _draw.OnRightDown((int)pt.X, (int)pt.Y);
-        GestureTrail.Points.Clear();
-        GestureTrail.Points.Add(new Point(pt.X, pt.Y));
+        _trail.Clear();
+        _trail.Add(new Point(pt.X, pt.Y));
     }
 
     private void GestureCanvas_Move(object sender, MouseEventArgs e)
@@ -331,14 +380,14 @@ public partial class GestureManagerWindow : Window
         if (!_draw.Pending) return;
         var pt = e.GetPosition(GestureCanvas);
         _draw.OnMove((int)pt.X, (int)pt.Y);
-        GestureTrail.Points.Add(new Point(pt.X, pt.Y));
+        _trail.Add(new Point(pt.X, pt.Y));
     }
 
     private void GestureCanvas_Up(object sender, MouseButtonEventArgs e)
     {
         GestureCanvas.ReleaseMouseCapture();
         var verdict = _draw.OnRightUp();
-        GestureTrail.Points.Clear();
+        _trail.Clear();
         if (verdict != PressVerdict.Fire || Current is not { } step) { PaintGesture(); return; }
 
         if (CheckDuplicate(step, _draw.Path, step.ForProcess))
@@ -353,7 +402,7 @@ public partial class GestureManagerWindow : Window
     // 画一半拖出画布：CaptureMouse 让事件继续来，这里只处理没捕获时的离开（如按下前掠过）。
     private void GestureCanvas_Leave(object sender, MouseEventArgs e)
     {
-        if (!GestureCanvas.IsMouseCaptured && _draw.Pending) { _draw.Reset(); GestureTrail.Points.Clear(); }
+        if (!GestureCanvas.IsMouseCaptured && _draw.Pending) { _draw.Reset(); _trail.Clear(); }
     }
 
     // 落盘 + 重画。存盘那一步会顺带按新配置装卸右键监听（App.SaveConfig 末尾调 ApplyMouseHook），
@@ -383,88 +432,33 @@ public partial class GestureManagerWindow : Window
             ? Visibility.Visible : Visibility.Collapsed;
     }
 
-    private void PopulateSettings()
-    {
-        _loadingSettings = true;
-        SensitivityCbo.Items.Clear();
-        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_High"), Tag = "high" });
-        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_Normal"), Tag = "normal" });
-        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_Low"), Tag = "low" });
-        var currentSens = _config.Settings.GestureSensitivity;
-        SensitivityCbo.SelectedItem = SensitivityCbo.Items.Cast<ComboBoxItem>().FirstOrDefault(x => (string)x.Tag == currentSens)
-            ?? SensitivityCbo.Items[1];
-
-        _loadingSettings = false;
-    }
-
-    private void Sensitivity_Changed(object sender, SelectionChangedEventArgs e)
-    {
-        if (_loadingSettings) return;
-        if (SensitivityCbo.SelectedItem is ComboBoxItem item && item.Tag is string sens)
-        {
-            _config.Settings.GestureSensitivity = sens;
-            _save();
-        }
-    }
-
-    // 笔迹的样子（样式 / 粗细 / 尾迹淡出）单独一扇窗。
+    // 全局设置（灵敏度、笔迹的样子、尾迹淡出、动作名、名单）在「手势设置…」那一扇窗里。
     //
-    // 为什么不是这一排里再添一个下拉：这一扇管理器没有余量了（见 XAML 里那段说明），
-    // 而且这三件事本就属于同一处——「这条线画成什么样」是一个决定，不是三个。
+    // 为什么搬出去：这一扇管理器**没有余量**（内容 390、兜底上限 392），
+    // 而那五项本就不属于「有哪些手势」这件事。顺带把职责分清：
+    // 这一扇回答「有哪些手势」，那一扇回答「它们整体怎么表现」。
     // 模态打开：改完当场生效，窗里没有「确定 / 取消」——挑完那一刻意思就已经完整了。
-    private void Appearance_Click(object sender, RoutedEventArgs e)
+    private void Settings_Click(object sender, RoutedEventArgs e)
     {
-        var w = new GestureAppearanceWindow(_config, _save);
+        var w = new GestureSettingsWindow(_config, _save);
         w.Owner = this;
         w.ShowDialog();
+        // 设置窗改的是笔迹的样子，而画布上那一笔用的是同一个渲染器——
+        // 不跟着换，画布上就还是旧样式，「所见即所得」又断一次。
+        RefreshTrailLook();
+    }
+
+    // 画布上那一笔的样子，重新按配置刷一遍。
+    private void RefreshTrailLook()
+    {
+        _trail.SetStyle(GestureTrailStyles.Resolve(_config.Settings.GestureTrailStyle),
+                        GestureTrailWidths.Resolve(_config.Settings.GestureTrailWidth),
+                        _config.Settings.GestureTrailFade);
     }
 
     // 笔迹旁那句「这将要做的事」。改了当场生效（_save 末尾会重装钩子，
-    // 而笔迹窗的开关是 ApplyMouseHook 顺手推过去的，见 GestureCoordinator）。
-    private void ShowActionLabel_Changed(object sender, RoutedEventArgs e)
-    {
-        if (_loadingSettings) return;
-        _config.Settings.GestureShowActionLabel = ShowActionLabelChk.IsChecked == true;
-        _save();
-    }
-
-    // 「这些程序里根本不接管手势」的名单。
-    //
-    // 为什么要它：从前只有一个总开关——要在一个程序里让出右键，就得把**所有**程序里的手势一起关掉。
-    // 而远程桌面、虚拟机、游戏、3D 视口这些地方，程序自己就管右键，我们插一脚只会碍事。
-    // 别的工具都有这一份「按程序排除」的名单，这里补上。
-    //
-    // 编辑方式是一张多行文本卡（一行一个程序名）：名单通常只有一两条，而逐个从「选程序」对话框里
-    // 挑要开好几轮。存的是**裸进程名**（与分应用绑定同一套写法，见 StepHelpers.ToProcessName），
-    // 「chrome」与「chrome.exe」等价。
-    private void IgnoreApps_Click(object sender, RoutedEventArgs e)
-    {
-        var current = string.Join("\n", _config.Settings.GestureIgnoreApps);
-        var edited = BrandDialog.AskMulti(this, Strings.Get("Gesture_IgnoreTitle"),
-                                          Strings.Get("Gesture_IgnoreMessage"), current);
-        if (edited == null) return;   // 取消：名单一个字都没动
-        _config.Settings.GestureIgnoreApps = GestureGate.ParseIgnoreList(edited);
-        _save();
-        PaintIgnoreApps();
-    }
-
-    // 名单的归一在 Core.GestureGate.ParseIgnoreList（纯函数、有测试）：
-    // 去掉首尾空白与路径、去掉 .exe 后缀（与分应用绑定同一套写法）、去掉重复项、去掉空行。
-    // 用户在多行框里手打，格式一定是乱的；而名单是**拿来比对**的，
-    // 存成 "Chrome.exe" 与 "chrome" 两条会让「关掉了却还在接管」这种症状变得极难查。
-
-    // 按钮上带当前份数：名单是空的与不空，差别大到界面上必须看得出来。
-    // 名单里的名字也进提示——那张卡里的正文说得清规矩，悬停里能直接看到「现在有哪几个」。
-    private void PaintIgnoreApps()
-    {
-        var list = _config.Settings.GestureIgnoreApps;
-        IgnoreAppsBtn.Content = list.Count > 0
-            ? Strings.Lf("Gesture_IgnoreAppsN", list.Count)
-            : Strings.Get("Gesture_IgnoreApps");
-        IgnoreAppsBtn.ToolTip = list.Count > 0
-            ? string.Join(", ", list)
-            : Strings.Get("Gesture_IgnoreHint");
-    }
+    // 笔迹旁那句「这将要做的事」与「不接管手势的程序」两份名单都搬进了「手势设置…」那一扇窗
+    // （见 Settings_Click 那里为什么搬）。这一扇现在只回答「有哪些手势」。
 
     private void Close_Click(object sender, RoutedEventArgs e) => Close();
 }

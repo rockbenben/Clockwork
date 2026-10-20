@@ -2241,7 +2241,7 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">한 줄에 프로세스 이름 하나씩(예: mstsc, vmware). 이 앱들에서 Clockwork는 오른쪽 버튼을 전혀 건드리지 않고 그대로 프로그램에 전달합니다.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">그리는 동안 실행할 작업 이름 표시</data>
   <data name="Mig_StepParams" xml:space="preserve">{0}개 단계가 공유하던 동작과 숫자를 종류별 항목으로 나눴습니다 (각 단계가 하는 일은 그대로입니다)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">필적 표시</data>
+
   <data name="Gesture_Style" xml:space="preserve">스타일</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">클래식</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">네온</data>
@@ -2250,4 +2250,10 @@
   <data name="Gesture_Style_Dots" xml:space="preserve">점선</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">펜 자국 흐리게</data>
   <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} — {1} 에서만</data>
+  <data name="Gesture_Search" xml:space="preserve">제스처 검색</data>
+  <data name="Gesture_Settings" xml:space="preserve">제스처 설정</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">프로그램 추가…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">제스처를 사용하지 않는 프로그램:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(아직 없음)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">일치하는 제스처가 없습니다. 다른 단어로 시도해 보세요.</data>
 </root>

@@ -2241,7 +2241,7 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">一行一個行程程序名稱（例如 mstsc、vmware）。在這些程式裡，Clockwork 完全不碰右鍵，右鍵原樣交給程式自己。</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">認出軌跡時在旁邊顯示這一步要做的事</data>
   <data name="Mig_StepParams" xml:space="preserve">把 {0} 條步驟裡共用的動作與數值拆到了各自的類型裡（每一步做什麼沒有變）</data>
-  <data name="Gesture_Appearance" xml:space="preserve">筆跡外觀</data>
+
   <data name="Gesture_Style" xml:space="preserve">樣式</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">經典</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">霓虹</data>
@@ -2250,4 +2250,10 @@
   <data name="Gesture_Style_Dots" xml:space="preserve">圓點</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">尾跡淡出</data>
   <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} 只在 {1} 裡</data>
+  <data name="Gesture_Search" xml:space="preserve">搜尋手勢</data>
+  <data name="Gesture_Settings" xml:space="preserve">手勢設定</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">加一個程式…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">這些程式裡不接管手勢：</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">（還沒加）</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">沒有符合的手勢。換個詞試試。</data>
 </root>
