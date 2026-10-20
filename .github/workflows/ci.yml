@@ -134,18 +134,23 @@ jobs:
         run: |
           Get-FileHash *.zip, app/bin/Release/publish-needs-dotnet10/Clockwork.exe -Algorithm SHA256 |
             ForEach-Object { "{0}  {1}" -f $_.Hash.ToLower(), (Split-Path $_.Path -Leaf) } |
-            Set-Content SHA256SUMS.txt
+            # 编码写死 ascii：内容本来全是 ASCII，写死就不吃两代 PowerShell 的默认编码差异
+            # （Windows PowerShell 5.1 默认写 BOM）。带 BOM 的 sums 文件，第一行摘要会被当成
+            # 65 个字符而跳过——那一条恰好是用户按 sha256sum -c 逐条验时先撞上的那条。
+            # 同一套判据见 023-QuickText / 033-windowshuttle 的 ci.yml。
+            Set-Content SHA256SUMS.txt -Encoding ascii
           Get-Content SHA256SUMS.txt
 
       # 来源证明，比 SHA256SUMS 强一档：sums 和资产同在 release 页，能替换资产的攻击者同样能替换 sums；
       # 证明存在 GitHub 侧，用户用 `gh attestation verify <文件> -R <owner>/<repo>` 验的是
       # 「这个文件确实由本仓库这条 workflow 构建」，而不只是「文件没被改过」。官方 action，无第三方依赖。
+      #
+      # ⚠️ **资产清单只有这一处**：`subject-checksums` 读的是上面那份 SHA256SUMS.txt，
+      # 而它正是那三个文件。再在这里手抄一遍路径，抄漏一个就有一个资产**静默地没有证明**
+      # ——同一条判据见 023-QuickText 的 ci.yml。
       - uses: actions/attest-build-provenance@v4
         with:
-          subject-path: |
-            Clockwork-${{ github.ref_name }}-win-x64.zip
-            Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip
-            app/bin/Release/publish-needs-dotnet10/Clockwork.exe
+          subject-checksums: SHA256SUMS.txt
 
       # 选包这件事发生在下载页，不是 README，所以说明得跟着 Release 走；GitHub 会把自动 changelog
       # 接在这段 body 后面。体积按 Windows 的算法（MiB）。
