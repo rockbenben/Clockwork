@@ -382,9 +382,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>パネルページ「{0}」はトレイメニューに表示されなくなりました（ページは実行できるアクションではありません）</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>パネルページが独立しました</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">設定を移行しました</data>
   <data name="Kind_group" xml:space="preserve">
     <value>アクショングループを実行</value>
   </data>
@@ -2233,4 +2231,5 @@
   <data name="Gesture_IgnoreTitle" xml:space="preserve">ジェスチャーを使わないアプリ</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">1行に1つ、プロセス名（例：mstsc、vmware）。これらのアプリでは Clockwork は右ボタンに一切触れません。そのままプログラムに渡ります。</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">軌跡を認識したときに実行する操作を表示する</data>
+  <data name="Mig_StepParams" xml:space="preserve">{0} つの手順が共有していたアクションと数値を、種類ごとの項目に分けました（各手順の動作は変わりません）</data>
 </root>

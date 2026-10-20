@@ -17,7 +17,7 @@ public class StepIdMigrationTests
     {
         var cfg = new RootConfig();   // new RootConfig() 的 schema 是 0
         cfg.LaunchSteps.Add(new LaunchStep { Kind = "app", Label = "清单项" });
-        cfg.Gestures.Add(new LaunchStep { Kind = "window", Action = "minimize", Gesture = "LD" });
+        cfg.Gestures.Add(new LaunchStep { Kind = "window", WindowAction = "minimize", Gesture = "LD" });
         var g = new ActionGroup { Name = "组" };
         g.Steps.Add(new LaunchStep { Kind = "keys", Combo = "^c" });
         cfg.ActionGroups.Add(g);

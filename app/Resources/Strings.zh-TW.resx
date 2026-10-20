@@ -382,9 +382,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>面板頁「{0}」不再出現在系統匣選單裡（頁不是可執行的動作）</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>面板頁已獨立</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">設定已升級</data>
   <data name="Kind_group" xml:space="preserve">
     <value>執行動作</value>
   </data>
@@ -2233,4 +2231,5 @@
   <data name="Gesture_IgnoreTitle" xml:space="preserve">不接管手勢的程式</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">一行一個行程程序名稱（例如 mstsc、vmware）。在這些程式裡，Clockwork 完全不碰右鍵，右鍵原樣交給程式自己。</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">認出軌跡時在旁邊顯示這一步要做的事</data>
+  <data name="Mig_StepParams" xml:space="preserve">把 {0} 條步驟裡共用的動作與數值拆到了各自的類型裡（每一步做什麼沒有變）</data>
 </root>

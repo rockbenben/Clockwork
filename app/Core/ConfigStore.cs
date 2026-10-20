@@ -340,7 +340,94 @@ public static class ConfigStore
         // 步骤身份。必须排在**上面两趟都结束之后**：这两趟会把 ActionGroups 里的步骤整批搬进
         // PanelPages（MigratePanelPages）并补 g.Steps ??= new()，在此之前跑就漏掉被搬走的那些。
         normalized |= AssignStepIds(cfg);
+        // 拆开共用参数（PanelSchema 4 → 5）。**必须排在 AssignStepIds 之后**：那一趟会遍历
+        // 四个清单里的每一步（面板页那部分刚被 MigratePanelPages 搬过来），而这一趟也要遍历同样的四份。
+        normalized |= MigrateStepParameters(cfg);
         return normalized;
+    }
+
+    /// <summary>一次性迁移：把共用的 Action / Level 拆到各类型自己的格子里（PanelSchema 4 → 5）。</summary>
+    //
+    // **为什么要有这一趟。** 从前 Action 一格服务五种类型（音量/窗口/鼠标/跳过/站点映射），
+    // Level 一格服务五种量纲（音量百分比/等剪贴板秒数/亮度百分比/正则组号/等按键秒数）。
+    // 共用的代价是**换类型会串味**：一条音量（50%）改成「等剪贴板」，那个数就变成 50 秒；
+    // 手改配置把 "kind" 从 volume 改成 waitClipboard 也一样。现在每个类型认领自己那一格，
+    // 串味从根上没了（见 LaunchStep 里那十格的说明）。
+    //
+    // **这一趟只搬值，不改值。** 每一步按自己的类型认领旧的那一格：
+    //   volume      → VolumeAction + VolumeLevel
+    //   window      → WindowAction
+    //   mouse       → MouseAction
+    //   skip        → SkipMode
+    //   siteMap     → SiteMapMode
+    //   waitClipboard → WaitSeconds
+    //   waitKey     → WaitKeySeconds
+    //   regex       → RegexGroup
+    //   system      → Brightness（只在这一条命令真用亮度时；别的系统命令那一格没有意义）
+    // 类型对不上的旧值**不搬**（它对那个类型本来就没有意义）。
+    //
+    // **「没写」与「写了 0」必须分得开**，这是旧字段改成可空的原因：旧 Level 的默认值是 50，
+    // 于是一条没写 level 的老配置（读进来是 50）和一条明写 "level": 0 的（音量 0%）在旧模型里
+    // 分不开——而迁移必须按前者走 50、按后者走 0。可空之后「没写」= null、「写了 0」= 0。
+    // 新字段的默认值又与旧字段逐字相同（空 / 50），所以「没写」的那一份**不搬也不会变**。
+    //
+    // 搬完把旧的两格清成 null：它们于是**不会落盘**（序列化只写与新建实例不同的值），
+    // 盘上从此只有新形状这一种，也就没有两份真相可分家。
+    private static bool MigrateStepParameters(RootConfig cfg)
+    {
+        int touched = 0;
+        foreach (var s in AllSteps(cfg))
+        {
+            if (s.Action == null && s.Level == null) continue;   // 已经是新形状（新建的、或迁过的）
+            // 局部变量而不是 s.Level：属性不会因为判空而收窄类型，直接赋给 int 会编译不过。
+            var action = s.Action;
+            var level = s.Level;
+            switch (s.Kind)
+            {
+                case "volume":
+                    if (action is string a1) s.VolumeAction = a1;
+                    if (level is int l1) s.VolumeLevel = l1;
+                    break;
+                case "window": if (action is string a2) s.WindowAction = a2; break;
+                case "mouse": if (action is string a3) s.MouseAction = a3; break;
+                case "skip": if (action is string a4) s.SkipMode = a4; break;
+                case "siteMap": if (action is string a5) s.SiteMapMode = a5; break;
+                case "waitClipboard": if (level is int l2) s.WaitSeconds = l2; break;
+                case "waitKey": if (level is int l3) s.WaitKeySeconds = l3; break;
+                case "regex": if (level is int l4) s.RegexGroup = l4; break;
+                // 系统命令里只有「亮度」用这一格；别的命令那一格没有意义，不搬。
+                case "system": if (level is int l5 && StepDisplay.SystemCommandTakesLevel(s.Command)) s.Brightness = l5; break;
+            }
+            s.Action = null;
+            s.Level = null;
+            touched++;
+        }
+        if (touched == 0) return false;
+        // 版本号**只在真搬了东西时**抬，而且抬到最后：抬早了这次启动的迁移会把自己关掉，数据卡在半路。
+        //
+        // **为什么不用版本号当门。** 这一趟的判据是**字段本身**：旧的两格清成 null 就是「迁过了」，
+        // 而「没迁过」就是它们还在。这比版本号可靠——版本号只记「这一版迁过没有」，
+        // 而手改配置随时可能加进一条带旧字段的步骤（那种配置版本号是新的、字段却是旧的）。
+        // 顺带也保住了一条老规矩：**一份本来就没得迁的配置，不该被写成「迁过了」**——
+        // 它没被改过，就不该被写回盘（那是一次无谓的全量重写），版本号也不该动。
+        if (cfg.Settings.PanelSchema < 5) cfg.Settings.PanelSchema = 5;
+        // 报给用户看：这一趟改的是**配置文件的形状**（每一步做什么没有变，但盘上的字段名变了）。
+        // 静默做完的话，用户打开配置看见字段名全变了，只会觉得是程序把配置弄坏了。
+        LastMigrationLog.Add(Strings.Lf("Mig_StepParams", touched));
+        return true;
+    }
+
+    /// <summary>四个清单里的全部步骤（启动清单 / 动作组 / 面板页 / 手势）。</summary>
+    // 迁移与发号都要走遍这四份，所以它收在一处——漏一份就意味着那份里的步骤永远停在旧形状，
+    // 而症状是「有的步骤换了类型会串味、有的不会」，最难查的那一种。
+    private static IEnumerable<LaunchStep> AllSteps(RootConfig cfg)
+    {
+        foreach (var s in cfg.LaunchSteps) yield return s;
+        foreach (var g in cfg.ActionGroups)
+            foreach (var s in g.Steps) yield return s;
+        foreach (var p in cfg.PanelPages)
+            foreach (var s in p.Steps) yield return s;
+        foreach (var s in cfg.Gestures) yield return s;
     }
 
     /// <summary>一次性迁移：给四个清单里的步骤补稳定 Id（PanelSchema 3 → 4）。</summary>

@@ -382,9 +382,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>Panel page “{0}” no longer appears in the tray menu (a page is not a runnable action)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>Panel pages are now separate</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">Config upgraded</data>
   <data name="Kind_group" xml:space="preserve">
     <value>Run action</value>
   </data>
@@ -2233,4 +2231,5 @@ Log: {1}</value>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Apps where gestures are off</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">One process name per line (for example mstsc, vmware). In these apps Clockwork leaves the right button completely alone — it goes straight to the program.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Show the action name while drawing</data>
+  <data name="Mig_StepParams" xml:space="preserve">Split the action and the number that {0} steps shared into per-type fields (what each step does is unchanged)</data>
 </root>

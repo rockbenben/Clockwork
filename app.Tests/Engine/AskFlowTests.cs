@@ -47,7 +47,7 @@ public class AskFlowTests
         var vars = new RunVars();
         var g = Group(
             new LaunchStep { Kind = "prompt", Message = "搜什么？", OutputVar = "关键词", Label = "问" },
-            new LaunchStep { Kind = "volume", Action = "mute", Label = "后面" });
+            new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "后面" });
         var r = ActionGroupRunner.RunGroup(g, Deps(ran, vars, _ => null));
         Assert.Empty(ran);
         Assert.Equal(GroupRunResult.Aborted, r);
@@ -63,7 +63,7 @@ public class AskFlowTests
         var vars = new RunVars();
         var g = Group(
             new LaunchStep { Kind = "prompt", Message = "备注？", OutputVar = "备注", Label = "问" },
-            new LaunchStep { Kind = "volume", Action = "mute", Label = "后面" });
+            new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "后面" });
         ActionGroupRunner.RunGroup(g, Deps(ran, vars, _ => ""));
         Assert.Equal(new[] { "后面" }, ran.ToArray());
         Assert.Equal("", vars.Get("备注"));
@@ -77,7 +77,7 @@ public class AskFlowTests
         var vars = new RunVars();
         var g = Group(
             new LaunchStep { Kind = "choice", Message = "去哪儿？", Text = "上班\n下班", Label = "选" },
-            new LaunchStep { Kind = "volume", Action = "mute", Label = "后面" });
+            new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "后面" });
         ActionGroupRunner.RunGroup(g, Deps(ran, vars, _ => "上班"));
         Assert.Equal(new[] { "后面" }, ran.ToArray());
         Assert.Empty(vars.Names);

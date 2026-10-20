@@ -23,7 +23,7 @@ public class GroupRowVmSummaryTests
         var g = Group(
             new LaunchStep { Kind = "system", Command = "lockScreen" },
             new LaunchStep { Kind = "system", Command = "monitorOff" },
-            new LaunchStep { Kind = "volume", Action = "mute" });
+            new LaunchStep { Kind = "volume", VolumeAction = "mute" });
         var s = Row(g).Summary;
 
         // 整串比对而不是逐条 Contains：分隔符「 · 」与步骤顺序都是列表可读性的一部分，
@@ -39,7 +39,7 @@ public class GroupRowVmSummaryTests
         var g = Group(
             new LaunchStep { Kind = "system", Command = "lockScreen" },
             new LaunchStep { Kind = "system", Command = "monitorOff" },
-            new LaunchStep { Kind = "volume", Action = "mute" },
+            new LaunchStep { Kind = "volume", VolumeAction = "mute" },
             new LaunchStep { Kind = "system", Command = "showDesktop" });
         var s = Row(g).Summary;
 

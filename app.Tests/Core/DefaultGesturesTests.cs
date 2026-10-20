@@ -102,12 +102,12 @@ public class DefaultGesturesTests
         Assert.Equal("Ctrl+End", byPath["RD"].Combo);    // →↓ 到最底部
 
         // 四个角 = 窗口四件事，方向本身就是意思：往左下收、往右上撑、往左上钉、往右下扫走。
-        Assert.Equal("minimize", byPath["1"].Action);    // ↙ 最小化
-        Assert.Equal("maximize", byPath["9"].Action);    // ↗ 最大化
-        Assert.Equal("topmost", byPath["7"].Action);     // ↖ 置顶（开关：同一条手势管钉住和放开）
+        Assert.Equal("minimize", byPath["1"].WindowAction);    // ↙ 最小化
+        Assert.Equal("maximize", byPath["9"].WindowAction);    // ↗ 最大化
+        Assert.Equal("topmost", byPath["7"].WindowAction);     // ↖ 置顶（开关：同一条手势管钉住和放开）
         // ↘ 关闭。放在斜角上是有意的：斜角扇区只有 34°，画不准就不会中——
         // 一个会关掉窗口的动作，「不容易误画」正是它该有的性质。
-        Assert.Equal("close", byPath["3"].Action);
+        Assert.Equal("close", byPath["3"].WindowAction);
         // ↑↓ 而不是 ∧（↗↘）：人画尖角自然是 65–80°，那就是 ↑↓ 不是 ↗↘（见 DefaultGestures 的注释）。
         // 选 ↑↓ 而不是 ↓↑ 是因为前缀落空时跑「复制」无害，跑「粘贴」会改掉内容。
         Assert.Equal("searchSelection", byPath["UD"].Command);   // ↑↓ 搜索选中的文字

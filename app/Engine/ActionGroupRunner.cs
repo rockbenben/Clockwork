@@ -164,7 +164,7 @@ public static class ActionGroupRunner
             // ---- 「跳出」步：只改控制流，本体什么都不做 ----
             if (step.Kind == "skip")
             {
-                if ((step.Action ?? "").Trim().ToLowerInvariant() == "run") return Aborted;
+                if ((step.SkipMode ?? "").Trim().ToLowerInvariant() == "run") return Aborted;
                 return Skipping;
             }
 

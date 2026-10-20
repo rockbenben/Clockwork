@@ -47,13 +47,13 @@ public partial class StepEditorWindow : Window
         {
             (Strings.Get("Vol_mute"), "mute"), (Strings.Get("Vol_unmute"), "unmute"), (Strings.Get("Ed_Vol_Set"), "set"),
             (Strings.Get("Vol_micMute"), "micMute"), (Strings.Get("Vol_micUnmute"), "micUnmute"),
-        }, step.Action, StepHelpers.DefaultActionFor("volume"));
+        }, step.VolumeAction, StepHelpers.DefaultActionFor("volume"));
         // 下拉项直接由 StepDisplay.MouseActions 生成：动作 id / 文案 / 伪键只此一张表，
         // 加一个动作只改那张表，编辑器、摘要、执行三处自动跟上，不会出现「选得到但跑不了」。
         FillCombo(MouseActCombo, StepDisplay.MouseActions.Select(m => (Strings.Get(m.LabelKey), m.Action)).ToArray(),
-                  step.Action, StepHelpers.DefaultActionFor("mouse"));
+                  step.MouseAction, StepHelpers.DefaultActionFor("mouse"));
         FillCombo(WinActionCombo, StepDisplay.WindowActionMap().Select(kv => (kv.Value, kv.Key)).ToArray(),
-                  step.Action, StepHelpers.DefaultActionFor("window"));
+                  step.WindowAction, StepHelpers.DefaultActionFor("window"));
         // siteMap 的打开方式。三档的 id 与 StepRunner 那支的 mode、StepDisplay.SiteMapActionOf 的
         // 归一结果同一批字面量——三处各写一份的话，改动只落一处，清单上就会写着「定位」而实际打开了文件。
         FillCombo(SiteMapActionCombo, new[]
@@ -69,7 +69,7 @@ public partial class StepEditorWindow : Window
         {
             (Strings.Get("Val_SkipBlock"), "block"),
             (Strings.Get("Val_SkipRun"), "run"),
-        }, string.Equals(step.Action, "run", StringComparison.OrdinalIgnoreCase) ? "run" : "block");
+        }, string.Equals(step.SkipMode, "run", StringComparison.OrdinalIgnoreCase) ? "run" : "block");
         FillCombo(SysCmdCombo, StepDisplay.SystemCommandMap().Select(kv => (kv.Value, kv.Key)).ToArray(), step.Command);
         // 引擎下拉的「值」就是地址本身，所以选中哪一项 = 盘上存的是哪个地址，不必另存一个引擎 id。
         // 手改 json 填了个表外的地址（或从旧版本升上来）→ 反查不到 → 落到「自定义…」并把地址原样露出来。
@@ -288,22 +288,22 @@ public partial class StepEditorWindow : Window
         TargetBox.Text = s.Target; ArgsBox.Text = s.Args; WorkDirBox.Text = s.WorkDir; ElevatedChk.IsChecked = s.Elevated;
         ActivateChk.IsChecked = s.ActivateIfRunning; ActivateProcBox.Text = s.ActivateProcess; AltTargetsBox.Text = s.AltTargets;
         ComboBox2.Text = s.Combo;
-        LevelBox.Text = s.Level.ToString();
+        LevelBox.Text = s.VolumeLevel.ToString();
         ProcessBox.Text = s.Process; SendKeyBox.Text = s.SendKey; WaitWinBox.Text = s.WaitForWindowSeconds.ToString(); PostDelayBox.Text = s.PostWindowDelaySeconds.ToString();
         TextBox2.Text = s.Text; TextProcessBox.Text = s.Process;
         UrlBox.Text = s.Kind == "url" ? s.Target : "";
         PathBox.Text = s.Kind == "path" ? s.Target : "";
-        WaitSecondsBox.Text = StepHelpers.ClampWaitSeconds(s.Level).ToString();
+        WaitSecondsBox.Text = StepHelpers.ClampWaitSeconds(s.WaitSeconds).ToString();
         // 五个新类型的字段。与上面同一批字段一起载入，缺一个就是「编辑再保存抹掉用户填的值」。
         SiteMapUrlBox.Text = s.Text;
-        // siteMap 的打开方式下拉在构造时由 FillCombo 填好并按 s.Action 选中，这里不再重设：
+        // siteMap 的打开方式下拉在构造时由 FillCombo 填好并按 s.SiteMapMode 选中，这里不再重设：
         // LoadStep 跑在构造之后，重设等于把 FillCombo 那套「表外值退回第一项」的兜底绕过去。
         DecodeTextBox.Text = s.Text;
         RegexInputBox.Text = s.Text; RegexPatternBox.Text = s.Pattern;
-        RegexGroupBox.Text = Math.Max(0, s.Level).ToString();
+        RegexGroupBox.Text = Math.Max(0, s.RegexGroup).ToString();
         ReplaceInputBox.Text = s.Text; ReplacePatternBox.Text = s.Pattern; ReplaceWithBox.Text = s.Replace;
         WaitKeysBox.Text = s.Text;
-        WaitKeySecondsBox.Text = StepHelpers.ClampWaitSeconds(s.Level).ToString();
+        WaitKeySecondsBox.Text = StepHelpers.ClampWaitSeconds(s.WaitKeySeconds).ToString();
         SplitTextBox.Text = s.Text;
         MathExprBox.Text = s.Text;
         EachListCombo.Text = s.Text;
@@ -320,7 +320,7 @@ public partial class StepEditorWindow : Window
         DelayBox.Text = s.DelayMs.ToString();
         RepeatBox.Text = StepHelpers.StepRepeat(s).ToString();
         NoteBox.Text = s.Note;
-        SysTextBox.Text = s.Text; SysLevelBox.Text = s.Level.ToString();
+        SysTextBox.Text = s.Text; SysLevelBox.Text = s.Brightness.ToString();
         // 初值必须在第一次 UpdateSysRows 之前定好：不定的话，打开一个搜索步骤时
         // 它的引擎地址会被当成「非搜索原文」寄存起来，之后切到播放声音就把那串 https:// 还了过去。
         _wasSearchCmd = s.Command == "searchSelection";
@@ -484,7 +484,7 @@ public partial class StepEditorWindow : Window
             case "browserUrl": break;      // 同上：只有「输出到变量」
             case "siteMap":
                 r.Text = SiteMapUrlBox.Text;
-                r.Action = StepDisplay.SiteMapActionOf(new LaunchStep { Action = ComboVal(SiteMapActionCombo) });
+                r.SiteMapMode = StepDisplay.SiteMapActionOf(new LaunchStep { SiteMapMode = ComboVal(SiteMapActionCombo) });
                 break;
             case "urlDecode": r.Text = DecodeTextBox.Text; break;
             case "list":
@@ -498,7 +498,7 @@ public partial class StepEditorWindow : Window
             case "regex":
                 r.Text = RegexInputBox.Text;
                 r.Pattern = RegexPatternBox.Text;
-                r.Level = Math.Max(0, ParseOr(RegexGroupBox.Text, 0));
+                r.RegexGroup = Math.Max(0, ParseOr(RegexGroupBox.Text, 0));
                 break;
             case "replace":
                 r.Text = ReplaceInputBox.Text;
@@ -509,23 +509,23 @@ public partial class StepEditorWindow : Window
                 r.Text = WaitKeysBox.Text;
                 // 0 = 不限时。**照实存 0**，不夹成 1：ClampWaitSeconds 把 0 变成 5 秒，
                 // 而「一直等」与「等 5 秒」是两件事，存进去就再也分不出来了。
-                r.Level = ParseOr(WaitKeySecondsBox.Text, 0) <= 0 ? 0 : StepHelpers.ClampWaitSeconds(ParseOr(WaitKeySecondsBox.Text, 0));
+                r.WaitKeySeconds = ParseOr(WaitKeySecondsBox.Text, 0) <= 0 ? 0 : StepHelpers.ClampWaitSeconds(ParseOr(WaitKeySecondsBox.Text, 0));
                 break;
             case "splitLines": r.Text = SplitTextBox.Text; break;
             case "math": r.Text = MathExprBox.Text; break;
-            case "skip": r.Action = ComboVal(SkipModeCombo); break;
+            case "skip": r.SkipMode = ComboVal(SkipModeCombo); break;
             case "each":
                 r.Text = EachListCombo.Text.Trim();
                 r.OutputVar = EachItemBox.Text.Trim();
                 r.Pattern = EachIndexBox.Text.Trim();
                 break;
-            case "waitClipboard": r.Level = StepHelpers.ClampWaitSeconds(ParseOr(WaitSecondsBox.Text, 5)); break;
+            case "waitClipboard": r.WaitSeconds = StepHelpers.ClampWaitSeconds(ParseOr(WaitSecondsBox.Text, 5)); break;
             // 动作存进 Action（与音量/窗口步骤同一个字段的用法），不为它新开配置字段。
             // 点几次/滚几格用共用的「重复次数」，这里不存第二个计数。
-            case "mouse": r.Action = ComboVal(MouseActCombo); break;
-            case "volume": r.Action = ComboVal(VolActionCombo); r.Level = Math.Clamp(ParseOr(LevelBox.Text, 0), 0, 100); break;
+            case "mouse": r.MouseAction = ComboVal(MouseActCombo); break;
+            case "volume": r.VolumeAction = ComboVal(VolActionCombo); r.VolumeLevel = Math.Clamp(ParseOr(LevelBox.Text, 0), 0, 100); break;
             case "window":
-                r.Action = ComboVal(WinActionCombo); r.Process = StepHelpers.ToProcessName(ProcessBox.Text);
+                r.WindowAction = ComboVal(WinActionCombo); r.Process = StepHelpers.ToProcessName(ProcessBox.Text);
                 r.SendKey = SendKeyBox.Text; r.WaitForWindowSeconds = ParseOr(WaitWinBox.Text, 0); r.PostWindowDelaySeconds = ParseOr(PostDelayBox.Text, 0);
                 break;
             case "system":
@@ -555,7 +555,7 @@ public partial class StepEditorWindow : Window
                 if (labelWasAuto) r.Label = StepDisplay.SystemCommandShortLabel(r.Command);
                 // 只给用得上参数的命令存参数：否则「锁屏」步骤的 json 里会躺着一段与它无关的剪贴板文本。
                 if (StepDisplay.SystemCommandTakesText(r.Command)) r.Text = SysTextBox.Text;
-                if (StepDisplay.SystemCommandTakesLevel(r.Command)) r.Level = Math.Clamp(ParseOr(SysLevelBox.Text, 50), 0, 100);
+                if (StepDisplay.SystemCommandTakesLevel(r.Command)) r.Brightness = Math.Clamp(ParseOr(SysLevelBox.Text, 50), 0, 100);
                 break;
             }
             case "text": r.Text = TextBox2.Text; r.Process = StepHelpers.ToProcessName(TextProcessBox.Text); break;
@@ -754,12 +754,15 @@ public partial class StepEditorWindow : Window
         // Action 那一格的初值也走同一处（StepHelpers.DefaultActionFor），
         // 与「换类型」那条路共用——见那处注释：同一个类型在两条路上起手不一样，
         // 差的是「音量」那一条（新建是「设到几成」，换类型曾落到「静音」，因为它是下拉的第一项）。
-        var s = seed ?? new LaunchStep
+        var s = seed ?? new LaunchStep { Kind = kind };
+        switch (kind)
         {
-            Kind = kind,
-            Action = StepHelpers.DefaultActionFor(kind),
-            Level = kind == "waitClipboard" ? StepHelpers.ClampWaitSeconds(0) : new LaunchStep().Level,
-        };
+            case "volume": s.VolumeAction = StepHelpers.DefaultActionFor("volume"); break;
+            case "window": s.WindowAction = StepHelpers.DefaultActionFor("window"); break;
+            case "mouse": s.MouseAction = StepHelpers.DefaultActionFor("mouse"); break;
+            // 等剪贴板的那一格要**意图值 5 秒**，不是模型默认的 50（那是音量那一档的量纲）。
+            case "waitClipboard": s.WaitSeconds = StepHelpers.ClampWaitSeconds(0); break;
+        }
         return Show(owner, s, groups, listItems, insideGroup);
     }
 

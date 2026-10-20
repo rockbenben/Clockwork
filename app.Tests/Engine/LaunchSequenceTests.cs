@@ -32,7 +32,7 @@ public class LaunchSequenceTests
     [Fact]
     public void Expands_group_step()
     {
-        var g = new ActionGroup { Id = "g1", Name = "组", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute" }, new LaunchStep { Kind = "keys", Combo = "Win+D" } } };
+        var g = new ActionGroup { Id = "g1", Name = "组", Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute" }, new LaunchStep { Kind = "keys", Combo = "Win+D" } } };
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "g1" } }, ActionGroups = new() { g } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
         Assert.Equal(2, r.Summary.Total);   // 组内 2 个非 message 子步骤
@@ -49,7 +49,7 @@ public class LaunchSequenceTests
     [Fact]
     public void Disabled_group_skipped()
     {
-        var g = new ActionGroup { Id = "g1", Name = "组", Enabled = false, Steps = new() { new LaunchStep { Kind = "volume", Action = "mute" } } };
+        var g = new ActionGroup { Id = "g1", Name = "组", Enabled = false, Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute" } } };
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "g1" } }, ActionGroups = new() { g } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
         Assert.Equal(0, r.Summary.Total);
@@ -77,7 +77,7 @@ public class LaunchSequenceTests
     [Fact]
     public void Group_message_substep_skipped_in_expansion()
     {
-        var g = new ActionGroup { Id = "g1", Name = "组", Steps = new() { new LaunchStep { Kind = "message", Message = "q" }, new LaunchStep { Kind = "volume", Action = "mute" } } };
+        var g = new ActionGroup { Id = "g1", Name = "组", Steps = new() { new LaunchStep { Kind = "message", Message = "q" }, new LaunchStep { Kind = "volume", VolumeAction = "mute" } } };
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "g1" } }, ActionGroups = new() { g } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
         Assert.Equal(1, r.Summary.Total);   // message 跳过，仅 mute 计入
@@ -87,7 +87,7 @@ public class LaunchSequenceTests
     public void Nested_group_expands_recursively()
     {
         var inner = new ActionGroup { Id = "in", Name = "内", Steps = new() { new LaunchStep { Kind = "keys", Combo = "a" } } };
-        var outer = new ActionGroup { Id = "out", Name = "外", Steps = new() { new LaunchStep { Kind = "group", GroupId = "in", Repeat = 3 }, new LaunchStep { Kind = "volume", Action = "mute" } } };
+        var outer = new ActionGroup { Id = "out", Name = "外", Steps = new() { new LaunchStep { Kind = "group", GroupId = "in", Repeat = 3 }, new LaunchStep { Kind = "volume", VolumeAction = "mute" } } };
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "out" } }, ActionGroups = new() { outer, inner } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
         Assert.Equal(4, r.Summary.Total);   // 内组 1 步 × 引用 3 次 + mute 1
@@ -122,7 +122,7 @@ public class LaunchSequenceTests
     [Fact]
     public void Group_level_repeat_applies_at_boot()
     {
-        var g = new ActionGroup { Id = "g1", Name = "组", Repeat = 3, Steps = new() { new LaunchStep { Kind = "volume", Action = "mute" } } };
+        var g = new ActionGroup { Id = "g1", Name = "组", Repeat = 3, Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute" } } };
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "g1" } }, ActionGroups = new() { g } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
         Assert.Equal(3, r.Summary.Total);   // 组自身 3 轮
@@ -179,7 +179,7 @@ public class LaunchSequenceTests
     [Fact]
     public void Group_busy_elsewhere_is_reported_once_and_stops_the_reference_loop()
     {
-        var g = new ActionGroup { Id = "busy1", Name = "占用中", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute" } } };
+        var g = new ActionGroup { Id = "busy1", Name = "占用中", Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute" } } };
         var c = new RootConfig
         {
             LaunchSteps = new()
@@ -206,7 +206,7 @@ public class LaunchSequenceTests
         var g = new ActionGroup { Id = "gm", Name = "组", Steps = new()
         {
             new LaunchStep { Kind = "message", Message = "要继续吗", Confirm = true },
-            new LaunchStep { Kind = "volume", Action = "mute" },
+            new LaunchStep { Kind = "volume", VolumeAction = "mute" },
         } };
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "gm" } }, ActionGroups = new() { g } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);
@@ -219,7 +219,7 @@ public class LaunchSequenceTests
         var g = new ActionGroup { Id = "gc", Name = "组", Steps = new()
         {
             new LaunchStep { Kind = "message", Message = "早安", Present = "card" },
-            new LaunchStep { Kind = "volume", Action = "mute" },
+            new LaunchStep { Kind = "volume", VolumeAction = "mute" },
         } };
         var c = new RootConfig { LaunchSteps = new() { new LaunchStep { Kind = "group", GroupId = "gc" } }, ActionGroups = new() { g } };
         var r = LaunchSequence.Run(c, false, 10, 3, Ok, Now);

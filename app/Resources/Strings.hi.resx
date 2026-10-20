@@ -376,9 +376,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>पैनल पेज «{0}» अब ट्रे मेन्यू में नहीं दिखेगा (पेज कोई चलाने योग्य क्रिया नहीं है)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>पैनल पेज अब अलग हैं</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">कॉन्फिग अपडेट हो गई</data>
   <data name="Kind_group" xml:space="preserve">
     <value>क्रिया समूह चलाएँ</value>
   </data>
@@ -2233,4 +2231,5 @@
   <data name="Gesture_IgnoreTitle" xml:space="preserve">वे ऐप जहाँ जेस्चर बंद हैं</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">हर पंक्ति में एक प्रोसेस नाम (जैसे mstsc, vmware)। इन ऐप्स में Clockwork दायाँ बटन को बिल्कुल नहीं छूता — वह सीधे प्रोग्राम को जाता है।</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">खींचते समय क्रिया का नाम दिखाएँ</data>
+  <data name="Mig_StepParams" xml:space="preserve">{0} चरणों द्वारा साझा किया गया क्रिया और संख्या अब हर प्रकार के अलग क्षेत्रों में है (हर चरण क्या करता है, वह नहीं बदला)</data>
 </root>

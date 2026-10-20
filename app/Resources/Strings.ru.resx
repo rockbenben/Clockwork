@@ -376,9 +376,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>Страница панели «{0}» больше не появляется в меню трея (страница — не запускаемое действие)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>Страницы панели теперь отдельно</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">Конфигурация обновлена</data>
   <data name="Kind_group" xml:space="preserve">
     <value>Выполнить группу</value>
   </data>
@@ -2233,4 +2231,5 @@
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Приложения без жестов</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">По одному имени процесса в строке (например, mstsc, vmware). В этих приложениях Clockwork не трогает правую кнопку — она передаётся программе как есть.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Показывать название действия во время рисования</data>
+  <data name="Mig_StepParams" xml:space="preserve">Действие и число, общие для {0} шагов, разнесены по полям для каждого типа (суть каждого шага не меняется)</data>
 </root>

@@ -376,9 +376,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>Trang bảng “{0}” không còn xuất hiện trong menu khay (trang không phải hành động chạy được)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>Trang bảng giờ tách riêng</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">Đã cập nhật cấu hình</data>
   <data name="Kind_group" xml:space="preserve">
     <value>Chạy nhóm hành động</value>
   </data>
@@ -2233,4 +2231,5 @@ Nhật ký: {1}</value>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Ứng dụng không dùng cử chỉ</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Mỗi dòng một tên tiến trình (ví dụ mstsc, vmware). Trong các ứng dụng này, Clockwork không đụng tới chuột phải — nó đi thẳng về ứng dụng.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Hiện tên hành động khi đang vẽ</data>
+  <data name="Mig_StepParams" xml:space="preserve">Hành động và số dùng chung của {0} bước đã được tách ra thành ô riêng theo từng loại (việc mỗi bước làm không đổi)</data>
 </root>

@@ -32,7 +32,7 @@ public class StepDisplayTitleTests
     [Fact]
     public void A_named_process_tile_still_shows_just_the_process()
         => Assert.Equal("slack.exe",
-            StepDisplay.StepTitle(new LaunchStep { Kind = "window", Action = "close", Process = "slack.exe" }));
+            StepDisplay.StepTitle(new LaunchStep { Kind = "window", WindowAction = "close", Process = "slack.exe" }));
 
     // 用户起了名字就永远优先，两条快路都不该盖掉它。
     [Fact]

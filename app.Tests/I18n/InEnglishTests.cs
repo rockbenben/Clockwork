@@ -12,7 +12,7 @@ using Xunit;
 //     而写日志这条路可能跑在 UI 线程上）。
 public class InEnglishTests
 {
-    private static readonly LaunchStep Volume = new() { Kind = "volume", Action = "set", Level = 30 };
+    private static readonly LaunchStep Volume = new() { Kind = "volume", VolumeAction = "set", VolumeLevel = 30 };
 
     private static T UnderZh<T>(Func<T> f)
     {

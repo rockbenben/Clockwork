@@ -145,8 +145,8 @@ public class StringsTests
     public void Display_helpers_localize_to_english() => WithCulture("en", () =>
     {
         Assert.Equal("Launch App", StepDisplay.StepKindLabel("app"));
-        Assert.Equal("Volume 30%", StepDisplay.StepSummary(new LaunchStep { Kind = "volume", Action = "set", Level = 30 }));
-        Assert.Equal("Close Window Weixin", StepDisplay.StepSummary(new LaunchStep { Kind = "window", Action = "close", Process = "Weixin" }));
+        Assert.Equal("Volume 30%", StepDisplay.StepSummary(new LaunchStep { Kind = "volume", VolumeAction = "set", VolumeLevel = 30 }));
+        Assert.Equal("Close Window Weixin", StepDisplay.StepSummary(new LaunchStep { Kind = "window", WindowAction = "close", Process = "Weixin" }));
         Assert.Equal("Mon–Fri", StepDisplay.DaysLabel(new List<int> { 1, 2, 3, 4, 5 }));
         Assert.Equal("Every 3 days", ReminderDisplay.PeriodLabel(new Reminder { RecurType = "everyNDays", IntervalDays = 3 }));
         Assert.Equal("At login · before 8:00", ReminderDisplay.TimeLabel(new Reminder { Trigger = "startup", StartupHourMode = "before", StartupHour = 8 }));

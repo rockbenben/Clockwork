@@ -69,22 +69,22 @@ public static class StepRunner
             // 鼠标步骤只是「发送按键」的一个预设入口：转成伪键走同一条注入路（含 UIPI 被拒的同款告警）。
             // 别在这里另起一套 SendWheel/SendMouseButton 调用——两处各写一份，将来改注入行为必漏一处。
             // 点几次/滚几格用步骤自带的「重复次数」，与手写伪键的行为完全一致。
-            case "mouse": return KeyInput.SendKeyCombo(StepDisplay.MouseActionCombo(s.Action));
+            case "mouse": return KeyInput.SendKeyCombo(StepDisplay.MouseActionCombo(s.MouseAction));
             case "volume":
-                switch (s.Action)
+                switch (s.VolumeAction)
                 {
                     case "mute": AudioController.Mute(true); return ActionResult.Empty;
                     case "unmute": AudioController.Mute(false); return ActionResult.Empty;
                     // 设为音量=想听到声音：系统若静音，只改百分比等于没调 → 先解静音再设。
-                    case "set": AudioController.Mute(false); AudioController.SetVolumePercent(s.Level); return ActionResult.Empty;
+                    case "set": AudioController.Mute(false); AudioController.SetVolumePercent(s.VolumeLevel); return ActionResult.Empty;
                     case "micMute": AudioController.MuteMic(true); return ActionResult.Empty;
                     case "micUnmute": AudioController.MuteMic(false); return ActionResult.Empty;
-                    default: return ActionResult.Warn("Warn_UnknownVolume", s.Action);
+                    default: return ActionResult.Warn("Warn_UnknownVolume", s.VolumeAction);
                 }
             case "window":
                 {
-                    var r = WindowManager.WindowAction(s.Process, s.Action, s.SendKey, s.WaitForWindowSeconds, s.PostWindowDelaySeconds, cancel);
-                    if (s.Action == "sendkey")
+                    var r = WindowManager.WindowAction(s.Process, s.WindowAction, s.SendKey, s.WaitForWindowSeconds, s.PostWindowDelaySeconds, cancel);
+                    if (s.WindowAction == "sendkey")
                     {
                         // 键注入前台后无法证实接收 → 成功记「~ 未校验」；没发出去才告警；急停/取消静默。
                         if (r == WindowOutcome.Ok) return ActionResult.Unver();
@@ -99,24 +99,24 @@ public static class StepRunner
                         // 什么都没关掉，只是没有目标。
                         // 「恢复活动窗口」找不到目标与「当前窗口」找不到目标是同一件事，同一句话：
                         // 触发那一刻前台是 Clockwork 自己，或者压根没有前台窗口。
-                        WindowOutcome.NoWindow when StepDisplay.IsCurrentWindow(s) || s.Action == "restore"
+                        WindowOutcome.NoWindow when StepDisplay.IsCurrentWindow(s) || s.WindowAction == "restore"
                             => ActionResult.Warn("Warn_NoForegroundWindow"),
                         // close 幂等：目标态就是「不在运行」，没开=已达成，记 ✓ 不告警。
-                        WindowOutcome.NoWindow => s.Action == "close" ? ActionResult.Empty
-                            : ActionResult.Warn("Warn_WindowNotFound", s.Process, s.Action),
+                        WindowOutcome.NoWindow => s.WindowAction == "close" ? ActionResult.Empty
+                            : ActionResult.Warn("Warn_WindowNotFound", s.Process, s.WindowAction),
                         // 「回到刚才那个窗口」没有目标进程，套不进「找到了『{0}』的窗口，但…」那句话——
                         // 拼出来是「找到了「」的窗口」，一个空引号。它自己一句。
-                        WindowOutcome.Failed when s.Action == "restore"
+                        WindowOutcome.Failed when s.WindowAction == "restore"
                             => ActionResult.Warn("Warn_RestoreFailed"),
                         // 窗口在、动作没生效：与「找不到窗口」是两回事，措辞必须分开——
                         // 前者该去查进程为什么没起来，后者该去看是不是前台锁定/提权窗口/弹框挡住了。
-                        WindowOutcome.Failed => ActionResult.Warn("Warn_WindowActionFailed", StepDisplay.WindowTarget(s), s.Action),
+                        WindowOutcome.Failed => ActionResult.Warn("Warn_WindowActionFailed", StepDisplay.WindowTarget(s), s.WindowAction),
                         // 动作合法、只是这个目标不开放它（「当前窗口」+ 置前/发键）。这个组合在编辑器里
                         // 点得出来，所以它必须有自己的话——落到下面那句会变成「不认识的窗口动作：activate」，
                         // 指着一个完全合法的动作说不认识，而问题在目标那一侧。
                         WindowOutcome.NotForCurrentWindow
-                            => ActionResult.Warn("Warn_NotForCurrentWindow", s.Action),
-                        _ => ActionResult.Warn("Warn_UnknownWindowAction", s.Action),
+                            => ActionResult.Warn("Warn_NotForCurrentWindow", s.WindowAction),
+                        _ => ActionResult.Warn("Warn_UnknownWindowAction", s.WindowAction),
                     };
                 }
             // 文本参数一律先替换：设置剪贴板文本、搜索地址模板都在这个字段上。
@@ -135,7 +135,7 @@ public static class StepRunner
                 // 但这条命令允许无人值守跑」——那就该跑。恒假会让它静默什么都不做，
                 // 而 run.log 记下一个 ✓：那正是上面那段注释反对的「假装做了」。
                 // 不问自动化的命令本就不会调它，恒真对它们无影响。
-                SystemCommands.Invoke(s.Command, confirmDestructive ?? (_ => true), Fill(s.Text, false, vars), s.Level);
+                SystemCommands.Invoke(s.Command, confirmDestructive ?? (_ => true), Fill(s.Text, false, vars), s.Brightness);
                 return ActionResult.Empty;
             case "text": return WindowManager.SendText(Fill(s.Text, urlEncode: false, vars), s.Process, cancel);
             // 打开网址：从「运行程序」拆出来的一档。执行上仍是 ShellExecute（同一条路），
@@ -191,7 +191,7 @@ public static class StepRunner
             // 等到了就往下走，没等到也往下走，只是如实说一声；把它做成硬失败会让整组停在这里。
             case "waitClipboard":
             {
-                int secs = StepHelpers.ClampWaitSeconds(s.Level);
+                int secs = StepHelpers.ClampWaitSeconds(s.WaitSeconds);
                 return SystemCommands.WaitClipboardChange(Win32.GetClipboardSequenceNumber(), secs * 1000, cancel)
                     ? ActionResult.Empty
                     : ActionResult.Warn("Warn_WaitClipboard", secs);
@@ -238,8 +238,8 @@ public static class StepRunner
                 // 先写变量再打开：打开失败时路径已经在手里，用户可以直接复制到地址栏去试。
                 if (!string.IsNullOrWhiteSpace(s.OutputVar) && vars != null) vars.Set(s.OutputVar, mapped.Path);
 
-                // action: open（默认）用系统默认程序打开；reveal 在资源管理器里选中；none 只产出不打开。
-                var mode = string.IsNullOrWhiteSpace(s.Action) ? "open" : s.Action.Trim().ToLowerInvariant();
+                // siteMapMode: open（默认）用系统默认程序打开；reveal 在资源管理器里选中；none 只产出不打开。
+                var mode = string.IsNullOrWhiteSpace(s.SiteMapMode) ? "open" : s.SiteMapMode.Trim().ToLowerInvariant();
                 if (mode == "none") return ActionResult.Empty;
                 try
                 {
@@ -267,7 +267,7 @@ public static class StepRunner
 
                 // group=0 是整个匹配；1..n 是捕获组。越界如实报，不退回整体——那会得到一个
                 // 看着对其实错的路径，而错误提示「找不到文件」永远指不到真正的原因。
-                var gi = Math.Max(0, s.Level);
+                var gi = Math.Max(0, s.RegexGroup);
                 string value;
                 if (gi == 0) value = m.Value;
                 else if (gi <= m.Groups.Count) value = m.Groups[gi].Value;
@@ -320,7 +320,7 @@ public static class StepRunner
                         string.IsNullOrWhiteSpace(s.Text) ? Strings.Get("Sum_Unset") : string.Join(", ", unknown));
 
                 // 超时秒数 0 = 不限时。限时用 waitClipboard 同一个夹取（1..60），不另造一套刻度。
-                var secs = StepHelpers.ClampWaitSeconds(s.Level);
+                var secs = StepHelpers.ClampWaitSeconds(s.WaitKeySeconds);
                 var vk = KeyWaiter.Wait(ok.Select(k => k.Vk).ToArray(), secs == 0 ? 0 : secs * 1000, cancel);
 
                 // 取消（急停 / 这次运行的闸）与超时**分别说话**：前者是用户主动叫停，后者是「一直没按」。

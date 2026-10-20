@@ -376,9 +376,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>لم تعد صفحة اللوحة «{0}» تظهر في قائمة العلبة (الصفحة ليست إجراءً قابلاً للتشغيل)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>صفحات اللوحة أصبحت مستقلة</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">تم تحديث الإعدادات</data>
   <data name="Kind_group" xml:space="preserve">
     <value>تشغيل مجموعة إجراءات</value>
   </data>
@@ -2233,4 +2231,5 @@
   <data name="Gesture_IgnoreTitle" xml:space="preserve">التطبيقات التي لا تعمل فيها الإيماءات</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">اسم عملية في كل سطر (مثل mstsc أو vmware). في هذه التطبيقات لا يلمس Clockwork الزر الأيمن إطلاقًا — يذهب إلى البرنامج كما هو.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">أظهر اسم الإجراء أثناء الرسم</data>
+  <data name="Mig_StepParams" xml:space="preserve">فُصلت الإجراء والرقم المشتركان بين {0} خطوة إلى حقول خاصة بكل نوع (ما تفعله كل خطوة لم يتغيّر)</data>
 </root>

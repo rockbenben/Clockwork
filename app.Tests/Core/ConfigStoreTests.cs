@@ -273,7 +273,7 @@ public class ConfigStoreTests : IDisposable
         try
         {
             var seed = new RootConfig();
-            seed.LaunchSteps.Add(new LaunchStep { Kind = "volume", Label = "v", Enabled = false, DelayMs = 0, Level = 0 });
+            seed.LaunchSteps.Add(new LaunchStep { Kind = "volume", Label = "v", Enabled = false, DelayMs = 0, VolumeLevel = 0 });
             seed.LaunchSteps.Add(new LaunchStep { Kind = "text", Label = "t", Text = "hi", SendKey = "" });
             seed.Reminders.Add(new Reminder());
             seed.Gestures.Add(new LaunchStep { Kind = "app", Label = "g", Gesture = "LR" });

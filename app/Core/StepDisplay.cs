@@ -35,7 +35,7 @@ public static class StepDisplay
     // 各写一份的话，改动一旦只落一处，清单上就会写着「定位」而实际打开了文件。
     public static string SiteMapActionOf(LaunchStep s)
     {
-        var a = (s.Action ?? "").Trim().ToLowerInvariant();
+        var a = (s.SiteMapMode ?? "").Trim().ToLowerInvariant();
         return a is "reveal" or "none" ? a : "open";
     }
 
@@ -180,7 +180,7 @@ public static class StepDisplay
     public static LaunchStep MakePreset(string kind, string arg) => kind switch
     {
         "keys" => new LaunchStep { Kind = "keys", Combo = arg },
-        "window" => new LaunchStep { Kind = "window", Action = arg, Process = CurrentWindowMark },
+        "window" => new LaunchStep { Kind = "window", WindowAction = arg, Process = CurrentWindowMark },
         _ => new LaunchStep { Kind = "system", Command = arg, Text = arg == "searchSelection" ? DefaultSearchUrl : "" },
     };
 
@@ -443,21 +443,21 @@ public static class StepDisplay
             "app" => !string.IsNullOrEmpty(s.Label) ? s.Label : Arg(LaunchTarget.DisplayName(s.Target)),
             "keys" => Strings.Lf("Sum_SendKeys", Arg(KeyComboLabel(s.Combo))),
             // 次数由摘要共用的 ×N 修饰段（DecorationSummary）负责，这里只说动作，别把次数写两遍
-            "mouse" => Strings.Get(MouseActionLabelKey(s.Action)),
-            "volume" => s.Action switch
+            "mouse" => Strings.Get(MouseActionLabelKey(s.MouseAction)),
+            "volume" => s.VolumeAction switch
             {
-                "mute" => Strings.Get("Vol_mute"), "unmute" => Strings.Get("Vol_unmute"), "set" => Strings.Lf("Vol_set", s.Level),
-                "micMute" => Strings.Get("Vol_micMute"), "micUnmute" => Strings.Get("Vol_micUnmute"), _ => s.Action,
+                "mute" => Strings.Get("Vol_mute"), "unmute" => Strings.Get("Vol_unmute"), "set" => Strings.Lf("Vol_set", s.VolumeLevel),
+                "micMute" => Strings.Get("Vol_micMute"), "micUnmute" => Strings.Get("Vol_micUnmute"), _ => s.VolumeAction,
             },
             // 「恢复活动窗口」没有目标，摘要就是它自己那一句——拼一个空目标会得到「恢复活动窗口 （未设置）」。
-            "window" => !WindowActionNeedsTarget(s.Action) ? WinActionLabel(s.Action)
-                : IsCurrentWindow(s) ? WinCurrentLabel(s.Action) : $"{Arg(WinActionLabel(s.Action))} {Arg(s.Process)}",
+            "window" => !WindowActionNeedsTarget(s.WindowAction) ? WinActionLabel(s.WindowAction)
+                : IsCurrentWindow(s) ? WinCurrentLabel(s.WindowAction) : $"{Arg(WinActionLabel(s.WindowAction))} {Arg(s.Process)}",
             // 参数为空时退回纯标签：「播放声音」留空是**常态**（= 系统提示音），
             // 拼出来会是「播放声音：」后面跟一片空白，读着像是配漏了。
             "system" => ArgIsTheSubject(s.Command) && !string.IsNullOrWhiteSpace(s.Text)
                 ? Strings.Lf("Sum_SysArg", SystemCommandShortLabel(s.Command), Clip(NoNewline(s.Text), 30))
                 : SystemCommandTakesLevel(s.Command)
-                    ? Strings.Lf("Sum_SysArg", SystemCommandShortLabel(s.Command), s.Level + "%")
+                    ? Strings.Lf("Sum_SysArg", SystemCommandShortLabel(s.Command), s.Brightness + "%")
                     : SystemCommandShortLabel(s.Command),
             "group" => Strings.Lf("Sum_RunGroup", !string.IsNullOrEmpty(s.Label) ? s.Label : (!string.IsNullOrEmpty(s.GroupId) ? s.GroupId : Strings.Get("Sum_Unset"))),
             // 引用清单项：与组引用同一条兜底链（名字 → id → 「未设置」）。格子提交时 Label 同步成
@@ -479,7 +479,7 @@ public static class StepDisplay
             // D:\Work 和 E:\Work 的区别全在前缀上，像 app 那样只取叶子名就分不开了。
             "path" => Strings.Lf("Sum_OpenPath", Arg(Clip(NoNewline(LaunchTarget.NormalizeTarget(s.Target)), 48))),
             "copySelection" => Strings.Get("Kind_copySelection"),
-            "waitClipboard" => Strings.Lf("Sum_WaitClipboard", StepHelpers.ClampWaitSeconds(s.Level)),
+            "waitClipboard" => Strings.Lf("Sum_WaitClipboard", StepHelpers.ClampWaitSeconds(s.WaitSeconds)),
 
             // ---- 产出值的那一族 ----
             // 摘要是「不写出来就答不了这一步在干什么」的那些字段：
@@ -525,7 +525,7 @@ public static class StepDisplay
                 + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
             "math" => Strings.Lf("Sum_Math", Arg(Clip(NoNewline(s.Text), 30)))
                 + (string.IsNullOrWhiteSpace(s.OutputVar) ? "" : Strings.Lf("Sum_ToVar", s.OutputVar.Trim())),
-            "skip" => Strings.Get((s.Action ?? "").Trim().ToLowerInvariant() == "run" ? "Sum_SkipRun" : "Sum_SkipBlock"),
+            "skip" => Strings.Get((s.SkipMode ?? "").Trim().ToLowerInvariant() == "run" ? "Sum_SkipRun" : "Sum_SkipBlock"),
             // 「每个」只写清单来源，**不写孩子有几步**：摘要这一格只拿到单条步骤，看不到兄弟列表，
             // 而硬要去数就得把整棵树传进 StepBaseCore 的签名——为了一个括注改一个被十几处调用的出口。
             // 孩子有几步在编辑器里是看得见的（缩进那一列就是），清单上要个数的地方用「运行整组」看日志。

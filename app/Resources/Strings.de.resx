@@ -376,9 +376,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>Panel-Seite „{0}“ erscheint nicht mehr im Infobereichsmenü (eine Seite ist keine ausführbare Aktion)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>Panel-Seiten sind jetzt eigenständig</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">Konfiguration aktualisiert</data>
   <data name="Kind_group" xml:space="preserve">
     <value>Aktionsgruppe ausführen</value>
   </data>
@@ -2233,4 +2231,5 @@ Protokoll: {1}</value>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Apps, in denen Gesten aus sind</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Ein Prozessname pro Zeile (zum Beispiel mstsc, vmware). In diesen Apps lässt Clockwork die rechte Taste vollständig in Ruhe – sie geht direkt an das Programm.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Aktionsnamen beim Zeichnen anzeigen</data>
+  <data name="Mig_StepParams" xml:space="preserve">Die von {0} Schritten gemeinsam genutzte Aktion und Zahl in Felder je Typ aufgeteilt (was jeder Schritt tut, bleibt unverändert)</data>
 </root>

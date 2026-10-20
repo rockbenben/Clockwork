@@ -42,7 +42,7 @@ public class DefaultConfigTests
     {
         var s = RootConfig.Default().LaunchSteps[0];
         Assert.Equal("volume", s.Kind);
-        Assert.Equal("mute", s.Action);
+        Assert.Equal("mute", s.VolumeAction);
         Assert.False(s.OnlyBefore8);
     }
 
@@ -51,7 +51,7 @@ public class DefaultConfigTests
     {
         var s = new LaunchStep();
         Assert.True(s.Enabled);
-        Assert.Equal(50, s.Level);
+        Assert.Equal(50, s.VolumeLevel);
         Assert.Equal(8, s.BeforeHour);
         Assert.Equal("{ENTER}", s.SendKey);
         Assert.Equal(1, s.Repeat);

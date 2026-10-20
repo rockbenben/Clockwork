@@ -349,7 +349,7 @@ public partial class App
                 var page = new PanelPage { Name = LongestOf("Tab_") };
                 page.Steps.Add(new LaunchStep { Kind = "app", Label = "notepad", Target = @"C:\Windows\System32\notepad.exe" });
                 page.Steps.Add(new LaunchStep { Kind = "system", Label = LongestOf("Sys_"), Command = "lockScreen" });
-                page.Steps.Add(new LaunchStep { Kind = "volume", Label = LongestOf("Vol_"), Action = "mute" });
+                page.Steps.Add(new LaunchStep { Kind = "volume", Label = LongestOf("Vol_"), VolumeAction = "mute" });
                 cfg.PanelPages.Add(page);
                 return new PanelManagerWindow(cfg, () => { });
             }),
@@ -481,7 +481,7 @@ public partial class App
             ("StepEditorUrl", () => new StepEditorWindow(
                 new LaunchStep { Kind = "url", Target = "https://www.bing.com/search?q={clipboard}" }, groups)),
             ("StepEditorCopySelection", () => new StepEditorWindow(new LaunchStep { Kind = "copySelection" }, groups)),
-            ("StepEditorWaitClipboard", () => new StepEditorWindow(new LaunchStep { Kind = "waitClipboard", Level = 5 }, groups)),
+            ("StepEditorWaitClipboard", () => new StepEditorWindow(new LaunchStep { Kind = "waitClipboard", WaitSeconds = 5 }, groups)),
             // 「交互式流程」那批新面板。这几个的面板此前**一次都没被渲染过**，而这一档最容易出问题：
             // 面板本身就是它那一节的全部版面（没有「主行 + 副行」的层次可借），塌了只会表现为
             // 编辑器里一小块空白或一行挤在一起的字，而那只有看图才知道——Build 绿、smoke 绿都盖不住，
@@ -495,9 +495,9 @@ public partial class App
             ("StepEditorEach", () => new StepEditorWindow(
                 new LaunchStep { Kind = "each", Text = "行" }, groups)),
             ("StepEditorSiteMap", () => new StepEditorWindow(
-                new LaunchStep { Kind = "siteMap", Target = "https://newzone.top/blog.html", Action = "reveal" }, groups)),
+                new LaunchStep { Kind = "siteMap", Target = "https://newzone.top/blog.html", SiteMapMode = "reveal" }, groups)),
             ("StepEditorWaitKey", () => new StepEditorWindow(
-                new LaunchStep { Kind = "waitKey", Text = "Insert,Escape", Level = 0, OutputVar = "按键" }, groups)),
+                new LaunchStep { Kind = "waitKey", Text = "Insert,Escape", WaitKeySeconds = 0, OutputVar = "按键" }, groups)),
 
             // ── 剩下那 9 种类型的编辑器面板，此前**一次都没有被渲染过** ──
             //
@@ -528,11 +528,11 @@ public partial class App
             //           那个统一字段（StepRunner 的 case "delay"）。恰恰因为没有专属面板，
             //           这一档唯一能拍的就是「它确实没有多出来的东西」。
             ("StepEditorMouse", () => new StepEditorWindow(
-                new LaunchStep { Kind = "mouse", Action = "rightClick" }, groups)),
+                new LaunchStep { Kind = "mouse", MouseAction = "rightClick" }, groups)),
             ("StepEditorText", () => new StepEditorWindow(
                 new LaunchStep { Kind = "text", Text = "看这个：{clipboard}", Process = "notepad" }, groups)),
             ("StepEditorVolume", () => new StepEditorWindow(
-                new LaunchStep { Kind = "volume", Action = "set", Level = 70 }, groups)),
+                new LaunchStep { Kind = "volume", VolumeAction = "set", VolumeLevel = 70 }, groups)),
             ("StepEditorBrowserUrl", () => new StepEditorWindow(
                 new LaunchStep { Kind = "browserUrl", OutputVar = "网址" }, groups)),
             // OnYes.Type 的合法值只有 none / run / url（StepEditorWindow 里那张 FillCombo 是唯一出处）。
@@ -559,7 +559,7 @@ public partial class App
                 new LaunchStep { Kind = "delay", DelayMs = 2000 }, groups)),
 
             ("StepEditorSkip", () => new StepEditorWindow(
-                new LaunchStep { Kind = "skip", Action = "block" }, groups)),
+                new LaunchStep { Kind = "skip", SkipMode = "block" }, groups)),
             ("StepEditorMath", () => new StepEditorWindow(
                 new LaunchStep { Kind = "math", Text = "{index}+1", OutputVar = "n" }, groups)),
             ("StepEditorRegex", () => new StepEditorWindow(
@@ -576,7 +576,7 @@ public partial class App
             //   播放声音 —— 与「搜索地址」共用同一个输入框，标签换成「声音文件」、
             //     说明行换成「留空 = 系统提示音」，高度从三行收成一行。
             ("StepEditorRestore", () => new StepEditorWindow(
-                new LaunchStep { Kind = "window", Action = "restore" }, groups)),
+                new LaunchStep { Kind = "window", WindowAction = "restore" }, groups)),
             ("StepEditorPlaySound", () => new StepEditorWindow(
                 new LaunchStep { Kind = "system", Command = "playSound" }, groups)),
             // 置顶：这一档比别的窗口动作多一行「它是开关」的说明，只有这一种取值下才存在。
@@ -805,7 +805,7 @@ public partial class App
             ("GestureManagerTopmost", () =>
             {
                 var cfg = RootConfig.Default();
-                cfg.Gestures.RemoveAll(s => !(s.Kind == "window" && s.Action == "topmost"));
+                cfg.Gestures.RemoveAll(s => !(s.Kind == "window" && s.WindowAction == "topmost"));
                 return new GestureManagerWindow(cfg, () => { });
             }),
             // 图标选择器：这个窗口本身就是内置图标库的验收图。挑错的 MDL2 码位不会报错，

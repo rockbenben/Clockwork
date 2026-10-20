@@ -55,9 +55,53 @@ public sealed class LaunchStep
     // 分应用手势：只在指定进程（裸名/带.exe均可）上划该手势才触发。空=全局通用。
     // 匹配时优先命中当前鼠标所在窗口的进程，未命中时再回退到全局手势。
     public string ForProcess { get; set; } = "";
-    // volume/window 共用 action；时间条件「仅 N 点前」
-    public string Action { get; set; } = "";
-    public int Level { get; set; } = 50;
+    // ── 每种类型自己的参数 ──
+    //
+    // 从前这些值挤在两格里：**Action**（音量/窗口/鼠标/跳过/站点映射五种类型共用）与
+    // **Level**（音量百分比 / 等剪贴板秒数 / 亮度百分比 / 正则组号 / 等按键秒数，五种量纲共用）。
+    //
+    // 共用的代价是**换类型会串味**：一条音量（50%）改成「等剪贴板」，那个数就变成 50 秒——
+    // 同一格里塞着两种量纲，而编辑器只有「每种类型各一个输入框」这一道挡。
+    // 手改配置也一样：把 "kind" 从 volume 改成 waitClipboard，"level": 50 就成了 50 秒。
+    //
+    // 现在**每个类型认领自己那一格**。串味从根上没了：改类型时新类型那一格是它自己的值，
+    // 而旧类型那一格里的值还留着（改回去还在）。
+    //
+    // **默认值与从前逐字相同**（字符串空、数值 50）：迁移要靠它做到「读回来一模一样」；
+    // 而新建时的**意图值**（等剪贴板 5 秒、音量「设到几成」）仍然由编辑器给，见 StepEditorWindow.Create。
+    //
+    // volume
+    public string VolumeAction { get; set; } = "";
+    public int VolumeLevel { get; set; } = 50;
+    // window
+    public string WindowAction { get; set; } = "";
+    // mouse
+    public string MouseAction { get; set; } = "";
+    // skip（跳过一整段 / 跳过一次运行）
+    public string SkipMode { get; set; } = "";
+    // siteMap（打开 / 定位 / 只产出不打开）
+    public string SiteMapMode { get; set; } = "";
+    // system（亮度，0-100）
+    public int Brightness { get; set; } = 50;
+    // waitClipboard（等多少秒，1-60）
+    public int WaitSeconds { get; set; } = 50;
+    // waitKey（等多少秒；0 = 不限时）
+    public int WaitKeySeconds { get; set; } = 50;
+    // regex（第几组）
+    public int RegexGroup { get; set; } = 50;
+
+    // ── 旧的两格：只给迁移读，迁完就空 ──
+    //
+    // **可空是这里的关键**：从前 Level 是个 int、默认 50，于是「配置里没写这一项」与
+    // 「写了 0」读进来之后**分不开**——而这两件事必须分得开：前者是旧默认的 50，
+    // 后者是用户明写的 0（音量 0%、等 0 秒）。迁移要按前者走 50、按后者走 0。
+    // 改成可空之后，「没写」= null、「写了 0」= 0，一眼分得开。
+    //
+    // 迁完（ConfigStore 的一次性迁移，PanelSchema 4 → 5）它们被清成 null，
+    // 于是**不会落盘**（序列化只写与新建实例不同的值，见 ConfigStore 那个跳过器），
+    // 盘上从此只有新形状这一种。
+    public string? Action { get; set; }
+    public int? Level { get; set; }
     public bool OnlyBefore8 { get; set; }
     public int BeforeHour { get; set; } = 8;
     public int BeforeMinute { get; set; }   // 「仅 N 前」的分钟位：阈值=BeforeHour:BeforeMinute，支持任意时刻（不再只整点）
@@ -511,7 +555,8 @@ public sealed class RootConfig
             Reminders = DefaultReminders(),
             // 首份配置直接写成当前模型，不留给迁移去改：写成老样子的话，每次读默认配置都会触发一次
             // 迁移改写，Read_clean_file_reports_no_normalization 会红——它红得对，说明首份配置不是规范形。
-            Settings = new AppSettings { PanelSchema = 4 },
+            // 版本号 5 = 「共用的 Action/Level 已经拆到各类型自己的格子里」（见 ConfigStore 那一趟迁移）。
+            Settings = new AppSettings { PanelSchema = 5 },
             ActionGroups = actions,
             PanelPages = DefaultPanelPages(actions),
             Gestures = DefaultGestures(),
@@ -606,7 +651,7 @@ public sealed class RootConfig
     // 文案经 resx 本地化，与 ActionGroupTemplates 同口径；进程名/路径是全球通用的字面量，不本地化。
     public static List<LaunchStep> DefaultLaunchSteps() => new()
     {
-        new LaunchStep { Kind = "volume", Label = Strings.Get("Smp_Mute"), Action = "mute", Enabled = false },
+        new LaunchStep { Kind = "volume", Label = Strings.Get("Smp_Mute"), VolumeAction = "mute", Enabled = false },
         new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenApp"), Target = "msedge.exe", Enabled = false },
         // 条件执行的演示放这条：「工作日才打开工作网站」是自证的，比原来的「仅 8 点前静音」好懂。
         new LaunchStep { Kind = "app", Label = Strings.Get("Smp_OpenSite"), Target = "https://github.com", DelayMs = 800, Days = new() { 1, 2, 3, 4, 5 }, Enabled = false },

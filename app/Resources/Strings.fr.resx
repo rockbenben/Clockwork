@@ -376,9 +376,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>La page de panneau « {0} » n'apparaît plus dans le menu de la zone de notification (une page n'est pas une action exécutable)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>Les pages de panneau sont désormais distinctes</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">Configuration mise à jour</data>
   <data name="Kind_group" xml:space="preserve">
     <value>Exécuter un groupe</value>
   </data>
@@ -2233,4 +2231,5 @@ Journal : {1}</value>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Applications sans gestes</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Un nom de processus par ligne (par exemple mstsc, vmware). Dans ces applications, Clockwork ne touche pas le bouton droit : il va directement au programme.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Afficher le nom de l’action pendant le tracé</data>
+  <data name="Mig_StepParams" xml:space="preserve">L’action et le nombre partagés par {0} étapes sont désormais dans des champs par type (ce que fait chaque étape ne change pas)</data>
 </root>

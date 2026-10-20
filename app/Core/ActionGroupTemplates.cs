@@ -30,9 +30,9 @@ public static class ActionGroupTemplates
         ("focus", new ActionGroup { Name = Strings.Get("Tpl_Focus"), Icon = "E7ED", Steps = new()
         {
             new LaunchStep { Kind = "system", Command = "notificationsOff" },
-            new LaunchStep { Kind = "volume", Action = "mute" },
-            new LaunchStep { Kind = "window", Action = "minimize", Process = "Slack" },
-            new LaunchStep { Kind = "window", Action = "minimize", Process = "Discord" },
+            new LaunchStep { Kind = "volume", VolumeAction = "mute" },
+            new LaunchStep { Kind = "window", WindowAction = "minimize", Process = "Slack" },
+            new LaunchStep { Kind = "window", WindowAction = "minimize", Process = "Discord" },
             new LaunchStep { Kind = "system", Command = "showDesktop" },
         } } ),
         // 会议：先清桌面（共享屏幕前别露隐私），再把音量设到能听清的档位。
@@ -44,10 +44,10 @@ public static class ActionGroupTemplates
         // 比任何会议软件自己的静音都彻底。进会后手动开麦即可——反过来（默认开着）风险大得多。
         ("meeting", new ActionGroup { Name = Strings.Get("Tpl_Meeting"), Icon = "E716", Steps = new()
         {
-            new LaunchStep { Kind = "volume", Action = "micMute" },
+            new LaunchStep { Kind = "volume", VolumeAction = "micMute" },
             new LaunchStep { Kind = "system", Command = "notificationsOff" },
             new LaunchStep { Kind = "system", Command = "showDesktop" },
-            new LaunchStep { Kind = "volume", Action = "set", Level = 70 },
+            new LaunchStep { Kind = "volume", VolumeAction = "set", VolumeLevel = 70 },
         } } ),
         // 恢复正常：专注 / 会议关掉的东西，这里一次开回来。
         // 通知 / 麦克风静音都是有状态的开关——只给「关」不给「开」，用户第二天会以为通知坏了。
@@ -56,16 +56,16 @@ public static class ActionGroupTemplates
         ("restore", new ActionGroup { Name = Strings.Get("Tpl_Restore"), Icon = "E895", Steps = new()
         {
             new LaunchStep { Kind = "system", Command = "notificationsOn" },
-            new LaunchStep { Kind = "volume", Action = "micUnmute" },
-            new LaunchStep { Kind = "volume", Action = "unmute" },
-            new LaunchStep { Kind = "system", Command = "brightness", Level = 80 },
+            new LaunchStep { Kind = "volume", VolumeAction = "micUnmute" },
+            new LaunchStep { Kind = "volume", VolumeAction = "unmute" },
+            new LaunchStep { Kind = "system", Command = "brightness", Brightness = 80 },
         } } ),
         // 收工：确认闸门在最前（答「否」整组中止），锁屏必须在最后。
         ("endOfDay", new ActionGroup { Name = Strings.Get("Tpl_EndOfDay"), Icon = "E7C1", Steps = new()
         {
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_EndOfDayMsg"), Confirm = true },
-            new LaunchStep { Kind = "window", Action = "close", Process = "Slack" },
-            new LaunchStep { Kind = "window", Action = "close", Process = "Discord" },
+            new LaunchStep { Kind = "window", WindowAction = "close", Process = "Slack" },
+            new LaunchStep { Kind = "window", WindowAction = "close", Process = "Discord" },
             new LaunchStep { Kind = "system", Command = "clearClipboard" },
             new LaunchStep { Kind = "system", Command = "lockScreen" },
         } } ),
@@ -73,8 +73,8 @@ public static class ActionGroupTemplates
         ("bedtime", new ActionGroup { Name = Strings.Get("Tpl_Bedtime"), Icon = "E708", Steps = new()
         {
             new LaunchStep { Kind = "message", Message = Strings.Get("Tpl_BedtimeMsg"), Speak = true },
-            new LaunchStep { Kind = "volume", Action = "mute" },
-            new LaunchStep { Kind = "window", Action = "close", Process = "Slack" },
+            new LaunchStep { Kind = "volume", VolumeAction = "mute" },
+            new LaunchStep { Kind = "window", WindowAction = "close", Process = "Slack" },
             // lockScreen 后多留 1.5 秒再息屏：LockWorkStation 是「发起后立即返回」的（换成原生调用之后
             // 依然如此，不是子进程的锅），返回时「已锁屏」远没完成，而锁屏过渡本身就是显示活动——
             // 紧接着 monitorOff 会黑一下又被唤醒。
@@ -209,7 +209,7 @@ public static class ActionGroupTemplates
                 // 按 Escape 时它成立，跳出本块（= 进入下一次迭代），发文本那一步被跳过。
                 new LaunchStep
                 {
-                    Kind = "skip", ParentId = loop.Id, Action = "block",
+                    Kind = "skip", ParentId = loop.Id, SkipMode = "block",
                     IfVar = keyVar, IfVarOp = "eq", IfVarValue = "Escape",
                 },
                 // 目标进程留空 = 发给当前焦点窗口。用热键或手势触发时焦点还在你要敲的那个窗口；
@@ -238,7 +238,7 @@ public static class ActionGroupTemplates
             Steps = new()
             {
                 new LaunchStep { Kind = "browserUrl", OutputVar = urlVar },
-                new LaunchStep { Kind = "siteMap", Action = "open", Text = "{" + urlVar + "}" },
+                new LaunchStep { Kind = "siteMap", SiteMapMode = "open", Text = "{" + urlVar + "}" },
             },
         };
     }

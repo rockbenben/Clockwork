@@ -37,11 +37,16 @@ public class StepEditorDefaultsTests
         => Assert.Contains($"StepHelpers.DefaultActionFor(\"{kind}\")", EditorSource());
 
     // 新建那一条路也必须走它——否则两条路又分家了。
+    //
+    // 拆开之后它落在**各自的那一格**上（音量走 VolumeAction、窗口走 WindowAction……），
+    // 而「哪个类型用哪一格」那张表只有 StepHelpers 一处说了算。
     [Fact]
     public void Creating_a_step_uses_the_shared_default()
     {
         var src = EditorSource();
-        Assert.Contains("Action = StepHelpers.DefaultActionFor(kind)", src);
+        Assert.Contains("StepHelpers.DefaultActionFor(\"volume\")", src);
+        Assert.Contains("StepHelpers.DefaultActionFor(\"window\")", src);
+        Assert.Contains("StepHelpers.DefaultActionFor(\"mouse\")", src);
         // 从前那一串是就地写死的：kind == "volume" ? "set" : (kind == "window" ? "close" : …)
         Assert.DoesNotContain("kind == \"volume\" ? \"set\"", src);
     }

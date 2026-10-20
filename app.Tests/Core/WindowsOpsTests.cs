@@ -80,7 +80,7 @@ public class WindowsOpsTests
     [Fact]
     public void The_restore_summary_carries_no_target()
     {
-        var s = StepDisplay.StepSummary(new LaunchStep { Kind = "window", Action = "restore" });
+        var s = StepDisplay.StepSummary(new LaunchStep { Kind = "window", WindowAction = "restore" });
         Assert.Equal(StepDisplay.WindowActionMap().First(kv => kv.Key == "restore").Value, s);
     }
 
@@ -88,7 +88,7 @@ public class WindowsOpsTests
     [Fact]
     public void A_stray_process_name_does_not_leak_into_the_restore_summary()
     {
-        var s = StepDisplay.StepSummary(new LaunchStep { Kind = "window", Action = "restore", Process = "Code" });
+        var s = StepDisplay.StepSummary(new LaunchStep { Kind = "window", WindowAction = "restore", Process = "Code" });
         Assert.DoesNotContain("Code", s);
     }
 }

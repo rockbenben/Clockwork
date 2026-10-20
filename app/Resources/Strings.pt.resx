@@ -376,9 +376,7 @@
   <data name="Mig_PageTrayDropped" xml:space="preserve">
     <value>A página do painel «{0}» já não aparece no menu da bandeja (uma página não é uma ação executável)</value>
   </data>
-  <data name="Mig_Title" xml:space="preserve">
-    <value>As páginas do painel agora são separadas</value>
-  </data>
+  <data name="Mig_Title" xml:space="preserve">Configuração atualizada</data>
   <data name="Kind_group" xml:space="preserve">
     <value>Executar grupo</value>
   </data>
@@ -2233,4 +2231,5 @@ Registro: {1}</value>
   <data name="Gesture_IgnoreTitle" xml:space="preserve">Aplicativos sem gestos</data>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Um nome de processo por linha (por exemplo, mstsc, vmware). Nestes aplicativos o Clockwork não encosta no botão direito — ele vai direto para o programa.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Mostrar o nome da ação enquanto desenha</data>
+  <data name="Mig_StepParams" xml:space="preserve">A ação e o número compartilhados por {0} passos foram separados em campos por tipo (o que cada passo faz não muda)</data>
 </root>

@@ -48,8 +48,8 @@ public class ActionGroupTemplatesTests
         var offOn = new (Func<LaunchStep, bool> Off, Func<LaunchStep, bool> On, string What)[]
         {
             (s => s.Kind == "system" && s.Command == "notificationsOff", s => s.Kind == "system" && s.Command == "notificationsOn", "通知"),
-            (s => s.Kind == "volume" && s.Action == "micMute", s => s.Kind == "volume" && s.Action == "micUnmute", "麦克风"),
-            (s => s.Kind == "volume" && s.Action == "mute", s => s.Kind == "volume" && s.Action == "unmute", "扬声器"),
+            (s => s.Kind == "volume" && s.VolumeAction == "micMute", s => s.Kind == "volume" && s.VolumeAction == "micUnmute", "麦克风"),
+            (s => s.Kind == "volume" && s.VolumeAction == "mute", s => s.Kind == "volume" && s.VolumeAction == "unmute", "扬声器"),
         };
         foreach (var (off, on, what) in offOn)
             if (all.SelectMany(g => g.Steps).Any(off))
@@ -83,8 +83,8 @@ public class ActionGroupTemplatesTests
         var meeting = ActionGroupTemplates.All()
             .Single(g => g.Name == Clockwork.I18n.Strings.Get("Tpl_Meeting"));
 
-        Assert.DoesNotContain(meeting.Steps, s => s.Kind == "volume" && s.Action == "mute");
-        Assert.Contains(meeting.Steps, s => s.Kind == "volume" && s.Action == "set");
+        Assert.DoesNotContain(meeting.Steps, s => s.Kind == "volume" && s.VolumeAction == "mute");
+        Assert.Contains(meeting.Steps, s => s.Kind == "volume" && s.VolumeAction == "set");
     }
 
     // 搜索模板是唯一演示「步骤之间传值」的模板。**变量名与地址里那个花括号必须对得上**——
@@ -183,7 +183,7 @@ public class ActionGroupTemplatesTests
 
         var map = g.Steps[1];
         Assert.Equal("siteMap", map.Kind);
-        Assert.Equal("open", map.Action);
+        Assert.Equal("open", map.SiteMapMode);
         Assert.Equal("{" + read.OutputVar + "}", map.Text);
     }
 }

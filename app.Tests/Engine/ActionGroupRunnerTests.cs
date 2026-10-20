@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Linq;
 using Clockwork.Engine;
 using Clockwork.Core;
@@ -23,7 +23,7 @@ public class ActionGroupRunnerTests
     public void Runs_all_non_message_steps()
     {
         var ran = new List<string>();
-        var g = new ActionGroup { Id = "g1", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "1" }, new LaunchStep { Kind = "keys", Combo = "a", Label = "2" } } };
+        var g = new ActionGroup { Id = "g1", Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "1" }, new LaunchStep { Kind = "keys", Combo = "a", Label = "2" } } };
         ActionGroupRunner.RunGroup(g, Deps(ran));
         Assert.Equal(new[] { "1", "2" }, ran.ToArray());
     }
@@ -32,7 +32,7 @@ public class ActionGroupRunnerTests
     public void Message_no_aborts_group()
     {
         var ran = new List<string>();
-        var g = new ActionGroup { Id = "g2", Steps = new() { new LaunchStep { Kind = "message", Message = "q", Label = "m" }, new LaunchStep { Kind = "volume", Action = "mute", Label = "after" } } };
+        var g = new ActionGroup { Id = "g2", Steps = new() { new LaunchStep { Kind = "message", Message = "q", Label = "m" }, new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "after" } } };
         ActionGroupRunner.RunGroup(g, Deps(ran, msg: _ => MsgResult.No));
         Assert.Empty(ran);   // No → 中止，after 不跑
     }
@@ -42,7 +42,7 @@ public class ActionGroupRunnerTests
     {
         var ran = new List<string>();
         var yes = new List<string>();
-        var g = new ActionGroup { Id = "g3", Steps = new() { new LaunchStep { Kind = "message", Message = "q", Label = "m" }, new LaunchStep { Kind = "volume", Action = "mute", Label = "after" } } };
+        var g = new ActionGroup { Id = "g3", Steps = new() { new LaunchStep { Kind = "message", Message = "q", Label = "m" }, new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "after" } } };
         ActionGroupRunner.RunGroup(g, Deps(ran, msg: _ => MsgResult.Yes, onYes: yes));
         Assert.Equal(new[] { "m" }, yes.ToArray());
         Assert.Equal(new[] { "after" }, ran.ToArray());
@@ -57,9 +57,9 @@ public class ActionGroupRunnerTests
             Id = "g4",
             Steps = new()
             {
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "disabled", Enabled = false },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "wrongday", Days = new() { 6 } },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "ok" },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "disabled", Enabled = false },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "wrongday", Days = new() { 6 } },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "ok" },
             }
         };
         ActionGroupRunner.RunGroup(g, Deps(ran));   // Hour=10, IsoDay=3(周三)
@@ -157,7 +157,7 @@ public class ActionGroupRunnerTests
             Steps = new()
             {
                 new LaunchStep { Kind = "message", Message = "存盘了吗", Label = "m", DelayMs = 0 },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "after", DelayMs = 0 },
             }
         };
         var res = ActionGroupRunner.RunGroup(g, Deps(ran, msg: _ => { asked++; return MsgResult.No; }));
@@ -334,7 +334,7 @@ public class ActionGroupRunnerTests
         {
             Assert.True(ActionGroupRunner.IsRunning("boot1"));
             var ran = new List<string>();
-            var g = new ActionGroup { Id = "boot1", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } } };
+            var g = new ActionGroup { Id = "boot1", Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "x", DelayMs = 0 } } };
             var res = ActionGroupRunner.RunGroup(g, new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => ran.Add(s.Label) });
             Assert.Equal(GroupRunResult.Skipped, res);
             Assert.Empty(ran);
@@ -353,8 +353,8 @@ public class ActionGroupRunnerTests
             Id = "gc1",
             Steps = new()
             {
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "1", DelayMs = 0 },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "2", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "1", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "2", DelayMs = 0 },
             }
         };
         bool accepted = false;
@@ -379,7 +379,7 @@ public class ActionGroupRunnerTests
         var ran = new List<string>();
         bool cancelAccepted = true;
         bool childSeenRunning = false;
-        var child = new ActionGroup { Id = "child2", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "c1", DelayMs = 0 } } };
+        var child = new ActionGroup { Id = "child2", Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "c1", DelayMs = 0 } } };
         GroupDeps deps = null!;
         deps = new GroupDeps
         {
@@ -399,7 +399,7 @@ public class ActionGroupRunnerTests
             Steps = new()
             {
                 new LaunchStep { Kind = "group", GroupId = "child2", Label = "ref", DelayMs = 0 },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "after", DelayMs = 0 },
             }
         };
         RunTopLevel(parent, deps);
@@ -413,7 +413,7 @@ public class ActionGroupRunnerTests
     {
         // 反向：取消顶层运行，嵌套子组与父组共用同一个闸，整条链一起收手。
         var ran = new List<string>();
-        var child = new ActionGroup { Id = "child3", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "c1", DelayMs = 0 } } };
+        var child = new ActionGroup { Id = "child3", Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "c1", DelayMs = 0 } } };
         GroupDeps deps = null!;
         deps = new GroupDeps
         {
@@ -427,7 +427,7 @@ public class ActionGroupRunnerTests
             Steps = new()
             {
                 new LaunchStep { Kind = "group", GroupId = "child3", Label = "ref", DelayMs = 0 },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "after", DelayMs = 0 },
             }
         };
         RunTopLevel(parent, deps);
@@ -447,7 +447,7 @@ public class ActionGroupRunnerTests
             Steps = new()
             {
                 new LaunchStep { Kind = "message", Message = "q", Label = "m", Confirm = true, DelayMs = 0 },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "after", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "after", DelayMs = 0 },
             }
         };
         var deps = new GroupDeps
@@ -471,7 +471,7 @@ public class ActionGroupRunnerTests
         var g = new ActionGroup
         {
             Id = "gc5", Repeat = 3, RepeatDelayMs = 10_000,
-            Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } }
+            Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "x", DelayMs = 0 } }
         };
         var deps = new GroupDeps { Hour = 10, IsoDay = 3, RunStep = s => ran.Add(s.Label) };
         // 不用固定 sleep 赌「这时候运行已登记」：CI 上一次抢占就会让 RequestCancel 落空、返回值又被丢弃，
@@ -496,7 +496,7 @@ public class ActionGroupRunnerTests
     {
         // 取消闸是「一次运行一份」。若做成组上的持久标志，取消过一次之后热键再按会当场自杀，
         // 而且没有任何反馈——那正是这次改动要根治的那种「按了没反应」。
-        var g = new ActionGroup { Id = "gc6", Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } } };
+        var g = new ActionGroup { Id = "gc6", Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "x", DelayMs = 0 } } };
         var first = new List<string>();
         RunTopLevel(g, new GroupDeps
         {
@@ -520,7 +520,7 @@ public class ActionGroupRunnerTests
         var g = new ActionGroup
         {
             Id = "gc8", Repeat = 3, RepeatDelayMs = 10_000,
-            Steps = new() { new LaunchStep { Kind = "volume", Action = "mute", Label = "x", DelayMs = 0 } }
+            Steps = new() { new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "x", DelayMs = 0 } }
         };
         // 同上：等「第一步真的跑过」这个确定信号，而不是赌固定 150ms——推送模型下若在登记前就 CancelAll，
         // 这一次推送会整个落空（全局信号本身不再叫醒睡眠），测试要睡满 20 秒才失败。
@@ -548,8 +548,8 @@ public class ActionGroupRunnerTests
             Id = "gc7",
             Steps = new()
             {
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "1", DelayMs = 0 },
-                new LaunchStep { Kind = "volume", Action = "mute", Label = "2", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "1", DelayMs = 0 },
+                new LaunchStep { Kind = "volume", VolumeAction = "mute", Label = "2", DelayMs = 0 },
             }
         };
         var deps = new GroupDeps

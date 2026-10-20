@@ -56,7 +56,7 @@ public class BrowserSourceStepsTests
     [Fact]
     public void SiteMap_summary_distinguishes_all_three_open_modes()
     {
-        string Summary(string a) => StepDisplay.StepSummary(new LaunchStep { Kind = "siteMap", Action = a });
+        string Summary(string a) => StepDisplay.StepSummary(new LaunchStep { Kind = "siteMap", SiteMapMode = a });
         var open = Summary("open");
         var reveal = Summary("reveal");
         var none = Summary("none");
@@ -75,7 +75,7 @@ public class BrowserSourceStepsTests
     [InlineData("none", "none")]
     [InlineData("somethingFromTheFuture", "open")]
     public void SiteMap_action_falls_back_to_open(string? raw, string want)
-        => Assert.Equal(want, StepDisplay.SiteMapActionOf(new LaunchStep { Action = raw! }));
+        => Assert.Equal(want, StepDisplay.SiteMapActionOf(new LaunchStep { Kind = "siteMap", SiteMapMode = raw! }));
 
     // ---- 地址栏归一：UIA 给的值不带 scheme，不补后面全崩 ----
 

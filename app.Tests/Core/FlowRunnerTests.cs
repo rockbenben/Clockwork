@@ -153,7 +153,7 @@ public class FlowRunnerTests
     {
         var block = St("each", cfg: s => s.Text = "lines");
         var before = St("waitKey", block.Id);
-        var skip = St("skip", block.Id, s => s.Action = "block");
+        var skip = St("skip", block.Id, s => s.SkipMode = "block");
         var after = St("waitKey", block.Id);
         var outside = St("waitKey");
 
@@ -170,7 +170,7 @@ public class FlowRunnerTests
     {
         var block = St("each", cfg: s => s.Text = "lines");
         var before = St("waitKey", block.Id);
-        var skip = St("skip", block.Id, s => s.Action = "block");
+        var skip = St("skip", block.Id, s => s.SkipMode = "block");
         var after = St("waitKey", block.Id);
 
         var order = Go(Lines("lines", "a\nb\nc"), block, before, skip, after).Order;
@@ -184,7 +184,7 @@ public class FlowRunnerTests
     public void Skip_run_stops_the_whole_group()
     {
         var block = St("each", cfg: s => s.Text = "lines");
-        var skip = St("skip", block.Id, s => s.Action = "run");
+        var skip = St("skip", block.Id, s => s.SkipMode = "run");
         var outside = St("waitKey");
 
         var ran = Go(Lines("lines", "a\nb"), block, skip, outside);

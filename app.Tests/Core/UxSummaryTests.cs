@@ -28,7 +28,7 @@ public class UxSummaryTests
     [Fact]
     public void Summary_equals_base_plus_decoration()
     {
-        var s = new LaunchStep { Kind = "volume", Action = "mute", Days = new() { 1, 2, 3 }, Repeat = 3, IfPower = "battery" };
+        var s = new LaunchStep { Kind = "volume", VolumeAction = "mute", Days = new() { 1, 2, 3 }, Repeat = 3, IfPower = "battery" };
         Assert.Equal("静音" + StepDisplay.DecorationSummary(s), StepDisplay.StepSummary(s));
         Assert.Equal(" ×3（周一–周三）（用电池）", StepDisplay.DecorationSummary(s));
     }
