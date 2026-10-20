@@ -1063,6 +1063,18 @@ Registro: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Buscar actualizaciones</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Buscar actualizaciones al iniciar</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Si está activado, se conecta una vez al iniciar a GitHub para ver si hay una versión más reciente: es la única vez que este programa se conecta a internet; todo lo demás funciona sin conexión.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>Se ha descargado la versión {0}. El programa nuevo está en {1}. Cierra el programa en ejecución y copia el nuevo encima para actualizar.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>El archivo descargado no coincide con la suma de verificación publicada, así que se descartó. Inténtalo más tarde.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>Plan 365 de código abierto · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Registro: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Ya tienes la última versión ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Nueva versión {0} disponible. ¿Ir a la descarga?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Error al buscar actualizaciones: {0}</value>

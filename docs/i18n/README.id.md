@@ -44,7 +44,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 | **Pengaturan Anda** | `clockwork.settings.json` di samping exe (atau `%APPDATA%\Clockwork\` bila pada penjalanan pertama folder itu hanya-baca; setelah itu tetap di tempat yang sudah terpilih) — tidak ada yang meninggalkan mesin |
 | **Antarmuka** | 18 bahasa serta tema terang / gelap. Bahasa mengikuti Windows saat pertama dijalankan; tema dimulai gelap dan bisa diatur mengikuti Windows |
 
-**Batasan.** Tanpa penginstal berarti tanpa pembaruan otomatis — unduh zip baru dan ganti exe-nya. Peluncur sandbox memblokir kirim-tombol, aksi tetikus, aksi jendela, aktifkan-jika-berjalan, dan volume (Anda akan mendapat pemberitahuan yang jelas; «luncurkan program» biasa tetap berfungsi). Pemetaan ulang tombol dan ekspansi teks di luar cakupan — itu pekerjaan AutoHotkey.
+**Batasan.** Tanpa penginstal, program tidak bisa mengganti dirinya sendiri — tetapi ia bisa mencari rilis baru dan mengunduhnya untuk Anda (mati secara bawaan; centang **Periksa pembaruan saat mulai** di tab **Pengaturan**). Mengganti exe tetap langkah manual: tutup programnya lalu salin yang baru di atasnya. Peluncur sandbox memblokir kirim-tombol, aksi tetikus, aksi jendela, aktifkan-jika-berjalan, dan volume (Anda akan mendapat pemberitahuan yang jelas; «luncurkan program» biasa tetap berfungsi). Pemetaan ulang tombol dan ekspansi teks di luar cakupan — itu pekerjaan AutoHotkey.
 
 ## Memulai
 

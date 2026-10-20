@@ -44,7 +44,7 @@ Tự mở ứng dụng khi đăng nhập · nhắc nhở đúng giờ · một c
 | **Cấu hình của bạn** | `clockwork.settings.json` cạnh tệp exe (hoặc `%APPDATA%\Clockwork\` nếu ở lần chạy đầu thư mục đó chỉ đọc; sau đó nó ở nguyên chỗ đã chọn) — không có gì rời khỏi máy |
 | **Giao diện** | 18 ngôn ngữ và giao diện sáng / tối. Ngôn ngữ theo Windows ở lần chạy đầu; giao diện mặc định tối, có thể đặt theo Windows |
 
-**Giới hạn.** Không cài đặt cũng có nghĩa là không tự cập nhật — tải zip mới và thay tệp exe. Trình khởi chạy dạng sandbox chặn gửi phím, thao tác chuột, thao tác cửa sổ, kích hoạt-nếu-đang-chạy và âm lượng (bạn sẽ nhận thông báo rõ ràng; «chạy chương trình» thuần túy vẫn hoạt động). Gán lại phím và mở rộng văn bản nằm ngoài phạm vi — đó là việc của AutoHotkey.
+**Giới hạn.** Không cài đặt nghĩa là chương trình không tự thay thế được chính nó — nhưng nó có thể tìm bản phát hành mới và tải về giúp bạn (mặc định tắt; bật **Kiểm tra cập nhật khi khởi động** trong **Cài đặt**). Việc thay tệp exe vẫn phải làm tay: hãy thoát chương trình đang chạy rồi chép đè tệp mới lên. Trình khởi chạy dạng sandbox chặn gửi phím, thao tác chuột, thao tác cửa sổ, kích hoạt-nếu-đang-chạy và âm lượng (bạn sẽ nhận thông báo rõ ràng; «chạy chương trình» thuần túy vẫn hoạt động). Gán lại phím và mở rộng văn bản nằm ngoài phạm vi — đó là việc của AutoHotkey.
 
 ## Bắt đầu
 

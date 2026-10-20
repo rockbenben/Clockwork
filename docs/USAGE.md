@@ -629,6 +629,12 @@ Three sections, ordered by when you'd reach for them.
 - **Hold the middle mouse button to open the panel** — off by default, with the hold time next to it (350 ms, clamps to 150–2000). Details and the passthrough rules are under **Quick panel** above.
 - **Layout / tile size / icons only / show built-in controls** — see **Tune it to taste** above.
 
+### Checking for updates
+
+- **Check for updates on startup** — off by default, and the only thing in Clockwork that goes online. Tick it and every launch asks GitHub once whether a newer release exists; if there is one, Clockwork downloads the self-contained build, checks it against the SHA-256 published with the release, and unpacks it into `%LOCALAPPDATA%\Clockwork\Updates\<version>\`. It then says where the new program is and stops there.
+- **It never replaces the running program.** Windows locks a running executable, so overwriting it in place fails with a sharing violation and leaves a half-written install behind. To update: quit Clockwork, then copy the new `Clockwork.exe` over the old one.
+- **Check for updates** (the button next to that switch) runs the same check whenever you want it, whether the switch is on or not, and reports the outcome: already up to date, the new program and where it is, or that the check failed. A download that does not match the published checksum is thrown away, not unpacked.
+
 ## Tips
 
 - Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Rerun startup list** for that.

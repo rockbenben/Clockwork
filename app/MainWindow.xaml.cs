@@ -140,6 +140,7 @@ public partial class MainWindow : Window
             // 因为管理器是模态开的、每次构造时重读」——那只能证明**管理器**看到的是新的，
             // 反方向压根没论及。）
             GesturesEnabledChk.IsChecked = config.Settings.GesturesEnabled;
+            CheckUpdatesChk.IsChecked = config.Settings.CheckUpdates;
             UpdatePanelRows();
             WireHotkeyBox();   // 急停键「点击即录键」（Attach 内会填入当前值）
         }
@@ -303,7 +304,8 @@ public partial class MainWindow : Window
     // —— 关于 ——
     private static string Lf(string key, params object[] args) => Strings.Lf(key, args);
 
-    private static string AppVersion()
+    // internal：App 的开机自检也要读同一个版本号，两处各写一份迟早会漂。
+    internal static string AppVersion()
     {
         var v = typeof(App).Assembly.GetName().Version;
         return v == null ? "1.0.0" : $"{v.Major}.{v.Minor}.{v.Build}";
@@ -316,30 +318,46 @@ public partial class MainWindow : Window
 
     private void GitHub_Click(object sender, RoutedEventArgs e) => OpenUrl(UpdateChecker.RepoUrl);
 
-    // 检查更新：拉 GitHub 最新 Release 比对版本。有新版询问是否前往下载；否则提示已最新；失败如实回。
+    // 检查更新：拉 GitHub 最新 Release 比对版本，有新版就下载、核对发布页给的校验值、解压，
+    // 然后说清楚新程序在哪儿。已是最新、失败也各自如实回一句。
+    //
+    // **不覆盖正在跑的这个**：Windows 锁着运行中的 exe，原地覆写会撞共享冲突，还会留下半个
+    // 装坏的安装。所以新版本解压到它自己的文件夹，换不换是用户的事——先把旧的关掉。
     private async void CheckUpdate_Click(object sender, RoutedEventArgs e)
     {
         var old = CheckUpdateBtn.Content;
         CheckUpdateBtn.IsEnabled = false;
         CheckUpdateBtn.Content = Strings.Get("Update_Checking");
-        var info = await UpdateChecker.CheckAsync(AppVersion());
+        var info = await UpdateChecker.RunAsync(AppVersion());
         CheckUpdateBtn.Content = old;
         CheckUpdateBtn.IsEnabled = true;
 
-        if (info.Error != null)
+        switch (info.Status)
         {
-            Views.BrandDialog.Warn(this, "Clockwork", Lf("Update_Failed", info.Error));
-            return;
+            case UpdateStatus.Ready:
+                Views.BrandDialog.Info(this, "Clockwork", Lf("Update_Ready", info.Latest, info.ExePath ?? ""));
+                break;
+            case UpdateStatus.VerifyFailed:
+                // 下载到的东西跟发布页公布的校验值对不上，已经丢弃了。这件事得说出来——
+                // 静悄悄地什么都不做，读起来就是「没有新版本」。
+                Views.BrandDialog.Warn(this, "Clockwork", Lf("Update_VerifyFailed"));
+                break;
+            case UpdateStatus.UpToDate:
+                Views.BrandDialog.Info(this, "Clockwork", Lf("Update_Latest", "v" + info.Current));
+                break;
+            default:
+                Views.BrandDialog.Warn(this, "Clockwork", Lf("Update_Failed", info.Error ?? ""));
+                break;
         }
-        if (info.HasNewer)
-        {
-            if (Views.BrandDialog.Confirm(this, "Clockwork", Lf("Update_Available", info.Latest)))
-                OpenUrl(info.Url ?? UpdateChecker.ReleasesUrl);
-        }
-        else
-        {
-            Views.BrandDialog.Info(this, "Clockwork", Lf("Update_Latest", "v" + info.Current));
-        }
+    }
+
+    // 开机检查更新的开关。勾上之后每次启动问一次 GitHub——这是本程序唯一会联网的行为，
+    // 理由与默认为什么是关，见 AppSettings.CheckUpdates。
+    private void CheckUpdates_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_config == null || _loadingSettings) return;
+        _config.Settings.CheckUpdates = CheckUpdatesChk.IsChecked == true;
+        _save?.Invoke();
     }
 
     private void UpdateAutostartLabel()

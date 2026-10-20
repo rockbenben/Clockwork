@@ -44,7 +44,7 @@ Avvia le tue app automaticamente all'accesso · promemoria a tempo · un tocco p
 | **Le tue impostazioni** | `clockwork.settings.json` accanto all'exe (o `%APPDATA%\Clockwork\` se quella cartella era di sola lettura al primo avvio; poi resta dov'è finita) — nulla lascia la macchina |
 | **Interfaccia** | 18 lingue e tema chiaro / scuro. La lingua segue Windows al primo avvio; il tema parte scuro e può seguire Windows |
 
-**Limiti.** Senza installazione non c'è aggiornamento automatico — scarica il nuovo zip e sostituisci l'exe. I launcher in sandbox bloccano invio tasti, azioni del mouse, azioni finestra, attiva-se-in-esecuzione e volume (riceverai un avviso chiaro; il semplice «avvia programma» funziona comunque). Rimappare i tasti ed espandere il testo restano fuori ambito — quello è il mestiere di AutoHotkey.
+**Limiti.** Senza installazione, il programma non può sostituirsi da solo — può però cercare una nuova release e scaricarla per te (disattivato per impostazione predefinita; spunta **Controlla gli aggiornamenti all'avvio** in **Impostazioni**). Sostituire l'exe resta un passo manuale: chiudi il programma e copia il nuovo sopra. I launcher in sandbox bloccano invio tasti, azioni del mouse, azioni finestra, attiva-se-in-esecuzione e volume (riceverai un avviso chiaro; il semplice «avvia programma» funziona comunque). Rimappare i tasti ed espandere il testo restano fuori ambito — quello è il mestiere di AutoHotkey.
 
 ## Per iniziare
 

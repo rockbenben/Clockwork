@@ -44,7 +44,7 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 | **Ayarlarınız** | exe'nin yanındaki `clockwork.settings.json` (ilk çalıştırmada o klasör salt okunursa; sonrasında bulunduğu yerde kalır `%APPDATA%\Clockwork\`) — hiçbir şey makineden çıkmaz |
 | **Arayüz** | 18 dil ve koyu / açık tema. Dil ilk çalıştırmada Windows’u izler; tema koyu başlar ve Windows’u izleyecek şekilde ayarlanabilir |
 
-**Sınırlar.** Kurulum olmayınca otomatik güncelleme de olmaz — yeni zip'i indirip exe'yi değiştirin. Sandbox başlatıcılar tuş gönderme, fare eylemleri, pencere işlemleri, çalışıyorsa-etkinleştir ve ses düzeyini engeller (net bir uyarı alırsınız; düz «program başlat» yine çalışır). Tuş yeniden atama ve metin genişletme kapsam dışıdır — o, AutoHotkey'in işidir.
+**Sınırlar.** Kurulum olmayınca program kendini değiştiremez — ama yeni bir sürüm arayıp onu sizin için indirebilir (varsayılan olarak kapalı; **Ayarlar** sekmesinde **Başlangıçta güncellemeleri denetle**'yi işaretleyin). exe'yi değiştirmek yine elle yapılır: programı kapatın ve yenisini üzerine kopyalayın. Sandbox başlatıcılar tuş gönderme, fare eylemleri, pencere işlemleri, çalışıyorsa-etkinleştir ve ses düzeyini engeller (net bir uyarı alırsınız; düz «program başlat» yine çalışır). Tuş yeniden atama ve metin genişletme kapsam dışıdır — o, AutoHotkey'in işidir.
 
 ## Başlarken
 

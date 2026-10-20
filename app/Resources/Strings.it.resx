@@ -1063,6 +1063,18 @@ Registro: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Controlla aggiornamenti</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Controlla gli aggiornamenti all'avvio</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Se attivo, il programma si collega una volta all'avvio a GitHub per verificare se esiste una versione più recente: è l'unica connessione di questo programma; tutto il resto resta offline.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>La versione {0} è stata scaricata. Il nuovo programma si trova in {1}. Chiudi il programma in esecuzione e copia il nuovo sopra per aggiornare.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>Il file scaricato non corrisponde al checksum pubblicato ed è stato scartato. Riprova più tardi.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>Piano 365 open source · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Registro: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Hai già l'ultima versione ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Nuova versione {0} disponibile. Vai al download?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Controllo aggiornamenti non riuscito: {0}</value>

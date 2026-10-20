@@ -44,7 +44,7 @@ Auto-launch your apps at login · timed reminders · one tap to run a whole rout
 | **Your setup** | `clockwork.settings.json` next to the exe (or `%APPDATA%\Clockwork\` if that folder was read-only on first run; it stays wherever it landed) — nothing leaves the machine |
 | **Interface** | 18 languages and a dark / light theme. The language follows Windows on first run; the theme starts dark, and can be set to follow Windows |
 
-**Limits.** No installer means no auto-update — grab the new zip and replace the exe. Sandboxed launchers block send-keys, mouse actions, window actions, activate-if-running and volume (you get a clear notice; plain "launch program" still works). Key remapping and text expansion stay out of scope — that's AutoHotkey's job.
+**Limits.** No installer means the app cannot swap itself out — it can check for a new release and fetch it for you (off by default; tick **Check for updates on startup** on the **Settings** tab), but replacing the exe is still a manual step: quit it and copy the new one over. Sandboxed launchers block send-keys, mouse actions, window actions, activate-if-running and volume (you get a clear notice; plain "launch program" still works). Key remapping and text expansion stay out of scope — that's AutoHotkey's job.
 
 ## Getting started
 

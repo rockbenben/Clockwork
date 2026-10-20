@@ -1063,6 +1063,18 @@ Protokoll: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Nach Updates suchen</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Beim Start nach Updates suchen</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Wenn aktiv, fragt das Programm beim Start einmal GitHub ab, ob es eine neuere Version gibt — das ist die einzige Verbindung dieses Programms; alles andere läuft offline.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>Version {0} wurde heruntergeladen. Das neue Programm liegt unter {1}. Beende das laufende Programm und kopiere das neue darüber, um zu aktualisieren.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>Die heruntergeladene Datei stimmt nicht mit der veröffentlichten Prüfsumme überein und wurde verworfen. Bitte später erneut versuchen.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>365 Open-Source-Plan · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Protokoll: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Sie haben die neueste Version ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Neue Version {0} verfügbar. Zum Download?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Updateprüfung fehlgeschlagen: {0}</value>

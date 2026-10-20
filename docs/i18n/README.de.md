@@ -44,7 +44,7 @@ Apps beim Anmelden automatisch starten · zeitgesteuerte Erinnerungen · eine ga
 | **Deine Einstellungen** | `clockwork.settings.json` neben der exe (oder `%APPDATA%\Clockwork\`, falls dieser Ordner beim ersten Start schreibgeschützt war; danach bleibt sie, wo sie gelandet ist) — nichts verlässt den Rechner |
 | **Oberfläche** | 18 Sprachen sowie helles / dunkles Design. Die Sprache folgt beim ersten Start Windows; das Design startet dunkel und kann Windows folgen |
 
-**Grenzen.** Ohne Installer gibt es kein Auto-Update — lade das neue Zip und ersetze die exe. Launcher mit Sandbox blockieren Tasteneingaben, Mausaktionen, Fensteraktionen, Aktivieren-falls-läuft und Lautstärke (du bekommst einen klaren Hinweis; das schlichte „Programm starten“ funktioniert weiterhin). Tastenbelegung ändern und Textbausteine bleiben außerhalb des Umfangs — das ist AutoHotkeys Aufgabe.
+**Grenzen.** Ohne Installer kann sich das Programm nicht selbst austauschen — es kann aber ein neues Release suchen und es für dich herunterladen (standardmäßig aus; unter **Einstellungen** **Beim Start nach Updates suchen** anhaken). Die exe zu ersetzen bleibt Handarbeit: Programm beenden und die neue darüberkopieren. Launcher mit Sandbox blockieren Tasteneingaben, Mausaktionen, Fensteraktionen, Aktivieren-falls-läuft und Lautstärke (du bekommst einen klaren Hinweis; das schlichte „Programm starten“ funktioniert weiterhin). Tastenbelegung ändern und Textbausteine bleiben außerhalb des Umfangs — das ist AutoHotkeys Aufgabe.
 
 ## Erste Schritte
 

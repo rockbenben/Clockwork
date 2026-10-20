@@ -122,6 +122,22 @@ public partial class App : System.Windows.Application
         // 而它此前堵在读配置和显示窗口之前。整体 try/catch 兜住——注册表被策略锁死之类的场景不该拖累启动，
         // 后果只是通知里没有应用图标。
         Task.Run(() => { try { RegisterAumidBranding(); } catch { } });
+
+        // 开机检查更新：**默认关**（AppSettings.CheckUpdates），勾上之后每次启动问一次 GitHub——
+        // 这是本程序唯一会联网的行为。fire-and-forget：慢网或没网都不该拖住启动。
+        // 没勾上就一步都不走，连请求都不发。
+        if (_config.Settings.CheckUpdates) _ = CheckForUpdatesOnStartup();
+    }
+
+    /// <summary>开机自检更新。**只在真的有新版可下载时才出声**：已是最新、或者没查成，都安静。
+    /// <para>说的是新程序在哪儿。正在跑的这个**不换**：Windows 锁着运行中的 exe，原地覆写会撞
+    /// 共享冲突，还会留下半个装坏的安装——换不换是用户的事，得先把旧的关掉。</para></summary>
+    private async Task CheckForUpdatesOnStartup()
+    {
+        var info = await Engine.UpdateChecker.RunAsync(Clockwork.MainWindow.AppVersion());
+        if (info.Status != Engine.UpdateStatus.Ready) return;
+        // 品牌名是字面量，不是文案键——本程序的名字不翻译（与 MainWindow 里那些对话框同一口径）。
+        ShowToast("Clockwork", Lf("Update_Ready", info.Latest, info.ExePath ?? ""));
     }
 
     // 一次性提权子任务：由非提权主实例在 schtasks 拒绝时以管理员身份重开自己触发。

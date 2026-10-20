@@ -44,7 +44,7 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 | **Tu configuración** | `clockwork.settings.json` junto al exe (o `%APPDATA%\Clockwork\` si esa carpeta era de solo lectura en el primer arranque; después se queda donde quedó) — nada sale del equipo |
 | **Interfaz** | 18 idiomas y tema claro / oscuro. El idioma sigue a Windows en el primer arranque; el tema empieza en oscuro y puede seguir a Windows |
 
-**Límites.** Sin instalador no hay actualización automática — descarga el zip nuevo y reemplaza el exe. Los lanzadores en sandbox bloquean enviar-teclas, acciones de ratón, acciones de ventana, activar-si-ya-se-ejecuta y volumen (recibirás un aviso claro; el simple «ejecutar programa» sigue funcionando). El remapeo de teclas y la expansión de texto quedan fuera del alcance — ese es el trabajo de AutoHotkey.
+**Límites.** Sin instalador, el programa no puede reemplazarse a sí mismo — sí puede buscar una versión nueva y descargarla por ti (desactivado por defecto; marca **Buscar actualizaciones al iniciar** en **Ajustes**). Reemplazar el exe sigue siendo un paso manual: ciérralo y copia el nuevo encima. Los lanzadores en sandbox bloquean enviar-teclas, acciones de ratón, acciones de ventana, activar-si-ya-se-ejecuta y volumen (recibirás un aviso claro; el simple «ejecutar programa» sigue funcionando). El remapeo de teclas y la expansión de texto quedan fuera del alcance — ese es el trabajo de AutoHotkey.
 
 ## Primeros pasos
 

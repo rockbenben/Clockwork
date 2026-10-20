@@ -1069,6 +1069,18 @@
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>檢查更新</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>開機檢查更新</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>開啟後每次啟動連線存取 GitHub 一次，看看有沒有新版本——這是本程式唯一的連線操作，其餘功能始終離線。</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>新版本 {0} 已下載，新程式在 {1}。請先結束正在執行的程式，再將新程式複製過去完成更新。</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>下載的檔案與發布的校驗值不一致，已捨棄。請稍後再試。</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>365 開源計劃 · #020</value>
   </data>
@@ -1077,9 +1089,6 @@
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>已是最新版（{0}）</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>發現新版 {0}，前往下載？</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>檢查更新失敗：{0}</value>

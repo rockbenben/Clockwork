@@ -1063,6 +1063,18 @@
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>التحقق من التحديثات</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>البحث عن تحديثات عند بدء التشغيل</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>عند التفعيل يتصل البرنامج مرة واحدة عند بدء التشغيل بـ GitHub للتحقق من وجود إصدار أحدث — وهو اتصاله الوحيد بالإنترنت؛ وكل ما عداه يبقى دون اتصال.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>تم تنزيل الإصدار {0}. البرنامج الجديد موجود في {1}. أغلق البرنامج الجاري تشغيله وانسخ الجديد فوقه لإتمام التحديث.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>الملف المنزَّل لم يطابق المجموع الاختباري المنشور، لذلك تم التخلص منه. حاول مرة أخرى لاحقًا.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>خطة 365 مفتوحة المصدر · ‏#020</value>
   </data>
@@ -1071,9 +1083,6 @@
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>أنت على أحدث إصدار ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>يتوفر إصدار جديد {0}. الانتقال إلى التنزيل؟</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>فشل التحقق من التحديثات: {0}</value>

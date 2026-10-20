@@ -793,12 +793,24 @@
                                     </StackPanel>
                                     <TextBlock Text="{loc:Loc App_Subtitle}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="0,3,0,0"/>
                                 </StackPanel>
-                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <!-- 两颗同为「读一次、点一下」的页脚动作，就同一层级：
-                                         RunButton 那套强调是给侧栏「▶ 运行」做的（本页的主行动），
-                                         而这一页的主行动是上面的表单。 -->
-                                    <Button Content="GitHub" Click="GitHub_Click" Margin="0,0,10,0"/>
-                                    <Button x:Name="CheckUpdateBtn" Content="{loc:Loc About_CheckUpdate}" Click="CheckUpdate_Click"/>
+                                <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center">
+                                    <!-- 开机检查更新：**默认关**，是本程序唯一会联网的行为（说明见
+                                         AppSettings.CheckUpdates）。它摆在「检查更新」那颗按钮的正上方，
+                                         两者是同一件事的两面：一个是开关，一个是「现在就查一次」。
+                                         竖着摞而不是横着排，是为了不把这一栏撑宽——这一栏是
+                                         Auto 宽度，撑宽了挤掉的是左边那列的标题（Clockwork + 版本号
+                                         + 系列名），而那一行不换行，挤了就是被裁。 -->
+                                    <CheckBox x:Name="CheckUpdatesChk" Content="{loc:Loc Settings_CheckUpdates}"
+                                              ToolTip="{loc:Loc Settings_CheckUpdatesTip}"
+                                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                                              Margin="0,0,0,8" Click="CheckUpdates_Changed"/>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <!-- 两颗同为「读一次、点一下」的页脚动作，就同一层级：
+                                             RunButton 那套强调是给侧栏「▶ 运行」做的（本页的主行动），
+                                             而这一页的主行动是上面的表单。 -->
+                                        <Button Content="GitHub" Click="GitHub_Click" Margin="0,0,10,0"/>
+                                        <Button x:Name="CheckUpdateBtn" Content="{loc:Loc About_CheckUpdate}" Click="CheckUpdate_Click"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </Grid>
                         </Grid>

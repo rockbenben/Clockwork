@@ -1063,6 +1063,18 @@ Log: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Periksa pembaruan</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Periksa pembaruan saat mulai</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Jika diaktifkan, program ini menghubungi GitHub sekali saat mulai untuk melihat apakah ada versi yang lebih baru — itulah satu-satunya waktu program ini terhubung ke internet; selebihnya tetap offline.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>Versi {0} telah diunduh. Program baru ada di {1}. Tutup program yang sedang berjalan lalu salin yang baru di atasnya untuk memperbarui.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>Berkas yang diunduh tidak cocok dengan checksums yang dipublikasikan, jadi dibuang. Silakan coba lagi nanti.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>Rencana 365 Open Source · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Log: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Anda menggunakan versi terbaru ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Versi baru {0} tersedia. Buka halaman unduh?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Gagal memeriksa pembaruan: {0}</value>
