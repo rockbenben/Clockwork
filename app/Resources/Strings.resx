@@ -2232,4 +2232,12 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">一行一个进程名（例如 mstsc、vmware）。在这些程序里，Clockwork 完全不碰右键，右键原样交给程序自己。</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">认出轨迹时在旁边显示这一步要做的事</data>
   <data name="Mig_StepParams" xml:space="preserve">把 {0} 条步骤里共用的动作与数值拆到了各自的类型里（每一步做什么没有变）</data>
+  <data name="Gesture_Appearance" xml:space="preserve">笔迹外观</data>
+  <data name="Gesture_Style" xml:space="preserve">样式</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">经典</data>
+  <data name="Gesture_Style_Neon" xml:space="preserve">霓虹</data>
+  <data name="Gesture_Style_Rainbow" xml:space="preserve">彩虹</data>
+  <data name="Gesture_Style_Dashed" xml:space="preserve">虚线</data>
+  <data name="Gesture_Style_Dots" xml:space="preserve">圆点</data>
+  <data name="Gesture_Trail_Fade" xml:space="preserve">尾迹淡出</data>
 </root>

@@ -482,6 +482,20 @@ public sealed class AppSettings
     // 鼠标手势轨迹宽度/显示方式："off"（不显笔迹）| "thin"（细）| "normal"（标准）| "thick"（粗）。
     public string GestureTrailWidth { get; set; } = "normal";
 
+    /// <summary>笔迹样式："classic"（经典）| "neon"（霓虹）| "rainbow"（彩虹）| "dashed"（虚线）| "dots"（圆点）。</summary>
+    //
+    // **默认是 classic，而 classic 就是升级前那一条线**（深色描边 + 主题强调色的线芯，
+    // 命中时转近白并一起加粗）。存量配置里没有这一项，落到默认值上时看到的应当与升级前一模一样——
+    // 这是「新增可选项」的第一条规矩：新的那几样都得由用户自己去挑。
+    public string GestureTrailStyle { get; set; } = GestureTrailStyles.DefaultId;
+
+    /// <summary>尾迹淡出：画着的那条线，尾巴变暗、笔尖留一段亮的（彗星那样）。</summary>
+    //
+    // **默认关**：它是另一种观感，不是「更好」。
+    // 而且它动到了「画的是什么」——认一条手势靠的正是那条线的形状，
+    // 尾巴淡下去之后形状本身会变难认，所以这件事只该由用户自己决定要不要。
+    public bool GestureTrailFade { get; set; }
+
     /// <summary>这些程序里**根本不接管手势**：右键完全交给程序自己。</summary>
     //
     // 与「分应用绑定」（步骤上的 ForProcess）是一对，缺一不可：

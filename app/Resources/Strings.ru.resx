@@ -2232,4 +2232,12 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">По одному имени процесса в строке (например, mstsc, vmware). В этих приложениях Clockwork не трогает правую кнопку — она передаётся программе как есть.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Показывать название действия во время рисования</data>
   <data name="Mig_StepParams" xml:space="preserve">Действие и число, общие для {0} шагов, разнесены по полям для каждого типа (суть каждого шага не меняется)</data>
+  <data name="Gesture_Appearance" xml:space="preserve">Оформление следа</data>
+  <data name="Gesture_Style" xml:space="preserve">Стиль</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Классический</data>
+  <data name="Gesture_Style_Neon" xml:space="preserve">Неон</data>
+  <data name="Gesture_Style_Rainbow" xml:space="preserve">Радуга</data>
+  <data name="Gesture_Style_Dashed" xml:space="preserve">Пунктир</data>
+  <data name="Gesture_Style_Dots" xml:space="preserve">Точки</data>
+  <data name="Gesture_Trail_Fade" xml:space="preserve">Затухание следа</data>
 </root>

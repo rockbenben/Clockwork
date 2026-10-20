@@ -2232,4 +2232,12 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">พิมพ์ชื่อโปรเซสทีละบรรทัด เช่น mstsc, vmware ในแอปเหล่านี้ Clockwork จะไม่แตะปุ่มขวาเลย ปุ่มจะส่งตรงไปยังโปรแกรม</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">แสดงชื่อคำสั่งขณะวาด</data>
   <data name="Mig_StepParams" xml:space="preserve">แยกแอ็กชันกับตัวเลขที่ {0} ขั้นตอนใช้ร่วมกัน ไปอยู่ในช่องของแต่ละชนิด (สิ่งที่แต่ละขั้นตอนทำไม่เปลี่ยน)</data>
+  <data name="Gesture_Appearance" xml:space="preserve">รูปแบบเส้นปากกา</data>
+  <data name="Gesture_Style" xml:space="preserve">รูปแบบ</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">คลาสสิก</data>
+  <data name="Gesture_Style_Neon" xml:space="preserve">นีออน</data>
+  <data name="Gesture_Style_Rainbow" xml:space="preserve">สีรุ้ง</data>
+  <data name="Gesture_Style_Dashed" xml:space="preserve">เส้นประ</data>
+  <data name="Gesture_Style_Dots" xml:space="preserve">จุด</data>
+  <data name="Gesture_Trail_Fade" xml:space="preserve">ให้หางจางลง</data>
 </root>

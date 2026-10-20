@@ -55,6 +55,9 @@ public partial class GestureManagerWindow : Window
         // 于是「窗口自己忘了封顶」在图里永远是正常的（DevChecks 顶部那段注释记着这个盲区）。
         WindowSizing.FitToWorkArea(this);
         GesturesOnChk.IsChecked = _config.Settings.GesturesEnabled;
+        // 按钮上的字在这儿设（不写在 XAML 里）：那个「…」是「会打开另一扇窗」的记号，
+        // 而它得排在本地化词**之后**——RTL 下省略号该在前，可那句本程序还不支持。
+        AppearanceBtn.Content = Strings.Get("Gesture_Appearance") + "…";
         PaintWatchState();
         PopulateSettings();
         ShowActionLabelChk.IsChecked = _config.Settings.GestureShowActionLabel;
@@ -391,14 +394,6 @@ public partial class GestureManagerWindow : Window
         SensitivityCbo.SelectedItem = SensitivityCbo.Items.Cast<ComboBoxItem>().FirstOrDefault(x => (string)x.Tag == currentSens)
             ?? SensitivityCbo.Items[1];
 
-        TrailWidthCbo.Items.Clear();
-        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Off"), Tag = "off" });
-        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thin"), Tag = "thin" });
-        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Normal"), Tag = "normal" });
-        TrailWidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thick"), Tag = "thick" });
-        var currentTrail = _config.Settings.GestureTrailWidth;
-        TrailWidthCbo.SelectedItem = TrailWidthCbo.Items.Cast<ComboBoxItem>().FirstOrDefault(x => (string)x.Tag == currentTrail)
-            ?? TrailWidthCbo.Items[2];
         _loadingSettings = false;
     }
 
@@ -412,14 +407,16 @@ public partial class GestureManagerWindow : Window
         }
     }
 
-    private void TrailWidth_Changed(object sender, SelectionChangedEventArgs e)
+    // 笔迹的样子（样式 / 粗细 / 尾迹淡出）单独一扇窗。
+    //
+    // 为什么不是这一排里再添一个下拉：这一扇管理器没有余量了（见 XAML 里那段说明），
+    // 而且这三件事本就属于同一处——「这条线画成什么样」是一个决定，不是三个。
+    // 模态打开：改完当场生效，窗里没有「确定 / 取消」——挑完那一刻意思就已经完整了。
+    private void Appearance_Click(object sender, RoutedEventArgs e)
     {
-        if (_loadingSettings) return;
-        if (TrailWidthCbo.SelectedItem is ComboBoxItem item && item.Tag is string trail)
-        {
-            _config.Settings.GestureTrailWidth = trail;
-            _save();
-        }
+        var w = new GestureAppearanceWindow(_config, _save);
+        w.Owner = this;
+        w.ShowDialog();
     }
 
     // 笔迹旁那句「这将要做的事」。改了当场生效（_save 末尾会重装钩子，

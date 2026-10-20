@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Shapes;
 // UseWindowsForms 的全局 using 让这几个类型撞名，显式钉到 WPF（同 Pickers.cs / StepMenu.cs 的惯例）。
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
@@ -53,15 +52,12 @@ public sealed class GestureTrailWindow : Window
     [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
     [StructLayout(LayoutKind.Sequential)] private struct MONITORINFO { public int cbSize; public RECT rcMonitor, rcWork; public uint dwFlags; }
 
-    // 一条线画两遍：底下一层半透明的黑当描边，上面一层强调色当线芯。
+    // 那条线本身：**画法在 GestureTrailRenderer 里**——描边/辉光/线芯几层、虚线还是珠点、
+    // 尾迹淡不淡出都在那儿定。这一扇窗只管把点喂给它、把「命中了」这件事告诉它。
+    //
+    // 描边不解决「配色好看」，解决的是「任何底色上都还看得见」：
     // 覆盖窗压在**任意**背景上——白文档、深色 IDE、花花的壁纸——单一颜色总有一种底色让它读不出来。
-    // 描边不解决「配色好看」，解决的是「任何底色上都还看得见」。
-    private readonly Polyline _halo = Stroke(new SolidColorBrush(Color.FromArgb(0x59, 0, 0, 0)), 8);
-    private readonly Polyline _core;
-    private readonly Brush _idleBrush, _armedBrush;
-    private bool _armed;
-    private double _coreIdle = 4, _coreArmed = 5.5;
-    private double _haloIdle = 8, _haloArmed = 10;
+    private readonly GestureTrailRenderer _trail;
     private bool _disabled;
 
     // 画完没匹配上时，就地显示「你画的是什么」的那颗小药丸。
@@ -119,15 +115,6 @@ public sealed class GestureTrailWindow : Window
     private bool _hasLast;                            // 这一笔到底有没有点——(0,0) 是合法坐标，不能拿它当哨兵
     private System.Windows.Threading.DispatcherOperation? _reveal;   // ShowGated 排的「淡回不透明」
 
-    private static Polyline Stroke(Brush b, double t) => new()
-    {
-        Stroke = b,
-        StrokeThickness = t,
-        StrokeLineJoin = PenLineJoin.Round,
-        StrokeStartLineCap = PenLineCap.Round,
-        StrokeEndLineCap = PenLineCap.Round,
-    };
-
     public GestureTrailWindow()
     {
         WindowStyle = WindowStyle.None;
@@ -140,13 +127,15 @@ public sealed class GestureTrailWindow : Window
         ResizeMode = ResizeMode.NoResize;
         WindowStartupLocation = WindowStartupLocation.Manual;
         // 笔迹与管理器里的缩略图同色：屏幕上画出来的那条线，和列表里存下来的那条，是同一样东西。
-        _idleBrush = (Brush)(System.Windows.Application.Current?.TryFindResource("BrushAccentText")
-                             ?? new SolidColorBrush(Color.FromRgb(0x75, 0x9C, 0xD7)));
+        var idleBrush = (Brush)(System.Windows.Application.Current?.TryFindResource("BrushAccentText")
+                                ?? new SolidColorBrush(Color.FromRgb(0x75, 0x9C, 0xD7)));
         // 命中色不从主题里取：主题色是给界面用的，而这条线压在**任意**程序的窗口上，
         // 要的是「和未命中那一档一眼分得开」。同一个蓝往亮里推到近白，比换一个色相稳——
         // 换色相（比如绿）在花壁纸和深色 IDE 上各是一种观感，而提亮在任何底色上都是同一个信号。
-        _armedBrush = new SolidColorBrush(Color.FromRgb(0xE6, 0xEF, 0xFF));
-        _core = Stroke(_idleBrush, 4);
+        var armedBrush = new SolidColorBrush(Color.FromRgb(0xE6, 0xEF, 0xFF));
+        _trail = new GestureTrailRenderer(Core.GestureTrailStyles.Resolve(null),
+                                          Core.GestureTrailWidths.Resolve("normal"),
+                                          idleBrush, armedBrush);
         // 药丸自己压一层半透明的黑底——同笔迹描边一个理由：覆盖窗压在任意背景上，
         // 白文档和深色 IDE 上都得读得出来。不用主题色，这不是要好看，是要在任何底色上可读。
         _note = new Border
@@ -170,19 +159,18 @@ public sealed class GestureTrailWindow : Window
         // 药丸到时收掉药丸，窗也一起藏——收笔后窗本就该藏着（见 Finish）。藏之前先让空画面
         // 合成出去，理由与收笔那条一模一样（见 HideSoon）：藏的那一刻位图里留的是什么，
         // 下一笔开头贴到屏上的就是什么——药丸同样是「上一笔留下的东西」。
-        _noteTimer.Tick += (_, _) => { _noteTimer.Stop(); HideNote(); if (_core.Points.Count == 0) HideSoon(); };
+        _noteTimer.Tick += (_, _) => { _noteTimer.Stop(); HideNote(); if (!_trail.HasPoints) HideSoon(); };
         _hideTimer.Interval = TimeSpan.FromMilliseconds(HideDelayMs);
         // 到点再核一次：这 120ms 里可能已经开了新的一笔（那时 Point 会把它停掉），
         // 也可能药丸又亮了起来（那是 _noteTimer 的活，它到点自己会走同一条路）。
         _hideTimer.Tick += (_, _) =>
         {
             _hideTimer.Stop();
-            if (_core.Points.Count == 0 && !_noteTimer.IsEnabled) Hide();
+            if (!_trail.HasPoints && !_noteTimer.IsEnabled) Hide();
         };
 
         var canvas = new Canvas();
-        canvas.Children.Add(_halo);
-        canvas.Children.Add(_core);
+        canvas.Children.Add(_trail.Surface);
         canvas.Children.Add(_hint);
         canvas.Children.Add(_note);
         Content = canvas;
@@ -211,43 +199,25 @@ public sealed class GestureTrailWindow : Window
         _noteTimer.Start();
     }
 
-    /// <summary>应用笔迹宽度与样式："off"（不显轨迹）| "thin"（细）| "normal"（默认标准）| "thick"（粗）。</summary>
-    public void ApplyStyle(string? widthMode)
+    /// <summary>应用笔迹的样子：粗细档 + 样式 + 尾迹要不要淡出。</summary>
+    /// <remarks>
+    /// 粗细档："off"（不显轨迹）| "thin"（细）| "normal"（默认标准）| "thick"（粗）。
+    /// 样式与淡出是另外两件事（Core.GestureTrailStyles 与「尾迹淡出」），
+    /// 三者一起决定这一条线画成什么样，但各自独立：换样式不必先想好粗细。
+    /// </remarks>
+    public void ApplyLook(string? widthMode, string? styleId, bool fadeTail)
     {
-        switch ((widthMode ?? "").Trim().ToLowerInvariant())
-        {
-            case "off":
-                _disabled = true;
-                break;
-            case "thin":
-                _disabled = false;
-                _coreIdle = 2.5; _coreArmed = 3.5;
-                _haloIdle = 5; _haloArmed = 7;
-                break;
-            case "thick":
-                _disabled = false;
-                _coreIdle = 6; _coreArmed = 8.5;
-                _haloIdle = 12; _haloArmed = 15;
-                break;
-            default: // "normal"
-                _disabled = false;
-                _coreIdle = 4; _coreArmed = 5.5;
-                _haloIdle = 8; _haloArmed = 10;
-                break;
-        }
-        _core.StrokeThickness = _armed ? _coreArmed : _coreIdle;
-        _halo.StrokeThickness = _armed ? _haloArmed : _haloIdle;
+        _disabled = (widthMode ?? "").Trim().ToLowerInvariant() == "off";
+        _trail.SetStyle(Core.GestureTrailStyles.Resolve(styleId),
+                        Core.GestureTrailWidths.Resolve(widthMode), fadeTail);
     }
 
     // 点亮 / 熄灭。会来回切：画出 ↑ 命中「复制」，继续往下画成 ↑↓ 就该灭掉，再成为「搜索」时重新亮起——
     // 命中是**此刻这一串**的属性，不是一旦点亮就锁住的状态。
     private void SetArmed(bool on)
     {
-        if (_armed == on) return;
-        _armed = on;
-        _core.Stroke = on ? _armedBrush : _idleBrush;
-        _core.StrokeThickness = on ? _coreArmed : _coreIdle;
-        _halo.StrokeThickness = on ? _haloArmed : _haloIdle;   // 描边跟着加粗，任何底色上都还托得住线芯
+        // 描边跟着加粗，任何底色上都还托得住线芯——那是渲染器里的事（线宽与颜色都在那儿定）。
+        _trail.SetArmed(on);
     }
 
     private void HideNote()
@@ -388,11 +358,10 @@ public sealed class GestureTrailWindow : Window
         long tAdd = Core.UiStallWatch.Begin();
         try
         {
-            _halo.Points.Add(new Point(x, y));
-            _core.Points.Add(new Point(x, y));
+            _trail.Add(new Point(x, y));
         }
         finally { Core.UiStallWatch.End("trail-add", tAdd); }
-        if (IsVisible || _core.Points.Count < 2) return;   // 不写 ==2：那一下万一没显示成，后面就再也不试了
+        if (IsVisible || _trail.PointCount < 2) return;   // 不写 ==2：那一下万一没显示成，后面就再也不试了
         // 重显走 ShowGated（含 Show + 重定位）：藏→显那一帧先整窗全透明，别把上一笔的旧位图顶到屏上。
         long tShow = Core.UiStallWatch.Begin();
         try { ShowGated(); }
@@ -417,8 +386,7 @@ public sealed class GestureTrailWindow : Window
         _placed = false;
         SetArmed(false);   // 复位，否则下一笔起手就是亮的（还什么都没画呢）
         HideHint();        // 那句「这将是哪件事」跟着这一笔一起结束
-        _halo.Points.Clear();
-        _core.Points.Clear();
+        _trail.Clear();
         // **`_hasLast` / `_last` 故意不清。** 紧跟着的 Note() 靠它们把「你画的是这个」
         // 摆在收笔点旁边（见 Note 的注释：MouseHook 先派 trailEnd 再派 unmatched）。
         // 在这里清掉它们，Note 会直接 return，那句提示永远不再出现。

@@ -2232,4 +2232,12 @@ Registro: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Um nome de processo por linha (por exemplo, mstsc, vmware). Nestes aplicativos o Clockwork não encosta no botão direito — ele vai direto para o programa.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Mostrar o nome da ação enquanto desenha</data>
   <data name="Mig_StepParams" xml:space="preserve">A ação e o número compartilhados por {0} passos foram separados em campos por tipo (o que cada passo faz não muda)</data>
+  <data name="Gesture_Appearance" xml:space="preserve">Aparência do traço</data>
+  <data name="Gesture_Style" xml:space="preserve">Estilo</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Clássico</data>
+  <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
+  <data name="Gesture_Style_Rainbow" xml:space="preserve">Arco-íris</data>
+  <data name="Gesture_Style_Dashed" xml:space="preserve">Tracejado</data>
+  <data name="Gesture_Style_Dots" xml:space="preserve">Pontos</data>
+  <data name="Gesture_Trail_Fade" xml:space="preserve">Desvanecer o rastro</data>
 </root>

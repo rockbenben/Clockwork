@@ -665,7 +665,9 @@ internal sealed class GestureCoordinator
             : 0;
         if (wantGesture && _trail != null)
         {
-            _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
+            _trail.ApplyLook(_config.Settings.GestureTrailWidth,
+                             _config.Settings.GestureTrailStyle,
+                             _config.Settings.GestureTrailFade);
             // 笔迹旁那句「这将是哪件事」是**另一件事**（可关），与笔迹本身分开管。
             _trail.ShowActionLabel(_config.Settings.GestureShowActionLabel);
         }
@@ -695,7 +697,9 @@ internal sealed class GestureCoordinator
             // 才可能变成「整个桌面点不动」，也就从这一刻起值得记下卡了多久。
             ApplyStallWatch(true);
             _trail ??= new Views.GestureTrailWindow();
-            _trail.ApplyStyle(_config.Settings.GestureTrailWidth);
+            _trail.ApplyLook(_config.Settings.GestureTrailWidth,
+                             _config.Settings.GestureTrailStyle,
+                             _config.Settings.GestureTrailFade);
             _trail.ShowActionLabel(_config.Settings.GestureShowActionLabel);
             // 探针跟钩子同起同收。**起在钩子装上之前**：钩子一装上就可能收到右键，
             // 而那一刻它要问的两句答案得有人在算。

@@ -2232,4 +2232,12 @@ Log: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Eén procesnaam per regel (bijvoorbeeld mstsc, vmware). In deze apps raakt Clockwork de rechtermuisknop niet — die gaat rechtstreeks naar het programma.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Naam van de actie tonen tijdens het tekenen</data>
   <data name="Mig_StepParams" xml:space="preserve">De actie en het getal die {0} stappen deelden staan nu in velden per soort (wat elke stap doet, verandert niet)</data>
+  <data name="Gesture_Appearance" xml:space="preserve">Weergave van de scia</data>
+  <data name="Gesture_Style" xml:space="preserve">Stijl</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Klassiek</data>
+  <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
+  <data name="Gesture_Style_Rainbow" xml:space="preserve">Regenboog</data>
+  <data name="Gesture_Style_Dashed" xml:space="preserve">Gestippeld</data>
+  <data name="Gesture_Style_Dots" xml:space="preserve">Stippen</data>
+  <data name="Gesture_Trail_Fade" xml:space="preserve">Spoor laten vervagen</data>
 </root>

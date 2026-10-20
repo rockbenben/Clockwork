@@ -71,7 +71,9 @@ public class StallProbeWiringTests
     {
         var body = Body(Src("app", "Views", "GestureTrailWindow.cs"), "public void Point(");
         AssertWraps(body, "trail-place", "CoverMonitorOf(px, py)");
-        AssertWraps(body, "trail-add", "_core.Points.Add(new Point(x, y))");
+        // 加点那一句搬进了渲染器（GestureTrailRenderer.Add）——笔迹的画法归它一处，
+        // 这一格探针跟着那句话走。
+        AssertWraps(body, "trail-add", "_trail.Add(new Point(x, y))");
         AssertWraps(body, "trail-show", "ShowGated()");
     }
 

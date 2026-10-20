@@ -427,6 +427,59 @@ public partial class App
                     w.Point(x, y);
                 return w;
             }),
+            // **五种笔迹样式并排**：这是「用户能挑什么」的那份目录的画出来的样子。
+            // 单独给一格是因为——同一条线换个画法，五种摆在一起才比得出高低；
+            // 而「比得出高低」这件事，截图是唯一说得清的判据（代码里只有层数与倍数，
+            // 好不好看它不知道）。
+            // 每种都画两遍：浅底上（描边那一层有没有起作用）与深底上（辉光那一层好不好看）。
+            ("GestureTrailStyles", () =>
+            {
+                var w = new System.Windows.Window
+                {
+                    Width = 900,
+                    Height = 300,
+                    Background = System.Windows.Media.Brushes.Black,
+                    WindowStartupLocation = System.Windows.WindowStartupLocation.Manual,
+                };
+                var row = new System.Windows.Controls.StackPanel
+                {
+                    Orientation = System.Windows.Controls.Orientation.Horizontal,
+                };
+                foreach (var style in GestureTrailStyles.All)
+                {
+                    foreach (bool light in new[] { true, false })
+                    {
+                        var box = new System.Windows.Controls.Border
+                        {
+                            Width = 88,
+                            Height = 132,
+                            Margin = new System.Windows.Thickness(2),
+                            Background = light
+                                ? (System.Windows.Media.Brush)new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xF3, 0xEE, 0xE1))
+                                : (System.Windows.Media.Brush)new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x1C, 0x1E, 0x22)),
+                            ClipToBounds = true,
+                        };
+                        var renderer = new GestureTrailRenderer(
+                            style, GestureTrailWidths.Resolve("normal"),
+                            new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x75, 0x9C, 0xD7)),
+                            new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xE6, 0xEF, 0xFF)),
+                            fade: true);
+                        for (int i = 0; i <= 40; i++)
+                        {
+                            double t = i / 40.0;
+                            renderer.Add(new System.Windows.Point(10 + t * 68, 100 - System.Math.Sin(t * System.Math.PI) * 70));
+                        }
+                        box.Child = renderer.Surface;
+                        row.Children.Add(box);
+                    }
+                }
+                w.Content = row;
+                return w;
+            }),
+            // 笔迹外观那扇窗：样式 / 粗细 / 尾迹淡出，外加浅底与深底两份预览。
+            // 它是手势管理器里那颗「笔迹外观…」按钮打开的那一扇——新界面从不出现在
+            // 截图矩阵里，就等于没人见过它长什么样。
+            ("GestureAppearance", () => new GestureAppearanceWindow(RootConfig.Default(), () => { })),
             // 刚「添加面板页」之后的样子：一张**空卡**。这是新用户最先遇到的一屏，
             // 而它此前从未被画出来过——空页曾经根本不产出（见 PanelLayout.keepEmpty）。
             ("PanelManagerEmptyPage", () =>

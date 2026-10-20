@@ -129,8 +129,14 @@
             <WrapPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="{loc:Loc Gesture_Sensitivity}" VerticalAlignment="Center" Margin="0,0,6,0" Style="{StaticResource FieldHint}"/>
                 <ComboBox x:Name="SensitivityCbo" Width="110" SelectionChanged="Sensitivity_Changed" Margin="0,0,16,0"/>
-                <TextBlock Text="{loc:Loc Gesture_Trail}" VerticalAlignment="Center" Margin="0,0,6,0" Style="{StaticResource FieldHint}"/>
-                <ComboBox x:Name="TrailWidthCbo" Width="90" SelectionChanged="TrailWidth_Changed" Margin="0,0,16,0"/>
+                <!-- 笔迹的样子（样式 / 粗细 / 尾迹淡出）单独一扇窗。
+                     这一扇管理器**没有余量**：它是 SizeToContent="Height"，空列表时内容就 390 高，
+                     而它自己的兜底 MaxHeight 是 392（=最紧那一档 464 减 72 边距）。
+                     再往里塞控件，被挤到窗外去的是底下那行「关闭」——那行恰恰最不该丢。
+                     笔迹的粗细原是这一排里的一个下拉，如今与样式、淡出一起搬进那扇窗，
+                     免得同一件事散在两处。 -->
+                <Button x:Name="AppearanceBtn" MinWidth="0" Padding="10,3" VerticalAlignment="Center"
+                        Margin="0,0,16,0" Click="Appearance_Click"/>
                 <!-- 「这些程序里根本不接管手势」的名单。摆在这一排里是因为它与灵敏度、笔迹一样
                      是**全局**的手势设置（不是某一条手势的属性），而这排就是全局手势设置那一排。
                      按钮上带当前份数：名单是空的与不空，差别大到界面上必须看得出来。 -->
