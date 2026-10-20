@@ -1063,6 +1063,18 @@
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Проверить обновления</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Проверять обновления при запуске</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Если включено, программа один раз при запуске обращается к GitHub, чтобы узнать, не вышла ли новая версия, — это единственное сетевое действие программы; всё остальное работает офлайн.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>Версия {0} загружена. Новая программа находится в {1}. Закройте запущенную программу и скопируйте новую поверх неё, чтобы обновиться.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>Загруженный файл не совпал с опубликованной контрольной суммой, поэтому он был отброшен. Повторите попытку позже.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>План 365 Open Source · #020</value>
   </data>
@@ -1071,9 +1083,6 @@
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Установлена последняя версия ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Доступна новая версия {0}. Перейти к загрузке?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Не удалось проверить обновления: {0}</value>

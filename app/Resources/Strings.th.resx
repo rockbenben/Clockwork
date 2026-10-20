@@ -1063,6 +1063,18 @@
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>ตรวจหาการอัปเดต</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>ตรวจหาการอัปเดตเมื่อเริ่มทำงาน</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>เมื่อเปิด โปรแกรมจะเชื่อมต่อ GitHub หนึ่งครั้งตอนเริ่มทำงานเพื่อดูว่ามีเวอร์ชันใหม่หรือไม่ — นั่นคือการเชื่อมต่ออินเทอร์เน็ตเพียงครั้งเดียวของโปรแกรม ส่วนอื่นทำงานแบบออฟไลน์ทั้งหมด</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>ดาวน์โหลดเวอร์ชัน {0} แล้ว โปรแกรมใหม่อยู่ที่ {1} กรุณาออกจากโปรแกรมที่กำลังใช้งาน แล้วคัดลอกโปรแกรมใหม่ไปทับเพื่ออัปเดต</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>ไฟล์ที่ดาวน์โหลดไม่ตรงกับค่าตรวจสอบที่ประกาศไว้ จึงถูกยกเลิก กรุณาลองใหม่อีกครั้งในภายหลัง</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>แผน 365 โอเพนซอร์ส · #020</value>
   </data>
@@ -1071,9 +1083,6 @@
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>คุณใช้เวอร์ชันล่าสุดแล้ว ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>มีเวอร์ชันใหม่ {0} ไปที่หน้าดาวน์โหลดไหม?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>ตรวจหาการอัปเดตล้มเหลว: {0}</value>

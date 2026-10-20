@@ -1063,6 +1063,18 @@ Log: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Controleren op updates</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Controleren op updates bij het opstarten</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Als dit aan staat, neemt het programma bij het starten één keer contact op met GitHub om te zien of er een nieuwere versie is — dat is het enige moment waarop dit programma online gaat; al het andere blijft offline.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>Versie {0} is gedownload. Het nieuwe programma staat in {1}. Sluit het actieve program af en kopieer het nieuwe erover om bij te werken.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>Het gedownloade bestand komt niet overeen met de gepubliceerde controlesom en is dus weggegooid. Probeer het later opnieuw.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>365 Open Source-plan · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Log: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Je hebt de nieuwste versie ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Nieuwe versie {0} beschikbaar. Naar download gaan?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Controle op updates mislukt: {0}</value>

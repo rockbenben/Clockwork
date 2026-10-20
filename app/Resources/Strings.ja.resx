@@ -1069,6 +1069,18 @@
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>更新を確認</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>起動時に更新を確認</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>オンにすると起動時に 1 回だけ GitHub に接続して新しいバージョンを確認します。他の機能はすべてこの端末内で完結します。</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>バージョン {0} をダウンロードしました。新しいプログラムは {1} にあります。更新するには実行中のプログラムを終了してから、新しいプログラムをコピーして置き換えてください。</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>ダウンロードしたファイルが公開されているチェックサムと一致しないため破棄しました。しばらくしてからもう一度お試しください。</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>365 オープンソース計画 · #020</value>
   </data>
@@ -1077,9 +1089,6 @@
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>最新バージョンです（{0}）</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>新しいバージョン {0} があります。ダウンロードページを開きますか？</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>更新の確認に失敗しました：{0}</value>

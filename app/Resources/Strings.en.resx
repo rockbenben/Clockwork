@@ -1069,6 +1069,18 @@ Log: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Check for updates</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Check for updates on startup</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>When on, contacts GitHub once at startup to see whether a newer version exists — the only time this program goes online; everything else stays offline.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>New version {0} was downloaded. The new program is at {1}. Quit the running program and copy it over to update.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>The downloaded file did not match the published checksum, so it was discarded. Please try again later.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>365 Open Source Plan · #020</value>
   </data>
@@ -1077,9 +1089,6 @@ Log: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>You’re on the latest version ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>New version {0} available. Go to download?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Update check failed: {0}</value>

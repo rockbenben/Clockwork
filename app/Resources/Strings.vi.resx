@@ -1063,6 +1063,18 @@ Nhật ký: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Kiểm tra cập nhật</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Kiểm tra cập nhật khi khởi động</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Khi được bật, chương trình sẽ kết nối GitHub một lần lúc khởi động để xem có bản mới hơn không — đó là lần duy nhất chương trình ra ngoài mạng; mọi thứ khác vẫn chạy ngoại tuyến.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>Đã tải phiên bản {0}. Chương trình mới nằm ở {1}. Hãy thoát chương trình đang chạy rồi chép đè chương trình mới lên để cập nhật.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>Tệp đã tải xuống không khớp với tổng kiểm tra đã công bố nên đã bị loại bỏ. Vui lòng thử lại sau.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>Kế hoạch 365 nguồn mở · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Nhật ký: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Bạn đang dùng phiên bản mới nhất ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Đã có phiên bản mới {0}. Tới trang tải về?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Kiểm tra cập nhật thất bại: {0}</value>

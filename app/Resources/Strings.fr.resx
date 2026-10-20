@@ -1063,6 +1063,18 @@ Journal : {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Rechercher des mises à jour</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Rechercher les mises à jour au démarrage</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Activé, le programme se connecte une fois au démarrage à GitHub pour voir s'il existe une version plus récente : c'est la seule connexion de ce programme ; tout le reste fonctionne hors ligne.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>La version {0} a été téléchargée. Le nouveau programme se trouve dans {1}. Quittez le programme en cours d'exécution puis copiez le nouveau par-dessus pour mettre à jour.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>Le fichier téléchargé ne correspond pas à la somme de contrôle publiée, il a donc été écarté. Réessayez plus tard.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>Plan 365 open source · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Journal : {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Vous avez la dernière version ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Nouvelle version {0} disponible. Aller au téléchargement ?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Échec de la vérification des mises à jour : {0}</value>

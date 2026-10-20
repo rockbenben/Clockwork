@@ -1063,6 +1063,18 @@ Günlük: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Güncellemeleri denetle</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Başlangıçta güncellemeleri denetle</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Açıkken, program her başlatıldığında daha yeni bir sürüm olup olmadığını görmek için GitHub'a bir kez bağlanır — bu, programın internete bağlandığı tek andır; geri kalan her şey çevrimdışı kalır.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>{0} sürümü indirildi. Yeni program {1} konumunda. Güncellemek için çalışan programı kapatın ve yeni programı üzerine kopyalayın.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>İndirilen dosya yayımlanan sağlama toplamıyla eşleşmediği için silindi. Lütfen daha sonra yeniden deneyin.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>365 Açık Kaynak Planı · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Günlük: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>En son sürümü kullanıyorsunuz ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Yeni sürüm {0} mevcut. İndirmeye gidilsin mi?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Güncelleme denetimi başarısız: {0}</value>

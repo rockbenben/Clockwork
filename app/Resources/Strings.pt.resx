@@ -1063,6 +1063,18 @@ Registro: {1}</value>
   <data name="About_CheckUpdate" xml:space="preserve">
     <value>Verificar atualizações</value>
   </data>
+  <data name="Settings_CheckUpdates" xml:space="preserve">
+    <value>Procurar atualizações ao iniciar</value>
+  </data>
+  <data name="Settings_CheckUpdatesTip" xml:space="preserve">
+    <value>Se estiver ativado, o programa liga-se uma vez ao arrancar ao GitHub para ver se existe uma versão mais recente — é a única ligação à internet deste programa; tudo o resto continua offline.</value>
+  </data>
+  <data name="Update_Ready" xml:space="preserve">
+    <value>A versão {0} foi transferida. O novo programa está em {1}. Feche o programa em execução e copie o novo por cima para atualizar.</value>
+  </data>
+  <data name="Update_VerifyFailed" xml:space="preserve">
+    <value>O ficheiro transferido não corresponde à soma de verificação publicada, por isso foi descartado. Tente novamente mais tarde.</value>
+  </data>
   <data name="About_Series" xml:space="preserve">
     <value>Plano 365 de código aberto · #020</value>
   </data>
@@ -1071,9 +1083,6 @@ Registro: {1}</value>
   </data>
   <data name="Update_Latest" xml:space="preserve">
     <value>Você já tem a versão mais recente ({0})</value>
-  </data>
-  <data name="Update_Available" xml:space="preserve">
-    <value>Nova versão {0} disponível. Ir para o download?</value>
   </data>
   <data name="Update_Failed" xml:space="preserve">
     <value>Falha ao verificar atualizações: {0}</value>

@@ -375,6 +375,19 @@ public sealed class AppSettings
     public bool StartupWaitForReady { get; set; }
     public int StartupDelaySeconds { get; set; } = 30;
     public string StopHotkey { get; set; } = "Ctrl+Alt+Q";
+
+    // 开机检查更新。**默认关**，而且是本程序**唯一**会联网的行为——其余一切都在本机完成。
+    //
+    // 为什么默认关：一个不打招呼就联网的常驻程序，跟用户对这个程序的预期不一样。托盘常驻的
+    // 工具尤其如此——它开机就在跑，没人知道它在跟谁说话。勾上之后它的行为是明确的：每次启动
+    // 问一次 GitHub 有没有新版本；有就把自包含的那份 zip 下载下来、核对发布页附的 SHA-256，
+    // 再解压到 %LOCALAPPDATA%\Clockwork\Updates\<版本>\，然后说一声新程序在哪。
+    //
+    // **它不覆盖正在运行的自己**：Windows 锁着运行中的 exe，原地覆写会撞共享冲突，还会留下
+    // 半个装坏的安装。换不换是用户的事，得先把旧的那个关掉——所以「在哪儿」得说清楚。
+    //
+    // 关掉之后仍有「检查更新」那颗按钮可用：那是用户明确要的一次性动作，跟默认行为无关。
+    public bool CheckUpdates { get; set; } = false;
     // 快捷面板的呼出键。默认给一个，理由与急停键相同：不给默认值的功能等于藏起来了，
     // 而热键被占用时已有现成的处理（注册失败会点名 toast，见 RebindFunctionHotkey），代价可控。
     // 空=不绑定，面板仍可从托盘菜单或中键长按打开——所以「关掉这个键」不等于关掉这个功能。
