@@ -164,29 +164,41 @@
             </Border>
         </Grid>
 
-        <!-- ── 底：新增与关闭 ── -->
+        <!-- ── 底：指路那句话 + 两颗动作按钮 ── -->
         <!-- 面板的外观那一列在主区右边（见上面 AppearanceBox），理由与它的文案都写在那儿。
-             底栏只剩一句指路的话与「关闭」——它们都要整行的宽度，挤在卡片下面各占一行才读得通。 -->
+             底栏只剩一句指路的话与两颗动作按钮——它们都要整行的宽度，挤在卡片下面各占一行才读得通。 -->
 
-        <!-- 页脚独占一行，不与按钮抢宽度。上一版文案与按钮同处一行，* 列被「关闭」挤掉大半，
-             于是一句操作说明被压成两行、末字「移。」孤零零挂在第二行（实测截图）。
-             这句话教的是**拖拽手势**——看界面看不出来的那一类，它该有整行的宽度。 -->
+        <!-- 页脚分两行，各管各的：
+             **第一行给指路那句话，它该有整行的宽度。** 它教的是**拖拽手势**——
+             看界面看不出来的那一类。上一版它与「清空点击统计」同处一行，右边那颗按钮把
+             * 列挤掉大半，一句操作说明被压成两行、末字「移。」孤零零挂在第二行（实测截图）。
+             **第二行给两颗动作按钮，同一行、同一条右缘。**
+             它们曾一个占第 0 行、一个占第 1 行，各带各的右外边距，于是两颗按钮的右缘
+             差着 12 DIP（实测：清空点击统计 973、关闭 991），看着像两颗没对齐的补丁。
+             收进同一个右对齐的横排，右缘就对齐了；顺带这一行整行都是它们的，
+             句子再长也挤不到按钮底下去。 -->
         <Grid Grid.Row="1" Margin="0,12,0,0">
             <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
             <!-- TextWrapping=Wrap 只在**可用宽度有限**时才折行；SizeToContent 宽度测量的是
                  无限宽，于是这句话按整行（约 966px）报给外层，把整扇窗撑宽。
                  MaxWidth 必须由 CapWidthToContent() 按主区给——见那里的说明。 -->
             <TextBlock x:Name="ManagerHint" Grid.Row="0" Grid.Column="0" Text="{loc:Loc Panel_ManagerHint}"
-                       Style="{StaticResource FieldHint}" TextWrapping="Wrap" Margin="0,0,14,0"/>
-            <!-- 清空点击统计。只在有数据时出现（App 传进来的字典为空就是隐藏）。
-                 **它必须占自己的列**：曾和指路文案同放 * 列右对齐，于是文案的第二行
-                 直接从按钮底下穿过去（用户实报「底部叠在一起了」——有统计数据时才现形，
-                 默认配置的截图永远截不到）。列一独立，* 列自动让宽，换行点自己会算。 -->
-            <Button Grid.Row="0" Grid.Column="1" x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32"
-                    MinWidth="104" Margin="0,0,12,0" Click="ResetUsage_Click" Visibility="Collapsed" ToolTip="{loc:Loc Btn_ResetUsageTip}"/>
-            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{loc:Loc Btn_Close}" MinWidth="88"
-                    Height="32" HorizontalAlignment="Right" Margin="0,10,0,0" Click="Close_Click"/>
+                       Style="{StaticResource FieldHint}" TextWrapping="Wrap"/>
+            <!-- 两颗动作按钮：同一个右对齐的横排，于是右缘同一条。
+                 中间那 12 DIP 是「清空点击统计」自己的右外边距，最后那颗不带——
+                 所以右缘由这一排的右端决定，两颗一样齐。 -->
+            <StackPanel Grid.Row="1" Grid.Column="0" x:Name="FooterActions" Orientation="Horizontal"
+                        HorizontalAlignment="Right" Margin="0,10,0,0">
+                <!-- 清空点击统计。只在有数据时出现（App 传进来的字典为空就是隐藏）。
+                     它曾经和指路文案同放 * 列右对齐，于是文案的第二行直接从按钮底下穿过去
+                     （用户实报「底部叠在一起了」——有统计数据时才现形，默认配置的截图永远截不到）。
+                     现在它与「关闭」同在第二行，压根不在句子那一行，叠不了。 -->
+                <Button x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32" MinWidth="104"
+                        Margin="0,0,12,0" Click="ResetUsage_Click" Visibility="Collapsed" ToolTip="{loc:Loc Btn_ResetUsageTip}"/>
+                <Button x:Name="CloseBtn" Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32"
+                        Click="Close_Click"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

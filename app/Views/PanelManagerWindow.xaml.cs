@@ -247,15 +247,11 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
 
         TopTabBar.MaxWidth = main;   // 顶栏那条 Border 只有下边框，横向不吃宽度
 
-        // 页脚那句指路文字要和右边那颗按钮同处一行，得给它留出按钮那一列
-        // （按钮不一定在：没有点击统计时它是 Collapsed，不占位）。
-        double btnCol = 0;
-        if (ResetUsageBtn.Visibility == Visibility.Visible)
-        {
-            ResetUsageBtn.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
-            btnCol = ResetUsageBtn.DesiredSize.Width + 12;   // 右 Margin
-        }
-        ManagerHint.MaxWidth = Math.Max(120, main - btnCol - 14);   // 14 = 它自己的右 Margin
+        // 页脚那句指路文字**独占一整行**（两颗动作按钮都在下一行），所以它能用满主区宽度。
+        // 曾经它与「清空点击统计」同处一行，得给它留出按钮那一列（main - btnCol - 14），
+        // 句子于是被压成两行、末字孤零零挂在第二行——而该文件自己的注释写着
+        // 「它该有整行的宽度」。按钮挪到下一行之后，这句话就该拿整行的宽度。
+        ManagerHint.MaxWidth = main;
     }
 
     // 这一类里一张页都没有时，中间画一句「往这儿放第一页」而不是留一片空白。
