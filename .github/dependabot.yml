@@ -1,0 +1,33 @@
+# Dependabot：把「依赖升级」变成 PR，而不是等着某天有人想起来查。
+#
+# **这份文件是 ci.yml 里那句「Dependabot 会提 PR 说一声」的前提**：
+# 没有它，那句话是假的——CI 用到的 action 与测试用的包都停在某个版本，
+# 直到有人手动想起来去看一眼。仓库里没有第三个提交者，人也就不会想起来。
+#
+# 两个生态：
+#   · github-actions —— ci.yml 里那四个（checkout / setup-dotnet / attest-build-provenance /
+#     action-gh-release）。它们各自按 major 打标（v7 / v6 / v4 / v3），
+#     而 major 一动就可能改行为——所以钉住 major 让 Dependabot 只提 patch 级的 PR，
+#     真要升 major 时人来定（那正是 ci.yml 那句注释里说的「出了 v4 这种破坏性升级」的情形）。
+#   · nuget —— xunit.v3 与它带进来的 Microsoft.Testing.Platform / 分析器。
+#     **这条生态的升级是「一串」，不是一条**：MTP 从 v1 跳到 v2 时，xunit.v3 也跟着跳大版本，
+#     而那次要改的是「关掉并行」那个特性（CollectionBehavior → Parallelization）——
+#     编译器会直接报错，不会静默。所以 NuGet 这边不分组，让每个包各自成一条 PR，
+#     一次只动一样，出事时好回退。
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "nuget"
+    directory: "/app.Tests"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

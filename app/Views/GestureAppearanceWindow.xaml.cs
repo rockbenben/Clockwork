@@ -78,9 +78,9 @@ public partial class GestureAppearanceWindow : Window
 
     // 样式名逐语言取。
     //
-    // **这里逐条写死，不拼键名**：拼出来的键名（"Gesture_Style_" + id）既查不到
-    // 「这一条到底翻没翻」，也过不了「文案表里有没有没人用的死键」那条检查。
-    // 五条样式各写一行，是这个目录变长时唯一还能一眼看完的写法。
+    // **这里逐条写死，不把键名拼出来**：拼出来的那种（拿前缀接上 id）既查不到
+    // 「这一条到底翻没翻」，也过不了「文案表里有没有没人用的死键」那条检查——
+    // 那个检查认的是字面量，五条样式各写一行，是这个目录变长时唯一还能一眼看完的写法。
     private static string StyleName(string id) => id switch
     {
         "neon" => Strings.Get("Gesture_Style_Neon"),
