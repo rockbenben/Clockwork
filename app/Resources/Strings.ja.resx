@@ -2249,4 +2249,5 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">破線</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">点線</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">軌跡をぼかす</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} は {1} のときだけ</data>
 </root>

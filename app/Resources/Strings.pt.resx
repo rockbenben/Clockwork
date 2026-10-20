@@ -2249,4 +2249,5 @@ Registro: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Tracejado</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Pontos</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Desvanecer o rastro</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} apenas em {1}</data>
 </root>

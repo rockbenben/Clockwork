@@ -2249,4 +2249,5 @@ Log: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Putus-putus</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Titik</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Redupkan jejak</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} hanya di {1}</data>
 </root>

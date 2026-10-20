@@ -2249,4 +2249,5 @@ Log: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Gestippeld</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Stippen</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Spoor laten vervagen</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} alleen in {1}</data>
 </root>

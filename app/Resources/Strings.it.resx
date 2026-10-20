@@ -2249,4 +2249,5 @@ Registro: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Tratteggio</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Punti</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Sfumare la scia</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} solo in {1}</data>
 </root>

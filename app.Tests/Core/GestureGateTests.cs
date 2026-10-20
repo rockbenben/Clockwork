@@ -671,4 +671,68 @@ public class GestureBindingTests
         Assert.False(g.LiveMatch());
         Assert.Equal(PressVerdict.ReplayClick, g.OnRightUp());   // 按上下文进程没绑上 → 还原成普通右键
     }
+
+    // ── 这一划「只绑在别的程序里」的名单 ──
+    //
+    // 没匹配上的时候，用户看到的是「没绑动作」，而真相常常是「它在 Chrome 里绑着」。
+    // 分应用绑定一多，这两件事在界面上再也分不开——于是那颗药丸得说得出是哪一个程序。
+
+    [Fact]
+    public void A_shape_bound_to_another_app_names_that_app()
+    {
+        var gestures = new List<LaunchStep>
+        {
+            new() { Gesture = "D", ForProcess = "chrome.exe" },
+        };
+        Assert.Equal(new[] { "chrome" }, GestureGate.BoundApps(gestures, "D"));
+    }
+
+    // 全局绑定不在这份名单里：它在哪儿都算数，没匹配上只能是被停用了，
+    // 而「被停用」在管理器里一眼看得到，不必由药丸来报。
+    [Fact]
+    public void A_global_binding_is_not_an_other_app()
+    {
+        var gestures = new List<LaunchStep>
+        {
+            new() { Gesture = "D", ForProcess = "" },
+        };
+        Assert.Empty(GestureGate.BoundApps(gestures, "D"));
+    }
+
+    // 停用的绑定同样不算：它在这个程序里也不会生效，报出来会让人去错地方找。
+    [Fact]
+    public void A_disabled_binding_is_not_listed()
+    {
+        var gestures = new List<LaunchStep>
+        {
+            new() { Gesture = "D", ForProcess = "chrome", Enabled = false },
+        };
+        Assert.Empty(GestureGate.BoundApps(gestures, "D"));
+    }
+
+    // 多个程序都绑了同一条形状 → 全报出来（去重、按配置顺序）。
+    // 进程名按同一套写法归一：「chrome.exe」与「Chrome」算同一个程序。
+    [Fact]
+    public void Several_apps_are_listed_in_order_and_deduplicated()
+    {
+        var gestures = new List<LaunchStep>
+        {
+            new() { Gesture = "D", ForProcess = "chrome.exe" },
+            new() { Gesture = "D", ForProcess = "notepad" },
+            new() { Gesture = "D", ForProcess = "CHROME" },
+        };
+        Assert.Equal(new[] { "chrome", "notepad" }, GestureGate.BoundApps(gestures, "D"));
+    }
+
+    // 形状对不上 → 空的（药丸照旧只报「你画的是什么」）。
+    [Fact]
+    public void An_unbound_shape_lists_nothing()
+    {
+        var gestures = new List<LaunchStep>
+        {
+            new() { Gesture = "D", ForProcess = "chrome" },
+        };
+        Assert.Empty(GestureGate.BoundApps(gestures, "U"));
+        Assert.Empty(GestureGate.BoundApps(null, "D"));
+    }
 }

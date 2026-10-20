@@ -886,7 +886,17 @@ internal sealed class GestureCoordinator
     // 现在把这一串画在笔迹那扇覆盖窗上、收笔点旁边，亮 0.9 秒自己消失：你在哪收的笔，答案就出在哪。
     // 要报的信息一个字没少（画出来的那一串），只是不再打断你。
     private void GestureUnmatched(string path)
-        => _trail?.Note(GestureGate.Arrows(path));
+    {
+        // 这一划没绑上，但它也许**在别的程序里**绑着。
+        //
+        // 「↑↓ 没绑动作」与「↑↓ 只在 Chrome 里」在用户眼里是同一种沉默：按了没反应。
+        // 而这两件事的补救完全不同——前者要去绑，后者要换个程序画。
+        // 分应用绑定一多，这两件事在界面上就再也分不开了，于是药丸得说出是哪一个程序。
+        var apps = Core.GestureGate.BoundApps(_config.Gestures, path);
+        _trail?.Note(apps.Count > 0
+            ? Strings.Lf("Gesture_BoundElsewhere", Core.GestureGate.Arrows(path), string.Join(", ", apps))
+            : Core.GestureGate.Arrows(path));
+    }
 
     private void RunByGesture(string path, IntPtr origin)
     {

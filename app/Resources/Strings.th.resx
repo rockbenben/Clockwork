@@ -2249,4 +2249,5 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">เส้นประ</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">จุด</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">ให้หางจางลง</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} มีเฉพาะใน {1}</data>
 </root>

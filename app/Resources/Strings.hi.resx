@@ -2249,4 +2249,5 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">टूटी रेखा</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">बिंदु</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">पथ धुंधला करें</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} केवल {1} में</data>
 </root>

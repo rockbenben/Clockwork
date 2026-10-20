@@ -2249,4 +2249,5 @@ Nhật ký: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Nét đứt</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Chấm</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Làm mờ nét bút</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} chỉ có trong {1}</data>
 </root>

@@ -2249,4 +2249,5 @@ Günlük: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Kesikli</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Noktalar</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">İzi soldur</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} yalnızca {1} içinde</data>
 </root>

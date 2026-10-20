@@ -2249,4 +2249,5 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">파선</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">점선</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">펜 자국 흐리게</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} — {1} 에서만</data>
 </root>

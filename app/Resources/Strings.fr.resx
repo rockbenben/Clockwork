@@ -2249,4 +2249,5 @@ Journal : {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Pointillés</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Points</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Estomper la traînée</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} uniquement dans {1}</data>
 </root>

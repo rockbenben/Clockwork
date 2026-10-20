@@ -2249,4 +2249,5 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">虛線</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">圓點</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">尾跡淡出</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} 只在 {1} 裡</data>
 </root>

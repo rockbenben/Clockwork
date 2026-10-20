@@ -2249,4 +2249,5 @@ Registro: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Discontinuo</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Puntos</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Desvanecer la estela</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} solo en {1}</data>
 </root>
