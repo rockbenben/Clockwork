@@ -2241,7 +2241,7 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">1行に1つ、プロセス名（例：mstsc、vmware）。これらのアプリでは Clockwork は右ボタンに一切触れません。そのままプログラムに渡ります。</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">軌跡を認識したときに実行する操作を表示する</data>
   <data name="Mig_StepParams" xml:space="preserve">{0} つの手順が共有していたアクションと数値を、種類ごとの項目に分けました（各手順の動作は変わりません）</data>
-  <data name="Gesture_Appearance" xml:space="preserve">筆跡の表示</data>
+
   <data name="Gesture_Style" xml:space="preserve">スタイル</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">クラシック</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">ネオン</data>
@@ -2249,4 +2249,11 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">破線</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">点線</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">軌跡をぼかす</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} は {1} のときだけ</data>
+  <data name="Gesture_Search" xml:space="preserve">ジェスチャを検索</data>
+  <data name="Gesture_Settings" xml:space="preserve">ジェスチャ設定</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">プログラムを追加…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">ジェスチャを無効にするプログラム:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">（まだなし）</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">一致するジェスチャーはありません。別の言葉で試してください。</data>
 </root>

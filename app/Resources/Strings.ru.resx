@@ -2241,7 +2241,7 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">По одному имени процесса в строке (например, mstsc, vmware). В этих приложениях Clockwork не трогает правую кнопку — она передаётся программе как есть.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Показывать название действия во время рисования</data>
   <data name="Mig_StepParams" xml:space="preserve">Действие и число, общие для {0} шагов, разнесены по полям для каждого типа (суть каждого шага не меняется)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">Оформление следа</data>
+
   <data name="Gesture_Style" xml:space="preserve">Стиль</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Классический</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Неон</data>
@@ -2249,4 +2249,11 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">Пунктир</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Точки</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Затухание следа</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} только в {1}</data>
+  <data name="Gesture_Search" xml:space="preserve">Поиск жестов</data>
+  <data name="Gesture_Settings" xml:space="preserve">Настройки жестов</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Добавить программу…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Жесты отключены в:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(пока нет)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">Подходящих жестов нет. Попробуйте другое слово.</data>
 </root>

@@ -2241,7 +2241,7 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">हर पंक्ति में एक प्रोसेस नाम (जैसे mstsc, vmware)। इन ऐप्स में Clockwork दायाँ बटन को बिल्कुल नहीं छूता — वह सीधे प्रोग्राम को जाता है।</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">खींचते समय क्रिया का नाम दिखाएँ</data>
   <data name="Mig_StepParams" xml:space="preserve">{0} चरणों द्वारा साझा किया गया क्रिया और संख्या अब हर प्रकार के अलग क्षेत्रों में है (हर चरण क्या करता है, वह नहीं बदला)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">पथ का रूप</data>
+
   <data name="Gesture_Style" xml:space="preserve">शैली</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">क्लासिक</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">नियॉन</data>
@@ -2249,4 +2249,11 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">टूटी रेखा</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">बिंदु</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">पथ धुंधला करें</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} केवल {1} में</data>
+  <data name="Gesture_Search" xml:space="preserve">हावनी खोजें</data>
+  <data name="Gesture_Settings" xml:space="preserve">हावनी सेटिंग्स</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">एक प्रोग्राम जोड़ें…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">इन प्रोग्रामों में हावनी बंद:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(अभी कोई नहीं)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">कोई मेल खाती जेस्चर नहीं। दूसरा शब्द आज़माएँ।</data>
 </root>

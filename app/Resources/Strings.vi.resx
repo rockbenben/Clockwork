@@ -2241,7 +2241,7 @@ Nhật ký: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Mỗi dòng một tên tiến trình (ví dụ mstsc, vmware). Trong các ứng dụng này, Clockwork không đụng tới chuột phải — nó đi thẳng về ứng dụng.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Hiện tên hành động khi đang vẽ</data>
   <data name="Mig_StepParams" xml:space="preserve">Hành động và số dùng chung của {0} bước đã được tách ra thành ô riêng theo từng loại (việc mỗi bước làm không đổi)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">Hiển thị nét bút</data>
+
   <data name="Gesture_Style" xml:space="preserve">Kiểu</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Cổ điển</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
@@ -2249,4 +2249,11 @@ Nhật ký: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Nét đứt</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Chấm</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Làm mờ nét bút</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} chỉ có trong {1}</data>
+  <data name="Gesture_Search" xml:space="preserve">Tìm cử chỉ</data>
+  <data name="Gesture_Settings" xml:space="preserve">Cài đặt cử chỉ</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Thêm một chương trình…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Không dùng cử chỉ trong:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(chưa có)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">Không có cử chỉ nào khớp. Hãy thử từ khác.</data>
 </root>

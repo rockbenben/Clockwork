@@ -2241,7 +2241,7 @@ Log: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">One process name per line (for example mstsc, vmware). In these apps Clockwork leaves the right button completely alone — it goes straight to the program.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Show the action name while drawing</data>
   <data name="Mig_StepParams" xml:space="preserve">Split the action and the number that {0} steps shared into per-type fields (what each step does is unchanged)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">Trail appearance</data>
+
   <data name="Gesture_Style" xml:space="preserve">Style</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Classic</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
@@ -2249,4 +2249,11 @@ Log: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Dashed</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Dots</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Fade the tail</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} only in {1}</data>
+  <data name="Gesture_Search" xml:space="preserve">Search gestures</data>
+  <data name="Gesture_Settings" xml:space="preserve">Gesture settings</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Add a program…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gestures off in:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(none yet)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">No matching gestures. Try another word.</data>
 </root>

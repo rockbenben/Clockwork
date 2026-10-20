@@ -476,10 +476,10 @@ public partial class App
                 w.Content = row;
                 return w;
             }),
-            // 笔迹外观那扇窗：样式 / 粗细 / 尾迹淡出，外加浅底与深底两份预览。
-            // 它是手势管理器里那颗「笔迹外观…」按钮打开的那一扇——新界面从不出现在
+            // 手势设置那扇窗：灵敏度、笔迹的样子、尾迹淡出、动作名、名单。
+            // 它是手势管理器里那颗「手势设置…」按钮打开的那一扇——新界面从不出现在
             // 截图矩阵里，就等于没人见过它长什么样。
-            ("GestureAppearance", () => new GestureAppearanceWindow(RootConfig.Default(), () => { })),
+            ("GestureSettings", () => new GestureSettingsWindow(RootConfig.Default(), () => { })),
             // 刚「添加面板页」之后的样子：一张**空卡**。这是新用户最先遇到的一屏，
             // 而它此前从未被画出来过——空页曾经根本不产出（见 PanelLayout.keepEmpty）。
             ("PanelManagerEmptyPage", () =>

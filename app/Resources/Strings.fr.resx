@@ -2241,7 +2241,7 @@ Journal : {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Un nom de processus par ligne (par exemple mstsc, vmware). Dans ces applications, Clockwork ne touche pas le bouton droit : il va directement au programme.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Afficher le nom de l’action pendant le tracé</data>
   <data name="Mig_StepParams" xml:space="preserve">L’action et le nombre partagés par {0} étapes sont désormais dans des champs par type (ce que fait chaque étape ne change pas)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">Apparence du trait</data>
+
   <data name="Gesture_Style" xml:space="preserve">Style</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Classique</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Néon</data>
@@ -2249,4 +2249,11 @@ Journal : {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Pointillés</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Points</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Estomper la traînée</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} uniquement dans {1}</data>
+  <data name="Gesture_Search" xml:space="preserve">Rechercher des gestes</data>
+  <data name="Gesture_Settings" xml:space="preserve">Réglages des gestes</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Ajouter un programme…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gestes désactivés dans :</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(aucun pour l'instant)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">Aucun geste correspondant. Essayez un autre mot.</data>
 </root>

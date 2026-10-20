@@ -1,0 +1,78 @@
+<Window x:Class="Clockwork.Views.GestureSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:Clockwork.I18n"
+        Title="{loc:Loc Gesture_Settings}" SizeToContent="Width,Height" MaxHeight="392" MinWidth="420"
+        WindowStartupLocation="CenterOwner" Background="{StaticResource BrushInk}">
+    <!-- 手势设置：全局的那几项。
+         它们从前散在管理器页脚的几个控件里（灵敏度、笔迹宽度、名单、动作标签），
+         而那一扇窗的**高度预算已经用满**（内容 390、兜底上限 392）——
+         再往里加东西，被挤到窗外去的是「关闭」那一行。
+         所以全局设置搬到这里，管理器只留「有哪些手势」这一件事。
+         这不是搬家癖：管理器的职责是「有哪些手势」，全局旋钮属于另一件事，
+         混在一扇窗里，用户每次改一个灵敏度都要滚过一张手势列表。 -->
+
+    <!-- 预览：浅底与深底各一份。
+         两份底色是承重的：描边那一层存在的全部理由就是「白文档上、深色 IDE 上都读得出来」，
+         而它在深色底上几乎看不见——只给一份深底预览，恰好看不见描边在干什么。 -->
+    <StackPanel Margin="16">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="LightBox" Grid.Column="0" Width="186" Height="92" Background="#F3EEE1"
+                    CornerRadius="6" ClipToBounds="True" Margin="0,0,8,0"/>
+            <Border x:Name="DarkBox" Grid.Column="1" Width="186" Height="92" Background="#1C1E22"
+                    CornerRadius="6" ClipToBounds="True"/>
+        </Grid>
+
+        <!-- 灵敏度：一条笔画至少要占屏幕宽度的百分之几才算一腿。跟着屏幕走，
+             而不是一个写死的像素数（4K 屏上 48px 的笔画短得像手抖）。 -->
+        <Grid Margin="0,14,0,0">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{loc:Loc Gesture_Sensitivity}" Style="{StaticResource FieldHint}"
+                       VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="76"/>
+            <ComboBox x:Name="SensitivityCbo" Grid.Column="1" Width="150" SelectionChanged="Sensitivity_Changed"/>
+        </Grid>
+
+        <Grid Margin="0,8,0,0">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{loc:Loc Gesture_Style}" Style="{StaticResource FieldHint}"
+                       VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="76"/>
+            <ComboBox x:Name="StyleCbo" Grid.Column="1" Width="150" SelectionChanged="Style_Changed"/>
+        </Grid>
+
+        <Grid Margin="0,8,0,0">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{loc:Loc Gesture_Trail}" Style="{StaticResource FieldHint}"
+                       VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="76"/>
+            <ComboBox x:Name="WidthCbo" Grid.Column="1" Width="150" SelectionChanged="Width_Changed"/>
+        </Grid>
+
+        <!-- 尾迹淡出：尾巴变暗、笔尖留一段亮的（彗星那样）。
+             它动到了「画的是什么」——认一条手势靠的正是那条线的形状，
+             所以它是个开关（可关），而不是又一种样式。 -->
+        <CheckBox x:Name="FadeChk" Content="{loc:Loc Gesture_Trail_Fade}"
+                  Margin="0,12,0,0" Click="Fade_Changed"/>
+
+        <!-- 笔迹旁那句「这将要做的事」。与笔迹本身是两件事，各自有各的开关。 -->
+        <CheckBox x:Name="ShowActionLabelChk" Content="{loc:Loc Gesture_ShowActionLabel}"
+                  Margin="0,8,0,0" Click="ShowActionLabel_Changed"/>
+
+        <!-- 「这些程序里根本不接管手势」的名单。
+             两条路都留着：手打（名单通常一两条，逐个从选择器里挑要开好几轮），
+             以及「加一个程序…」——那一步走的是现成的程序选择器，
+             省掉「这个进程叫什么」这道坎（分应用绑定那边本来就用它）。 -->
+        <TextBlock Text="{loc:Loc Gesture_IgnoreCurrent}" Style="{StaticResource FieldHint}" Margin="0,14,0,4"/>
+        <TextBlock x:Name="IgnoreList" Style="{StaticResource FieldHint}" Margin="0,0,0,6" TextWrapping="Wrap"
+                   Foreground="{DynamicResource BrushMuted}"/>
+        <WrapPanel>
+            <Button x:Name="EditIgnoreBtn" MinWidth="0" Padding="10,3" Margin="0,0,8,0" Click="EditIgnore_Click"/>
+            <Button x:Name="AddIgnoreBtn" MinWidth="0" Padding="10,3" Click="AddIgnore_Click"/>
+        </WrapPanel>
+
+        <Button Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32"
+                HorizontalAlignment="Right" Margin="0,16,0,0" IsCancel="True" Click="Close_Click"/>
+    </StackPanel>
+</Window>

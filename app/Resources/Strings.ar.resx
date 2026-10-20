@@ -2241,7 +2241,7 @@
   <data name="Gesture_IgnoreMessage" xml:space="preserve">اسم عملية في كل سطر (مثل mstsc أو vmware). في هذه التطبيقات لا يلمس Clockwork الزر الأيمن إطلاقًا — يذهب إلى البرنامج كما هو.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">أظهر اسم الإجراء أثناء الرسم</data>
   <data name="Mig_StepParams" xml:space="preserve">فُصلت الإجراء والرقم المشتركان بين {0} خطوة إلى حقول خاصة بكل نوع (ما تفعله كل خطوة لم يتغيّر)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">مظهر الأثر</data>
+
   <data name="Gesture_Style" xml:space="preserve">النمط</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">كلاسيكي</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">نيون</data>
@@ -2249,4 +2249,11 @@
   <data name="Gesture_Style_Dashed" xml:space="preserve">متقطع</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">نقاط</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">تلاشي الأثر</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} في {1} فقط</data>
+  <data name="Gesture_Search" xml:space="preserve">ابحث في الإيماءات</data>
+  <data name="Gesture_Settings" xml:space="preserve">إعدادات الإيماءات</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">أضف برنامجًا…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">الإيماءات معطّلة في:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(لا شيء بعد)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">لا توجد إيماءات مطابقة. جرّب كلمة أخرى.</data>
 </root>

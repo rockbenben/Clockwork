@@ -2241,7 +2241,7 @@ Log: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Satu nama proses per baris (misalnya mstsc, vmware). Di aplikasi ini Clockwork sama sekali tidak menyentuh tombol kanan — ia langsung ke programnya.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Tampilkan nama tindakan saat menggambar</data>
   <data name="Mig_StepParams" xml:space="preserve">Aksi dan angka yang dipakai bersama oleh {0} langkah kini dipisah ke kolom per jenis (yang dilakukan tiap langkah tidak berubah)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">Tampilan jejak</data>
+
   <data name="Gesture_Style" xml:space="preserve">Gaya</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Klasik</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
@@ -2249,4 +2249,11 @@ Log: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Putus-putus</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Titik</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Redupkan jejak</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} hanya di {1}</data>
+  <data name="Gesture_Search" xml:space="preserve">Cari gestur</data>
+  <data name="Gesture_Settings" xml:space="preserve">Pengaturan gestur</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Tambah program…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gestur dimatikan di:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(belum ada)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">Tidak ada gestur yang cocok. Coba kata lain.</data>
 </root>

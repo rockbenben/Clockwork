@@ -13,18 +13,17 @@ using Point = System.Windows.Point;
 
 namespace Clockwork.Views;
 
-// 笔迹外观：手势那条线画成什么样。
+// 手势设置：全局的那几项——灵敏度、笔迹的样子、尾迹淡不淡、动作名显不显示、
+// 哪些程序里根本不接管手势。
 //
-// 这一扇窗只管三件事——**样式**（画成什么）、**粗细**（画多粗）、**尾迹淡不淡出**——
-// 外加一份**当场就能看见**的预览。
+// **它们从前散在管理器页脚的几个控件里**，而那一扇窗的高度预算已经用满
+// （内容 390、兜底上限 392）：再往里加，被挤到窗外去的是「关闭」那一行。
+// 搬出来之后，管理器只回答一件事——「有哪些手势」；这里回答另一件事——「它们整体怎么表现」。
 //
 // 预览与屏幕上那条线**出自同一份画法**（GestureTrailRenderer）：预览一旦是另抄一份的，
 // 它就会慢慢与真的那条线对不上，而预览的全部价值就是「所见即所得」——
 // 抄一份的预览比没有预览更坏，它会骗人。
-//
-// 改动即时写进模型并存盘（同手势管理器）：这个窗口没有「确定 / 取消」，
-// 挑完的那一刻意思就已经完整了——退不回去的东西写在界面上只会让人犹豫。
-public partial class GestureAppearanceWindow : Window
+public partial class GestureSettingsWindow : Window
 {
     private readonly RootConfig _config;
     private readonly Action _save;
@@ -32,7 +31,7 @@ public partial class GestureAppearanceWindow : Window
     private readonly List<GestureTrailRenderer> _previews = new();
     private bool _loading;
 
-    public GestureAppearanceWindow(RootConfig config, Action save)
+    public GestureSettingsWindow(RootConfig config, Action save)
     {
         _config = config;
         _save = save;
@@ -70,10 +69,47 @@ public partial class GestureAppearanceWindow : Window
         for (int i = 0; i <= N; i++)
         {
             double t = i / (double)N;
-            double x = 14 + t * (w - 28);
+            double x = 16 + t * (w - 32);
             double y = h * 0.66 - Math.Sin(t * Math.PI) * h * 0.36;
             yield return new Point(x, y);
         }
+    }
+
+    private void Populate()
+    {
+        _loading = true;
+
+        SensitivityCbo.Items.Clear();
+        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_High"), Tag = "high" });
+        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_Normal"), Tag = "normal" });
+        SensitivityCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Sensitivity_Low"), Tag = "low" });
+        var currentSens = _config.Settings.GestureSensitivity;
+        SensitivityCbo.SelectedItem = SensitivityCbo.Items.Cast<ComboBoxItem>()
+            .FirstOrDefault(x => (string)x.Tag == currentSens) ?? SensitivityCbo.Items[1];
+
+        StyleCbo.Items.Clear();
+        foreach (var style in GestureTrailStyles.All)
+            StyleCbo.Items.Add(new ComboBoxItem { Content = StyleName(style.Id), Tag = style.Id });
+        var currentStyle = _config.Settings.GestureTrailStyle;
+        StyleCbo.SelectedItem = StyleCbo.Items.Cast<ComboBoxItem>()
+            .FirstOrDefault(x => (string)x.Tag == currentStyle) ?? StyleCbo.Items[0];
+
+        WidthCbo.Items.Clear();
+        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Off"), Tag = "off" });
+        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thin"), Tag = "thin" });
+        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Normal"), Tag = "normal" });
+        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thick"), Tag = "thick" });
+        var currentWidth = _config.Settings.GestureTrailWidth;
+        WidthCbo.SelectedItem = WidthCbo.Items.Cast<ComboBoxItem>()
+            .FirstOrDefault(x => (string)x.Tag == currentWidth) ?? WidthCbo.Items[2];
+
+        FadeChk.IsChecked = _config.Settings.GestureTrailFade;
+        ShowActionLabelChk.IsChecked = _config.Settings.GestureShowActionLabel;
+
+        AddIgnoreBtn.Content = Strings.Get("Gesture_IgnoreAdd");
+        PaintIgnoreApps();
+
+        _loading = false;
     }
 
     // 样式名逐语言取。
@@ -90,30 +126,19 @@ public partial class GestureAppearanceWindow : Window
         _ => Strings.Get("Gesture_Style_Classic"),
     };
 
-    private void Populate()
+    // 名单：写出来给人看（空的时候说「还没加」）。
+    //
+    // 按钮上带当前份数，名单里的名字也进提示——空与不空差别大到界面上必须看得出来。
+    private void PaintIgnoreApps()
     {
-        _loading = true;
-
-        StyleCbo.Items.Clear();
-        foreach (var style in GestureTrailStyles.All)
-            StyleCbo.Items.Add(new ComboBoxItem { Content = StyleName(style.Id), Tag = style.Id });
-        var currentStyle = _config.Settings.GestureTrailStyle;
-        StyleCbo.SelectedItem = StyleCbo.Items.Cast<ComboBoxItem>()
-            .FirstOrDefault(x => (string)x.Tag == currentStyle)
-            ?? StyleCbo.Items[0];
-
-        WidthCbo.Items.Clear();
-        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Off"), Tag = "off" });
-        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thin"), Tag = "thin" });
-        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Normal"), Tag = "normal" });
-        WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Thick"), Tag = "thick" });
-        var currentWidth = _config.Settings.GestureTrailWidth;
-        WidthCbo.SelectedItem = WidthCbo.Items.Cast<ComboBoxItem>()
-            .FirstOrDefault(x => (string)x.Tag == currentWidth)
-            ?? WidthCbo.Items[2];
-
-        FadeChk.IsChecked = _config.Settings.GestureTrailFade;
-        _loading = false;
+        var list = _config.Settings.GestureIgnoreApps;
+        IgnoreList.Text = list.Count > 0 ? string.Join(", ", list) : Strings.Get("Gesture_IgnoreEmpty");
+        EditIgnoreBtn.Content = list.Count > 0
+            ? Strings.Lf("Gesture_IgnoreAppsN", list.Count)
+            : Strings.Get("Gesture_IgnoreApps");
+        EditIgnoreBtn.ToolTip = list.Count > 0
+            ? string.Join(", ", list)
+            : Strings.Get("Gesture_IgnoreHint");
     }
 
     // 把当前选择刷到预览上。
@@ -124,14 +149,11 @@ public partial class GestureAppearanceWindow : Window
         var style = GestureTrailStyles.Resolve(SelectedStyleId());
         var widths = GestureTrailWidths.Resolve(SelectedWidthId());
         bool fade = FadeChk.IsChecked == true;
-        bool off = SelectedWidthId() == "off";
         foreach (var p in _previews)
         {
             p.SetStyle(style, widths, fade);
             p.SetArmed(false);
         }
-        // 「不显示轨迹」那一档本来就没有线——预览里空着看着像坏了，所以另给一句话。
-        OffNote.Visibility = off ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private string? SelectedStyleId() => (StyleCbo.SelectedItem as ComboBoxItem)?.Tag as string;
@@ -154,12 +176,63 @@ public partial class GestureAppearanceWindow : Window
         Refresh();
     }
 
+    private void Sensitivity_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading) return;
+        if (SensitivityCbo.SelectedItem is ComboBoxItem item && item.Tag is string sens)
+        {
+            _config.Settings.GestureSensitivity = sens;
+            _save();
+        }
+    }
+
     private void Fade_Changed(object sender, RoutedEventArgs e)
     {
         if (_loading) return;
         _config.Settings.GestureTrailFade = FadeChk.IsChecked == true;
         _save();
         Refresh();
+    }
+
+    private void ShowActionLabel_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_loading) return;
+        _config.Settings.GestureShowActionLabel = ShowActionLabelChk.IsChecked == true;
+        _save();
+    }
+
+    // 手打那份名单：一张多行文本卡，一行一个程序名。
+    //
+    // 名单通常只有一两条，而逐个从「选程序」对话框里挑要开好几轮——所以这条是主路。
+    private void EditIgnore_Click(object sender, RoutedEventArgs e)
+    {
+        var current = string.Join("\n", _config.Settings.GestureIgnoreApps);
+        var edited = BrandDialog.AskMulti(this, Strings.Get("Gesture_IgnoreTitle"),
+                                          Strings.Get("Gesture_IgnoreMessage"), current);
+        if (edited == null) return;   // 取消：名单一个字都没动
+        _config.Settings.GestureIgnoreApps = GestureGate.ParseIgnoreList(edited);
+        _save();
+        PaintIgnoreApps();
+    }
+
+    // 「加一个程序…」：走现成的程序选择器，省掉「这个进程叫什么」那道坎
+    // （分应用绑定那边本来就用它）。
+    //
+    // 名单的归一在 Core.GestureGate.ParseIgnoreList（纯函数、有测试）：
+    // 去掉首尾空白与路径、去掉 .exe 后缀（与分应用绑定同一套写法）、去掉重复项、去掉空行。
+    private void AddIgnore_Click(object sender, RoutedEventArgs e)
+    {
+        if (Pickers.PickProcess(this) is not string picked) return;
+        var name = StepHelpers.ToProcessName(picked);
+        if (name.Length == 0) return;
+        var list = _config.Settings.GestureIgnoreApps;
+        if (!list.Contains(name, StringComparer.OrdinalIgnoreCase))
+        {
+            list.Add(name);
+            _config.Settings.GestureIgnoreApps = list;
+            _save();
+        }
+        PaintIgnoreApps();
     }
 
     private void Close_Click(object sender, RoutedEventArgs e) => Close();

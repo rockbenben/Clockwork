@@ -66,11 +66,28 @@
             <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}"
                     BorderThickness="1" CornerRadius="8" MinHeight="150">
                 <Grid>
-                    <ListBox x:Name="Bound" BorderThickness="0" Background="Transparent"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- 搜索：手势一多，列表只能靠滚。动作编辑器那边有搜索框（工具箱），
+                         手势列表此前没有——同一个程序里两套查找方式不统一。
+                         空框里那行灰字是水印（同画布与工具箱的做法）：一个光秃秃的输入框
+                         没人知道是干什么用的。 -->
+                    <Grid Grid.Row="0" Margin="8,8,8,0" Height="26">
+                        <TextBox x:Name="SearchBox" Height="26"
+                                 FontSize="{StaticResource FsBody}" Padding="6,2"
+                                 AutomationProperties.Name="{loc:Loc Gesture_Search}"
+                                 ToolTip="{loc:Loc Gesture_Search}"
+                                 TextChanged="SearchBox_TextChanged"/>
+                        <TextBlock x:Name="SearchHint" Text="{loc:Loc Gesture_Search}" Foreground="{DynamicResource BrushFaint}"
+                                   FontSize="{StaticResource FsBody}" Margin="8,4,0,0" IsHitTestVisible="False"/>
+                    </Grid>
+                    <ListBox x:Name="Bound" Grid.Row="1" BorderThickness="0" Background="Transparent"
                              AutomationProperties.Name="{loc:Loc Gesture_Manager}"
                              SelectionChanged="Bound_SelectionChanged" MouseDoubleClick="Bound_DoubleClick"/>
                     <!-- 空态不放在 ListBox 里：它是「这里还没有东西」的说明，不是一个可选项。 -->
-                    <TextBlock x:Name="EmptyNote" Text="{loc:Loc Gesture_None}" Style="{StaticResource FieldHint}"
+                    <TextBlock x:Name="EmptyNote" Grid.Row="1" Text="{loc:Loc Gesture_None}" Style="{StaticResource FieldHint}"
                                HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
                                TextAlignment="Center" MaxWidth="320" Visibility="Collapsed"/>
                 </Grid>
@@ -99,8 +116,11 @@
                                     FontSize="{StaticResource FsMicro}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                     TextWrapping="Wrap" TextAlignment="Center" Margin="8,0"/>
                         <ContentControl x:Name="GestureShape" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Polyline x:Name="GestureTrail" Stroke="{DynamicResource BrushAccentText}" StrokeThickness="2"
-                                  StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                        <!-- 画布上这一笔走的是**屏幕上那条线的同一个渲染器**（GestureTrailRenderer）：
+                             早先这里是一根普通的强调色折线，于是「笔迹外观」里挑的样式在这一步完全看不见——
+                             所见即所得断在了画手势这一格。渲染器挂在代码里（画布是代码画的，不是 XAML 画的），
+                             所以这里是它那块画布的宿主。 -->
+                        <Canvas x:Name="GestureTrailHost"/>
                     </Grid>
                 </Border>
                 <!-- 只有「置顶」这一档才有的说明：它是开关，同一条手势管钉住和放开。
@@ -112,42 +132,19 @@
             </StackPanel>
         </Grid>
 
+        <!-- 页脚只剩两颗：全局设置与「关闭」。
+             灵敏度、笔迹的样子、尾迹淡出、动作名、名单——五项全局旋钮都搬进「手势设置…」那一扇窗。
+             搬走的不只是版面：这一扇管理器的高度预算本来就用满了（内容 390、兜底上限 392），
+             再往页脚里塞控件，被挤到窗外去的就是「关闭」那一行。
+             顺带把职责分清：这一扇回答「有哪些手势」，那一扇回答「它们整体怎么表现」。 -->
         <Grid Grid.Row="3" Margin="0,14,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <!-- 两列：左边那列按余量伸缩，右边那列是「关闭」。这一分是**为了窄窗不压字**——
-                 窗能被拖到 640 宽（MinWidth），而这排东西的宽度随语言变：俄语那一行
-                 「Чувствительность […] След […] Игнорируемые приложения…」在 640 下放不下，
-                 挤在同一个 Grid 单元里会直接压在「关闭」按钮上。
-                 分成两列之后，那排设置在窄窗里**换行**（WrapPanel），而「关闭」始终在自己的列里。 -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <WrapPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="{loc:Loc Gesture_Sensitivity}" VerticalAlignment="Center" Margin="0,0,6,0" Style="{StaticResource FieldHint}"/>
-                <ComboBox x:Name="SensitivityCbo" Width="110" SelectionChanged="Sensitivity_Changed" Margin="0,0,16,0"/>
-                <!-- 笔迹的样子（样式 / 粗细 / 尾迹淡出）单独一扇窗。
-                     这一扇管理器**没有余量**：它是 SizeToContent="Height"，空列表时内容就 390 高，
-                     而它自己的兜底 MaxHeight 是 392（=最紧那一档 464 减 72 边距）。
-                     再往里塞控件，被挤到窗外去的是底下那行「关闭」——那行恰恰最不该丢。
-                     笔迹的粗细原是这一排里的一个下拉，如今与样式、淡出一起搬进那扇窗，
-                     免得同一件事散在两处。 -->
-                <Button x:Name="AppearanceBtn" MinWidth="0" Padding="10,3" VerticalAlignment="Center"
-                        Margin="0,0,16,0" Click="Appearance_Click"/>
-                <!-- 「这些程序里根本不接管手势」的名单。摆在这一排里是因为它与灵敏度、笔迹一样
-                     是**全局**的手势设置（不是某一条手势的属性），而这排就是全局手势设置那一排。
-                     按钮上带当前份数：名单是空的与不空，差别大到界面上必须看得出来。 -->
-                <Button x:Name="IgnoreAppsBtn" MinWidth="0" Padding="10,3" VerticalAlignment="Center"
-                        Content="{loc:Loc Gesture_IgnoreApps}" Click="IgnoreApps_Click"/>
-            </WrapPanel>
-            <!-- 笔迹旁那句「这将要做的事」。**它与笔迹本身是两件事**：笔迹回答「我画到哪了」，
-                 这一句回答「松手会发生什么」，所以它有自己的开关。 -->
-            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="ShowActionLabelChk" Content="{loc:Loc Gesture_ShowActionLabel}"
-                      VerticalAlignment="Center" Margin="0,10,0,0" Click="ShowActionLabel_Changed"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="{loc:Loc Btn_Close}" Width="96" Margin="16,0,0,0"
+            <Button x:Name="SettingsBtn" Grid.Column="0" MinWidth="0" Padding="10,3"
+                    HorizontalAlignment="Left" VerticalAlignment="Center" Click="Settings_Click"/>
+            <Button Grid.Column="1" Content="{loc:Loc Btn_Close}" Width="96" Margin="16,0,0,0"
                     IsCancel="True" Click="Close_Click"/>
         </Grid>
     </Grid>

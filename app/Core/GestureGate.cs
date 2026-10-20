@@ -153,6 +153,35 @@ public sealed class GestureGate
         return fallback;
     }
 
+    /// <summary>这条形状**绑在哪些程序上**（分应用绑定的那几条），按配置里的顺序、去重。</summary>
+    ///
+    // 它回答的是「这一划在别处有没有绑」：没匹配上的时候，用户看到的是「没绑动作」，
+    // 而真相常常是「它在 Chrome 里绑着」——分应用绑定一多，这两件事就再也分不开了。
+    // 只报**程序名**（不报动作名）是有意的：用户要的是「我该去哪儿绑」，
+    // 而不是「那个动作叫什么」——后者他可以在管理器里一眼看到。
+    //
+    // **全局绑定不计入。** 全局那条在哪儿都算数，没匹配上只能是因为它被停用了，
+    // 而「被停用」在管理器里看得到，不该由这颗药丸来报。
+    //
+    // 因此调用方不必传「当前是哪个程序」：走到这一步说明当前程序里没有可用的绑定，
+    // 于是这里列出的每一个都是「别的程序」。
+    public static List<string> BoundApps(IEnumerable<LaunchStep>? gestures, string path)
+    {
+        var names = new List<string>();
+        if (gestures == null || string.IsNullOrEmpty(path)) return names;
+        var norm = Normalize(path);
+        if (string.IsNullOrEmpty(norm)) return names;
+        foreach (var s in gestures)
+        {
+            if (s == null || !s.Enabled) continue;
+            if (Normalize(s.Gesture) != norm) continue;
+            var proc = StepHelpers.ToProcessName(s.ForProcess ?? "");
+            if (proc.Length == 0) continue;   // 全局绑定：不在这份名单里
+            if (!names.Contains(proc, StringComparer.OrdinalIgnoreCase)) names.Add(proc);
+        }
+        return names;
+    }
+
     // 扇区中心角与半宽（度，屏幕坐标 y 向下：0=→ 90=↓ 180=← -90=↑）。
     // 半宽是可调的旋钮而不是写死的 45：轴向宽、斜角窄，理由见类头注释。
     private const double AxisHalf = 28, DiagHalf = 17;   // 4*56 + 4*34 = 360，恰好铺满

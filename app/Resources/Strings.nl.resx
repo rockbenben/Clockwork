@@ -2241,7 +2241,7 @@ Log: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Eén procesnaam per regel (bijvoorbeeld mstsc, vmware). In deze apps raakt Clockwork de rechtermuisknop niet — die gaat rechtstreeks naar het programma.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Naam van de actie tonen tijdens het tekenen</data>
   <data name="Mig_StepParams" xml:space="preserve">De actie en het getal die {0} stappen deelden staan nu in velden per soort (wat elke stap doet, verandert niet)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">Weergave van de scia</data>
+
   <data name="Gesture_Style" xml:space="preserve">Stijl</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Klassiek</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
@@ -2249,4 +2249,11 @@ Log: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Gestippeld</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Stippen</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Spoor laten vervagen</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} alleen in {1}</data>
+  <data name="Gesture_Search" xml:space="preserve">Gebaren zoeken</data>
+  <data name="Gesture_Settings" xml:space="preserve">Gebarensinstellingen</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Programma toevoegen…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gebaren uit in:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(nog geen)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">Geen overeenkomende gebaren. Probeer een ander woord.</data>
 </root>

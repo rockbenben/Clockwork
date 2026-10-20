@@ -2241,7 +2241,7 @@ Registro: {1}</value>
   <data name="Gesture_IgnoreMessage" xml:space="preserve">Un nome di processo per riga (ad esempio mstsc, vmware). In queste app Clockwork non tocca il pulsante destro: va direttamente al programma.</data>
   <data name="Gesture_ShowActionLabel" xml:space="preserve">Mostra il nome dell’azione mentre tracci</data>
   <data name="Mig_StepParams" xml:space="preserve">L’azione e il numero condivisi da {0} passaggi sono ora in campi per tipo (ciò che ogni passo fa non cambia)</data>
-  <data name="Gesture_Appearance" xml:space="preserve">Aspetto della scia</data>
+
   <data name="Gesture_Style" xml:space="preserve">Stile</data>
   <data name="Gesture_Style_Classic" xml:space="preserve">Classico</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
@@ -2249,4 +2249,11 @@ Registro: {1}</value>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Tratteggio</data>
   <data name="Gesture_Style_Dots" xml:space="preserve">Punti</data>
   <data name="Gesture_Trail_Fade" xml:space="preserve">Sfumare la scia</data>
+  <data name="Gesture_BoundElsewhere" xml:space="preserve">{0} solo in {1}</data>
+  <data name="Gesture_Search" xml:space="preserve">Cerca gesti</data>
+  <data name="Gesture_Settings" xml:space="preserve">Impostazioni dei gesti</data>
+  <data name="Gesture_IgnoreAdd" xml:space="preserve">Aggiungi un programma…</data>
+  <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gesti disattivati in:</data>
+  <data name="Gesture_IgnoreEmpty" xml:space="preserve">(nessuno per ora)</data>
+  <data name="Gesture_SearchNone" xml:space="preserve">Nessun gesto corrispondente. Prova un'altra parola.</data>
 </root>
