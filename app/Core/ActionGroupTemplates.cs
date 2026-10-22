@@ -18,7 +18,25 @@ namespace Clockwork.Core;
 // （与会议重叠、与睡前重叠）仍然砍着。
 public static class ActionGroupTemplates
 {
-    public static readonly (string Key, ActionGroup Group)[] Templates = new[]
+    /// <summary>内置模板清单。</summary>
+    //
+    // **每次访问现生成**，不是 static readonly 的字段。
+    //
+    // 模板的名字与文案是本地化的（resx 的 Tpl_*），而模板的身份是 key —— 与语言无关
+    // （见 DefaultActionGroups 里那条注释）。既然如此，名字就应当**用的时候**按当前语言算，
+    // 而不是「类第一次被碰到的时候」算一次、从此冻住。
+    //
+    // 冻住的那一次恰好是最不该冻的时候：App 的启动顺序是 LoadConfig → ApplyUiCulture，
+    // 而 LoadConfig 里就会碰到这里（RootConfig.Default() → DefaultActionGroups()）——
+    // 那会儿界面语言还没定下来。于是模板名被定在**进程默认文化**那一门：
+    // 用户在设置里选了别的语言（或者系统语言不在支持列表里、界面落到英文），
+    // 模板清单就是一屏别的语言的模板名配着另一种语言的界面。
+    //
+    // 改成属性之后：每次访问都按当前文化重建一份。调用方本来就都拿副本
+    // （All/BuiltIn/Resolve 走 Fresh 深拷贝 + 重发 id），所以重建不影响它们那份「全新副本」的承诺。
+    public static (string Key, ActionGroup Group)[] Templates => BuildTemplates();
+
+    private static (string Key, ActionGroup Group)[] BuildTemplates() => new[]
     {
         // 图标逐组指定：「运行动作」的格子没自己设图标时跟着组走（见 PanelLayout），而组没设就是
         // 那枚共用的「一叠动作」字形——八个模板摆到面板上会长成八格一模一样，认不出哪个是哪个。

@@ -11,6 +11,16 @@ public static class Strings
 
     public static string Get(string key) => Rm.GetString(key, CultureInfo.CurrentUICulture) ?? key;
 
+    /// <summary>按指定文化取值；这一门没有这条文案时返回 <c>null</c>。</summary>
+    ///
+    /// 为什么要另有一条：<see cref="Get"/> 在找不到时返回**键名本身**——
+    /// 那是给「渲染一个键」用的兜底，而拿它去当「这一门有没有这条文案」的判据会出事：
+    /// 缺一条就会把用户界面上的一段话换成字面量 "Smp_Mute"。
+    public static string? TryGet(string key) => Rm.GetString(key, CultureInfo.CurrentUICulture);
+
+    /// <summary>按指定文化取值；这一门没有这条文案时返回 <c>null</c>。</summary>
+    public static string? TryGet(string key, CultureInfo culture) => Rm.GetString(key, culture);
+
     // 取本地化模板并格式化占位符。数字/日期按当前区域(CurrentCulture)格式化——.NET 惯例：
     // UICulture 选文案语言、Culture 定数值格式；本应用只改 UICulture、区域保持系统设置。
     // App 与 MainWindow 共用，避免各写一份。

@@ -105,6 +105,11 @@ public partial class App : System.Windows.Application
         LoadConfig();
         LoadReminderState();
         ApplyUiCulture();
+        // 出厂示例跟着界面语言走。换过语言、导入过别处的配置、或者首启时系统语言
+        // 不在支持列表里，配置里都可能留着一屏别的语言的示例——而那些示例正是
+        // 用户用来搞懂这个程序的东西。没被用户改过的换成当前语言的；改过的一个字不动。
+        // 必须在 ApplyUiCulture 之后：当前文化就是界面语言，换出来的才是这一门。
+        if (Core.SampleText.Relocalize(_config)) SaveConfig();
         ApplyTheme(_config.Settings.Theme);
 
         BuildShell();          // 主窗口 + 托盘
@@ -786,7 +791,10 @@ public partial class App : System.Windows.Application
         try
         {
             if (File.Exists(example)) File.Copy(example, _cfgPath, false);
-            else ConfigStore.Write(RootConfig.Default(), _cfgPath);
+            // 首启还没有配置文件，语言只能是「跟随系统」——而这正是 ApplyUiCulture 稍后会用上的那一门
+            // （LoadConfig 把空串规范化成同一个 code 再落盘）。示例文案要按它写，
+            // 否则进程默认文化不在支持列表里时写进去的是中文，而界面是英文。
+            else ConfigStore.WriteFirstRun(_cfgPath, Languages.ResolveForSystem());
         }
         catch { }
     }

@@ -105,6 +105,23 @@ public static class ConfigStore
         finally { UiStallWatch.End($"config-write:attempt{attempt}", t0); }
     }
 
+    /// <summary>首启：写一份带示例的默认配置。</summary>
+    //
+    // **示例必须按界面语言写**——它是用户打开这个程序看到的第一批东西。
+    // 中性 resx 是中文源：不先把文化定下来，写进去的就是**进程默认文化**那一门；
+    // 而进程默认文化不在支持列表里时（捷克语、希腊语、乌克兰语……），
+    // 界面按 Languages.ResolveFor 落到英文，文件里却是一屏中文——
+    // 用户第一眼看到的是「英文界面 + 中文示例」，而这份中文从此写死在配置里，
+    // 之后再改语言也救不回来（示例是数据，不是界面文案）。
+    //
+    // 所以这一门语言由调用方按「用户将要看到的那门」给进来，
+    // 而不是由写文件时的线程文化碰运气。
+    public static void WriteFirstRun(string path, string uiLanguage)
+    {
+        Strings.ApplyCulture(uiLanguage);
+        Write(RootConfig.Default(), path);
+    }
+
     public static RootConfig Read(string path) => Read(path, out _);
 
     public static RootConfig Read(string path, out bool normalized) => Read(path, out normalized, out _);
