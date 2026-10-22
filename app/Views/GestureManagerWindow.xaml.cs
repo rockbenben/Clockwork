@@ -209,7 +209,15 @@ public partial class GestureManagerWindow : Window
         var rows = _rows.Where(Matches).ToList();
         Bound.Items.Clear();
         foreach (var r in rows)
-            Bound.Items.Add(new ListBoxItem { Content = BuildRow(r), Tag = r, ToolTip = r.Detail });
+        {
+            var item = new ListBoxItem { Content = BuildRow(r), Tag = r, ToolTip = r.Detail };
+            // 无障碍名用 Row.ToString()（箭头 + 摘要）——它本来就是为朗读写的
+            // （见 Row 那条注释：「笔迹缩略图是给眼睛的……一条画出来的线没法朗读」）。
+            // 不给的话 WPF 只能从 Content 取名字，而那是一块**画出来的面板**（笔迹 + 文字），
+            // 取不到字符串——这一列每一行都只报「System.Windows.Controls.ListBoxItem」。
+            System.Windows.Automation.AutomationProperties.SetName(item, r.ToString());
+            Bound.Items.Add(item);
+        }
         // 没有指定就选第一条：不选的话右边画布是禁用的，水印却写着「按住左键在此画」——
         // 一句你照做不了的指令。永远选中一条，那个死状态就不存在了。
         Bound.SelectedItem = select == null

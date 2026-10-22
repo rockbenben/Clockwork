@@ -84,6 +84,18 @@
                                  Background="Transparent" BorderThickness="0"
                                  MouseDoubleClick="Toolbox_DoubleClick"
                                  KeyDown="Toolbox_KeyDown">
+                            <!-- 每一项的无障碍名取 Label。
+                                 不给的话 WPF 退到 record 的 ToString()，读屏软件念出来的是
+                                 「ToolItem { Label = 复制, Kind = keys, Seed = Clockwork.Core.LaunchStep, Glyph = }」
+                                 ——工具箱里二十来项，一项一句 C# 记录转储。
+                                 同一页的分类下拉早就踩过这个坑（上面 DisplayMemberPath 那条注释）。
+                                 BasedOn 不能省：Theme.xaml 里那份 ListBoxItem 样式带着选中/悬停的模板，
+                                 换掉它整列的选中高亮就没了。 -->
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                    <Setter Property="AutomationProperties.Name" Value="{Binding Label}"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <!-- 图标 + 名字，和面板上那一格是同一张字形表（PanelGlyph）。
