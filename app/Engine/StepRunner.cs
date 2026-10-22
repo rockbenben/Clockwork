@@ -449,6 +449,17 @@ public static class StepRunner
             }
         }
 
+        // 目标留空：与 url / path 两支同一道口径，连实参也一样。
+        // 空文件名会让 Process.Start 抛一句 .NET 的英文（"a file name has not been provided"）——
+        // 那句话在中文界面里读不懂，也说不出下一步该做什么；「（未指定）」至少说的是「这一步还没填」。
+        // 编辑器是**允许**留空保存的（那是有意的一条：见 StepDisplay 里「（未指定）」那段），
+        // 所以这一步在运行期才拦，而不是在编辑器里替用户把话说完。
+        //
+        // **位置在「已在运行则激活」之后**：目标空着而「激活进程」填了名字的那一步，
+        // 要的正是「它开着就把窗口叫到前面」——先拦掉就等于把那条路堵死了。
+        if (string.IsNullOrWhiteSpace(tgt))
+            return ActionResult.Warn("Warn_LaunchFail", "", new Strings.Ref("Sum_Unset"));
+
         try
         {
             var psi = new ProcessStartInfo { UseShellExecute = true };   // 走 shell：可开 URL/URI(ms-settings:)/文档

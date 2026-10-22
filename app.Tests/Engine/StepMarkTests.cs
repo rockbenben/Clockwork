@@ -1,4 +1,5 @@
-﻿using Clockwork.Engine;
+﻿using System.IO;
+using Clockwork.Engine;
 using Clockwork.Core;
 using Xunit;
 
@@ -63,4 +64,61 @@ public class StepMarkTests
     public void Activate_shortcut_still_off_when_the_flag_is_off()
         => Assert.False(StepRunner.ShouldActivateInsteadOfLaunch(
                new LaunchStep { Kind = "app", Target = "notepad.exe", ActivateIfRunning = false }));
+
+    // 目标留空时要说人话。
+    //
+    // 编辑器是**允许**留空保存的（那是有意的一条：空白行在列表里显示成「（未指定）」而不是像坏了），
+    // 所以这一步只能拦在运行期。从前 app 这一支没有这道闸：空文件名让 Process.Start 抛一句
+    // .NET 的英文（"a file name has not been provided"），那句在中文界面里读不懂，
+    // 也说不出下一步该做什么。url / path 两支早就有这道闸（「（未指定）」），app 这支补上，三支同一口径。
+    [Fact]
+    public void An_empty_launch_target_fails_in_the_users_language()
+    {
+        var r = StepRunner.RunLaunchItem(new LaunchStep { Kind = "app", Target = "" }, new List<string>());
+
+        Assert.True(r.HasWarning);
+        string expected = Clockwork.I18n.Strings.Get("Sum_Unset");
+        Assert.Contains(expected, r.Warning!);
+        Assert.DoesNotContain("file name has not been provided", r.Warning!, StringComparison.OrdinalIgnoreCase);
+    }
+
+    // 三支（启动程序 / 打开网址 / 打开文件或文件夹）空目标时说同一句话。
+    [Fact]
+    public void All_three_launch_kinds_report_an_empty_target_the_same_way()
+    {
+        var app = StepRunner.RunLaunchItem(new LaunchStep { Kind = "app", Target = "" }, new List<string>());
+        var url = StepRunner.InvokeStepAction(new LaunchStep { Kind = "url", Target = "" }, null, new List<string>(), null);
+        var path = StepRunner.InvokeStepAction(new LaunchStep { Kind = "path", Target = "" }, null, new List<string>(), null);
+
+        string expected = Clockwork.I18n.Strings.Get("Sum_Unset");
+        Assert.Contains(expected, app.Warning!);
+        Assert.Contains(expected, url.Warning!);
+        Assert.Contains(expected, path.Warning!);
+    }
+
+    // 空目标那道闸必须排在「已在运行则激活」**之后**。
+    //
+    // 目标空着、而「激活进程」填了名字的那一步，要的正是「它开着就把窗口叫到前面」——
+    // 闸若排在前面，那条路就被堵死了（本条修复自己差点引进这个回归）。
+    // 走源码断言而不是真去激活一个窗口：那边要么依赖「某个进程正开着」这种环境前提，
+    // 要么就得为它拉一个窗口出来，代价远大于这条断言要守住的东西。
+    [Fact]
+    public void The_empty_target_guard_sits_after_the_activate_branch()
+    {
+        var src = File.ReadAllText(Path.Combine(AppRoot(), "app", "Engine", "StepRunner.cs"));
+        // 锚在**声明**上：这个名字在文件前面还被调用过若干次，锚在第一次出现会量到别处。
+        int method = src.IndexOf("public static ActionResult RunLaunchItem", StringComparison.Ordinal);
+        int activate = src.IndexOf("ShouldActivateInsteadOfLaunch(item)", method, StringComparison.Ordinal);
+        int guard = src.IndexOf("Sum_Unset", method, StringComparison.Ordinal);
+        Assert.True(method >= 0 && activate > method && guard > method, "找不到 RunLaunchItem 里的那两处");
+        Assert.True(guard > activate, "空目标的闸必须排在「已在运行则激活」之后");
+    }
+
+    private static string AppRoot()
+    {
+        var d = new DirectoryInfo(AppContext.BaseDirectory);
+        while (d != null && !Directory.Exists(Path.Combine(d.FullName, "app", "Resources"))) d = d.Parent;
+        Assert.NotNull(d);
+        return d!.FullName;
+    }
 }
