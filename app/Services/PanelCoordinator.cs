@@ -321,9 +321,14 @@ internal sealed class PanelCoordinator
             new(Strings.Get("Tray_Stop"), TrayGlyph.Stop, _runner.RequestStop),
             // 勿扰是个开关，标签跟着当前状态走：生效中显示「恢复提醒（剩 N 分钟）」，否则「暂停 1 小时」。
             // 一格两态，而不是并排摆「暂停」和「恢复」两格——后者任何时刻都有一格是废的。
+            //
+            // 那一格要**说清是干什么的**：面板底栏这一排全是图标，提示气泡是唯一的文字，
+            // 而只写「1 小时」说的是时长、不是动作——用户读完不知道按下去会发生什么。
+            // 「暂停提醒」与「1 小时」都是现成的文案（托盘那一份，已 18 语），拼起来即可，
+            // 与旁边三格（重跑 / 停止 / 显示主窗）一样是「一个动作」。
             _reminders.DndRemaining is TimeSpan left
                 ? new(_reminders.DndResumeLabel(left), TrayGlyph.Run, _reminders.ResumeReminders)
-                : new Views.PanelTile(Lf("Tray_Hours", 1), TrayGlyph.Dnd, () => _reminders.PauseReminders(1)),
+                : new Views.PanelTile(Strings.Get("Tray_DndMenu") + " · " + Lf("Tray_Hours", 1), TrayGlyph.Dnd, () => _reminders.PauseReminders(1)),
             new(Strings.Get("Tray_Show"), TrayGlyph.Window, () => ShowMainEdge?.Invoke()),
         };
         return ops;
