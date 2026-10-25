@@ -11,18 +11,35 @@ on:
   pull_request:
     branches: [main]
 
+# 全局只读，要写的 job 自己提权。
+# **PR 触发时 release / publish 根本不跑**，所以 PR 里的代码永远拿不到写令牌。
+permissions:
+  contents: read
+
+# 分支上新推送取消旧运行；发版运行永不被中途取消——取消到一半的发布会留下一个半成品 release。
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
 jobs:
   test:
     runs-on: windows-latest
     timeout-minutes: 15          # 卡住就快点红，别一路挂到 6 小时上限
     steps:
-      # checkout@v7 / setup-dotnet@v6：底层 Node 24（LTS），消除旧版 Node 20 弃用警告。
       - uses: actions/checkout@v7
+        with:
+          # 后面没有 git push，令牌别留在 .git/config 里给后续步骤读。
+          persist-credentials: false
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          # SDK 版本唯一来源是仓库根的 global.json。**别再并排写 dotnet-version**：
+          # 两处都写就是两个版本源，升级时必有一处被忘掉。
+          #
+          # 那边下限锁 10.0.402、rollForward 是 latestFeature——补丁与新的 feature band
+          # 自己往上走，这个下限只在要换 LTS 时才动。
+          global-json-file: global.json
 
       # 测试工程 ProjectReference 主程序，还原/构建它即连带把 app 一起编出来。
       - name: Restore
@@ -36,8 +53,8 @@ jobs:
       # 让 xunit.v3 跑在 MTP 上的那几处在测试工程的 csproj 与仓库根的 global.json 里。
       # 实测双向：传 1 通过，传 99999 退出 9（MTP 的「没达到最少用例数」退出码）。
       #
-      # **`--project` 而不是位置参数**：MTP 模式（global.json 里 "test": { "runner": ... }）
-      # 是 .NET 10 SDK 自带的新 dotnet test 体验，官方文档给的就是这种写法。
+      # **`--project` 而不是位置参数**：MTP 模式（global.json 里 "test": { "runner": ... }）是
+      # .NET 10 SDK 自带的新 dotnet test 体验，官方文档给的就是这种写法。
       # 位置参数现在也还认，但那是兼容路径，不是推荐路径。
       - name: Test
         shell: pwsh
@@ -84,8 +101,16 @@ jobs:
           if (-not $out.StartsWith('OK')) { exit 1 }
           if ($p.ExitCode -and $p.ExitCode -ne 0) { exit 1 }
 
-  # 一个文件两个 job：needs 让红的树发不出 Release，且不额外花一次测试——同一次运行已经跑过了。
+  # 一个文件三个 job：needs 让红的树发不出 Release，且不额外花一次测试——同一次运行已经跑过了。
   # 拆成 ci.yml + release.yml 就丢了这点，needs 不能跨 workflow 文件。
+  #
+  # **release 只把资产传进草稿，publish 才对外公开。** 中间那一步在 Linux 上核对
+  # SHA256SUMS.txt：这一核对只有用 GNU coreutils 的 sha256sum 跑才等于用户在 Linux / macOS /
+  # WSL 上拿到的那件事。Windows 上的写法看不出 CRLF——本程序自己读校验值时是 Trim() 过的，
+  # 所以应用内一切正常，只有真拿 sha256sum -c 去验的人会撞上「文件名里多了个 \r」。
+  # v3.2.1 发出去的那份就是这么坏的：已发布资产实测 3 行全是 CRLF，
+  # GNU coreutils 8.32 上逐行报 "No such file or directory"（sha256sum 把 \r 当成文件名的一部分）。
+  # 现在这道闸就在发布之前，坏文件停在草稿里，用户看不到。
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: test
@@ -95,13 +120,26 @@ jobs:
       contents: write            # 创建 Release 需要写权限；只给这个 job，PR 触发时它根本不跑
       id-token: write            # attest 那步用：换取 OIDC 令牌去签署构建来源证明
       attestations: write        # 同上：把证明写回 GitHub 侧
+      artifact-metadata: write   # 同上：写制品存储记录（官方 README 列为必需，别按旧模板漏掉）
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
+
+      # 只收 vX.Y.Z。**预发布 tag 进不了 releases/latest**（那个端点只认正式版），
+      # 走到 publish 那步的断言只会红，而那时版本已经发出去一半了；在这里就拦下。
+      - name: Check tag
+        shell: bash
+        run: |
+          if [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::tag ${GITHUB_REF_NAME} is not vX.Y.Z"
+            exit 1
+          fi
 
       # 标签 v1.2.0 → 版本 1.2.0（去掉前缀 v），注入 exe 让文件版本与标签一致。
       - name: Derive version from tag
@@ -110,7 +148,7 @@ jobs:
         run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
       # 两种发布形态都在 app/Properties/PublishProfiles/*.pubxml 里，不挂在 csproj 上——挂上去
-      # 日常 build/run 也会走 RID 专属 + 单文件 + 压缩，且自包含工程不能被 app.Tests 引用。
+      # 日常 build/run 也会走 RID 专属 + 单文件 + 压缩的路径，且自包含工程不能被 app.Tests 引用。
       # 框架依赖版需机器上已装 .NET 10 桌面运行时（缺运行时时 apphost 会自己弹下载提示）。
       - name: Publish single-file exe (self-contained)
         run: dotnet publish app/Clockwork.csproj -c Release -p:PublishProfile=win-x64 -p:Version=${{ steps.ver.outputs.version }}
@@ -132,23 +170,36 @@ jobs:
       - name: SHA256 sums
         shell: pwsh
         run: |
-          Get-FileHash *.zip, app/bin/Release/publish-needs-dotnet10/Clockwork.exe -Algorithm SHA256 |
-            ForEach-Object { "{0}  {1}" -f $_.Hash.ToLower(), (Split-Path $_.Path -Leaf) } |
-            # 编码写死 ascii：内容本来全是 ASCII，写死就不吃两代 PowerShell 的默认编码差异
-            # （Windows PowerShell 5.1 默认写 BOM）。带 BOM 的 sums 文件，第一行摘要会被当成
-            # 65 个字符而跳过——那一条恰好是用户按 sha256sum -c 逐条验时先撞上的那条。
-            # 同一套判据见 023-QuickText / 033-windowshuttle 的 ci.yml。
-            Set-Content SHA256SUMS.txt -Encoding ascii
+          # 编码写死 ascii：内容本来全是 ASCII，写死就不吃两代 PowerShell 的默认编码差异
+          # （Windows PowerShell 5.1 默认写 BOM）。带 BOM 的 sums 文件，第一行摘要会被当成
+          # 65 个字符而跳过——那一条恰好是用户按 sha256sum -c 逐条验时先撞上的那条。
+          # 同一套判据见 023-QuickText / 033-windowshuttle 的 ci.yml。
+          $lines = Get-FileHash *.zip, app/bin/Release/publish-needs-dotnet10/Clockwork.exe -Algorithm SHA256 |
+            ForEach-Object { "{0}  {1}" -f $_.Hash.ToLower(), (Split-Path $_.Path -Leaf) }
+          # ⚠️ **行尾必须是 LF，不能用 Set-Content。** 它在 Windows 上写 CRLF，而 sha256sum
+          # 把那个 `\r` 当成文件名的一部分：Linux / macOS / WSL / Git Bash 里
+          # `sha256sum -c SHA256SUMS.txt` 逐条报
+          #   sha256sum: 'Clockwork-…-win-x64.zip'$'\r': No such file or directory → FAILED
+          # **摘要是对的**（把 `\r` 去掉两条都 OK），坏的是这个文件存在的目的——它被下载去
+          # 就是为了让人一条命令验完，而那条命令在非 Windows 上必然报错，看起来像包被改过。
+          # v3.2.1 发出去的那份就是 CRLF（已发布资产实测：3 行全是 CRLF）。
+          # WriteAllText 不写 BOM（内容是纯 ASCII，字节与 ascii 编码一致），`n` 显式写 LF。
+          [System.IO.File]::WriteAllText(
+            (Join-Path (Get-Location).Path 'SHA256SUMS.txt'),
+            (($lines -join "`n") + "`n"))
           Get-Content SHA256SUMS.txt
 
       # 来源证明，比 SHA256SUMS 强一档：sums 和资产同在 release 页，能替换资产的攻击者同样能替换 sums；
       # 证明存在 GitHub 侧，用户用 `gh attestation verify <文件> -R <owner>/<repo>` 验的是
       # 「这个文件确实由本仓库这条 workflow 构建」，而不只是「文件没被改过」。官方 action，无第三方依赖。
       #
+      # 用 actions/attest 而不是 actions/attest-build-provenance：后者从 v4 起只是前者的一层包装，
+      # 它自己的 README 写明新接入应直接用 actions/attest。
+      #
       # ⚠️ **资产清单只有这一处**：`subject-checksums` 读的是上面那份 SHA256SUMS.txt，
       # 而它正是那三个文件。再在这里手抄一遍路径，抄漏一个就有一个资产**静默地没有证明**
       # ——同一条判据见 023-QuickText 的 ci.yml。
-      - uses: actions/attest-build-provenance@v4
+      - uses: actions/attest@v4
         with:
           subject-checksums: SHA256SUMS.txt
 
@@ -159,13 +210,17 @@ jobs:
       # 第三个资产是框架依赖版的裸 exe，直接从 publish 目录上传，因而保持干净的原名：点开即用，
       # 也能直接盖掉已有的 Clockwork.exe 完成更新。只有小包这么发——自带运行时的那个裸 exe 正是浏览器和
       # SmartScreen 最敌视的东西，而不带版本号的名字只能给其中一个。
-      - name: Release
-        # 刻意钉大版本标签：v3 会随补丁漂移，修复因此不用任何人动手就能拿到。
-        # 出了 v4 这种破坏性升级，Dependabot 会提 PR 说一声。
+      #
+      # **draft: true —— 资产先停在草稿里**，由 publish job 核对过才对外公开。
+      # 重跑会找到同一份草稿、覆盖同名资产（上传中途断了重跑就好）。
+      - name: Release (draft)
         uses: softprops/action-gh-release@v3
         with:
+          draft: true
           # 逐个写死而不用通配：名字和上面 Package 步骤生成的一一对应，既不会看起来像漏了谁，
-          # 也不会因为通配重叠把同一个文件传两遍。
+          # 也不会因为通配重叠把同一个文件传两遍。列出的文件必须真的在——缺一个就在这里红，
+          # 而不是发出去之后由用户发现。
+          fail_on_unmatched_files: true
           files: |
             Clockwork-${{ github.ref_name }}-win-x64.zip
             Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip
@@ -177,37 +232,63 @@ jobs:
             - `Clockwork-${{ github.ref_name }}-win-x64.zip` — .NET runtime included; unzip and run on any Windows 10/11. Take this if you're unsure. / 内含 .NET 运行时，解压即用；拿不准、或电脑装不了东西就选它。
             - `Clockwork-${{ github.ref_name }}-win-x64-needs-dotnet10.zip` — same app without the bundled runtime; needs the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) installed. / 同一个程序，只是不带运行时；需要电脑上已装 [.NET 10 桌面运行时](https://dotnet.microsoft.com/download/dotnet/10.0)。
             - `Clockwork.exe` — the same build as the zip above, unzipped: click, run, or drop it over your existing Clockwork.exe to update. Windows will offer the runtime download if it is missing. / 就是上面那个不含运行时的版本，只是没打包：点开即用，也可直接覆盖现有的 Clockwork.exe 完成更新。缺运行时时 Windows 会自己提示下载。
+
+            **Unsigned build / 未签名构建：** Clockwork is not code-signed. On first run Windows SmartScreen may show “Windows protected your PC” — choose **More info → Run anyway**. Some antivirus tools may also warn because Clockwork manages startup entries. / 这个程序没有做代码签名。首次运行 SmartScreen 可能弹出「已保护你的电脑」——点「更多信息 → 仍要运行」。部分杀毒软件也可能报警，因为本工具需要管理开机启动项。
+
+            **Verify / 校验：** `sha256sum -c SHA256SUMS.txt`（在下载下来的那个目录里）或 `gh attestation verify <文件> -R rockbenben/Clockwork`。
           generate_release_notes: true
-      # 把 release 发布出去，并显式把 `releases/latest` 指到它，然后自己确认一遍。
-      #
-      # ⚠️ **显式给 make_latest 不是多此一举**：GitHub 在「草稿转成已发布」时**不会**重算
-      # `releases/latest` 指向谁。2026-10-20 在 rclone-deck 上撞到过一次：release 已经是
-      # `draft=false`、`prerelease=false`、`published_at` 也填上了，`releases/latest` 却仍
-      # 返回旧版本，端点 `releases/latest/download/latest.json` 于是 404（旧 release 里没有
-      # 那个文件）——已装的应用从此收不到更新。
-      #
-      # 判据是**看 API 指到谁**，不是看 release 的字段：字段全对而指针没挪，端点照样 404。
-      # CDN 那层重定向会再滞后几分钟，属正常——这里判 API，不判 CDN。
-      - name: 发布这个 release，并把 latest 指到它
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
+
+  # 把草稿核对过再公开。这一步跑在 Linux 上——sha256sum -c 只有在 GNU coreutils 上跑，
+  # 才是用户拿到 SHA256SUMS.txt 之后真正会做的那件事。
+  # 核对不过就停在草稿里：用户看不到一个校验文件坏掉的 release。
+  publish:
+    needs: release
+    runs-on: ubuntu-latest
+    # 受保护环境：必须在仓库 Settings → Environments 里建 `release`，并配置 Required reviewers。
+    # 只写这一行不会自动产生审批规则；没有保护规则时 GitHub 会建一个无审批的同名环境。
+    environment: release
+    timeout-minutes: 10
+    permissions:
+      contents: write            # 把草稿转正并指到 latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ github.ref_name }}
+    steps:
+      - name: Verify the draft's assets
         run: |
           set -euo pipefail
-          tag="${GITHUB_REF_NAME}"
+          # 草稿也能下载：gh 走 GraphQL 找「待发布 tag 名」下的草稿，REST 的 releases/tags
+          # 那个端点只返回已发布的（见下面 publish 那步的注释）。
+          mkdir dl && cd dl
+          gh release download "$TAG" -R "$GH_REPO" --dir . --clobber
+          ls -l
+          # **这一句就是用户在 Linux / macOS / WSL 上会敲的那一句。**
+          # 校验文件少一行、摘要对不上、行尾是 CRLF，三种都在这里现形。
+          sha256sum -c SHA256SUMS.txt
+
+      - name: Publish the release and point latest at it
+        run: |
+          set -euo pipefail
+          # ⚠️ **显式给 make_latest 不是多此一举**：GitHub 在「草稿转成已发布」时**不会**
+          # 重算 `releases/latest` 指向谁。2026-10-20 在 rclone-deck 上撞到过一次：release 已经是
+          # `draft=false`、`prerelease=false`、`published_at` 也填上了，`releases/latest` 却仍
+          # 返回旧版本，端点 `releases/latest/download/latest.json` 于是 404（旧 release 里没有
+          # 那个文件）——已装的应用从此收不到更新。
+          #
           # ⚠️ **不能用 `releases/tags/<tag>` 找这条 release**：那个端点**不返回草稿**。
           # 草稿只能从 release 列表里捞——列表按创建时间倒序，新建的草稿总在第一页。
-          id="$(gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" \
-                 --jq "first(.[] | select(.tag_name == \"${tag}\") | .id)")"
+          id="$(gh api "repos/${GH_REPO}/releases?per_page=100" \
+                 --jq "first(.[] | select(.tag_name == \"${TAG}\") | .id)")"
           if [ -z "$id" ]; then
-            echo "::error::没找到 tag ${tag} 对应的 release"
+            echo "::error::没找到 tag ${TAG} 对应的 release"
             exit 1
           fi
-          gh api --method PATCH "repos/${GITHUB_REPOSITORY}/releases/${id}" \
+          gh api --method PATCH "repos/${GH_REPO}/releases/${id}" \
             -F draft=false -f make_latest=true > /dev/null
-          latest="$(gh api "repos/${GITHUB_REPOSITORY}/releases/latest" --jq .tag_name)"
-          if [ "$latest" != "$tag" ]; then
-            echo "::error::releases/latest 指着 ${latest}，不是 ${tag}"
+          latest="$(gh api "repos/${GH_REPO}/releases/latest" --jq .tag_name)"
+          if [ "$latest" != "$TAG" ]; then
+            echo "::error::releases/latest 指着 ${latest}，不是 ${TAG}"
             exit 1
           fi
-          echo "release ${tag} 已发布，releases/latest 指向它"
+          echo "release ${TAG} 已发布，releases/latest 指向它"

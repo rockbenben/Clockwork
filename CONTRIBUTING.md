@@ -48,6 +48,15 @@ Five switches built into the exe (see `app/DevChecks.cs` and `app/DevSelfTest.cs
 
 Run `--smoke` before any PR that touches XAML (CI runs it, and `--selftest`, on every push too). After layout changes, run `--shots` and eyeball the images. The languages are `zh-CN, en, de, es, ru, ar`, and the tight combinations are where things break: German and Russian run longest, Spanish beats German on some strings, and Arabic is the only RTL. Chinese at a comfortable size shows none of it.
 
+### Running them on the machine you are using
+
+Two of those touch the machine they run on, and the difference matters when that machine is the one under your hands:
+
+- **`--smoke` / `--selftest` open real windows.** The gesture-trail entry is the full-screen topmost overlay, and it genuinely goes on screen. The harness now disables window ghosting for its own process — the same one-way switch the production path uses — so a hung harness can no longer leave a click-eating DWM ghost over your desktop. The overlay still flashes, so run it where that does not interrupt you.
+- **`dotnet test` installs a real global `WH_MOUSE_LL` hook.** Global is the operative word: it is not scoped to your session, it lives in every desktop on the machine. The hooks the suite really installs carry no press gate, so they swallow no button and inject nothing while tearing down — a hook that did would take over the mouse of the machine you are sitting at. Windows also silently drops any low-level hook whose callback overruns `LowLevelHooksTimeout` (300 ms by default), so the hook can vanish mid-run on a busy box.
+
+Both are fine in CI. On a workstation, run them when you are not driving the mouse.
+
 The tallest tier does not give you a taller window: work-area height is the *available* height, and each window is still capped by its own `Height` (720 for the main window, 640 for the group editor). That tier tests "more room than the window needs", not a bigger window.
 
 ## Layout
@@ -68,7 +77,11 @@ Adding a UI string means adding the key to `Strings.resx` **and** to all 17 sate
 
 GitHub Actions builds, runs every test and then both `--smoke` and `--selftest` on a Windows runner for each push and PR. Pushing a `v*` tag (e.g. `v2.0.0`) builds, stamps the file version from the tag, creates a GitHub Release and attaches four assets: `Clockwork-<tag>-win-x64.zip` (self-contained) and `Clockwork-<tag>-win-x64-needs-dotnet10.zip` (framework-dependent), each holding one `Clockwork.exe`; that framework-dependent build attached raw under the plain name `Clockwork.exe` for one-click download-and-run; and `SHA256SUMS.txt` covering all three. Every downloadable also gets a GitHub build-provenance attestation — `gh attestation verify <file> -R rockbenben/Clockwork` proves it was built by this repository's workflow, which is a stronger claim than a checksum that sits on the same release page as the files it checks. Release runs only after the test job passes (`needs:`), so a red tree can't produce one.
 
-**Dependabot keeps the two dependency sets moving** (`.github/dependabot.yml`): the four GitHub Actions in `ci.yml` and the NuGet packages the test project uses. The action upgrades are grouped and stay inside a major — a major bump changes behaviour and is a decision, not an update. The NuGet ones are deliberately *not* grouped: MTP and xunit.v3 move as one chain (MTP v1 → v2 took xunit.v3 across a major too, and that upgrade needed a source change — `CollectionBehavior` → `Parallelization`), so one package per PR keeps the blast radius obvious.
+**The release is published in two steps: assets go to a draft, and a separate job on Linux checks them before the draft goes public.** The check is `sha256sum -c SHA256SUMS.txt` against the files downloaded back from the draft — the same command a user runs on Linux or macOS, and the only place a CRLF in that file shows up (GNU coreutils reads the trailing `\r` as part of the file name, so every line fails with "No such file or directory"). The application itself is unaffected by such a file — it trims each line — which is exactly why the defect can ship unnoticed; v3.2.1 shipped one. A broken checksum file therefore stays in the draft instead of reaching users.
+
+**The publish job is gated by the protected `release` environment.** Create it under Settings → Environments with Required reviewers before the first tag; without a protection rule GitHub creates an unprotected environment and the job can publish without review.
+
+Dependency versions are checked before a release (`dotnet list package --outdated`, `dotnet list package --vulnerable --include-transitive`, and the Action major check); this repository intentionally does not use Dependabot.
 
 ## Docs
 
