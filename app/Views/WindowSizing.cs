@@ -43,16 +43,8 @@ public static class WindowSizing
         {
             try
             {
-                var hwnd = new WindowInteropHelper(window).Handle;
-                if (hwnd == 0) return;
-                var mon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-                if (mon == 0) return;
-                var mi = new MONITORINFO { cbSize = Marshal.SizeOf<MONITORINFO>() };
-                if (!GetMonitorInfo(mon, ref mi)) return;
-
-                var scale = VisualTreeHelper.GetDpi(window).DpiScaleY;
-                if (scale <= 0) return;
-                double workHeight = (mi.rcWork.Bottom - mi.rcWork.Top) / scale;
+                double workHeight = WorkAreaHeight(window);
+                if (workHeight <= 0) return;
                 double cap = workHeight - margin;
                 // 工作区比窗口自己声明的下限还矮时，**以屏幕为准**，把 MinHeight 一并压下去。
                 // 原来这里是「MinHeight 优先」，理由是「那是控件排得下的底线」——听着对，实际是错的：
@@ -77,5 +69,24 @@ public static class WindowSizing
             }
             catch { }
         };
+    }
+
+    /// <summary>当前窗口所在屏幕的工作区高度（DIP）；拿不到显示器信息时返回 0。
+    /// 正文类控件的显示上限也用它，避免另写一份主屏尺寸的算法。</summary>
+    public static double WorkAreaHeight(Window window)
+    {
+        try
+        {
+            var hwnd = new WindowInteropHelper(window).Handle;
+            if (hwnd == 0) return 0;
+            var mon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+            if (mon == 0) return 0;
+            var mi = new MONITORINFO { cbSize = Marshal.SizeOf<MONITORINFO>() };
+            if (!GetMonitorInfo(mon, ref mi)) return 0;
+            var scale = VisualTreeHelper.GetDpi(window).DpiScaleY;
+            if (scale <= 0) return 0;
+            return (mi.rcWork.Bottom - mi.rcWork.Top) / scale;
+        }
+        catch { return 0; }
     }
 }

@@ -37,9 +37,13 @@
                                Foreground="{StaticResource BrushMuted}" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- 提醒正文：全app最大的正文号——这是要隔着半个房间看清的一句话 -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,22"
-                              Focusable="False">
+                <!-- 提醒正文：全app最大的正文号——这是要隔着半个房间看清的一句话。
+                     高度也必须自己封顶：窗口的 MaxHeight 在 SizeToContent=Height 的透明窗上实测没能把
+                     高度收进工作区，一段长提醒会把「是/否/稍后」挤到屏幕下方，只剩等超时才走得掉。
+                     封住正文，按钮行才一定留在屏内；超长文本在框内滚动。这里的 260 是量不到屏幕时的兜底，
+                     运行时会按当前屏幕工作区重算（MessageAreaSizing）。 -->
+                <ScrollViewer x:Name="MsgScroll" Grid.Row="1" MaxHeight="260" VerticalScrollBarVisibility="Auto"
+                              Margin="0,0,0,22" Focusable="False">
                     <TextBlock x:Name="MsgText" TextWrapping="Wrap" FontSize="{StaticResource FsHero}"
                                Foreground="{StaticResource BrushPaper}" LineStackingStrategy="BlockLineHeight"
                                LineHeight="26"/>

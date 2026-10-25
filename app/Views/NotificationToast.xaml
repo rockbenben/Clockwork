@@ -42,8 +42,16 @@
                                    Foreground="{StaticResource BrushAccentText}" VerticalAlignment="Center"
                                    Margin="8,0,0,0" Visibility="Collapsed"/>
                     </Grid>
-                    <TextBlock x:Name="MsgText" FontSize="{StaticResource FsLead}" Foreground="{StaticResource BrushPaper}"
-                               TextWrapping="Wrap" LineHeight="20" LineStackingStrategy="BlockLineHeight" Margin="0,6,0,0"/>
+                    <!-- 正文高度必须自己封顶：FitToWorkArea 会把窗口上限抬到整块工作区，
+                         而通知卡没有「确定」按钮可找——不封顶时一段长提醒会长成盖住半屏的墙，
+                         眉标（时刻/来源）还被挤到屏幕上方。这里的 240 是量不到屏幕时的兜底，
+                         运行时会按工作区高度重算（MessageAreaSizing）。滚动条只在超长时出现，全文仍可读完。 -->
+                    <ScrollViewer x:Name="MsgScroll" MaxHeight="240" Margin="0,6,0,0"
+                                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                  Focusable="False" PreviewMouseLeftButtonUp="MsgScroll_PreviewMouseLeftButtonUp">
+                        <TextBlock x:Name="MsgText" FontSize="{StaticResource FsLead}" Foreground="{StaticResource BrushPaper}"
+                                   TextWrapping="Wrap" LineHeight="20" LineStackingStrategy="BlockLineHeight"/>
+                    </ScrollViewer>
                 </StackPanel>
             </Grid>
         </Grid>

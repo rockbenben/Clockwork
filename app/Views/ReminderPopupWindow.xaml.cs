@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Threading;
+using Clockwork.Core;
 using Clockwork.I18n;
 
 namespace Clockwork.Views;
@@ -31,6 +32,13 @@ public partial class ReminderPopupWindow : Window
     {
         InitializeComponent();
         WindowSizing.FitToWorkArea(this);   // 提醒文本长度由用户定：不封顶，小屏上按钮行就在屏幕外
+        // 弹窗按当前屏幕工作区给正文留上限；XAML 的 260 只是量不到屏幕时的兜底。
+        // 必须在 SourceInitialized 之后取，FitToWorkArea 也是在那一刻才拿得到窗口所在显示器。
+        SourceInitialized += (_, _) =>
+        {
+            var workHeight = WindowSizing.WorkAreaHeight(this);
+            if (workHeight > 0) MsgScroll.MaxHeight = MessageAreaSizing.ForWorkArea(workHeight);
+        };
         _confirm = confirm;
         Title = Strings.Get("Tray_ReminderTitle");   // 无可见标题栏，仅用于 alt-tab/辅助功能
         Eyebrow.Text = Strings.Get("Tray_ReminderTitle");

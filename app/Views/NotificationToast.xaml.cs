@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Clockwork.Core;
 
 namespace Clockwork.Views;
 
@@ -32,6 +34,8 @@ public partial class NotificationToast : Window
     {
         InitializeComponent();
         WindowSizing.FitToWorkArea(this);   // 长文本封进工作区（超出部分裁掉——瞬态卡片，全文在弹窗/日志里）
+        // 卡片按屏幕工作区留出正文上限；XAML 里的 240 只是量不到屏幕时的兜底。
+        MsgScroll.MaxHeight = MessageAreaSizing.ForWorkArea(SystemParameters.WorkArea.Height);
         _level = level;
         TitleText.Text = title ?? "";
         TitleText.Visibility = string.IsNullOrEmpty(title) ? Visibility.Collapsed : Visibility.Visible;
@@ -105,6 +109,22 @@ public partial class NotificationToast : Window
         Reflow();
         if (Animate) BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(220)));
         _timer?.Start();
+    }
+
+    // 卡片整体「点击即关」；但长正文现在可滚动，拖滚动条不该顺手把卡片关掉。
+    private void MsgScroll_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (IsInScrollBar(e.OriginalSource as DependencyObject)) e.Handled = true;
+    }
+
+    private static bool IsInScrollBar(DependencyObject? d)
+    {
+        while (d != null)
+        {
+            if (d is System.Windows.Controls.Primitives.ScrollBar) return true;
+            d = d is Visual ? VisualTreeHelper.GetParent(d) : LogicalTreeHelper.GetParent(d);
+        }
+        return false;
     }
 
     private void Dismiss()

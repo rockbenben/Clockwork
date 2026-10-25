@@ -25,6 +25,14 @@ public partial class IconPickerWindow : Window
     {
         InitializeComponent();
         Native.DarkWindow.Apply(this);
+        WindowSizing.FitToWorkArea(this);
+        // 图标区单独封顶：窗口封顶不等于内容封顶（透明/SizeToContent 窗尤其），
+        // 11 行图标会把底部按钮挤到屏幕外。给提示行、按钮和窗口边框留约 260 DIP。
+        SourceInitialized += (_, _) =>
+        {
+            var workHeight = WindowSizing.WorkAreaHeight(this);
+            if (workHeight > 0) IconScroll.MaxHeight = Math.Max(80, workHeight - 260);
+        };
 
         int cur = IconLibrary.Parse(current);
         string? curBrand = BrandIcons.TryGet(current, out var cb) ? cb.Slug : null;

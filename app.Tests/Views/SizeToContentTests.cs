@@ -22,8 +22,6 @@ public class SizeToContentTests
     // 且下面那条用例会验证豁免本身还成立（别让它变成橡皮图章）。
     private static readonly Dictionary<string, string> Bounded = new()
     {
-        // 图标是一张写死的 96 项表、16 列 = 恒定 6 行，长不了。
-        ["IconPickerWindow"] = "IconLibrary.Glyphs",
         // 它不封窗口、封的是里面两个 ScrollViewer，且按**目标屏**的工作区算
         // （面板跟着光标走，可能落在另一块屏上，封窗口反而算错那一块）。见 PlaceAtCursor。
         ["QuickPanelWindow"] = "PlaceAtCursor",
@@ -124,6 +122,20 @@ public class SizeToContentTests
     {
         var m = Regex.Match(xaml, @"<Window\b.*?>", RegexOptions.Singleline);
         return m.Success ? m.Value : "";
+    }
+
+    // 图标选择器的窗口封顶在 392，但真正会把它撑破的是 11 行图标；窗口有 MaxHeight
+    // 不等于内容会滚。176 项 / 16 列 = 11 行，底部按钮必须在滚动区之外。
+    [Fact]
+    public void Icon_picker_icon_grid_scrolls_inside_the_fitted_window()
+    {
+        var xaml = File.ReadAllText(Path.Combine(Root(), "app", "Views", "IconPickerWindow.xaml"));
+        Assert.Contains("x:Name=\"IconScroll\"", xaml);
+        Assert.Matches(@"<ScrollViewer[^>]*x:Name=""IconScroll""[^>]*MaxHeight=""\d+""", xaml);
+
+        var code = File.ReadAllText(Path.Combine(Root(), "app", "Views", "IconPickerWindow.xaml.cs"));
+        Assert.Contains("IconScroll.MaxHeight", code);
+        Assert.Contains("WorkAreaHeight", code);
     }
 
     // 豁免名单防腐：名单里的窗口若已经不是 SizeToContent（或压根没了），这条会红，
