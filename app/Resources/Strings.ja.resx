@@ -990,6 +990,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>以内なら時刻を過ぎても通知</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>リマインダーの内容を入力してください。</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>対象を入力してください。</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>未選択の場合は毎日です。</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>時刻は HH:mm 形式で入力してください</value>
   </data>
@@ -1892,9 +1901,7 @@
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>下段の行数</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>パネルのアイコン</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">アイコン</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>空のままにすると自動で決まります。「アプリ起動」は対象そのもののアイコンを、それ以外は種類に応じた線画アイコンを使います。</value>
   </data>
@@ -2256,4 +2263,5 @@
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">ジェスチャを無効にするプログラム:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">（まだなし）</data>
   <data name="Gesture_SearchNone" xml:space="preserve">一致するジェスチャーはありません。別の言葉で試してください。</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">詳細設定</data>
 </root>

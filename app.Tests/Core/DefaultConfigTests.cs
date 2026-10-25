@@ -10,7 +10,7 @@ public class DefaultConfigTests
         var c = RootConfig.Default();
         Assert.Equal(5, c.LaunchSteps.Count);           // 一个真实的早晨：5 步
         Assert.Equal(4, c.Reminders.Count);             // 工作日两条 + 每天一条 + 每月一条：4 条
-        Assert.Equal(2, c.ActionGroups.Count);          // 首启预置「离开一下」+「下班」两个可运行的动作组
+        Assert.Equal(2, c.ActionGroups.Count);          // 首启预置「离开一下」+「下班」两个模板，默认停用
         Assert.Equal(30, c.Settings.TickSeconds);
         Assert.Equal("Ctrl+Alt+Q", c.Settings.StopHotkey);
         Assert.Equal("Ctrl+Oem3", c.Settings.QuickOpenHotkey);   // 一键直达默认 Ctrl+`（Oem3=反引号）
@@ -23,6 +23,7 @@ public class DefaultConfigTests
         var c = RootConfig.Default();
         Assert.All(c.LaunchSteps, s => Assert.False(s.Enabled));
         Assert.All(c.Reminders, r => Assert.False(r.Enabled));
+        Assert.All(c.ActionGroups, g => Assert.False(g.Enabled));
     }
 
     // 样例文案必须走 resx：直接返回键名说明键漏加了，非中文用户会在界面上看到 Smp_* 原始键名。
@@ -107,5 +108,13 @@ public class DefaultConfigTests
         var sys = RootConfig.Default().PanelPages.Single().Steps.Where(s => s.Kind == "system").ToList();
         Assert.All(sys, s => Assert.False(string.IsNullOrWhiteSpace(s.Icon), "系统格子没指图标，会退回统一的齿轮"));
         Assert.Equal(sys.Count, sys.Select(s => s.Icon).Distinct().Count());
+    }
+
+    // 预置动作组是停用的模板，首启面板不该把它们做成“一点就按”的格子。
+    [Fact]
+    public void The_default_page_has_no_disabled_action_tiles()
+    {
+        var page = Assert.Single(RootConfig.Default().PanelPages);
+        Assert.DoesNotContain(page.Steps, s => s.Kind == "group");
     }
 }

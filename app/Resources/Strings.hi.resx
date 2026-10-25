@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>भीतर समय चूकने पर भी ट्रिगर होता है</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>कृपया अनुस्मारक पाठ दर्ज करें।</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>कृपया लक्ष्य दर्ज करें।</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>कोई दिन न चुनने पर हर दिन।</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>समय HH:mm प्रारूप में होना चाहिए</value>
   </data>
@@ -1892,9 +1901,7 @@
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>निचली पंक्तियाँ</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>पैनल आइकन</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">आइकन</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>खाली छोड़ने पर यह अपने आप भर जाता है: «ऐप चलाएँ» लक्ष्य का अपना आइकन लेता है, बाकी सबको उनके प्रकार का रेखा-आइकन मिलता है।</value>
   </data>
@@ -2256,4 +2263,5 @@
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">इन प्रोग्रामों में हावनी बंद:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(अभी कोई नहीं)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">कोई मेल खाती जेस्चर नहीं। दूसरा शब्द आज़माएँ।</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">अधिक सेटिंग्स</data>
 </root>

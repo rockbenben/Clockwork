@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>aún se dispara si se perdió la hora dentro de</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Escribe el texto del recordatorio.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Introduce un destino.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Sin días marcados, todos los días.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>La hora debe tener el formato HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@ Registro: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Filas abajo</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Icono del panel</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Icono</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Si lo dejas vacío se rellena solo: «Abrir app» toma el icono del propio destino y el resto recibe un icono de línea según su tipo.</value>
   </data>
@@ -2256,4 +2263,5 @@ Registro: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Sin gestos en:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(ninguno todavía)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">No hay gestos coincidentes. Prueba otra palabra.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Más ajustes</data>
 </root>

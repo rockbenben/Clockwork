@@ -115,8 +115,9 @@ public class SampleTextTests
             UseCulture("zh-CN");
             var cfg = RootConfig.Default();
             var group = cfg.ActionGroups[0];
-            var tile = cfg.PanelPages[0].Steps.First(s => s.Kind == "group");
-            tile.Label = group.Name;
+            // 首启面板不再自动放示例动作的引用格；这条测试只需要一个指向该组的格子。
+            var tile = new LaunchStep { Kind = "group", GroupId = group.Id, Label = group.Name };
+            cfg.PanelPages[0].Steps.Add(tile);
 
             UseCulture("en");
             SampleText.Relocalize(cfg);

@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>vẫn kích hoạt nếu bỏ lỡ giờ trong khoảng</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Hãy nhập nội dung nhắc nhở.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Hãy nhập đích.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Không chọn ngày = hằng ngày.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>Giờ phải theo định dạng HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@ Nhật ký: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Số hàng dưới</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Biểu tượng bảng</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Biểu tượng</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Để trống thì nó tự điền: “Mở ứng dụng” lấy biểu tượng của chính đích đến, còn lại nhận biểu tượng nét theo loại của mình.</value>
   </data>
@@ -2256,4 +2263,5 @@ Nhật ký: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Không dùng cử chỉ trong:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(chưa có)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Không có cử chỉ nào khớp. Hãy thử từ khác.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Cài đặt khác</data>
 </root>

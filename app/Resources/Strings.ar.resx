@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>يظل يُشغَّل إذا فات الوقت خلال</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>يرجى إدخال نص التذكير.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>يرجى إدخال الوجهة.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>دون تحديد أي يوم = كل يوم.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>يجب أن يكون الوقت بصيغة HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>صفوف الأسفل</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>أيقونة اللوحة</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">أيقونة</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>إن تركته فارغًا مُلئ تلقائيًا: «تشغيل تطبيق» يأخذ أيقونة الهدف نفسها، وما عداه يأخذ أيقونة خطّية بحسب نوعه.</value>
   </data>
@@ -2256,4 +2263,5 @@
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">الإيماءات معطّلة في:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(لا شيء بعد)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">لا توجد إيماءات مطابقة. جرّب كلمة أخرى.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">إعدادات إضافية</data>
 </root>

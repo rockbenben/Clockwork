@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>tetap memicu jika waktu terlewat dalam</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Masukkan teks pengingat.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Masukkan target.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Tanpa pilihan hari = setiap hari.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>Waktu harus dalam format HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@ Log: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Baris bawah</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Ikon panel</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Ikon</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Bila dibiarkan kosong akan terisi sendiri: “Buka aplikasi” memakai ikon sasarannya sendiri, sisanya mendapat ikon garis sesuai jenisnya.</value>
   </data>
@@ -2256,4 +2263,5 @@ Log: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gestur dimatikan di:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(belum ada)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Tidak ada gestur yang cocok. Coba kata lain.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Pengaturan lainnya</data>
 </root>

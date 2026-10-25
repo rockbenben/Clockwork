@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>se déclenche encore si l'heure a été manquée dans ce délai</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Saisissez le texte du rappel.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Saisissez une cible.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Aucun jour coché = tous les jours.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>L'heure doit être au format HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@ Journal : {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Rangées du bas</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Icône du panneau</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Icône</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Laissé vide, il se remplit seul : « Lancer une app » reprend l’icône de la cible, tout le reste reçoit une icône linéaire selon son type.</value>
   </data>
@@ -2256,4 +2263,5 @@ Journal : {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gestes désactivés dans :</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(aucun pour l'instant)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Aucun geste correspondant. Essayez un autre mot.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Plus d'options</data>
 </root>

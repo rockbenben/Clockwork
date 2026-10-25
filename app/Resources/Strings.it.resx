@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>si attiva ancora se l'ora è stata mancata entro</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Inserisci il testo del promemoria.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Inserisci una destinazione.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Nessun giorno selezionato = ogni giorno.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>L'ora deve essere nel formato HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@ Registro: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Righe in basso</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Icona del pannello</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Icona</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Lasciato vuoto si riempie da sé: «Avvia app» prende l’icona della destinazione, tutto il resto riceve un’icona lineare in base al tipo.</value>
   </data>
@@ -2256,4 +2263,5 @@ Registro: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gesti disattivati in:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(nessuno per ora)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Nessun gesto corrispondente. Prova un'altra parola.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Altre impostazioni</data>
 </root>

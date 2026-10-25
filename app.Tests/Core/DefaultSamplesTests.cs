@@ -45,15 +45,16 @@ public class DefaultSamplesTests
     }
 
     // 动作组页首次不再是空白——原来用户得点开「新增 ▾」才知道有模板可用。
-    // 与启动清单/提醒样例相反，这两个组是启用的：动作组永远不会自动执行，
-    // 只在托盘/热键/引用处被主动触发，所以「不该替用户动电脑」在这里不成立。
+    // 但这两个组是**模板**，默认不启用、不进托盘、不进面板：
+    // “离开一下”会静音并熄屏，“下班”会关 Slack/Discord，不能以装完就能按的样子出现。
     [Fact]
-    public void First_run_presets_two_runnable_groups()
+    public void First_run_presets_two_disabled_example_groups()
     {
         var groups = RootConfig.Default().ActionGroups;
 
         Assert.Equal(2, groups.Count);
-        Assert.All(groups, g => Assert.True(g.Enabled));
+        Assert.All(groups, g => Assert.False(g.Enabled));
+        Assert.All(groups, g => Assert.False(g.ShowInTray));
         Assert.All(groups, g => Assert.NotEmpty(g.Steps));
         Assert.All(groups, g => Assert.False(string.IsNullOrWhiteSpace(g.Name)));
     }

@@ -196,6 +196,9 @@ public partial class ReminderEditorWindow : Window
     {
         var trig = ComboVal(TrigCombo);
         if (trig == "time" && !HhmmRe.IsMatch(DurationText.FormatTimeHHmm(TimeBox.Text))) { Warn(Strings.Get("Val_TimeFormat")); return; }
+        // 文本是这条提醒唯一的名字。留空也能存，但到点弹出的是一张没有内容的卡片，用户既读不到事由，
+        // 事后在列表里也认不出它是哪一条（静默组还拿它当「引用的组不见了」告警的标识）。
+        if (string.IsNullOrWhiteSpace(MsgBox.Text)) { Warn(Strings.Get("Val_MsgRequired")); return; }
         var repUntil = RepeatUntilBox.Text.Trim();
         if (repUntil != "" && !HhmmRe.IsMatch(DurationText.FormatTimeHHmm(repUntil))) { Warn(Strings.Get("Val_RepeatUntil")); return; }
         var anchor = AnchorBox.Text.Trim();
@@ -291,9 +294,24 @@ public partial class ReminderEditorWindow : Window
 
     private static void Warn(string m) => BrandDialog.Warn(null, "Clockwork", m);
 
+    // 新建提醒的起手值：一小时后的“仅一次”，不是模型默认的“每天 09:00”。
+    // 普通用户点“新增”通常是要一件马上/当天发生的事；静默落到每天会把一次性提醒
+    // 变成长期打扰，而周期又只在下拉里一行字，保存前不容易发现。选“仅一次”后
+    // 日期行会直接显示出来，想改成每天也只是下拉一次的事。
+    public static Reminder NewReminderSeed(DateTime? now = null)
+    {
+        var due = (now ?? DateTime.Now).AddHours(1);
+        return new Reminder
+        {
+            RecurType = "once",
+            Time = due.ToString("HH:mm", CultureInfo.InvariantCulture),
+            OnceDate = due.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+        };
+    }
+
     public static Reminder? Edit(Window owner, Reminder? reminder, IReadOnlyList<ActionGroup> groups)
     {
-        var dlg = new ReminderEditorWindow(reminder ?? new Reminder(), groups) { Owner = owner };
+        var dlg = new ReminderEditorWindow(reminder ?? NewReminderSeed(), groups) { Owner = owner };
         return dlg.ShowDialog() == true ? dlg.Result : null;
     }
 }

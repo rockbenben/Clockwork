@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>löst noch aus, wenn die Zeit innerhalb dieses Zeitraums verpasst wurde</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Bitte geben Sie den Erinnerungstext ein.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Bitte geben Sie ein Ziel ein.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Ohne Auswahl gilt jeder Tag.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>Zeit muss im Format HH:mm sein</value>
   </data>
@@ -1892,9 +1901,7 @@ Protokoll: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Untere Zeilen</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Panel-Symbol</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Symbol</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Leer gelassen ergänzt es sich selbst: „App starten“ übernimmt das Symbol des Ziels, alles andere erhält ein Liniensymbol nach seiner Art.</value>
   </data>
@@ -2256,4 +2263,5 @@ Protokoll: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gesten aus in:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(noch keines)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Keine passenden Gesten. Versuch ein anderes Wort.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Weitere Einstellungen</data>
 </root>

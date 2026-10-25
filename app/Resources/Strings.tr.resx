@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>saati bu süre içinde kaçırırsa yine de tetiklenir</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Hatırlatma metnini girin.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Bir hedef girin.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Gün seçilmezse her gün.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>Saat HH:mm biçiminde olmalı</value>
   </data>
@@ -1892,9 +1901,7 @@ Günlük: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Alt satırlar</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Panel simgesi</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Simge</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Boş bırakılırsa kendiliğinden dolar: «Uygulama aç» hedefin kendi simgesini alır, geri kalanı türüne göre bir çizgi simgesi alır.</value>
   </data>
@@ -2256,4 +2263,5 @@ Günlük: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Hareketlerin kapalı olduğu programlar:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(henüz yok)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Eşleşen hareket yok. Başka bir kelime dene.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Diğer ayarlar</data>
 </root>

@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>ยังเตือนถ้าพลาดเวลาภายใน</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>โปรดป้อนข้อความเตือน</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>โปรดป้อนเป้าหมาย</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>ไม่เลือกวัน = ทุกวัน</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>เวลาต้องอยู่ในรูปแบบ HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>แถวล่าง</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>ไอคอนแผง</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">ไอคอน</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>ถ้าเว้นว่างไว้จะเติมให้เอง «เปิดแอป» จะใช้ไอคอนของเป้าหมายเอง ส่วนอย่างอื่นจะได้ไอคอนเส้นตามชนิดของมัน</value>
   </data>
@@ -2256,4 +2263,5 @@
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">ไม่ใช้ท่ามือใน:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(ยังไม่มี)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">ไม่พบท่ามือที่ตรงกัน ลองคำอื่นดู</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">การตั้งค่าเพิ่มเติม</data>
 </root>

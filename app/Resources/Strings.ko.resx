@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>이내면 시각을 놓쳐도 알림</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>알림 내용을 입력하세요.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>대상을 입력하세요.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>선택한 요일이 없으면 매일입니다.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>시간은 HH:mm 형식이어야 합니다</value>
   </data>
@@ -1892,9 +1901,7 @@
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>아래쪽 줄 수</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>패널 아이콘</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">아이콘</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>비워 두면 저절로 정해집니다. “앱 실행”은 대상 자체의 아이콘을, 나머지는 종류에 맞는 선 아이콘을 씁니다.</value>
   </data>
@@ -2256,4 +2263,5 @@
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">제스처를 사용하지 않는 프로그램:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(아직 없음)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">일치하는 제스처가 없습니다. 다른 단어로 시도해 보세요.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">추가 설정</data>
 </root>

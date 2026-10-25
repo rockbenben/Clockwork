@@ -142,6 +142,17 @@ public partial class StepEditorWindow : Window
         // IfProcModeCombo 已有 IfProcMode_Changed，在那里顺带刷新（别挂两个各自为政的处理器）。
         UpdateCondHeader();
         CondExp.IsExpanded = StepDisplay.DecorationSummary(ConditionProbe()).Length > 0;
+        // 高级字段：没配过的收起，配过的自动展开——已有配置不能被一次界面改版藏没。
+        MoreExp.IsExpanded = _icon.Length > 0
+            || !string.IsNullOrEmpty(_original.Args)
+            || !string.IsNullOrEmpty(_original.WorkDir)
+            || _original.Elevated
+            || !string.IsNullOrEmpty(_original.WindowStyle)
+            || !_original.ActivateIfRunning
+            || !string.IsNullOrEmpty(_original.ActivateProcess)
+            || !string.IsNullOrEmpty(_original.AltTargets)
+            || (_original.DelayMs != 100 && _original.DelayMs != 0)
+            || !string.IsNullOrEmpty(_original.Note);
 
         // 「组合键」是单个组合（keys 步骤经 SendKeyCombo 单发），与热键同性质，改「点击即录键」——去掉多余的捕捉按钮。
         // 值就在框里、确定时读取，故 set 空。（「发送键」是 SendKeys 序列，可含 {TAB}{ENTER}/字面文本，必须能打字，
@@ -346,7 +357,8 @@ public partial class StepEditorWindow : Window
 
     private void ShowPanelForKind(string kind)
     {
-        Vis(PanApp, kind == "app"); Vis(PanKeys, kind == "keys"); Vis(PanVolume, kind == "volume");
+        Vis(PanApp, kind == "app"); Vis(PanAppAdvanced, kind == "app");
+        Vis(PanKeys, kind == "keys"); Vis(PanVolume, kind == "volume");
         Vis(PanMouse, kind == "mouse");
         Vis(PanWindow, kind == "window"); Vis(PanSystem, kind == "system"); Vis(PanText, kind == "text");
         Vis(PanMessage, kind == "message"); Vis(PanGroup, kind == "group");
@@ -432,6 +444,13 @@ public partial class StepEditorWindow : Window
     private void Ok_Click(object sender, RoutedEventArgs e)
     {
         var kind = ComboVal(KindCombo);
+        // 「打开」类步骤没有目标时，保存下来的是一条启用中的空步骤：开机时它必然失败，
+        // 而失败只会在托盘弹出一句「启动失败： —— （未指定）」。拦在编辑期，别把畸形配置留到运行时。
+        if (kind is "app" or "url" or "path")
+        {
+            var target = kind switch { "url" => UrlBox.Text, "path" => PathBox.Text, _ => TargetBox.Text };
+            if (string.IsNullOrWhiteSpace(target)) { BrandDialog.Warn(this, "Clockwork", Strings.Get("Val_TargetRequired")); return; }
+        }
         // 发送键编辑期校验：IsValidSendKeys 按 SendKeys 真实语法精确解析，只拦 SendWait 必抛的串
         //（未闭合/空花括号组、未知键名、孤立 } 等），合法转义（{{} {}}）不误伤——
         // 旧的「花括号是否成对」廉价校验因误伤被移除，没有编辑期兜底则畸形串要到每次开机运行时才暴露。

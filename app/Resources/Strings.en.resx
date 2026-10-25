@@ -990,6 +990,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>still fires if the time was missed within</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Please enter the reminder text.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Please enter a target.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>No days selected means every day.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>Time must be in HH:mm format</value>
   </data>
@@ -1892,9 +1901,7 @@ Log: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Bottom rows</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Panel icon</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Icon</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Left empty it fills itself in: “Launch App” takes the target’s own icon, everything else gets a line icon for its type.</value>
   </data>
@@ -2256,4 +2263,5 @@ Log: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gestures off in:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(none yet)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">No matching gestures. Try another word.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">More settings</data>
 </root>

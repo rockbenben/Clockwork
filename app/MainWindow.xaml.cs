@@ -640,8 +640,9 @@ public partial class MainWindow : Window
 
     private void LAdd_Click(object sender, RoutedEventArgs e)
     {
-        // 新增 ▾：按意图分节的类型菜单（见 StepMenu）→ 打开对应编辑器 → 插入。
-        // 「从开始菜单选择…」排「打开」节最前：它是零配置的那条路（勾几下就完事），
+        // 新增 ▾：首层先给常用项（从开始菜单选择… / 启动程序 / 打开网址），其余按意图分节
+        //（见 StepMenu）→ 打开对应编辑器 → 插入。
+        // 「从开始菜单选择…」排首层最前：它是零配置的那条路（勾几下就完事），
         // 而其余每一项都要先开编辑器再手填目标。最常见的需求应该排在最省事的入口上。
         var fromMenu = new MenuItem { Header = Strings.Get("Menu_FromStartMenu") };
         fromMenu.Click += (_, _) => AddFromStartMenu();

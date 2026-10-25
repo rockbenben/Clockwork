@@ -489,6 +489,8 @@ public sealed class AppSettings
     // 临时要用那个手法时，翻一个开关，比把五条手势逐个取消勾选强。
     //
     // 默认 true：老配置里没有这个键，反序列化落到这个初始值上，行为与从前一致。
+    // 模型默认保持 true：老配置没有这个键，读回来必须还是升级前的行为。
+    // **新装**那条路由 RootConfig.Default() 显式写 false（见那里的注释）。
     public bool GesturesEnabled { get; set; } = true;
     // 鼠标手势灵敏度："low"（长笔画，防误触）| "normal"（默认 2.5% 屏宽）| "high"（短笔画，省力）。
     public string GestureSensitivity { get; set; } = "normal";
@@ -585,7 +587,11 @@ public sealed class RootConfig
             // 首份配置直接写成当前模型，不留给迁移去改：写成老样子的话，每次读默认配置都会触发一次
             // 迁移改写，Read_clean_file_reports_no_normalization 会红——它红得对，说明首份配置不是规范形。
             // 版本号 5 = 「共用的 Action/Level 已经拆到各类型自己的格子里」（见 ConfigStore 那一趟迁移）。
-            Settings = new AppSettings { PanelSchema = 5 },
+            //
+            // 手势总开关在首份配置里显式关掉：它一开就全局接管右键，而新手来装这个程序是为了
+            // 启动清单/提醒，不是为了让右键变慢。模型默认仍是 true——老配置没有这个键时读回来
+            // 必须保持升级前的行为，只有“新装”这一条路才落 false。
+            Settings = new AppSettings { PanelSchema = 5, GesturesEnabled = false },
             ActionGroups = actions,
             PanelPages = DefaultPanelPages(actions),
             Gestures = DefaultGestures(),
@@ -619,13 +625,14 @@ public sealed class RootConfig
     // 前缀撞车是这类两笔手势的固有性质：↑↓ 的第二笔太短会读成 ↑（复制）。
     // 选 ↑↓ 而不是 ↓↑ 正是为此——前缀落空时跑「复制」无害，跑「粘贴」会改掉你的内容。
     //
-    // **默认启用**——与示例清单、示例提醒相反，那两处是不启用的。
-    // 理由是这三样东西的性质不同：清单会去开程序、提醒会弹窗打断，都是「替你动了电脑」；
-    // 而手势只在你主动画出一条轨迹时才发生，画之前它什么也不做。一个装完得先去
-    // 逐条勾选才有反应的手势功能，多数人不会翻到那一屏，于是这个功能等于不存在。
+    // **手势步骤本身默认启用，但新装的总开关默认关闭**（RootConfig.Default 显式写 false）。
+    // 老配置没有这个键，AppSettings 落到 true，升级行为不变。
+    // 为什么新装关：只要有一条启用的手势，右键就被接管；普通用户来装这个程序是为了
+    // 启动清单/提醒，不该先被改掉全系统右键。想用的人打开设置/手势管理器，
+    // 十条立刻生效，不必再逐条勾选；这也让“右键恢复原样”的出口成为首启状态本身。
     //
-    // 代价必须说清楚：**只要有一条启用的手势，右键就被接管**——按下先被扣住，松手时再决定
-    // 是补发普通右键还是执行手势；右键拖拽在监听期间不可用。
+    // 代价必须说清楚：**总开关打开后，只要有一条启用的手势，右键就被接管**——按下先被扣住，
+    // 松手时再决定是补发普通右键还是执行手势；右键拖拽在监听期间不可用。
     // 出口是总开关（Settings.GesturesEnabled，手势管理器标题行右边那个勾）：
     // 要右键完全恢复原样时翻一下，比逐条取消勾选再逐条勾回来强。文档里这两条并排写着。
     //
@@ -704,7 +711,11 @@ public sealed class RootConfig
 
     // 首次预置的动作组：直接从模板里挑，避免同一套步骤在两处各写一份、日后漂移。
     // 挑「离开一下」（零配置、任何机器都能跑）与「下班」（最有代表性，含确认闸门）。
-    // 启用但不带热键——组不会自己跑，禁用只会让托盘里多两条灰的；而开箱占用全局组合键太越界。
+    //
+    // **默认不启用、不进托盘、不进面板**：它们是模板，不是装完就该按的按钮。启动清单和
+    // 提醒的样例都默认关着，这里没有理由不同；“离开一下”会静音并熄屏，“下班”会关掉
+    // Slack/Discord——新用户只是点开动作页看看就被改变电脑状态，是最不该发生的首启体验。
+    // 想用的人勾一下（或从模板…新建一份）；老配置里的启用状态原样保留，不受这里影响。
     public static List<ActionGroup> DefaultActionGroups()
     {
         // 按 key 挑，不按 Name：Name 是 resx 里那个 Tpl_ 键的译文，按名字挑就得先把译文读出来，
@@ -714,11 +725,10 @@ public sealed class RootConfig
         var picked = keys.Select(k => ActionGroupTemplates.BuiltIn(k))
                           .Where(g => g != null).Select(g => g!)
                           .ToList();
-        // 显式进托盘：首启时没有任何提醒/热键指向它们，托盘和面板是仅有的顺手入口。
         // 显式写值（而非留 null 靠 Normalize 补）→ 首份配置就是规范形，读回不会再触发一次写盘
         //（Read_clean_file_reports_no_normalization 盯着这条不变量）。新加可空的迁移字段时，
         // 记得一并在这儿写上默认值，否则那条测试会红——它红得对，说明首份配置不是规范形。
-        foreach (var g in picked) { g.ShowInTray = true; g.ShowInPanel = false; }
+        foreach (var g in picked) { g.Enabled = false; g.ShowInTray = false; g.ShowInPanel = false; }
         return picked;
     }
 
@@ -738,8 +748,8 @@ public sealed class RootConfig
     // 选一段字、按一下，结果就在浏览器里——比任何一句说明都短。
     //
     // 顺序按「多久按一次」，不按功能分类：前四个是每天都会用到的，后面依次递减。
-    // 末尾两格是示例动作的引用格——「运行动作」格子唯一的现成例子，
-    // 也是面板与动作这两件事接起来的地方（改了动作里的步骤，这一格跟着变；抄一份就不会）。
+    // 只把**已启用**的动作组接成格子：首启那两个预置组是关着的模板，不该以“一点就息屏/关软件”
+    // 的样子出现在面板上。用户启用后可以从面板管理器加一格，仍然走同一套引用。
     public static List<PanelPage> DefaultPanelPages(List<ActionGroup> actions)
     {
         // 不设 Label：标题由 StepDisplay 按当前语言现算（系统命令的短标签）。
@@ -759,7 +769,7 @@ public sealed class RootConfig
             ("emptyRecycleBin", "E74D"),   // 删除
             ("searchSelection", "E721"),   // 搜索
         }.Select(x => { var t = StepDisplay.MakePreset("system", x.Item1); t.Icon = x.Item2; return t; }).ToList();
-        steps.AddRange(actions.Select(g => new LaunchStep
+        steps.AddRange(actions.Where(g => g.Enabled).Select(g => new LaunchStep
         { Kind = "group", GroupId = g.Id, Label = g.Name, Icon = g.Icon }));
         // 页名借「常用」那条现成文案（「新增 ▾」里那一节用的就是它），不为一个页名再造一条 18 语。
         return new List<PanelPage> { new() { Name = Strings.Get("Menu_SecCommon"), Steps = steps } };

@@ -14,10 +14,10 @@ namespace Clockwork.Views;
 // （分类 + 搜索，能看到一整节里有哪些步骤）。启动清单与手势要的是「三秒加一步」，
 // 那里一只常驻工具箱是负担，所以这两处仍用下拉。两处共用同一份分节，不会各自排一版。
 //
-// **每一节是一个子菜单**，顶层只有意图词。这不是排版偏好，是量出来的（见 DevChecks.CheckStepMenuFits）：
-// 平铺时 15 个类型 + 5 个小节头 + 5 条分隔线是一堵 26 行、721px 高的墙，
-// 而最紧的那档工作区只有 566px（1366×768 @125%，小本的出厂设置）——菜单不像窗口，
-// 长过屏幕不会报错，只会悄悄长出上下滚动箭头，把末尾几项藏起来。
+// **顶层先给最常用的两项（启动程序 / 打开网址），其余按意图分节成子菜单**。
+// 这不是排版偏好，是量出来的（见 DevChecks.CheckStepMenuFits）：平铺时 15 个类型 + 5 个小节头
+// + 5 条分隔线是一堵 26 行、721px 高的墙，而最紧的那档工作区只有 566px（1366×768 @125%，
+// 小本的出厂设置）——菜单不像窗口，长过屏幕不会报错，只会悄悄长出上下滚动箭头，把末尾几项藏起来。
 //
 // 顺带它把分节这件事做实了：分节本来就是为了让人先想「我要对什么做事」再想机制名
 //（不然新用户不知道「关掉微信」该点「窗口动作」还是「发送按键」）。机制名藏到悬停之后，
@@ -26,12 +26,16 @@ public static class StepMenu
 {
     // pick：选中一项后的回调，收 (kind, seed)。seed 为 null 表示「从这个类型新建」——
     // 交给步骤编辑器按类型填默认值；非 null 是「常用」里预填好的那一份，编辑器直接拿它当初值。
-    // firstOpenItem：插在「常用」节最前面的额外项——启动清单把「从开始菜单选择…」放这儿，
-    // 它语义上就是「打开」的一种，且是零配置那条路，理应排最前。
+    // firstOpenItem：首层快捷项最前面的额外项——启动清单把「从开始菜单选择…」放这儿，
+    // 它语义上就是「打开」的一种，且是零配置那条路，理应排最前；首层的 Common 子菜单不再重复它。
     // presets：是否显示「常用预设」那一节。开机清单关掉它（见 StepDisplay.CommonPresets 的说明）。
     // headerItems：整份菜单最前面那一组（「新建空白动作 / 从模板…」，见 Quicker 的动作添加菜单）。
     //   它与「挑一个步骤类型」不是一回事——前两件造的是**动作**，后面造的是**步骤**，
     //   混在一列里读的人得先想一遍自己要的是哪一个。传 null 就没有那一组。
+    /// <summary>首层直接给的两种动作：加程序与打开网址。文件/文件夹留在自己的分类里——
+    /// 它没有这两件常用，塞进来只会把首层菜单顶到小屏放不下。</summary>
+    public static readonly string[] QuickKinds = { "app", "url" };
+
     public static ContextMenu Build(Action<string, LaunchStep?> pick, MenuItem? firstOpenItem = null,
                                    bool presets = true, IEnumerable<MenuItem>? headerItems = null,
                                    bool insideGroup = false)
@@ -43,16 +47,37 @@ public static class StepMenu
             // 分隔线：两组东西之间没有共同上级，不隔开的话读起来是同一列。
             if (menu.Items.Count > 0) menu.Items.Add(new Separator());
         }
-        // 「常用预设」排最前：它是预填好的成品，比「先挑一个类型再自己配」短得多。
+        // 首层快捷项：新用户来加启动项时，九成是要“启动程序”或“打开网址”，不该先猜
+        // “常用 / 系统与窗口 / 运行动作”哪一类。firstOpenItem（从开始菜单选择…）排最前，
+        // 它是零配置那条路；下面两格是其余两种最常用的机制。
+        var quick = new List<MenuItem>();
+        if (firstOpenItem != null) quick.Add(firstOpenItem);
+        foreach (var kind in QuickKinds)
+        {
+            var k = kind;
+            var mi = new MenuItem { Header = StepDisplay.StepKindLabel(k) };
+            mi.Click += (_, _) => pick(k, null);
+            quick.Add(WithGlyph(mi, k));
+        }
+        if (quick.Count > 0)
+        {
+            foreach (var item in quick) menu.Items.Add(item);
+            menu.Items.Add(new Separator());
+        }
+        // 「常用预设」排首层快捷项之后：它是预填好的成品，比「先挑一个类型再自己配」短得多。
         if (presets)
         {
             var common = new MenuItem { Header = Strings.Get("Menu_SecPreset") };
             foreach (var item in PresetItems(pick)) common.Items.Add(item);
             menu.Items.Add(common);
         }
+        var quickKinds = QuickKinds.ToHashSet(StringComparer.Ordinal);
         foreach (var (sectionKey, _) in StepDisplay.StepKindSections)
         {
-            var items = SectionItems(sectionKey, pick, firstOpenItem, insideGroup).ToList();
+            // 「常用」里不再重复首层已经给出的 app/url，也不重复 firstOpenItem。
+            var sectionFirst = sectionKey == "Menu_SecCommon" ? null : firstOpenItem;
+            var skip = sectionKey == "Menu_SecCommon" ? quickKinds : null;
+            var items = SectionItems(sectionKey, pick, sectionFirst, insideGroup, skip).ToList();
             // 筛完可能整节空了（节表一改就会发生）：留一个点开什么都没有的子菜单，比不显示更糟。
             if (items.Count == 0) continue;
             // 只有一项的节直接摆在顶层，不套一层子菜单——为一项开一层，那个 ▸ 是在承诺
@@ -104,16 +129,18 @@ public static class StepMenu
     // 无声的滚动箭头。冒烟自查拿这批项另建一个菜单去量（DevChecks.CheckStepMenuFits），
     // 量的必须是真的这些项——照着行数估算迟早和实际对不上。
     public static IEnumerable<MenuItem> SectionItems(string sectionKey, Action<string, LaunchStep?> pick,
-                                                     MenuItem? firstOpenItem = null, bool insideGroup = false)
+                                                     MenuItem? firstOpenItem = null, bool insideGroup = false,
+                                                     HashSet<string>? skipKinds = null)
     {
-        // 「从开始菜单选择…」语义上就是「打开」的一种，跟着「常用」那一节（这一节现在放的是
-        // 日常原子操作：打开网址 / 运行程序 / 发送文本），排最前（零配置那条路）。
+        // 直接调用 SectionItems 的调用方（如版面自查）仍可把「从开始菜单选择…」放进 Common；
+        // Build 已把它提到首层，因此传 null，不在这里重复。
         if (sectionKey == "Menu_SecCommon" && firstOpenItem != null) yield return firstOpenItem;
         var section = StepDisplay.StepKindSections.FirstOrDefault(x => x.SectionKey == sectionKey);
         foreach (var kind in section.Kinds ?? Array.Empty<string>())
         {
             // 单步语境不放块内类型进来——理由见 StepDisplay.BlockOnlyKinds。
             if (!insideGroup && !StepDisplay.IsAtomic(kind)) continue;
+            if (skipKinds != null && skipKinds.Contains(kind)) continue;
             var k = kind;
             var mi = new MenuItem { Header = StepDisplay.StepKindLabel(k) };
             mi.Click += (_, _) => pick(k, null);

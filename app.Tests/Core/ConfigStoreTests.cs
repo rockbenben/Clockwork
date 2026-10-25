@@ -497,10 +497,16 @@ public class ConfigStoreTests : IDisposable
         finally { File.Delete(path); }
     }
 
-    // 首启预置的两个组必须进托盘：那时没有任何提醒/热键指向它们，托盘是唯一顺手的入口。
+    // 首启预置的两个组是模板，默认既不启用也不进托盘——
+    // 它们会息屏/关应用，不能以“装完就能按”的样子出现。
     [Fact]
-    public void Default_preset_groups_are_shown_in_tray()
-        => Assert.All(RootConfig.Default().ActionGroups, g => Assert.True(g.ShowInTray));
+    public void Default_preset_groups_are_hidden_and_disabled()
+        => Assert.All(RootConfig.Default().ActionGroups, g =>
+        {
+            Assert.False(g.Enabled);
+            Assert.False(g.ShowInTray);
+            Assert.False(g.ShowInPanel);
+        });
 
     [Fact]
     public void GestureSettings_and_LaunchStep_ForProcess_roundtrips()

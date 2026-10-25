@@ -990,6 +990,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>内错过时点仍补弹</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>请填写提醒内容。</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>请填写目标。</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>不勾选任何一天 = 每天</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>时间格式应为 HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>下带行数</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>面板图标</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">图标</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>留空即自动：「启动程序」用目标自己的图标，其余按类型用线描图标。</value>
   </data>
@@ -2256,4 +2263,5 @@
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">这些程序里不接管手势：</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">（还没加）</data>
   <data name="Gesture_SearchNone" xml:space="preserve">没有匹配的手势。换个词试试。</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">更多设置</data>
 </root>

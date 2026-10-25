@@ -4,12 +4,10 @@ using Xunit;
 
 // 首份配置里的示例手势。
 //
-// **默认是启用的**，与示例清单、示例提醒相反（那两处不启用）。三样东西的性质不同：
-// 清单会去开程序、提醒会弹窗打断，都是「替你动了电脑」；而手势只在你主动画出一条轨迹时
-// 才发生，画之前它什么也不做。装完得先逐条勾选才有反应的话，多数人翻不到那一屏。
-//
-// 代价是右键在那期间被接管（右键按住拖放用不了），出口是总开关 Settings.GesturesEnabled。
-// 这两条在文档里并排写着——钉在这儿是因为「样例的启用状态」是个会被顺手改掉的值。
+// 十条手势本身是启用的，但**首启的总开关是关的**：只要有一条手势在监听，右键就被接管，
+// 而新用户装这个程序是为了启动清单/提醒，不是为了让右键先停顿一下。老配置没有
+// gesturesEnabled 这个键，读回来仍是 true（模型默认），升级行为不变。
+// 钉在这儿是因为「样例的启用状态」和「总开关的默认」都是会被顺手改掉的值。
 public class DefaultGesturesTests
 {
     [Fact]
@@ -20,17 +18,18 @@ public class DefaultGesturesTests
         Assert.All(g, s => Assert.True(s.Enabled));
     }
 
-    // 启用的样例意味着装完就接管右键，所以那个出口必须真的管用。
+    // 新装不监听；用户主动打开总开关后才接管右键。
     //
     // 这条一度写成「赋值 false 再读回 false」——那测的是自动属性，测的是编译器，
     // 任何实现都过得了。真正让出口成立的是「关掉之后一条钩子都不装」，
     // 那句判据现在在 GestureGate.ShouldWatch 里（App.ApplyMouseHook 用的就是它）。
     [Fact]
-    public void The_escape_hatch_actually_stops_the_hook()
+    public void Fresh_config_does_not_watch_until_the_switch_is_on()
     {
         var cfg = RootConfig.Default();
-        Assert.True(GestureGate.ShouldWatch(cfg.Settings.GesturesEnabled, cfg.Gestures));   // 装完就监听
-        Assert.False(GestureGate.ShouldWatch(false, cfg.Gestures));                          // 总开关一关，不监听
+        Assert.False(GestureGate.ShouldWatch(cfg.Settings.GesturesEnabled, cfg.Gestures));  // 新装不监听
+        Assert.False(GestureGate.ShouldWatch(false, cfg.Gestures));                         // 总开关一关，不监听
+        Assert.True(GestureGate.ShouldWatch(true, cfg.Gestures));                           // 主动打开后才监听
     }
 
     // 反过来也得成立：总开关开着但一条启用的手势都没有时，同样不监听——
@@ -78,12 +77,13 @@ public class DefaultGesturesTests
     public void Every_sample_is_named()
         => Assert.All(RootConfig.Default().Gestures, s => Assert.False(string.IsNullOrWhiteSpace(s.Label)));
 
-    // 总开关默认开着：老配置里没有这个键，反序列化落到初始值上，行为得与从前一致。
+    // 模型默认仍是开：老配置里没有这个键，反序列化落到初始值上，行为得与从前一致。
+    // 新装由 RootConfig.Default() 显式写 false。
     [Fact]
-    public void The_master_switch_defaults_to_on()
+    public void The_master_switch_stays_on_for_old_configs_but_is_off_for_fresh_ones()
     {
         Assert.True(new AppSettings().GesturesEnabled);
-        Assert.True(RootConfig.Default().Settings.GesturesEnabled);
+        Assert.False(RootConfig.Default().Settings.GesturesEnabled);
     }
 
     // 这一组照的是同类工具通行的那套默认动作（用户给的参照），外加 ← → 补成后退 / 前进。

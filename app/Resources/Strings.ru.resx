@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>всё ещё сработает, если время было пропущено в течение</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Введите текст напоминания.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Укажите цель.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Если дни не выбраны — каждый день.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>Время должно быть в формате HH:mm</value>
   </data>
@@ -1892,9 +1901,7 @@
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Строк снизу</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Значок панели</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Значок</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Оставьте пустым — заполнится само: «Запуск приложения» берёт значок самой цели, остальное получает контурный значок по своему типу.</value>
   </data>
@@ -2256,4 +2263,5 @@
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Жесты отключены в:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(пока нет)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Подходящих жестов нет. Попробуйте другое слово.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Дополнительные параметры</data>
 </root>

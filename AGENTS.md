@@ -41,6 +41,7 @@ app/bin/Debug/net10.0-windows/Clockwork.exe --selftest
 - Every `SizeToContent` window needs a runtime height cap **and** a XAML `MaxHeight` fallback. A window-level cap is not automatically a content cap: a `SizeToContent` window with a scrollable body can still lay out past the work area. Cap the body as well, and keep the action buttons outside the scroll area.
 - Do not bypass the existing foreground / z-order guards. In particular, never use `SetWindowPos` on a `Topmost` window; read the WPF skill's pitfall reference before changing activation.
 - Keep the application's single-instance, config-location and startup behavior intact. A test that needs a second instance must use an isolated copy or a dedicated test path; it must not disturb a running user instance.
+- Put **first-run defaults** in `RootConfig.Default()` (or the new-item seed in the relevant editor), not in a model property that existing configs rely on. Old configs may omit a field; a missing field must keep its previous behavior. Test both a fresh config and a missing-field old config.
 - The application is offline by design. The update check is the only network path and is opt-in. Do not add telemetry, cloud calls or silent background network behavior.
 
 ## 4. Localization and documentation

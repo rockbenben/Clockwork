@@ -984,6 +984,15 @@
   <data name="Ed_GraceHint" xml:space="preserve">
     <value>triggert alsnog als de tijd binnen deze periode wordt gemist</value>
   </data>
+  <data name="Val_MsgRequired" xml:space="preserve">
+    <value>Voer de herinneringstekst in.</value>
+  </data>
+  <data name="Val_TargetRequired" xml:space="preserve">
+    <value>Voer een doel in.</value>
+  </data>
+  <data name="Ed_DaysHint" xml:space="preserve">
+    <value>Geen dag aangevinkt = elke dag.</value>
+  </data>
   <data name="Val_TimeFormat" xml:space="preserve">
     <value>Tijd moet in HH:mm-formaat zijn</value>
   </data>
@@ -1892,9 +1901,7 @@ Log: {1}</value>
   <data name="Settings_PanelBottomRows" xml:space="preserve">
     <value>Onderste rijen</value>
   </data>
-  <data name="Ed_Icon" xml:space="preserve">
-    <value>Paneelpictogram</value>
-  </data>
+  <data name="Ed_Icon" xml:space="preserve">Pictogram</data>
   <data name="Ed_IconHint" xml:space="preserve">
     <value>Leeg gelaten vult het zichzelf in: ‘App openen’ neemt het pictogram van het doel over, al het andere krijgt een lijnpictogram naar zijn soort.</value>
   </data>
@@ -2256,4 +2263,5 @@ Log: {1}</value>
   <data name="Gesture_IgnoreCurrent" xml:space="preserve">Gebaren uit in:</data>
   <data name="Gesture_IgnoreEmpty" xml:space="preserve">(nog geen)</data>
   <data name="Gesture_SearchNone" xml:space="preserve">Geen overeenkomende gebaren. Probeer een ander woord.</data>
+  <data name="Ed_MoreOptions" xml:space="preserve">Meer instellingen</data>
 </root>
