@@ -335,6 +335,12 @@ public class UiStallWatchTests
 
     // 摘钩那个包装本身必须带计时，且名字要能区分来路——heal / manual / off / reapply
     // 四条路的成因完全不同，混成一个名字等于没记。四个调用点一个都不能漏。
+    //
+    // **manual 与 boot 现在走同一个调用点**（source 参数带下来），而 boot 是**新增**的一路：
+    // 开机清单跑完后的自动抢链首。它从前写死成 manual，于是用户机器上的
+    // clockwork.error.log 里 7 次开机重装全是「detached: source=manual」配
+    // 「reinstalled: source=boot」——同一件事两种说法，读日志的人去查一个不存在的故障。
+    // 所以这里断言的是**来路集合齐全**，不是「四个字面量调用点」这种形状。
     [Fact]
     public void Disposing_the_hook_is_always_timed_and_named()
     {
@@ -345,8 +351,13 @@ public class UiStallWatchTests
         Assert.Contains("UiStallWatch.Begin()", body);
         Assert.Contains("UiStallWatch.End(\"hook-dispose:\" + why, t0)", body);
         Assert.Contains("_mouseHook.Dispose()", body);          // 真正摘钩那一句得在包装里
-        foreach (var why in new[] { "heal", "manual", "off", "reapply" })
+        // 自愈 / 关掉 / 设置变了：三条各有各的字面量来路。
+        foreach (var why in new[] { "heal", "off", "reapply" })
             Assert.Contains($"DisposeMouseHook(\"{why}\")", app);
+        // 手动与开机：同一条路，来路由调用方给（默认 manual，开机那条传 boot）。
+        Assert.Contains("DisposeMouseHook(source)", app);
+        Assert.Contains("RehookMouse(string source = \"manual\")", app);
+        Assert.Contains("RehookMouse(\"boot\")", app);
     }
 
     // 看门狗那一跳也要有名字：CursorWatchTick 里跑着摘钩 + 重装，

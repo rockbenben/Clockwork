@@ -1138,10 +1138,25 @@ public sealed class MouseHook : IDisposable
                 //
                 // 代价：刚切过去的窗口、快照还没算出来的那一瞬不接管（MayEngage 对 pid 不符答 false）。
                 // 这是刻意选的错：一次没画成手势 vs 一次右键凭空消失。
-                if (msg == WM_RBUTTONDOWN && !_mayEngage(Win32.ForegroundPid()))
+                //
+                // **前台 pid 这一句也包一圈计时**：它是回调里剩下的两处跨进程窗口查询之一
+                // （GetForegroundWindow + GetWindowThreadProcessId），而这一处此前**没有名字**——
+                // 用户 2026-10-20 的 clockwork.error.log 里有一行
+                // `ui thread slow: hook-callback took 1093ms (thread=bg) chain=0ms ours=1093ms`：
+                // 链排除了（不是别人堵的），ours 那一秒多却说不出是哪一句。
+                // 与旁边两格（hook-proc-name / hook-window-at）同一口径：让它下次自己报名。
+                // **只在按下这一侧问**（原样）：抬起时不问前台是谁——那一句在回调路径上没有价值。
+                if (msg == WM_RBUTTONDOWN)
                 {
-                    _owedRightClick = false;
-                    return Chain(code, wParam, lParam);
+                    long pfg = Core.UiStallWatch.Begin();
+                    uint fgPid;
+                    try { fgPid = Win32.ForegroundPid(); }
+                    finally { Core.UiStallWatch.End("hook-foreground-pid", pfg); }
+                    if (!_mayEngage(fgPid))
+                    {
+                        _owedRightClick = false;
+                        return Chain(code, wParam, lParam);
+                    }
                 }
                 // **这个程序在「不接管手势」名单里 → 整笔放行，一个字节都不碰。**
                 //
@@ -1157,7 +1172,10 @@ public sealed class MouseHook : IDisposable
                 string? downProc = null;
                 if (msg == WM_RBUTTONDOWN)
                 {
-                    _gesturePid = Win32.ForegroundPid();
+                    // 同一句前台 pid 查询，这里是第二处调用点——也包一圈计时（同一个名字）。
+                    long pfg2 = Core.UiStallWatch.Begin();
+                    try { _gesturePid = Win32.ForegroundPid(); }
+                    finally { Core.UiStallWatch.End("hook-foreground-pid", pfg2); }
                     // 进程名这一句要 OpenProcess，而它在回调路径上实测能到秒级（见 HookProbe 类头）。
                     // 读的是探针的缓存（冷缓存时排一次后台解析，这一格第一次真可能慢），
                     // 所以它仍带着自己的计时格：哪一次真的慢了，日志里得有个名字。
@@ -1194,7 +1212,14 @@ public sealed class MouseHook : IDisposable
                 // 清掉，这条补写连「本笔」都认不出来了）。
                 // 读缓存仍是纯字典查，不把跨进程查询放回回调。
                 if (msg == WM_RBUTTONUP && string.IsNullOrEmpty(_gesture.ContextProcess))
-                    _gesture.ContextProcess = _procNameForPid(_gesturePid);
+                {
+                    // **这一句也要计时**：它与上面那句是同一个调用（探针缓存，冷缓存时第一次真可能慢），
+                    // 但只有按下那一侧包了计时——抬起这一侧没包，于是它在日志里是个没有名字的
+                    // 「ours=NNNNms」。抬起这一侧恰恰是每次右键抬手都走的路。
+                    long p2 = Core.UiStallWatch.Begin();
+                    try { _gesture.ContextProcess = _procNameForPid(_gesturePid); }
+                    finally { Core.UiStallWatch.End("hook-proc-name", p2); }
+                }
                 var gv = msg == WM_RBUTTONDOWN ? _gesture.OnRightDown(data.X, data.Y) : _gesture.OnRightUp();
                 if (msg == WM_RBUTTONDOWN)
                 {

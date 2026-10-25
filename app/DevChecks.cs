@@ -315,6 +315,26 @@ public partial class App
 
     private static (string Name, Func<Window> Make)[] AllXamlWindows()
     {
+        // **先把本进程的窗口幽灵化关掉，再谈笔迹窗。**
+        //
+        // 这张表里有一项（GestureTrail）造的是 GestureTrailWindow——**铺满整块屏、置顶**的
+        // 透明覆盖窗，而它在这条路上会真的 Show() 到**活桌面**上（见 Views/GestureTrailWindow.cs
+        // 的 ShowGated）。
+        //
+        // 幽灵化是进程级的单向开关：UI 线程一旦卡过 5 秒（HungWindowTimeout），DWM 就会在那个
+        // 窗口的位置上盖一块**点得中**、且不继承 WS_EX_TRANSPARENT 的幽灵窗——于是整个桌面点不
+        // 动，唯一的解法是杀掉 dwm.exe（见 Win32.DisableWindowGhosting 那段，以及用户报的原话
+        // 「偶尔手势操作会造成无法点击，关闭桌面窗口管理器才正常」）。
+        //
+        // 生产路径早就防住了：Services/GestureCoordinator.cs 的 ApplyMouseHook 在建覆盖窗**之前**
+        // 就翻了开关。**但开发期这条路不走 ApplyMouseHook**——App.OnStartup 见到
+        // --smoke/--shots/--selftest 就 return 了，StartEngines 根本没跑。于是这里幽灵化是开着的，
+        // 而它偏偏是唯一一条会把全屏覆盖窗摆到用户面前的路。
+        //
+        // 代价：进程级、单向、一次性（本进程从此不再有「未响应」外壳可拖可关）。对一个跑完就退的
+        // 开发期进程来说等于没有代价——而省下的是「整个桌面点不动」。
+        Native.Win32.DisableWindowGhosting();
+
         var groups = new[] { new ActionGroup() };
         return new (string, Func<Window>)[]
         {
@@ -384,6 +404,12 @@ public partial class App
                 return new PanelManagerWindow(cfg, () => { });
             }),
             ("StepEditor", () => new StepEditorWindow(new LaunchStep(), groups)),
+            // 最常见的「加一个程序」：高级字段应当收起，只留名称+目标。
+            ("StepEditorAppBasic", () => new StepEditorWindow(
+                new LaunchStep { Kind = "app", Label = "记事本", Target = "notepad.exe" }, groups)),
+            // 配过高级字段的同一型：折叠区应自动展开，已有配置不能被藏没。
+            ("StepEditorAppAdvanced", () => new StepEditorWindow(
+                new LaunchStep { Kind = "app", Label = "记事本", Target = "notepad.exe", Args = "--safe-mode", Elevated = true, Note = "示例" }, groups)),
             // 「发送按键」步骤：PanKeys 此前在截图矩阵里从未出现过，而它挂着全项目最长、
             // 拉丁键名最密的提示（Ed_KeysHint）——RTL 下最容易把这种混排打乱，不截等于没见过。
             ("StepEditorKeys", () => new StepEditorWindow(
@@ -769,6 +795,9 @@ public partial class App
                 return w;
             }),
             ("ReminderEditor", () => new ReminderEditorWindow(new Reminder(), groups)),
+            // 新增提醒的起手值：一小时后的“仅一次”，周期行显示 OnceRow 而不是 DaysRow。
+            ("ReminderEditorNew", () => new ReminderEditorWindow(
+                ReminderEditorWindow.NewReminderSeed(new DateTime(2026, 10, 25, 8, 0, 0)), groups)),
             // 展开「高级」的提醒编辑器：催促（HH:mm，…）/循环（HH:mm，…）/每 N 天锚点
             // (yyyy-MM-dd；…) 三条带日期的提示全藏在折叠的 Expander 里，收起态的矩阵从未渲染过它们。
             ("ReminderEditorAdv", () =>

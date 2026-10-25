@@ -11,6 +11,13 @@ using Xunit;
 //      drain 跑过之后新点才允许挂下一个，且画的是最新一点。
 //
 // 状态机部分仍照 MouseHookModifierBailTests 的办法反射驱动私有 Callback，不依赖真实鼠标输入。
+//
+//   3. **真装钩子的那几条，不许带闸门。** WH_MOUSE_LL 是**全局**的：装它的进程不在自己的
+//      会话里，而在每一个人的桌面上。中键闸门（holdMs>0）会吞掉真实的 WM_MBUTTONDOWN，
+//      拆卸时 SettleOwedKeys 还会真的注入一次按键（见 MouseHook.cs 的 SettleOwedKeys）。
+//      开发者机器上装得上（无头 CI 装不上，于是那里那条早退），所以「测试进程接管了整台
+//      机器的鼠标」不是假设——它就发生在按下 `dotnet test` 的那几秒里。
+//      真装的钩子一律 holdMs=0 且 gesture: null：它只当一条通道，不对真实输入动手。
 public class MouseHookThreadTests
 {
     private const int WM_MOUSEMOVE = 0x0200;
@@ -56,7 +63,7 @@ public class MouseHookThreadTests
     [Fact]
     public void Install_starts_a_pump_thread_and_Dispose_joins_it()
     {
-        using var hook = new MouseHook(350, () => { }, a => a(), gesture: null);
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
         bool ok = hook.Install();
         // 非交互会话（无头 CI）装不上低级钩子：判不了的环境直接放，不算回归。
         if (!ok) return;
@@ -72,7 +79,7 @@ public class MouseHookThreadTests
     [Fact]
     public void Dispose_without_Install_neither_starts_thread_nor_throws()
     {
-        var hook = new MouseHook(350, () => { }, a => a(), gesture: null);
+        var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
         hook.Dispose();
         Assert.Null(Field(hook, "_thread"));
         hook.Dispose();
@@ -89,7 +96,7 @@ public class MouseHookThreadTests
         Assert.Null(Field(a, "_thread"));
         a.Dispose();
 
-        var b = new MouseHook(350, () => { }, x => x(), gesture: null);
+        var b = new MouseHook(0, () => { }, x => x(), gesture: null);
         if (!b.Install()) { b.DisposeForExit(); return; }   // 无头会话装不上低级钩子：判不了就不算回归
         var t = Assert.IsType<System.Threading.Thread>(Field(b, "_thread"));
         b.DisposeForExit();
@@ -103,7 +110,7 @@ public class MouseHookThreadTests
     public void A_clean_dispose_strands_nothing()
     {
         int before = MouseHook.StrandedTeardowns;
-        var hook = new MouseHook(350, () => { }, x => x(), gesture: null);
+        var hook = new MouseHook(0, () => { }, x => x(), gesture: null);
         if (hook.Install())
         {
             hook.Dispose();
@@ -183,5 +190,49 @@ public class MouseHookThreadTests
         Assert.Contains("PostThreadMessage", src);
         Assert.Contains("GetMessage", src);
         Assert.Contains("Clockwork.MouseHook", src);
+    }
+
+    // ── 防回归：真装的钩子不许带闸门 ──
+    //
+    // 上面那条纪律（真装的钩子一律 holdMs=0 且 gesture: null）一旦被改回去，后果落在
+    // **开发者正在用的**桌面上：中键闸门吞掉真实的 WM_MBUTTONDOWN，拆卸时还键那一步再注入
+    // 一次按键。而「有没有装上」在开发者机器上就是「装上了」（无头 CI 装不上，那里那条早退），
+    // 所以这件事不会在 CI 里露出来，只会在有人按 `dotnet test` 的那几秒里发生。
+    //
+    // 所以这里钉的是**形状**而不是行为：同一个用例里真被 Install() 的那个钩子，
+    // 构造时必须没有闸门。分块扫（按 [Fact] 切）而不是整文件扫——变量名在不同用例里会重名，
+    // 整文件扫会把「另一个用例里的 hook.Install()」算到这一条头上。
+    [Fact]
+    public void A_really_installed_hook_must_not_carry_a_gate()
+    {
+        var src = File.ReadAllText(Path.Combine(RepoRoot(), "app.Tests", "Native", "MouseHookThreadTests.cs"));
+        foreach (var chunk in src.Split("[Fact]"))
+        {
+            foreach (var line in chunk.Split('\n'))
+            {
+                int at = line.IndexOf("new MouseHook(", System.StringComparison.Ordinal);
+                if (at < 0) continue;
+                string decl = line.Substring(0, at);
+                int v = decl.LastIndexOf("var ", System.StringComparison.Ordinal);
+                if (v < 0) continue;
+                string name = decl.Substring(v + 4).Split('=')[0].Trim();
+                if (name.Length == 0) continue;
+
+                string args = line.Substring(at + "new MouseHook(".Length);
+                int comma = args.IndexOf(',');
+                Assert.True(comma > 0, "读不出 holdMs：" + line.Trim());
+                Assert.True(int.TryParse(args.Substring(0, comma).Trim(), out int holdMs),
+                    "holdMs 不是数字：" + line.Trim());
+                bool liveGesture = args.Contains("gesture:") && !args.Contains("gesture: null");
+
+                // 这个用例里没真装 → 与真实输入无关，放行。
+                if (!chunk.Contains(name + ".Install()", System.StringComparison.Ordinal)) continue;
+
+                Assert.True(holdMs == 0,
+                    "真装钩子的用例不许带中键闸门（holdMs=0）：闸门会吞掉真实的 WM_MBUTTONDOWN —— " + line.Trim());
+                Assert.False(liveGesture,
+                    "真装钩子的用例不许带手势闸门：手势闸门会吞掉真实的 WM_RBUTTONDOWN —— " + line.Trim());
+            }
+        }
     }
 }

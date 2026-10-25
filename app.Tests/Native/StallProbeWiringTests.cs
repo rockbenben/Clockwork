@@ -301,4 +301,23 @@ public class StallProbeWiringTests
         AssertWraps(Body(Src("app", "Services", "GestureCoordinator.cs"), "private void TrailEnd"),
                     "trail-finish", "_trail?.Finish()");
     }
+
+    // 回调里剩下的两处跨进程窗口查询也必须有名字。
+    //
+    // 用户 2026-10-20 的 clockwork.error.log 里有一行
+    // `ui thread slow: hook-callback took 1093ms (thread=bg) chain=0ms ours=1093ms`：
+    // chain=0 排除了「别人堵了链」，ours 那一秒多却**说不出是哪一句**——
+    // 因为回调里还有两处查询没有计时格：前台 pid（GetForegroundWindow）与抬起那一侧的进程名解析。
+    // 后者代码自己就写着「冷缓存时第一次真可能慢」，却只有按下那一侧包了计时。
+    //
+    // 代价是一次 TickCount64 读数（常数级），换来下一次卡顿**有名有姓**。
+    [Fact]
+    public void The_two_remaining_cross_process_lookups_in_the_callback_are_timed()
+    {
+        var body = Body(Src("app", "Native", "MouseHook.cs"), "private IntPtr CallbackCore(");
+        AssertWraps(body, "hook-foreground-pid", "Win32.ForegroundPid()");
+        // 抬起那一侧的进程名解析：与按下那一侧同一个探针名（同一句调用）。
+        Assert.Contains("End(\"hook-proc-name\"", body);
+        Assert.Contains("_procNameForPid(_gesturePid)", body);
+    }
 }

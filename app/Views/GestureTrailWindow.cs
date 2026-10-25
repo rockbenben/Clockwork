@@ -109,6 +109,8 @@ public sealed class GestureTrailWindow : Window
     private const int HideDelayMs = 120;
 
     private bool _placed;
+    private bool _coverageValid;                       // 当前 _origin/_span/_scale 是否已经按某块屏算过
+    private bool _positionApplied;                     // 当前覆盖范围是否已经写进过 HWND
     private double _scale = 1;
     private int _originX, _originY, _spanX, _spanY;   // 覆盖窗在屏幕上的物理像素矩形
     private Point _last;                              // 收笔那一点（DIP，窗内坐标）：药丸摆这儿
@@ -282,9 +284,14 @@ public sealed class GestureTrailWindow : Window
         _reveal?.Abort();
         Opacity = 0;
         Show();
-        // 显示之后再摆一次：位置是直接用 SetWindowPos 写进 HWND 的，WPF 的 Left/Top 仍是「未设」，
-        // 它在显示流程里若按自己那份记账同步一次窗口，笔迹就会跑到屏幕另一个角落。再写一遍是幂等的。
-        Reposition();
+        // 只有第一次/换屏才用物理像素兜底摆一次。此后同一个覆盖范围已经写进过 HWND，
+        // Hide→Show 只换可见性，位置/尺寸不会丢；每笔再调一次全屏 SetWindowPos 是纯重复劳动。
+        // 混合 DPI 下 WPF 自己那份 Left/Top 仍是我们按 DIP 设好的，Show 不会把它挪到别处。
+        if (!_positionApplied)
+        {
+            Reposition();
+            _positionApplied = true;
+        }
         _reveal = Dispatcher.BeginInvoke(new Action(() =>
         {
             _reveal = null;
@@ -418,32 +425,50 @@ public sealed class GestureTrailWindow : Window
 
     // 摆到起点所在那块屏上，全程物理像素（同 QuickPanelWindow.PlaceAtCursor 的做法与理由）。
     // 任何一步取不到信息就当没有笔迹——少一条线是小事，摆错位置糊住半个屏幕不是。
+    /// <summary>同一块屏、同一 DPI 的覆盖范围直接复用；只在换了屏/缩放/分辨率时重算。</summary>
+    internal static bool SameCoverage(int ox, int oy, int sx, int sy, double scale,
+                                      int nox, int noy, int nsx, int nsy, double nscale)
+        => ox == nox && oy == noy && sx == nsx && sy == nsy
+           && Math.Abs(scale - nscale) < 0.0001;
+
     private bool CoverMonitorOf(int px, int py)
     {
         try
         {
-            var h = new WindowInteropHelper(this).EnsureHandle();
             var mon = MonitorFromPoint(new POINT { X = px, Y = py }, MONITOR_DEFAULTTONEAREST);
             if (mon == IntPtr.Zero) return false;
             var mi = new MONITORINFO { cbSize = Marshal.SizeOf<MONITORINFO>() };
             if (!GetMonitorInfo(mon, ref mi)) return false;
-            _scale = GetDpiForMonitor(mon, MDT_EFFECTIVE_DPI, out uint dpiX, out _) == 0 && dpiX > 0 ? dpiX / 96.0 : 1.0;
-            _originX = mi.rcMonitor.Left;
-            _originY = mi.rcMonitor.Top;
+            double scale = GetDpiForMonitor(mon, MDT_EFFECTIVE_DPI, out uint dpiX, out _) == 0 && dpiX > 0 ? dpiX / 96.0 : 1.0;
+            int originX = mi.rcMonitor.Left;
+            int originY = mi.rcMonitor.Top;
             // 铺满整块屏（不是工作区）：手势可以画到任务栏上面去。
-            _spanX = mi.rcMonitor.Right - _originX;
-            _spanY = mi.rcMonitor.Bottom - _originY;
-            // **WPF 自己那份 Left/Top/Width/Height 也必须一起设。** 位置一直是靠 Reposition 的
-            // SetWindowPos 写进 HWND 的，而那是在窗还**隐藏**时做的；等到第二个采样点调 Show()，
-            // WPF 发现自己的 Left/Top 从没被设过（NaN + Manual），就按系统默认位置把窗建出来——
-            // 覆盖掉隐藏时的定位——闪一帧在屏幕默认角落，Show 之后的 Reposition 才把它挪回来。
-            // 外面看就是「先弹个位置错的轨迹、迅速又跳对」。把 DIP 坐标喂给 WPF，Show 直接建在对的
-            // 屏上，那一帧不再错；SetWindowPos 仍留着，在混合 DPI 下按物理像素兜底（同 QuickPanelWindow）。
+            int spanX = mi.rcMonitor.Right - originX;
+            int spanY = mi.rcMonitor.Bottom - originY;
+
+            // **同一块屏不再重摆。** 从前每个手势的第一个采样点都会创建句柄、把整屏大小再写一遍，
+            // 而窗口在两笔之间只是 Hide，并没有销毁——同一块屏上这些值一个都没变。
+            // 一笔一摆的全屏定位是 UI 线程上最没必要的重复劳动，也是 13.2s `trail-place`
+            // 现场里唯一真正做窗口操作的一句。
+            if (_coverageValid && SameCoverage(_originX, _originY, _spanX, _spanY, _scale,
+                                               originX, originY, spanX, spanY, scale))
+                return true;
+
+            _coverageValid = true;
+            _positionApplied = false;
+            _scale = scale;
+            _originX = originX;
+            _originY = originY;
+            _spanX = spanX;
+            _spanY = spanY;
+            // **不在这里创建句柄/重摆。** 第一个采样点只是记下这一笔会画在哪块屏；
+            // 窗口要到第二个点 ShowGated（Opacity=0 的 Show + 物理像素 Reposition）才真正建出来。
+            // 先把句柄建出来再改一次全屏大小，等于在用户还没看见任何笔迹时先做一次最贵的分层窗合成。
+            // WPF 的 Left/Top/Width/Height 必须先设好，Show() 才会直接建在对的屏上，不会闪一帧默认位置。
             Left = _originX / _scale;
             Top = _originY / _scale;
             Width = _spanX / _scale;
             Height = _spanY / _scale;
-            Reposition();
             return true;
         }
         catch { return false; }

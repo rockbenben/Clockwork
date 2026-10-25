@@ -567,7 +567,13 @@ internal sealed class GestureCoordinator
             // 而「他按的时候链上都有谁」正是他下一步要问的（见 _prevSuspects）。
             _prevSuspects = HookSuspects.Describe(HookSuspects.RunningProcessNames());
         }
-        DisposeMouseHook("manual");
+        // **source 传下去，不要写死。** 这一行是日志里唯一的分支点：它把「用户在排障时点的」
+        // 与「开机后自动抢链首的正常一次」分开——而分错了就去问用户「你当时点了吗」。
+        // 写死成 "manual" 的那版，**开机抢链首那几次全被记成了手动**：
+        // 用户机器上的 clockwork.error.log 里，7 次开机重装全是
+        // 「detached: source=manual」配「reinstalled: source=boot」——同一件事，两种说法。
+        // 读日志的人于是以为用户在反复手动点「重新挂钩」，去查一个不存在的故障。
+        DisposeMouseHook(source);
         _mouseHookMs = -1;               // 逼 ApplyMouseHook 走完整重装，别被「已经是想要的状态」挡回去
         _lastHealAt = Environment.TickCount64;  // 手动摘钩也算摘钩：否则紧接着的真故障会立刻再摘一次
         _healGapMs = HealMinGapMs;              // 人按的那一下是意图，不是循环：退避从头算
