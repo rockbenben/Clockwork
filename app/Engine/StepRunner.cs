@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using Clockwork.Core;
@@ -151,9 +152,9 @@ public static class StepRunner
                 // 不拦的话 ShellExecute 会再开一个自己——单实例那边会把它引到「显示主窗口」，
                 // 于是一条动作组步骤变成了「莫名弹出主窗口」，而日志记的是 ✓。
                 if (selfPaths != null && selfPaths.Count > 0 && LaunchTarget.IsSelfTarget(url, selfPaths))
-                    return ActionResult.Warn("Warn_SelfSkip", s.Label);
+                    return ActionResult.Warn("Warn_SelfSkip", StepDisplay.StepTitle(s));
                 try { Start(url); return ActionResult.Empty; }
-                catch (Exception ex) { return ActionResult.Warn("Warn_LaunchFail", StepHelpers.Ellipsis(url), ex.Message); }
+                catch (Exception ex) { return ActionResult.Warn("Warn_LaunchFail", StepHelpers.Ellipsis(url), UserFacingError(ex)); }
             }
             // 打开文件 / 文件夹：从「运行程序」拆出的一档，与「打开网址」完全对称——执行上仍是
             // 同一条 ShellExecute 路（Start），拆出来的收益在模型侧：编辑器只剩一个路径框，
@@ -166,9 +167,9 @@ public static class StepRunner
                 // 自指同拦：app / url 两支都有这一道。对着 Clockwork.exe 自己建一条「打开文件」
                 // 不会开第二份（单实例会把它引到弹出主窗口），但那与这一步承诺的事完全无关。
                 if (selfPaths != null && selfPaths.Count > 0 && LaunchTarget.IsSelfTarget(path, selfPaths))
-                    return ActionResult.Warn("Warn_SelfSkip", s.Label);
+                    return ActionResult.Warn("Warn_SelfSkip", StepDisplay.StepTitle(s));
                 try { Start(path); return ActionResult.Empty; }
-                catch (Exception ex) { return ActionResult.Warn("Warn_LaunchFail", StepHelpers.Ellipsis(path), ex.Message); }
+                catch (Exception ex) { return ActionResult.Warn("Warn_LaunchFail", StepHelpers.Ellipsis(path), UserFacingError(ex)); }
             }
             // 取选中的文字：机器整个在 SystemCommands（版本号判定、终端键序、注入被拒的判读），
             // 与「搜索选中的文字」共用同一份——那台机器身上攒着好几轮实测，复制一份出去必然漂。
@@ -430,7 +431,7 @@ public static class StepRunner
         // 备用路径：主路径不存在时用备用里第一个存在的。
         var tgt = LaunchTarget.ResolveLaunchTarget(item.Target, item.AltTargets);
         if (selfPaths != null && selfPaths.Count > 0 && LaunchTarget.IsSelfTarget(tgt, selfPaths))
-            return ActionResult.Warn("Warn_SelfSkip", item.Label);
+            return ActionResult.Warn("Warn_SelfSkip", StepDisplay.StepTitle(item));
 
         // 已运行则激活窗口、不重复启动。
         if (ShouldActivateInsteadOfLaunch(item))
@@ -470,10 +471,10 @@ public static class StepRunner
                 // 于是只留下一个退出码（找不到文件 -196608 / 解码失败 1），而黑窗一闪即逝、错误没人看得到。
                 // 光靠下面那条「0.5 秒内退出」的告警，用户只会拿到一串数字，照着查不出任何东西。
                 if (!File.Exists(tgt))
-                    return ActionResult.Warn("Warn_LaunchFail", item.Label, new Strings.Ref("Err_ScriptMissing"));
+                    return ActionResult.Warn("Warn_LaunchFail", StepDisplay.StepTitle(item), new Strings.Ref("Err_ScriptMissing"));
                 var exe = LaunchTarget.PowerShellExeFor(tgt);
                 if (exe == null)
-                    return ActionResult.Warn("Warn_LaunchFail", item.Label, new Strings.Ref("Err_ScriptNeedsPwsh"));
+                    return ActionResult.Warn("Warn_LaunchFail", StepDisplay.StepTitle(item), new Strings.Ref("Err_ScriptNeedsPwsh"));
                 psi.FileName = exe;
                 psi.Arguments = LaunchTarget.PowerShellFileArgs(tgt, item.Args);
             }
@@ -512,7 +513,7 @@ public static class StepRunner
                 try
                 {
                     if (proc.WaitForExit(500) && proc.ExitCode != 0)
-                        return ActionResult.Warn("Warn_QuickExit", item.Label, proc.ExitCode);
+                        return ActionResult.Warn("Warn_QuickExit", StepDisplay.StepTitle(item), proc.ExitCode);
                 }
                 catch { }
             }
@@ -520,7 +521,15 @@ public static class StepRunner
         }
         catch (Exception ex)
         {
-            return ActionResult.Warn("Warn_LaunchFail", item.Label, ex.Message);
+            return ActionResult.Warn("Warn_LaunchFail", StepDisplay.StepTitle(item), UserFacingError(ex));
         }
     }
+
+    // Process.Start 的 Win32Exception 把 .NET 的英文包装句和系统本地化错误拼在一起：
+    // 「An error occurred trying to start process '…' … 系统找不到指定的文件。」
+    // 前半句不是给用户看的，还让中文界面里一句失败回执变成中英混排；只留系统那一句。
+    internal static string UserFacingError(Exception ex)
+        => ex is Win32Exception w && w.NativeErrorCode != 0
+            ? new Win32Exception(w.NativeErrorCode).Message
+            : ex.Message;
 }

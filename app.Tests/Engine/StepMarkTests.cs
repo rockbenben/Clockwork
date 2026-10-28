@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using Clockwork.Engine;
 using Clockwork.Core;
 using Xunit;
@@ -113,6 +114,48 @@ public class StepMarkTests
         Assert.True(method >= 0 && activate > method && guard > method, "找不到 RunLaunchItem 里的那两处");
         Assert.True(guard > activate, "空目标的闸必须排在「已在运行则激活」之后");
     }
+
+    // 失败回执的主语不能留空：标签是可选的，未填标签的步骤（大多数）从前会得到
+    // 「启动失败： —— …」，冒号后面一片空白，读起来像程序少拼了一段。没有标签时用目标名。
+    [Fact]
+    public void An_unlabelled_launch_failure_names_the_target()
+    {
+        var r = StepRunner.RunLaunchItem(
+            new LaunchStep { Kind = "app", Target = @"C:\no-such-script-xyz.ps1" }, new List<string>());
+
+        Assert.True(r.HasWarning);
+        Assert.Contains("no-such-script-xyz", r.Warning!);
+        Assert.DoesNotContain("「」", r.Warning!);
+    }
+
+    [Fact]
+    public void A_labelled_launch_failure_keeps_the_label_as_the_subject()
+    {
+        var r = StepRunner.RunLaunchItem(
+            new LaunchStep { Kind = "app", Label = "我的脚本", Target = @"C:\no-such-script-xyz.ps1" },
+            new List<string>());
+
+        Assert.True(r.HasWarning);
+        Assert.Contains("我的脚本", r.Warning!);
+        Assert.DoesNotContain("no-such-script-xyz", r.Warning!);
+    }
+
+    // 直接构造 Win32Exception，不拉起进程：旧测试依赖 Shell 的错误文案，还会在 CI 上拖慢/抖动。
+    [Fact]
+    public void UserFacingError_strips_the_dotnet_wrapper()
+    {
+        var wrapped = new Win32Exception(2,
+            "An error occurred trying to start process 'x' with working directory 'C:\\'. 系统找不到指定的文件。");
+        var msg = StepRunner.UserFacingError(wrapped);
+
+        Assert.False(string.IsNullOrWhiteSpace(msg));
+        Assert.Equal(new Win32Exception(2).Message, msg);
+        Assert.DoesNotContain("An error occurred trying to start process", msg, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void UserFacingError_keeps_a_non_native_message()
+        => Assert.Equal("boom", StepRunner.UserFacingError(new InvalidOperationException("boom")));
 
     private static string AppRoot()
     {

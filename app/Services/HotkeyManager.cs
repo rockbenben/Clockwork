@@ -72,8 +72,9 @@ internal sealed class HotkeyManager
         // 面板关掉就别占着这个组合键：留着它既会拦住别的程序，按下去又什么都不会发生
         // （TogglePanel 已经在开头返回了）。传空串走的正是 RebindFunctionHotkey 里「不注册」那条路。
         RebindFunctionHotkey(PanelHotkeyId, _config.Settings.PanelEnabled ? _config.Settings.PanelHotkey : "",
-                             ref _panelHotkeyFail);
-        RebindFunctionHotkey(QuickOpenHotkeyId, _config.Settings.QuickOpenHotkey, ref _quickOpenHotkeyFail);
+                             ref _panelHotkeyFail, Strings.Get("Settings_Panel"));
+        RebindFunctionHotkey(QuickOpenHotkeyId, _config.Settings.QuickOpenHotkey, ref _quickOpenHotkeyFail,
+                             Strings.Get("Settings_QuickOpenHotkey"));
         RebindGroupHotkeys();
     }
 
@@ -101,8 +102,9 @@ internal sealed class HotkeyManager
         if (!_hotkeysSuspended)
         {
             RebindFunctionHotkey(PanelHotkeyId, _config.Settings.PanelEnabled ? _config.Settings.PanelHotkey : "",
-                                 ref _panelHotkeyFail);
-            RebindFunctionHotkey(QuickOpenHotkeyId, _config.Settings.QuickOpenHotkey, ref _quickOpenHotkeyFail);
+                                 ref _panelHotkeyFail, Strings.Get("Settings_Panel"));
+            RebindFunctionHotkey(QuickOpenHotkeyId, _config.Settings.QuickOpenHotkey, ref _quickOpenHotkeyFail,
+                                 Strings.Get("Settings_QuickOpenHotkey"));
         }
     }
 
@@ -113,7 +115,7 @@ internal sealed class HotkeyManager
     // 注册 → 分类报错 → 去重记账），差别只有热键 id 和「上次失败的组合」记在哪个格子里。
     // 抄一遍的代价不是多 25 行，是日后修 bug 只修了一边——去重逻辑尤其容易只补一处。
     // lastFail 用 ref 传：去重状态必须留在字段里跨调用存活，两个键各记各的（失败原因通常不同）。
-    private void RebindFunctionHotkey(int id, string? combo, ref string? lastFail)
+    private void RebindFunctionHotkey(int id, string? combo, ref string? lastFail, string? failSubject = null)
     {
         // 句柄已销毁（退出时主窗 Closed 触发的恢复）就跳过：否则在死句柄上注册失败、又弹「注册失败」气泡。
         if (_hotkeyHwnd == 0 || !HotKey.IsWindow(_hotkeyHwnd)) return;
@@ -133,7 +135,15 @@ internal sealed class HotkeyManager
         try { ok = HotKey.RegisterHotKey(_hotkeyHwnd, id, p.Modifiers | HotKey.MOD_NOREPEAT, p.Vk); } catch { }
         if (!ok)
         {
-            if (lastFail != combo) ShowToast("Clockwork", Lf("Hotkey_RegisterFail", HotkeyCapture.PrettyCombo(combo)), Views.ToastLevel.Warn);
+            // 「急停快捷键…托盘右键停止仍可用」只对急停成立。面板 / 一键直达失败时照抄那句，
+            // 会把 Ctrl+Alt+Space 说成急停键、还让人去托盘「停止」找一个根本不相干的出口。
+            // 带 failSubject 的两档改用现成的「动作『角色』的热键…」：点名的角色与组合是对的。
+            if (lastFail != combo)
+                ShowToast("Clockwork",
+                    failSubject == null
+                        ? Lf("Hotkey_RegisterFail", HotkeyCapture.PrettyCombo(combo))
+                        : Lf("Hotkey_GroupRegisterFail", failSubject, HotkeyCapture.PrettyCombo(combo)),
+                    Views.ToastLevel.Warn);
             lastFail = combo;
             return;
         }
