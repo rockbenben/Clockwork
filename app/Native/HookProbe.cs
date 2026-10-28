@@ -84,6 +84,13 @@ public sealed class HookProbe : IDisposable
         return "";
     }
 
+    /// <summary>
+    /// 只读缓存，不排解析请求。给笔迹中途的 LiveMatch 修正用：
+    /// 它每个采样点都会问一次，走 <see cref="ProcessName"/> 会把同一 pid 的解析请求灌满队列。
+    /// </summary>
+    public string CachedProcessName(uint pid)
+        => pid != 0 && _names.TryGetValue(pid, out var cached) ? cached : "";
+
     /// <summary>排一次「重算注入可行性」的请求（幂等，队列满时静默跳过）。</summary>
     //
     // **只在真正需要时才去问那一句。** 那一句要 OpenProcess，而本机实测它能到秒级（见类头）：

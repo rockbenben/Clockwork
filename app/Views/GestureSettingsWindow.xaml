@@ -12,18 +12,51 @@
          这不是搬家癖：管理器的职责是「有哪些手势」，全局旋钮属于另一件事，
          混在一扇窗里，用户每次改一个灵敏度都要滚过一张手势列表。 -->
 
-    <!-- 预览：浅底与深底各一份。
-         两份底色是承重的：描边那一层存在的全部理由就是「白文档上、深色 IDE 上都读得出来」，
-         而它在深色底上几乎看不见——只给一份深底预览，恰好看不见描边在干什么。 -->
-    <StackPanel Margin="16">
+    <Window.Resources>
+        <!-- 五格样式卡片：预览在上、名称在下；选中与键盘焦点各有可见边框。 -->
+        <Style x:Key="GestureStyleItem" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Card" Padding="2" BorderBrush="Transparent" BorderThickness="1" CornerRadius="6">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush" Value="{DynamicResource BrushAccentText}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- 正文可滚、关闭留在滚动区外：样式 swatch 与名单都可能把内容顶高，
+             464 那一档的工作区不能让「关闭」被挤到屏幕外。 -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+        <!-- 预览：浅底与深底各一份。
+             两份底色是承重的：描边那一层存在的全部理由就是「白文档上、深色 IDE 上都读得出来」，
+             而它在深色底上几乎看不见——只给一份深底预览，恰好看不见描边在干什么。 -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Border x:Name="LightBox" Grid.Column="0" Width="186" Height="92" Background="#F3EEE1"
+            <Border x:Name="LightBox" Grid.Column="0" Width="186" Height="82" Background="#F3EEE1"
                     CornerRadius="6" ClipToBounds="True" Margin="0,0,8,0"/>
-            <Border x:Name="DarkBox" Grid.Column="1" Width="186" Height="92" Background="#1C1E22"
+            <Border x:Name="DarkBox" Grid.Column="1" Width="186" Height="82" Background="#1C1E22"
                     CornerRadius="6" ClipToBounds="True"/>
         </Grid>
 
@@ -36,12 +69,24 @@
             <ComboBox x:Name="SensitivityCbo" Grid.Column="1" Width="150" SelectionChanged="Sensitivity_Changed"/>
         </Grid>
 
-        <Grid Margin="0,8,0,0">
+        <Grid Margin="0,10,0,0">
             <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="{loc:Loc Gesture_Style}" Style="{StaticResource FieldHint}"
                        VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="76"/>
-            <ComboBox x:Name="StyleCbo" Grid.Column="1" Width="150" SelectionChanged="Style_Changed"/>
+            <TextBlock x:Name="StyleNameText" Grid.Column="1" Style="{StaticResource FieldHint}"
+                       Foreground="{DynamicResource BrushMuted}" FontSize="{StaticResource FsMicro}"
+                       HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
+        <ListBox x:Name="StyleList" Margin="0,4,0,0" Background="Transparent" BorderThickness="0" Padding="0"
+                 SelectionMode="Single" ItemContainerStyle="{StaticResource GestureStyleItem}"
+                 SelectionChanged="StyleList_Changed"
+                 AutomationProperties.Name="{loc:Loc Gesture_Style}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate><StackPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
 
         <Grid Margin="0,8,0,0">
             <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -72,7 +117,9 @@
             <Button x:Name="AddIgnoreBtn" MinWidth="0" Padding="10,3" Click="AddIgnore_Click"/>
         </WrapPanel>
 
-        <Button Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32"
-                HorizontalAlignment="Right" Margin="0,16,0,0" IsCancel="True" Click="Close_Click"/>
-    </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <Button Grid.Row="1" Content="{loc:Loc Btn_Close}" MinWidth="88" MinHeight="32"
+                HorizontalAlignment="Right" Margin="0,12,0,0" IsCancel="True" Click="Close_Click"/>
+    </Grid>
 </Window>

@@ -450,7 +450,9 @@ public class UiStallWatchTests
         int bare = System.Text.RegularExpressions.Regex.Matches(hook, @"CallNextHookEx\(_hook, code").Count;
         Assert.True(bare == 1, $"裸 CallNextHookEx 应只剩 Chain() 定义那一条，实际 {bare} 条");
         // 重入必须只记最外层：内层（自家注入引起的）落在外层的注入窗口之内，再累加一次就是算两遍。
-        Assert.Contains("if (_cbDepth == 1) _chainMs = 0;", hook);
+        // 判据写成 outermost 变量（自救也用它决定要不要投递），语义仍是「_cbDepth == 1」。
+        Assert.Contains("bool outermost = _cbDepth == 1;", hook);
+        Assert.Contains("if (outermost) _chainMs = 0;", hook);
     }
 
     // 卡顿行还要带上**上游延迟**：只报 sinceBeat 分不开「链被排在前面的工具堵住」和

@@ -194,9 +194,9 @@
                      它曾经和指路文案同放 * 列右对齐，于是文案的第二行直接从按钮底下穿过去
                      （用户实报「底部叠在一起了」——有统计数据时才现形，默认配置的截图永远截不到）。
                      现在它与「关闭」同在第二行，压根不在句子那一行，叠不了。 -->
-                <Button x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" Height="32" MinWidth="104"
+                <Button x:Name="ResetUsageBtn" Content="{loc:Loc Btn_ResetUsage}" MinHeight="32" MinWidth="104"
                         Margin="0,0,12,0" Click="ResetUsage_Click" Visibility="Collapsed" ToolTip="{loc:Loc Btn_ResetUsageTip}"/>
-                <Button x:Name="CloseBtn" Content="{loc:Loc Btn_Close}" MinWidth="88" Height="32"
+                <Button x:Name="CloseBtn" Content="{loc:Loc Btn_Close}" MinWidth="88" MinHeight="32"
                         Click="Close_Click"/>
             </StackPanel>
         </Grid>

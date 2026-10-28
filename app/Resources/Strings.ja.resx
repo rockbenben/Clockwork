@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>ほかのプログラムが右ボタンを持っていっています（AutoHotkey、マウスドライバなど）</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>譲在中・右クリックを取得しません</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>ジェスチャーを今すぐ復元</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>右ボタンを押したまま軌跡を描くと、対応するアクションを実行します。ジェスチャーがなければ右ボタンは通常どおりです。</value>
   </data>
@@ -1727,6 +1733,9 @@
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>スタート メニューにアプリのショートカットが見つかりませんでした。</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>一致する項目が見つかりません。別の言葉で試してください。</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>通常に戻す</value>
   </data>
@@ -2113,7 +2122,7 @@
   <data name="Sum_Replace" xml:space="preserve">{0} を {1} に置換</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">ブラウザのアドレスを読み取れませんでした。Chrome または Edge でページを開いているか確認してください（Firefox は未対応です）。</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">アドレスとして読めません：{0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">このアドレスのドメインがサイト設定にありません。clockwork.settings.json の sites に追加してください。</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">このアドレスのドメインがサイト設定にありません。サイトマップの手順で追加してください。</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">サイト「{0}」のローカルフォルダーが見つかりません。sourceRoot を確認してください。</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">そのパスにマップしましたが、ローカルにファイルがありません：{0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">ファイルは見つかりましたが開けませんでした：{0}</data>
@@ -2124,7 +2133,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">この内容はデコードできません：{0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">現在のブラウザのアドレスバーを読み取り、以降のステップで使えるアドレスを生成します。Chrome / Edge などの Chromium 系ブラウザに対応。Firefox は未対応です。</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">開く方法</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">アドレスを入力します（{名前} のプレースホルダーも使えます）。表示中のページのアドレスに追従するには、先に「ブラウザーのアドレスを読み取る」手順を置き、アドレスを変数に書き出してから、ここに {その変数} を入れてください。ドメイン → ローカルパスの対応は「設定 → サイトマップ」で編集します。</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">アドレスを入力します（{名前} のプレースホルダーも使えます）。表示中のページのアドレスに追従するには、先に「ブラウザーのアドレスを読み取る」手順を置き、アドレスを変数に書き出してから、ここに {その変数} を入れてください。</data>
   <data name="Ed_RegexPattern" xml:space="preserve">正規表現</data>
   <data name="Ed_RegexGroup" xml:space="preserve">取得するグループ</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = 的整体一致、1 以降 = 何番目の括弧の中身。.NET の正規表現構文です。</data>
@@ -2250,7 +2259,7 @@
   <data name="Mig_StepParams" xml:space="preserve">{0} つの手順が共有していたアクションと数値を、種類ごとの項目に分けました（各手順の動作は変わりません）</data>
 
   <data name="Gesture_Style" xml:space="preserve">スタイル</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">クラシック</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">ルーメン</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">ネオン</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">レインボー</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">破線</data>

@@ -76,6 +76,13 @@ public partial class GestureManagerWindow : Window
         SettingsBtn.Content = Strings.Get("Gesture_Settings") + "…";
         PaintWatchState();
         Reload(null);
+        // 让路进入/退出可能发生在这扇窗开着的时候（链堵是瞬时事件）。半秒一拍只看一个状态，
+        // 关闭即停；没有它，状态行会停在打开那一刻的读数。
+        var watchTimer = new System.Windows.Threading.DispatcherTimer
+        { Interval = System.TimeSpan.FromMilliseconds(500) };
+        watchTimer.Tick += (_, _) => PaintWatchState();
+        watchTimer.Start();
+        Closed += (_, _) => watchTimer.Stop();
     }
 
     // 总开关。存盘那一步会按新配置装卸右键监听（App.SaveConfig 末尾调 ApplyMouseHook），
@@ -105,12 +112,16 @@ public partial class GestureManagerWindow : Window
             GestureWatchState.Stale => "Gesture_WatchStale",
             GestureWatchState.Deaf => "Gesture_WatchDeaf",
             GestureWatchState.Blocked => "Gesture_WatchBlocked",
+            GestureWatchState.Yielding => "Gesture_WatchYielding",
             _ => "Gesture_WatchOff",
         });
         bool trouble = st is GestureWatchState.Failed or GestureWatchState.Stale
                           or GestureWatchState.Deaf or GestureWatchState.Blocked;
         WatchState.Foreground = (System.Windows.Media.Brush)FindResource(
-            trouble ? "BrushDanger" : st == GestureWatchState.Live ? "BrushMuted" : "BrushFaint");
+            trouble ? "BrushDanger"
+            : st == GestureWatchState.Yielding ? "BrushAccentText"
+            : st == GestureWatchState.Live ? "BrushMuted"
+            : "BrushFaint");
         // 「重新挂钩」只在出事时露面：它是**补救**，不是日常操作。
         // 常驻的话，它会在标题行里和总开关抢注意力，而 99% 的时候没人需要它；
         // 跟着问题一起出现，它就自带了「这是拿来治那句红字的」这层意思，不用再解释。
@@ -149,7 +160,7 @@ public partial class GestureManagerWindow : Window
     private System.Windows.FrameworkElement BuildRow(Row r)
     {
         var box = new Grid { Width = 52, Height = 30 };
-        var glyph = GestureGlyph.Make(r.Step.Gesture, 52, 30, (System.Windows.Media.Brush)FindResource("BrushAccentText"), 1.6);
+        var glyph = GestureGlyph.Make(r.Step.Gesture, 52, 30, StyleAccent(), 1.6);
         if (glyph != null) box.Children.Add(glyph);
         var line = new StackPanel { Orientation = Orientation.Horizontal };
         line.Children.Add(box);
@@ -210,7 +221,13 @@ public partial class GestureManagerWindow : Window
         Bound.Items.Clear();
         foreach (var r in rows)
         {
-            var item = new ListBoxItem { Content = BuildRow(r), Tag = r, ToolTip = r.Detail };
+            // 行高与 DataGrid 的 40 对齐：缩略图 30 + 上下 Padding 8 + 边框 2。
+            // 全局 ListBoxItem 是 10,6，这一列有更高的图，单独收一点内边距才不会被撑到 44。
+            var item = new ListBoxItem
+            {
+                Content = BuildRow(r), Tag = r, ToolTip = r.Detail,
+                Padding = new Thickness(10, 4, 10, 4), MinHeight = 40,
+            };
             // 无障碍名用 Row.ToString()（箭头 + 摘要）——它本来就是为朗读写的
             // （见 Row 那条注释：「笔迹缩略图是给眼睛的……一条画出来的线没法朗读」）。
             // 不给的话 WPF 只能从 Content 取名字，而那是一块**画出来的面板**（笔迹 + 文字），
@@ -377,6 +394,7 @@ public partial class GestureManagerWindow : Window
     {
         if (Current == null) return;
         GestureCanvas.CaptureMouse();
+        GestureShape.Visibility = Visibility.Collapsed;   // 画的时候让位给实时渲染器
         var pt = e.GetPosition(GestureCanvas);
         _draw.OnRightDown((int)pt.X, (int)pt.Y);
         _trail.Clear();
@@ -430,15 +448,25 @@ public partial class GestureManagerWindow : Window
     private void PaintGesture()
     {
         var path = Current?.Gesture ?? "";
-        // 画布里的笔迹与列表缩略图出自同一个 GestureGlyph，只是尺寸不同——
-        // 「列表里看到什么，手上就画什么」靠的是同一份几何，不是两处对齐的代码。
-        GestureShape.Content = GestureGlyph.Make(path, 150, 118, (System.Windows.Media.Brush)FindResource("BrushAccentText"), 2.4);
+        // 保存后的预览走**屏幕上的同一个渲染器**，不再回落到一根纯色折线；
+        // 起点/末端箭头仍由 GestureGlyph 提供，样式只换笔画。
+        var style = GestureTrailStyles.Resolve(_config.Settings.GestureTrailStyle);
+        var widths = GestureTrailWidths.Resolve(_config.Settings.GestureTrailWidth);
+        var armed = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xE6, 0xEF, 0xFF));
+        GestureShape.Content = GestureTrailPreview.MakePath(
+            path, style, widths, _config.Settings.GestureTrailFade, 150, 118, StyleAccent(), armed);
+        GestureShape.Visibility = GestureShape.Content == null ? Visibility.Collapsed : Visibility.Visible;
         GestureWatermark.Visibility = GestureShape.Content == null ? Visibility.Visible : Visibility.Collapsed;
         // 「置顶」是开关，而标签「置顶当前窗口」读起来像单向动作——看列表时正是会冒出
         // 「那取消置顶呢」的时候，所以那句说明得出现在这儿，不能只留在步骤编辑器里。
         TopmostHint.Visibility = Current is { Kind: "window", Action: "topmost" }
             ? Visibility.Visible : Visibility.Collapsed;
     }
+
+    // 列表缩略图、右侧预览的终点箭头与 HUD 左条共用样式代表色；空值回落主题 accent。
+    private System.Windows.Media.Brush StyleAccent()
+        => GestureTrailRenderer.BrushFromHex(GestureTrailStyles.Resolve(_config.Settings.GestureTrailStyle).Accent)
+           ?? (System.Windows.Media.Brush)FindResource("BrushAccentText");
 
     // 全局设置（灵敏度、笔迹的样子、尾迹淡出、动作名、名单）在「手势设置…」那一扇窗里。
     //
@@ -451,9 +479,10 @@ public partial class GestureManagerWindow : Window
         var w = new GestureSettingsWindow(_config, _save);
         w.Owner = this;
         w.ShowDialog();
-        // 设置窗改的是笔迹的样子，而画布上那一笔用的是同一个渲染器——
-        // 不跟着换，画布上就还是旧样式，「所见即所得」又断一次。
+        // 设置窗改的是笔迹的样子：实时画布、保存预览、列表缩略图都要跟着换；
+        // 不重载列表的话，列表里仍是旧 accent。
         RefreshTrailLook();
+        Reload(Current);
     }
 
     // 画布上那一笔的样子，重新按配置刷一遍。

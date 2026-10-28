@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>कोई दूसरा प्रोग्राम दायाँ बटन ले जा रहा है (AutoHotkey, माउस ड्राइवर…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>रास्ता दे रहा है · राइट-क्लिक पकड़ा नहीं जा रहा</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>अभी इशारे बहाल करें</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>दायाँ बटन दबाए रखकर एक रेखा खींचें — संबंधित क्रिया चलेगी। कोई जेस्चर न हो तो दायाँ बटन सामान्य रूप से काम करता है।</value>
   </data>
@@ -1727,6 +1733,9 @@
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>स्टार्ट मेन्यू में कोई प्रोग्राम शॉर्टकट नहीं मिला।</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>कोई मेल खाता परिणाम नहीं मिला। कोई दूसरा शब्द आज़माएँ।</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>सामान्य पर लौटें</value>
   </data>
@@ -2113,7 +2122,7 @@
   <data name="Sum_Replace" xml:space="preserve">{0} को {1} से बदलें</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">ब्राउज़र पता नहीं पढ़ा जा सका। जाँचें कि Chrome या Edge में कोई पेज खुला है (Firefox अभी समर्थित नहीं है)।</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">यह पते जैसा नहीं लगता: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">उस पते का डोमेन साइट सूची में नहीं है। clockwork.settings.json की sites में इसे जोड़ें।</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">उस पते का डोमेन साइट सूची में नहीं है। इसे साइट मैप चरण में जोड़ें।</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">साइट «{0}» का स्थानीय फ़ोल्डर मौजूद नहीं है। इसका sourceRoot जाँचें।</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">उस पथ पर मैप हुआ, पर स्थानीय रूप से यह फ़ाइल नहीं है: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">फ़ाइल मिल गई, पर उसे खोला नहीं जा सका: {0}</data>
@@ -2124,7 +2133,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">इसे डीकोड नहीं किया जा सका: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">मौजूदा ब्राउज़र के पता पट्टी को पढ़कर बाद के चरणों के लिए पता बनाता है। Chrome और Edge जैसे Chromium ब्राउज़र समर्थित हैं; Firefox अभी समर्थित नहीं है।</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">कैसे खोलें</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">पता भरें ({नाम} प्लेसहोल्डर भी चलते हैं)। जो पेज अभी खुला है उसका पता पाने के लिए पहले 'ब्राउज़र पता पढ़ें' चरण जोड़ें, उसे पते को एक वेरिएबल में लिखने दें, फिर यहाँ {उस वेरिएबल} भरें। डोमेन → स्थानीय पथ का मिलान सेटिंग्स → साइट मैप में बदला जाता है।</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">पता भरें ({नाम} प्लेसहोल्डर भी चलते हैं)। जो पेज अभी खुला है उसका पता पाने के लिए पहले 'ब्राउज़र पता पढ़ें' चरण जोड़ें, उसे पते को एक वेरिएबल में लिखने दें, फिर यहाँ {उस वेरिएबल} भरें।</data>
   <data name="Ed_RegexPattern" xml:space="preserve">नियमित अभिव्यक्ति</data>
   <data name="Ed_RegexGroup" xml:space="preserve">कैप्चर ग्रुप</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = पूरा मेल; 1 और उससे ऊपर = कौन-सा कोष्ठक समूह। .NET रेगुलर एक्सप्रेशन सिंटैक्स।</data>
@@ -2250,7 +2259,7 @@
   <data name="Mig_StepParams" xml:space="preserve">{0} चरणों द्वारा साझा किया गया क्रिया और संख्या अब हर प्रकार के अलग क्षेत्रों में है (हर चरण क्या करता है, वह नहीं बदला)</data>
 
   <data name="Gesture_Style" xml:space="preserve">शैली</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">क्लासिक</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">ल्यूमेन</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">नियॉन</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">इंद्रधनुष</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">टूटी रेखा</data>

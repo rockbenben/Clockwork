@@ -74,14 +74,14 @@
                          手势列表此前没有——同一个程序里两套查找方式不统一。
                          空框里那行灰字是水印（同画布与工具箱的做法）：一个光秃秃的输入框
                          没人知道是干什么用的。 -->
-                    <Grid Grid.Row="0" Margin="8,8,8,0" Height="26">
-                        <TextBox x:Name="SearchBox" Height="26"
+                    <Grid Grid.Row="0" Margin="8,8,8,0" Height="28">
+                        <TextBox x:Name="SearchBox" Height="28"
                                  FontSize="{StaticResource FsBody}" Padding="6,2"
                                  AutomationProperties.Name="{loc:Loc Gesture_Search}"
                                  ToolTip="{loc:Loc Gesture_Search}"
                                  TextChanged="SearchBox_TextChanged"/>
                         <TextBlock x:Name="SearchHint" Text="{loc:Loc Gesture_Search}" Foreground="{DynamicResource BrushFaint}"
-                                   FontSize="{StaticResource FsBody}" Margin="8,4,0,0" IsHitTestVisible="False"/>
+                                   FontSize="{StaticResource FsBody}" Margin="8,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
                     </Grid>
                     <ListBox x:Name="Bound" Grid.Row="1" BorderThickness="0" Background="Transparent"
                              AutomationProperties.Name="{loc:Loc Gesture_Manager}"

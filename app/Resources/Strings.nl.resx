@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>Een ander programma pakt de rechterknop (AutoHotkey, een muisstuurprogramma…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>Wijkt · rechtermuisknop wordt niet vastgehouden</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>Gebaren nu herstellen</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Houd de rechterknop ingedrukt, teken een streek en de bijbehorende actie wordt uitgevoerd. Zonder gebaren werkt de rechterknop gewoon.</value>
   </data>
@@ -1727,6 +1733,9 @@ Log: {1}</value>
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>Er zijn geen programmasnelkoppelingen gevonden in het Startmenu.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>Geen overeenkomende resultaten gevonden. Probeer een ander woord.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>Terug naar normaal</value>
   </data>
@@ -2113,7 +2122,7 @@ Log: {1}</value>
   <data name="Sum_Replace" xml:space="preserve">{0} vervangen door {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">Kan het browseradres niet worden gelezen. Zorg dat er in Chrome of Edge een pagina openstaat (Firefox wordt nog niet ondersteund).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">Dat lijkt niet op een adres: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Het domein van dat adres staat niet in de sitelijst. Voeg het toe bij sites in clockwork.settings.json.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Het domein van dat adres staat niet in de sitelijst. Voeg het toe in de sitemap-stap.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">De lokale map voor “{0}” bestaat niet. Controleer de sourceRoot.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">Daarop afgebeeld, maar dat bestand bestaat lokaal niet: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">Bestand gevonden, maar kon niet worden geopend: {0}</data>
@@ -2124,7 +2133,7 @@ Log: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Dat kon niet worden gedecodeerd: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Leest de adresbalk van de huidige browser en levert een adres voor latere stappen. Ondersteunt Chromium-browsers zoals Chrome en Edge; Firefox wordt nog niet ondersteund.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Hoe openen</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Vul een adres in ({name}-placeholders werken). Volg de pagina die u nu ziet door eerst een stap 'Browseradres lezen' toe te voegen, die het adres naar een variabele schrijft, en zet hier dan {die variabele}. De koppeling domein → lokaal pad bewerkt u bij Instellingen → Sitemap.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Vul een adres in ({name}-placeholders werken). Volg de pagina die u nu ziet door eerst een stap 'Browseradres lezen' toe te voegen, die het adres naar een variabele schrijft, en zet hier dan {die variabele}.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Reguliere expressie</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Opvanggroep</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = de volledige overeenkomst; 1 en hoger = welke groep tussen haakjes. .NET-regexsyntaxis.</data>
@@ -2250,7 +2259,7 @@ Log: {1}</value>
   <data name="Mig_StepParams" xml:space="preserve">De actie en het getal die {0} stappen deelden staan nu in velden per soort (wat elke stap doet, verandert niet)</data>
 
   <data name="Gesture_Style" xml:space="preserve">Stijl</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">Klassiek</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Lumen</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">Regenboog</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Gestippeld</data>

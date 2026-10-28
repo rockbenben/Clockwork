@@ -246,7 +246,7 @@ public static class ConfigStore
         cfg.Gestures ??= new();
 
         // 站点映射表。与上面那些集合同一条底线：只补 null，绝不替用户改写他写下的内容。
-        // 这张表**不再手改**（设置页里有一张专门的表，见 SiteMapEditorWindow），
+        // 这张表**不再手改**（「打开站点源文件」步骤里有入口，见 SiteMapEditorWindow），
         // 但老配置里那份手写内容还得照原样读进来——启动时静默「修好」一份他没写过的东西最坏。
         //   域名不做小写化、不去空白、不排序——"NewZone.top" 和 "newzone.top" 都是用户的原意，
         //     匹配那边本来就大小写不敏感，改写只会让他下次看不懂自己写过什么；

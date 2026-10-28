@@ -33,10 +33,10 @@
             </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Col_Name}" Style="{StaticResource FieldLabel}" Margin="0,6,10,0"/>
-                <TextBox   Grid.Row="0" Grid.Column="1" x:Name="NameBox" AutomationProperties.Name="{loc:Loc Col_Name}" Height="30" Margin="0,0,16,8"/>
+                <TextBox   Grid.Row="0" Grid.Column="1" x:Name="NameBox" AutomationProperties.Name="{loc:Loc Col_Name}" Height="28" Margin="0,0,16,8"/>
 
                 <TextBlock Grid.Row="0" Grid.Column="2" Text="{loc:Loc Ed_GroupHotkey}" Style="{StaticResource FieldLabel}" Margin="0,6,10,0"/>
-            <TextBox   Grid.Column="3" x:Name="HotkeyBox" AutomationProperties.Name="{loc:Loc Ed_GroupHotkey}" Height="30" Margin="0,0,16,8" Style="{StaticResource HotkeyCapture}"/>
+            <TextBox   Grid.Column="3" x:Name="HotkeyBox" AutomationProperties.Name="{loc:Loc Ed_GroupHotkey}" Height="28" Margin="0,0,16,8" Style="{StaticResource HotkeyCapture}"/>
             <!-- 「进托盘」留在表头，**不进右栏的「选项」那一页**：TabControl 只把选中页交给键盘
                  导航，一颗待在非选中页里的 CheckBox 既拿不到焦点环（冒烟自查的焦点探针直接判它坏），
                  键盘用户也要先翻页才够得到它。开关是全局行为，不属于「这一页的设置」。 -->

@@ -24,7 +24,7 @@
                 <StackPanel x:Name="StartupRow" Margin="0,3">
                     <StackPanel Orientation="Horizontal"><TextBlock Text="{loc:Loc Ed_LoginTiming}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SModeCombo" AutomationProperties.Name="{loc:Loc Ed_LoginTiming}" Width="264" Height="28" SelectionChanged="SMode_Changed"/>
                         <TextBox x:Name="SHourBox" AutomationProperties.Name="{loc:Loc Ed_LoginTiming}" Width="50" Height="28" Margin="8,0,4,0"/><TextBlock x:Name="SHourLbl" Text="{loc:Loc Ed_Hour}" VerticalAlignment="Center"/></StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="118,4,0,0"><TextBlock Text="{loc:Loc Ed_OnlyBoot}" VerticalAlignment="Center"/><TextBox x:Name="SWithinBox" AutomationProperties.Name="{loc:Loc Ed_OnlyBoot}" Width="50" Height="26" Margin="6,0"/><TextBlock Text="{loc:Loc Ed_WithinHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" VerticalAlignment="Center"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="118,4,0,0"><TextBlock Text="{loc:Loc Ed_OnlyBoot}" VerticalAlignment="Center"/><TextBox x:Name="SWithinBox" AutomationProperties.Name="{loc:Loc Ed_OnlyBoot}" Width="50" Height="28" Margin="6,0"/><TextBlock Text="{loc:Loc Ed_WithinHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" VerticalAlignment="Center"/></StackPanel>
                 </StackPanel>
 
                 <!-- 事件触发的两个参数行：只有「空闲时」「电量偏低时」用得上，其余事件没有参数 -->

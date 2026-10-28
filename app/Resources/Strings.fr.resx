@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>Un autre programme capte le bouton droit (AutoHotkey, un pilote de souris…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>En retrait · clic droit non capturé</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>Rétablir les gestes maintenant</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Maintenez le bouton droit, dessinez un tracé, l’action correspondante s’exécute. Sans geste défini, le bouton droit fonctionne normalement.</value>
   </data>
@@ -1727,6 +1733,9 @@ Journal : {1}</value>
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>Aucun raccourci de programme trouvé dans le menu Démarrer.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>Aucun résultat correspondant. Essayez un autre mot.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>Retour à la normale</value>
   </data>
@@ -2113,7 +2122,7 @@ Journal : {1}</value>
   <data name="Sum_Replace" xml:space="preserve">Remplacer {0} par {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">Impossible de lire l’adresse du navigateur. Vérifiez qu’une page est ouverte dans Chrome ou Edge (Firefox n’est pas encore pris en charge).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">Cela ne ressemble pas à une adresse : {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Le domaine de cette adresse n’est pas dans la liste des sites. Ajoutez-le dans sites, dans clockwork.settings.json.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Le domaine de cette adresse n’est pas dans la liste des sites. Ajoutez-le à l’étape de la table des sites.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">Le dossier local du site « {0} » n’existe pas. Vérifiez son sourceRoot.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">Mappé vers ce chemin, mais le fichier n’existe pas en local : {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">Fichier trouvé, mais ouverture impossible : {0}</data>
@@ -2124,7 +2133,7 @@ Journal : {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Impossible de décoder cela : {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Lit la barre d’adresse du navigateur actuel et produit une adresse pour les étapes suivantes. Prend en charge les navigateurs Chromium comme Chrome et Edge ; Firefox n’est pas encore pris en charge.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Comment ouvrir</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Renseignez une adresse (les espaces réservés {nom} fonctionnent). Pour suivre la page affichée, ajoutez d'abord une étape « Lire l'adresse du navigateur » qui écrit l'adresse dans une variable, puis mettez {cette variable} ici. La correspondance domaine → chemin local se modifie dans Paramètres → Table des sites.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Renseignez une adresse (les espaces réservés {nom} fonctionnent). Pour suivre la page affichée, ajoutez d'abord une étape « Lire l'adresse du navigateur » qui écrit l'adresse dans une variable, puis mettez {cette variable} ici.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Expression régulière</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Groupe de capture</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = l’ensemble de la correspondance ; 1 et plus = quel groupe entre parenthèses. Syntaxe regex .NET.</data>
@@ -2250,7 +2259,7 @@ Journal : {1}</value>
   <data name="Mig_StepParams" xml:space="preserve">L’action et le nombre partagés par {0} étapes sont désormais dans des champs par type (ce que fait chaque étape ne change pas)</data>
 
   <data name="Gesture_Style" xml:space="preserve">Style</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">Classique</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Lumen</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Néon</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">Arc-en-ciel</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Pointillés</data>

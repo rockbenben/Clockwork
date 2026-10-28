@@ -30,8 +30,9 @@ Five switches built into the exe (see `app/DevChecks.cs` and `app/DevSelfTest.cs
                                      # process — the checks that need a live window and therefore cannot
                                      # live in app.Tests. CI gates on this one too
 .\Clockwork.exe --shots shots-dir    # renders every tab of every window to PNG: 3 widths × 5 work-area
-                                     # heights × 6 languages, plus one light-theme pass — 7,080 images
-                                     # as of this writing (the count moves with every window and tab added).
+                                     # heights × 6 languages, plus one light-theme pass — on the order of
+                                     # ten thousand images (the exact total moves with every window and
+                                     # tab added, so don't pin it down here).
                                      # Every axis was added after a real defect slipped past the one
                                      # before it (see the DevChecks.cs header)
 .\Clockwork.exe --screenshots out    # the three README screenshots (en / zh-CN / zh-TW) at a fixed size.

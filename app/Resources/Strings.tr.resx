@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>Sağ tuşu başka bir program alıyor (AutoHotkey, bir fare sürücüsü…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>Ödün veriyor · sağ tık yakalanmıyor</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>Hareketleri şimdi geri yükle</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Sağ tuşu basılı tutup bir iz çizin, ilgili eylem çalışır. Hiç hareket yoksa sağ tuş her zamanki gibi çalışır.</value>
   </data>
@@ -1727,6 +1733,9 @@ Günlük: {1}</value>
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>Başlat menüsünde hiçbir program kısayolu bulunamadı.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>Eşleşen sonuç yok. Başka bir kelime deneyin.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>Normale dön</value>
   </data>
@@ -2113,7 +2122,7 @@ Günlük: {1}</value>
   <data name="Sum_Replace" xml:space="preserve">{0} öğesini {1} ile değiştir</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">Tarayıcı adresi okunamadı. Chrome veya Edge’de bir sayfanın açık olduğundan emin olun (Firefox henüz desteklenmiyor).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">Bu bir adrese benzemiyor: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">O alan adresi site listesinde yok. clockwork.settings.json içindeki sites bölümüne ekleyin.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">O alan adresi site listesinde yok. Site haritası adımında ekleyin.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">«{0}» sitesinin yerel klasörü yok. sourceRoot değerini kontrol edin.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">Bu yola eşlendi, ancak dosya yerelde yok: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">Dosya bulundu ancak açılamadı: {0}</data>
@@ -2124,7 +2133,7 @@ Günlük: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Bu çözülemedi: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Geçerli tarayıcının adres çubuğunu okur ve sonraki adımlar için bir adres üretir. Chrome ve Edge gibi Chromium tarayıcıları desteklenir; Firefox henüz desteklenmiyor.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Nasıl açılır</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Bir adres girin ({ad} yer tutucuları çalışır). Şu anda baktığınız sayfayı izlemek için önce «Tarayıcı adresini oku» adımını ekleyin; adresi bir değişkene yazsın, sonra buraya {o değişken} yazın. Alan adı → yerel yol eşlemesi Ayarlar → Site haritası altında düzenlenir.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Bir adres girin ({ad} yer tutucuları çalışır). Şu anda baktığınız sayfayı izlemek için önce «Tarayıcı adresini oku» adımını ekleyin; adresi bir değişkene yazsın, sonra buraya {o değişken} yazın.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Normal ifade</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Yakalama grubu</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = eşleşmenin tamamı; 1 ve üzeri = hangi parantez grubu. .NET normal ifade sözdizimi.</data>
@@ -2250,7 +2259,7 @@ Günlük: {1}</value>
   <data name="Mig_StepParams" xml:space="preserve">{0} adımın ortak kullandığı eylem ve sayı, tür başına alanlara ayrıldı (her adımın yaptığı değişmedi)</data>
 
   <data name="Gesture_Style" xml:space="preserve">Biçim</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">Klasik</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Lumen</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">Gökkuşağı</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Kesikli</data>

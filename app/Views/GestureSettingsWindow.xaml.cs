@@ -87,12 +87,8 @@ public partial class GestureSettingsWindow : Window
         SensitivityCbo.SelectedItem = SensitivityCbo.Items.Cast<ComboBoxItem>()
             .FirstOrDefault(x => (string)x.Tag == currentSens) ?? SensitivityCbo.Items[1];
 
-        StyleCbo.Items.Clear();
-        foreach (var style in GestureTrailStyles.All)
-            StyleCbo.Items.Add(new ComboBoxItem { Content = StyleName(style.Id), Tag = style.Id });
-        var currentStyle = _config.Settings.GestureTrailStyle;
-        StyleCbo.SelectedItem = StyleCbo.Items.Cast<ComboBoxItem>()
-            .FirstOrDefault(x => (string)x.Tag == currentStyle) ?? StyleCbo.Items[0];
+        BuildStyleSwatches();
+        SelectStyle(_config.Settings.GestureTrailStyle);
 
         WidthCbo.Items.Clear();
         WidthCbo.Items.Add(new ComboBoxItem { Content = Strings.Get("Gesture_Trail_Off"), Tag = "off" });
@@ -156,17 +152,63 @@ public partial class GestureSettingsWindow : Window
         }
     }
 
-    private string? SelectedStyleId() => (StyleCbo.SelectedItem as ComboBoxItem)?.Tag as string;
+    // 五格样式卡片：每格是固定弧线样本 + 本地化名称；样式的颜色/层次由渲染器自己带。
+    private void BuildStyleSwatches()
+    {
+        StyleList.Items.Clear();
+        var accent = (Brush)FindResource("BrushAccentText");
+        var armed = new SolidColorBrush(Color.FromRgb(0xE6, 0xEF, 0xFF));
+        var slate = (Brush)FindResource("BrushSlate");
+        var line = (Brush)FindResource("BrushLine");
+        var muted = (Brush)FindResource("BrushMuted");
+        double fs = (double)FindResource("FsMicro");
 
-    private string? SelectedWidthId() => (WidthCbo.SelectedItem as ComboBoxItem)?.Tag as string;
+        foreach (var style in GestureTrailStyles.All)
+        {
+            var preview = GestureTrailPreview.MakeArc(style, GestureTrailWidths.Resolve("thin"), 54, 26, accent, armed);
+            var card = new Border
+            {
+                Width = 58, Height = 30, Background = slate, BorderBrush = line, BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(4), ClipToBounds = true, Child = preview,
+            };
+            var name = new TextBlock
+            {
+                Text = StyleName(style.Id), FontSize = fs, Foreground = muted,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                MaxWidth = 58, Margin = new Thickness(0, 3, 0, 0),
+            };
+            var stack = new StackPanel();
+            stack.Children.Add(card);
+            stack.Children.Add(name);
+            var item = new ListBoxItem { Content = stack, Tag = style.Id, ToolTip = StyleName(style.Id) };
+            System.Windows.Automation.AutomationProperties.SetName(item, StyleName(style.Id));
+            StyleList.Items.Add(item);
+        }
+    }
 
-    private void Style_Changed(object sender, SelectionChangedEventArgs e)
+    private void SelectStyle(string id)
+    {
+        var canonical = GestureTrailStyles.Resolve(id).Id;
+        var item = StyleList.Items.Cast<ListBoxItem>().FirstOrDefault(x => (string)x.Tag == canonical)
+                   ?? StyleList.Items.Cast<ListBoxItem>().FirstOrDefault();
+        StyleList.SelectedItem = item;
+        StyleNameText.Text = item?.Tag is string tag ? StyleName(tag) : "";
+    }
+
+    private void StyleList_Changed(object sender, SelectionChangedEventArgs e)
     {
         if (_loading) return;
-        _config.Settings.GestureTrailStyle = GestureTrailStyles.Resolve(SelectedStyleId()).Id;
+        if (StyleList.SelectedItem is not ListBoxItem item || item.Tag is not string id) return;
+        _config.Settings.GestureTrailStyle = GestureTrailStyles.Resolve(id).Id;
+        StyleNameText.Text = StyleName(id);
         _save();
         Refresh();
     }
+
+    private string? SelectedStyleId() => (StyleList.SelectedItem as ListBoxItem)?.Tag as string;
+
+    private string? SelectedWidthId() => (WidthCbo.SelectedItem as ComboBoxItem)?.Tag as string;
 
     private void Width_Changed(object sender, SelectionChangedEventArgs e)
     {

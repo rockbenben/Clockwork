@@ -100,4 +100,35 @@ public class HookWatchTests
         Assert.False(HookWatch.ShouldHeal(false, LongAgo, SampleMs, LongAgo, SkewMs, 12_000));
         Assert.True(HookWatch.ShouldHeal(true, SampleMs + SkewMs + 1, SampleMs, 12_000, SkewMs, 12_000));
     }
+
+    // ── A3：自救阈值 ──
+    //
+    // 阈值必须**高于**系统预算：低于预算会在系统还没摘我们时白重装；回落到默认值则保证
+    // 注册表缺失（或被人写成 0）时不会变成一个「永不触发」的自救。
+    [Fact]
+    public void The_recovery_threshold_is_budget_plus_margin_and_falls_back_to_300()
+    {
+        Assert.Equal(300, HookWatch.EffectiveHookTimeoutMs(null));
+        Assert.Equal(300, HookWatch.EffectiveHookTimeoutMs(0));
+        Assert.Equal(300, HookWatch.EffectiveHookTimeoutMs(-1));
+        Assert.Equal(500, HookWatch.EffectiveHookTimeoutMs(500));
+        Assert.Equal(350, HookWatch.RecoveryThresholdMs(null));
+        Assert.Equal(550, HookWatch.RecoveryThresholdMs(500));
+        Assert.Equal(300, HookWatch.RecoveryThresholdMs(null, marginMs: 0));
+        Assert.Equal(int.MaxValue, HookWatch.RecoveryThresholdMs(int.MaxValue));
+    }
+
+    // 只有最外层、且没有正在自救/拆钩的回调，才允许投自救请求。
+    // 内层重入的时长已经在祖先那一格里算过；正在拆钩时把钩子装回来是最坏的一种竞态。
+    [Fact]
+    public void Self_recovery_is_outermost_only_and_never_while_tearing_down()
+    {
+        const int threshold = 350;
+        Assert.True(HookWatch.ShouldSelfRecover(350, threshold, depth: 1, recoveryPending: false, disposePosted: false));
+        Assert.False(HookWatch.ShouldSelfRecover(349, threshold, depth: 1, recoveryPending: false, disposePosted: false));
+        Assert.False(HookWatch.ShouldSelfRecover(2000, threshold, depth: 2, recoveryPending: false, disposePosted: false));
+        Assert.False(HookWatch.ShouldSelfRecover(2000, threshold, depth: 1, recoveryPending: true, disposePosted: false));
+        Assert.False(HookWatch.ShouldSelfRecover(2000, threshold, depth: 1, recoveryPending: false, disposePosted: true));
+        Assert.False(HookWatch.ShouldSelfRecover(2000, thresholdMs: 0, depth: 1, recoveryPending: false, disposePosted: false));
+    }
 }

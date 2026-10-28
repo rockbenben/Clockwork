@@ -134,6 +134,20 @@
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_Url}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><TextBox x:Name="SiteMapUrlBox" AutomationProperties.Name="{loc:Loc Ed_Url}" Width="300" Height="28"/><Button x:Name="SiteMapUrlVarBtn" Style="{StaticResource PickerButton}" Content="{}{ }" FlowDirection="LeftToRight" ToolTip="{loc:Loc Btn_InsertVar}" AutomationProperties.Name="{loc:Loc Btn_InsertVar}" Margin="6,0,0,0" Click="PickSiteMapUrlVar_Click"/></StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,3"><TextBlock Text="{loc:Loc Ed_SiteMapAction}" Width="108" TextWrapping="Wrap" Margin="0,0,10,0" VerticalAlignment="Center"/><ComboBox x:Name="SiteMapActionCombo" AutomationProperties.Name="{loc:Loc Ed_SiteMapAction}" Width="240" Height="28"/></StackPanel>
                     <TextBlock Text="{loc:Loc Ed_SiteMapUrlHint}" Foreground="{StaticResource BrushMuted}" FontSize="{StaticResource FsBody}" TextWrapping="Wrap" Margin="118,0,0,4"/>
+                    <Grid Margin="0,6,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{loc:Loc Site_SettingsRow}" Width="108" TextWrapping="Wrap"
+                                   Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" x:Name="SiteMapEditBtn" Content="{loc:Loc Site_Open}"
+                                Click="EditSiteMap_Click" MinWidth="0" Padding="10,3" Margin="0,0,12,0"
+                                VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{loc:Loc Site_SettingsTip}" Foreground="{StaticResource BrushMuted}"
+                                   FontSize="{StaticResource FsBody}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                    </Grid>
                 </StackPanel>
 
                 <!-- URL 解码。输入框与「发送文本」共用 Ed_Text 这个标签，但两处含义不同
@@ -286,13 +300,13 @@
                 <StackPanel Orientation="Horizontal" Margin="0,3">
                     <CheckBox x:Name="OnlyBeforeChk" Content="{loc:Loc Ed_OnlyBefore}" VerticalAlignment="Center"/>
                     <!-- 朗读名用整句格式说明，不用左边那个「仅」——「仅」单独念出来什么也不是 -->
-                    <TextBox x:Name="BeforeTimeBox" AutomationProperties.Name="{loc:Loc Ed_BeforeTimeHint}" Width="60" Height="26" Margin="6,0" ToolTip="{loc:Loc Ed_BeforeTimeHint}"/>
+                    <TextBox x:Name="BeforeTimeBox" AutomationProperties.Name="{loc:Loc Ed_BeforeTimeHint}" Width="60" Height="28" Margin="6,0" ToolTip="{loc:Loc Ed_BeforeTimeHint}"/>
                     <TextBlock Text="{loc:Loc Ed_HourBefore}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <!-- 「仅 N 后」与上面一行是 AND：两条都勾 = 09:00 后且 18:00 前，正好圈出上班时段 -->
                 <StackPanel Orientation="Horizontal" Margin="0,3">
                     <CheckBox x:Name="OnlyAfterChk" Content="{loc:Loc Ed_OnlyAfter}" VerticalAlignment="Center"/>
-                    <TextBox x:Name="AfterTimeBox" AutomationProperties.Name="{loc:Loc Ed_AfterTimeHint}" Width="60" Height="26" Margin="6,0" ToolTip="{loc:Loc Ed_AfterTimeHint}"/>
+                    <TextBox x:Name="AfterTimeBox" AutomationProperties.Name="{loc:Loc Ed_AfterTimeHint}" Width="60" Height="28" Margin="6,0" ToolTip="{loc:Loc Ed_AfterTimeHint}"/>
                     <TextBlock Text="{loc:Loc Ed_HourAfter}" VerticalAlignment="Center"/>
                 </StackPanel>
 

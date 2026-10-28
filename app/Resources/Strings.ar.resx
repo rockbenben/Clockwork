@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>برنامج آخر يستحوذ على الزر الأيمن (⁨AutoHotkey⁩ أو تعريف الفأرة…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>يُفسح · لا يتم التقاط النقر الأيمن</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>استعادة الإيماءات الآن</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>اضغط الزر الأيمن مع الاستمرار وارسم مسارًا، فيُنفَّذ الإجراء المقابل. وبدون إيماءات يعمل الزر الأيمن كالمعتاد.</value>
   </data>
@@ -1727,6 +1733,9 @@
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>لم يُعثر على أي اختصارات برامج في قائمة ابدأ.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>لم يتم العثور على نتائج مطابقة. جرّب كلمة أخرى.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>العودة إلى الوضع الطبيعي</value>
   </data>
@@ -2113,7 +2122,7 @@
   <data name="Sum_Replace" xml:space="preserve">استبدال {0} بـ {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">تعذّرت قراءة عنوان المتصفح. تأكّد من وجود صفحة مفتوحة في Chrome أو Edge (Firefox غير مدعوم بعد).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">لا يبدو عنوانًا: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">نطاق ذلك العنوان غير موجود في قائمة المواقع. أضِفه ضمن sites في clockwork.settings.json.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">نطاق ذلك العنوان غير موجود في قائمة المواقع. أضِفه في خطوة خريطة المواقع.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">مجلد الموقع المحلي لـ «{0}» غير موجود. تحقّق من sourceRoot.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">تم الربط بهذا المسار، لكن الملف غير موجود محليًا: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">تم العثور على الملف لكن تعذّر فتحه: {0}</data>
@@ -2124,7 +2133,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">تعذّر فك ترميز ذلك: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">يقرأ شريط العنوان في المتصفح الحالي وينتج عنوانًا للخطوات التالية. يدعم متصفحات Chromium مثل Chrome وEdge؛ ولا يدعم Firefox بعد.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">طريقة الفتح</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">أدخل عنوانًا (تعمل العناصر النائبة {name}). لمتابعة الصفحة التي أمامك، أضف أولًا خطوة «قراءة عنوان المتصفح» لتكتب العنوان في متغيّر، ثم ضع {ذلك المتغيّر} هنا. تُحرَّر مطابقة النطاق ← المسار المحلي في الإعدادات ← خريطة المواقع.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">أدخل عنوانًا (تعمل العناصر النائبة {name}). لمتابعة الصفحة التي أمامك، أضف أولًا خطوة «قراءة عنوان المتصفح» لتكتب العنوان في متغيّر، ثم ضع {ذلك المتغيّر} هنا.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">تعبير نمطي</data>
   <data name="Ed_RegexGroup" xml:space="preserve">مجموعة الالتقاط</data>
   <data name="Ed_RegexHint" xml:space="preserve">٠ = المطابقة كاملة؛ 1 فما فوق = المجموعة بين قوسين. صيغة تعبير نمطي من .NET.</data>
@@ -2250,7 +2259,7 @@
   <data name="Mig_StepParams" xml:space="preserve">فُصلت الإجراء والرقم المشتركان بين {0} خطوة إلى حقول خاصة بكل نوع (ما تفعله كل خطوة لم يتغيّر)</data>
 
   <data name="Gesture_Style" xml:space="preserve">النمط</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">كلاسيكي</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">لومن</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">نيون</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">قوس قزح</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">متقطع</data>

@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>Program lain mengambil tombol kanan (AutoHotkey, driver tetikus…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>Mengalah · klik kanan tidak ditangkap</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>Pulihkan gestur sekarang</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Tahan tombol kanan, gambar goresan, dan aksi yang cocok akan berjalan. Tanpa gerakan, tombol kanan bekerja seperti biasa.</value>
   </data>
@@ -1727,6 +1733,9 @@ Log: {1}</value>
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>Tidak ada pintasan program yang ditemukan di menu Start.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>Tidak ada hasil yang cocok. Coba kata lain.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>Kembali normal</value>
   </data>
@@ -2113,7 +2122,7 @@ Log: {1}</value>
   <data name="Sum_Replace" xml:space="preserve">Ganti {0} dengan {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">Tidak bisa membaca alamat peramban. Pastikan Chrome atau Edge membuka halaman (Firefox belum didukung).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">Itu tidak terlihat seperti alamat: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Domain alamat itu tidak ada di daftar situs. Tambahkan di sites pada clockwork.settings.json.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Domain alamat itu tidak ada di daftar situs. Tambahkan di langkah peta situs.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">Folder lokal situs “{0}” tidak ada. Periksa sourceRoot-nya.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">Dipetakan ke jalur itu, tetapi berkasnya tidak ada secara lokal: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">Berkas ditemukan, tetapi tidak dapat dibuka: {0}</data>
@@ -2124,7 +2133,7 @@ Log: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Tidak bisa mendekode itu: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Membaca bilah alamat peramban saat ini dan menghasilkan alamat untuk langkah-langkah berikutnya. Mendukung peramban Chromium seperti Chrome dan Edge; Firefox belum didukung.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Cara membuka</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Isi alamatnya (placeholder {nama} berfungsi). Untuk mengikuti halaman yang sedang Anda lihat, tambahkan dulu langkah 'Baca alamat peramban' yang menulis alamat ke sebuah variabel, lalu taruh {variabel itu} di sini. Pasangan domain → path lokal disunting di Pengaturan → Peta situs.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Isi alamatnya (placeholder {nama} berfungsi). Untuk mengikuti halaman yang sedang Anda lihat, tambahkan dulu langkah 'Baca alamat peramban' yang menulis alamat ke sebuah variabel, lalu taruh {variabel itu} di sini.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Ekspresi reguler</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Grup tangkap</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = keseluruhan kecocokan; 1 ke atas = grup kurung Capture. Sintaks regex .NET.</data>
@@ -2250,7 +2259,7 @@ Log: {1}</value>
   <data name="Mig_StepParams" xml:space="preserve">Aksi dan angka yang dipakai bersama oleh {0} langkah kini dipisah ke kolom per jenis (yang dilakukan tiap langkah tidak berubah)</data>
 
   <data name="Gesture_Style" xml:space="preserve">Gaya</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">Klasik</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Lumen</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">Pelangi</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Putus-putus</data>

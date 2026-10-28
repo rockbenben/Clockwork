@@ -449,14 +449,16 @@
          一处定义，各处引用；主次只差样式，尺寸恒等（长译文靠 MinWidth 之上自然撑开）。 -->
     <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="MinWidth" Value="88"/>
-        <Setter Property="Height" Value="34"/>
+        <Setter Property="MinHeight" Value="34"/>
     </Style>
     <Style x:Key="DialogPrimaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
         <Setter Property="MinWidth" Value="88"/>
-        <Setter Property="Height" Value="34"/>
+        <Setter Property="MinHeight" Value="34"/>
     </Style>
 
     <!-- ============ TextBox ============ -->
+    <!-- 单行输入统一 28 DIP 高：ComboBox、PickerButton、IconButton 也是 28，一行里的
+         框、下拉、浏览按钮才会有同一条上下缘。多行框靠显式 Height 长大，MinHeight 管不到它们。 -->
     <Style TargetType="TextBox">
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
         <Setter Property="CaretBrush" Value="{StaticResource BrushAccent}"/>
@@ -465,6 +467,7 @@
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Padding" Value="6,2"/>
+        <Setter Property="MinHeight" Value="28"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -559,16 +562,24 @@
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <!-- 与 CheckBox 同一套折行规则：横向 StackPanel 给子元素的宽度是无限的，
+             长译文永远不会换行。Grid 的 * 列让文字拿到真实可用宽度，ContentTemplate 才让 Wrap 生效。 -->
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate><TextBlock Text="{Binding}" TextWrapping="Wrap"/></DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <StackPanel Orientation="Horizontal" Background="Transparent">
-                        <Grid Width="18" Height="18" VerticalAlignment="Center">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Width="18" Height="18" VerticalAlignment="Center">
                             <Ellipse x:Name="ring" Stroke="{StaticResource BrushFaint}" StrokeThickness="2" Fill="Transparent"/>
                             <Ellipse x:Name="dot" Width="8" Height="8" Fill="{StaticResource BrushPaper}" Visibility="Collapsed"/>
                         </Grid>
-                        <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
+                        <ContentPresenter Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="ring" Property="Stroke" Value="{StaticResource BrushMuted}"/>
@@ -610,11 +621,19 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- 纯文本列表行的统一模板：定宽列表里一律以省略号收尾，悬停放全文（调用方给 ToolTip）。
+         字符串内容不套它时会被父级直接裁掉半个词，和 DataGrid 的 CellEllipsis 不是同一套读法。 -->
+    <DataTemplate x:Key="ListTextEllipsis">
+        <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+    </DataTemplate>
     <Style TargetType="ListBoxItem">
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Padding" Value="10,6"/>
+        <!-- 列表行统一 40 DIP（DataGrid 的 RowHeight 也是 40）；行内内容垂直居中，
+             内容比这个高度矮时（单行进程名、单行选项）多出来的空间上下均分，不会顶在上缘。 -->
+        <Setter Property="MinHeight" Value="40"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="Template">
@@ -622,7 +641,7 @@
                 <ControlTemplate TargetType="ListBoxItem">
                     <Border x:Name="bd" Background="Transparent" CornerRadius="5" Padding="{TemplateBinding Padding}"
                             BorderThickness="1" BorderBrush="Transparent">
-                        <ContentPresenter/>
+                        <ContentPresenter VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/></Trigger>
@@ -651,14 +670,24 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="bd" Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="0,4,4,0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    </Border>
+                    <Grid>
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0,4,4,0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <!-- 导航页签是自绘模板，不会继承默认按钮的焦点环；没有这一层，
+                             Tab 走到左栏时整行像素不动。 -->
+                        <Border x:Name="ring" CornerRadius="0,4,4,0" Margin="1"
+                                BorderBrush="{StaticResource BrushAccent}" BorderThickness="1.5"
+                                Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="ring" Property="Visibility" Value="Visible"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -678,14 +707,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="bd" Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
+                    <Grid>
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <Border x:Name="ring" CornerRadius="4" Margin="1"
+                                BorderBrush="{StaticResource BrushAccent}" BorderThickness="1.5"
+                                Visibility="Collapsed" IsHitTestVisible="False" SnapsToDevicePixels="True"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="ring" Property="Visibility" Value="Visible"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -801,7 +838,12 @@
                         <ContentPresenter/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <!-- 与列表行同一套语汇：指针/键盘经过是钢灰，真正选中的是强调色底。
+                             原来两者都用强调色，展开下拉时看不出「已选的是哪一项」。 -->
                         <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushSteel}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="bd" Property="Background" Value="{StaticResource BrushAccentTint}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -815,6 +857,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinHeight" Value="28"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -842,10 +885,13 @@
                         </ContentPresenter>
                         <Path Data="M 0,0 L 8,0 L 4,5 Z" Fill="{StaticResource BrushMuted}" HorizontalAlignment="Right"
                               VerticalAlignment="Center" Margin="0,0,12,0" IsHitTestVisible="False"/>
+                        <!-- 下拉弹层与右键菜单统一 8px 圆角，贴在暗色窗口上才像同一层浮层；
+                             投影只给 ContextMenu / ToolTip（WPF 的 Popup.HasDropShadow 只读，
+                             下拉弹层靠自身描边和紧贴 ComboBox 的位置区分层级）。 -->
                         <Popup x:Name="PART_Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}"
                                AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
                             <Border Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}" BorderThickness="1"
-                                    CornerRadius="6" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" Margin="0,4,0,0">
+                                    CornerRadius="8" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" Margin="0,4,0,0">
                                 <ScrollViewer MaxHeight="320">
                                     <ItemsPresenter/>
                                 </ScrollViewer>
@@ -1152,6 +1198,8 @@
         <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
         <Setter Property="Foreground" Value="{StaticResource BrushPaper}"/>
         <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+        <!-- 弹层统一用系统投影：自绘模板默认不带阴影，暗色界面上菜单会与背后的面板糊成一片。 -->
+        <Setter Property="HasDropShadow" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContextMenu">
@@ -1242,13 +1290,13 @@
         <Setter Property="BorderBrush" Value="{StaticResource BrushLine}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontBody}"/>
         <Setter Property="FontSize" Value="12.5"/>
-        <Setter Property="HasDropShadow" Value="False"/>
+        <Setter Property="HasDropShadow" Value="True"/>
         <Setter Property="MaxWidth" Value="640"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1" CornerRadius="6" Padding="10,6">
+                            BorderThickness="1" CornerRadius="8" Padding="10,6">
                         <ContentPresenter>
                             <ContentPresenter.Resources>
                                 <!-- 长命令行/路径在 MaxWidth 内换行显示，而非拖出一条超宽白条 -->

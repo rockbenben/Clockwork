@@ -39,6 +39,10 @@ public class RightClickNeverSwallowedTests
         => typeof(MouseHook).GetField(name,
             System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.GetValue(hook);
 
+    private static void SetField(MouseHook hook, string name, object value)
+        => typeof(MouseHook).GetField(name,
+            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.SetValue(hook, value);
+
     // 契约是「1 = 吞掉」，其余都是放行（CallNextHookEx 的返回值无钩子链时为 0，不钉死它）。
     private static bool Swallowed(IntPtr verdict) => verdict == new IntPtr(1);
 
@@ -82,7 +86,8 @@ public class RightClickNeverSwallowedTests
     public void A_matching_stroke_still_fires_when_the_window_allows_injection()
     {
         var gate = new GestureGate(p => p == "R", 40);
-        using var hook = Hook(gate, _ => true);
+        // A1 之后，名字为空会在抬起时退化成普通右键；这条要测的是「命中」，给它一个名字。
+        using var hook = Hook(gate, _ => true, _ => "notepad");
         Assert.True(Swallowed(Send(hook, WM_RBUTTONDOWN, 100, 100)));
         for (int i = 1; i <= 12; i++) Assert.False(Swallowed(Send(hook, 0x0200, 100 + i * 10, 100)));
         Assert.True(Swallowed(Send(hook, WM_RBUTTONUP, 220, 100)));   // Fire = 吞掉抬起，动作在 post 里
@@ -123,6 +128,61 @@ public class RightClickNeverSwallowedTests
         Assert.True(Swallowed(Send(hook, WM_RBUTTONUP, 220, 100)));
     }
 
+    // A1 的迟到兜底：抬起时进程名仍没回来，就不能让这一笔按「全局手势」接管。
+    // 按下已经吞了，按普通点击补发；这里让注入探针答 false，于是回调应放行真抬起。
+    [Fact]
+    public void An_unresolved_process_name_turns_the_stroke_into_a_plain_right_click()
+    {
+        var gate = new GestureGate(_ => true, 40);
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: gate,
+            mayEngage: _ => true, canInject: () => false, procNameForPid: _ => "");
+        Assert.True(Swallowed(Send(hook, WM_RBUTTONDOWN, 100, 100)));
+        for (int i = 1; i <= 12; i++) Assert.False(Swallowed(Send(hook, 0x0200, 100 + i * 10, 100)));
+        Assert.False(Swallowed(Send(hook, WM_RBUTTONUP, 220, 100)));
+        Assert.False(gate.Pending);
+    }
+
+    // A1 的“下一次节流点修正”：名字在笔画中途才回来，后续的 LiveMatch 必须按真正的程序判，
+    // 而不是一直等抬起。用一支只有 notepad 才命中的手势 + 迟到名字逼出这一条。
+    [Fact]
+    public void A_late_name_corrects_live_match_on_the_next_sample()
+    {
+        var gate = new GestureGate((p, proc) => p == "R" && proc == "notepad", 40);
+        bool resolved = false;
+        var armed = new List<bool>();
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: gate,
+            mayEngage: _ => true, procNameForPid: _ => resolved ? "notepad" : "",
+            trailPoint: (x, y, a, hit) => armed.Add(a));
+        Assert.True(Swallowed(Send(hook, WM_RBUTTONDOWN, 100, 100)));
+        // 单测不依赖桌面当前前台窗口；注入一个假 pid，否则后台/CI 下 _gesturePid=0，移动分支不会补问名字。
+        SetField(hook, "_gesturePid", 4242u);
+        for (int i = 1; i <= 12; i++) Assert.False(Swallowed(Send(hook, 0x0200, 100 + i * 10, 100)));
+        Assert.DoesNotContain(true, armed);       // 名字没到：全局匹配不命中
+
+        resolved = true;                           // 后台线程在笔画中途算完了
+        Send(hook, 0x0200, 230, 100);
+        Assert.Contains(true, armed);              // 下一拍就按 notepad 命中，笔迹跟着变色
+        gate.Reset();
+    }
+
+    // 名字在抬起前才回来，而它属于「不接管」名单：按下那一刻名单没生效，抬起必须补上这一道，
+    // 否则这个程序里的第一笔右键会跑一个全局手势。与上一条同一种兜底，理由不同。
+    [Fact]
+    public void A_late_ignored_app_name_still_turns_the_stroke_into_a_plain_right_click()
+    {
+        var gate = new GestureGate(_ => true, 40);
+        bool resolved = false;
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: gate,
+            mayEngage: _ => true, canInject: () => false,
+            procNameForPid: _ => resolved ? "chrome" : "",
+            ignoredApp: name => name == "chrome");
+        Assert.True(Swallowed(Send(hook, WM_RBUTTONDOWN, 100, 100)));
+        for (int i = 1; i <= 12; i++) Assert.False(Swallowed(Send(hook, 0x0200, 100 + i * 10, 100)));
+        resolved = true;
+        Assert.False(Swallowed(Send(hook, WM_RBUTTONUP, 220, 100)));
+        Assert.False(gate.Pending);
+    }
+
     // ── 探针：快照的语义 ──
     //
     // 「刚切过去的窗口」那一档必须答 false（不接管），而不是拿上一个窗口的答案冒充。
@@ -152,6 +212,9 @@ public class RightClickNeverSwallowedTests
         var own = Win32.ProcessNameForPid((uint)Environment.ProcessId);
         Assert.NotEqual("", own);
         Assert.Equal(own, SpinUntil(() => probe.ProcessName((uint)Environment.ProcessId), 5000));
+        // 迟到的解析只能落在它自己的 pid 上：另一个从未算过的 pid 仍然答空
+        //（这条键控就是 A1 的代际守卫——晚到的名字不可能覆盖下一笔）。
+        Assert.Equal("", probe.ProcessName(uint.MaxValue - 7));
     }
 
     // 查不到名字时**不许**把空串钉进缓存：一个后来才启动的同名 pid 会一直吃这一格空答案，

@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>Một chương trình khác đang lấy nút phải (AutoHotkey, trình điều khiển chuột…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>Đang nhường · không bắt chuột phải</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>Khôi phục cử chỉ ngay</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Giữ nút phải và vẽ một nét, hành động tương ứng sẽ chạy. Nếu chưa có cử chỉ nào, nút phải hoạt động như bình thường.</value>
   </data>
@@ -1727,6 +1733,9 @@ Nhật ký: {1}</value>
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>Không tìm thấy lối tắt chương trình nào trong menu Start.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>Không có kết quả phù hợp. Hãy thử từ khác.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>Trở lại bình thường</value>
   </data>
@@ -2113,7 +2122,7 @@ Nhật ký: {1}</value>
   <data name="Sum_Replace" xml:space="preserve">Thay {0} bằng {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">Không đọc được địa chỉ trình duyệt. Hãy chắc rằng Chrome hoặc Edge đang mở một trang (Firefox chưa được hỗ trợ).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">Đây không giống một địa chỉ: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Tên miền của địa chỉ đó không có trong danh sách trang. Hãy thêm vào sites trong clockwork.settings.json.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Tên miền của địa chỉ đó không có trong danh sách trang. Hãy thêm trong bước bản đồ trang.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">Thư mục cục bộ của trang “{0}” không tồn tại. Hãy kiểm tra sourceRoot.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">Đã ánh xạ tới đường dẫn đó, nhưng không có tệp đó cục bộ: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">Đã tìm thấy tệp nhưng không mở được: {0}</data>
@@ -2124,7 +2133,7 @@ Nhật ký: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Không thể giải mã nội dung đó: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Đọc thanh địa chỉ của trình duyệt hiện tại và tạo ra một địa chỉ cho các bước sau. Hỗ trợ trình duyệt Chromium như Chrome và Edge; chưa hỗ trợ Firefox.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Cách mở</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Điền một địa chỉ (dùng được {tên} làm ký hiệu). Để theo địa chỉ trang đang mở, hãy thêm trước một bước 'Đọc địa chỉ trình duyệt' để ghi địa chỉ vào một biến, rồi điền {biến đó} vào đây. Ánh xạ tên miền → đường dẫn cục bộ được sửa trong Cài đặt → Bản đồ trang.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Điền một địa chỉ (dùng được {tên} làm ký hiệu). Để theo địa chỉ trang đang mở, hãy thêm trước một bước 'Đọc địa chỉ trình duyệt' để ghi địa chỉ vào một biến, rồi điền {biến đó} vào đây.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Biểu thức chính quy</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Nhóm bắt</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = toàn bộ kết quả khớp; 1 trở lên = nhóm trong ngoặc nào. Cú pháp biểu thức chính quy của .NET.</data>
@@ -2250,7 +2259,7 @@ Nhật ký: {1}</value>
   <data name="Mig_StepParams" xml:space="preserve">Hành động và số dùng chung của {0} bước đã được tách ra thành ô riêng theo từng loại (việc mỗi bước làm không đổi)</data>
 
   <data name="Gesture_Style" xml:space="preserve">Kiểu</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">Cổ điển</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Lumen</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">Cầu vồng</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Nét đứt</data>

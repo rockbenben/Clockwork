@@ -83,6 +83,7 @@ internal sealed class GestureCoordinator
         {
             if (_mouseHookFailed) return GestureWatchState.Failed;
             if (_mouseHook == null || !_mouseHookGesture) return GestureWatchState.Off;
+            if (_yield.Active) return GestureWatchState.Yielding;
             // **看心跳，不看「我们装没装」。** 这两个字段记的是当初的打算：Windows 把低级钩子
             // 静默卸掉之后它们原样不动，于是状态会在最需要说真话的那一次显示「监听中」。
             // 打开这扇窗必然刚动过鼠标，所以「几秒内没有回调」就是「它已经不在了」。
@@ -126,6 +127,17 @@ internal sealed class GestureCoordinator
     // 因为 3 秒恰好就是判定死亡的节拍本身。心跳一恢复就复位，所以真掉了的钩子还是 3 秒内接回来。
     private const long HealMaxGapMs = 30_000;
     private long _healGapMs = HealMinGapMs;
+
+    // 让路：判据在 Core.GestureYieldRules，这里只负责采样窗口、日志与 UI 通知。
+    private readonly GestureYield _yield = new();
+    private int _healDeferred;          // 自愈被连续推迟的次数（让路判据之一）
+    // 让路被人工/30 秒上限解除后，判据没消失之前不再自动进入。没有这一格，
+    // 「立即恢复」只生效半秒，30 秒上限也形同虚设（下一拍立刻又进去）。
+    private bool _yieldSuppressed;
+    private static readonly int HookBudgetMs = HookWatch.EffectiveHookTimeoutMs(Native.Win32.LowLevelHooksTimeoutMs());
+    public Action? OnYieldChanged;      // 托盘 tooltip / 菜单；管理器自己轮询状态行
+
+    public bool GestureYieldActive => _yield.Active;
 
     /// <summary>钩子掉了就重新装上。</summary>
     //
@@ -369,6 +381,8 @@ internal sealed class GestureCoordinator
         long intervalMs = nowMs - _lastSampleAt;   // 实测长度：计时器迟到时它自己变长，新鲜度的界跟着长
         _lastCursor = pos;
         _lastSampleAt = nowMs;
+        // 先读这一窗的拥堵峰值再决定让路/自愈：先自愈会换掉钩子，把窗口清零，等于把证据丢掉。
+        UpdateGestureYield(nowMs);
         HealMouseHookIfDead(moved, intervalMs);
     }
 
@@ -400,6 +414,8 @@ internal sealed class GestureCoordinator
         // 两个开关的当前读数一并写出去：off / reapply / heal / manual 每条路都经过这里。
         AppendErrorLog(HookDetachLine(why, _mouseHookGesture, _mouseHookMs > 0, _mouseHookMinLeg,
                                      _mouseHookTolerance, Clockwork.Native.MouseHook.StrandedTeardowns));
+        // 让路状态属于这一代钩子：摘掉就结束。新钩子从干净状态开始；判据还在的话下一次 tick 会自动再进。
+        ClearGestureYield(why);
         long t0 = Core.UiStallWatch.Begin();
         try { _mouseHook.Dispose(); }
         finally { Core.UiStallWatch.End("hook-dispose:" + why, t0); }
@@ -440,6 +456,68 @@ internal sealed class GestureCoordinator
         finally { Core.UiStallWatch.End("trail-finish", t0); }
     }
 
+    // 让路的唯一采样点（UI 线程，500ms 一拍）。判据用的是**读后清零**的窗口峰值：
+    // lifetime 峰值只给重装日志；拿它当让路判据会让一次尖峰把状态永久锁死。
+    private void UpdateGestureYield(long nowMs)
+    {
+        if (_mouseHook == null || !_mouseHookGesture) { ClearGestureYield("no-gestures"); return; }
+        var (callbackMax, replayMax) = _mouseHook.TakeCongestionPeaks();
+        bool trigger = GestureYieldRules.ShouldTrigger(
+            Native.MouseHook.StrandedTeardowns > 0, _healDeferred, callbackMax, replayMax, HookBudgetMs);
+        if (_yieldSuppressed)
+        {
+            // 人工恢复或 30 秒上限解除后，判据还在也别自动再进；等它自己消失
+            // （或下次重装/关手势）再恢复自动让路。否则按钮/上限都只生效半秒。
+            if (!trigger) _yieldSuppressed = false;
+            else trigger = false;
+        }
+        var change = _yield.Tick(nowMs, trigger);
+        if (change == GestureYieldChange.Entered)
+        {
+            _mouseHook.SetYielding(true);
+            AppendErrorLog($"gesture yield: entered callbackMax={callbackMax}ms replayMax={replayMax}ms "
+                           + $"stranded={Native.MouseHook.StrandedTeardowns} healsDeferred={_healDeferred} "
+                           + $"threshold={HookBudgetMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+            OnYieldChanged?.Invoke();
+        }
+        else if (change is GestureYieldChange.Exited or GestureYieldChange.ForcedExit)
+        {
+            _mouseHook.SetYielding(false);
+            // 30 秒强制解除是一次真正的恢复，不是下一拍又进：判据消失前不再自动让路。
+            if (change == GestureYieldChange.ForcedExit) _yieldSuppressed = true;
+            AppendErrorLog($"gesture yield: exited reason={(change == GestureYieldChange.ForcedExit ? "forced" : "timeout")} "
+                           + $"held={nowMs - _yield.SinceMs}ms callbackMax={callbackMax}ms replayMax={replayMax}ms "
+                           + $"stranded={Native.MouseHook.StrandedTeardowns} healsDeferred={_healDeferred} "
+                           + $"threshold={HookBudgetMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+            OnYieldChanged?.Invoke();
+        }
+    }
+
+    /// <summary>用户点「立即恢复手势」：立刻结束让路，并在判据消失前不再自动进入。</summary>
+    public void EndGestureYield()
+    {
+        if (!Disp.CheckAccess()) { Disp.Invoke(EndGestureYield); return; }
+        if (!_yield.Active) return;
+        long held = Environment.TickCount64 - _yield.SinceMs;
+        _yieldSuppressed = true;
+        _yield.End();
+        try { _mouseHook?.SetYielding(false); } catch { }
+        AppendErrorLog($"gesture yield: exited reason=manual held={held}ms threshold={HookBudgetMs}ms "
+                       + $"suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+        OnYieldChanged?.Invoke();
+    }
+
+    // 拆钩/关手势/装失败：让路状态跟着这一代钩子一起结束。新钩子从干净状态开始，
+    // 若判据仍成立，下一次 cursor tick 会重新进入并重新记一行。
+    private void ClearGestureYield(string reason)
+    {
+        if (!_yield.End()) { _yieldSuppressed = false; return; }
+        long held = Environment.TickCount64 - _yield.SinceMs;
+        _yieldSuppressed = false;
+        AppendErrorLog($"gesture yield: exited reason={reason} held={held}ms");
+        OnYieldChanged?.Invoke();
+    }
+
     private void HealMouseHookIfDead(bool movedInSample, long intervalMs)
     {
         // 手势与中键面板共用同一个钩子：只开中键面板（没配手势）时钩子一样会被静默摘掉，
@@ -462,7 +540,11 @@ internal sealed class GestureCoordinator
         if (!_mouseHook.EverBeat) return;
         // **心跳新就是链通了，退避立刻复位。** 下面那格的增长只针对「装了又哑、哑了又装」那个循环；
         // 一次性的真掉钩（回调自己超了 300ms 被系统摘掉）隔几小时再来一次，还是该 3 秒内接回来。
-        if (_mouseHook.SinceBeatMs <= intervalMs + HealBeatSkewMs) _healGapMs = HealMinGapMs;
+        if (_mouseHook.SinceBeatMs <= intervalMs + HealBeatSkewMs)
+        {
+            _healGapMs = HealMinGapMs;
+            _healDeferred = 0;   // 心跳新鲜 = 链又通了，连续推迟的判据从零开始
+        }
         // 三条守卫合起来才动手（区间内有移动、心跳老于本区间、距上次摘钩够久）：
         // 抽成 HookWatch.ShouldHeal 就是要让每条都有断言盯着（挪错一条阈值、或把下限删掉，
         // 都有测试变红）。状态行用的 StaleBeatMs 与此无关：那格取宽是给人看的，这里只要
@@ -484,6 +566,8 @@ internal sealed class GestureCoordinator
             // 上一次**真摘钩**的时刻，于是每 500ms 一拍就重复一行 deferred（2026-10-06 实测
             // 06:58:25 与 :26 连着两行），而这一格一堵就是 30 秒。
             _lastHealAt = Environment.TickCount64;
+            // 连续推迟是让路的第二条判据：链已经被证明堵住了，别再等一个「真掉钩」的读数。
+            _healDeferred++;
             AppendErrorLog($"mouse heal deferred: stranded={Native.MouseHook.StrandedTeardowns}"
                            + $" gap={_healGapMs}ms silentFor={_mouseHook.SinceBeatMs}ms");
             return;
@@ -521,6 +605,7 @@ internal sealed class GestureCoordinator
         _lastHealAt = Environment.TickCount64;   // 记在真动手之前：万一重装又失败，下限仍得拦住立刻再摘一次
         // 这一跳之后要是输入回来了，下面那格复位会把它抹掉；没回来就是「装了又哑」，下一跳等双倍。
         _healGapMs = HookWatch.NextHealGap(_healGapMs, HealMinGapMs, HealMaxGapMs);
+        _healDeferred = 0;                       // 真的动手了，连续推迟的计数归零
         DisposeMouseHook("heal");
         _mouseHookMs = -1;                 // 逼 ApplyMouseHook 走完整的重装，别被那句「已经是想要的状态」挡回去
         _mouseHookGesture = !wasGesture;
@@ -577,6 +662,7 @@ internal sealed class GestureCoordinator
         _mouseHookMs = -1;               // 逼 ApplyMouseHook 走完整重装，别被「已经是想要的状态」挡回去
         _lastHealAt = Environment.TickCount64;  // 手动摘钩也算摘钩：否则紧接着的真故障会立刻再摘一次
         _healGapMs = HealMinGapMs;              // 人按的那一下是意图，不是循环：退避从头算
+        _healDeferred = 0;                      // 这一次是人的决定，不让推迟计数把让路带回来
         _mouseHookFailed = false;        // 上一次装失败不该让这一次连报错都不报
         ApplyMouseHook();
     }
@@ -738,7 +824,13 @@ internal sealed class GestureCoordinator
             // 「这个程序里不接管手势」的名单：命中时整笔右键原样放行，
             // 那个程序自己管右键（远程桌面、虚拟机、游戏、3D 视口…）。
             // 判据是纯函数（GestureGate.IsIgnoredApp），钩子那边只负责把进程名问出来。
-            ignoredApp: name => GestureGate.IsIgnoredApp(name, _config.Settings.GestureIgnoreApps));
+            ignoredApp: name => GestureGate.IsIgnoredApp(name, _config.Settings.GestureIgnoreApps),
+            // A3：钩子线程自救成功后把上一代账交回来。回调必须在 UI 线程上记账/写日志，
+            // 所以这里只做一次 BeginInvoke，绝不在钩子线程上碰 UI 或文件。
+            selfRecovered: (source, report) =>
+            {
+                try { Disp.BeginInvoke(() => OnHookSelfRecovered(source, report)); } catch { }
+            });
         _mouseHookMs = ms;
         _mouseHookGesture = wantGesture;
         _mouseHookMinLeg = minLeg;
@@ -786,6 +878,7 @@ internal sealed class GestureCoordinator
         if (ok)
         {
             _mouseHookFailed = false;
+            _healDeferred = 0;
             // **只在有「前任的账」时记一行，也就是只在自愈、手动「重新挂钩」、开机后抢链首之后。**
             //
             // 此前这里对**每一次**装上都记一行成功，于是：每次启动一行、每次改中键阈值或手势开关
@@ -846,6 +939,7 @@ internal sealed class GestureCoordinator
         // 和气泡同受 _mouseHookFailed 夹一次：ApplyMouseHook 每次保存配置都会走到，
         // 不夹的话一个装不上的钩子会把日志按保存次数刷满——那正是这轮要修的毛病。
         var win32 = hook.LastError;   // 先取错码，Dispose 之后就没人能问了
+        ClearGestureYield("install-failed");
         // **按不上也要按关掉那条路收尾**，与上面 `!wantPress && !wantGesture` 那个分支同一套。
         // 漏了不是漏一次：ApplyMouseHook 在每次 SaveConfig 末尾都会走到，而 `_mouseHook` 已经是 null
         // 让上面那个「已经是想要的状态」早退永远不成立——于是每保存一次就新建一个 MouseHook，
@@ -862,6 +956,45 @@ internal sealed class GestureCoordinator
             WarnToast(Strings.Get("Warn_MouseHookFail"));
         }
         _mouseHookFailed = true;
+    }
+
+    // A3 自救回来的账。字段与 OnHookInstalled 那条同口径；source=selfrecover 让排障时
+    // 一眼分清「UI 看门狗判死」与「钩子线程自己超时后重装」。
+    private void OnHookSelfRecovered(Native.MouseHook source, Native.MouseHook.HookRecoveryReport report)
+    {
+        if (!Disp.CheckAccess()) { try { Disp.BeginInvoke(() => OnHookSelfRecovered(source, report)); } catch { } return; }
+        // 自救结果回到 UI 时，这个钩子可能已经被换配置/自愈拆掉了；旧结果不许改新钩子的状态。
+        if (!ReferenceEquals(source, _mouseHook)) return;
+        var a = report.Previous;
+        var prevRight = (a.RightDown ? "down+" : "down-") + (a.RightUp ? " up+" : " up-");
+        var prevMiddle = "middle " + (a.MiddleDown ? "down+" : "down-")
+                       + (a.MiddleUp ? " up+" : " up-")
+                       + $" fired={a.MiddleFired} dragEscapes={a.DragEscapes}";
+        var silent = a.SilentForMs == long.MaxValue ? "never" : a.SilentForMs + "ms";
+        if (!report.Ok)
+        {
+            // 重装也失败：不偷偷留在「看起来还装着」的状态；交给状态行/管理器去说。
+            ClearGestureYield("selfrecover-failed");
+            _mouseHookFailed = true;
+            CloseTrail();
+            ApplyCursorWatch(false);
+            AppendErrorLog($"mouse hook self-recover failed: middleHoldMs={_mouseHookMs} gestures={_mouseHookGesture} "
+                           + $"prevEverFired={(a.EverBeat ? "yes" : "no")} prevRightButton={prevRight} "
+                           + $"silentFor={silent} callbackMax={a.CallbackMaxMs}ms chainMax={a.ChainMaxMs}ms "
+                           + $"replayMax={a.ReplayMaxMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+            OnYieldChanged?.Invoke();
+            return;
+        }
+        _mouseHookFailed = false;
+        _healDeferred = 0;
+        AppendErrorLog($"mouse hook reinstalled: source=selfrecover middleHoldMs={_mouseHookMs} "
+                       + $"middleTolerance={_mouseHookTolerance} gestures={_mouseHookGesture} "
+                       + $"prevEverFired={(a.EverBeat ? "yes" : "no")} prevRightButton={prevRight} prev{prevMiddle} "
+                       + $"silentFor={silent} injectRejected={a.InjectRejected} upstreamMax={a.UpstreamMaxMs}ms "
+                       + $"callbackMax={a.CallbackMaxMs}ms chainMax={a.ChainMaxMs}ms "
+                       + $"replayMax={a.ReplayMaxMs}ms replayQueued={a.ReplayQueued} replayDropped={a.ReplayDropped} "
+                       + $"rescueSkipped={a.RescueSkipped} "
+                       + $"suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
     }
 
     private void CloseTrail()

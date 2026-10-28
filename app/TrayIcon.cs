@@ -38,7 +38,7 @@ public sealed class TrayIcon : IDisposable
         menu.Opening += (s, e) => { Rebuild(menu, app); SyncTip(); };
         Rebuild(menu, app);   // 初始也建一份：空菜单在部分系统上首次右键不弹
         _icon.ContextMenuStrip = menu;
-        _icon.Text = TrayTip.Build(app.IsRunning, app.DndUntil, DateTime.Now);
+        _icon.Text = TrayTip.Build(app.IsRunning, app.DndUntil, DateTime.Now, YieldLabel(app));
         _icon.DoubleClick += (s, e) => app.ShowMain();
     }
 
@@ -66,6 +66,9 @@ public sealed class TrayIcon : IDisposable
         // 文案复用 Gesture_Rehook（各语言已齐），字形用「刷新」。
         if (app.MouseHookActive)
             menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_Rehook"), TrayGlyph.Rerun, (s, e) => app.RehookMouse()));
+        // 让路中给一条「立即恢复」：菜单是用户此刻唯一确定够得着的入口（管理器可能没开）。
+        if (app.GestureYieldActive)
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_YieldResume"), TrayGlyph.Run, (s, e) => app.EndGestureYield()));
 
         // 启动清单区（小标题复用「我的启动清单」标签页名，已多语言）
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Launch")));
@@ -154,9 +157,13 @@ public sealed class TrayIcon : IDisposable
     // 提醒 tick 是 30 秒一次的常态，每拍都往 shell 发一条修改消息纯属白事。
     public void SyncTip()
     {
-        var t = TrayTip.Build(_app.IsRunning, _app.DndUntil, DateTime.Now);
+        var t = TrayTip.Build(_app.IsRunning, _app.DndUntil, DateTime.Now, YieldLabel(_app));
         if (_icon.Text != t) _icon.Text = t;
     }
+
+    // 让路的托盘短句。状态是即时切换的，文案随语言走；空串表示不在让路。
+    private static string? YieldLabel(App app)
+        => app.GestureYieldActive ? Strings.Get("Gesture_WatchYielding") : null;
 
     // 摘要压成单行：提醒/消息步骤的文本框允许多行，而 ToolStrip 菜单按单行测绘，
     // 硬换行会把自绘菜单画花（第二行被裁掉/压住相邻项）。与 ReminderDisplay.TextSummary 同口径。

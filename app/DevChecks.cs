@@ -15,7 +15,9 @@ namespace Clockwork;
 //                  能一路带到发版；这个开关在 CI 里替用户把每扇窗、每一页都开一遍。
 //   --selftest     要一扇真窗、因而进不了 app.Tests 的那几条检查（问句弹框那条链）。见 DevSelfTest.cs。
 //   --shots <目录>  离屏渲染成 PNG 逐张比对：每个窗口的每个 Tab × 3 档宽度 × 5 档工作区高度 × 6 种语言，
-//                  外加一轮浅色主题——实测约 6200 张。全量太慢时可用环境变量 CW_SHOT_LANGS /
+//                  外加一轮浅色主题——量级是**万张**（具体张数随窗口与页签增减，不写死在这里：
+//                  写死的那个数每次加窗口都会过期，而过期的数比没有数更坏）。
+//                  全量太慢时可用环境变量 CW_SHOT_LANGS /
 //                  CW_SHOT_WINDOWS（逗号分隔，窗口按名前缀）只渲子集，复验单条发现用。
 //                  这些轴都是被真实缺陷逃过之后一条条加上去的：只截首页 → 其余五页从未被渲染；
 //                  宽度恒为 1040 → 窗口拖到最窄时的裁切从未被看见；只跑 zh/en/de/ar → 西语在某些串上比德语更长。
@@ -248,6 +250,8 @@ public partial class App
         ("FocusProbeTab", "MainWindow", "TabItem"),
         ("FocusProbeList", "GestureManager", "ListBoxItem"),
         ("FocusProbeCell", "MainWindow", "DataGridCell"),
+        ("FocusProbeTopTab", "PanelManager", "PanelTopTab"),
+        ("FocusProbePageTab", "PanelManager", "PanelPageTab"),
     };
 
     // 阈值是量出来的，不是拍的：五类控件补上环之后实测差 128 / 552 / 311 / 1226 / 1972 像素，
@@ -336,6 +340,21 @@ public partial class App
         Native.Win32.DisableWindowGhosting();
 
         var groups = new[] { new ActionGroup() };
+
+        // 面板管理器：默认配置只有一页两格，页眉、空位、并排那三件要验的东西
+        // 得靠再添一页格子更多的才拍得全。焦点探针必须与基线用同一份配置，
+        // 否则成对像素差先被窗口尺寸差打断、根本量不到焦点环。
+        PanelManagerWindow MakePanelManagerWithExtraPage()
+        {
+            var cfg = RootConfig.Default();
+            var page = new PanelPage { Name = LongestOf("Tab_") };
+            page.Steps.Add(new LaunchStep { Kind = "app", Label = "notepad", Target = @"C:\Windows\System32\notepad.exe" });
+            page.Steps.Add(new LaunchStep { Kind = "system", Label = LongestOf("Sys_"), Command = "lockScreen" });
+            page.Steps.Add(new LaunchStep { Kind = "volume", Label = LongestOf("Vol_"), VolumeAction = "mute" });
+            cfg.PanelPages.Add(page);
+            return new PanelManagerWindow(cfg, () => { });
+        }
+
         return new (string, Func<Window>)[]
         {
             ("MainWindow", () =>
@@ -361,17 +380,29 @@ public partial class App
                 w.PSearch.Text = "zzz-no-such-port";
                 return w;
             }),
-            // 面板管理器：默认配置只有一页两格，页眉、空位、并排那三件要验的东西
-            // 得靠再添一页格子更多的才拍得全。
-            ("PanelManager", () =>
+            ("PanelManager", MakePanelManagerWithExtraPage),
+            // 面板两条导航栏的焦点探针：它们的模板原先只有悬停，Tab 过去整行像素不动。
+            ("FocusProbeTopTab", () =>
             {
-                var cfg = RootConfig.Default();
-                var page = new PanelPage { Name = LongestOf("Tab_") };
-                page.Steps.Add(new LaunchStep { Kind = "app", Label = "notepad", Target = @"C:\Windows\System32\notepad.exe" });
-                page.Steps.Add(new LaunchStep { Kind = "system", Label = LongestOf("Sys_"), Command = "lockScreen" });
-                page.Steps.Add(new LaunchStep { Kind = "volume", Label = LongestOf("Vol_"), VolumeAction = "mute" });
-                cfg.PanelPages.Add(page);
-                return new PanelManagerWindow(cfg, () => { });
+                var w = MakePanelManagerWithExtraPage();
+                w.Loaded += (_, _) =>
+                {
+                    var tab = w.TopTabBar.Children.OfType<System.Windows.Controls.Button>().FirstOrDefault()
+                        ?? throw new InvalidOperationException("focus probe: PanelManager 没有分类页签");
+                    FocusOrThrow(tab, "PanelTopTab");
+                };
+                return w;
+            }),
+            ("FocusProbePageTab", () =>
+            {
+                var w = MakePanelManagerWithExtraPage();
+                w.Loaded += (_, _) =>
+                {
+                    var tab = w.PageRail.Children.OfType<System.Windows.Controls.Button>().FirstOrDefault()
+                        ?? throw new InvalidOperationException("focus probe: PanelManager 没有页签");
+                    FocusOrThrow(tab, "PanelPageTab");
+                };
+                return w;
             }),
             // 「只显示图标」档：这一档的 LabelFont 是 0，而 WPF 的 FontSize 不接受 0 ——
             // 曾经在这里当场崩（「"0" 不是属性 "FontSize" 的有效值」）。
@@ -453,6 +484,26 @@ public partial class App
                     w.Point(x, y);
                 return w;
             }),
+            // HUD 两句：动作名小字与未匹配药丸。样式 accent 左条只在真窗里出现，
+            // 不走一次渲染就没人见过它和笔迹是不是同一套语言。
+            ("GestureTrailHint", () =>
+            {
+                var w = new GestureTrailWindow();
+                w.ApplyLook("normal", "classic", false);
+                var hit = new LaunchStep { Kind = "keys", Label = "Copy", Combo = "Ctrl+C" };
+                foreach (var (x, y) in new[] { (300, 200), (330, 190), (360, 200), (390, 220), (420, 260) })
+                    w.Point(x, y, armed: x == 420, hit: x == 420 ? hit : null);
+                return w;
+            }),
+            ("GestureTrailNote", () =>
+            {
+                var w = new GestureTrailWindow();
+                w.ApplyLook("normal", "classic", false);
+                foreach (var (x, y) in new[] { (300, 200), (330, 190), (360, 200), (390, 220), (420, 260) })
+                    w.Point(x, y);
+                w.Note("↑↓", 60000);
+                return w;
+            }),
             // **五种笔迹样式并排**：这是「用户能挑什么」的那份目录的画出来的样子。
             // 单独给一格是因为——同一条线换个画法，五种摆在一起才比得出高低；
             // 而「比得出高低」这件事，截图是唯一说得清的判据（代码里只有层数与倍数，
@@ -489,7 +540,7 @@ public partial class App
                             style, GestureTrailWidths.Resolve("normal"),
                             new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x75, 0x9C, 0xD7)),
                             new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xE6, 0xEF, 0xFF)),
-                            fade: true);
+                            fade: false);
                         for (int i = 0; i <= 40; i++)
                         {
                             double t = i / 40.0;
@@ -1197,15 +1248,15 @@ public partial class App
     // 每加一条常用动作就多一行，而菜单不像窗口，长过屏幕不会报错，只会悄悄长出上下滚动箭头。
     // 那时用户看到的是一份「最后几项要滚才看得见」的清单，而最常用的往往正好排在末尾。
     //
-    // 两份都要量：顶层那份，和「常用」子菜单。子菜单横着展开、不占顶层高度，
+    // 顶层、各节子菜单和「常用」子菜单都要量：子菜单横着展开、不占顶层高度，
     // 但它自己一样会长过屏幕，而且那是加动作时唯一会变长的地方。
     //
-    // 阈值是量出来的，不是拍的。顶层：光是类型清单就已经 524px 高
-    // （行高与文案无关，德语俄语量出来一模一样，长的只会是行数），加上「常用」那一行约 561px。
-    // 渲染矩阵里最紧的一档工作区是 464（1366×768 @150%），顶层菜单在那一档**本来就装不下**——
-    // 这是既有状况，不是这次改出来的。所以顶层按 566（1366×768 @125%，小本的出厂设置）要求，
-    // 只剩一行的余量：谁再往顶层加一行这里就会红，那时该想的是「收进子菜单」而不是抬阈值。
-    // 子菜单与顶层同一档（理由在方法体里那三行：父的都装不下，苛求子的没有意义）。
+    // 阈值 566 是渲染矩阵里这条菜单实际验证能站住的最小档（1366×768 @125% 的工作区减边距）；
+    // 464 那档不作为必须装下的目标。子菜单与顶层同一档：父的都装不下时苛求子的没有意义。
+    //
+    // **必须量实际的菜单变体。** 面板/手势管理器的菜单会传 headerItems（「新建空白动作」），
+    // 启动清单会传 firstOpenItem（「从开始菜单选择…」）且关掉 presets；只量不带参数的 Build
+    // 说明不了真实菜单多出来的那一行。
     private void CheckStepMenuFits()
     {
         const double SmallestFittingWorkArea = 768 / 1.25 - 48;
@@ -1213,6 +1264,12 @@ public partial class App
         {
             Strings.ApplyCulture(culture);
             MeasureMenu(Views.StepMenu.Build((_, _) => { }), "step menu", culture, SmallestFittingWorkArea);
+            var fromStart = new MenuItem { Header = Strings.Get("Menu_FromStartMenu") };
+            MeasureMenu(Views.StepMenu.Build((_, _) => { }, firstOpenItem: fromStart, presets: false),
+                        "startup step menu", culture, SmallestFittingWorkArea);
+            var compound = new MenuItem { Header = Strings.Get("Panel_NewCompound") };
+            MeasureMenu(Views.StepMenu.Build((_, _) => { }, headerItems: new[] { compound }, presets: true),
+                        "step menu (header+presets)", culture, SmallestFittingWorkArea);
             // 每一节的子菜单单独量：它们横着展开、不占顶层的高度，但自己一样会长过屏幕，
             // 而现在类型全在这些子菜单里——顶层量得再好也说明不了它们装得下。
             foreach (var (sectionKey, _) in StepDisplay.StepKindSections)
@@ -1224,9 +1281,7 @@ public partial class App
             // 「常用」子菜单同理。
             var probe = new ContextMenu();
             foreach (var it in Views.StepMenu.PresetItems((_, _) => { })) probe.Items.Add(it);
-            // 阈值与顶层菜单同一档（566），不是更严的 464。此前按 464 要求是**不自洽的**：
-            // 顶层菜单本身就 524px 高，在 464 那一档从来装不下——却要求它的子菜单在那儿装得下。
-            // 父的都装不下，苛求子的没有意义。566 是这条菜单路径实际站得住的那一档。
+            // 子菜单与顶层同一档（566）：父的都装不下时苛求子的没有意义。
             MeasureMenu(probe, "common submenu", culture, SmallestFittingWorkArea);
         }
         Strings.ApplyCulture(null);

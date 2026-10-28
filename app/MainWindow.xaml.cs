@@ -441,17 +441,6 @@ public partial class MainWindow : Window
         base.OnClosing(e);
     }
 
-    // —— 站点映射表 ——
-    // 改完立刻落盘：这张表是 siteMap 步骤运行时要查的，而那条步骤多半是被面板格子或手势
-    // 触发的——用户改完映射表不是为了「配置里好看」，是为了下一步就能用。
-    private void SiteMap_Click(object sender, RoutedEventArgs e)
-    {
-        if (_config == null || AppInstance == null) return;
-        if (Views.SiteMapEditorWindow.Edit(this, _config.Sites) is not List<SiteEntry> edited) return;
-        _config.Sites = edited;
-        AppInstance.SaveConfig();
-    }
-
     // —— 配置导入/导出 ——
     private void ExportConfig_Click(object sender, RoutedEventArgs e)    {
         var cfgPath = AppInstance?.ConfigFilePath;

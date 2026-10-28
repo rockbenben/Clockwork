@@ -44,6 +44,7 @@ public sealed class GestureTrailWindow : Window
     [DllImport("user32.dll", SetLastError = true)] private static extern int GetWindowLong(IntPtr h, int i);
     [DllImport("user32.dll", SetLastError = true)] private static extern int SetWindowLong(IntPtr h, int i, int v);
     [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr h, IntPtr after, int x, int y, int cx, int cy, uint flags);
+    [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr h, out RECT rect);
     [DllImport("user32.dll")] private static extern IntPtr MonitorFromPoint(POINT p, int flags);
     [DllImport("user32.dll")] private static extern bool GetMonitorInfo(IntPtr mon, ref MONITORINFO mi);
     [DllImport("shcore.dll")] private static extern int GetDpiForMonitor(IntPtr mon, int type, out uint x, out uint y);
@@ -69,12 +70,13 @@ public sealed class GestureTrailWindow : Window
     // 就地显示还顺带答了「我画到哪了」——你在哪收的笔，答案就出在哪。
     private readonly TextBlock _noteText = new()
     {
-        FontSize = 20,
+        FontSize = 16,
         FontWeight = FontWeights.SemiBold,
         Foreground = new SolidColorBrush(Color.FromRgb(0xE8, 0xEA, 0xED)),
     };
 
     private readonly Border _note;
+    private readonly Border _noteBar;
     // 画到一半、已经认出某条手势时，笔迹旁那句「这将是哪件事」。
     //
     // 为什么需要它：笔迹「亮了」只说明认出了**形状**，不说明认出了**哪一个动作**。
@@ -87,11 +89,12 @@ public sealed class GestureTrailWindow : Window
     // 收笔即消失（它描述的是「正在画的那一笔」，那一笔结束了它就没有对象了）。
     private readonly TextBlock _hintText = new()
     {
-        FontSize = 15,
+        FontSize = 14,
         FontWeight = FontWeights.SemiBold,
         Foreground = new SolidColorBrush(Color.FromRgb(0xF2, 0xF5, 0xFA)),
     };
     private readonly Border _hint;
+    private readonly Border _hintBar;
     // 这一格可关（AppSettings.GestureShowActionLabel）：有人要那种「只有一条线」的手感。
     private bool _hintEnabled = true;
     private string? _hintShown;   // 上一次摆出来的那句，变了才重摆（摆一次要重排一次版）
@@ -128,7 +131,8 @@ public sealed class GestureTrailWindow : Window
         IsHitTestVisible = false;
         ResizeMode = ResizeMode.NoResize;
         WindowStartupLocation = WindowStartupLocation.Manual;
-        // 笔迹与管理器里的缩略图同色：屏幕上画出来的那条线，和列表里存下来的那条，是同一样东西。
+        // 屏幕线与设置/管理器预览共用同一个渲染器；列表缩略图只取样式的 accent 做形状索引。
+        // 样式自带颜色时由渲染器覆盖，这里的主题色只是样式没写色值时的兜底。
         var idleBrush = (Brush)(System.Windows.Application.Current?.TryFindResource("BrushAccentText")
                                 ?? new SolidColorBrush(Color.FromRgb(0x75, 0x9C, 0xD7)));
         // 命中色不从主题里取：主题色是给界面用的，而这条线压在**任意**程序的窗口上，
@@ -138,24 +142,37 @@ public sealed class GestureTrailWindow : Window
         _trail = new GestureTrailRenderer(Core.GestureTrailStyles.Resolve(null),
                                           Core.GestureTrailWidths.Resolve("normal"),
                                           idleBrush, armedBrush);
-        // 药丸自己压一层半透明的黑底——同笔迹描边一个理由：覆盖窗压在任意背景上，
-        // 白文档和深色 IDE 上都得读得出来。不用主题色，这不是要好看，是要在任何底色上可读。
+        // HUD：两句都用同一块半透明黑底、1px 冷边和 2px 样式色左条。
+        // 药丸（没绑上时画出的方向串）比「这将是哪件事」重要一级：字号大一号、底更实。
+        var hudEdge = new SolidColorBrush(Color.FromArgb(0x38, 0xC8, 0xDA, 0xF2));
+        _noteText.FontFamily = (System.Windows.Media.FontFamily)FindResource("FontMono");
+        _noteText.FlowDirection = System.Windows.FlowDirection.LeftToRight;
+        _noteBar = new Border
+        {
+            Width = 2, Background = idleBrush, CornerRadius = new CornerRadius(1),
+            Margin = new Thickness(0, 1, 8, 1), VerticalAlignment = VerticalAlignment.Stretch,
+        };
         _note = new Border
         {
             Background = new SolidColorBrush(Color.FromArgb(0xD8, 0x1C, 0x1E, 0x22)),
+            BorderBrush = hudEdge, BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(8),
-            Padding = new Thickness(12, 6, 12, 6),
-            Child = _noteText,
+            Padding = new Thickness(10, 5, 10, 5),
+            Child = HudContent(_noteBar, _noteText),
             Visibility = Visibility.Collapsed,
         };
-        // 那句「这将是哪件事」用同一块底子，但小一号——它是**从属于笔迹**的一句，
-        // 不是另一条消息。药丸（没绑上时的那句）比它重要一级，所以字号大一号。
+        _hintBar = new Border
+        {
+            Width = 2, Background = idleBrush, CornerRadius = new CornerRadius(1),
+            Margin = new Thickness(0, 1, 8, 1), VerticalAlignment = VerticalAlignment.Stretch,
+        };
         _hint = new Border
         {
             Background = new SolidColorBrush(Color.FromArgb(0xCC, 0x1C, 0x1E, 0x22)),
+            BorderBrush = hudEdge, BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(6),
-            Padding = new Thickness(9, 3, 9, 3),
-            Child = _hintText,
+            Padding = new Thickness(8, 3, 8, 3),
+            Child = HudContent(_hintBar, _hintText),
             Visibility = Visibility.Collapsed,
         };
         // 药丸到时收掉药丸，窗也一起藏——收笔后窗本就该藏着（见 Finish）。藏之前先让空画面
@@ -176,6 +193,18 @@ public sealed class GestureTrailWindow : Window
         canvas.Children.Add(_hint);
         canvas.Children.Add(_note);
         Content = canvas;
+    }
+
+    private static Grid HudContent(Border bar, TextBlock text)
+    {
+        var grid = new Grid();
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        Grid.SetColumn(bar, 0);
+        Grid.SetColumn(text, 1);
+        grid.Children.Add(bar);
+        grid.Children.Add(text);
+        return grid;
     }
 
     /// <summary>就地说一句「你画的是这个」。<paramref name="text"/> 为空则什么都不做。</summary>
@@ -210,8 +239,13 @@ public sealed class GestureTrailWindow : Window
     public void ApplyLook(string? widthMode, string? styleId, bool fadeTail)
     {
         _disabled = (widthMode ?? "").Trim().ToLowerInvariant() == "off";
-        _trail.SetStyle(Core.GestureTrailStyles.Resolve(styleId),
-                        Core.GestureTrailWidths.Resolve(widthMode), fadeTail);
+        var style = Core.GestureTrailStyles.Resolve(styleId);
+        var accent = GestureTrailRenderer.BrushFromHex(style.Accent)
+                     ?? (Brush)(System.Windows.Application.Current?.TryFindResource("BrushAccentText")
+                                ?? new SolidColorBrush(Color.FromRgb(0x75, 0x9C, 0xD7)));
+        _noteBar.Background = accent;
+        _hintBar.Background = accent;
+        _trail.SetStyle(style, Core.GestureTrailWidths.Resolve(widthMode), fadeTail);
     }
 
     // 点亮 / 熄灭。会来回切：画出 ↑ 命中「复制」，继续往下画成 ↑↓ 就该灭掉，再成为「搜索」时重新亮起——
@@ -284,10 +318,10 @@ public sealed class GestureTrailWindow : Window
         _reveal?.Abort();
         Opacity = 0;
         Show();
-        // 只有第一次/换屏才用物理像素兜底摆一次。此后同一个覆盖范围已经写进过 HWND，
-        // Hide→Show 只换可见性，位置/尺寸不会丢；每笔再调一次全屏 SetWindowPos 是纯重复劳动。
-        // 混合 DPI 下 WPF 自己那份 Left/Top 仍是我们按 DIP 设好的，Show 不会把它挪到别处。
-        if (!_positionApplied)
+        // 同一覆盖范围不每次无条件 SetWindowPos（全屏重摆是纯重复劳动），但也不能只信
+        // “第一次写过”：混合 DPI 下 WPF 可能在 Show 流程里按自己的 DIP 记账挪窗。
+        // 每次 Show 后读一次真实物理矩形，只有不一致才重写；正常路径只多一次 GetWindowRect。
+        if (!_positionApplied || !PositionMatches())
         {
             Reposition();
             _positionApplied = true;
@@ -368,7 +402,19 @@ public sealed class GestureTrailWindow : Window
             _trail.Add(new Point(x, y));
         }
         finally { Core.UiStallWatch.End("trail-add", tAdd); }
-        if (IsVisible || _trail.PointCount < 2) return;   // 不写 ==2：那一下万一没显示成，后面就再也不试了
+        if (_trail.PointCount < 2) return;   // 不写 ==2：那一下万一没显示成，后面就再也不试了
+        if (IsVisible)
+        {
+            // 上一笔的药丸还在时窗口仍然可见；此时在新监视器起笔，CoverMonitorOf 只改了
+            // WPF 的 DIP 值并清掉 _positionApplied，Point 若按旧逻辑直接 return，
+            // 物理像素兜底就永远不跑。这里补上；下一次 ShowGated 会看到已应用而跳过。
+            if (!_positionApplied)
+            {
+                Reposition();
+                _positionApplied = true;
+            }
+            return;
+        }
         // 重显走 ShowGated（含 Show + 重定位）：藏→显那一帧先整窗全透明，别把上一笔的旧位图顶到屏上。
         long tShow = Core.UiStallWatch.Begin();
         try { ShowGated(); }
@@ -430,6 +476,24 @@ public sealed class GestureTrailWindow : Window
                                       int nox, int noy, int nsx, int nsy, double nscale)
         => ox == nox && oy == noy && sx == nsx && sy == nsy
            && Math.Abs(scale - nscale) < 0.0001;
+
+    internal static bool CoverageMatches(int left, int top, int right, int bottom,
+                                         int originX, int originY, int spanX, int spanY)
+        => left == originX && top == originY
+           && right - left == spanX && bottom - top == spanY;
+
+    // HWND 的真实物理矩形（不是 WPF 的 DIP 记账）。层叠窗跨屏/改缩放后，WPF 可能在
+    // Show 流程里按自己的 Left/Top 同步一次；一次 GetWindowRect 比每笔无条件 SetWindowPos 便宜。
+    private bool PositionMatches()
+    {
+        try
+        {
+            var h = new WindowInteropHelper(this).Handle;
+            if (h == IntPtr.Zero || !GetWindowRect(h, out var r)) return false;
+            return CoverageMatches(r.Left, r.Top, r.Right, r.Bottom, _originX, _originY, _spanX, _spanY);
+        }
+        catch { return false; }
+    }
 
     private bool CoverMonitorOf(int px, int py)
     {

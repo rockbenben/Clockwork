@@ -529,6 +529,24 @@ public static class Win32
 
     public static string ForegroundProcessName() => ProcessNameForWindow(GetForegroundWindow());
 
+    /// <summary>
+    /// 系统给低级钩子回调的预算（毫秒）：<c>HKCU\Control Panel\Desktop\LowLevelHooksTimeout</c>。
+    /// 读不到 / 写成 0 或负数时返回 null，由 <see cref="Core.HookWatch.EffectiveHookTimeoutMs"/> 回落到 300。
+    /// </summary>
+    public static int? LowLevelHooksTimeoutMs()
+    {
+        try
+        {
+            var v = Microsoft.Win32.Registry.GetValue(
+                @"HKEY_CURRENT_USER\Control Panel\Desktop", "LowLevelHooksTimeout", null);
+            if (v is int i) return i;
+            if (v is long l) return (int)Math.Min(l, int.MaxValue);
+            if (v is string s && int.TryParse(s, out int n)) return n;
+            return null;
+        }
+        catch { return null; }
+    }
+
     // 设备变更广播：U 盘等卷插入时 Windows 向所有顶层窗口发 WM_DEVICECHANGE，不需要事先注册。
     // 只认「卷到达」（DBT_DEVTYP_VOLUME）——设备接口层的到达通知（打印机、摄像头、蓝牙适配器）
     // 混进来会让「U 盘插入时」在插耳机时也跑，那不是这个触发承诺的事。

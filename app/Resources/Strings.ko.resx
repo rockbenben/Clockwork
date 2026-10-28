@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>다른 프로그램이 오른쪽 버튼을 가져가고 있습니다 (AutoHotkey, 마우스 드라이버 등)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>양보 중 · 오른쪽 클릭을 가로채지 않음</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>지금 제스처 복원</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>오른쪽 버튼을 누른 채 궤적을 그리면 해당 동작이 실행됩니다. 제스처가 없으면 오른쪽 버튼은 평소대로 작동합니다.</value>
   </data>
@@ -1727,6 +1733,9 @@
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>시작 메뉴에서 프로그램 바로 가기를 찾지 못했습니다.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>일치하는 항목이 없습니다. 다른 단어로 검색해 보세요.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>평소대로 되돌리기</value>
   </data>
@@ -2113,7 +2122,7 @@
   <data name="Sum_Replace" xml:space="preserve">{0}을(를) {1}(으)로 바꾸기</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">브라우저 주소를 읽지 못했습니다. Chrome 또는 Edge에서 페이지가 열려 있는지 확인하세요(Firefox는 아직 지원되지 않습니다).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">주소로 보이지 않습니다: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">이 주소의 도메인이 사이트 목록에 없습니다. clockwork.settings.json의 sites에 추가하세요.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">이 주소의 도메인이 사이트 목록에 없습니다. 사이트 맵 단계에서 추가하세요.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">사이트 “{0}”의 로컬 폴더가 없습니다. sourceRoot를 확인하세요.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">해당 경로로 매핑했지만 로컬에 파일이 없습니다: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">파일은 찾았지만 열 수 없습니다: {0}</data>
@@ -2124,7 +2133,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">이 내용을 디코드할 수 없습니다: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">현재 브라우저의 주소 표시줄을 읽어 뒤 단계에서 쓸 주소를 만듭니다. Chrome / Edge 등 Chromium 系 브라우저를 지원하며 Firefox는 아직 지원되지 않습니다.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">여는 방식</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">주소를 입력하세요({이름} 자리 표시자를 쓸 수 있습니다). 지금 보고 있는 페이지의 주소를 따라가려면 먼저 '브라우저 주소 읽기' 단계를 두고 주소를 변수에 기록한 다음, 여기에 {그 변수}를 넣으세요. 도메인 → 로컬 경로 대응은 설정 → 사이트 맵에서 고칩니다.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">주소를 입력하세요({이름} 자리 표시자를 쓸 수 있습니다). 지금 보고 있는 페이지의 주소를 따라가려면 먼저 '브라우저 주소 읽기' 단계를 두고 주소를 변수에 기록한 다음, 여기에 {그 변수}를 넣으세요.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">정규식</data>
   <data name="Ed_RegexGroup" xml:space="preserve">가져올 그룹</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = 전체 일치, 1 이상 = 몇 번째 괄호 내용. .NET 정규식 구문을 사용합니다.</data>
@@ -2250,7 +2259,7 @@
   <data name="Mig_StepParams" xml:space="preserve">{0}개 단계가 공유하던 동작과 숫자를 종류별 항목으로 나눴습니다 (각 단계가 하는 일은 그대로입니다)</data>
 
   <data name="Gesture_Style" xml:space="preserve">스타일</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">클래식</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">루멘</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">네온</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">무지개</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">파선</data>

@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>Another program is taking the right button (AutoHotkey, a mouse driver…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>Yielding · right-click is not captured</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>Restore gestures now</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Hold the right button, draw a stroke, and the matching action runs. With no gestures set, the right button behaves as usual.</value>
   </data>
@@ -1727,6 +1733,9 @@ Log: {1}</value>
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>No program shortcuts were found in the Start menu.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>No matching results. Try another word.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>Back to normal</value>
   </data>
@@ -2113,7 +2122,7 @@ Log: {1}</value>
   <data name="Sum_Replace" xml:space="preserve">Replace {0} with {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">Couldn’t read a browser address. Make sure Chrome or Edge has a page open (Firefox isn’t supported yet).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">That doesn’t look like an address: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">That address’ domain isn’t in the site list. Add one under sites in clockwork.settings.json.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">That address’ domain isn’t in the site list. Add one in the site-map step.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">The local folder for “{0}” doesn’t exist. Check its sourceRoot.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">Mapped to that path, but there’s no such file locally: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">Found the file, but couldn’t open it: {0}</data>
@@ -2124,7 +2133,7 @@ Log: {1}</value>
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Couldn’t decode that: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Reads the address bar of the current browser and produces an address for later steps. Supports Chromium browsers such as Chrome and Edge; Firefox isn’t supported yet.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">How to open</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Fill in an address ({name} placeholders work). To follow whatever page you're on, add a Read browser address step first, have it write the address to a variable, then put {that variable} here. The domain → local path mapping is edited under Settings → Site map.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Fill in an address ({name} placeholders work). To follow whatever page you're on, add a Read browser address step first, have it write the address to a variable, then put {that variable} here.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Regular expression</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Capture group</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = the whole match; 1 and up = which parenthesised group. .NET regex syntax.</data>
@@ -2250,7 +2259,7 @@ Log: {1}</value>
   <data name="Mig_StepParams" xml:space="preserve">Split the action and the number that {0} steps shared into per-type fields (what each step does is unchanged)</data>
 
   <data name="Gesture_Style" xml:space="preserve">Style</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">Classic</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Lumen</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Neon</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">Rainbow</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Dashed</data>

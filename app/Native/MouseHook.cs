@@ -66,6 +66,10 @@ public sealed class MouseHook : IDisposable
 
     // 投给钩子线程泵的私有消息：中键长按闹钟到点，回钩子线程问 gate 要不要弹面板。
     private const uint WM_POLLDUE = 0x8001;   // WM_APP + 1
+    // 回调超时后由回调自己投给泵线程：在**钩子线程**上摘钩再装，不经过 UI。
+    private const uint WM_HOOK_RECOVER = 0x8002;   // WM_APP + 2
+    // 让路状态切换：只放行右键手势，不碰中键面板。
+    private const uint WM_YIELD = 0x8003;   // WM_APP + 3
     private const uint WM_QUIT = 0x0012;
 
     private readonly LongPressGate? _gate;
@@ -105,6 +109,9 @@ public sealed class MouseHook : IDisposable
     // 却一声不响**。这一格没有阈值、也不会刷屏（一任钩子只有一个数），
     // 只在自愈/重钩那一行报出来；那时它接近 300 就是铁证。
     private uint _callbackMax;
+    // 与上面那格同样的读数，但只覆盖「最近一个让路采样窗口」：让路判据要的是一个**可复位**的
+    // 峰值，否则一次 313ms 会让状态永久锁在让路中。lifetime 那格继续供重装日志读。
+    private uint _callbackWindowMax;
     // 面板到点唤出过几次（闹钟与回调内追赶轮询共用，见 PollFireAndPost）。
     private int _middleFired;
     // 长按被改判成「中键拖拽」的次数：按住后位移超出容差就归还按下、撤防闹钟、面板不再弹。
@@ -141,6 +148,8 @@ public sealed class MouseHook : IDisposable
     // 就是这么来的——chain=0 排除了别人也排除了注入，整整几秒全是这两句。
     // 用户看到的是「按右键时整机鼠标顿一下」，而 Windows 不会为它留下任何一行日志。
     private readonly Func<uint, string> _procNameForPid;
+    // 只读缓存，不排队：笔迹中途每个采样点都会问一次（见 CallbackCore 的 A1 修正）。
+    private readonly Func<uint, string> _cachedProcNameForPid;
     private readonly Func<uint, bool> _mayEngage;
 
     // ── 笔迹回调合帧 ──
@@ -161,6 +170,23 @@ public sealed class MouseHook : IDisposable
     // 而且崩在任意一次鼠标移动上，看不出和这里有关。
     private readonly HookProc _proc;
     private IntPtr _hook;
+    // 自救请求已投出（防止一次超时在泵线程还没处理时又投一条）。
+    private int _recoverPosted;
+    // 自救阈值：LowLevelHooksTimeout + 余量，构造时读一次。与让路的预算同源（同一个注册表读数），见 HookWatch。
+    private readonly int _recoveryThresholdMs;
+    private readonly Action<MouseHook, HookRecoveryReport>? _selfRecovered;
+    // 让路中：右键按下/抬起一律放行，只影响手势；中键面板照常。
+    private int _yielding;
+
+    // 一代钩子的账。自救重装前抄一份交给 GestureCoordinator，否则下一次查日志时
+    // 「上一任钩子到底收到了什么」已经被新钩子覆盖。字段与 _prev* 那组一一对应。
+    public readonly record struct HookAccount(
+        bool EverBeat, bool RightDown, bool RightUp, bool MiddleDown, bool MiddleUp,
+        int MiddleFired, int DragEscapes, long SilentForMs, int InjectRejected,
+        uint UpstreamMaxMs, uint CallbackMaxMs, uint ChainMaxMs,
+        int ReplayMaxMs, int ReplayQueued, int ReplayDropped, int RescueSkipped);
+
+    public readonly record struct HookRecoveryReport(bool Ok, HookAccount Previous);
 
     // ── 专用钩子线程（见类头第 1 条）──
     // Install 之前一直是 null：单测反射驱动 Callback、不调 Install，构造函数绝不能偷偷开线程。
@@ -241,6 +267,8 @@ public sealed class MouseHook : IDisposable
     // 从前这一格长在回调的 `inject=` 里，与 `chain=` 各半；注入移出回调之后，回调那一格
     // 就该恒为 0，而耗时并没有消失，它换了名字待在这里。验收口径就写在这两个数的对比上。
     private int _replayMaxMs;
+    // 同上，供让路判据按窗口读后清零；`_replayMaxMs` 保留为这一任钩子的 lifetime 峰值。
+    private int _replayWindowMax;
     // 排队排进去过多少次（右键/中键合在一起）：证明「补发确实在跑」，而不是静默地被跳过。
     private int _replayQueued;
     // 拖拽救援因为**已经在重入里**而被跳过注入的次数（见 RescueDragDown 的限深闸）。
@@ -288,8 +316,11 @@ public sealed class MouseHook : IDisposable
                      int moveTolerancePhysical = 0, Func<bool>? canInject = null,
                      HookProbe? probe = null,
                      Func<uint, string>? procNameForPid = null, Func<uint, bool>? mayEngage = null,
-                     Func<string, bool>? ignoredApp = null)
+                     Func<string, bool>? ignoredApp = null,
+                     Action<MouseHook, HookRecoveryReport>? selfRecovered = null)
     {
+        _selfRecovered = selfRecovered;
+        _recoveryThresholdMs = HookWatch.RecoveryThresholdMs(Win32.LowLevelHooksTimeoutMs());
         _trailPoint = trailPoint ?? ((_, _, _, _) => { });
         _ignoredApp = ignoredApp ?? (_ => false);
         _trailEnd = trailEnd ?? (() => { });
@@ -336,6 +367,8 @@ public sealed class MouseHook : IDisposable
         //（方法组不是值类型，没法用 ?? 判空）。
         _procNameForPid = probe != null ? probe.ProcessName
                         : procNameForPid ?? Win32.ProcessNameForPid;
+        // 生产走探针的只读缓存；单测注入的假实现本身不会排队，直接复用。
+        _cachedProcNameForPid = probe != null ? probe.CachedProcessName : _procNameForPid;
         _mayEngage = probe != null ? probe.MayEngage
                    : mayEngage ?? (_ => true);
     }
@@ -395,8 +428,10 @@ public sealed class MouseHook : IDisposable
     {
         switch (Interlocked.Exchange(ref _clickUpDue, 0))
         {
-            case 1: Win32.SendRightUpTagged(); break;
-            case 2: Win32.SendMiddleUpTagged(); break;
+            // 抬起也走 SendTimed：它同样可能在输入队列里被按住；让路判据要看到这一段，
+            // 不能只量按下那一半。
+            case 1: SendTimed(() => Win32.SendRightUpTagged()); break;
+            case 2: SendTimed(() => Win32.SendMiddleUpTagged()); break;
         }
     }
 
@@ -448,8 +483,7 @@ public sealed class MouseHook : IDisposable
         try { sent = send(); }
         finally
         {
-            long ms = Environment.TickCount64 - t;
-            if (ms > Volatile.Read(ref _replayMaxMs)) Volatile.Write(ref _replayMaxMs, (int)ms);
+            RecordReplayMs(Environment.TickCount64 - t);
         }
         if (sent == 0) { Interlocked.Increment(ref _injectRejected); return false; }
         return true;
@@ -487,6 +521,121 @@ public sealed class MouseHook : IDisposable
         uint id = _threadId;
         if (id != 0) { try { PostThreadMessage(id, WM_POLLDUE, IntPtr.Zero, IntPtr.Zero); } catch { } }
         else { try { _post(FireIfDue); } catch { } }
+    }
+
+    // 回调超时后向泵线程投一条自救请求。只投一次；泵线程不在（单测 / 已退出）就不投。
+    private void RequestSelfRecovery()
+    {
+        uint id = _threadId;
+        if (id == 0) return;
+        if (Interlocked.Exchange(ref _recoverPosted, 1) != 0) return;
+        try
+        {
+            if (!PostThreadMessage(id, WM_HOOK_RECOVER, IntPtr.Zero, IntPtr.Zero))
+                Volatile.Write(ref _recoverPosted, 0);
+        }
+        catch { Volatile.Write(ref _recoverPosted, 0); }
+    }
+
+    // 自救的落点：在钩子线程的泵里摘钩、重装。**绝不在回调里做**——回调已经超预算，
+    // 再在它里面摘装只会把这一格拖得更长；而 PostThreadMessage 本身是微秒级。
+    private void RecoverHook()
+    {
+        Volatile.Write(ref _recoverPosted, 0);
+        if (Volatile.Read(ref _disposePosted) != 0) return;   // 正在拆：不许把钩子装回来
+
+        // 先把这一代欠系统的键结掉，再重置 gate；顺序反了会把「用户还按着」的按下留在半空。
+        try { SettleOwedKeys(); } catch { }
+        Arm(false);
+        _gate?.Reset();
+        _gesture?.Reset();
+        _owedRightClick = false;
+        try { _post(_trailEnd); } catch { }
+
+        var old = Volatile.Read(ref _hook);
+        Volatile.Write(ref _hook, IntPtr.Zero);
+        UnhookNow(old);
+        if (Volatile.Read(ref _disposePosted) != 0) { ResetGenerationMetrics(); return; }
+
+        IntPtr h;
+        try
+        {
+            h = SetWindowsHookEx(WH_MOUSE_LL, _proc, IntPtr.Zero, 0);
+            LastError = h == IntPtr.Zero ? Marshal.GetLastWin32Error() : 0;
+        }
+        catch { h = IntPtr.Zero; LastError = -1; }
+
+        // 拆钩可能在我们重装的同时刚开始：这时新钩子已经不合法，立刻摘掉，别留给链。
+        if (Volatile.Read(ref _disposePosted) != 0)
+        {
+            if (h != IntPtr.Zero) UnhookNow(h);
+            ResetGenerationMetrics();
+            return;
+        }
+
+        Volatile.Write(ref _hook, h);
+        _installResult = h != IntPtr.Zero ? 1 : 0;
+        var account = SnapshotAccount();
+        ResetGenerationMetrics();
+        Volatile.Write(ref _downsSettled, 0);
+        try { _selfRecovered?.Invoke(this, new HookRecoveryReport(h != IntPtr.Zero, account)); } catch { }
+    }
+
+    // 让路切换的钩子线程落点。进入时：
+    //   · 已经扣下的右键按下必须还给系统（否则让路本身又吞了用户一键）；
+    //   · 丢掉这一笔手势与屏上的线；
+    //   · **不碰中键 gate**——让路只放右键，面板照常。
+    private void ApplyYield(bool on)
+    {
+        // 标志已经由 SetYielding 先落了；这里只负责钩子线程上的结算。
+        // 若在消息排队期间又被切回 false，就不许再结算——那会把刚恢复的一笔手势清掉。
+        if (!on || Volatile.Read(ref _yielding) == 0) return;
+        try { ReplayUp(); } catch { }
+        if (_gesture?.Pending == true) SendTimed(() => Win32.SendRightDownTagged());
+        _gesture?.Reset();
+        _owedRightClick = false;
+        try { _post(_trailEnd); } catch { }
+    }
+
+    private HookAccount SnapshotAccount()
+        => new(EverBeat, EverRightDown, EverRightUp, EverMiddleDown, EverMiddleUp,
+               MiddleFireCount, MiddleDragEscapeCount, SinceBeatMs, InjectRejected,
+               UpstreamMaxMs, CallbackMaxMs, ChainMaxMs, ReplayMaxMs, ReplayQueued,
+               ReplayDropped, RescueSkipped);
+
+    // 自救重装 = 新的一代钩子：lifetime 读数必须跟着新钩子归零，否则下一次日志会把
+    // 上一代的峰值当成这一代的账。只由钩子线程调用（或拆钩后不再有回调的路径）。
+    private void ResetGenerationMetrics()
+    {
+        Interlocked.Exchange(ref _beat, 0);
+        Interlocked.Exchange(ref _beatRDown, 0);
+        Interlocked.Exchange(ref _beatRUp, 0);
+        Interlocked.Exchange(ref _beatMDown, 0);
+        Interlocked.Exchange(ref _beatMUp, 0);
+        Volatile.Write(ref _upstreamMax, 0u);
+        Volatile.Write(ref _callbackMax, 0u);
+        Volatile.Write(ref _chainMax, 0u);
+        _chainMs = 0;
+        Interlocked.Exchange(ref _middleFired, 0);
+        Interlocked.Exchange(ref _dragEscapes, 0);
+        Interlocked.Exchange(ref _injectRejected, 0);
+        Interlocked.Exchange(ref _replayMaxMs, 0);
+        // **不重置 _callbackWindowMax / _replayWindowMax**：自救正是由一次超预算回调触发的，
+        // 这两个窗口峰值是让路判据要读的证据；在这里清掉，下一拍就看不到「刚刚超时过」。
+        // lifetime 峰值归零供新的重装账；窗口峰值由 TakeCongestionPeaks 每拍读后清零。
+        Interlocked.Exchange(ref _replayQueued, 0);
+        Interlocked.Exchange(ref _replayDropped, 0);
+        Interlocked.Exchange(ref _rescueSkipped, 0);
+        Interlocked.Exchange(ref _clickUpDue, 0);
+        _gesturePid = 0;
+        _gestureOrigin = IntPtr.Zero;
+    }
+
+    private void RecordReplayMs(long ms)
+    {
+        int v = (int)ms;
+        if (v > Volatile.Read(ref _replayMaxMs)) Volatile.Write(ref _replayMaxMs, v);
+        if (v > Volatile.Read(ref _replayWindowMax)) Volatile.Write(ref _replayWindowMax, v);
     }
 
     // 闹钟响了：问 gate 是不是真该弹（中途抬起 / 拖走的话它会说不该）。只在钩子线程上跑；
@@ -741,6 +890,8 @@ public sealed class MouseHook : IDisposable
                 int r = GetMessage(out MSG msg, IntPtr.Zero, 0, 0);
                 if (r <= 0) break;   // WM_QUIT → 0；出错 → -1，都走统一拆除
                 if (msg.Message == WM_POLLDUE) FireIfDue();
+                else if (msg.Message == WM_HOOK_RECOVER) RecoverHook();
+                else if (msg.Message == WM_YIELD) ApplyYield(msg.WParam != IntPtr.Zero);
             }
         }
         catch
@@ -957,6 +1108,25 @@ public sealed class MouseHook : IDisposable
     /// 它非零 = 那段时间下游的链正在堵，而我们是**主动**不再往里叠注入，不是判定没走到。</summary>
     public int RescueSkipped => Volatile.Read(ref _rescueSkipped);
 
+    /// <summary>读走「本让路窗口」的回调/注入峰值，并把它们清零。lifetime 峰值不受影响。</summary>
+    public (int CallbackMaxMs, int ReplayMaxMs) TakeCongestionPeaks()
+        => ((int)Interlocked.Exchange(ref _callbackWindowMax, 0),
+            Interlocked.Exchange(ref _replayWindowMax, 0));
+
+    /// <summary>手势是否正在让路（只影响右键，中键面板照常）。</summary>
+    public bool Yielding => Volatile.Read(ref _yielding) != 0;
+
+    /// <summary>切换让路。必须落在钩子线程上处理：进入时要结算已吞下的右键。</summary>
+    public void SetYielding(bool on)
+    {
+        // 标志先落，回调立刻就能看到「别再吞右键」；结算消息随后交给钩子线程做。
+        int target = on ? 1 : 0;
+        if (Interlocked.Exchange(ref _yielding, target) == target) return;
+        uint id = _threadId;
+        if (id == 0) return;   // 单测 / 还没装：没有 gate 在跑，改标志就够
+        try { PostThreadMessage(id, WM_YIELD, new IntPtr(target), IntPtr.Zero); } catch { }
+    }
+
     /// <summary>把一次回调的时长拆成「链 / 剩下才是我们自己的计算」。</summary>
     // 纯函数，为了这一句能被断言钉住（日志归因写错方向比没有归因更糟）。
     // TickCount64 是毫秒粒度，取整会让 chain 略大于 total，ours 兜到 0，不代表算错。
@@ -966,7 +1136,8 @@ public sealed class MouseHook : IDisposable
     private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)
     {
         _cbDepth++;
-        if (_cbDepth == 1) _chainMs = 0;   // 只有最外层清账，理由见字段处
+        bool outermost = _cbDepth == 1;
+        if (outermost) _chainMs = 0;   // 只有最外层清账，理由见字段处
         long t0 = Core.UiStallWatch.Begin();
         try { return CallbackCore(code, wParam, lParam); }
         finally
@@ -975,14 +1146,21 @@ public sealed class MouseHook : IDisposable
             // 中间那一段只有这一格抓得住（见 _callbackMax）。
             uint ms = (uint)(Environment.TickCount64 - t0);
             if (ms > _callbackMax) Volatile.Write(ref _callbackMax, ms);
+            if (ms > _callbackWindowMax) Volatile.Write(ref _callbackWindowMax, ms);
+            // 回调已经越过了系统预算：Windows 多半已经把钩子静默摘掉了。给泵线程投一条
+            // 自救消息，让它在回调**外面**重装；这里绝不能再做任何慢事。
+            if (outermost && HookWatch.ShouldSelfRecover((int)ms, _recoveryThresholdMs, depth: 1,
+                    recoveryPending: Volatile.Read(ref _recoverPosted) != 0,
+                    disposePosted: Volatile.Read(ref _disposePosted) != 0))
+                RequestSelfRecovery();
             _cbDepth--;
             // 归因尾巴只在最外层给：内层与外层是同一份活的两次记账，报两遍会误导。
-            if (_cbDepth == 0)
+            if (outermost)
             {
                 if (_chainMs > _chainMax) Volatile.Write(ref _chainMax, (uint)_chainMs);
             }
             Core.UiStallWatch.End("hook-callback", t0,
-                _cbDepth == 0 ? Attribution(ms, _chainMs) : null);
+                outermost ? Attribution(ms, _chainMs) : null);
         }
     }
 
@@ -1059,8 +1237,7 @@ public sealed class MouseHook : IDisposable
         }
         finally
         {
-            long ms = Environment.TickCount64 - t;
-            if (ms > Volatile.Read(ref _replayMaxMs)) Volatile.Write(ref _replayMaxMs, (int)ms);
+            RecordReplayMs(Environment.TickCount64 - t);
             Core.UiStallWatch.End("hook-drag-rescue", t);
         }
     }
@@ -1110,6 +1287,9 @@ public sealed class MouseHook : IDisposable
                 if (msg == WM_RBUTTONDOWN) Volatile.Write(ref _beatRDown, Environment.TickCount64);
                 else Volatile.Write(ref _beatRUp, Environment.TickCount64);
                 if (_gesture == null) return Chain(code, wParam, lParam);
+                // 让路中：右键一个字节都不碰。进入让路时已经结掉了被吞的按下并丢了这一笔，
+                // 这里只负责把随后到达的按下/抬起原样放行；中键面板不走这个分支。
+                if (Volatile.Read(ref _yielding) != 0) return Chain(code, wParam, lParam);
                 // 修饰键（Ctrl/Shift/Alt/Win）按着的右键是**别人的组合手势**——WindowShuffle 的
                 // Ctrl+右键拖窗、Explorer 的 Shift+右键扩展菜单那一类。按下这一刻就整笔放行：
                 // 低级钩子后装先调、return 1 截断整条链，扣下这个按下，排在后面的工具连按下都收不到，
@@ -1220,6 +1400,25 @@ public sealed class MouseHook : IDisposable
                     try { _gesture.ContextProcess = _procNameForPid(_gesturePid); }
                     finally { Core.UiStallWatch.End("hook-proc-name", p2); }
                 }
+                // A1 的兜底：抬起时进程名仍没回来，就别接管这一笔。
+                // 手势按程序绑定，名字空着时匹配只能走全局那一档；在拥堵里让一个未知程序
+                // 触发全局手势，比「这一次手势没生效」更坏。按下已经吞了，按普通点击补发；
+                // 补发投不进去就放行真抬起（DefWindowProc 仍能合成菜单）。
+                //
+                // 代际守卫就在 _procNameForPid 的实现里：HookProbe 按 pid 存名字，晚到的结果
+                // 只会落到它自己的 pid 上，不可能覆盖下一笔；这里只判断「本笔抬起时有没有」。
+                if (msg == WM_RBUTTONUP && _gesture.Pending
+                    && (string.IsNullOrEmpty(_gesture.ContextProcess) || _ignoredApp(_gesture.ContextProcess)))
+                {
+                    // 两种晚到都要退回普通右键：名字还没回来（未知程序不能跑全局手势），
+                    // 或名字回来了却发现它在「不接管」名单里（按下那一刻缓存还是空的，
+                    // 名单没来得及生效）。按下已经吞了，按普通点击补发；补发投不进去就放行真抬起。
+                    _gesture.Reset();
+                    _owedRightClick = false;
+                    try { _post(_trailEnd); } catch { }
+                    if (!ReplayClick(1)) return Chain(code, wParam, lParam);
+                    return 1;
+                }
                 var gv = msg == WM_RBUTTONDOWN ? _gesture.OnRightDown(data.X, data.Y) : _gesture.OnRightUp();
                 if (msg == WM_RBUTTONDOWN)
                 {
@@ -1314,6 +1513,15 @@ public sealed class MouseHook : IDisposable
                     _owedRightClick = true;   // 还欠系统一次按下，等真抬起来领（见字段注释）
                     _post(_trailEnd);
                     return Chain(code, wParam, lParam);
+                }
+                // A1 的“下一次节流点修正”：名字由 HookProbe 在后台解析，这里只读缓存。
+                // 解析完成前 LiveMatch 按无程序限制判；一旦名字到了，后面的采样点就按真正的
+                // 程序匹配，笔迹高亮不会一直等到抬起来。pid 是本笔按下时锁定的，晚到的
+                // 别的 pid 结果不可能进来（HookProbe 按 pid 存，见它的类头）。
+                if (_gesture.Pending && string.IsNullOrEmpty(_gesture.ContextProcess) && _gesturePid != 0)
+                {
+                    var resolved = _cachedProcNameForPid(_gesturePid);
+                    if (resolved.Length > 0) _gesture.ContextProcess = resolved;
                 }
                 int before = _gesture.PointCount;
                 _gesture.OnMove(data.X, data.Y);

@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>Правую кнопку забирает другая программа (AutoHotkey, драйвер мыши…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>Уступает · правый клик не перехватывается</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>Восстановить жесты сейчас</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Удерживая правую кнопку, нарисуйте штрих — выполнится соответствующее действие. Если жестов нет, правая кнопка работает как обычно.</value>
   </data>
@@ -1727,6 +1733,9 @@
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>В меню «Пуск» не найдено ярлыков программ.</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>Подходящих результатов не найдено. Попробуйте другое слово.</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>Вернуть как было</value>
   </data>
@@ -2113,7 +2122,7 @@
   <data name="Sum_Replace" xml:space="preserve">Заменить {0} на {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">Не удалось прочитать адрес браузера. Убедитесь, что в Chrome или Edge открыта страница (Firefox пока не поддерживается).</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">Это не похоже на адрес: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Домен этого адреса отсутствует в списке сайтов. Добавьте его в sites в clockwork.settings.json.</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">Домен этого адреса отсутствует в списке сайтов. Добавьте его на шаге карты сайтов.</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">Локальная папка сайта «{0}» не существует. Проверьте его sourceRoot.</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">Сопоставлено с этим путём, но локально такого файла нет: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">Файл найден, но открыть его не удалось: {0}</data>
@@ -2124,7 +2133,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">Не удалось декодировать: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">Читает адресную строку текущего браузера и создаёт адрес для следующих шагов. Поддерживаются браузеры на Chromium (Chrome, Edge); Firefox пока не поддерживается.</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">Как открыть</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Укажите адрес (подстановки {имя} работают). Чтобы адрес шёл за текущей страницей, сначала добавьте шаг «Прочитать адрес браузера», пусть он запишет адрес в переменную, и подставьте здесь {эту переменную}. Соответствие «домен → локальный путь» меняется в Параметры → Карта сайтов.</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">Укажите адрес (подстановки {имя} работают). Чтобы адрес шёл за текущей страницей, сначала добавьте шаг «Прочитать адрес браузера», пусть он запишет адрес в переменную, и подставьте здесь {эту переменную}.</data>
   <data name="Ed_RegexPattern" xml:space="preserve">Регулярное выражение</data>
   <data name="Ed_RegexGroup" xml:space="preserve">Группа захвата</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = всё совпадение; 1 и выше = какая группа в скобках. Синтаксис регулярных выражений .NET.</data>
@@ -2250,7 +2259,7 @@
   <data name="Mig_StepParams" xml:space="preserve">Действие и число, общие для {0} шагов, разнесены по полям для каждого типа (суть каждого шага не меняется)</data>
 
   <data name="Gesture_Style" xml:space="preserve">Стиль</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">Классический</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">Люмен</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">Неон</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">Радуга</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">Пунктир</data>

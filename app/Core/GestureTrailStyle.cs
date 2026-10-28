@@ -31,6 +31,9 @@ public enum GestureTrailRole
 
     /// <summary>线芯本身：用户真正看见的那条线。</summary>
     Core,
+
+    /// <summary>冷光外缘：深色底上负责成形的一层亮边；与 Halo 一样不参与尾迹压暗。</summary>
+    LightHalo,
 }
 
 /// <summary>笔迹的一层。</summary>
@@ -58,6 +61,18 @@ public sealed record GestureTrailStyle
 
     /// <summary>由外到内排列：先画的在下，后画的压在上面。</summary>
     public IReadOnlyList<GestureTrailLayer> Layers { get; init; } = Array.Empty<GestureTrailLayer>();
+
+    /// <summary>样式代表色（#RRGGBB）：辉光、LightHalo、列表缩略图与 HUD 左条共用。</summary>
+    public string Accent { get; init; } = "";
+
+    /// <summary>未命中时线芯的颜色（#RRGGBB）；空 = 用调用方传入的主题色。</summary>
+    public string CoreIdle { get; init; } = "";
+
+    /// <summary>丝带带身的颜色（#RRGGBB）；只有 <see cref="Ribbon"/> 样式使用。</summary>
+    public string Body { get; init; } = "";
+
+    /// <summary>是否用有宽窄变化的丝带，而不是等粗折线。</summary>
+    public bool Ribbon { get; init; }
 
     /// <summary>线芯是否用彩虹渐变（沿笔迹扫过一圈色相）。</summary>
     public bool Rainbow { get; init; }
@@ -100,64 +115,72 @@ public static class GestureTrailStyles
 
     /// <summary>样式目录，顺序即界面里的顺序。</summary>
     /// <remarks>
-    /// **第一项必须是 classic，而且它就是原来那一条线**：深色描边 + 主题强调色的线芯，
-    /// 命中时线芯转近白、两者一起加粗。存量用户的配置里没有样式这一项，
-    /// 落到默认值上时看到的应当与升级前一模一样——这是「新增可选项」的第一条规矩。
+    /// **第一项仍是 classic（id 不能换：配置文件里写的就是它），但画法已经是流光 Lumen。**
+    /// Lumen 不是等粗线：它是一条约 2px 起笔、向笔头展开到 8–10px 的丝带，
+    /// 深钢带身 + 冰蓝亮芯 + 冷光外缘 + 深色描边。暂无 style 的旧配置和显式 classic
+    /// 都落到这条新默认上，id 保留只是为了不迁移配置文件。
     /// </remarks>
     public static IReadOnlyList<GestureTrailStyle> All { get; } = new[]
     {
-        // 经典：原来那一条。深色描边垫底，任何底色上都读得出来。
+        // 流光：有宽窄的丝带；带身负责浅底，亮芯/外缘负责深底。
         new GestureTrailStyle
         {
             Id = "classic",
-            Layers = new[]
-            {
-                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1 },
-                new GestureTrailLayer { Role = GestureTrailRole.Core, WidthFactor = 1 },
-            },
+            Ribbon = true,
+            Accent = "#7FD8FF",
+            CoreIdle = "#DFF4FF",
+            Body = "#16202E",
         },
-        // 霓虹：没有深色描边，改成三层同色辉光。
-        // 深色背景上好看得多；浅色底上就吃亏——所以它得是「选的」，不能是默认的。
+        // 霓虹：双层青蓝辉光；补一层极淡暗描边，浅色文档上不再消失。
         new GestureTrailStyle
         {
             Id = "neon",
+            Accent = "#5BE0FF",
+            CoreIdle = "#BFF4FF",
             Layers = new[]
             {
+                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1 },
                 new GestureTrailLayer { Role = GestureTrailRole.Glow, WidthFactor = 3.4, Opacity = 0.16 },
                 new GestureTrailLayer { Role = GestureTrailRole.Glow, WidthFactor = 2, Opacity = 0.30 },
                 new GestureTrailLayer { Role = GestureTrailRole.Core, WidthFactor = 0.9 },
             },
         },
-        // 彩虹：线芯扫过一圈色相，底下照旧垫一层深色描边。
-        // 描边不能省——彩虹里有浅色那一段，没有描边它在白文档上就没了。
+        // 彩虹：冷色相段（青 → 蓝 → 紫 → 玫），底下照旧垫深色描边。
         new GestureTrailStyle
         {
             Id = "rainbow",
+            Accent = "#7FB6FF",
             Layers = new[]
             {
-                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1 },
+                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1.2 },
                 new GestureTrailLayer { Role = GestureTrailRole.Core, WidthFactor = 1 },
             },
             Rainbow = true,
         },
-        // 虚线：整条线都走虚线——描边那一层也是（笔触是整条线的事，见 GestureTrailStyle.Dash）。
+        // 虚线：墨光的三层 + 整条线都走虚线。
         new GestureTrailStyle
         {
             Id = "dashed",
+            Accent = "#9CC8FF",
+            CoreIdle = "#182435",
             Layers = new[]
             {
-                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1 },
+                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1.2 },
+                new GestureTrailLayer { Role = GestureTrailRole.LightHalo, WidthFactor = 1.8, Opacity = 0.5 },
                 new GestureTrailLayer { Role = GestureTrailRole.Core, WidthFactor = 1 },
             },
             Dash = "dash",
         },
-        // 珠点：整条线走珠点（圆头 + 点线）。比虚线更碎，像一串珠子跟着笔走。
+        // 珠点：墨光的三层 + 更大的珠点。
         new GestureTrailStyle
         {
             Id = "dots",
+            Accent = "#8FE3D2",
+            CoreIdle = "#0F2622",
             Layers = new[]
             {
-                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1 },
+                new GestureTrailLayer { Role = GestureTrailRole.Halo, WidthFactor = 1.2 },
+                new GestureTrailLayer { Role = GestureTrailRole.LightHalo, WidthFactor = 1.8, Opacity = 0.5 },
                 new GestureTrailLayer { Role = GestureTrailRole.Core, WidthFactor = 1.35 },
             },
             Dash = "dot",

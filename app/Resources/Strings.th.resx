@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>โปรแกรมอื่นกำลังดึงปุ่มขวาไป (AutoHotkey, ไดรเวอร์เมาส์…)</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>กำลังหลีกทาง · ไม่จับคลิกขวา</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>คืนค่าท่าทางทันที</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>กดปุ่มขวาค้างแล้ววาดเส้น การกระทำที่ตรงกันจะทำงาน หากไม่มีเจสเจอร์ ปุ่มขวาจะทำงานตามปกติ</value>
   </data>
@@ -1727,6 +1733,9 @@
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>ไม่พบทางลัดของโปรแกรมในเมนู Start</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>ไม่พบผลลัพธ์ที่ตรงกัน ลองใช้คำอื่น</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>กลับสู่ปกติ</value>
   </data>
@@ -2113,7 +2122,7 @@
   <data name="Sum_Replace" xml:space="preserve">แทนที่ {0} ด้วย {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">อ่านที่อยู่เบราว์เซอร์ไม่ได้ ตรวจสอบว่า Chrome หรือ Edge เปิดหน้าเว็บอยู่ (ยังไม่รองรับ Firefox)</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">นี่ไม่ใช่ที่อยู่: {0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">โดเมนของที่อยู่นั้นไม่อยู่ในรายการเว็บไซต์ เพิ่มใน sites ของ clockwork.settings.json</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">โดเมนของที่อยู่นั้นไม่อยู่ในรายการเว็บไซต์ เพิ่มในขั้นตอนแผนผังเว็บไซต์</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">ไม่พบโฟลเดอร์ในเครื่องของเว็บไซต์ «{0}» ตรวจสอบ sourceRoot</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">แมปไปยังพาธนั้นแล้ว แต่ไม่มีไฟล์นั้นในเครื่อง: {0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">พบไฟล์แล้ว แต่เปิดไม่ได้: {0}</data>
@@ -2124,7 +2133,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">ถอดรหัสสิ่งนั้นไม่ได้: {0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">อ่านแถบที่อยู่ของเบราว์เซอร์ปัจจุบันและสร้างที่อยู่สำหรับขั้นตอนถัดไป รองรับเบราว์เซอร์ Chromium เช่น Chrome และ Edge (ยังไม่รองรับ Firefox)</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">วิธีเปิด</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">กรอกที่อยู่ (ใช้ {ชื่อ} เป็นตัวแทนได้) หากต้องการให้อยู่ตามหน้าที่เปิดอยู่ ให้เพิ่มขั้นตอน 'อ่านที่อยู่จากเบราว์เซอร์' ให้เขียนที่อยู่ลงตัวแปร แล้วใส่ {ตัวแปรนั้น} ที่นี่ การจับคู่โดเมน → พาธในเครื่องแก้ไขได้ที่ การตั้งค่า → แผนผังเว็บไซต์</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">กรอกที่อยู่ (ใช้ {ชื่อ} เป็นตัวแทนได้) หากต้องการให้อยู่ตามหน้าที่เปิดอยู่ ให้เพิ่มขั้นตอน 'อ่านที่อยู่จากเบราว์เซอร์' ให้เขียนที่อยู่ลงตัวแปร แล้วใส่ {ตัวแปรนั้น} ที่นี่</data>
   <data name="Ed_RegexPattern" xml:space="preserve">นิพจน์ปกติ</data>
   <data name="Ed_RegexGroup" xml:space="preserve">กลุ่มการจับ</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = การจับคู่ทั้งหมด; 1 ขึ้นไป = กลุ่มในวงเล็บที่เท่าไร ใช้ไวยากรณ์นิพจน์ปกติของ .NET</data>
@@ -2250,7 +2259,7 @@
   <data name="Mig_StepParams" xml:space="preserve">แยกแอ็กชันกับตัวเลขที่ {0} ขั้นตอนใช้ร่วมกัน ไปอยู่ในช่องของแต่ละชนิด (สิ่งที่แต่ละขั้นตอนทำไม่เปลี่ยน)</data>
 
   <data name="Gesture_Style" xml:space="preserve">รูปแบบ</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">คลาสสิก</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">ลูเมน</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">นีออน</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">สีรุ้ง</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">เส้นประ</data>

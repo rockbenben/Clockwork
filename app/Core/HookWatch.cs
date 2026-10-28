@@ -6,6 +6,34 @@ namespace Clockwork.Core;
 
 public static class HookWatch
 {
+    /// <summary>Windows 的默认 LowLevelHooksTimeout（毫秒）。注册表读不到时用它。</summary>
+    public const int DefaultHookTimeoutMs = 300;
+
+    /// <summary>注册表里的 LowLevelHooksTimeout；0 / 负数 / 缺失都回落到 300ms。</summary>
+    public static int EffectiveHookTimeoutMs(int? configuredMs)
+        => configuredMs is > 0 ? configuredMs.Value : DefaultHookTimeoutMs;
+
+    /// <summary>
+    /// 自救阈值 = 系统回调预算 + 余量。**必须高于预算**：低于预算会在系统还没摘我们时
+    /// 白重装一截，凭空开一段输入空窗；高于预算太多又会漏掉真正越界的那次回调。
+    /// 50ms 是测量粒度（TickCount64 只到毫秒）与白重装风险之间的折中，不是 Windows 的另一个阈。
+    /// </summary>
+    public static int RecoveryThresholdMs(int? configuredMs, int marginMs = 50)
+    {
+        long sum = (long)EffectiveHookTimeoutMs(configuredMs) + Math.Max(0, marginMs);
+        return sum > int.MaxValue ? int.MaxValue : (int)sum;
+    }
+
+    /// <summary>
+    /// 这次回调结束后该不该向泵线程投一条自救请求。
+    /// 只看最外层：重入回调的时长已经在祖先那一格里算过一次。
+    /// 拆钩已开始（disposePosted）时绝不能自救，否则会把正在拆的钩子又装回去。
+    /// </summary>
+    public static bool ShouldSelfRecover(int callbackMs, int thresholdMs, int depth,
+                                         bool recoveryPending, bool disposePosted)
+        => depth == 1 && !recoveryPending && !disposePosted
+           && thresholdMs > 0 && callbackMs >= thresholdMs;
+
     /// <summary>此刻该不该摘钩重装。</summary>
     ///
     /// 判据的关键是**在同一个采样区间里对齐两格信号**，而不是拿两扇各自计时的窗去比：

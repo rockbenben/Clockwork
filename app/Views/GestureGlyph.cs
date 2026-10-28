@@ -25,10 +25,44 @@ namespace Clockwork.Views;
 public static class GestureGlyph
 {
     /// <summary>画一条手势。path 为空或非法时返回 null——调用方据此显示水印/占位，而不是画一个空盒子。</summary>
-    public static FrameworkElement? Make(string? path, double w, double h, Brush stroke, double thickness = 2)
+    /// <param name="includeLine">false = 只画起点圆点与末端箭头，笔画由 GestureTrailRenderer 自己画。</param>
+    public static FrameworkElement? Make(string? path, double w, double h, Brush stroke, double thickness = 2,
+                                         bool includeLine = true)
+    {
+        var scr = Fit(path, w, h, thickness);
+        if (scr.Count < 2) return null;
+
+        var host = new Grid { Width = w, Height = h };
+        if (includeLine)
+        {
+            var fig = new PathFigure { StartPoint = scr[0], IsClosed = false };
+            for (int i = 1; i < scr.Count; i++) fig.Segments.Add(new LineSegment(scr[i], true));
+            host.Children.Add(new Path
+            {
+                Data = new PathGeometry(new[] { fig }),
+                Stroke = stroke,
+                StrokeThickness = thickness,
+                StrokeLineJoin = PenLineJoin.Round,
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Round,
+            });
+        }
+        host.Children.Add(Arrow(scr[^2], scr[^1], stroke, thickness));
+        host.Children.Add(new Ellipse
+        {
+            Width = thickness * 2.2, Height = thickness * 2.2, Fill = stroke,
+            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(scr[0].X - thickness * 1.1, scr[0].Y - thickness * 1.1, 0, 0),
+        });
+        return host;
+    }
+
+    // 把方向串落到给定框里的屏幕坐标；列表缩略图、右侧保存预览和笔迹渲染器共用它，
+    // 保证「同一份几何」不再各抄一套缩放。返回空列表 = 路径非法。
+    internal static List<Point> Fit(string? path, double w, double h, double thickness)
     {
         var pts = Trace(path);
-        if (pts.Count < 2) return null;
+        if (pts.Count < 2) return new List<Point>();
 
         // 归一化到给定的框里，留出线宽和箭头的余量；单向手势（一条直线）某个轴的跨度为 0，
         // 此时按另一个轴缩放并居中，否则会除零或被拉成一条贴边的线。
@@ -54,30 +88,7 @@ public static class GestureGlyph
         if (double.IsInfinity(scale) || scale <= 0) scale = unit;
         double offX = (w - spanX * scale) / 2 - minX * scale;
         double offY = (h - spanY * scale) / 2 - minY * scale;
-        var scr = pts.ConvertAll(p => new Point(p.X * scale + offX, p.Y * scale + offY));
-
-        var fig = new PathFigure { StartPoint = scr[0], IsClosed = false };
-        for (int i = 1; i < scr.Count; i++) fig.Segments.Add(new LineSegment(scr[i], true));
-        var line = new Path
-        {
-            Data = new PathGeometry(new[] { fig }),
-            Stroke = stroke,
-            StrokeThickness = thickness,
-            StrokeLineJoin = PenLineJoin.Round,
-            StrokeStartLineCap = PenLineCap.Round,
-            StrokeEndLineCap = PenLineCap.Round,
-        };
-
-        var host = new Grid { Width = w, Height = h };
-        host.Children.Add(line);
-        host.Children.Add(Arrow(scr[^2], scr[^1], stroke, thickness));
-        host.Children.Add(new Ellipse
-        {
-            Width = thickness * 2.2, Height = thickness * 2.2, Fill = stroke,
-            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(scr[0].X - thickness * 1.1, scr[0].Y - thickness * 1.1, 0, 0),
-        });
-        return host;
+        return pts.ConvertAll(p => new Point(p.X * scale + offX, p.Y * scale + offY));
     }
 
     /// <summary>方向串 → 单位格点折线。连续同向不合并——那是量化器的事，这里画的是最终结果。</summary>

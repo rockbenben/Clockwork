@@ -8,10 +8,12 @@
     <!-- 品牌化非模态通知卡片：擒纵蓝钢面板 + 左缘刻度轨 + 品牌标记 + 仪表眉标 + 正文。
          屏幕右下角堆叠、不抢焦点，替代原来的系统托盘气泡，与提醒弹窗视觉一致。
          MinHeight：短消息（「已保存」）不缩成一小块——堆叠起来才有节奏，刻度轨也才有足够格数可读。 -->
+    <!-- 与提醒卡、品牌对话框同一档浮层：12px 圆角 + 同一组投影参数。
+         通知卡更窄更矮，圆角与阴影不跟着缩小，三种卡片在屏幕上才像同一套东西。 -->
     <Border Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}" BorderThickness="1"
-            CornerRadius="10" Margin="12" MinHeight="92" ClipToBounds="True">
+            CornerRadius="12" Margin="12" MinHeight="92" ClipToBounds="True">
         <Border.Effect>
-            <DropShadowEffect Color="#0A0D12" BlurRadius="20" ShadowDepth="4" Direction="270" Opacity="0.55"/>
+            <DropShadowEffect Color="#0A0D12" BlurRadius="22" ShadowDepth="5" Direction="270" Opacity="0.55"/>
         </Border.Effect>
         <Grid>
             <!-- 余量表：点亮格数=剩余显示时间，满格不动=常驻到你点掉。见 EscapementRail。 -->

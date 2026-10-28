@@ -59,6 +59,8 @@ public enum GestureWatchState
     // 手势类工具正是这么干的（吞掉按下去判断是不是手势）。这一档单列，是因为它与其余几档
     // 的补救完全不同：这儿一切正常，要动的是那个程序的设置，不是 Clockwork。
     Blocked,
+    /// <summary>链正堵着，手势主动让路：右键不抢、中键面板照常。</summary>
+    Yielding,
 }
 
 public sealed class GestureGate

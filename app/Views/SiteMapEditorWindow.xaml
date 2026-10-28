@@ -157,9 +157,9 @@
                                         <!-- Text 双向绑定直接写回规则对象（TextBox 默认 LostFocus 回写），
                                              所以「确定」时不需要再把界面上的值抄一遍——
                                              抄一遍就多一个「忘了抄哪一栏」的机会。 -->
-                                        <TextBox Grid.Column="0" Height="26" Text="{Binding Match, UpdateSourceTrigger=LostFocus}"
+                                        <TextBox Grid.Column="0" Height="28" Text="{Binding Match, UpdateSourceTrigger=LostFocus}"
                                                  AutomationProperties.Name="{loc:Loc Site_Match}"/>
-                                        <TextBox Grid.Column="2" Height="26" Text="{Binding Replace, UpdateSourceTrigger=LostFocus}"
+                                        <TextBox Grid.Column="2" Height="28" Text="{Binding Replace, UpdateSourceTrigger=LostFocus}"
                                                  AutomationProperties.Name="{loc:Loc Site_Replace}"/>
                                         <Button Grid.Column="4" Content="{loc:Loc Btn_Delete}" Padding="10,2" MinWidth="0"
                                                 CommandParameter="{Binding}" Click="RuleDel_Click"/>

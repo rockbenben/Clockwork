@@ -68,7 +68,7 @@
     <!-- 夹板。外层 Margin 是留给投影的空间——AllowsTransparency 下投影画在窗口内部，
          没有这圈余量就会被裁掉。 -->
     <Border Background="{StaticResource BrushSlate}" BorderBrush="{StaticResource BrushLine}" BorderThickness="1"
-            CornerRadius="11" Margin="14" Padding="7,6,7,7">
+            CornerRadius="12" Margin="14" Padding="7,6,7,7">
         <Border.Effect>
             <DropShadowEffect Color="#0A0D12" BlurRadius="28" ShadowDepth="6" Direction="270" Opacity="0.62"/>
         </Border.Effect>
@@ -218,7 +218,7 @@
                                 <TextBlock x:Name="EmptyNote" TextWrapping="Wrap"
                                            Foreground="{StaticResource BrushMuted}"/>
                                 <Button x:Name="EmptyAction" Visibility="Collapsed" HorizontalAlignment="Left"
-                                        Margin="0,12,0,0" MinWidth="96" Height="30"
+                                        Margin="0,12,0,0" MinWidth="96" MinHeight="30"
                                         Style="{StaticResource PrimaryButton}"/>
                             </StackPanel>
                         </StackPanel>

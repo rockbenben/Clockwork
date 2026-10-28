@@ -169,6 +169,12 @@
   <data name="Gesture_WatchBlocked" xml:space="preserve">
     <value>右鍵被別的程式截走了（AutoHotkey / 滑鼠驅動之類）</value>
   </data>
+  <data name="Gesture_WatchYielding" xml:space="preserve">
+    <value>讓路中·不搶右鍵</value>
+  </data>
+  <data name="Gesture_YieldResume" xml:space="preserve">
+    <value>立即恢復手勢</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>按住右鍵畫一條軌跡，就執行對應的動作。沒有匹配的手勢時，右鍵原樣交給當前程式。</value>
   </data>
@@ -1727,6 +1733,9 @@
   <data name="Picker_StartMenuEmpty" xml:space="preserve">
     <value>沒有在開始功能表裡找到任何程式捷徑。</value>
   </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>找不到符合的項目，換個詞試試。</value>
+  </data>
   <data name="Tpl_Restore" xml:space="preserve">
     <value>恢復正常</value>
   </data>
@@ -2113,7 +2122,7 @@
   <data name="Sum_Replace" xml:space="preserve">將 {0} 換成 {1}</data>
   <data name="Warn_BrowserUrlNone" xml:space="preserve">沒讀到瀏覽器網址。請確認 Chrome 或 Edge 正開啟著一個網頁（Firefox 暫不支援）。</data>
   <data name="Warn_SiteMapBadUrl" xml:space="preserve">這不像一個網址：{0}</data>
-  <data name="Warn_SiteMapNoMatch" xml:space="preserve">這個網址的網域不在網站設定裡。請在 clockwork.settings.json 的 sites 裡加一筆。</data>
+  <data name="Warn_SiteMapNoMatch" xml:space="preserve">這個網址的網域不在網站設定裡。請在「開啟網站源文件」步驟的網站對應表裡加一筆。</data>
   <data name="Warn_SiteMapBadRoot" xml:space="preserve">網站「{0}」的本機目錄不存在，請檢查它的 sourceRoot。</data>
   <data name="Warn_SiteMapNotFound" xml:space="preserve">對應到這個路徑，但本機沒有這個檔案：{0}</data>
   <data name="Warn_SiteMapOpenFail" xml:space="preserve">找到了檔案，卻打不開：{0}</data>
@@ -2124,7 +2133,7 @@
   <data name="Warn_UrlDecodeBad" xml:space="preserve">無法解碼這段內容：{0}</data>
   <data name="Ed_BrowserUrlHint" xml:space="preserve">讀取目前瀏覽器的網址列，產生一個網址給後面的步驟用。支援 Chrome / Edge 等 Chromium 系瀏覽器，暫不支援 Firefox。</data>
   <data name="Ed_SiteMapAction" xml:space="preserve">開啟方式</data>
-  <data name="Ed_SiteMapUrlHint" xml:space="preserve">要填一個網址（可以寫 {名字} 占位）。想讓網址跟著目前頁面走，先加一步「讀瀏覽器網址」把網址寫進變數，再在這裡填 {那個變數}。網域 → 本機路徑的對應關係在「設定 → 網站對應表」裡改。</data>
+  <data name="Ed_SiteMapUrlHint" xml:space="preserve">要填一個網址（可以寫 {名字} 占位）。想讓網址跟著目前頁面走，先加一步「讀瀏覽器網址」把網址寫進變數，再在這裡填 {那個變數}。</data>
   <data name="Ed_RegexPattern" xml:space="preserve">正則表達式</data>
   <data name="Ed_RegexGroup" xml:space="preserve">取第幾組</data>
   <data name="Ed_RegexHint" xml:space="preserve">0 = 整個比對，1 起 = 第幾個括號裡的內容。正則採用 .NET 語法。</data>
@@ -2250,7 +2259,7 @@
   <data name="Mig_StepParams" xml:space="preserve">把 {0} 條步驟裡共用的動作與數值拆到了各自的類型裡（每一步做什麼沒有變）</data>
 
   <data name="Gesture_Style" xml:space="preserve">樣式</data>
-  <data name="Gesture_Style_Classic" xml:space="preserve">經典</data>
+  <data name="Gesture_Style_Classic" xml:space="preserve">流光</data>
   <data name="Gesture_Style_Neon" xml:space="preserve">霓虹</data>
   <data name="Gesture_Style_Rainbow" xml:space="preserve">彩虹</data>
   <data name="Gesture_Style_Dashed" xml:space="preserve">虛線</data>

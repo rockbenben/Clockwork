@@ -366,6 +366,8 @@ public partial class App : System.Windows.Application
         // 托盘状态灯的两个刷新源：运行闸（即时）与提醒 tick（30s 心跳，兜住勿扰到点自解）。
         _runner.RunStateChanged += _tray.SyncTip;
         _reminders.Tick += _tray.SyncTip;
+        // 让路进入/退出是低频事件，但托盘 tooltip 与菜单都得当场变，不能等下一次提醒 tick。
+        _gesture.OnYieldChanged = _tray.SyncTip;
     }
 
     private void StartEngines()
@@ -619,8 +621,11 @@ public partial class App : System.Windows.Application
     // —— 鼠标钩子 / 手势：实现整体在 Services/GestureCoordinator.cs，这里只留门面转发 ——
     internal bool MouseHookActive => _gesture.MouseHookActive;
     internal GestureWatchState GestureWatch => _gesture.GestureWatch;
+    internal bool GestureYieldActive => _gesture.GestureYieldActive;
     // 托盘/手势管理器给的「重新挂钩抢链首」入口。
     internal void RehookMouse(string source = "manual") => _gesture.RehookMouse(source);
+    // 托盘的「立即恢复手势」入口（让路中才出现）。
+    internal void EndGestureYield() => _gesture.EndGestureYield();
     /// <summary>打开手势管理器。面板表圈上那颗按钮与主界面那颗走同一条路。</summary>
     public void OpenGestureManager() => _gesture.OpenGestureManager();
     // 按当前设置装/卸中键长按与手势钩子（幂等，UI 线程编组在实现里）。
@@ -631,6 +636,14 @@ public partial class App : System.Windows.Application
     // —— 快捷面板：实现整体在 Services/PanelCoordinator.cs，这里只留门面转发 ——
     // 面板是开关：热键再按一次收起来（僵尸/活面板的分辨在实现里）。
     public void TogglePanel() => _panelHub.TogglePanel();
+
+    /// <summary>编辑站点映射表。入口在 siteMap 步骤的编辑器里；表仍是全局共享的那一份。</summary>
+    internal void EditSiteMap(Window owner)
+    {
+        if (Views.SiteMapEditorWindow.Edit(owner, _config.Sites) is not List<SiteEntry> edited) return;
+        _config.Sites = edited;
+        SaveConfig();   // 表是 siteMap 步骤运行时要查的，改完立刻落盘
+    }
     // 跑一个步骤：group 类型转交整组运行（ToggleGroup），其余走单步。
     // 这行门面同时是 _gesture.RunGestureStep 接线的落点（GestureReceiptTests 钉 by: Gesture 档）。
     public void RunStep(LaunchStep step, Window? owner = null, StepTrigger by = StepTrigger.Button,

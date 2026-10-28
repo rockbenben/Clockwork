@@ -143,16 +143,7 @@ public partial class StepEditorWindow : Window
         UpdateCondHeader();
         CondExp.IsExpanded = StepDisplay.DecorationSummary(ConditionProbe()).Length > 0;
         // 高级字段：没配过的收起，配过的自动展开——已有配置不能被一次界面改版藏没。
-        MoreExp.IsExpanded = _icon.Length > 0
-            || !string.IsNullOrEmpty(_original.Args)
-            || !string.IsNullOrEmpty(_original.WorkDir)
-            || _original.Elevated
-            || !string.IsNullOrEmpty(_original.WindowStyle)
-            || !_original.ActivateIfRunning
-            || !string.IsNullOrEmpty(_original.ActivateProcess)
-            || !string.IsNullOrEmpty(_original.AltTargets)
-            || (_original.DelayMs != 100 && _original.DelayMs != 0)
-            || !string.IsNullOrEmpty(_original.Note);
+        MoreExp.IsExpanded = AdvancedConfigured(_original, _icon);
 
         // 「组合键」是单个组合（keys 步骤经 SendKeyCombo 单发），与热键同性质，改「点击即录键」——去掉多余的捕捉按钮。
         // 值就在框里、确定时读取，故 set 空。（「发送键」是 SendKeys 序列，可含 {TAB}{ENTER}/字面文本，必须能打字，
@@ -167,6 +158,20 @@ public partial class StepEditorWindow : Window
     }
 
     // （关窗恢复全局热键的兜底由 KeyCaptureBox 统一负责——挂宿主窗口 Closed，此处不再各写一份。）
+
+    // 「配过高级项」的判据。默认值不展开（如 ActivateIfRunning 默认 true、DelayMs 默认 100），
+    // 任何偏离默认的显式值都要展开——包括用户刻意设成 0 的延时。
+    internal static bool AdvancedConfigured(LaunchStep step, string icon)
+        => icon.Length > 0
+           || !string.IsNullOrEmpty(step.Args)
+           || !string.IsNullOrEmpty(step.WorkDir)
+           || step.Elevated
+           || !string.IsNullOrEmpty(step.WindowStyle)
+           || !step.ActivateIfRunning
+           || !string.IsNullOrEmpty(step.ActivateProcess)
+           || !string.IsNullOrEmpty(step.AltTargets)
+           || step.DelayMs != 100
+           || !string.IsNullOrEmpty(step.Note);
 
     // 「发送键」的捕捉便利：SendKeys 序列须能打字，故仍用弹窗按需录一个键（校验目的地可编码），不改成只读捕捉框。
     private void CaptureSendKey_Click(object sender, RoutedEventArgs e)
@@ -674,6 +679,9 @@ public partial class StepEditorWindow : Window
     // 四个新面板的「插入变量」按钮。四条同款写法，与上面那四条是同一个函数的不同入参——
     // 各写一份出来的话，将来给菜单加一项（比如剪贴板历史）就只改得动其中一半。
     private void PickSiteMapUrlVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(SiteMapUrlBox, SiteMapUrlVarBtn);
+
+    // 站点映射表的入口跟着它唯一的使用者走：表本身仍是全局共享的一份（见 App.EditSiteMap）。
+    private void EditSiteMap_Click(object sender, RoutedEventArgs e) => App.Instance?.EditSiteMap(this);
     private void PickDecodeVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(DecodeTextBox, DecodeVarBtn);
     private void PickRegexInputVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(RegexInputBox, RegexInputVarBtn);
     private void PickReplaceInputVar_Click(object sender, RoutedEventArgs e) => PickVar_Click(ReplaceInputBox, ReplaceInputVarBtn);

@@ -56,7 +56,8 @@ public static class Pickers
         DockPanel.SetDock(search, Dock.Top);
         var buttons = OkCancelRow(dlg, out var ok);
         DockPanel.SetDock(buttons, Dock.Bottom);
-        var list = new ListBox { Margin = new Thickness(0, 8, 0, 8) };
+        var list = new ListBox();
+        var listHost = WrapWithNoMatch(list, out var noMatch);
         // 两个控件都没有可见标签（搜索框只有 placeholder 式的 tooltip），读屏软件读到的就是「编辑，空白」——
         // 补上朗读名，名字直接借用它们各自的用途文案。
         System.Windows.Automation.AutomationProperties.SetName(search, Strings.Get("Picker_Search"));
@@ -65,6 +66,10 @@ public static class Pickers
         void Fill()
         {
             var q = search.Text.Trim();
+            var matches = procs
+                .Where(x => q == "" || x.Name.Contains(q, StringComparison.OrdinalIgnoreCase) || x.Title.Contains(q, StringComparison.OrdinalIgnoreCase))
+                .Select(x => TextRow(x.Title == "" ? x.Name : $"{x.Name} — {x.Title}", x.Name))
+                .ToList();
             var rows = new List<ListBoxItem>();
             // 「当前窗口」不参与搜索过滤：它不是一个进程，搜进程名的人不该把它筛掉，
             // 而它排在最前，一眼就能看见。
@@ -72,18 +77,18 @@ public static class Pickers
             // 而用户正是为了在长列表里缩范围才打字的——想起来要选「当前窗口」时得先把输入框清空。
             // 它只有一行、钉在最前，留着的代价比那一趟清空小。
             if (withCurrentWindow)
-                rows.Add(new ListBoxItem { Content = Strings.Get("Win_current"), Tag = Native.WindowManager.CurrentWindow });
-            rows.AddRange(procs
-                .Where(x => q == "" || x.Name.Contains(q, StringComparison.OrdinalIgnoreCase) || x.Title.Contains(q, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ListBoxItem { Content = x.Title == "" ? x.Name : $"{x.Name} — {x.Title}", Tag = x.Name }));
+                rows.Add(TextRow(Strings.Get("Win_current"), Native.WindowManager.CurrentWindow));
+            rows.AddRange(matches);
             list.ItemsSource = rows;
+            // 提示只统计真正匹配的进程：固定的「当前窗口」行不算搜索结果。
+            noMatch.Visibility = matches.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
         search.TextChanged += (_, _) => Fill();
         Fill();
         list.MouseDoubleClick += (_, _) => { if (list.SelectedItem != null) dlg.DialogResult = true; };
         ok.Click += (_, _) => { if (list.SelectedItem != null) dlg.DialogResult = true; };
 
-        root.Children.Add(search); root.Children.Add(buttons); root.Children.Add(list);
+        root.Children.Add(search); root.Children.Add(buttons); root.Children.Add(listHost);
         dlg.Content = root;
         search.Focus();
         return dlg.ShowDialog() == true ? (list.SelectedItem as ListBoxItem)?.Tag as string : null;
@@ -201,17 +206,20 @@ public static class Pickers
         DockPanel.SetDock(hint, Dock.Top);
         var buttons = OkCancelRow(dlg, out var ok);
         DockPanel.SetDock(buttons, Dock.Bottom);
-        var list = new ListBox { Margin = new Thickness(0, 8, 0, 8), SelectionMode = SelectionMode.Extended };
+        var list = new ListBox { SelectionMode = SelectionMode.Extended };
+        var listHost = WrapWithNoMatch(list, out var noMatch);
         System.Windows.Automation.AutomationProperties.SetName(search, Strings.Get("Picker_SearchApp"));
         System.Windows.Automation.AutomationProperties.SetName(list, Strings.Get("Picker_StartMenu"));
 
         void Fill()
         {
             var q = search.Text.Trim();
-            list.ItemsSource = entries
+            var items = entries
                 .Where(x => q == "" || x.Name.Contains(q, StringComparison.CurrentCultureIgnoreCase))
-                .Select(x => new ListBoxItem { Content = x.Name, Tag = x, ToolTip = x.Path })
+                .Select(x => TextRow(x.Name, x, x.Path))
                 .ToList();
+            list.ItemsSource = items;
+            noMatch.Visibility = items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
         search.TextChanged += (_, _) => Fill();
         Fill();
@@ -219,7 +227,7 @@ public static class Pickers
         list.MouseDoubleClick += (_, _) => { if (list.SelectedItems.Count > 0) dlg.DialogResult = true; };
         ok.Click += (_, _) => { if (list.SelectedItems.Count > 0) dlg.DialogResult = true; };
 
-        root.Children.Add(search); root.Children.Add(hint); root.Children.Add(buttons); root.Children.Add(list);
+        root.Children.Add(search); root.Children.Add(hint); root.Children.Add(buttons); root.Children.Add(listHost);
         dlg.Content = root;
         search.Focus();
         if (dlg.ShowDialog() != true) return null;
@@ -288,6 +296,35 @@ public static class Pickers
         app?.SuspendHotkeys();
         try { return dlg.ShowDialog() == true ? combo : null; }
         finally { app?.ResumeHotkeys(); }
+    }
+
+    // 纯文本行的共同外壳：省略号截断、悬停显示全文，Tag 仍是调用方要的值。
+    private static ListBoxItem TextRow(string text, object? tag, string? toolTip = null)
+        => new()
+        {
+            Content = text,
+            Tag = tag,
+            ToolTip = toolTip ?? text,
+            ContentTemplate = (DataTemplate)System.Windows.Application.Current.FindResource("ListTextEllipsis"),
+        };
+
+    // 两个搜索列表共用的空结果外壳：提示覆在列表上，不能做成列表项，
+    // 否则会被空格/方向键选中，双击还会被当成一个结果加进去。
+    private static Grid WrapWithNoMatch(ListBox list, out TextBlock noMatch)
+    {
+        list.Margin = new Thickness(0);
+        noMatch = new TextBlock
+        {
+            Text = Strings.Get("Picker_NoMatch"), HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Center,
+            TextWrapping = TextWrapping.Wrap, IsHitTestVisible = false, Visibility = Visibility.Collapsed,
+            Foreground = (System.Windows.Media.Brush)System.Windows.Application.Current.Resources["BrushMuted"],
+            FontSize = 12, MaxWidth = 360,
+        };
+        var host = new Grid { Margin = new Thickness(0, 8, 0, 8) };
+        host.Children.Add(list);
+        host.Children.Add(noMatch);
+        return host;
     }
 
     private static Window NewDialog(Window owner, string title, double w, double h)
