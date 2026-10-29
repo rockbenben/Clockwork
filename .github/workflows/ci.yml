@@ -141,6 +141,37 @@ jobs:
             exit 1
           fi
 
+      # **不覆盖已发布的资产**：仓库的规矩是坏掉的发布用新版本往前修，不回头改已发布的那一份。
+      #
+      # 而这条工作流对同一个 tag 是可以重跑的（concurrency 只取消分支上的运行，tag 运行永不被取消），
+      # 于是重跑 release 这一档会拿新构建的资产盖掉用户已经下载过的那一份：
+      # SHA256SUMS.txt 随之改变，用户手上的文件对不上校验值，看着像包被改过；
+      # 而 draft: true 还会把已发布的那条 release 推回草稿态，用户与 releases/latest 都看不见它。
+      #
+      # 所以这里先问一句：这条 tag 已经有**发布出去**的那份了吗？有就停。
+      # 还没发布的那份（草稿）不拦——「上传中途断了重跑就好」是支持的用法。
+      - name: Check the tag was never published before
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # 「查不到」与「查不动」必须分开：令牌失效、gh 缺失、5xx……一律**停下**，
+          # 不能当成「没发布过」——那正是这道闸要防的那件事（把用户已下载的资产换掉）。
+          if published="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${GITHUB_REF_NAME}" --jq '.id' 2>&1)"; then
+            if [ -n "$published" ]; then
+              echo "::error::tag ${GITHUB_REF_NAME} 已经发布过（release id=${published}）——不覆盖已发布的资产。用新版本往前修。"
+              exit 1
+            fi
+            echo "tag ${GITHUB_REF_NAME} 没有已发布的 release，可以发草稿"
+          elif printf '%s' "$published" | grep -qi '404'; then
+            # 真的没有这一条（草稿也走这条路：releases/tags 那个端点不返回草稿）。
+            echo "tag ${GITHUB_REF_NAME} 没有已发布的 release，可以发草稿"
+          else
+            echo "::error::无法确认 ${GITHUB_REF_NAME} 是否已发布（不是「没有」）：${published}"
+            exit 1
+          fi
+
       # **发版不等人。** 这道闸门拦的不是「谁来批」，是「从哪儿发」。
       #
       # 这个仓库**没有分支保护**（/branches/main/protection 是 404），
@@ -302,6 +333,21 @@ jobs:
       - name: Publish the release and point latest at it
         run: |
           set -euo pipefail
+          # **这一档只管指针，不管资产**（资产是 release 那一档传的，那一档才有「不覆盖
+          # 已发布的资产」那道闸）。所以它必须**可重跑**：
+          #   · 指针已经指着这条 tag → 什么都不用做，退出 0；
+          #   · 指针没指着（上一次 PATCH 之后断言失败）→ 补一次 PATCH，把指针挪过来——
+          #     那正是这一档存在的理由（GitHub 在「草稿转正」时不会重算 releases/latest，
+          #     2026-10-20 在 rclone-deck 上撞到过一次：release 已经发布，
+          #     releases/latest 却仍返回旧版本，端点 releases/latest/download/latest.json
+          #     于是 404——已装的应用从此收不到更新）。
+          # 早先这里有一道「已经发布过就停」的闸：它把上面那条**修复路径**也堵死了，
+          # 于是指针永远挪不过来，404 永远修不好。
+          latest="$(gh api "repos/${GH_REPO}/releases/latest" --jq '.tag_name' 2>/dev/null || echo "")"
+          if [ "$latest" = "$TAG" ]; then
+            echo "release ${TAG} 已发布，且 releases/latest 已经指着它——这一档无事可做。"
+            exit 0
+          fi
           # ⚠️ **显式给 make_latest 不是多此一举**：GitHub 在「草稿转成已发布」时**不会**
           # 重算 `releases/latest` 指向谁。2026-10-20 在 rclone-deck 上撞到过一次：release 已经是
           # `draft=false`、`prerelease=false`、`published_at` 也填上了，`releases/latest` 却仍
