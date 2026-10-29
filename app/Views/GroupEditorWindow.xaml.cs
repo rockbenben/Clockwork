@@ -371,12 +371,17 @@ public partial class GroupEditorWindow : Window
     {
         var tree = StepTree.Build(steps);
         var outp = new List<LaunchStep>();
-        var seen = new HashSet<string>(StringComparer.Ordinal) { block.Id ?? "" };
+        // **空 id 用哨兵而不是空串**：两个没有 id 的步骤会共用空串，
+        // 于是第二个被当成「已经走过」跳过——它活了下来，而它的 ParentId 还指着
+        // 被删掉的块，孤儿就此留下（ConfigStore 会补 id，所以这是潜伏的洞，不是天天中的）。
+        const string MissingId = "\0";
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        if (!string.IsNullOrEmpty(block.Id)) seen.Add(block.Id);
         void Walk(IReadOnlyList<LaunchStep> list)
         {
             foreach (var s in list)
             {
-                if (!seen.Add(s.Id ?? "")) continue;
+                if (!seen.Add(s.Id ?? MissingId)) continue;
                 outp.Add(s);
                 Walk(tree.ChildrenOf(s.Id));
             }
