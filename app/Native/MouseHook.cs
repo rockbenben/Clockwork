@@ -248,9 +248,10 @@ public sealed class MouseHook : IDisposable
     // 欠着的抬起账本（显式状态机，见 app/Core/MouseUpLedger.cs）。
     //
     // 账目的形状全在**那一个类**里：谁欠谁、欠几笔、有几笔在途、退避到第几次、
-    // 认输了没有、配对期到什么时候、那一笔交还给程序的按下还在不在。
-    // 这一侧只留**单一发送出口**（见 SendUpUnit）与三个驱动源：
-    // 补发线程（`ReplayLoop`）、看门狗（`UpWatchdogTick`）、拆卸时的结清（`SettleOwedKeys`）。
+    // 配对期到什么时候、那一笔交还给程序的按下还在不在。
+    // 这一侧只留**单一发送出口**（见 SendUpUnit）与四个驱动源：
+    // 补发线程（`ReplayLoop`）、看门狗（`UpWatchdogTick`）、让路时结账（`ApplyYield`）、
+    // 拆卸时的结清（`SettleOwedKeys`）。
     //
     // 为什么把它收成一个状态机而不是几个计数器：账目的形状散在各处时，
     // 它们之间的不变式只能靠注释维持——而注释不会跟着代码一起被改。
@@ -290,6 +291,9 @@ public sealed class MouseHook : IDisposable
     private int _upWatchdogSeq;
     // 看门狗：只负责把欠着的抬起按退避重试还上（见 MouseUpLedger.ScheduleRetry）。
     private System.Threading.Timer? _upWatchdog;
+    // 只护 `_upWatchdog` 这一个指针：武装（读后写的 ??=）与退休必须互斥，理由见 UpWatchdogTick。
+    // 它不跨 SendInput、也不在账本锁里去拿——本类所有锁都守着「不许挡住钩子线程」这条纪律。
+    private readonly object _watchdogArmLock = new();
     // 看门狗重试/收尾这两件事要能从日志里看见（它们只在「本该正常」的路径出问题时才发生）。
     // 写盘在 AppDiagnostics 的后台线程上，这里只负责把一行文本交出去。
     private readonly Action<string> _diag;
@@ -328,6 +332,21 @@ public sealed class MouseHook : IDisposable
     // 以前只能钉字符串——而钉字符串拦不住「条件反了」那种改法。
     // 有了这道口子，它们就能**行为级**地验：假的发送口说失败，账就必须还在。
     private readonly Func<MouseUpButton, bool>? _sendUp;
+
+    // **问一句「那个键此刻在系统里是按下的吗」**。生产走 Win32 的键态探针；单测注入假的实现。
+    //
+    // 它是这套账目唯一的外部真相：账按「笔」记，而系统那边一个键只有一个按下态。
+    // 发抬起之前先问一次，问出「已经不按了」就当众销账而不再注入——多发的那一个抬起
+    // 是没有配对按下的抬起（DefWindowProc 会凭它合成一个莫名的右键菜单）。
+    // 这一问不犯「吞了别人的消息就别拿系统键态当判据」那条：账本里每一笔都来自
+    // **我们自己注入成功的按下**，那一次真的进了输入流（理由见 Win32.RightButtonDown 处）。
+    private readonly Func<MouseUpButton, bool>? _keyDown;
+
+    // 测试宿主进程里绝不允许走真注入那一条路（哪怕某个测试忘了注入接缝）。
+    // 认不出来的一律按生产放行：生产进程名不是这个，所以这道闸对用户端是空转。
+    private static readonly bool TestHostProcess =
+        Environment.ProcessPath?.EndsWith("Clockwork.Tests.exe", StringComparison.OrdinalIgnoreCase) == true;
+    private static int _refusedTestInjections;
 
     // 「这个程序里不接管手势吗」。名单判据在 GestureGate.IsIgnoredApp（纯函数、有测试），
     // 这里只负责在按下那一刻把进程名问出来（读后台探针的缓存，不做跨进程查询）。
@@ -369,10 +388,12 @@ public sealed class MouseHook : IDisposable
                      Func<string, bool>? ignoredApp = null,
                      Action<MouseHook, HookRecoveryReport>? selfRecovered = null,
                      Action<string>? diag = null,
-                     Func<MouseUpButton, bool>? sendUp = null)
+                     Func<MouseUpButton, bool>? sendUp = null,
+                     Func<MouseUpButton, bool>? keyDown = null)
     {
         _selfRecovered = selfRecovered;
         _sendUp = sendUp;
+        _keyDown = keyDown;
         // 诊断通道**绝不许把异常抛出去**：它会被看门狗的 catch 调用，也会被拆卸路径调用——
         // 一个抛出去的异常会终止线程池上的那条线程（进程当场没了），
         // 或者打断拆卸（钩子摘不掉 = 机器上留一条全局鼠标钩子）。
@@ -567,12 +588,26 @@ public sealed class MouseHook : IDisposable
     /// </remarks>
     private bool SendUpUnit(MouseUpUnit unit)
     {
+        // **先与真实键态对账**：那个键已经不按着了，说明这一笔早被别人结清了（用户自己的抬起，
+        // 或同键积压里我们先前发出去的那一个）。这时再发一次就是没有配对按下的抬起——
+        // 目标程序凭它合成一个莫名的右键菜单（用户报的「凭空多出一次右键」）。就地销账、不发；
+        // 同键的其余几笔也一样：下一笔认领时问到的还是「不按」，一路销账到底。
+        //
+        // 这一问为什么不犯「吞了别人的消息就别拿系统键态当自己的判据」那条（见 Win32 处）：
+        // 账本里每一笔都来自**我们自己注入成功的按下**，那一次真的进了输入流、在键态表里落过账。
+        // 而 SendInput 报成功却压根没落地的那一档（UIPI 在投递侧过滤）也一并兜住：
+        // 那个键从头到尾没按下过，问出来是「不按」，销账正是对的结局。
+        if (!ButtonDown(unit.Button))
+        {
+            _upLedger.Settle(unit);
+            _diag($"up for {unit.Button} was already discharged; settled without injecting");
+            return true;
+        }
         bool ok = false;
         try
         {
-            ok = _sendUp != null
-                ? _sendUp(unit.Button)
-                : SendTimed(() => unit.Button == MouseUpButton.Right
+            if (_sendUp != null) ok = _sendUp(unit.Button);
+            else ok = SendTimed(() => unit.Button == MouseUpButton.Right
                     ? Win32.SendRightUpTagged()
                     : Win32.SendMiddleUpTagged());
         }
@@ -583,6 +618,15 @@ public sealed class MouseHook : IDisposable
         }
         return ok;
     }
+
+    /// <summary>
+    /// 那个键此刻在系统里是按下的吗。单测注入探针；生产问 Win32 的键态（读一个全局状态位，
+    /// 不注入任何东西，受限令牌也读得到）。
+    /// </summary>
+    private bool ButtonDown(MouseUpButton button)
+        => _keyDown != null
+            ? _keyDown(button)
+            : button == MouseUpButton.Right ? Win32.RightButtonDown() : Win32.MiddleButtonDown();
 
     // 补发队列里的一件：要么是一次完整的点击，要么是「还某笔欠着的抬起」（带 token）。
     private enum ReplayKind
@@ -671,10 +715,18 @@ public sealed class MouseHook : IDisposable
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
             // 队列被 Dispose / 线程被中止：补发就此停住。不会留下卡住的按键——摘钩那一路
             // 由 SettleOwedKeys 无条件还键并结清欠着的抬起，与这条线程活不活无关。
+            //
+            // 但**这件事必须看得见**：这条线程是 `ReleaseOwed` 那件补发的唯一认领人，
+            // 它死了而钩子还装着，之后的补发会一路填满队列、每一次 ReplayClick 都退化成放行，
+            // 日志里「从没需要补发」与「补发线程死了」长得一模一样。
+            // 配对期也在这里收回来：异常若正好落在配对中间，闸门留着只会让看门狗白等
+            //（它自己会过期，但那一拍本来就能还账）。
+            _upLedger.ReleasePairing();
+            _diag($"replay loop ended: {ex}");
         }
     }
 
@@ -686,6 +738,21 @@ public sealed class MouseHook : IDisposable
     // 一响就给用户还按着的键补一个抬起（目标程序先收到一次提前的松开，
     // 稍后用户真松手时又来一条没有配对按下的抬起，凭它合成一个莫名菜单）。
     // 那一档由**下一次右键按下**认领（见 ClaimLostHandedDown）。
+
+    /// <summary>
+    /// 这只看门狗此刻可以退休吗：代号还是自己的 + 补发线程已退 + 账与在途都清零。
+    ///
+    /// 三个读都是各自原子的、合起来**不是**原子的，所以退休那一头要在
+    /// <see cref="_watchdogArmLock"/> 里再问一遍（理由见 UpWatchdogTick 里那段）。
+    /// </summary>
+    private bool WatchdogRetirable(int gen)
+    {
+        var replay = Volatile.Read(ref _replayThread);
+        return Volatile.Read(ref _upWatchdogGen) == gen
+            && (replay == null || !replay.IsAlive)
+            && _upLedger.ShouldRetireWatchdog(Volatile.Read(ref _tornDown) != 0);
+    }
+
     internal void UpWatchdogTick()
     {
         // 这一拍属于哪一只看门狗：退休时只退自己那一只（见下面的代号）。
@@ -706,7 +773,8 @@ public sealed class MouseHook : IDisposable
                     SettleOwedUps(UpWatchdogMaxSends);
                     break;
             }
-            // 钩子已经拆完、账也还清了（**或者根本还不上、已认输**）→ 看门狗退休。
+            // 钩子已经拆完、账也还清了 → 看门狗退休。
+            // **它不认输**：还不上就一直退避重试（见账本类头），所以这里没有「放弃」那一档；
             // 判据在账本里：**在途的那几笔也算没还清**——账目在认领时就少了，
             // 而抬起还在发送里；那一刻若把看门狗销毁，那笔在途的账一失败就没人还了
             //（失败时它把账还回去并排重试，可已经没有看门狗去认领那个重试）。
@@ -716,18 +784,27 @@ public sealed class MouseHook : IDisposable
             // 它要是正好在这个窗口里被拆掉，看门狗就会看着「账清零」先走，
             // 那一笔随后记上就再没人还了（那个键卡在全系统按下态）。
             // 补发线程退出前会把它手上那一笔还上，所以等它退干净再退休就够了。
-            var replay = Volatile.Read(ref _replayThread);
-            if (Volatile.Read(ref _upWatchdogGen) == gen
-                && (replay == null || !replay.IsAlive)
-                && _upLedger.ShouldRetireWatchdog(Volatile.Read(ref _tornDown) != 0))
+            if (WatchdogRetirable(gen))
             {
                 // **先把引用摘走，再释放**：反过来（先 Dispose 再置 null）的话，
                 // 这一拍若正好被抢占在两句之间，而此刻装钩子那条路走到
                 // `_upWatchdog ??= new Timer(...)`——它看到的是**非空但已经释放**的定时器，
                 // 于是不新建；而这一拍回来再把字段置空：**看门狗就此彻底没有了**，
                 // 之后的欠账没人还（那个键卡在全系统按下态）。
-                var retired = Interlocked.Exchange(ref _upWatchdog, null);
-                try { retired?.Dispose(); } catch { }
+                //
+                // 摘走与释放还要和装钩子那条路的「武装」抢同一把锁，并在锁里**把判据再看一遍**：
+                // `??=` 是读后写、不是原子的——那一头读到非空就不新建，而这一头的判据是几条指令
+                // 之前读的（代号、补发线程、已拆标志）。那时顺序变成「它读到旧的非空 → 不新建 →
+                // 我释放掉那只唯一的定时器」，这一代同样没有看门狗。Install 与 Dispose 会并发是
+                // 这个仓库写明的既有事实（见 `_installed` 那段：安装改到后台线程上等之后，
+                // 重叠成了必然），所以这不是纸面上的竞态。
+                // 这把锁只护定时器指针：不跨 SendInput，也不在任何别的锁里再拿它。
+                lock (_watchdogArmLock)
+                {
+                    if (!WatchdogRetirable(gen)) return;   // 换代了：这一拍不是这只看门狗的主人
+                    var retired = Interlocked.Exchange(ref _upWatchdog, null);
+                    try { retired?.Dispose(); } catch { }
+                }
             }
         }
         catch (Exception ex)
@@ -742,8 +819,32 @@ public sealed class MouseHook : IDisposable
     // 一次注入：耗时记进 `_replayMaxMs`，被 UIPI 丢掉就计 `_injectRejected`。
     // 跑在补发线程、看门狗与结清路径上——它们都不在钩子回调里，所以这里怎么慢都越不过
     // LowLevelHooksTimeout。返回「送出去了没有」——按下被丢时不该再补一次无配对的抬起（见上面的台账）。
+    /// <summary>
+    /// **装配级守卫**：测试宿主里不许把真的鼠标事件送进系统。两个同步注入出口（`SendTimed`、
+    /// `SendSync`）都先问这一句，所以这不靠每条测试自己记得清账、关闸门。
+    ///
+    /// 为什么值得收成一处：这条纪律原先写在每条测试的收尾里（`gate.Reset()`、`ClearOwedUps()`），
+    /// 而纪律不是守卫——任何一条新测试忘了，就往开发者的桌面上注入一次真的按下或抬起；
+    /// 抬起那一路的后果是「一个用户没按过的键被松开」（莫名右键菜单），收不回来。
+    /// 拒发之后账还留着，看门狗继续退避重试（少发一次是有主人的），所以拒发不会把键留在按下态。
+    ///
+    /// 认不出测试宿主的一律按生产放行：生产进程叫 Clockwork.exe，不是 Clockwork.Tests.exe，
+    /// 所以这道闸对用户端是空转。真的要走真注入，用 `--hookprobe`（那是生产 exe 里的开关）。
+    /// </summary>
+    private bool RefusedInTestHost()
+    {
+        if (!TestHostProcess) return false;
+        Interlocked.Increment(ref _refusedTestInjections);
+        _diag("refused a real mouse injection under the test host");
+        return true;
+    }
+
+    /// <summary>测试宿主里被挡下的真注入次数（装配级守卫的读数，见 <see cref="RefusedInTestHost"/>）。</summary>
+    internal static int RefusedTestInjections => Volatile.Read(ref _refusedTestInjections);
+
     private bool SendTimed(Func<uint> send)
     {
+        if (RefusedInTestHost()) return false;
         long t = Environment.TickCount64;
         uint sent;
         try { sent = send(); }
@@ -792,7 +893,11 @@ public sealed class MouseHook : IDisposable
         replay.Start();
         // 抬起账的看门狗与补发线程同起同收（见 UpWatchdogTick）。放在这里而不是构造函数：
         // 构造函数不许偷开线程/定时器（与钩子线程同一条纪律）。
-        _upWatchdog ??= new System.Threading.Timer(_ => UpWatchdogTick(), null, UpWatchdogPeriodMs, UpWatchdogPeriodMs);
+        // 与退休抢同一把锁：那一头在锁里会把代号再看一遍，两头不会互相踩到。
+        lock (_watchdogArmLock)
+        {
+            _upWatchdog ??= new System.Threading.Timer(_ => UpWatchdogTick(), null, UpWatchdogPeriodMs, UpWatchdogPeriodMs);
+        }
     }
 
     // 超时兜底丢掉一笔手势后，**还欠系统一次右键按下**（它已经被我们 return 1 吃掉了）。
@@ -921,10 +1026,11 @@ public sealed class MouseHook : IDisposable
         long heldMs = _upLedger.HandedDownAgeMs(now);
         if (!_upLedger.ClaimHandedDown(now, Win32.ForegroundWindow().ToInt64(), out var unit))
             return;
-        // **投不进去也得有人还这笔账**：队列满了或已收 → 这一件没人领，
-        // 而看门狗只在「已经排过重试」时才动——
-        // 不排下一次重试，这笔账就永远挂着 = 那个键卡在全系统按下态
-        //（2026-10-28 那次整机左键失效的同一类事故）。
+        // **投不进去也得有人还这笔账**：队列满了或已收 → 这一件没人领，这里排一次重试
+        // 是把它交给退避梯子（500ms → 5s）。不排也不会永远挂着：看门狗的 TakeOver 快路径
+        // 会接手（见 Decide 那一档），但那条路**每拍立刻试一次、不退避**——而此刻的处境
+        // 正是「前台是提权窗口，这一次注入注定被拒」，半秒撞一次没有意义。
+        //（2026-10-28 那次整机左键失效的同一类事故：欠着的抬起必须有主人，只是主人要退避着试。）
         if (!EnqueueReplay(ReplayKind.ReleaseOwed, unit.Token))
             ScheduleUpRetry(now);
         _diag($"handed right down was never released by the user (held {heldMs}ms); queued one release");
@@ -1434,7 +1540,16 @@ public sealed class MouseHook : IDisposable
             // · 不还的代价又比右键小一个量级：孤立的中键抬起在绝大多数程序里是惰性的，
             //   而孤立的右键抬起会被 DefWindowProc 合成一个 WM_CONTEXTMENU（那才是看得见的毛病）。
             // 已经被当成「漏了 _fired 一半」提过一次，留这段免得反复。
-            if (_gate?.Pending == true) Win32.SendMiddleDownTagged();
+            //
+            // 还回去的那个中键按下**同样要记账**（与上面右键那一档同一个理由）：它是真进了系统的
+            // 按下，没人替它配对就是中键卡在全系统按下态 = 中键拖拽永远在拖。
+            // 右键那一档不记账是有主人的（交还给程序的按下由用户自己的抬起配对），
+            // 而这里没有：钩子已经要摘了，之后再也没有一条路会为它补抬起。
+            // 发送前会与真实键态对账（见 SendUpUnit），所以这条账不会多补一个抬起。
+            // 顺带把它收进 SendTimed：送不进去要计 `_injectRejected`、耗时要进 `_replayMaxMs`，
+            // 否则这一句在仪表上是完全隐形的。
+            if (_gate?.Pending == true && SendTimed(() => Win32.SendMiddleDownTagged()))
+                _upLedger.Owe(MouseUpButton.Middle, Environment.TickCount64, Win32.ForegroundWindow().ToInt64());
         }
         finally { Core.UiStallWatch.End("hook-teardown-inject", inj0); }
     }
@@ -1465,6 +1580,16 @@ public sealed class MouseHook : IDisposable
         Volatile.Write(ref _tornDown, 1);
         // 账本里那笔「交还给程序的按下」也清掉：钩子摘掉之后，用户那条真抬起会直接进系统，
         // 不存在「没人替它配对」的问题；再补一个抬起反而会在程序里凭空多出一次抬起。
+        //
+        // 这里**故意不转成一笔欠着的抬起**（与上面还中键那一档相反），三档摊开说：
+        //   · 用户还按着 → 他的真抬起马上进系统配平它。要是这里记了账，看门狗下一拍（≤500ms）
+        //     问键态答「按着」就会补一个抬起——在他手里提前松开，而他真松手时又是一条野抬起。
+        //     右键拖拽、按住选菜单都是这一档，常见。
+        //   · 抬起已经被安全桌面吃掉（手已经离开）→ 那个键此时刻在全系统按下态，而标记被清掉
+        //     之后就没人再管它。这是这一档留下的缝。
+        //   · 记了账也救不了第二条：区分「他还按着」与「已经丢了」要的正是那个我们拿不到的信息。
+        // 取向：宁可留第二条那个少见的缝，不在第一条那一档每次退出/重装都掐断用户的右键拖拽。
+        // 与「不用计时器兜底」是同一条决定的两半（见 MouseUpLedger.MarkHandedDown）。
         _upLedger.ClearHandedDown();
         _gate?.Reset();
         _gesture?.Reset();
@@ -1660,11 +1785,17 @@ public sealed class MouseHook : IDisposable
             Interlocked.Increment(ref _rescueSkipped);
             return;
         }
+        // 这一笔按下**故意不进账本**（与拆卸时还键那一档不同，理由是时机不是键）：
+        // 拖拽正在用户手里跑着，它的抬起会原样流过这条链并把按下配平。要是这里也记一笔欠账，
+        // 看门狗下一次醒（≤500ms）就会在他还按着的时候补一个中键抬起——孤立的中键抬起在别的
+        // 程序里是惰性的，在这里不是：它把中键自动滚动当场掐断。
+        // 拆卸那一档反过来：钩子正在离开，没人再为它配对，所以那边必须记。
         SendSync(() => Win32.SendMiddleDownTagged());
     }
 
     private uint SendSync(Func<uint> send)
     {
+        if (RefusedInTestHost()) return 0;
         long t = Core.UiStallWatch.Begin();
         try
         {

@@ -164,6 +164,31 @@ public class MouseUpLedgerTests
         Assert.Equal(MouseUpClaim.Claimed, l.TryClaimOldest(1_011, out _));
     }
 
+    // **两条补发线程共用这一个配对窗时，先结清的那一条不许把另一条的窗打开**。
+    // 这不是纸面上的形状：拆过又装回来时旧线程可能还在排空老队列（`StartReplayWorker` 在
+    // 「已拆完」那一档会放行第二条线程），而旧实现里 `ReleasePairing` 是无条件归零——
+    // 谁先结清谁就把门打开，看门狗立刻领走另一条**正在配对**的那一笔：
+    // 按下已经送进系统、抬起被从别的线程补出去，中间那 15ms 没了 = 0ms 的零长度点击
+    // = 用户那一下右键凭空消失（Chromium 那类程序把同批时间戳相同的事件当噪声丢掉）。
+    // 让它变红的改动：把 ReleasePairing 改回无条件归零（不数还有几条压着）。
+    [Fact]
+    public void Releasing_one_pairing_leaves_the_other_threads_window_standing()
+    {
+        var l = new MouseUpLedger();
+        l.Owe(MouseUpButton.Right, 1_000, foregroundWindow: 1);
+        l.ReservePairing(1_000, 500);      // 线程 A：窗口到 1_500
+        l.ReservePairing(1_100, 500);      // 线程 B：窗口到 1_600
+
+        l.ReleasePairing();                 // A 结清了
+
+        Assert.True(l.PairingActive(1_300));
+        Assert.Equal(MouseUpClaim.Pairing, l.TryClaimOldest(1_300, out _));   // B 的那一笔还受保护
+
+        l.ReleasePairing();                 // B 也结清 → 窗才真的收掉
+        Assert.False(l.PairingActive(1_300));
+        Assert.Equal(MouseUpClaim.Claimed, l.TryClaimOldest(1_300, out _));
+    }
+
     // 退避：500ms → 1s → 2s → 4s → 5s 封顶。够等到用户切走那个提权窗口。
     [Fact]
     public void The_retry_backs_off_and_then_caps()
@@ -208,16 +233,49 @@ public class MouseUpLedgerTests
         var l = new MouseUpLedger();
         l.Owe(MouseUpButton.Right, 1_000, foregroundWindow: 1);
 
-        // 排上一千次：每一次都排出了下一次（没有 long.MaxValue 那种「永不再到期」）。
-        for (int i = 0; i < 1_000; i++)
+        // 每一轮都把时钟推过退避的封顶（5s）再排一次：任何「排到第 N 次就不排了」的写法，
+        // 那个冻住的时刻在下一轮就落到过去里来了，这条断言才会红。
+        //
+        // 早先这一条每轮只把时钟推 1ms 而封顶是 5000ms —— 冻住的时刻**永远还在未来**，
+        // 于是它只咬得住「第 1~6 次就停」那种没人会写的数，注释里声称的那个变异照样全绿。
+        long now = 10_000;
+        long previous = 0;
+        for (int i = 0; i < 200; i++)
         {
-            l.ScheduleRetry(1_000 + i);
-            Assert.NotEqual(long.MaxValue, l.RetryAtMs);
-            Assert.True(l.RetryAtMs > 1_000 + i);
+            now += 6_000;
+            l.ScheduleRetry(now);
+            Assert.True(l.RetryAtMs > now, $"第 {i} 轮不再排下一次了（= 它认输了）");
+            Assert.True(l.RetryAtMs > previous, "重试时刻要一路往后排，不是在原地不动");
+            previous = l.RetryAtMs;
         }
 
         // 而账还在——认输的话它就不会在了。
         Assert.Equal(1, l.OwedCount);
+    }
+
+    // **补发线程自己结清最后一笔时也要把退避档位复位**。它走的是 token 认领那条路，
+    // 不经过 `SettleOwedUps` 的收尾，而 ClearRetry 今天只有那一个调用点——复位永远轮不到它。
+    // 不复位的后果不是崩溃而是**变慢**：档位随会话时长一路爬到 5s 封顶，下一次真卡住键的
+    // 第一次重试要等 5s，而那句「第一次失败」的证据行（只在档位 1 打）从此再也不出现。
+    // 让它变红的改动：把 Settle 里「账与在途都空了就复位」那一句删掉。
+    [Fact]
+    public void Settling_the_last_unit_forgets_the_backoff()
+    {
+        var l = new MouseUpLedger();
+        var a = l.Owe(MouseUpButton.Right, 1_000, foregroundWindow: 1);
+        var b = l.Owe(MouseUpButton.Right, 1_001, foregroundWindow: 1);
+        l.ScheduleRetry(1_002);
+        l.ScheduleRetry(1_003);
+        Assert.Equal(2, l.RetryAttempt);
+
+        Assert.True(l.TryClaimToken(a.Token, out var ua));
+        l.Settle(ua);
+        Assert.Equal(2, l.RetryAttempt);      // 还欠着 b 那一笔 → 不许复位
+
+        Assert.True(l.TryClaimToken(b.Token, out var ub));
+        l.Settle(ub);
+        Assert.Equal(0, l.RetryAttempt);      // 账与在途都空了 → 下一次从 500ms 重新起算
+        Assert.Equal(0, l.RetryAtMs);
     }
 
     // 看门狗这一拍该不该动账：
@@ -253,7 +311,7 @@ public class MouseUpLedgerTests
         Assert.Equal(MouseUpDecision.Idle, l.Decide(1_010));
     }
 
-    // 看门狗退休的判据：钩子已拆 + 没有在途的那几笔 + 账已还清（或已认输）。
+    // 看门狗退休的判据：钩子已拆 + 没有在途的那几笔 + 账已还清（账本不认输，没有「放弃」那一档）。
     // **在途的那几笔也算没还清**——那一笔一失败就把账还回去并排重试，
     // 看门狗要是已经没了，那个重试没人认领 → 那个键卡在全系统按下态。
     [Fact]

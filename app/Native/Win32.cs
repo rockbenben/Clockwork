@@ -283,11 +283,26 @@ public static class Win32
     // 手势那边改用自己收到按下的时刻（MouseHook 里的 _beatRDown），不依赖任何被我们动过的
     // 系统状态。
     //
-    // 它现在唯一的调用方正是 DevChecks 里那个探针（--hookprobe）：探针**故意**吞一次按下，
+    // 它曾经唯一的调用方是 DevChecks 里那个探针（--hookprobe）：探针**故意**吞一次按下，
     // 再数这一问的答案，为的就是把上面那个事实量出来。别把它用回判据里去。
+    //
+    // **一个例外，而且是同一条规则的正面用法**（MouseHook.SendUpUnit 与真实键态对账）：
+    // 那一问的对象不是「用户那一下」，而是**我们自己注入、并且注入成功了的按下**——
+    // 那一次按下真进了输入流，所以它在键态表里落过账，与 return 1 吞掉的那条正相反。
+    // 键态说不按了 = 那次按下已经被谁松开了（用户自己的抬起，或我们先前那一个抬起），
+    // 这时再补一个抬起就是没有配对按下的抬起 → 莫名右键菜单。
+    //
+    // 读不到时答「没按」：这里是**少发一个抬起**的方向，而抬起少发的兜底是看门狗继续退避重试
+    // （账还在），不是把键留在按下态；受限令牌读得到这一问（见 KeyWaiter 的实测说明）。
     public static bool RightButtonDown()
     {
         try { return (GetAsyncKeyState(0x02) & 0x8000) != 0; } catch { return false; }   // VK_RBUTTON
+    }
+
+    /// <summary>中键此刻在系统里是按下的吗（同一个键态问法，与 RightButtonDown 同一个例外）。</summary>
+    public static bool MiddleButtonDown()
+    {
+        try { return (GetAsyncKeyState(0x04) & 0x8000) != 0; } catch { return false; }   // VK_MBUTTON
     }
     private const int VK_SHIFT = 0x10, VK_CONTROL = 0x11, VK_MENU = 0x12;
     private const int VK_LWIN = 0x5B, VK_RWIN = 0x5C;   // Win 键没有通用 VK，左右各问一次

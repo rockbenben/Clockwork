@@ -195,8 +195,9 @@ public class ReplayOffCallbackTests
         Assert.Contains("Owe(MouseUpButton.Right", loop);
         Assert.Contains("Owe(MouseUpButton.Middle", loop);
         // **配对期要放掉**：补发线程把抬起发完了就把闸门收回来，
-        // 不放的话看门狗会白晚半秒才敢动账。
-        Assert.Equal(2, System.Text.RegularExpressions.Regex.Matches(loop, @"ReleasePairing\(\)").Count);
+        // 不放的话看门狗会白晚半秒才敢动账。三处各有主人：右键那一档、中键那一档、
+        // 以及补发线程死在半路时（异常那条路不收窗，闸门就要白等到自己过期）。
+        Assert.Equal(3, System.Text.RegularExpressions.Regex.Matches(loop, @"ReleasePairing\(\)").Count);
         // 按下与抬起之间必须留着那一段间隔：同批注入的 down/up 时间戳完全相同，
         // 零长度点击会被下游当噪声丢掉（理由见 MouseHook.ClickGapMs 处，是本地的实测口径）。
         // **两档点击各一次**——只断言「出现过」的话，摘掉其中一条什么也不会红（打过这一发）。

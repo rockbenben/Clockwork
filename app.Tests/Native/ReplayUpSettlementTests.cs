@@ -194,14 +194,23 @@ public class ReplayUpSettlementTests
     // 看门狗退休判据里的另外两个合取项：补发线程还活着时不许退休（它正要记一笔新账），
     // 而**代号**必须对得上（换看门狗要换号：旧号的那一拍还在路上，它不能把新这只也退休掉）。
     //
-    // 让它变红的改动：删掉这两个合取项。
+    // 判据抽成了 `WatchdogRetirable`——因为退休那一头要在武装锁里**把它再问一遍**（见下），
+    // 一份判据两处问，比两处各写一遍更不会被改歪。
+    //
+    // 让它变红的改动：删掉这两个合取项，或删掉锁里的第二次问。
     [Fact]
     public void The_watchdog_only_retires_when_the_replay_thread_is_done_and_its_generation_matches()
     {
         var src = Source("Native", "MouseHook.cs");
-        var guard = IfBlockContaining(Body(src, "internal void UpWatchdogTick()"), "ShouldRetireWatchdog");
-        Assert.Contains("(replay == null || !replay.IsAlive)", guard);
+        var guard = Body(src, "private bool WatchdogRetirable(int gen)");
         Assert.Contains("_upWatchdogGen) == gen", guard);
+        Assert.Contains("IsAlive", guard);
+        Assert.Contains("ShouldRetireWatchdog", guard);
+        // 摘走与释放必须在武装锁里、并且**问过锁再动**：`_upWatchdog ??=` 是读后写，
+        // 判据与 Exchange 之间换了代，这一拍就会把新一代唯一的那只定时器释放掉。
+        var guard2 = IfBlockContaining(Body(src, "internal void UpWatchdogTick()"), "_watchdogArmLock");
+        Assert.Contains("if (!WatchdogRetirable(gen)) return;", guard2);
+        Assert.Contains("Interlocked.Exchange(ref _upWatchdog, null)", guard2);
     }
 
     // 欠账跨代际存在（自救重装不能把它清零）；而「交还给程序的那次按下」
@@ -277,8 +286,15 @@ public class ReplayUpSettlementTests
         //    那一拍若正好被抢占在两句之间，而此刻装钩子那条路看到的是一个**非空但已释放**的
         //    定时器，它就不新建；而那一拍回来再把字段置空——看门狗就此彻底没有了，
         //    之后的欠账没人还（那个键卡在全系统按下态）。
-        var guard = IfBlockContaining(Body(src, "internal void UpWatchdogTick()"), "ShouldRetireWatchdog");
-        Assert.Contains("Interlocked.Exchange(ref _upWatchdog, null)", guard);
+        // 3. 看门狗的退休：销毁必须落在「问过锁」那一段**里面**，而且是先摘走引用再释放
+        //    （只比两处字面量的先后是不够的：判据被挪到锁外、或反过来先释放再置空，
+        //     两处字面量都还在原位，而看门狗照样会在有欠账时消失）。
+        //    **先把引用摘走再释放**：反过来那一拍正好被抢占在两句之间时，装钩子那条路
+        //    读到的是一个非空但已释放的定时器，于是不新建——那一拍回来再置空，看门狗就此没了。
+        var guard = IfBlockContaining(Body(src, "internal void UpWatchdogTick()"), "_watchdogArmLock");
+        int recheck = guard.IndexOf("if (!WatchdogRetirable(gen)) return;", StringComparison.Ordinal);
+        int take = guard.IndexOf("Interlocked.Exchange(ref _upWatchdog, null)", StringComparison.Ordinal);
+        Assert.True(recheck >= 0 && take > recheck, "摘走引用必须在锁里问过判据之后");
         Assert.Contains("Dispose();", guard);
         // 4. 补发线程认领它自己那一笔（两档点击各一次）。
         var loop = Body(src, "private void ReplayLoop()");

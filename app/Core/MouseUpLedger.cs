@@ -107,6 +107,10 @@ public sealed class MouseUpLedger
     private readonly HashSet<long> _inFlight = new();
     private long _nextToken;
     private long _pairingUntilMs;
+    // 有几条补发线程正压在配对期上。**闸门归零要等它们都放掉**：
+    // 拆过又装回来时旧的补发线程可能还在排空老队列，两条线程共用这一个配对窗——
+    // 谁先结清谁把归零做掉，就把另一条还压着的那一笔暴露给看门狗，抢走就成了零长度点击。
+    private int _pairingDepth;
     /// <summary>下一次重试的时刻（TickCount64）；0 = 没人排过（看门狗快路径接手）。</summary>
     private long _retryAtMs;
     private int _retryAttempt;
@@ -226,10 +230,25 @@ public sealed class MouseUpLedger
         }
     }
 
-    /// <summary>这一笔发出去了：结清。</summary>
+    /// <summary>
+    /// 这一笔发出去了：结清。账与在途都空了就把退避梯子复位。
+    ///
+    /// 为什么复位要落在这里而不是只在调用方的收尾里：补发线程结清**自己那一笔**走的是
+    /// token 认领那条路，它不经过 `SettleOwedUps` 的 finally——那条梯子于是只在「看门狗
+    /// 动过账」时才复位。后果是退避档位随会话时长一路爬到 5s 封顶，下一次真卡住键的第一次
+    /// 重试要等 5s，而那句「第一次失败」的证据行（只在档位 1 打）从此再也不出现。
+    /// </summary>
     public void Settle(MouseUpUnit unit)
     {
-        lock (_gate) { _inFlight.Remove(unit.Token); }
+        lock (_gate)
+        {
+            _inFlight.Remove(unit.Token);
+            if (_owed.Count == 0 && _inFlight.Count == 0)
+            {
+                _retryAtMs = 0;
+                _retryAttempt = 0;
+            }
+        }
     }
 
     /// <summary>这一笔没发出去：账还在（回到队列末尾）。</summary>
@@ -251,18 +270,32 @@ public sealed class MouseUpLedger
     {
         lock (_gate)
         {
+            _pairingDepth++;
             long until = nowMs + guardMs;
             if (until > _pairingUntilMs) _pairingUntilMs = until;
         }
     }
 
-    /// <summary>配对期结束（补发线程把抬起发完了）。</summary>
+    /// <summary>
+    /// 配对期结束（补发线程把抬起发完了）。
+    ///
+    /// 只放掉**自己那一份**：还有一条线程压着这个窗时归零，等于替它把门打开——
+    /// 那一笔按下已经送进系统、抬起还没发，看门狗此刻领走就是 0ms 的零长度点击。
+    /// </summary>
     public void ReleasePairing()
     {
-        lock (_gate) { _pairingUntilMs = 0; }
+        lock (_gate)
+        {
+            if (_pairingDepth > 0) _pairingDepth--;
+            if (_pairingDepth == 0) _pairingUntilMs = 0;
+        }
     }
 
     /// <summary>此刻是不是配对期。</summary>
+    /// <remarks>
+    /// 判据仍是那个时刻：线程死在半路时它自己过期，账不会永远压在闸里（深度计数器留着
+    /// 也只影响「归零」，不影响过期）。
+    /// </remarks>
     public bool PairingActive(long nowMs)
     {
         lock (_gate) { return nowMs < _pairingUntilMs; }

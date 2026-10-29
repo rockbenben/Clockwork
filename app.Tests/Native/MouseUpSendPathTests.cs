@@ -24,9 +24,12 @@ public class MouseUpSendPathTests
         public int Count => Sent.Count;
     }
 
-    private static MouseHook NewHook(FakeSender sender)
+    // 键态探针默认答「那个键此刻按着」——发送前那一道对账要过关，才会真的走到发送口去。
+    // 想验「键已经松开了就别补发」的测试把它换成 `(_ => false)`。
+    private static MouseHook NewHook(FakeSender sender, Func<MouseUpButton, bool>? keyDown = null)
         => new(0, () => { }, a => a(), gesture: null, canInject: () => true,
-               sendUp: b => { sender.Sent.Add(b); return sender.Answer(b); });
+               sendUp: b => { sender.Sent.Add(b); return sender.Answer(b); },
+               keyDown: keyDown ?? (_ => true));
 
     private static void Owe(MouseHook hook, MouseUpButton button, int times)
     {
@@ -196,5 +199,79 @@ public class MouseUpSendPathTests
         hook.SettleOwedUps(1);
 
         Assert.Equal(MouseUpButton.Middle, Assert.Single(sender.Sent));
+    }
+
+    // **到点了的那一拍也要还账**（`MouseUpDecision.Due` 那一档）。
+    // 这条为什么单独要有：上面那两条看门狗的用例欠的都是**没人排过重试**的账，走的都是
+    // TakeOver 那一档；把 `case Due: SettleOwedUps(...)` 整段删掉，其余各条照样全绿——
+    // 而生产里第一次发失败之后 `_retryAtMs` 就再也不为 0，从此**只走 Due**。
+    // 也就是说：没有这一条，退避重试那条主路是没人守的（那个键就此卡在全系统按下态）。
+    // 让它变红的改动：删掉 case Due 那一支。
+    [Fact]
+    public void The_watchdog_pays_a_due_retry()
+    {
+        var sender = new FakeSender { Answer = _ => true };
+        using var hook = NewHook(sender);
+        Owe(hook, MouseUpButton.Right, 1);
+        hook.UpLedger.ScheduleRetry(Environment.TickCount64 - 1_000);   // 早就到点了
+
+        hook.UpWatchdogTick();
+
+        Assert.Equal(1, sender.Count);
+        Assert.Equal(0, hook.UpLedger.OwedCount);
+    }
+
+    // **发之前先与真实键态对账**：那个键已经不按着了，这一笔就早被别人结清了。
+    // 这时再发是一个没有配对按下的抬起 → 目标程序凭它合成一个莫名的右键菜单
+    //（用户报的「凭空多出一次右键」）。就地销账，一个字节都不发。
+    // 让它变红的改动：把 SendUpUnit 里那道键态判断删掉。
+    [Fact]
+    public void An_up_for_a_key_that_is_already_up_is_settled_without_injecting()
+    {
+        var sender = new FakeSender { Answer = _ => true };
+        using var hook = NewHook(sender, keyDown: _ => false);
+        Owe(hook, MouseUpButton.Right, 1);
+
+        hook.SettleOwedUps(1);
+
+        Assert.Equal(0, sender.Count);                  // 一次都没发
+        Assert.Equal(0, hook.UpLedger.OwedCount);       // 而账结清了
+    }
+
+    // **账按笔记，键态是布尔**：同键积压三笔时，第一个抬起就把那个键松开了，
+    // 后面每一个都是多余的那一次。这条钉的是「积压一起就地销账、不逐个补发」。
+    // 只验上面那条还不够：那只有 1 笔，删掉对账判断也照样绿（本条才是计数与布尔的那道缝）。
+    // 让它变红的改动：删掉 SendUpUnit 的键态判断，或对账时只销「队首那一笔」。
+    [Fact]
+    public void A_same_button_backlog_discharges_without_extra_ups()
+    {
+        var sender = new FakeSender { Answer = _ => true };
+        using var hook = NewHook(sender, keyDown: _ => false);
+        Owe(hook, MouseUpButton.Right, 3);
+
+        hook.SettleOwedUps(3);
+
+        Assert.Equal(0, sender.Count);
+        Assert.Equal(0, hook.UpLedger.OwedCount);
+    }
+
+    // **装配级守卫**：测试宿主里不许把真的鼠标事件送进系统。
+    // 这条纪律以前只写在每条测试的收尾里（记得关闸门、记得先清账），而纪律不是守卫——
+    // 任何一条新测试忘了，就往开发者的桌面上注入一次真的按下/抬起。
+    // 这里故意**不**注入发送接缝：走真发送口的那条路必须被拒，并且账要留着
+    //（拒发不等于丢账：看门狗还在退避重试，少发一次是有主人的）。
+    // 让它变红的改动：把 SendTimed/SendSync 开头那句 RefusedInTestHost 删掉。
+    [Fact]
+    public void Real_injections_are_refused_under_the_test_host()
+    {
+        int before = MouseHook.RefusedTestInjections;
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null, canInject: () => true,
+                                      keyDown: _ => true);
+        hook.UpLedger.Owe(MouseUpButton.Right, Environment.TickCount64, foregroundWindow: 0);
+
+        hook.SettleOwedUps(1);
+
+        Assert.Equal(before + 1, MouseHook.RefusedTestInjections);
+        Assert.Equal(1, hook.UpLedger.OwedCount);       // 账没被当成已还
     }
 }
