@@ -109,6 +109,52 @@ public class HookSelfRecoveryTests
         gate.Reset();   // 别让 Dispose 走还键那一条注入路
     }
 
+    // 让路的结算消息投不出去时，**进入**那一档要把标志退回去：
+    // 结算消息没到钩子线程 = 那一笔被吞掉的按下永远还不了（让路本身又吞了用户一键），
+    // 而退回去之后回调继续按老路接管，协调器下一拍会再问一次
+    //（见 GestureCoordinator.UpdateGestureYield）——于是这一拍自动重试。
+    //
+    // 让它变红的改动：把 PostThreadMessage 的返回值丢掉
+    //（RequestSelfRecovery 那边是看返回值的——同一份代码里两种写法，不是政策问题）。
+    [Fact]
+    public void A_failed_yield_post_reverts_the_flag()
+    {
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
+        // 一个不存在的线程 id：投递必然失败（PostThreadMessage 答 false）。
+        typeof(MouseHook).GetField("_threadId", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(hook, 4242u);
+        hook.SetYielding(true);
+        Assert.False(hook.Yielding);
+    }
+
+    // **退出**那一档相反：标志不能退回去。
+    //
+    // 这一条**不是红证明**（改之前它也过）：它守的是「别把修复做成另一种坏」——
+    // 退出这一边根本没有结算要做（ApplyYield 对 on=false 直接返回），
+    // **标志本身就是退出的全部**。退回去 = 让路永远退不掉，
+    // 钩子会一直放行右键 = 手势静默失效（而托盘那边看不出来）。
+    [Fact]
+    public void A_failed_yield_exit_post_keeps_the_flag_off()
+    {
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
+        hook.SetYielding(true);          // 没装钩子 → 只落标志，不投消息
+        Assert.True(hook.Yielding);
+        typeof(MouseHook).GetField("_threadId", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(hook, 4242u);
+        hook.SetYielding(false);         // 投递必然失败
+        Assert.False(hook.Yielding);
+    }
+
+    // 协调器这一层结束让路时，钩子那一层也要归零：两边的「在不在让路」对不上时，
+    // 钩子会一直放行右键 = 手势静默失效，而托盘那边看不出来。
+    // 让它变红的改动：把 ClearGestureYield 里那句 SetYielding(false) 删掉。
+    [Fact]
+    public void Clearing_the_yield_clears_the_hook_side_too()
+    {
+        var body = BodyOf(Source("Services", "GestureCoordinator.cs"), "private void ClearGestureYield");
+        Assert.Contains("_mouseHook?.SetYielding(false)", body);
+    }
+
     // 笔画中途的修正只能读缓存；若每个采样点都排一次解析，HookProbe 的 64 格队列会被同一 pid 灌满。
     [Fact]
     public void Mid_stroke_name_correction_reads_the_cache_without_enqueuing()

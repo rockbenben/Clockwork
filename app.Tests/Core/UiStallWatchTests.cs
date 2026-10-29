@@ -569,6 +569,10 @@ public class UiStallWatchTests
 
     // 峰值必须在**回调自己那个 finally 里**记，而且要在交 slow 日志之前。
     // 少了它，300~500ms 那一段就永远不可见——而那正是钩子被摘的区间。
+    //
+    // 写法是 `MaxInto(ref _callbackMax, ms)` 而不是「读—比—写」：后者会让两个并发的回调里
+    // **较小的那个盖掉较大的那个**（而峰值正是让路判据的输入）。守卫盯的是「记在哪、
+    // 记的是什么」，不是那三个字符怎么拼。
     [Fact]
     public void The_callback_peak_is_recorded_inside_the_hook_callback()
     {
@@ -576,7 +580,7 @@ public class UiStallWatchTests
         int c = hook.IndexOf("private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)");
         Assert.True(c >= 0, "找不到 Callback：这段守卫要跟着它走");
         var body = MethodAt(hook, "private IntPtr Callback(int code, IntPtr wParam, IntPtr lParam)");
-        int write = body.IndexOf("Volatile.Write(ref _callbackMax, ms)");
+        int write = body.IndexOf("MaxInto(ref _callbackMax, ms)");
         int slow = body.IndexOf("UiStallWatch.End(\"hook-callback\"");
         Assert.True(write >= 0, "回调里没有记耗时峰值");
         Assert.True(body.Contains("Environment.TickCount64 - t0"), "峰值必须来自真实的调用耗时");

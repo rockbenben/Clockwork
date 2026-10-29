@@ -22,8 +22,10 @@ public class MouseHookModifierBailTests
     private struct MSLLHOOKSTRUCT { public int X, Y; public uint MouseData, Flags, Time; public IntPtr DwExtraInfo; }
 
     // holdMs=0：不管中键，只留手势那条路。post 同步执行，回调里的 trail 投递当场跑完，不依赖消息循环。
+    // procNameForPid 给假实现：配了手势就必须说清「起笔窗是谁家的程序」怎么查
+    //（默认那条 Win32.ProcessNameForPid 每次鼠标移动都要 OpenProcess，见 MouseHook 构造器）。
     private static MouseHook GestureHook(GestureGate gate, Func<bool>? modifierHeld = null)
-        => new(0, () => { }, a => a(), gesture: gate, modifierHeld: modifierHeld);
+        => new(0, () => { }, a => a(), gesture: gate, modifierHeld: modifierHeld, procNameForPid: _ => "");
 
     // holdMs=350、gesture=null：只留中键长按那条路（与 DevChecks 同款构造）。
     private static MouseHook MiddleHook(Func<bool>? modifierHeld = null)

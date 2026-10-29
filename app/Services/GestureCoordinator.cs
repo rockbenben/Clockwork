@@ -194,10 +194,22 @@ internal sealed class GestureCoordinator
 
     // 摘钩前抄一份中键的账，格式与右键那段对称。fired 是到点唤出次数，
     // dragEscapes 非零 = 「按住很久也不弹」其实是抖动容差把长按判成了拖拽。
+    //
+    // 右键与中键这两段的写法各有一份「活钩子」版与一份「上一任钩子的账」版，
+    // 格式必须一模一样——抄错一处，日志就开始说另一件事，而日志是这类故障唯一的自证手段。
+    // 所以格式只有这两个函数，抄写的地方一律调它们。
     private static string MiddleAccount(Native.MouseHook h)
-        => "middle " + (h.EverMiddleDown ? "down+" : "down-")
-          + (h.EverMiddleUp ? " up+" : " up-")
-          + $" fired={h.MiddleFireCount} dragEscapes={h.MiddleDragEscapeCount}";
+        => MiddleAccount(h.EverMiddleDown, h.EverMiddleUp, h.MiddleFireCount, h.MiddleDragEscapeCount);
+
+    private static string MiddleAccount(bool everDown, bool everUp, int fired, int dragEscapes)
+        => "middle " + (everDown ? "down+" : "down-")
+          + (everUp ? " up+" : " up-")
+          + $" fired={fired} dragEscapes={dragEscapes}";
+
+    // 右键那一格：按下与抬起分开记。合成一格（或）会把这个功能唯一能自证的信号抹掉：
+    // 「收到过抬起、从没收到按下」只有一种成因——有人排在前面把按下吞了。
+    private static string RightAccount(bool everDown, bool everUp)
+        => (everDown ? "down+" : "down-") + (everUp ? " up+" : " up-");
 
     // 上一次采样的时刻（TickCount64）。量的是「本采样区间实测有多长」，
     // 与心跳年龄同一条时间轴——同区间对齐判据的一半，见 CursorWatchTick。
@@ -491,6 +503,14 @@ internal sealed class GestureCoordinator
                            + $"threshold={HookBudgetMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
             OnYieldChanged?.Invoke();
         }
+        else if (_yield.Active)
+        {
+            // 让路还在进行中：**每一拍都再问一次钩子「你在让路吗」**。
+            // SetYielding 是幂等的（标志已经是对的就直接返回、不投消息），所以这一句平时什么也不做；
+            // 它接的是「上一拍投递失败、标志被退回去」那一档——
+            // 那一档若没人重问，让路就永远停在「协调器以为在让路、钩子其实没让路」。
+            _mouseHook.SetYielding(true);
+        }
     }
 
     /// <summary>用户点「立即恢复手势」：立刻结束让路，并在判据消失前不再自动进入。</summary>
@@ -511,6 +531,10 @@ internal sealed class GestureCoordinator
     // 若判据仍成立，下一次 cursor tick 会重新进入并重新记一行。
     private void ClearGestureYield(string reason)
     {
+        // 钩子那一侧也让路状态归零：协调器这一层结束、钩子那一层还开着，
+        // 两边的「在不在让路」就对不上了（钩子会一直放行右键 = 手势静默失效）。
+        // SetYielding 是幂等的（标志已经是对的就直接返回、不投消息），所以这句平时什么也不做。
+        try { _mouseHook?.SetYielding(false); } catch { }
         if (!_yield.End()) { _yieldSuppressed = false; return; }
         long held = Environment.TickCount64 - _yield.SinceMs;
         _yieldSuppressed = false;
@@ -580,8 +604,7 @@ internal sealed class GestureCoordinator
         _prevBeat = _mouseHook.EverBeat ? "yes" : "no";
         // 按下与抬起**分开记**。合成一格（或）会把这个功能唯一能自证的信号抹掉：
         // 「收到过抬起、从没收到按下」只有一种成因——有人排在前面把按下吞了。
-        _prevRight = (_mouseHook.EverRightDown ? "down+" : "down-")
-                   + (_mouseHook.EverRightUp ? " up+" : " up-");
+        _prevRight = RightAccount(_mouseHook.EverRightDown, _mouseHook.EverRightUp);
         _prevMiddle = MiddleAccount(_mouseHook);
         _prevSince = _mouseHook.SinceBeatMs;
         _prevRejected = _mouseHook.InjectRejected;
@@ -830,7 +853,10 @@ internal sealed class GestureCoordinator
             selfRecovered: (source, report) =>
             {
                 try { Disp.BeginInvoke(() => OnHookSelfRecovered(source, report)); } catch { }
-            });
+            },
+            // 抬起账的两行诊断（补发重试、交还按下的收尾）：AppendErrorLog 只入队，
+            // 写在看门狗线程上也安全（见 AppDiagnostics 的入队注释）。
+            diag: AppendErrorLog);
         _mouseHookMs = ms;
         _mouseHookGesture = wantGesture;
         _mouseHookMinLeg = minLeg;
@@ -943,7 +969,7 @@ internal sealed class GestureCoordinator
         // **按不上也要按关掉那条路收尾**，与上面 `!wantPress && !wantGesture` 那个分支同一套。
         // 漏了不是漏一次：ApplyMouseHook 在每次 SaveConfig 末尾都会走到，而 `_mouseHook` 已经是 null
         // 让上面那个「已经是想要的状态」早退永远不成立——于是每保存一次就新建一个 MouseHook，
-        // 每个都带两个 System.Threading.Timer（_alarm、_clickUp），上一个连 Dispose 都没调就被丢了。
+        // 每个都带两个 System.Threading.Timer（_alarm 与抬起账的看门狗 _upWatchdog），上一个连 Dispose 都没调就被丢了。
         // 轨迹窗与 2 Hz 的「钩子还活着吗」同理：前面刚建完 / 刚上弦，而自愈那一句一看 `_mouseHook == null`
         // 就立即返回，于是那个计时器永远转着、每半秒一次 GetCursorPos，什么也不做。
         hook.Dispose();
@@ -966,10 +992,8 @@ internal sealed class GestureCoordinator
         // 自救结果回到 UI 时，这个钩子可能已经被换配置/自愈拆掉了；旧结果不许改新钩子的状态。
         if (!ReferenceEquals(source, _mouseHook)) return;
         var a = report.Previous;
-        var prevRight = (a.RightDown ? "down+" : "down-") + (a.RightUp ? " up+" : " up-");
-        var prevMiddle = "middle " + (a.MiddleDown ? "down+" : "down-")
-                       + (a.MiddleUp ? " up+" : " up-")
-                       + $" fired={a.MiddleFired} dragEscapes={a.DragEscapes}";
+        var prevRight = RightAccount(a.RightDown, a.RightUp);
+        var prevMiddle = MiddleAccount(a.MiddleDown, a.MiddleUp, a.MiddleFired, a.DragEscapes);
         var silent = a.SilentForMs == long.MaxValue ? "never" : a.SilentForMs + "ms";
         if (!report.Ok)
         {

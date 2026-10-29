@@ -165,10 +165,21 @@ public class ReplayOffCallbackTests
         //（那张台账只能结一次，见 ReplayUp 处的理由）。合起来必须盖满四个键，
         // 少盯一个 = 中键那条路可以随便改回回调里。
         var loop = BodyOf(src, "private void ReplayLoop()");
-        var up = BodyOf(src, "private void ReplayUp()");
+        var up = BodyOf(src, "private void ReplayUp(int maxSends");
         Assert.Contains("Win32.SendRightDownTagged()", loop);
         Assert.Contains("Win32.SendMiddleDownTagged()", loop);
-        Assert.Contains("ReplayUp();", loop);
+        // **抬起也在这条线程上发**（不去走 ReplayUp 那条「认领账」的路）：
+        // 认领会把别人的那一笔也领走，于是这一笔的抬起反而没人发；
+        // 而看门狗若已经替我们发过了，账上就少了一笔——那正好说明抬起已经出去了，
+        // 不再发第二次（多发一次是一个没有配对的抬起，会合成一个莫名菜单）。
+        Assert.Contains("Win32.SendRightUpTagged()", loop);
+        Assert.Contains("Win32.SendMiddleUpTagged()", loop);
+        // **「只结一次」那一环必须钉住**：新机制里抬起是「认领（TryClaim）一笔账 → 发出」，
+        // 认领就是那个递减。少了它，抬起照发、账不减 → 看门狗稍后补发一次 →
+        // 就是这个 delta 要修的「凭空多出一次右键」，而这一整片测试仍然绿。
+        Assert.Contains("TryClaim(ref _owedRightUps)", loop);
+        Assert.Contains("TryClaim(ref _owedMiddleUps)", loop);
+        // 欠账的重试路径（发失败、看门狗退避）仍走 ReplayUp。
         Assert.Contains("Win32.SendRightUpTagged()", up);
         Assert.Contains("Win32.SendMiddleUpTagged()", up);
         // 按下与抬起之间必须留着那一段间隔：同批注入的 down/up 时间戳完全相同，
@@ -194,7 +205,8 @@ public class ReplayOffCallbackTests
     {
         // 探针=注入不了 → ReplayClick 必须返回 false，回调必须放行那条真抬起。
         var gate = new GestureGate(_ => false, 40);
-        using var hook = new MouseHook(350, () => { }, a => a(), gesture: gate, canInject: () => false);
+        using var hook = new MouseHook(350, () => { }, a => a(), gesture: gate, canInject: () => false,
+            procNameForPid: _ => "");
         Assert.Equal(new IntPtr(1), Send(hook, WM_RBUTTONDOWN, 200, 200));   // 按下照旧吞
         Assert.NotEqual(new IntPtr(1), Send(hook, WM_RBUTTONUP, 200, 200));  // 抬起必须放行
     }

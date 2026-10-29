@@ -149,7 +149,7 @@ public class MouseHookThreadTests
         var ends = 0;
         var hook = new MouseHook(0, () => { }, posted.Add, gesture: gate,
             trailPoint: (x, y, armed, hit) => points.Add((x, y, armed)),
-            trailEnd: () => ends++);
+            trailEnd: () => ends++, procNameForPid: _ => "");
 
         // 按下：先收上一笔、再落起点，两个独立操作。
         Assert.Equal(new IntPtr(1), Send(hook, WM_RBUTTONDOWN, 200, 200));

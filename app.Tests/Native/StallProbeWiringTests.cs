@@ -145,7 +145,9 @@ public class StallProbeWiringTests
     public void Teardown_times_the_injected_replays()
     {
         var src = Src("app", "Native", "MouseHook.cs");
-        AssertWraps(Body(src, "private void SettleOwedKeys()"), "hook-teardown-inject", "ReplayUp()");
+        // 「ReplayUp(」而不是「ReplayUp()」：钩子线程上那一次只发一个（ReplayUp(1)），
+        // 盯的是「还键被探针量着」这件事，不是那一句的写法。
+        AssertWraps(Body(src, "private void SettleOwedKeys()"), "hook-teardown-inject", "ReplayUp(");
         Assert.Contains("SettleOwedKeys();", Body(src, "private void Teardown()"));
     }
 
