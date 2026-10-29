@@ -336,13 +336,14 @@ public partial class GroupEditorWindow : Window
         if (i < 0 || i >= _rows.Count) return;
         var target = _rows[i].Step;
 
-        // 删一个块要连它的孩子一起删，且**先说清楚要删几条**。
+        // 删一个块要连它自己和它的孩子一起删，且**先说清楚要删几条**。
         // 不说的话：块没了、孩子留下，而孩子的 ParentId 指向一个不存在的 id —— 运行期靠
         // StepTree 兜成顶层，于是它们继续跑，而且出现在块本该在的位置之外的地方。
         // 用户删「那个循环」时的本意是「那一整段都不要了」，只删外壳等于留了个空壳在原地跑里面的东西。
-        var doomed = DescendantsOf(target).ToList();
-        var label = doomed.Count > 0
-            ? Strings.Lf("Confirm_DeleteBlockWithSteps", StepDisplay.StepListSummary(target), doomed.Count)
+        var steps = _rows.Select(r => r.Step).ToList();
+        var doomed = DeleteSet(target, steps);
+        var label = doomed.Count > 1
+            ? Strings.Lf("Confirm_DeleteBlockWithSteps", StepDisplay.StepListSummary(target), doomed.Count - 1)
             : StepDisplay.StepListSummary(target);
         if (!BrandDialog.ConfirmDelete(this, label)) return;
 
@@ -353,8 +354,22 @@ public partial class GroupEditorWindow : Window
 
     /// <summary>某个块的孩子（不含它自己）。</summary>
     private IEnumerable<LaunchStep> DescendantsOf(LaunchStep block)
+        => Descendants(block, _rows.Select(r => r.Step).ToList());
+
+    /// <summary>删除按钮要删的集合：目标自身 + 它的全部后代。</summary>
+    // 与 DescendantsOf 分开：那个回答「这个块里有几步」（插入位置、上下移跨度用它，
+    // 所以不含块本身）；这个回答「这一下要删掉哪些」。漏掉目标时，普通步骤删的是空集，
+    // 块则会删掉孩子、留下空壳。
+    internal static IReadOnlyList<LaunchStep> DeleteSet(LaunchStep target, IReadOnlyList<LaunchStep> steps)
     {
-        var tree = StepTree.Build(_rows.Select(r => r.Step).ToList());
+        var set = new List<LaunchStep> { target };
+        set.AddRange(Descendants(target, steps));
+        return set;
+    }
+
+    private static IEnumerable<LaunchStep> Descendants(LaunchStep block, IReadOnlyList<LaunchStep> steps)
+    {
+        var tree = StepTree.Build(steps);
         var outp = new List<LaunchStep>();
         var seen = new HashSet<string>(StringComparer.Ordinal) { block.Id ?? "" };
         void Walk(IReadOnlyList<LaunchStep> list)
