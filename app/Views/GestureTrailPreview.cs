@@ -40,12 +40,8 @@ public static class GestureTrailPreview
                                            double w, double h, Brush fallbackAccent, Brush armed)
     {
         var renderer = new GestureTrailRenderer(style, widths, fallbackAccent, armed);
-        const int N = 48;
-        for (int i = 0; i <= N; i++)
-        {
-            double t = i / (double)N;
-            renderer.Add(new Point(8 + t * (w - 16), h * 0.74 - System.Math.Sin(t * System.Math.PI) * h * 0.42));
-        }
+        // 弧线形状只有 GestureTrailRenderer.SampleArc 一处（与设置页的预览共用）。
+        foreach (var p in GestureTrailRenderer.SampleArc(w, h, 8, 0.74, 0.42)) renderer.Add(p);
         var host = new Grid { Width = w, Height = h };
         host.Children.Add(renderer.Surface);
         return host;

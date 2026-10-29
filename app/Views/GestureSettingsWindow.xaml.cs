@@ -63,17 +63,9 @@ public partial class GestureSettingsWindow : Window
 
     // 预览里那一段弧：从左下起，抬起来，落到右下。
     // 起笔在左、收笔在右——**收笔那头正是亮头所在**，淡出的效果因此看得见。
+    // 形状只有 GestureTrailRenderer.SampleArc 一处（样式选择器里的缩略图共用同一条弧）。
     private static IEnumerable<Point> Sample(double w, double h)
-    {
-        const int N = 48;
-        for (int i = 0; i <= N; i++)
-        {
-            double t = i / (double)N;
-            double x = 16 + t * (w - 32);
-            double y = h * 0.66 - Math.Sin(t * Math.PI) * h * 0.36;
-            yield return new Point(x, y);
-        }
-    }
+        => GestureTrailRenderer.SampleArc(w, h, 16, 0.66, 0.36);
 
     private void Populate()
     {

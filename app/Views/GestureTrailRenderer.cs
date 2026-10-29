@@ -50,16 +50,69 @@ public sealed class GestureTrailRenderer
     }
 
     // 丝带的宽度轮廓：起笔细，到 85% 处最宽，最后 15% 收成尖。
+    //
+    // 这几个数是**形状**不是随手写的：它们一起决定那条线看起来像不像一笔墨。
+    // 摆在名字里，是为了让「起笔多细」「收尖占多长」这种问题有一个可以问的地方。
+    private const double RibbonStartWidth = 0.22;    // 起笔那一段的宽度比例
+    private const double RibbonTaperStart = 0.85;   // 从这里开始收尖
+    private const double RibbonTaperDepth = 0.92;   // 收尖收掉多少（尖处只剩 1 - 0.92 = 0.08）
+    // 这三个是**推出来的**，不是另填的一组数：分开填的话，改了上面任何一个就会悄悄把形状弄坏
+    //（比如收尖段算出负的宽度）。
+    private const double RibbonTaperSpan = 1 - RibbonTaperStart;   // 收尖那一段的长度
+    private const double RibbonGrowSpan = 1 - RibbonStartWidth;    // 从起笔到最宽涨了多少
+    private const double RibbonTipWidth = 1 - RibbonTaperDepth;    // 笔尖的宽度比例
+
+    // 丝带的三层：外晕 / 暗色描边 / 带身。带身宽度是线芯的几倍，外晕与描边各比带身宽多少。
+    private const double RibbonBodyWidthFactor = 2.2;
+    private const double RibbonGlowExtra = 5.5;
+    private const double RibbonHaloExtra = 2.5;
+
+    // 丝带那几层的不透明度（外晕分「认出来了 / 没认出来」两档）。
+    private const double RibbonGlowOpacityArmed = 0.27;
+    private const double RibbonGlowOpacityIdle = 0.18;
+    private const double RibbonBodyOpacity = 0.62;
+
+    // 线芯、亮头、笔尖点的最小尺寸（太细在深底上就没了）以及它们相对线芯的比例。
+    private const double RibbonCoreMinWidth = 1.4;
+    private const double RibbonCoreWidthFactor = 0.55;
+    private const double RibbonHeadMinWidth = 2.0;
+    private const double RibbonHeadWidthFactor = 0.8;
+    private const double RibbonTipMinSize = 3.0;
+    private const double RibbonTipSizeFactor = 1.5;
+
+    /// <summary>一段固定形状的弧线样本——设置页的预览与样式选择器里的缩略图共用。</summary>
+    /// <remarks>
+    /// 两处预览画的是**同一种形状**（一段正弦弧），只是装进不同的框里。
+    /// 抄两份的话，两条弧迟早会走样，而预览的全部价值就是「所见即所得」。
+    /// 所以形状只有这一处，取景（左右留白与起伏幅度）由调用方给。
+    /// </remarks>
+    /// <param name="w">画布宽（DIP）。</param>
+    /// <param name="h">画布高（DIP）。</param>
+    /// <param name="inset">左右各留多少白（DIP）。</param>
+    /// <param name="baseline">弧线中段在画布高度上的位置比例（0.5 = 正中，越大越靠下）。</param>
+    /// <param name="amplitude">起伏幅度（相对画布高度的比例）。</param>
+    public static IEnumerable<Point> SampleArc(double w, double h, double inset, double baseline,
+                                               double amplitude)
+    {
+        const int Steps = 48;   // 采样段数：实现细节，不是对外的契约
+        for (int i = 0; i <= Steps; i++)
+        {
+            double t = i / (double)Steps;
+            yield return new Point(inset + t * (w - inset * 2),
+                                   h * baseline - Math.Sin(t * Math.PI) * h * amplitude);
+        }
+    }
+
     internal static double RibbonWidthFactor(double t)
     {
-        if (t <= 0) return 0.22;
-        if (t >= 1) return 0.08;
-        if (t < 0.85)
+        if (t <= 0) return RibbonStartWidth;
+        if (t >= 1) return RibbonTipWidth;
+        if (t < RibbonTaperStart)
         {
-            double s = t / 0.85;
-            return 0.22 + 0.78 * (s * s * (3 - 2 * s));
+            double s = t / RibbonTaperStart;
+            return RibbonStartWidth + RibbonGrowSpan * (s * s * (3 - 2 * s));
         }
-        return 1 - 0.92 * ((t - 0.85) / 0.15);
+        return 1 - RibbonTaperDepth * ((t - RibbonTaperStart) / RibbonTaperSpan);
     }
 
     // 把折线点放成左右两条边界，闭合成一条宽度随 t 变化的丝带。
@@ -294,7 +347,7 @@ public sealed class GestureTrailRenderer
         if (_ribbonGlow != null)
         {
             _ribbonGlow.Fill = _styleAccent;
-            _ribbonGlow.Opacity = _armed ? 0.27 : 0.18;
+            _ribbonGlow.Opacity = _armed ? RibbonGlowOpacityArmed : RibbonGlowOpacityIdle;
         }
         if (_ribbonHalo != null)
         {
@@ -304,23 +357,23 @@ public sealed class GestureTrailRenderer
         if (_ribbonBody != null)
         {
             _ribbonBody.Fill = _styleBody;
-            _ribbonBody.Opacity = 0.62 * (_fade ? FadeOpacity : 1);
+            _ribbonBody.Opacity = RibbonBodyOpacity * (_fade ? FadeOpacity : 1);
         }
         if (_ribbonCore != null)
         {
             _ribbonCore.Stroke = _armed ? _armedBrush : _styleCoreIdle;
-            _ribbonCore.StrokeThickness = Math.Max(1.4, coreWidth * 0.55);
+            _ribbonCore.StrokeThickness = Math.Max(RibbonCoreMinWidth, coreWidth * RibbonCoreWidthFactor);
             _ribbonCore.Opacity = _fade ? FadeOpacity : 1;
         }
         // 亮头始终亮着（丝带的笔尖就是它的方向），命中时转纯白。
         _head.Stroke = _armed ? _armedBrush : BrightHead;
-        _head.StrokeThickness = Math.Max(2.0, coreWidth * 0.8);
+        _head.StrokeThickness = Math.Max(RibbonHeadMinWidth, coreWidth * RibbonHeadWidthFactor);
         _head.StrokeDashArray = null;
         _head.Opacity = 1;
         _head.Visibility = Visibility.Visible;
         if (_tip != null)
         {
-            double size = Math.Max(3.0, coreWidth * 1.5);
+            double size = Math.Max(RibbonTipMinSize, coreWidth * RibbonTipSizeFactor);
             _tip.Width = size;
             _tip.Height = size;
             _tip.Fill = _head.Stroke;
@@ -339,9 +392,9 @@ public sealed class GestureTrailRenderer
             _ribbonBody.Data = null;
             return;
         }
-        double baseBody = (_armed ? _widths.CoreArmed : _widths.CoreIdle) * 2.2;
-        _ribbonGlow.Data = BuildRibbon(_points, baseBody, 5.5);
-        _ribbonHalo.Data = BuildRibbon(_points, baseBody, 2.5);
+        double baseBody = (_armed ? _widths.CoreArmed : _widths.CoreIdle) * RibbonBodyWidthFactor;
+        _ribbonGlow.Data = BuildRibbon(_points, baseBody, RibbonGlowExtra);
+        _ribbonHalo.Data = BuildRibbon(_points, baseBody, RibbonHaloExtra);
         _ribbonBody.Data = BuildRibbon(_points, baseBody, 0);
     }
 
