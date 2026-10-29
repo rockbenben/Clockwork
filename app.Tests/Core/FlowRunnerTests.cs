@@ -65,7 +65,7 @@ public class FlowRunnerTests
         var order = Go(Lines("lines", "a\nb\nc"), block, inBody, outside).Order;
 
         Assert.Equal(3, order.Count(x => ReferenceEquals(x, inBody)));
-        Assert.Single(order.Where(x => ReferenceEquals(x, outside)));
+        Assert.Single(order, x => ReferenceEquals(x, outside));
     }
 
     [Fact]
@@ -161,7 +161,7 @@ public class FlowRunnerTests
 
         Assert.Equal(3, order.Count(x => ReferenceEquals(x, before)));
         Assert.DoesNotContain(order, x => ReferenceEquals(x, after));
-        Assert.Single(order.Where(x => ReferenceEquals(x, outside)));
+        Assert.Single(order, x => ReferenceEquals(x, outside));
     }
 
     // 块里的「跳出本块」= 进入下一次迭代（continue），不是结束循环。

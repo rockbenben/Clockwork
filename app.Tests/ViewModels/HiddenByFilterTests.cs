@@ -93,7 +93,7 @@ public class HiddenByFilterTests
         // 那句话要报的是「机器上到底有多少」——用户拿它判断自己是不是被筛掉了东西。
         var vm = SystemVm(Item("Steam", true), Item("Discord", true), Item("Policy X", false));
         vm.Search = "zzz";
-        Assert.Equal(0, vm.Rows.Count);
+        Assert.Empty(vm.Rows);
         Assert.Equal(3, vm.TotalCount);
     }
 

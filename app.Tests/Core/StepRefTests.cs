@@ -55,8 +55,8 @@ public class StepRefTests
         Assert.Equal(2, StepRefResolver.CountPanelRefs(pages, "a"));
         Assert.Equal(2, StepRefResolver.RemovePanelRefs(pages, "a"));
         Assert.Equal(0, StepRefResolver.CountPanelRefs(pages, "a"));
-        Assert.Equal(1, pages[0].Steps.Count);   // 被引用者本人的正常步骤一步不少
-        Assert.Equal(0, pages[1].Steps.Count);
+        Assert.Single(pages[0].Steps);   // 被引用者本人的正常步骤一步不少
+        Assert.Empty(pages[1].Steps);
         // 清自己不该误伤：引用别的 id 的一格都不能动
         var other = new List<PanelPage> { new() { Name = "p", Steps = new() { new LaunchStep { Kind = "step", RefId = "z" } } } };
         Assert.Equal(0, StepRefResolver.RemovePanelRefs(other, "a"));
