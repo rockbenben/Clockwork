@@ -56,14 +56,14 @@ public class MouseHookThreadTests
     [Fact]
     public void Constructor_does_not_start_any_thread()
     {
-        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null, modifierHeld: () => false);
         Assert.Null(Field(hook, "_thread"));
     }
 
     [Fact]
     public void Install_starts_a_pump_thread_and_Dispose_joins_it()
     {
-        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null, modifierHeld: () => false);
         bool ok = hook.Install();
         // 非交互会话（无头 CI）装不上低级钩子：判不了的环境直接放，不算回归。
         if (!ok) return;
@@ -79,7 +79,7 @@ public class MouseHookThreadTests
     [Fact]
     public void Dispose_without_Install_neither_starts_thread_nor_throws()
     {
-        var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
+        var hook = new MouseHook(0, () => { }, a => a(), gesture: null, modifierHeld: () => false);
         hook.Dispose();
         Assert.Null(Field(hook, "_thread"));
         hook.Dispose();
@@ -91,12 +91,12 @@ public class MouseHookThreadTests
     public void DisposeForExit_takes_the_same_lifecycle_as_Dispose()
     {
         // 没装过钩子：就地收尾，不起线程、不抛；退出收尾之后再 Dispose 也不抛。
-        var a = new MouseHook(350, () => { }, x => x(), gesture: null);
+        var a = new MouseHook(350, () => { }, x => x(), gesture: null, modifierHeld: () => false);
         a.DisposeForExit();
         Assert.Null(Field(a, "_thread"));
         a.Dispose();
 
-        var b = new MouseHook(0, () => { }, x => x(), gesture: null);
+        var b = new MouseHook(0, () => { }, x => x(), gesture: null, modifierHeld: () => false);
         if (!b.Install()) { b.DisposeForExit(); return; }   // 无头会话装不上低级钩子：判不了就不算回归
         var t = Assert.IsType<System.Threading.Thread>(Field(b, "_thread"));
         b.DisposeForExit();
@@ -110,7 +110,7 @@ public class MouseHookThreadTests
     public void A_clean_dispose_strands_nothing()
     {
         int before = MouseHook.StrandedTeardowns;
-        var hook = new MouseHook(0, () => { }, x => x(), gesture: null);
+        var hook = new MouseHook(0, () => { }, x => x(), gesture: null, modifierHeld: () => false);
         if (hook.Install())
         {
             hook.Dispose();
@@ -149,7 +149,7 @@ public class MouseHookThreadTests
         var ends = 0;
         var hook = new MouseHook(0, () => { }, posted.Add, gesture: gate,
             trailPoint: (x, y, armed, hit) => points.Add((x, y, armed)),
-            trailEnd: () => ends++, procNameForPid: _ => "");
+            trailEnd: () => ends++, procNameForPid: _ => "", modifierHeld: () => false);
 
         // 按下：先收上一笔、再落起点，两个独立操作。
         Assert.Equal(new IntPtr(1), Send(hook, WM_RBUTTONDOWN, 200, 200));

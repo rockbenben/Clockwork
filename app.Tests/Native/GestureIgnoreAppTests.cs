@@ -101,7 +101,7 @@ public class GestureIgnoreAppTests
             procNameForPid: _ => "mstsc",
             ignoredApp: proc => GestureGate.IsIgnoredApp(proc, new[] { "mstsc" }),
             trailPoint: (x, y, armed, hit) => points++,
-            trailEnd: () => ends++);
+            trailEnd: () => ends++, modifierHeld: () => false);
         Assert.False(Swallowed(Send(hook, WM_RBUTTONDOWN, 200, 200)));
         Assert.Equal(0, points);
         Assert.Equal(1, ends);   // 但仍要把上一笔可能挂着的线收掉

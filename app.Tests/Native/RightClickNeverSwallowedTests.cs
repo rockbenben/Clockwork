@@ -135,7 +135,7 @@ public class RightClickNeverSwallowedTests
     {
         var gate = new GestureGate(_ => true, 40);
         using var hook = new MouseHook(0, () => { }, a => a(), gesture: gate,
-            mayEngage: _ => true, canInject: () => false, procNameForPid: _ => "");
+            mayEngage: _ => true, canInject: () => false, procNameForPid: _ => "", modifierHeld: () => false);
         Assert.True(Swallowed(Send(hook, WM_RBUTTONDOWN, 100, 100)));
         for (int i = 1; i <= 12; i++) Assert.False(Swallowed(Send(hook, 0x0200, 100 + i * 10, 100)));
         Assert.False(Swallowed(Send(hook, WM_RBUTTONUP, 220, 100)));
@@ -152,7 +152,7 @@ public class RightClickNeverSwallowedTests
         var armed = new List<bool>();
         using var hook = new MouseHook(0, () => { }, a => a(), gesture: gate,
             mayEngage: _ => true, procNameForPid: _ => resolved ? "notepad" : "",
-            trailPoint: (x, y, a, hit) => armed.Add(a));
+            trailPoint: (x, y, a, hit) => armed.Add(a), modifierHeld: () => false);
         Assert.True(Swallowed(Send(hook, WM_RBUTTONDOWN, 100, 100)));
         // 单测不依赖桌面当前前台窗口；注入一个假 pid，否则后台/CI 下 _gesturePid=0，移动分支不会补问名字。
         SetField(hook, "_gesturePid", 4242u);
@@ -175,7 +175,7 @@ public class RightClickNeverSwallowedTests
         using var hook = new MouseHook(0, () => { }, a => a(), gesture: gate,
             mayEngage: _ => true, canInject: () => false,
             procNameForPid: _ => resolved ? "chrome" : "",
-            ignoredApp: name => name == "chrome");
+            ignoredApp: name => name == "chrome", modifierHeld: () => false);
         Assert.True(Swallowed(Send(hook, WM_RBUTTONDOWN, 100, 100)));
         for (int i = 1; i <= 12; i++) Assert.False(Swallowed(Send(hook, 0x0200, 100 + i * 10, 100)));
         resolved = true;

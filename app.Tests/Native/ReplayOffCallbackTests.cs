@@ -71,10 +71,6 @@ public class ReplayOffCallbackTests
         finally { Marshal.FreeHGlobal(ptr); }
     }
 
-    private static object? Field(MouseHook hook, string name)
-        => typeof(MouseHook).GetField(name,
-            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!.GetValue(hook);
-
     // 四个注入出口，一个都不许漏——只盯 `SendRightDownTagged` 的话，中键那条路可以随便改回去。
     private static readonly string[] Injectors =
     {
@@ -91,7 +87,7 @@ public class ReplayOffCallbackTests
     public void Nothing_is_injected_on_the_callback_path()
     {
         var src = Source("Native", "MouseHook.cs");
-        var replay = BodyOf(src, "private bool ReplayClick(int which)");
+        var replay = BodyOf(src, "private bool ReplayClick(ReplayKind kind)");
         foreach (var injector in Injectors)
         {
             Assert.DoesNotContain(injector, replay);
@@ -161,27 +157,46 @@ public class ReplayOffCallbackTests
     public void The_replay_thread_is_the_only_injector_and_is_a_named_background_thread()
     {
         var src = Source("Native", "MouseHook.cs");
-        // 注入的两个出口都在补发那一侧：`ReplayLoop` 发按下，抬起经 `ReplayUp` 结清
-        //（那张台账只能结一次，见 ReplayUp 处的理由）。合起来必须盖满四个键，
-        // 少盯一个 = 中键那条路可以随便改回回调里。
+        // 按下的两个出口都在补发那一侧：`ReplayLoop` 发按下，抬起走**单一发送出口**。
         var loop = BodyOf(src, "private void ReplayLoop()");
-        var up = BodyOf(src, "private void ReplayUp(int maxSends");
+        var up = BodyOf(src, "private bool SendUpUnit(");
         Assert.Contains("Win32.SendRightDownTagged()", loop);
         Assert.Contains("Win32.SendMiddleDownTagged()", loop);
-        // **抬起也在这条线程上发**（不去走 ReplayUp 那条「认领账」的路）：
-        // 认领会把别人的那一笔也领走，于是这一笔的抬起反而没人发；
-        // 而看门狗若已经替我们发过了，账上就少了一笔——那正好说明抬起已经出去了，
-        // 不再发第二次（多发一次是一个没有配对的抬起，会合成一个莫名菜单）。
-        Assert.Contains("Win32.SendRightUpTagged()", loop);
-        Assert.Contains("Win32.SendMiddleUpTagged()", loop);
-        // **「只结一次」那一环必须钉住**：新机制里抬起是「认领（TryClaim）一笔账 → 发出」，
-        // 认领就是那个递减。少了它，抬起照发、账不减 → 看门狗稍后补发一次 →
+        // **抬起只有一个出口**（整个类里唯一把抬起注入系统的地方）：
+        // 多一个出口就多一条「同一笔账发两次」的路，而多发一次是一个没有配对的抬起，
+        // 会合成一个莫名菜单。所以这里数的是**全文件的命中数**，不是「某一处出现过」。
+        // **数的是去掉注释之后的代码**：文档里提一句那个调用名不算一个出口，
+        // 而它会让这条守卫红在一个让人摸不着头脑的地方。
+        var code = Code(src);
+        Assert.Single(System.Text.RegularExpressions.Regex.Matches(code, @"Win32\.SendRightUpTagged\(\)"));
+        Assert.Single(System.Text.RegularExpressions.Regex.Matches(code, @"Win32\.SendMiddleUpTagged\(\)"));
+        // **不许跨 SendInput 持锁**：钩子线程也会走这一条（让路时结账、拆卸时结清），
+        // 它在锁上等着就越过了 LowLevelHooksTimeout，Windows 会静默摘掉这个钩子。
+        Assert.DoesNotContain("lock (", up);
+        // **抬起也在这条线程上发**，而且走的是**单一发送出口**：
+        // 补发线程先按 token 认领**它自己那一笔**（认领「队首那一笔」会把别人的账领走，
+        // 于是自己那一笔的抬起反而没人发），再从那个出口发出去。
+        // 而看门狗若已经替我们发过了，这一笔就不在账上了——那正好说明抬起已经出去了，
+        // 不再发第二次。
+        Assert.Contains("SendUpUnit(mine)", loop);
+        // **「只结一次」那一环必须钉住**：抬起是「认领（TryClaimToken）一笔账 → 发出」，
+        // 认领就是那个从队列里取走的动作。少了它，抬起照发、账不减 → 看门狗稍后补发一次 →
         // 就是这个 delta 要修的「凭空多出一次右键」，而这一整片测试仍然绿。
-        Assert.Contains("TryClaim(ref _owedRightUps)", loop);
-        Assert.Contains("TryClaim(ref _owedMiddleUps)", loop);
-        // 欠账的重试路径（发失败、看门狗退避）仍走 ReplayUp。
-        Assert.Contains("Win32.SendRightUpTagged()", up);
-        Assert.Contains("Win32.SendMiddleUpTagged()", up);
+        // **两档点击各一次**（只盯右键那一档的话，中键那条路可以改回「领最老的一笔」，
+        // 而中键卡在全系统按下态 = 中键拖拽永远在拖）。
+        Assert.Equal(2, System.Text.RegularExpressions.Regex.Matches(loop, @"TryClaimToken\(unit\.Token").Count);
+        // **认领成功才发**：写成「先发再认领」的话，会多出一个没有配对按下的抬起。
+        Assert.Equal(2, System.Text.RegularExpressions.Regex.Matches(loop, @"TryClaimToken\(unit\.Token, out var mine\) && !SendUpUnit\(mine\)").Count);
+        // **「还那一笔欠账」也必须按 token 领**：它要还的是**那一笔**，
+        // 领「队首那一笔」会把别人的账领走，而自己那一笔永远没人还。
+        Assert.Contains("TryClaimToken(item.Token", loop);
+        // **账上记的是哪个键**：记错了键，补发出去的抬起就打在另一个键上
+        //（右键卡住，中键被凭空松开）。
+        Assert.Contains("Owe(MouseUpButton.Right", loop);
+        Assert.Contains("Owe(MouseUpButton.Middle", loop);
+        // **配对期要放掉**：补发线程把抬起发完了就把闸门收回来，
+        // 不放的话看门狗会白晚半秒才敢动账。
+        Assert.Equal(2, System.Text.RegularExpressions.Regex.Matches(loop, @"ReleasePairing\(\)").Count);
         // 按下与抬起之间必须留着那一段间隔：同批注入的 down/up 时间戳完全相同，
         // 零长度点击会被下游当噪声丢掉（理由见 MouseHook.ClickGapMs 处，是本地的实测口径）。
         // **两档点击各一次**——只断言「出现过」的话，摘掉其中一条什么也不会红（打过这一发）。
@@ -206,7 +221,7 @@ public class ReplayOffCallbackTests
         // 探针=注入不了 → ReplayClick 必须返回 false，回调必须放行那条真抬起。
         var gate = new GestureGate(_ => false, 40);
         using var hook = new MouseHook(350, () => { }, a => a(), gesture: gate, canInject: () => false,
-            procNameForPid: _ => "");
+            procNameForPid: _ => "", modifierHeld: () => false);
         Assert.Equal(new IntPtr(1), Send(hook, WM_RBUTTONDOWN, 200, 200));   // 按下照旧吞
         Assert.NotEqual(new IntPtr(1), Send(hook, WM_RBUTTONUP, 200, 200));  // 抬起必须放行
     }
@@ -222,11 +237,11 @@ public class ReplayOffCallbackTests
     public void A_dropped_replay_is_reported_to_the_caller_and_counted()
     {
         var src = Source("Native", "MouseHook.cs");
-        var enq = BodyOf(src, "private bool EnqueueReplay(int which)");
+        var enq = BodyOf(src, "private bool EnqueueReplay(ReplayKind kind");
         Assert.Contains("TryAdd", enq);                                   // 有界队列 + 不等待
         Assert.Contains("_replayDropped", enq);                           // 投不进去要计数
         Assert.DoesNotContain("_ = _replay", enq);                        // 不看结果的投递 = 那个洞本身
-        Assert.Contains("return EnqueueReplay(which);", BodyOf(src, "private bool ReplayClick(int which)"));
+        Assert.Contains("return EnqueueReplay(kind);", BodyOf(src, "private bool ReplayClick(ReplayKind kind)"));
     }
 
     // ── 7. 「能不能注入」这句探针的判据本身 ──

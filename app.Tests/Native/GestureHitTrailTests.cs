@@ -45,7 +45,7 @@ public class GestureHitTrailTests
             mayEngage: _ => true,
             procNameForPid: _ => "",
             trailPoint: (x, y, armed, h) => seen.Add((armed, h)),
-            trailEnd: () => { });
+            trailEnd: () => { }, modifierHeld: () => false);
 
         Send(hook, WM_RBUTTONDOWN, 100, 100);
         for (int i = 1; i <= 12; i++) Send(hook, WM_MOUSEMOVE, 100 + i * 10, 100);
@@ -54,6 +54,11 @@ public class GestureHitTrailTests
         Assert.NotEmpty(seen);
         Assert.True(seen[^1].Armed);
         Assert.Same(hit, seen[^1].Hit);
+
+        // **把闸门关掉再退**：这一笔按下被手势吞了（闸门还 pending），
+        // 而拆卸时那条「把扣着的那次按下还回去」的路会**真的注入一次右键按下**——
+        // 一个没有配对抬起的按下，会让开发者的右键在全系统卡在按下态。
+        gate.Reset();
     }
 
     // 没命中的时候捎的是 null：一句「这将是哪件事」在没有「哪件事」时必须没有，
@@ -68,7 +73,7 @@ public class GestureHitTrailTests
             mayEngage: _ => true,
             procNameForPid: _ => "",
             trailPoint: (x, y, armed, h) => seen.Add((armed, h)),
-            trailEnd: () => { });
+            trailEnd: () => { }, modifierHeld: () => false);
 
         Send(hook, WM_RBUTTONDOWN, 100, 100);
         for (int i = 1; i <= 12; i++) Send(hook, WM_MOUSEMOVE, 100 + i * 10, 100);
@@ -77,5 +82,8 @@ public class GestureHitTrailTests
         Assert.NotEmpty(seen);
         Assert.False(seen[^1].Armed);
         Assert.Null(seen[^1].Hit);
+
+        // 同上：闸门还 pending 的话，拆卸会真的注入一次右键按下。
+        gate.Reset();
     }
 }

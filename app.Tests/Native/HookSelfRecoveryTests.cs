@@ -60,7 +60,7 @@ public class HookSelfRecoveryTests
     [Fact]
     public void Congestion_peaks_are_read_and_cleared_without_touching_the_lifetime_peak()
     {
-        using var hook = new MouseHook(0, () => { }, a => a());
+        using var hook = new MouseHook(0, () => { }, a => a(), modifierHeld: () => false);
         typeof(MouseHook).GetField("_callbackWindowMax", BindingFlags.Instance | BindingFlags.NonPublic)!
             .SetValue(hook, 412u);
         typeof(MouseHook).GetField("_replayWindowMax", BindingFlags.Instance | BindingFlags.NonPublic)!
@@ -79,7 +79,7 @@ public class HookSelfRecoveryTests
     [Fact]
     public void Generation_reset_keeps_the_window_peaks_for_the_yield_sampler()
     {
-        using var hook = new MouseHook(0, () => { }, a => a());
+        using var hook = new MouseHook(0, () => { }, a => a(), modifierHeld: () => false);
         var t = typeof(MouseHook);
         t.GetField("_callbackWindowMax", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(hook, 412u);
         t.GetField("_replayWindowMax", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(hook, 87);
@@ -96,7 +96,7 @@ public class HookSelfRecoveryTests
     {
         var gate = new GestureGate(_ => true, 40);
         using var hook = new MouseHook(0, () => { }, a => a(), gesture: gate,
-            mayEngage: _ => true, procNameForPid: _ => "notepad");
+            mayEngage: _ => true, procNameForPid: _ => "notepad", modifierHeld: () => false);
         hook.SetYielding(true);
         Assert.True(hook.Yielding);
 
@@ -119,7 +119,7 @@ public class HookSelfRecoveryTests
     [Fact]
     public void A_failed_yield_post_reverts_the_flag()
     {
-        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null, modifierHeld: () => false);
         // 一个不存在的线程 id：投递必然失败（PostThreadMessage 答 false）。
         typeof(MouseHook).GetField("_threadId", BindingFlags.Instance | BindingFlags.NonPublic)!
             .SetValue(hook, 4242u);
@@ -136,7 +136,7 @@ public class HookSelfRecoveryTests
     [Fact]
     public void A_failed_yield_exit_post_keeps_the_flag_off()
     {
-        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null);
+        using var hook = new MouseHook(0, () => { }, a => a(), gesture: null, modifierHeld: () => false);
         hook.SetYielding(true);          // 没装钩子 → 只落标志，不投消息
         Assert.True(hook.Yielding);
         typeof(MouseHook).GetField("_threadId", BindingFlags.Instance | BindingFlags.NonPublic)!
