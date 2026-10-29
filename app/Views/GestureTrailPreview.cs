@@ -26,6 +26,9 @@ public static class GestureTrailPreview
         // 方向串只有拐点；丝带的宽窄变化需要沿线段也有采样点，否则一条单腿手势的预览
         // 只剩起笔/收笔两个宽度因子，看起来仍是一条细线。
         foreach (var p in Densify(points)) renderer.Add(p);
+        // **一次喂完就摆出去**：那条路不等下一帧，几何立刻最新才是对的
+        // （正在画的那一笔走的是每帧合并重建，见 GestureTrailRenderer.RequestRibbonRebuild）。
+        renderer.Flush();
 
         var host = new Grid { Width = w, Height = h };
         host.Children.Add(renderer.Surface);
@@ -42,6 +45,7 @@ public static class GestureTrailPreview
         var renderer = new GestureTrailRenderer(style, widths, fallbackAccent, armed);
         // 弧线形状只有 GestureTrailRenderer.SampleArc 一处（与设置页的预览共用）。
         foreach (var p in GestureTrailRenderer.SampleArc(w, h, 8, 0.74, 0.42)) renderer.Add(p);
+        renderer.Flush();   // 一次喂完就摆出去：几何立刻最新（见 MakePath 的同一句）
         var host = new Grid { Width = w, Height = h };
         host.Children.Add(renderer.Surface);
         return host;

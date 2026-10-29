@@ -186,6 +186,79 @@ public class GestureTrailStyleTests
         Assert.True(tip < 0.2, $"笔尖应收尖，实测 {tip}");
     }
 
+    // **投递失败不能把重建永久卡住**：标志还挂着的话，后面的每一次加点都会在这里
+    // 直接返回，几何从此再也不重建——笔迹的带身冻住，而亮头还在动。
+    //
+    // 让它变红的改动：把 catch 里那句 `_ribbonDirty = false;` 删掉。
+    [Fact]
+    public void A_failed_post_does_not_freeze_the_ribbon()
+    {
+        OnSta(() =>
+        {
+            var queued = new List<Action>();
+            Action<Action>? post = null;
+            var renderer = new GestureTrailRenderer(
+                GestureTrailStyles.Resolve(GestureTrailStyles.DefaultId),
+                GestureTrailWidths.Resolve("normal"),
+                new SolidColorBrush(Colors.SteelBlue), new SolidColorBrush(Colors.White),
+                fade: false, postRebuild: a => post!(a));
+
+            post = _ => throw new InvalidOperationException("dispatcher is closing");
+            renderer.Add(new Point(10, 80));        // 投递失败 → 标志必须被放开
+
+            post = a => queued.Add(a);             // 换一个会成功的投递口
+            renderer.Add(new Point(13, 78));        // 下一次还要能重新排上
+
+            Assert.Single(queued);
+        });
+    }
+
+    // **一帧里的多个采样点只重建一次**。
+    //
+    // 丝带每加一个点都要按**全部**点重建三条几何（辉光 / 外缘 / 带身），而采样点是按
+    // 鼠标移动事件来的——高报率鼠标一秒能上千个。每个采样点都重建一遍的话，一笔按住
+    // 两秒的笔画总工作量随点数**平方**地长，而那些活儿全在 UI 线程上：UI 一卡，
+    // 钩子投过来的点就排队，笔迹跟着发涩。
+    //
+    // 所以重建被**合并到一帧一次**。这条钉的就是「合并」：24 个采样点只排**一次**重建；
+    // 泵过那一帧之后，几何反映的是全部 24 个点。
+    //
+    // 让它变红的改动：把 RequestRibbonRebuild 改回每次 Add 都重建（去掉那个 dirty 标志），
+    // 或者让 Flush 提前半拍执行（那样几何就只反映泵之前的那些点了）。
+    [Fact]
+    public void The_ribbon_rebuilds_once_per_frame_not_once_per_sample()
+    {
+        OnSta(() =>
+        {
+            var queued = new List<Action>();
+            var style = GestureTrailStyles.Resolve(GestureTrailStyles.DefaultId);
+            var renderer = new GestureTrailRenderer(style, GestureTrailWidths.Resolve("normal"),
+                new SolidColorBrush(Colors.SteelBlue), new SolidColorBrush(Colors.White),
+                fade: false, postRebuild: a => queued.Add(a));
+
+            for (int i = 0; i < 24; i++)
+                renderer.Add(new Point(10 + i * 3, 80 - Math.Sin(i / 6.0) * 30));
+
+            Assert.Single(queued);                         // 24 个采样点 → 只排了一次重建
+            var body = renderer.Surface.Children.OfType<Path>().ElementAt(2);
+            Assert.Null(body.Data);                        // 还没泵 → 几何还没重建
+
+            queued[0]();                                  // 泵这一帧
+
+            Assert.NotNull(body.Data);                     // 泵过之后反映全部点
+            Assert.True(body.Data!.Bounds.Width > 20, $"丝带几何应有宽度，实测 {body.Data.Bounds.Width}");
+
+            // **下一帧还能再排一次**（这一格是「每帧一次」的后半句）：
+            // 重建时会把「待重建」那个标志清回去；清不回去的话，
+            // 后面的每一次加点都会在这里直接返回——笔迹的带身从此冻住，
+            // 而亮头还在动。只验「一帧里排一次」看不出这个。
+            renderer.Add(new Point(200, 200));
+            Assert.Equal(2, queued.Count);
+            queued[1]();
+            Assert.NotNull(body.Data);
+        });
+    }
+
     // 流光画成六格：外晕 / 深色描边 / 带身 / 亮芯 / 亮头 / 笔尖点。
     [Fact]
     public void The_ribbon_draws_glow_halo_body_core_head_and_tip()

@@ -58,6 +58,7 @@ public partial class GestureSettingsWindow : Window
             accent, armed);
         host.Child = renderer.Surface;
         foreach (var p in Sample(host.Width, host.Height)) renderer.Add(p);
+        renderer.Flush();   // 一次喂完就摆出去：几何立刻最新（见 GestureTrailPreview.MakePath）
         return renderer;
     }
 

@@ -26,6 +26,15 @@ public sealed class GestureTrailRenderer
     /// <summary>亮头带多少个点。</summary>
     private const int HeadPoints = 16;
 
+    // 丝带几何重建的调度：「下一帧」的投递口 + 「待重建」标志。
+    // 判据见 RequestRibbonRebuild 的说明。
+    //
+    // 生产走 Dispatcher（合并到一帧一次）；单测可以注入一个收集器，把「下一帧」变成
+    // 「手动泵」——于是「一帧只重建一次」那条也能被钉住，不必真去造一个 WPF Application。
+    // 没有投递口时就是同步重建（单测里没有 Application，那条路不赶时间）。
+    private readonly Action<Action>? _postRebuild;
+    private bool _ribbonDirty;
+
     /// <summary>淡出时（非亮头那部分）的透明度。</summary>
     private const double FadeOpacity = 0.45;
 
@@ -185,6 +194,14 @@ public sealed class GestureTrailRenderer
 
     public GestureTrailRenderer(GestureTrailStyle style, GestureTrailWidths widths,
                                 Brush accent, Brush armedBrush, bool fade = false)
+        : this(style, widths, accent, armedBrush, fade, DispatcherPost())
+    {
+    }
+
+    /// <summary>单测用的口子：把「下一帧」换成注入的那个投递口（null = 同步重建）。</summary>
+    internal GestureTrailRenderer(GestureTrailStyle style, GestureTrailWidths widths,
+                                  Brush accent, Brush armedBrush, bool fade,
+                                  Action<Action>? postRebuild)
     {
         _accent = accent;
         _styleAccent = accent;
@@ -194,7 +211,22 @@ public sealed class GestureTrailRenderer
         _widths = widths;
         Surface = new Canvas { IsHitTestVisible = false };
         _head = MakeLine();
+        _postRebuild = postRebuild;
         Rebuild(style, fade);
+    }
+
+    /// <summary>
+    /// 生产那一条投递口：**合并到一帧一次**（Normal 优先级在渲染那一档之前跑完，
+    /// 所以这一帧画出来的就是最新的）。
+    ///
+    /// 没有 Dispatcher 的场合（单测里没有 WPF Application）就是 null → 同步重建。
+    /// </summary>
+    private static Action<Action>? DispatcherPost()
+    {
+        var d = System.Windows.Application.Current?.Dispatcher;
+        return d != null
+            ? a => d.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, a)
+            : null;
     }
 
     /// <summary>换一种样式（或换粗细、换淡出）——**正在画的那一笔不会因此丢掉**。</summary>
@@ -239,13 +271,64 @@ public sealed class GestureTrailRenderer
             _head.Points.Add(p);
             if (_head.Points.Count > HeadPoints) _head.Points.RemoveAt(0);
             UpdateTip();
-            RebuildRibbonGeometry();
+            RequestRibbonRebuild();
             return;
         }
         foreach (var l in _lines) l.Points.Add(p);
         // 亮头只留最近的一小段：多了就不是「笔尖」，而是半条线都亮着。
         _head.Points.Add(p);
         if (_head.Points.Count > HeadPoints) _head.Points.RemoveAt(0);
+    }
+
+    /// <summary>把丝带几何重建到最新（幂等）。</summary>
+    /// <remarks>
+    /// **「喂完就不再动」的用法要显式调它**：预览、样式样本那些路一次把点喂完就摆出去，
+    /// 不等下一帧——那条路不赶时间，几何立刻最新才是对的。
+    /// 正在画的那一笔走的是合并重建（见 <see cref="RequestRibbonRebuild"/>），不用调。
+    /// </remarks>
+    public void Flush()
+    {
+        if (!_ribbonDirty) return;
+        RebuildRibbonGeometry();
+    }
+
+    /// <summary>请求重建丝带几何：**同一帧里只重建一次**。</summary>
+    /// <remarks>
+    /// 丝带每加一个点都要按**全部**点重建三条几何（辉光 / 外缘 / 带身），而采样点是按
+    /// 鼠标移动事件来的——高报率鼠标一秒能上千个。若每个采样点都重建，
+    /// 总工作量随点数**平方**地长，而这些活儿全在 UI 线程上：UI 一卡，
+    /// 钩子投过来的点就排队，笔迹跟着发涩。
+    ///
+    /// 所以重建被**合并**：加点只记点并标脏，真正的重建推到本帧的渲染之前
+    /// （Normal 优先级在渲染那一档之前跑完，所以这一帧画出来的就是最新的）。
+    ///
+    /// **省得最多的是静态预览**：它一次喂几十个点（预览把折线加密成采样点、
+    /// 样式样本 48 个点），合成一次重建省掉的是几十次全量重建。
+    /// 屏幕上那一笔受益小得多——钩子那边早就把采样点合并过了
+    /// （MouseHook.ScheduleTrail 只记最新一点、同一时刻 UI 队列里最多挂一个 drain），
+    /// 渲染器每帧收到的本来就只有一个点。
+    ///
+    /// **没有 Dispatcher 的场合（单测）直接同步重建**：那条路不赶时间，契约也一样，
+    /// 于是「Add 返回时几何已经反映全部点」在单测里仍然成立。
+    /// </remarks>
+    private void RequestRibbonRebuild()
+    {
+        if (_ribbonDirty) return;      // 已经排上了，不必再排
+        _ribbonDirty = true;
+        var post = _postRebuild;
+        if (post == null) { Flush(); return; }
+        try
+        {
+            post(Flush);
+        }
+        catch
+        {
+            // **投递失败（调度器正在关闭）不能把重建永久卡住**：标志还挂着的话，
+            // 后面的每一次 Add 都会在这里直接返回，几何从此再也不重建——
+            // 笔迹的带身会冻住，而亮头还在动。
+            // 所以这里把标志放开，让下一个点重新排一次。
+            _ribbonDirty = false;
+        }
     }
 
     // 按样式重建这几根线，并把已有的点喂回去。
@@ -384,6 +467,7 @@ public sealed class GestureTrailRenderer
 
     private void RebuildRibbonGeometry()
     {
+        _ribbonDirty = false;   // 重建过了，不再是「待重建」
         if (_ribbonGlow == null || _ribbonHalo == null || _ribbonBody == null) return;
         if (_points.Count < 2)
         {
