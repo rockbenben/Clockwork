@@ -141,6 +141,36 @@ jobs:
             exit 1
           fi
 
+      # **发版不等人。** 这道闸门拦的不是「谁来批」，是「从哪儿发」。
+      #
+      # 这个仓库**没有分支保护**（/branches/main/protection 是 404），
+      # 所以任何有 push 权限的人都能从任意分支推一个 v* 标签。
+      # 「等人审批」那道闸门被明确否掉了（发版不该等审批），
+      # 于是这里换一道**不需要人**的：被发版的那个提交必须在 main 的历史里。
+      # 机器判、不等人；拦住的是「从别处发版」。
+      - name: Check the released commit is on main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          type="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${GITHUB_REF_NAME}" --jq '.object.type')"
+          sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${GITHUB_REF_NAME}" --jq '.object.sha')"
+          # 注解标签（annotated tag）的 object.type 是 "tag"，要再取一层才是提交。
+          if [ "$type" = "tag" ]; then
+            sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/tags/${sha}" --jq '.object.sha')"
+          fi
+          # compare 的 status 相对 head：base=被发版的提交，head=main。
+          # 提交在 main 的历史里 → main 领先它 → "ahead"；分叉或根本不在 → 不通过。
+          #
+          # 注意它判的是**祖先关系**，不是「main 现在的内容」：一个后来在 main 上被回退掉的
+          # 提交仍然是 main 的祖先，照样放行。要连内容一起判就得比对树，那是另一件事。
+          status="$(gh api "repos/${GITHUB_REPOSITORY}/compare/${sha}...main" --jq '.status')"
+          case "$status" in
+            ahead|identical) echo "release commit ${sha} is on main" ;;
+            *) echo "::error::the released commit ${sha} is not on main (compare status=${status}) — releases are cut from main"; exit 1 ;;
+          esac
+
       # 标签 v1.2.0 → 版本 1.2.0（去掉前缀 v），注入 exe 让文件版本与标签一致。
       - name: Derive version from tag
         id: ver
@@ -244,8 +274,10 @@ jobs:
   publish:
     needs: release
     runs-on: ubuntu-latest
-    # 受保护环境：必须在仓库 Settings → Environments 里建 `release`，并配置 Required reviewers。
-    # 只写这一行不会自动产生审批规则；没有保护规则时 GitHub 会建一个无审批的同名环境。
+    # 环境名只是给这次发布留一条 deployment 记录（仓库的 Deployments 页能查）。
+    # **它刻意没有保护规则**：发版不该等审批（仓库主人的决定）。
+    # 「从哪儿发」那道闸门在 release job 里——被发版的提交必须在 main 的历史上——
+    # 那是机器判的，不等人。
     environment: release
     timeout-minutes: 10
     permissions:

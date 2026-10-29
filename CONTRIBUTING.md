@@ -80,7 +80,7 @@ GitHub Actions builds, runs every test and then both `--smoke` and `--selftest` 
 
 **The release is published in two steps: assets go to a draft, and a separate job on Linux checks them before the draft goes public.** The check is `sha256sum -c SHA256SUMS.txt` against the files downloaded back from the draft — the same command a user runs on Linux or macOS, and the only place a CRLF in that file shows up (GNU coreutils reads the trailing `\r` as part of the file name, so every line fails with "No such file or directory"). The application itself is unaffected by such a file — it trims each line — which is exactly why the defect can ship unnoticed; v3.2.1 shipped one. A broken checksum file therefore stays in the draft instead of reaching users.
 
-**The publish job is gated by the protected `release` environment.** Create it under Settings → Environments with Required reviewers before the first tag; without a protection rule GitHub creates an unprotected environment and the job can publish without review.
+**A release never waits for a human.** The `release` environment exists so each release leaves a deployment record; it deliberately carries **no** protection rule (Required reviewers was considered and rejected, because a release should not block on an approval). The mechanical gate is instead that **the released commit must be on `main`** — this repository has no branch protection, so without that check any branch could push a `v*` tag. The `release` job fails before it builds anything when the tag points elsewhere.
 
 Dependency versions are checked before a release (`dotnet list package --outdated`, `dotnet list package --vulnerable --include-transitive`, and the Action major check); this repository intentionally does not use Dependabot.
 
