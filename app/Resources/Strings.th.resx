@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>คืนค่าท่าทางทันที</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>ปลดปล่อยปุ่มเมาส์ที่ค้างอยู่</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>กดปุ่มขวาค้างแล้ววาดเส้น การกระทำที่ตรงกันจะทำงาน หากไม่มีเจสเจอร์ ปุ่มขวาจะทำงานตามปกติ</value>
   </data>

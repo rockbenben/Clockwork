@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>立即恢復手勢</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>鬆開卡住的滑鼠鍵</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>按住右鍵畫一條軌跡，就執行對應的動作。沒有匹配的手勢時，右鍵原樣交給當前程式。</value>
   </data>

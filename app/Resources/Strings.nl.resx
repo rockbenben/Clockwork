@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>Gebaren nu herstellen</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>Vastgelopen muisknop vrijgeven</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Houd de rechterknop ingedrukt, teken een streek en de bijbehorende actie wordt uitgevoerd. Zonder gebaren werkt de rechterknop gewoon.</value>
   </data>

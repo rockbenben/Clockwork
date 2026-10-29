@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>Ripristina i gesti ora</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>Rilascia il pulsante del mouse bloccato</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Tieni premuto il tasto destro, disegna un tratto e parte l’azione corrispondente. Senza gesti, il tasto destro funziona come sempre.</value>
   </data>

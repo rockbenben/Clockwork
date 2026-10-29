@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>지금 제스처 복원</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>멈춘 마우스 버튼 해제</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>오른쪽 버튼을 누른 채 궤적을 그리면 해당 동작이 실행됩니다. 제스처가 없으면 오른쪽 버튼은 평소대로 작동합니다.</value>
   </data>

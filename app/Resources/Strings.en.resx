@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>Restore gestures now</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>Release stuck mouse button</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Hold the right button, draw a stroke, and the matching action runs. With no gestures set, the right button behaves as usual.</value>
   </data>

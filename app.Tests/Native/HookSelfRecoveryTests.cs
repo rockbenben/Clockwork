@@ -120,9 +120,13 @@ public class HookSelfRecoveryTests
     public void A_failed_yield_post_reverts_the_flag()
     {
         using var hook = new MouseHook(0, () => { }, a => a(), gesture: null, modifierHeld: () => false);
-        // 一个不存在的线程 id：投递必然失败（PostThreadMessage 答 false）。
+        // **一个不可能存在的线程 id**：投递必然失败（PostThreadMessage 答 false）。
+        //
+        // 不用「起一条线程、记下它的 id、再让它结束」那种写法：Windows 并不保证
+        // 立刻不复用那个 id（实测 3000 轮都没碰上，但不是保证）——「大概率不撞上」
+        // 不等于「构造上不可能」。这里用一个越界的 id，失败是构造出来的。
         typeof(MouseHook).GetField("_threadId", BindingFlags.Instance | BindingFlags.NonPublic)!
-            .SetValue(hook, 4242u);
+            .SetValue(hook, uint.MaxValue);
         hook.SetYielding(true);
         Assert.False(hook.Yielding);
     }

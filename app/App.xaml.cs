@@ -626,6 +626,9 @@ public partial class App : System.Windows.Application
     internal void RehookMouse(string source = "manual") => _gesture.RehookMouse(source);
     // 托盘的「立即恢复手势」入口（让路中才出现）。
     internal void EndGestureYield() => _gesture.EndGestureYield();
+    // 托盘的「松开卡住的鼠标键」入口：人工逃生口，账上还欠着抬起时才出现。
+    internal int ReleaseStuckMouseButtons() => _gesture.ReleaseStuckMouseButtons();
+    internal bool HasStuckMouseButton => _gesture.HasStuckMouseButton;
     /// <summary>打开手势管理器。面板表圈上那颗按钮与主界面那颗走同一条路。</summary>
     public void OpenGestureManager() => _gesture.OpenGestureManager();
     // 按当前设置装/卸中键长按与手势钩子（幂等，UI 线程编组在实现里）。

@@ -198,6 +198,14 @@ public class ReplayOffCallbackTests
         // 不放的话看门狗会白晚半秒才敢动账。三处各有主人：右键那一档、中键那一档、
         // 以及补发线程死在半路时（异常那条路不收窗，闸门就要白等到自己过期）。
         Assert.Equal(3, System.Text.RegularExpressions.Regex.Matches(loop, @"ReleasePairing\(\)").Count);
+        // **异常那条路只放掉自己占着的那一份**：配对窗是全局共享的引用计数，
+        // 而这条补发线程可能被换掉（拆过又装回来时新旧两条同时在跑）。
+        // 无条件放掉就等于在另一条线程还压着「按下已进系统、抬起还没发」的那一笔时
+        // 把闸门打开——看门狗领走那一笔，零长度点击就此出现（症状是「这一下右键凭空消失」）。
+        //
+        // 上面那条只数「有几处 ReleasePairing」，改回无条件放掉它照样满足；
+        // 这一条才钉住「catch 里那一放带条件」。
+        Assert.Contains("if (pairingHeld) _upLedger.ReleasePairing();", loop);
         // 按下与抬起之间必须留着那一段间隔：同批注入的 down/up 时间戳完全相同，
         // 零长度点击会被下游当噪声丢掉（理由见 MouseHook.ClickGapMs 处，是本地的实测口径）。
         // **两档点击各一次**——只断言「出现过」的话，摘掉其中一条什么也不会红（打过这一发）。

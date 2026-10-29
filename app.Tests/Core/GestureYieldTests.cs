@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Clockwork.Core;
 using Xunit;
 
@@ -56,6 +58,94 @@ public class GestureYieldTests
         y.Tick(10_000, trigger: true);
         Assert.Equal(GestureYieldChange.None, y.Tick(13_999, trigger: false));
         Assert.Equal(GestureYieldChange.Exited, y.Tick(14_000, trigger: false));
+    }
+
+    // **用户按过「立即恢复手势」之后，判据还在也不自动再进。**
+    //
+    // 这一格以前住在协调器里，而协调器在换钩子/自愈重装时把它清掉了——
+    // 于是用户点完不到一秒，链还堵着（判据仍在）就又进了让路，
+    // 那个按钮等于没按过。文档里写的正是「在链真正疏通之前，它不会再自动让路」。
+    //
+    // 现在压制住在 GestureYield 里，只由**判据自己消失**来解除：
+    // 钩子生命周期的事件（换钩子、自愈重装、手动重挂）碰不到它。
+    //
+    // **顺序要紧**：必须先 Suppress() 再 End()——那正是协调器里的顺序
+    // （EndGestureYield：Suppress → End）。反过来写的话，「End() 顺手把压制也清了」
+    // 那种改法这条测试照样绿：End() 在压制之前调用，清掉的是个空的标记。
+    // 而 End() 清掉压制恰恰就是原来的 bug 形状（协调器的 ClearGestureYield 就是调 End()）。
+    //
+    // 让它变红的改动：给 End() 加一句「也清掉压制」，或者把 ClearGestureYield 改成清压制。
+    [Fact]
+    public void A_manual_suppression_survives_until_the_trigger_clears()
+    {
+        var y = new GestureYield();
+        y.Tick(0, trigger: true);
+        y.Suppress();
+        y.End();                                   // 协调器那一档的顺序：先压住，再结束
+
+        Assert.True(y.Suppressed);                 // **End() 不许碰压制**
+        Assert.False(y.Active);
+
+        // 判据还在 → 不进
+        Assert.Equal(GestureYieldChange.None, y.Tick(1_000, trigger: true));
+        Assert.False(y.Active);
+
+        // 判据消失 → 压制作废
+        Assert.Equal(GestureYieldChange.None, y.Tick(2_000, trigger: false));
+        Assert.False(y.Suppressed);
+
+        // 于是下一次判据又成立时就能进了
+        Assert.Equal(GestureYieldChange.Entered, y.Tick(3_000, trigger: true));
+        Assert.True(y.Active);
+    }
+
+    // **30 秒上限解除后也一样**：上限强制解除是一次真正的恢复，不是下一拍又进。
+    // 这一格由状态机自己落（见 GestureYield.Tick 的 ForcedExit 那一档），
+    // 所以协调器换钩子的时候碰不到它。
+    [Fact]
+    public void A_forced_exit_suppresses_the_next_entry()
+    {
+        var y = new GestureYield();
+        Assert.Equal(GestureYieldChange.Entered, y.Tick(0, trigger: true));
+        Assert.Equal(GestureYieldChange.ForcedExit, y.Tick(GestureYieldRules.MaxDurationMs, trigger: true));
+        Assert.True(y.Suppressed);
+
+        Assert.Equal(GestureYieldChange.None, y.Tick(GestureYieldRules.MaxDurationMs + 1, trigger: true));
+        Assert.False(y.Active);
+    }
+
+    // **「立即恢复手势」那一档必须真的压住自动让路。**
+    //
+    // 压制住在状态机里（GestureYield.Suppress），而**只有协调器会去设它**——
+    // 它要是漏了这一句，用户点完按钮不到一秒（判据还在）就又进让路了，
+    // 那个按钮等于没按过。而状态机那几条测试全是直接调 GestureYield，
+    // 根本碰不到协调器这一段。
+    //
+    // 让它变红的改动：把 EndGestureYield 里那句 _yield.Suppress() 删掉（或挪到 End 之后）。
+    [Fact]
+    public void The_manual_resume_actually_suppresses_the_next_auto_entry()
+    {
+        var src = File.ReadAllText(Path.Combine(RepoRoot(), "app", "Services", "GestureCoordinator.cs"));
+        int i = src.IndexOf("public void EndGestureYield()", StringComparison.Ordinal);
+        Assert.True(i > 0, "找不到 EndGestureYield");
+        int end = src.IndexOf("public void EndGestureYield()", i + 1, StringComparison.Ordinal);
+        if (end < 0) end = src.Length;
+        var body = src.Substring(i, end - i);
+
+        Assert.Contains("_yield.Suppress()", body);
+        // **压制要落在结束之前**：反过来的话，End() 之后标记就没了。
+        int suppress = body.IndexOf("_yield.Suppress()", StringComparison.Ordinal);
+        int endCall = body.IndexOf("_yield.End()", StringComparison.Ordinal);
+        Assert.True(suppress >= 0 && endCall >= 0, "EndGestureYield 里要有压制与结束两句");
+        Assert.True(suppress < endCall, "压制必须落在结束之前");
+    }
+
+    private static string RepoRoot()
+    {
+        var d = new DirectoryInfo(AppContext.BaseDirectory);
+        while (d != null && !Directory.Exists(Path.Combine(d.FullName, "app", "Resources"))) d = d.Parent;
+        Assert.NotNull(d);   // 找不到就是布局变了，宁可红也别静默跳过
+        return d!.FullName;
     }
 
     [Fact]

@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>Restaurar gestos agora</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>Liberar o botão do mouse travado</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Segure o botão direito, desenhe um traço e a ação correspondente é executada. Sem gestos, o botão direito funciona como sempre.</value>
   </data>

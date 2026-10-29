@@ -281,11 +281,6 @@ public class ReplayUpSettlementTests
         Assert.Contains("_upLedger.ReOwe(unit)", up);
         // 2. **不许跨 SendInput 持锁**。
         Assert.DoesNotContain("lock (", up);
-        // 3. 看门狗的退休：销毁必须落在那个判断**里面**（只比两处字面量的先后是不够的）。
-        //    而且要**先把引用摘走再释放**：反过来（先 Dispose 再置 null）的话，
-        //    那一拍若正好被抢占在两句之间，而此刻装钩子那条路看到的是一个**非空但已释放**的
-        //    定时器，它就不新建；而那一拍回来再把字段置空——看门狗就此彻底没有了，
-        //    之后的欠账没人还（那个键卡在全系统按下态）。
         // 3. 看门狗的退休：销毁必须落在「问过锁」那一段**里面**，而且是先摘走引用再释放
         //    （只比两处字面量的先后是不够的：判据被挪到锁外、或反过来先释放再置空，
         //     两处字面量都还在原位，而看门狗照样会在有欠账时消失）。
@@ -540,17 +535,31 @@ public class ReplayUpSettlementTests
     {
         int peak = 0;
         const int N = 14;
+        // **栅栏**：没有它 14 条线程是顺序跑的——先起来的那条在别的线程被调度前就把 500 次
+        // MaxInto 全做完了，于是「读—比—写」那种朴素写法照样全过，
+        // 而那正是这条守卫要拦的东西（本仓库已经踩过一次：实测 200 轮里只有 1 轮真的撞上）。
+        using var start = new Barrier(N);
         var threads = new Thread[N];
+        Exception? barrierError = null;
         for (int i = 0; i < N; i++)
         {
             int v = i + 1;
             threads[i] = new Thread(() =>
             {
+                // **带超时的栅栏**：没有它的话，只要有一条线程没能起来，
+                // 其余 13 条就永远卡在这里——整套测试挂住，而不是红掉。
+                //
+                // **异常要在线程里接住**：裸线程上抛出去的断言失败是未处理异常，
+                // 会把整个测试宿主带走——那 2891 条结果全丢，而这里本该只红一条。
+                // 接住之后由主线程断言，红的是这一条。
+                try { Assert.True(start.SignalAndWait(TimeSpan.FromSeconds(10)), "起跑栅栏没等到所有线程（有一条没能起来？）"); }
+                catch (Exception ex) { barrierError = ex; }
                 for (int k = 0; k < 500; k++) MouseHook.MaxInto(ref peak, v);
             });
             threads[i].Start();
         }
-        foreach (var t in threads) t.Join();
+        foreach (var t in threads) Assert.True(t.Join(TimeSpan.FromSeconds(30)), "有一条线程没在 30 秒内结束");
+        Assert.Null(barrierError);
         Assert.Equal(N, peak);   // 最大的那个还在
     }
 

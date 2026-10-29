@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>Hareketleri şimdi geri yükle</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>Takılı fare düğmesini bırak</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Sağ tuşu basılı tutup bir iz çizin, ilgili eylem çalışır. Hiç hareket yoksa sağ tuş her zamanki gibi çalışır.</value>
   </data>

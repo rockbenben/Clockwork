@@ -215,10 +215,51 @@ public class MouseUpLedgerTests
         l.ScheduleRetry(2_000);
         Assert.Equal(2, l.RetryAttempt);
 
-        l.ClearRetry();
+        l.ClearRetryIfAllClear();
 
         Assert.Equal(0, l.RetryAttempt);
         Assert.Equal(0, l.RetryAtMs);
+    }
+
+    // **「账与在途都空了才复位」**：只清空的那一档复位；还欠着一笔、
+    // 或有一笔正在发，都不许清——那一笔一失败就把账还回去并排重试，
+    // 档位从 1 重新起算就太乐观了（它已经等了很久）。
+    //
+    // 让它变红的改动：把 ClearRetryIfAllClear 改回无条件复位（旧版 ClearRetry）。
+    [Fact]
+    public void The_backoff_is_not_reset_while_a_unit_is_owed_or_in_flight()
+    {
+        var l = new MouseUpLedger();
+        var owed = l.Owe(MouseUpButton.Right, 1_000, foregroundWindow: 1);
+        l.ScheduleRetry(1_001);
+        l.ScheduleRetry(1_002);
+        Assert.Equal(2, l.RetryAttempt);
+
+        l.ClearRetryIfAllClear();
+        Assert.Equal(2, l.RetryAttempt);      // 还欠着一笔 → 不许复位
+        Assert.NotEqual(0, l.RetryAtMs);
+
+        // 认领了（进在途）也还不算清：那一笔还在发送里
+        Assert.True(l.TryClaimToken(owed.Token, out var unit));
+        l.ClearRetryIfAllClear();
+        Assert.Equal(2, l.RetryAttempt);      // 在途 → 也不许复位
+
+        l.Settle(unit);
+        Assert.Equal(0, l.RetryAttempt);      // 账与在途都空了 → 复位
+        Assert.Equal(0, l.RetryAtMs);
+    }
+
+    // **档位与自增同一次加锁问出来**：返回值就是「排完之后」的档位。
+    //
+    // 调用方要拿「这是不是第一次失败」当判据（那行唯一的自证日志只在第一次失败时打）。
+    // 若自增在这里、判据在调用方另读一次，两次加锁之间别的线程爬了一档，
+    // 那行证据就永远不出现了。
+    [Fact]
+    public void The_scheduled_attempt_comes_back_from_the_same_lock_as_the_increment()
+    {
+        var l = new MouseUpLedger();
+        Assert.Equal(1, l.ScheduleRetry(1_000));
+        Assert.Equal(2, l.ScheduleRetry(2_000));
     }
 
     // **它不认输。** 重试到什么时候都不放弃：认输会让那一笔欠着的抬起永远送不出去，
@@ -254,7 +295,7 @@ public class MouseUpLedgerTests
     }
 
     // **补发线程自己结清最后一笔时也要把退避档位复位**。它走的是 token 认领那条路，
-    // 不经过 `SettleOwedUps` 的收尾，而 ClearRetry 今天只有那一个调用点——复位永远轮不到它。
+    // 不经过 `SettleOwedUps` 的收尾，而 ClearRetryIfAllClear 今天只有那一个调用点——复位永远轮不到它。
     // 不复位的后果不是崩溃而是**变慢**：档位随会话时长一路爬到 5s 封顶，下一次真卡住键的
     // 第一次重试要等 5s，而那句「第一次失败」的证据行（只在档位 1 打）从此再也不出现。
     // 让它变红的改动：把 Settle 里「账与在途都空了就复位」那一句删掉。

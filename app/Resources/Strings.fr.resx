@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>Rétablir les gestes maintenant</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>Relâser le bouton de souris bloqué</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Maintenez le bouton droit, dessinez un tracé, l’action correspondante s’exécute. Sans geste défini, le bouton droit fonctionne normalement.</value>
   </data>

@@ -243,11 +243,8 @@ public sealed class MouseUpLedger
         lock (_gate)
         {
             _inFlight.Remove(unit.Token);
-            if (_owed.Count == 0 && _inFlight.Count == 0)
-            {
-                _retryAtMs = 0;
-                _retryAttempt = 0;
-            }
+            // 复位的那条判据只有一处（见 ClearRetryIfAllClearLocked）：账与在途都空了才清退避档位。
+            ClearRetryIfAllClearLocked();
         }
     }
 
@@ -301,13 +298,17 @@ public sealed class MouseUpLedger
         lock (_gate) { return nowMs < _pairingUntilMs; }
     }
 
-    /// <summary>排下一次退避重试。</summary>
+    /// <summary>排下一次退避重试；返回排完之后的档位。</summary>
     /// <param name="nowMs">此刻（TickCount64）。</param>
     /// <remarks>
     /// 退避 500ms → 1s → 2s → 4s → 5s 封顶，够等到用户切走那个提权窗口。
     /// **它不认输**——理由见本类的类头注释：认输会让那个卡在按下态的键永远解不开。
+    ///
+    /// **返回值与自增在同一次加锁里**：调用方要拿「这是不是第一次失败」当判据，
+    /// 而那一行证据日志只在第一次失败时打。若自增在这里、判据在调用方另读一次，
+    /// 两次加锁之间别的线程可能已经爬了一档——那行唯一的自证就永远不出现了。
     /// </remarks>
-    public void ScheduleRetry(long nowMs)
+    public int ScheduleRetry(long nowMs)
     {
         lock (_gate)
         {
@@ -315,13 +316,32 @@ public sealed class MouseUpLedger
             long delay = RetryBaseMs << Math.Min(RetryMaxShift, _retryAttempt - 1);
             if (delay > RetryCapMs) delay = RetryCapMs;
             _retryAtMs = nowMs + delay;
+            return _retryAttempt;
         }
     }
 
-    /// <summary>账还清了：把重试状态清掉。</summary>
-    public void ClearRetry()
+    /// <summary>账与在途都空了：把重试状态清掉。</summary>
+    /// <remarks>
+    /// **在途的那几笔也算没还清**：认领时账就少了，而抬起还在发送里；
+    /// 那一刻若把重试状态清掉，它一失败就把账还回去并排重试——排出来的档位从 1 开始，
+    /// 而这一笔已经等了很久了。
+    /// </remarks>
+    public void ClearRetryIfAllClear()
     {
-        lock (_gate)
+        lock (_gate) { ClearRetryIfAllClearLocked(); }
+    }
+
+    /// <summary>「账与在途都空了才复位退避档位」——**假定锁已经拿在手里**。</summary>
+    /// <remarks>
+    /// 判据只有这一份（<see cref="Settle"/> 与外面那个公开方法都调它）。
+    /// 分成「拿锁的公开壳」与「假定已拿锁的本体」是为了**锁只拿一次**：
+    /// 让 Settle（已经拿着锁）去调一个自己会再加锁的公开方法，
+    /// 这个类就没有「一把锁只拿一次」的形状了——而这一类别的规则正是本类最要紧的那条
+    /// （绝不在拿着 _gate 的时候去碰 SendInput，绝不在 _gate 里嵌另一把锁）。
+    /// </remarks>
+    private void ClearRetryIfAllClearLocked()
+    {
+        if (_owed.Count == 0 && _inFlight.Count == 0)
         {
             _retryAtMs = 0;
             _retryAttempt = 0;

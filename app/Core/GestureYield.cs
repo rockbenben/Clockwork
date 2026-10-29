@@ -43,6 +43,18 @@ public sealed class GestureYield
     public long SinceMs { get; private set; }
     public long UntilMs { get; private set; }
 
+    /// <summary>
+    /// 「在判据消失之前不要再自动让路」——用户点过「立即恢复手势」，或者 30 秒上限解除过。
+    ///
+    /// **它属于这里，不属于协调器**：换钩子、自愈重装这些钩子生命周期的事件
+    /// 不该把用户那句话作废掉（用户要的是「链还堵着，但别再让路」），
+    /// 而这件事的判据本来就只在这里。
+    /// </summary>
+    public bool Suppressed { get; private set; }
+
+    /// <summary>压住下一次自动进入，直到判据自己消失。</summary>
+    public void Suppress() => Suppressed = true;
+
     public GestureYieldChange Tick(long nowMs, bool trigger)
     {
         if (Active)
@@ -50,6 +62,8 @@ public sealed class GestureYield
             if (nowMs - SinceMs >= GestureYieldRules.MaxDurationMs)
             {
                 Active = false;
+                // **30 秒强制解除是一次真正的恢复，不是下一拍又进**：判据消失之前不再自动让路。
+                Suppressed = true;
                 return GestureYieldChange.ForcedExit;
             }
             if (trigger)
@@ -66,7 +80,16 @@ public sealed class GestureYield
             return GestureYieldChange.None;
         }
 
-        if (!trigger) return GestureYieldChange.None;
+        // **判据消失，压制就作废**：用户那句「先别再让路」只压到判据真的没了为止。
+        if (!trigger)
+        {
+            Suppressed = false;
+            return GestureYieldChange.None;
+        }
+        // **压着就不进**：用户点过「立即恢复手势」，或 30 秒上限解除过。
+        // 这一档必须在「换钩子 / 自愈重装」之后照样成立——
+        // 那些事件与用户的意思无关，却会让让路重新开始，用户按的那个按钮就等于没按过。
+        if (Suppressed) return GestureYieldChange.None;
         Active = true;
         SinceMs = nowMs;
         UntilMs = nowMs + GestureYieldRules.DefaultDurationMs;

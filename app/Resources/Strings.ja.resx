@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>ジェスチャーを今すぐ復元</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>固まったマウスボタンを解除</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>右ボタンを押したまま軌跡を描くと、対応するアクションを実行します。ジェスチャーがなければ右ボタンは通常どおりです。</value>
   </data>

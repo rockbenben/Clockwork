@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>अभी इशारे बहाल करें</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>अटका हुआ माउस बटन छोड़ें</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>दायाँ बटन दबाए रखकर एक रेखा खींचें — संबंधित क्रिया चलेगी। कोई जेस्चर न हो तो दायाँ बटन सामान्य रूप से काम करता है।</value>
   </data>

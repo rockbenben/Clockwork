@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>Восстановить жесты сейчас</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>Освободить застрявшую кнопку мыши</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>Удерживая правую кнопку, нарисуйте штрих — выполнится соответствующее действие. Если жестов нет, правая кнопка работает как обычно.</value>
   </data>

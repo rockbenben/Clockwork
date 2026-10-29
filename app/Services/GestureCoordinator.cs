@@ -131,10 +131,16 @@ internal sealed class GestureCoordinator
     // 让路：判据在 Core.GestureYieldRules，这里只负责采样窗口、日志与 UI 通知。
     private readonly GestureYield _yield = new();
     private int _healDeferred;          // 自愈被连续推迟的次数（让路判据之一）
-    // 让路被人工/30 秒上限解除后，判据没消失之前不再自动进入。没有这一格，
-    // 「立即恢复」只生效半秒，30 秒上限也形同虚设（下一拍立刻又进去）。
-    private bool _yieldSuppressed;
+    // 「让路被人工/30 秒上限解除后，判据没消失之前不再自动进入」这件事住在
+    // GestureYield 里（见 GestureYield.Suppress）——它是判据的一部分，
+    // 而判据不该被换钩子这类生命周期事件顺手作废。
     private static readonly int HookBudgetMs = HookWatch.EffectiveHookTimeoutMs(Native.Win32.LowLevelHooksTimeoutMs());
+
+    // 让路日志的节流：一分钟内只记第一对「进入/退出」。
+    // 理由见 UpdateGestureYield 里那两行——判据抖一下就一轮，几十分钟就能写满 128KB。
+    private const long YieldLogMinGapMs = 60_000;
+    private long _yieldLoggedAtMs;
+    private bool _yieldLoggedPair;
     public Action? OnYieldChanged;      // 托盘 tooltip / 菜单；管理器自己轮询状态行
 
     public bool GestureYieldActive => _yield.Active;
@@ -426,7 +432,10 @@ internal sealed class GestureCoordinator
         // 两个开关的当前读数一并写出去：off / reapply / heal / manual 每条路都经过这里。
         AppendErrorLog(HookDetachLine(why, _mouseHookGesture, _mouseHookMs > 0, _mouseHookMinLeg,
                                      _mouseHookTolerance, Clockwork.Native.MouseHook.StrandedTeardowns));
-        // 让路状态属于这一代钩子：摘掉就结束。新钩子从干净状态开始；判据还在的话下一次 tick 会自动再进。
+        // 让路状态属于这一代钩子：摘掉就结束。新钩子从干净状态开始；
+        // 判据还在的话下一次 tick 会自动再进——**除非用户压过它**
+        // （「立即恢复手势」或 30 秒上限：压制住在 GestureYield 里，换钩子碰不到它，
+        // 要等判据自己消失才作废，见 GestureYield.Tick）。
         ClearGestureYield(why);
         long t0 = Core.UiStallWatch.Begin();
         try { _mouseHook.Dispose(); }
@@ -476,31 +485,37 @@ internal sealed class GestureCoordinator
         var (callbackMax, replayMax) = _mouseHook.TakeCongestionPeaks();
         bool trigger = GestureYieldRules.ShouldTrigger(
             Native.MouseHook.StrandedTeardowns > 0, _healDeferred, callbackMax, replayMax, HookBudgetMs);
-        if (_yieldSuppressed)
-        {
-            // 人工恢复或 30 秒上限解除后，判据还在也别自动再进；等它自己消失
-            // （或下次重装/关手势）再恢复自动让路。否则按钮/上限都只生效半秒。
-            if (!trigger) _yieldSuppressed = false;
-            else trigger = false;
-        }
+        // 压制（用户点过「立即恢复手势」/30 秒上限解除过）在 GestureYield 里面：
+        // 判据还在就不进，判据消失才作废——见 GestureYield.Tick。
         var change = _yield.Tick(nowMs, trigger);
         if (change == GestureYieldChange.Entered)
         {
             _mouseHook.SetYielding(true);
-            AppendErrorLog($"gesture yield: entered callbackMax={callbackMax}ms replayMax={replayMax}ms "
-                           + $"stranded={Native.MouseHook.StrandedTeardowns} healsDeferred={_healDeferred} "
-                           + $"threshold={HookBudgetMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+            // **进入/退出这一对日志要节流**：判据抖一下就进一次、出一轮（每 4 秒一轮），
+            // 几十分钟就能把 128KB 的错误日志写满——而那正是用户要贴进 issue 的那份诊断。
+            // 所以一分钟里只记第一对；期间的状态在那条周期性状态行里。
+            if (nowMs - _yieldLoggedAtMs >= YieldLogMinGapMs)
+            {
+                _yieldLoggedAtMs = nowMs;
+                _yieldLoggedPair = true;
+                AppendErrorLog($"gesture yield: entered callbackMax={callbackMax}ms replayMax={replayMax}ms "
+                               + $"stranded={Native.MouseHook.StrandedTeardowns} healsDeferred={_healDeferred} "
+                               + $"threshold={HookBudgetMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+            }
+            else _yieldLoggedPair = false;
             OnYieldChanged?.Invoke();
         }
         else if (change is GestureYieldChange.Exited or GestureYieldChange.ForcedExit)
         {
             _mouseHook.SetYielding(false);
-            // 30 秒强制解除是一次真正的恢复，不是下一拍又进：判据消失前不再自动让路。
-            if (change == GestureYieldChange.ForcedExit) _yieldSuppressed = true;
-            AppendErrorLog($"gesture yield: exited reason={(change == GestureYieldChange.ForcedExit ? "forced" : "timeout")} "
-                           + $"held={nowMs - _yield.SinceMs}ms callbackMax={callbackMax}ms replayMax={replayMax}ms "
-                           + $"stranded={Native.MouseHook.StrandedTeardowns} healsDeferred={_healDeferred} "
-                           + $"threshold={HookBudgetMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+            // 30 秒强制解除是一次真正的恢复，不是下一拍又进——压制由 GestureYield 自己落
+            // （见 GestureYield.Tick 的 ForcedExit 那一档），换钩子碰不到它。
+            if (_yieldLoggedPair)
+                AppendErrorLog($"gesture yield: exited reason={(change == GestureYieldChange.ForcedExit ? "forced" : "timeout")} "
+                               + $"held={nowMs - _yield.SinceMs}ms callbackMax={callbackMax}ms replayMax={replayMax}ms "
+                               + $"stranded={Native.MouseHook.StrandedTeardowns} healsDeferred={_healDeferred} "
+                               + $"threshold={HookBudgetMs}ms suspects={HookSuspects.Describe(HookSuspects.RunningProcessNames())}");
+            _yieldLoggedPair = false;
             OnYieldChanged?.Invoke();
         }
         else if (_yield.Active)
@@ -519,7 +534,7 @@ internal sealed class GestureCoordinator
         if (!Disp.CheckAccess()) { Disp.Invoke(EndGestureYield); return; }
         if (!_yield.Active) return;
         long held = Environment.TickCount64 - _yield.SinceMs;
-        _yieldSuppressed = true;
+        _yield.Suppress();
         _yield.End();
         try { _mouseHook?.SetYielding(false); } catch { }
         AppendErrorLog($"gesture yield: exited reason=manual held={held}ms threshold={HookBudgetMs}ms "
@@ -528,16 +543,43 @@ internal sealed class GestureCoordinator
     }
 
     // 拆钩/关手势/装失败：让路状态跟着这一代钩子一起结束。新钩子从干净状态开始，
-    // 若判据仍成立，下一次 cursor tick 会重新进入并重新记一行。
+    // 若判据仍成立，下一次 cursor tick 会重新进入并重新记一行——
+    // **除非用户压过它**（压制住在 GestureYield 里，见 GestureYield.Tick）。
+    /// <summary>
+    /// 人工逃生口：把系统里还按着的那个鼠标键松开。返回补了几个抬起。
+    /// </summary>
+    /// <remarks>
+    /// **为什么要有这条**：看门狗只认「账上欠着的」。真抬起被安全桌面吃掉、
+    /// 而那次按下又不在账上的时候（交还给程序的那一次），只有下一次右键才会被认领——
+    /// 在那之前用户的右键一直是死的。托盘菜单是用户此刻唯一确定够得着的入口
+    /// （管理器可能没开），所以逃生口挂在托盘上，不藏在设置里。
+    /// </remarks>
+    public int ReleaseStuckMouseButtons()
+    {
+        if (_mouseHook == null) return 0;
+        // 「交还给程序的那次按下」：它的真抬起没了 → 先变成一笔欠账，一并还掉。
+        _mouseHook.UpLedger.ClaimHandedDown(Environment.TickCount64, 0, out _);
+        int paid = _mouseHook.PayAllOwedUpsNow();
+        AppendErrorLog($"gesture: released {paid} owed mouse-up(s) by hand");
+        return paid;
+    }
+
+    /// <summary>此刻有没有「系统里还按着、而我们欠着一个抬起」的键（决定托盘里显不显示逃生口）。</summary>
+    public bool HasStuckMouseButton => _mouseHook?.HasOwedUps == true;
+
     private void ClearGestureYield(string reason)
     {
         // 钩子那一侧也让路状态归零：协调器这一层结束、钩子那一层还开着，
         // 两边的「在不在让路」就对不上了（钩子会一直放行右键 = 手势静默失效）。
         // SetYielding 是幂等的（标志已经是对的就直接返回、不投消息），所以这句平时什么也不做。
         try { _mouseHook?.SetYielding(false); } catch { }
-        if (!_yield.End()) { _yieldSuppressed = false; return; }
+        // **这里不动「用户手动按过的压制」**：换钩子、自愈重装、手动重挂——
+        // 那些都是钩子生命周期的事，与用户那句「链还堵着，但别再让路」无关。
+        // 从前这一格把压制清掉了，于是用户点完「立即恢复手势」不到一秒，
+        // 判据还在（链还堵着）时就又进了让路——那个按钮等于没按过，
+        // 而文档里写的正是「在链真正疏通之前，它不会再自动让路」。
+        if (!_yield.End()) return;
         long held = Environment.TickCount64 - _yield.SinceMs;
-        _yieldSuppressed = false;
         AppendErrorLog($"gesture yield: exited reason={reason} held={held}ms");
         OnYieldChanged?.Invoke();
     }
@@ -659,8 +701,7 @@ internal sealed class GestureCoordinator
         {
             _prevSource = source;
             _prevBeat = _mouseHook.EverBeat ? "yes" : "no";
-            _prevRight = (_mouseHook.EverRightDown ? "down+" : "down-")
-                       + (_mouseHook.EverRightUp ? " up+" : " up-");
+            _prevRight = RightAccount(_mouseHook.EverRightDown, _mouseHook.EverRightUp);
             _prevMiddle = MiddleAccount(_mouseHook);
             _prevSince = _mouseHook.SinceBeatMs;
             _prevRejected = _mouseHook.InjectRejected;

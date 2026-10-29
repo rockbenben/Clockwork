@@ -69,6 +69,11 @@ public sealed class TrayIcon : IDisposable
         // 让路中给一条「立即恢复」：菜单是用户此刻唯一确定够得着的入口（管理器可能没开）。
         if (app.GestureYieldActive)
             menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_YieldResume"), TrayGlyph.Run, (s, e) => app.EndGestureYield()));
+        // **人工逃生口**：系统里还有哪个鼠标键按着、而我们欠着一个抬起时，
+        // 给用户一条手动松开的路——看门狗只认账上欠着的，真抬起被安全桌面吃掉的那一次
+        // 要等下一次右键才被认领，在那之前用户的右键一直是死的。
+        if (app.HasStuckMouseButton)
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_ReleaseStuck"), TrayGlyph.Run, (s, e) => app.ReleaseStuckMouseButtons()));
 
         // 启动清单区（小标题复用「我的启动清单」标签页名，已多语言）
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Launch")));

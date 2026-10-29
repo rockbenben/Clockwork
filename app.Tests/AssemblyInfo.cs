@@ -20,5 +20,14 @@ internal static class TestCultureInit
         var zh = System.Globalization.CultureInfo.GetCultureInfo("zh-CN");
         System.Globalization.CultureInfo.CurrentUICulture = zh;
         System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = zh;
+
+        // **「测试宿主里不许注入真的鼠标事件」这道闸靠它认人。**
+        // 判定看环境变量而不是进程名：程序集改个名，看进程名的那道闸就静默失效了，
+        // 而失效的后果是往开发者的桌面上注入一次真的按下/抬起（收不回来）。
+        // 生产进程里这道闸永远不生效（见 Win32.InTestHost），所以用户右键不会因此失灵。
+        //
+        // 变量名用生产侧那个常量（Win32.TestHostEnvVar）：两边各写一份字面量的话，
+        // 改了一边就静默对不上——闸会以为测试宿主不是测试宿主。
+        System.Environment.SetEnvironmentVariable(Clockwork.Native.Win32.TestHostEnvVar, "1");
     }
 }

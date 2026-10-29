@@ -175,6 +175,9 @@
   <data name="Gesture_YieldResume" xml:space="preserve">
     <value>استعادة الإيماءات الآن</value>
   </data>
+  <data name="Gesture_ReleaseStuck" xml:space="preserve">
+    <value>تحرير زر الفأرة العالق</value>
+  </data>
   <data name="Gesture_Hint" xml:space="preserve">
     <value>اضغط الزر الأيمن مع الاستمرار وارسم مسارًا، فيُنفَّذ الإجراء المقابل. وبدون إيماءات يعمل الزر الأيمن كالمعتاد.</value>
   </data>
