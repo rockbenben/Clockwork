@@ -106,9 +106,8 @@ internal sealed class PanelCoordinator
             var s = _config.Settings;
             var look = new Views.PanelLook(s.PanelColumns, s.PanelTileSize, s.PanelIconOnly, s.PanelShowOps,
                                            s.PanelTopRows, s.PanelBottomRows, s.PanelLeftTabs, s.PanelTopTabs);
-            // 一页的容量由两条带的行数×列数决定，装不下的自动续到下一页。
-            var capacity = PanelMetrics.PageCapacity(s.PanelTopRows, s.PanelBottomRows, s.PanelColumns);
-            w = new Views.QuickPanelWindow(BuildPanelPages(foreground, capacity), BuildPanelOps(), look,
+            // 一页就是一页：格子多了在面板的坑里往下滚，不再按容量切成好几屏。
+            w = new Views.QuickPanelWindow(BuildPanelPages(foreground), BuildPanelOps(), look,
                                            BuildPanelWaistOps());
             _panel = w;
         }
@@ -182,8 +181,8 @@ internal sealed class PanelCoordinator
         _runner.RunStepAsync(step, owner, by, gestureOrigin);
     }
 
-    private List<Views.PanelTilePage> BuildPanelPages(string? foreground = null, int capacity = 0)
-        => PanelLayout.BuildPages(_config.PanelPages, foreground, capacity, actions: _config.ActionGroups,
+    private List<Views.PanelTilePage> BuildPanelPages(string? foreground = null)
+        => PanelLayout.BuildPages(_config.PanelPages, foreground, actions: _config.ActionGroups,
                                   listItems: _config.LaunchSteps)
             .Select(p => new Views.PanelTilePage(
                 p.Title,
@@ -192,7 +191,7 @@ internal sealed class PanelCoordinator
                                                          OnDelete: () => DeletePanelItem(it),
                                                          Tip: StepDisplay.StepSummary(it.Step),
                                                          Search: StepDisplay.StepSearchText(it.Step))).ToList(),
-                AddStepTo(p), p.Tab, p.Screen))
+                AddStepTo(p), p.Tab))
             .ToList();
 
     // —— 面板上的增删改：一律复用主界面那两个编辑器 ——
@@ -310,6 +309,22 @@ internal sealed class PanelCoordinator
     // 面板底部那一片：程序自带的几个高频操作。与上面那片用分隔线隔开——
     // 混在一起时，格子一多就分不清哪些是「我配的动作」哪些是「程序自带的按钮」。
     //
+    // **四颗，不多不少**：这排被均分到整条宽板上（宽 = 凹坑的宽），三颗时它们孤零零悬在
+    // 三个等分里，中间空得发慌，读起来像没画完；四颗才是一排「开关带」。
+    // 四颗也就是程序自带的全部动作：重跑清单 / 停止 / 勿扰 / 打开窗口。
+    //
+    // **重跑清单曾经被撤掉过**，理由是「误点一次就把清单里的关窗口、发按键全重做一遍」。
+    // 那道闸现在由**内容**承担而不是由位置承担：手动重跑之前会弹一道整清单确认，
+    // 把这一次会做哪几件事摊开给你看（见 RunOrchestrator.ConfirmRerunLaunchList），
+    // 框本身还有 600ms 误触保护，连点两下也点不中「是」。于是位置的风险已经交给内容去挡，
+    // 而「这个程序最核心的能力」不该只剩右键托盘这一个二级入口。
+    //
+    // **相对次序与托盘菜单一致**（重跑 → 停止 → 勿扰 → 打开窗口）：同一个操作在两处长得一样、
+    // 排得也一样，认一次就够。前面两颗是「这份清单的两端」（重做一遍 / 停下来），
+    // 后面两颗是「这台机器现在要不要说话、要不要把主界面叫出来」。
+    // （托盘里「显示主窗」在最上面、「勿扰」在提醒段，两处并不相邻——这一排按
+    // 「清单的两端在前」排，不是照抄托盘的绝对位置。）
+    //
     // 文案复用托盘那几条（都已 18 语），不为面板另造一套说法：
     // 同一个操作在两个地方叫不同的名字，是最没必要的一种困惑。
     private List<Views.PanelTile> BuildPanelOps()
@@ -317,6 +332,8 @@ internal sealed class PanelCoordinator
         // 图标沿用托盘菜单那一套（TrayGlyph）：同一个操作在两处长得一样，认一次就够。
         var ops = new List<Views.PanelTile>
         {
+            // 重跑走的是手动那条路（boot=false）——与托盘那一条是同一段代码，
+            // 所以它**也会**先弹那道整清单确认（这是它能回到这一排的前提）。
             new(Strings.Get("Tray_Rerun"), TrayGlyph.Rerun, () => _runner.RunLaunchAsync(false)),
             new(Strings.Get("Tray_Stop"), TrayGlyph.Stop, _runner.RequestStop),
             // 勿扰是个开关，标签跟着当前状态走：生效中显示「恢复提醒（剩 N 分钟）」，否则「暂停 1 小时」。
@@ -348,21 +365,23 @@ internal sealed class PanelCoordinator
         // 0xE962 = MDL2 的 Mouse，与「鼠标动作」那类步骤的格子用的是同一个字形（PanelGlyph）。
         // 复用是有意的：都在说「鼠标」。代价是面板里一个「鼠标动作」格子和这颗按钮长得一样，
         // 但两者分处表圈与格子区、不挨着，比换一个语义更差的字形（触屏的手）强。
-        //
-        // 这里一度写的是 0xF126。**它不是「空心方框」那种错**——实测 segmdl2.ttf 里 F126 有字形，
-        // 画出来是一个光秃秃的圆环，一个与手势毫无关系的真图标。这才是挑错私用区码位的典型后果：
-        // 不报错、不留白，而是理直气壮地画错。GlyphCoverageTests 能挡住的只是「码位根本不存在」
-        // 那一半（渲染成方框），语义挑错那一半只有人眼能验——改完跑 `--shots` 看一眼 QuickPanel。
+        // 主窗口上那个手势入口也画成同一只鼠标 —— 同一个入口在两处不该长成两个样子。
         new(Strings.Get("Gesture_Manager"), char.ConvertFromUtf32(0xE962), () => OpenGestureManager?.Invoke()),
         // fillsEmptyPanel：面板空着时那颗行动按钮指向这里——把面板填满的正是「管理面板」。
         // 显式标记而不是靠排在第几个：上面那条手势入口就是加在前面的，靠顺序的话它会把空态按钮劫走。
         //
-        // 0xE790 = MDL2 的 Repair（扳手）：「调这块面板」，与任何格子字形都不重形。
+        // 0xE8A9 = MDL2 的 Tiles（一盘方格）：「管理面板」管的就是这盘格子，语义最准。
+        //
         // 这里一度用齿轮（E713），依据是「与管理器页眉那颗编辑齿轮同符号」——页眉后来没有那颗
         // 齿轮了，依据失效；更要命的是 system 类格子的字形同为 E713，同一窗口里两颗齿轮指向两处。
-        // 中途还试过 E8A9 Tiles（四方格，语义最准——它管的就是这盘格子），但和 group/引用格子的
-        // E71D AllApps 几乎同形，格子区里一半的格都长着那张网，表圈再挂一张就分不出谁是谁了。
-        // 改码位时 EmptyPanelCtaTests 的源形守卫与 DevChecks 的变体要一起改，并跑 --shots 用眼睛验收。
-        new(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE790), OpenPanelManager, fillsEmptyPanel: true),
+        // 中途还试过 0xE790，**注释里写着它是「Repair（扳手）」**——**那是错的**：
+        // 渲染出来是一只**调色盘**（挑错私用区码位的典型后果：不报错、不留白，只是理直气壮地画错；
+        // 「它到底是扳手还是调色盘」只有渲染出来看图才知道，见 IconLibrary 那条规矩）。
+        // 而当年否决 Tiles 的理由「和 group/引用格子的 E71D 几乎同形」同样站不住：
+        // E71D 渲染出来是一张**列表**（行 + 圆点），E8A9 是一张**方格网**，一眼可分。
+        //
+        // 改码位时 EmptyPanelCtaTests 的源形守卫与 DevChecks 的变体要一起改，
+        // 并跑 --shots 用眼睛验收（字形对不对，只有图说了算）。
+        new(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE8A9), OpenPanelManager, fillsEmptyPanel: true),
     };
 }

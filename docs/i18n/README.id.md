@@ -32,7 +32,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 - ⚡ **Panel cepat** — satu tombol pintasan (bawaan `Ctrl+Alt+Space`) memunculkan kisi kotak tepat di posisi kursor: tindakan Anda sendiri, ditambah jalankan ulang daftar, hentikan, jangan ganggu, dan buka jendela. Klik sebuah kotak, atau capai dengan tombol panah lalu tekan Enter; **Esc** atau klik di tempat lain akan menutupnya. Ada juga di menu baki, jadi mengosongkan pintasan mematikan tombolnya, bukan fiturnya. Lebih suka mouse? Nyalakan **tahan tombol tengah** dan panel terbuka tanpa menyentuh papan ketik — klik tengah biasa tetap berfungsi. Halaman panel Anda buat dan Anda atur sendiri di pengelola panel, dan setiap ubin pada sebuah halaman adalah satu operasi: kunci layar, bisukan, buka aplikasi, buka URL, dan «jalankan satu grup penuh» pun berdampingan. Begitu halamannya banyak, kelompokkan: **baris atas memilih kategori, kolom kiri mendaftar halaman kategori itu**, keduanya diurutkan dengan menyeret; bila tidak ada yang dikategorikan, semuanya berada di *Tanpa kategori* dan baris kategori tidak muncul sama sekali. Tidak memakainya sama sekali? **Pengaturan → Gunakan panel cepat** mematikan fiturnya sendiri, pintasan dan tombol tengah sekaligus.
 - 🖱️ **Gerakan mouse** — tahan **tombol kanan**, gambar sebuah goresan, dan aksi yang cocok akan berjalan. Delapan arah dan semua jenis langkah (termasuk menjalankan satu grup penuh). Goresan tergambar di layar selagi Anda menarik, dan hilang saat dilepas. **Sepuluh sudah siap pakai begitu dipasang** (salin / tempel / kembali / maju / cari teks yang dipilih (↑↓) / lompat ke bawah, ditambah empat diagonal untuk minimalkan, maksimalkan, sematkan di atas, dan tutup) — pakai apa adanya atau tulis ulang sesuka Anda. Harganya, disebut di muka: satu gerakan aktif saja sudah cukup untuk mengambil alih tombol kanan, jadi **menyeret dengan tombol kanan perlu jeda singkat dulu** — tekan, diam sekitar 0,2 detik, baru seret (menyeret berkas dengan tombol kanan di File Explorer, memutar pandangan di aplikasi 3D). Kalau Anda ingin tombol kanan sama sekali tidak disentuh, baris judul pengelola gerakan punya sakelar utama. Gerakan bawaan pun tidak wajib dipakai: matikan sakelar itu, biarkan WGestures / StrokesPlus / Quicker yang menggambar, dan aksinya tetap di sini lewat `Clockwork.exe --run-group "Fokus"`. Sakelar itu ada juga di tab **Pengaturan**: **Gunakan gestur mouse**. Pada peluncuran pertama, sakelar utama gerakan mouse nonaktif; aktifkan di tab Pengaturan atau bilah judul pengelola gerakan.
 
-> **Hentikan kapan saja** — tombol hentikan di ujung kanan bilah tab (hanya muncul saat ada yang berjalan), baki → **Hentikan aksi yang berjalan**, atau tombol pintas darurat global (bawaan `Ctrl+Alt+Q`). Penantian panjang dipotong, bukan ditunggui.
+> **Hentikan kapan saja** — tombol hentikan di ujung kanan bilah tab (hanya muncul saat ada yang berjalan), baki → **Hentikan aksi berjalan**, atau tombol pintas darurat global (bawaan `Ctrl+Alt+Q`). Penantian panjang dipotong, bukan ditunggui.
 
 ## Persyaratan
 
@@ -40,7 +40,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
 | --- | --- |
 | **Sistem** | Windows 10 / 11, x64 |
 | **Instalasi** | Tidak ada. Satu `Clockwork.exe` portabel — letakkan di folder mana pun |
-| **Hak admin** | Hanya untuk «Mulai saat login» dan langkah yang Anda tandai **jalankan sebagai admin** |
+| **Hak admin** | Hanya untuk «Jalankan saat masuk» dan langkah yang Anda tandai **Jalankan sebagai administrator** |
 | **Pengaturan Anda** | `clockwork.settings.json` di samping exe (atau `%APPDATA%\Clockwork\` bila pada penjalanan pertama folder itu hanya-baca; setelah itu tetap di tempat yang sudah terpilih) — tidak ada yang meninggalkan mesin |
 | **Antarmuka** | 18 bahasa serta tema terang / gelap. Bahasa mengikuti Windows saat pertama dijalankan; tema dimulai gelap dan bisa diatur mengikuti Windows |
 
@@ -53,7 +53,7 @@ Luncurkan aplikasi otomatis saat login · pengingat terjadwal · satu ketukan un
    - **`Clockwork-<versi>-win-x64-needs-dotnet10.zip`** — butuh [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) yang sudah terpasang. Pasang sekali di PC yang online, setelah itu tiap pembaruan hanya unduhan kecil.
    - **`Clockwork.exe`** — build yang sama dengan zip di atas, hanya tanpa zip: klik dan jalan, atau timpa salinan lama Anda untuk memperbarui. Kalau runtime-nya tidak ada, Windows menawarkan unduhannya.
 2. Klik dua kali untuk membuka jendela pengaturan. Contoh yang dimuat semuanya **tidak dicentang** — tidak ada yang berjalan sampai Anda mencentangnya.
-3. Agar berjalan setiap boot: pada tab **Pengaturan**, centang **Mulai saat login** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
+3. Agar berjalan setiap boot: pada tab **Pengaturan**, centang **Jalankan saat masuk** (mendaftarkan tugas terjadwal dengan hak admin, sehingga tidak ada tumpukan prompt UAC saat boot).
 
 Setelah itu ia bertengger di tray: klik dua kali ikonnya untuk membuka jendela, dan tombol tutup hanya menyembunyikannya lagi. Untuk benar-benar keluar, klik kanan tray lalu pilih **Keluar**.
 
@@ -68,7 +68,7 @@ Setelah itu ia bertengger di tray: klik dua kali ikonnya untuk membuka jendela, 
 - **Seret sebuah baris untuk mengurutkannya** — di ketiga daftar dan di daftar langkah pada editor grup; tombol naik/turun tetap berfungsi.
 - **Coba dulu sebelum menyimpan** — **▶ Jalankan langkah ini** dan **▶ Jalankan grup** di editor grup menjalankan apa yang sedang ada di layar, dan tombolnya berubah jadi **■ Hentikan** selama berjalan.
 - **Duplikat** mengkloning tugas atau grup yang dipilih tepat di bawahnya — lebih cepat daripada menyusun ulang yang nyaris sama. **Penghapusan selalu bertanya lebih dulu**, di mana pun.
-- Mengklik dua kali `Clockwork.exe` hanya membuka jendela; ia **tidak** menjalankan ulang daftar startup. Gunakan **Jalankan ulang daftar startup** di tray untuk itu.
+- Mengklik dua kali `Clockwork.exe` hanya membuka jendela; ia **tidak** menjalankan ulang daftar startup. Gunakan **Jalankan ulang daftar startup** di tray untuk itu. — ia meminta lebih dulu dan menunjukkan apa yang akan diulang oleh proses ini.
 
 ## Tentang 365 Open Source Plan
 

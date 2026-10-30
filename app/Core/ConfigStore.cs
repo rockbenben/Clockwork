@@ -181,7 +181,7 @@ public static class ConfigStore
         // 那个方法末尾确实有一句 `cfg.PanelPages ??= new()`，但它排在 MigratePanelPages 之后，
         // 而迁移里就有 `cfg.PanelPages.Add(page)`——于是 "panelPages": null + panelSchema<3 +
         // 任意一个 showInPanel:true 的组，启动时在 Add 那一行 NRE。
-        // 而 Normalize 是在 Read 的 try/catch **之外**调的（见上面第 87 行附近），
+        // 而 Normalize 是在 Read 的 try/catch **之外**调的（见上面 Read 里那句 normalized = Normalize(cfg)），
         // 一崩就正好违背这一段自己写的承诺：解析失败落回默认，绝不崩。导入配置走同一条路。
         // 这里是 ??= new() 而不是 OrDefault(..., def.PanelPages)：只把守卫**提前**，不改它做什么。
         // 原来那句（在 FillPanelPageDefaults 末尾）补的就是空表；换成补出厂默认页的话，

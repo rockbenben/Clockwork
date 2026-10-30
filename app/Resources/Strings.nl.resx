@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>Weet je zeker dat je “{0}” wilt uitvoeren?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>Opstartlijst opnieuw uitvoeren? De volgende worden opnieuw gedaan:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…en nog {0}</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Fout</value>
   </data>
@@ -1230,6 +1236,12 @@ Log: {1}</value>
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Recent</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Herinneringen</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Repareren</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>Nog geen opstartlogboek (voer eerst de opstartlijst uit)</value>
@@ -1878,7 +1890,7 @@ Log: {1}</value>
     <value>Indeling</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Kolommen × bovenste rijen + onderste rijen bepaalt hoeveel er op één pagina past en hoe breed het paneel wordt. De rest gaat naar de volgende pagina; zet onderste op 0 voor één band.</value>
+    <value>Kolommen × rijen per scherm bepaalt hoeveel tegels op één scherm passen en hoe breed het paneel wordt; de bovenste rijen zijn waar de split valt (evenveel rijen als “rijen per scherm” = één band). De rijen zijn een bovengrens — een kleiner scherm toont er minder, de rest scrolt u.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Tegels per rij</value>
@@ -1910,8 +1922,8 @@ Log: {1}</value>
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Bovenste rijen</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Onderste rijen</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Rijen per scherm</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Pictogram</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@ Log: {1}</value>
   <data name="Panel_NewPage" xml:space="preserve">
     <value>Nieuwe pagina</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Hier een actie neerzetten</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ nog {0} onder · scroll in het paneel om ze te zien</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>Dit scherm past {0} rijen; de instellingen zeggen {1} — het paneel toont wat het scherm toelaat, de rest scrolt u.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>Er zijn nog geen pagina’s. Met de + aan het einde van de paginabalk maak je er een aan; voeg daar vervolgens acties aan toe.</value>

@@ -21,7 +21,7 @@ dotnet build app/Clockwork.csproj -c Debug
 dotnet test app.Tests/Clockwork.Tests.csproj -c Debug
 ```
 
-The application has two in-process self-checks:
+The application has six in-process self-checks:
 
 ```bash
 app/bin/Debug/net10.0-windows/Clockwork.exe --smoke
@@ -29,8 +29,11 @@ app/bin/Debug/net10.0-windows/Clockwork.exe --selftest
 ```
 
 - `--smoke` constructs and lays out every XAML window. It must be run after XAML or window-option changes.
-- `--selftest` drives the modal ask-dialog chain end to end.
+- `--selftest` drives the modal dialogs end to end — the question dialogs and the confirmation that guards a manual rerun of the whole startup list.
 - For UI changes, also run `--shots <directory>`. The full matrix is expensive; use `CW_SHOT_WINDOWS` and `CW_SHOT_LANGS` to render only the changed windows/languages first, then run the full matrix for broad layout changes.
+- `--trayshot <png>` renders the tray menu. It is the screen the user looks at most often and it is **not** a WPF window, so `--shots` cannot reach it — which is how two glyph collisions and a misaligned section header survived for so long. The menu flashes at the top-left corner of the screen for about a fifth of a second; add `--repair` to force the normally hidden **Fix** section into the shot.
+- `--screenshots <directory>` writes the three fixed README screenshots (en / zh-CN / zh-TW).
+- `--hookprobe` installs a bare low-level mouse hook and counts events for 12 s. **Do not run it on a machine you are driving the mouse on.**
 - The screenshot harness is not a substitute for a screen-level check: it sets `MaxHeight` itself and renders the whole window offscreen. It can hide an off-screen action button, and it can also show a button that is outside the real monitor. For a scrollable dialog or pop-up, also verify the primary button's screen rectangle against the monitor work area, or take a full-screen capture.
 - Do not run a harness that installs a real global mouse hook, or a full-screen topmost overlay, on a machine you are using. Read the WPF skill's warnings first and use the app's opt-in switches.
 

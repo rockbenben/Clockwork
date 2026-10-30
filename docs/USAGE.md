@@ -22,6 +22,17 @@ A small Windows tray tool that manages five everyday things (plus a Settings tab
 
 It sits quietly in the tray. The window's close button only hides it to the tray; quit for real via the tray's right-click **Exit**. Tick **Start minimized to tray** on the Settings tab and opening it manually goes straight to the tray too.
 
+### The tray menu
+
+Right-clicking the tray icon opens the program's own menu, grouped under four headings — the ones you see depend on what is going on:
+
+- **My startup list** — **Rerun startup list** (asks first and lays out what this run would do again), **Stop running actions**, **View last startup log**.
+- **Actions** — one **Run: <group>** per action group you put in the tray. Groups not listed here still run from their hotkey, from a reminder, or from the **Run** button on the Actions tab.
+- **Reminders** — **Pause reminders** (1 / 2 / 4 / 8 hours, or until the end of today) and **Quick reminder** (5 to 60 minutes). While reminders are paused, a **Resume reminders (N minutes left)** line appears here too.
+- **Fix** — **only there when something is actually wrong**: re-install the mouse hook (another program stole it), resume a gesture that yielded the right button, or release a mouse button that is stuck down. It sits near the top of the menu, right under the two everyday entries — so when your right-click is dead you can see there is something to fix.
+
+Above those sit **Show window** and **Quick panel**; **Exit** is at the bottom.
+
 ## First run: replace the samples with your own
 
 On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — muting the speakers, launching an app, opening a URL on weekdays only (conditional execution), starting a chat app minimized in the background, sending a key combo. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Actions tab also preloads two **templates** (Stepping away / Wrap up · End of day), disabled like the rest — they turn off the screen or close apps, so enable one only when you mean it. Add more from the built-in templates under **From a template…**.
@@ -36,7 +47,7 @@ The most common need, "open my everyday apps at login":
    - URLs (`https://…`), documents, `.ps1` scripts and shortcuts (`.lnk`) all work too; paths may include surrounding quotes or environment variables like `%USERPROFILE%` — both are handled for you.
    - Give `.ps1` scripts a **full path** (PowerShell can't resolve a bare filename); which PowerShell runs them is picked for you — see the notes under *Step types* below.
 4. Want an app to open later (e.g. after another one is up, or after the network is ready)? Raise its **post-step delay**, or move it up/down.
-5. Tray → **Rerun startup list** to test it once.
+5. Tray → **Rerun startup list** to test it once. (It asks first and lays out what this run would do again — the list's close-window and send-keys steps are mostly irreversible, so it is worth reading before pressing.)
 6. Happy with it? On the **Settings** tab, enable **Start at login** — it'll run automatically every boot.
 
 > Only want scheduled tasks or actions? Adjust the samples on the matching tab the same way; the startup list can be emptied entirely — the four features are independent.
@@ -217,7 +228,7 @@ Two things exist for the case where the list does something you didn't want.
 - **Hold Shift while logging in.** Use this when you're already locked out — it's the only input you still have. It skips the list for that boot only; the next one runs as usual.
 - **Create an empty file named `clockwork.disable-startup` next to `clockwork.settings.json`.** Use this when you can still get to the desktop and just want the list to stop running — while you debug one step, or for a day you don't want the usual dozen apps. It keeps working until you delete it, and it says so in the card each boot, naming the exact path.
 
-Either way the app still starts into the tray as usual, so **Rerun startup list** is right there when you want to test a fix.
+Either way the app still starts into the tray as usual, so **Rerun startup list** is right there when you want to test a fix (it asks first, and shows you the list it is about to run).
 
 ### Stop anytime
 
@@ -357,13 +368,15 @@ You get told when it doesn't work: an unknown name or a switched-off group raise
 A tile grid at your mouse, one press away — for when the tray icon is a long way from where your hand already is.
 
 - **Press the panel hotkey** (default `Ctrl+Alt+Space`, set on the **Settings** tab — in that box, Esc cancels and **Del clears it**, leaving the middle-button hold and the tray entry as the ways in) and the panel appears at the pointer. Press it again, press **Esc**, or click anywhere else to dismiss it.
-- **A page is a thing you make, not a side job of some action.** Hit the **+** at the end of the left rail in the **panel manager** and a card drops in with its name ready to type, **in whichever category you were looking at**; the **+** at the end of the top row makes a category instead — just the category, no page with it, so its rail starts empty and you add the first page yourself. click an empty slot to put something on it. A page's name, category and app binding are all edited in place on its header — there is no separate settings window.
+- **A page is a thing you make, not a side job of some action.** Hit the **+** at the end of the left rail in the **panel manager** and a card drops in with its name ready to type, **in whichever category you were looking at**; the **+** at the end of the top row makes a category instead — just the category, no page with it, so its rail starts empty and you add the first page yourself. Put something on a page with the **+** at the right end of its header — it is not part of the grid, because the grid holds real tiles and nothing else (the panel works the same way). A page's name, category and app binding are all edited in place on its header — there is no separate settings window.
+  - **The manager's preview is the panel's first screen.** The two bands are drawn to the row counts you set, and **anything more on that page is drawn in a block below**, under a line saying you have to scroll in the panel to see it — so the card always matches the panel's first screen instead of running a few rows past it.
   - **Pages and actions are two different things.** An action is a run of operations plus how it fires (hotkey, tray, referenced elsewhere); a page is a screenful of tiles plus when it shows (category, app). They share no properties, so they no longer share a stored object — configs from older versions are moved across on first launch, and you get a card listing what changed.
   - **Every step kind works as a tile** — launch program, open URL, send keys, mouse, send text, volume, window action, system command, run action, delay, message, and the rest. A tile runs that one operation the same way the **Run** button next to a step does.
   - **Want a tile that runs a whole action?** Add a **Run action** step pointing at it — that is what the step kind is for. So a whole routine ("Focus mode", "End of day") and a single operation (lock screen, mute) sit side by side on the same page. A tile with no icon of its own borrows the icon of the action it points at.
   - Page order is set by dragging tabs; tile order by dragging tiles.
 - **Switched-off tiles are greyed, not missing** — so "it's disabled" and "it's gone" stay distinguishable.
 - **Then the handful you reach for anyway**, below a divider so they never get confused with your own actions: rerun the startup list, stop running actions, pause/resume reminders, open the window.
+  - **"Rerun the startup list" asks first.** It lays out what this run would do again (the windows it would close, the keys it would send, the apps it would launch) and offers **Cancel** underneath. Most of what a startup list does cannot be undone, so it is worth reading before pressing. The tray entry goes through the same confirmation.
 - **Mouse or keyboard.** Click a tile, or arrow to it and press Enter — focus starts on the first tile, so you never have to touch the mouse to use it.
 - **It closes before it runs.** Actions that bring a window to the front or send keystrokes need the foreground back first; leaving a topmost panel in the way would mean keys landing on the panel and the window you just raised being covered by it.
 - **Or hold the middle mouse button.** Tick it on the **Settings** tab and a press of ~350 ms (adjustable) opens the panel — no keyboard at all, and the panel appears exactly where your hand already is.
@@ -386,7 +399,7 @@ A tile grid at your mouse, one press away — for when the tray icon is a long w
 
 ### Pages
 
-Pages follow content, not a tile count: **each one is a page you made and named yourself.** So you flip between "Handy" and "Dev", not "2 of 4". Only when a page overflows is it continued onto a second screen under the same name — that is a capacity problem, not a content one.
+Pages follow content, not a tile count: **each one is a page you made and named yourself.** So you flip between "Handy" and "Dev", not "2 of 4". **One page is one page** — when it holds more tiles than fit, they scroll inside that page instead of continuing onto a second screen under the same name. That is a capacity problem, not a content one.
 
 **Two rows — the top one picks a category, the left one lists that category's pages.** A category is a name you give
 a batch of pages (*Coding*, *Winding down*). Pages have none by default, so everything sits under *Uncategorized*,
@@ -396,15 +409,19 @@ question of which row a page is on.
 - **With one category the top row is not drawn**, and with one page in the current category neither is the left one
   (a tab would just repeat the name). The panel manager's appearance strip has a tick for each, to force one out of
   sight when you do have several.
-- **The dots in the waist answer a different question.** A page that does not fit is split into screens, and the dots
-  say which screen you are on. Tabs answer *which page*, dots answer *which screen* — only when both rows are off do
-  the dots fall back to meaning pages, so that turning the tabs off does not take page-flipping with it.
+- **The scale in the middle of the panel's header row only answers "which page"**, and it sits right next to the page name.
+  It disappears entirely while the left row is up — one thing is said in one place — and it is the only
+  page-flipping entry when that row is off, so turning the tabs off does not take page-flipping with it.
+  It used to sit between the two wells, back when it answered "which screen"; now that a page is never
+  split, it only answers "which page", and parked between the actions it read as an indicator stuck in
+  the middle of the content — so it moved up to the header row, next to the name it belongs with.
 - **Both rows hide while you search**: results come from every page, so a highlighted tab would claim you are
   searching inside one.
 - The panel manager shows the same two rows (same styles). **Putting a page in a category** has three routes, take
   whichever is nearest: drag its tab **onto a category tab**, or click the button in its heading that names its
-  current category. The **+** at the end of the top row makes a new category **with a page already in it** (an empty
-  category opens onto nothing), puts it last in the row, and lets you name it on the spot. **Double-click a category
+  current category. The **+** at the end of the top row makes a new category **on its own** — it creates no page, so
+  the left rail stays empty until you put the first page in with the **+** at the end of that rail; it puts the new
+  category last in the row and lets you name it on the spot. **Double-click a category
   tab** to rename it; that rewrites the category name on every page in it, because a category is not a record of its
   own, it emerges from the pages. The manager always keeps its category row, even with only *Uncategorized* on it,
   because that + is the only way to make a category.
@@ -428,17 +445,20 @@ This is what makes the panel worth opening in the first place: pop it over your 
 - If the foreground app can't be read (a restricted process, no foreground window), scene groups stay hidden rather than appearing in the wrong place.
 
 - **Turn pages** with the mouse wheel, **PageUp / PageDown**, or by clicking a segment of the index. Arrow keys are left alone for moving between tiles — if they did both, reaching the end of a row would have two meanings.
-- **The index across the top is a graduated scale, one segment per page**, with the current one in brass. It replaces a numeric page counter: a scale that shows position already answers "which page, out of how many". The page name sits next to it.
+- **The index in the middle of the header row is a graduated scale, one segment per page**, with the current one in brass. It replaces a numeric page counter: a scale that shows position already answers "which page, out of how many". The page name sits next to it.
 - Pages wrap, so rolling the wheel past the last one comes back to the first.
 - A page with more tiles than fit **scrolls inside the page** — that's a capacity problem, not a reason to invent a second page.
+- **The `+` at the right end of the panel's header row means "add a tile to this page".** It is not part of the grid — it used to be a half-transparent ghost slot at the end of the grid, and that took up a tile's place: once a page filled up it became one tile too many, hanging alone on a fifth row and bending the 3 + 4 layout out of shape. Out here it takes no tile and never moves — whatever this page holds, the button stays put.
 - With only one page the index and the page name disappear entirely; there is nothing to navigate.
 
 ### Making it look how you want
 
 On the **Settings** tab, under **Quick panel**:
 
-- **Layout — read it as `columns × top rows + bottom rows`** (4 × 3 + 4 by default). The well is split into two bands with a hairline between them. They mean nothing different from each other; the split is rhythm. A single 7-row slab of squares reads as a wall, while 3 + 4 gives the eye a place to land, the same reason a keyboard has rows. Set bottom rows to **0** for one band.
-  - Columns × total rows is also **the page capacity** — 28 tiles by default. Anything past that continues onto the next page under the same name.
+- **Layout — read it as `columns × rows per screen`** (4 × 7 by default). The well is split into two bands with a hairline between them. They mean nothing different from each other; the split is rhythm. A single 7-row slab of squares reads as a wall, while 3 + 4 gives the eye a place to land, the same reason a keyboard has rows.
+  - **"Rows per screen" is how many rows fit on one screen** (7 rows = 28 tiles by default); **"Top rows" is where the split falls** (3 by default, so 3 + 4 — set it equal to the rows per screen for a single band). The old pair, top rows / bottom rows, had to be added up to see how much fits, and "bottom rows" was an odd thing to want on its own.
+  - A page with more tiles keeps them in the same page, scrolling below the fold — it is never split into a second page, so a page name never turns into "screen 1 of 2".
+  - **The rows are an upper limit, not a promise**: on a screen too small for them the panel shows fewer (you scroll for the rest). The manager tells you **how many rows this screen actually fits** — a setting that says 4 while the screen shows 1 would otherwise be a setting that lies.
   - The bands are limits, not reserved space: with five actions the bottom band isn't drawn at all, so a small panel stays small.
 - **Tile size** (compact / normal / roomy) — compact at 8 across gives you a dense keypad; roomy at 3 gives you big targets for a touchscreen.
 - **Icons only** — drops the labels and shrinks the tiles to near-square, so far more actions fit on one screen. The names stay in the tooltip, so this hides them until you need them rather than throwing them away.
@@ -653,7 +673,7 @@ Three sections, ordered by when you'd reach for them.
 
 ## Tips
 
-- Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Rerun startup list** for that.
+- Double-click `Clockwork.exe` only opens the settings window — it does **not** immediately run the startup list; use the tray's **Rerun startup list** for that (it asks first and lays out what the run would do again).
 - **The side buttons follow the selection** — with no row selected, **Edit / Delete / Up / Down / Run** are greyed out, since they only ever act on the selected row. **Add** always works. The right-click menu's **Duplicate** (plus **Skip today** on the Scheduled tasks page) behaves the same way: with nothing selected, or when you right-click the header or empty space, the menu simply does not open — a menu that acts somewhere else is worse than no menu.
 - **Nothing is cut off silently** — in all four lists, a cell too wide for its column ends in "…"; hover it to read the whole thing.
 - **Deleting always asks for confirmation** — list rows, steps inside the group editor, and system startup items alike. The dialog names what you're about to delete, so you can catch a wrong selection before it's gone.

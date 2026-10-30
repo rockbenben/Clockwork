@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>Bạn có chắc muốn chạy “{0}”?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>Chạy lại danh sách khởi động? Những mục dưới đây sẽ được chạy lại:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…và {0} mục nữa</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Lỗi</value>
   </data>
@@ -1230,6 +1236,12 @@ Nhật ký: {1}</value>
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Gần đây</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Nhắc nhở</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Sửa</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>Chưa có nhật ký khởi động (hãy chạy danh sách khởi động một lần trước)</value>
@@ -1878,7 +1890,7 @@ Nhật ký: {1}</value>
     <value>Bố cục</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Số cột × số hàng trên + số hàng dưới quyết định một trang chứa được bao nhiêu và bảng rộng bao nhiêu. Phần dư chuyển sang trang sau; đặt hàng dưới bằng 0 thì chỉ còn một dải.</value>
+    <value>Số cột × số hàng mỗi màn hình quyết định một màn hình chứa được bao nhiêu ô và bảng rộng bao nhiêu; các hàng trên là chỗ chia hai dải (bằng số hàng mỗi màn hình thì chỉ còn một dải). Số hàng là giới hạn trên — màn hình nhỏ hiện ít hơn, phần còn lại cuộn xem.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Số ô mỗi hàng</value>
@@ -1910,8 +1922,8 @@ Nhật ký: {1}</value>
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Số hàng trên</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Số hàng dưới</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Số hàng mỗi màn hình</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Biểu tượng</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@ Nhật ký: {1}</value>
   <data name="Panel_NewPage" xml:space="preserve">
     <value>Trang mới</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Đặt một hành động vào đây</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ Còn {0} mục bên dưới · cuộn trong bảng để xem</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>Màn hình này chứa được {0} hàng; cài đặt ghi {1} — bảng hiện đúng những gì màn hình cho phép, phần còn lại cuộn xem.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>Chưa có trang nào. Dấu + ở cuối thanh tab trang sẽ tạo ra một trang; sau đó, bạn có thể thêm các hành động vào đó.</value>

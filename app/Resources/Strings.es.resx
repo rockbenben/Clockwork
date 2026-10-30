@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>¿Seguro que quieres ejecutar «{0}»?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>¿Reejecutar la lista de inicio? Lo siguiente se repetirá:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…y {0} más</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Error</value>
   </data>
@@ -1230,6 +1236,12 @@ Registro: {1}</value>
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Recientes</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Recordatorios</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Reparar</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>Aún no hay registro de inicio (ejecuta primero la lista de inicio)</value>
@@ -1878,7 +1890,7 @@ Registro: {1}</value>
     <value>Disposición</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Columnas × filas arriba + filas abajo define cuánto cabe en una página y cuánto ocupa el panel. El resto pasa a la página siguiente; pon 0 abajo para una sola banda.</value>
+    <value>Columnas × filas por pantalla define cuántas casillas caben en una pantalla y cuánto ocupa el panel; las filas de arriba marcan dónde está el corte (igual que las filas por pantalla = una sola banda). Las filas son un límite superior: una pantalla más pequeña muestra menos y el resto se desplaza.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Mosaicos por fila</value>
@@ -1910,8 +1922,8 @@ Registro: {1}</value>
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Filas arriba</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Filas abajo</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Filas por pantalla</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Icono</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@ Registro: {1}</value>
   <data name="Panel_NewPage" xml:space="preserve">
     <value>Página nueva</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Poner una acción aquí</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ {0} más abajo · baja en el panel para verlas</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>Esta pantalla cabe en {0} filas; los ajustes dicen {1}: el panel muestra lo que permite la pantalla y el resto se desplaza.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>Aún no hay páginas. El signo «+» que aparece al final de la barra de pestañas de la página te permite crear una; después, añade acciones a ella.</value>

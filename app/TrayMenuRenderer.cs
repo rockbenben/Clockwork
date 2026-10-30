@@ -38,14 +38,25 @@ internal static class TrayPalette
 }
 
 // 托盘菜单字形（Segoe MDL2 Assets 码位）：统一的线性图标族，笔画一致。
+//
+// **一个字形只说一件事。** 菜单里没有别的文字提示栏，字形是扫菜单时最先看到的东西，
+// 同一个字形挂在两个意思上（曾经「查看上次启动日志」与「快速提醒」都是时钟），
+// 扫的人只能靠字认——于是那一列就白画了。码位是按**画出来什么样**定的，
+// 不是按文档里的名字（0xE790 文档叫 Repair，画出来却是一只调色盘）。
 internal static class TrayGlyph
 {
     public static readonly string Window = char.ConvertFromUtf32(0xE8A7);  // 打开窗口
+    public static readonly string Tiles  = char.ConvertFromUtf32(0xE8A9);  // 方格网＝一盘格子（快捷面板 / 管理面板）
     public static readonly string Rerun  = char.ConvertFromUtf32(0xE72C);  // 刷新＝重新运行
     public static readonly string Stop   = char.ConvertFromUtf32(0xE71A);  // 停止
     public static readonly string Log    = char.ConvertFromUtf32(0xE81C);  // 历史时钟＝上次日志（呼应「Clockwork」）
+    public static readonly string Message= char.ConvertFromUtf32(0xE8BD);  // 消息气泡＝通知
     public static readonly string Run    = char.ConvertFromUtf32(0xE768);  // 播放＝运行/恢复
     public static readonly string Dnd    = char.ConvertFromUtf32(0xE708);  // 月亮＝勿扰/暂停提醒
+    public static readonly string Timer  = char.ConvertFromUtf32(0xE916);  // 秒表＝「N 分钟后叫我」
+    public static readonly string Wrench = char.ConvertFromUtf32(0xE90F);  // 扳手＝修东西
+    public static readonly string ArrowUp= char.ConvertFromUtf32(0xE7EB);  // 实心上箭头＝抬起来 / 恢复
+    public static readonly string Mouse  = char.ConvertFromUtf32(0xE962);  // 鼠标＝鼠标键的事
     public static readonly string Exit   = char.ConvertFromUtf32(0xE711);  // ×＝退出
 }
 
@@ -93,8 +104,12 @@ internal static class TrayMenu
     }
 
     // 区段小标题：不可选、无悬停。字距在此就地加好——「测宽」与「绘制」用同一串文本，不会因绘制时才加字距、box 却按原文测宽而裁掉尾字。
+    //
+    // **左边距与项的文字同列**（GlyphCol）。标题是它下面那些项的开头，
+    // 标题不与项对齐就像飘在字形列里——早先它落在 14px（字形列里），
+    // 而项的文字在 30px，两边都不靠，看图时第一眼就觉得这行歪着。
     public static ToolStripMenuItem Header(string text)
-        => new(Escape(Spaced(text))) { Enabled = false, Tag = new TrayMeta { Header = true }, Font = HeaderFont, Padding = new Padding(14, 10, 10, 3) };
+        => new(Escape(Spaced(text))) { Enabled = false, Tag = new TrayMeta { Header = true }, Font = HeaderFont, Padding = new Padding(GlyphCol, 10, 10, 3) };
 
     // 转义 & → &&：ToolStrip 按「助记符」规则测宽（吃掉单个 &），我们要把 & 当字面量显示，
     // 转义后测宽=绘制都得到字面 &（如动作组名「R&D」），不会因宽度对不上被省略号截断。
@@ -167,7 +182,8 @@ internal sealed class TrayMenuRenderer : ToolStripRenderer
 
         if (e.Item.Tag is TrayMeta { Header: true })
         {
-            var hr = new Rectangle(b.Left + 14, b.Top, b.Width - 24, b.Height);
+            // 左边界＝字形列宽：标题与它下面那些项的文字同列（同 TrayMenu.Header 的 padding）。
+            var hr = new Rectangle(b.Left + TrayMenu.GlyphCol, b.Top, b.Width - TrayMenu.GlyphCol - 10, b.Height);
             // 不加 NoPrefix：与测宽口径一致地处理助记符（&& → 字面 &），文本已转义故无游离下划线。
             TextRenderer.DrawText(g, e.Text, font, hr, TrayPalette.Muted,
                 TextFormatFlags.Left | TextFormatFlags.Bottom | TextFormatFlags.EndEllipsis);

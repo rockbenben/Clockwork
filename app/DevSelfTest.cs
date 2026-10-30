@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using Clockwork.Core;
 using Clockwork.Engine;
 using Clockwork.I18n;
+using Clockwork.Services;
 using Clockwork.Views;
 // UseWindowsForms 把 WinForms 也加进了隐式全局 using，这几个名字两边都有（同别处那几行）。
 using Button = System.Windows.Controls.Button;
@@ -17,11 +18,13 @@ namespace Clockwork;
 
 // --selftest：**要一扇真窗、因而进不了 app.Tests 的那几条检查**，在真实进程里自动跑一遍。
 //
-// 分工是清楚的：纯逻辑归 app.Tests（1500 多条），版面归 --shots，「每扇窗都打得开」归 --smoke。
-// 剩下这一类没人管——问句弹框是**模态**的，从外面没有第二条路能驱动它（ShowDialog 一进去就不返回），
+// 分工是清楚的：纯逻辑归 app.Tests（两千多条），版面归 --shots，「每扇窗都打得开」归 --smoke。
+// 剩下这一类没人管——**模态弹框**从外面没有第二条路能驱动它（ShowDialog 一进去就不返回），
 // 于是「打字 → 点确定 → 答案进变量 → 后面的步骤用得上」这条链一直只能靠人手点一遍。
 // 而它恰恰是用户唯一真正会碰的那一段：占位替换、变量表、编排全都有测试，
 // 唯独把它们连起来的那扇窗没有。这个开关把那一遍手点变成自动的。
+// 手动重跑整份清单之前那道确认也是这一类：它是唯一挡得住「重跑整份清单」的地方，
+// 而它弹不弹得出来、点「否」之后闸放不放得回去，都只有真跑一遍才看得见。
 //
 // 驱动方式见 BrandDialog.Rehearse：弹框画出来之后按脚本操作它。等 700ms 再点是必须的——
 // 那张卡有 600ms 的误触保护（它可能被一条热键或手势不请自来地弹出来），点早了不算数。
@@ -32,8 +35,10 @@ public partial class App
     {
         string marker = Path.Combine(Path.GetTempPath(), "clockwork-selftest.txt");
         var fails = new List<string>();
+        int checks = 0;
         void Check(string what, bool ok, string got)
         {
+            checks++;
             if (!ok) fails.Add($"{what}：{got}");
         }
 
@@ -82,13 +87,18 @@ public partial class App
             //    走的是真的 ActionGroupRunner、真的 StepRunner、真的占位替换，
             //    只把落点换成剪贴板（而不是打开浏览器）——好让这一遍看得见结果又不打扰人。
             Check("端到端·答案流到下一步", EndToEnd(out var chain), chain);
+
+            // ⑧ 手动重跑整份清单之前那道确认：它真的弹了吗？点「否」之后闸放回去了吗？
+            //    闸卡在 1 的后果是「重跑清单」从此点不动——那种故障只有真跑一遍才看得见，
+            //    而 app.Tests 罩不到模态框（问句那条链进不了测试，原因见文件头）。
+            Check("重跑清单·确认与放行", RerunConfirm(out var relog), relog);
         }
         catch (Exception ex) { fails.Add("自查自己抛了：" + ex); }
         finally { BrandDialog.Rehearse = null; }
 
         File.WriteAllText(marker, fails.Count == 0
-            ? "OK 7 checks"
-            : $"FAIL {fails.Count}/7\r\n" + string.Join("\r\n", fails));
+            ? $"OK {checks} checks"
+            : $"FAIL {fails.Count}/{checks}\r\n" + string.Join("\r\n", fails));
         Shutdown(fails.Count == 0 ? 0 : 1);
     }
 
@@ -125,6 +135,34 @@ public partial class App
     private static void Click(Button b) => b.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
 
     private static string Show(string? s) => s == null ? "取消(null)" : $"「{s}」";
+
+    // 手动重跑整份清单之前那道确认：弹出来了吗？点「否」之后还能再弹第二次吗？
+    //
+    // 第二次能再弹 = 闸确实放回去了。闸（_launchRunning）卡在 1 时，第二次调用会立刻返回、
+    // 框不再出现——而那正是「重跑清单」从此点不动的故障（见 RunOrchestrator 里那处注释）。
+    //
+    // **用一份隔离的配置**：万一确认没弹出来（这正是要抓的回归），跑起来的也是这份只有一条
+    // 延时的清单，而**不是用户真正的清单**——那里面有真的关窗口与发按键。
+    // 日志也写到临时目录，不碰用户那份 clockwork.run.log。
+    private bool RerunConfirm(out string log)
+    {
+        var tmp = Path.Combine(Path.GetTempPath(), "clockwork-selftest-rerun");
+        Directory.CreateDirectory(tmp);
+        var cfg = RootConfig.Default();
+        cfg.LaunchSteps = new List<LaunchStep> { new LaunchStep { Kind = "delay", DelayMs = 10, Enabled = true } };
+        var runner = new RunOrchestrator(() => cfg, () => tmp, () => _exePath, new AppDiagnostics(() => tmp));
+
+        int shown = 0;
+        BrandDialog.Rehearse = d => { shown++; After(d, 700, () => Click(d.NoBtn)); };
+        try
+        {
+            runner.RunLaunchAsync(false);
+            runner.RunLaunchAsync(false);
+        }
+        finally { BrandDialog.Rehearse = null; }
+        log = $"确认框弹了 {shown} 次（应为 2：一次证明弹得出来，一次证明闸放回去了）";
+        return shown == 2;
+    }
 
     // 一条真动作：用户输入 → 把答案写进剪贴板。跑完读剪贴板，看那一句有没有原样到达。
     // 用剪贴板当落点而不是「打开网址」：这一遍要能在 CI 上无人值守地跑，不能真弹出一个浏览器。

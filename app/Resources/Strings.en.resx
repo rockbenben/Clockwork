@@ -1038,6 +1038,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>Are you sure you want to “{0}”?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>Rerun the startup list? These will be done again:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…and {0} more</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Error</value>
   </data>
@@ -1236,6 +1242,12 @@ Log: {1}</value>
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Recent</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Reminders</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Fix</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>No startup log yet (run the Startup List once first)</value>
@@ -1878,7 +1890,7 @@ Log: {1}</value>
     <value>Layout</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Columns × top rows + bottom rows sets how much fits on a page and how wide the panel gets. The rest spills onto the next page; set bottom rows to 0 for a single band.</value>
+    <value>Columns × rows per screen sets how many tiles fit on one screen and how wide the panel gets; the top rows are where the split falls (equal to the rows per screen means a single band). The rows are an upper limit — a smaller screen shows fewer, and you scroll for the rest.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Tiles per row</value>
@@ -1910,8 +1922,8 @@ Log: {1}</value>
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Top rows</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Bottom rows</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Rows per screen</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Icon</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@ Log: {1}</value>
   <data name="Panel_NewPage" xml:space="preserve">
     <value>New page</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Put an action here</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ {0} more below · scroll in the panel to see them</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>This screen fits {0} rows; the settings say {1} — the panel shows what the screen allows and you scroll for the rest.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>No pages yet. The + at the end of the page tab rail makes one; then put actions on it.</value>

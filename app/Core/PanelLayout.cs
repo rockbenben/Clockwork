@@ -14,19 +14,17 @@ public sealed record PanelItem(string Label, PanelIconSpec Icon, bool Enabled, P
 /// <summary>面板一页的**一次排版结果**（View，不是存储）。存储那份是 Core.PanelPage。</summary>
 //
 // 两者分开命名是因为它们答的不是同一个问题：存储的页答「用户配了什么」（名字、分类、场景、格子），
-// 这份答「这一屏该画什么」（标题、这一屏的格子、第几屏）。一页在容量不够时会被切成好几屏，
-// 于是一个存储页对应多个 View——名字一样的话，"pages.Count" 到底是几就说不清了。
+// 这份答「这一页该画什么」（标题、这一页的格子）。**一个存储页对应一个 View**——
+// 一页就是一页：格子多了就在面板的凹坑里往下滚，不拆成好几屏（理由见 BuildPages）。
 /// <summary>Title 会显示在页签上，所以它必须是人话——
 /// 页名就是用户给这一页起的名字，而不是「第 2 页」这种编号。
-/// <see cref="Tab"/> 是这一页归哪一类（空 = 未分类）；
-/// <see cref="Screen"/> 是同一页被容量切开之后的第几屏（从 0 起），
-/// 左侧页签认的是「哪一页」，腰栏的圆点认的是「这一页的第几屏」——两件事分开。</summary>
-/// <param name="Source">这一屏是从哪一页排出来的，恒非空——
+/// <see cref="Tab"/> 是这一页归哪一类（空 = 未分类）。</summary>
+/// <param name="Source">这一页是从哪一页排出来的，恒非空——
 /// 别再从 Items[0].Page 去反推：那条路只在「空页不可能存在」时才成立，
 /// 而管理器恰恰要显示空页（新建的页天生是空的），那时第一个格子并不存在，
 /// 反推出来的是 null，于是那张卡拖不动、也删不掉。</param>
 public sealed record PanelPageView(string Title, IReadOnlyList<PanelItem> Items,
-                              string Tab = "", int Screen = 0, PanelPage? Source = null);
+                              string Tab = "", PanelPage? Source = null);
 
 // 面板上摆哪些格子、分几页、什么顺序。纯函数：不碰 WPF、不绑委托，App 拿到结果再给每格接上真正的动作。
 //
@@ -39,7 +37,11 @@ public sealed record PanelPageView(string Title, IReadOnlyList<PanelItem> Items,
 //
 // 分页规则跟着内容走，而不是按容量切：页名写得出「常用」「开发」，翻页索引旁边才有方向感。
 // 按容量机械切页（每 8 格一页）也能分出页来，但页与页的边界毫无意义，索引旁边只能写「2/4」。
-// 一页装不下时才按 capacity 二次切分（BuildPages），那是容量问题，不是内容问题。
+// 一页装不下时**不再按容量切成好几屏**。曾经是这么切的：切出来的屏共用同一个页名，
+// 于是「这一页」在一屏放不下时被拆成两半——用户配的是一页，面板却摆出两个「第 1 屏 / 第 2 屏」，
+// 腰上那排圆点也就不再是「哪一页」而是「第几屏」，同一件事有两个意思。
+// 现在一页就是一页：格子多了在面板的凹坑里往下滚（那是容量问题，不是内容问题），
+// 页签栏与腰上的圆点于是都只回答「哪一页」。
 public static class PanelLayout
 {
     /// <summary>本页是不是「场景页」——绑定到某个程序，只在那个程序前台时出现。</summary>
@@ -59,9 +61,6 @@ public static class PanelLayout
 
     /// <param name="foreground">呼出面板那一刻的前台进程名（裸名或路径皆可）。
     /// 必须在面板显示**之前**取——面板一显示就把前台抢走了。传 null / 空则只出全局页。</param>
-    /// <param name="capacity">一页装得下多少格（见 <see cref="PanelMetrics.PageCapacity"/>）。
-    /// 装不下的自动续到下一页，续页沿用同一个页名——续页是「同一批东西的下半截」，
-    /// 给它另起一个名字（「常用 2」之类）是在假装那是另一类东西。&lt;=0 表示不限，整页一次放完。</param>
     /// <param name="keepEmpty">连一步都没有的页也留下。**面板不要、管理器要**：
     /// 面板上翻到一张空页只会让人以为出错了；而管理器正是你往空页里放动作的地方，
     /// 新建的页天生就是空的，不显示出来就等于「点了添加什么也没发生」。</param>
@@ -73,27 +72,16 @@ public static class PanelLayout
     /// 传 null 只是那种格子回落到按 Kind 取默认图标，页照排不误。</param>
     /// <param name="listItems">启动清单，同一条理由给「运行启动项」格子取被引用条目的图标。</param>
     public static List<PanelPageView> BuildPages(IReadOnlyList<PanelPage>? pages, string? foreground = null,
-                                             int capacity = 0, bool keepEmpty = false, bool allContexts = false,
+                                             bool keepEmpty = false, bool allContexts = false,
                                              IReadOnlyList<ActionGroup>? actions = null,
                                              IReadOnlyList<LaunchStep>? listItems = null)
-    {
-        var built = BuildContentPages(pages, foreground, keepEmpty, allContexts, actions, listItems);
-        if (capacity <= 0) return built;
-        var chunked = new List<PanelPageView>();
-        foreach (var p in built)
-        {
-            // 空页切不出任何一屏（循环一次都不进），会在这里第二次消失。留着它。
-            if (p.Items.Count == 0) { chunked.Add(p); continue; }
-            for (int i = 0; i < p.Items.Count; i += capacity)
-                chunked.Add(p with { Items = p.Items.Skip(i).Take(capacity).ToList(), Screen = i / capacity });
-        }
-        return chunked;
-    }
+        => BuildContentPages(pages, foreground, keepEmpty, allContexts, actions, listItems);
 
-    /// <summary>左侧页签要画哪几条：一页一条。同一页被容量切开的那几屏只算一条——
-    /// 页签回答「哪一页」，腰栏的圆点回答「这一页的第几屏」，两件事不该挤在同一处。</summary>
+    /// <summary>左侧页签要画哪几条：一页一条。</summary>
+    // 一个存储页对应一个 View（见上），所以这里就是全部——不再有「同一页被切成几屏，
+    // 几屏只算一条页签」那一层。一页一条页签，与页签栏、左栏、分类栏读的是同一件事。
     public static List<PanelPageView> Tabs(IReadOnlyList<PanelPageView>? pages)
-        => pages == null ? new List<PanelPageView>() : pages.Where(p => p.Screen == 0).ToList();
+        => pages == null ? new List<PanelPageView>() : pages.ToList();
 
     /// <summary>这一页归哪一类。空串 = 未分类，它自己也算一类（顶栏上有它的位置）。</summary>
     public static string CategoryOf(PanelPageView p) => Category(p?.Tab);
@@ -206,7 +194,11 @@ public static class PanelLayout
 
     /// <summary>把一页的格子切成上下两条带：上带最多 topRows 行，其余归下带。
     /// 上带没填满时下带为空（两条带是**上限**，不是预留的空位——预留会让只有三个动作的面板
-    /// 底下空出四行，看着像没加载完）。</summary>
+    /// 底下空出四行，看着像没加载完）。
+    ///
+    /// **下带走到底**：一页装不下的格子继续排在下面，由面板在页内滚动收着。
+    /// 它不再被切到「下一页」去（见类头注释）——下带因此可以比 bottomRows 还高，
+    /// 那是这一页本来就有那么多格子，不是版面出了错。</summary>
     //
     // 泛型是因为两边的元素类型不同：Core 这层是 PanelItem，视图那层已经换成了绑好动作的 PanelTile。
     // 切分的公式只有一条，放在这里两边共用——抄两份的话，改了行数上限只会改中一处。
@@ -215,6 +207,27 @@ public static class PanelLayout
         var all = items ?? (IReadOnlyList<T>)Array.Empty<T>();
         int cut = PanelMetrics.ClampRows(topRows) * PanelMetrics.ClampColumns(columns);
         return (all.Take(cut).ToList(), all.Skip(cut).ToList());
+    }
+
+    /// <summary>把一页的格子切成三段：面板**第一屏**看得见的两条带 + 落在下面的那些。</summary>
+    //
+    // 面板上那一屏 = 上带 topRows 行 + 下带 bottomRows 行；再往下的格子要滚动才看得到。
+    // 管理器的预览要照着这个口径画，否则「管理器里看到什么样，呼出来就是什么样」只兑现一半：
+    // 卡片下带走到底（40 格 = 7 行），面板上却只看得到 4 行 + 滚动。
+    //
+    // 与 SplitBands 的关系：那个是给**面板**用的（下带走到底，因为面板自己会滚），
+    // 这个是给**管理器**用的（下带只画看得见的那些，剩下的另算一块）。
+    // 两条公式都放在这里，改行数上限时只改一处。
+    public static (List<T> Top, List<T> Bottom, List<T> Below) SplitVisible<T>(
+        IReadOnlyList<T>? items, int topRows, int bottomRows, int columns)
+    {
+        var all = items ?? (IReadOnlyList<T>)Array.Empty<T>();
+        int cols = PanelMetrics.ClampColumns(columns);
+        int topCut = PanelMetrics.ClampRows(topRows) * cols;
+        int visible = topCut + PanelMetrics.ClampRows(bottomRows) * cols;
+        return (all.Take(topCut).ToList(),
+                all.Skip(topCut).Take(Math.Max(0, visible - topCut)).ToList(),
+                all.Skip(visible).ToList());
     }
 
 }

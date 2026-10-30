@@ -96,7 +96,8 @@ public partial class App : System.Windows.Application
 
         // 开发期自查（--smoke / --shots / --selftest，见 DevChecks.cs）：在单实例之前——托盘里正在用的实例照常工作。
         if (e.Args.Contains("--smoke") || e.Args.Contains("--shots") || e.Args.Contains("--selftest")
-            || e.Args.Contains("--screenshots") || e.Args.Contains("--hookprobe")) { RunDevCheck(e.Args); return; }
+            || e.Args.Contains("--screenshots") || e.Args.Contains("--hookprobe") || e.Args.Contains("--trayshot"))
+        { RunDevCheck(e.Args); return; }
 
         if (!ClaimSingleInstance(e.Args)) return;     // 已有实例在跑：叫醒它，自己退出
 

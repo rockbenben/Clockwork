@@ -25,9 +25,10 @@
              格子里两行文字的第二行被挤掉半截（实测「休眠（存盘…」被切在括号中间）。
              这个窗口和管理器必须长得一样，那就不能有两份样式。 -->
 
-        <!-- 自带操作：图标与文字**并排**，不是上下堆叠。这个区别是有意的——
-             凹槽里是堆叠的方格（你的动作），夹板上是横排的窄条（程序的开关），
-             一眼就能分出两类东西，不必靠一条分隔线去解释。 -->
+        <!-- 自带操作：**只有图标，没有文字**。这不是省地方，是要把两排东西分作两排：
+             凹槽里是堆叠的方格（你的动作，图标在上文字在下），夹板上是横排的窄条
+             （程序自己的开关，名字退到悬停提示），一眼就能分出两类东西，
+             不必靠一条分隔线去解释。 -->
         <Style x:Key="RailButton" TargetType="Button">
             <Setter Property="Height" Value="26"/>
             <Setter Property="Margin" Value="1,0"/>
@@ -95,22 +96,36 @@
                      多页时才出现——单页时它只是把组名重复一遍，占着位置不说新东西。
                      MaxWidth 封住：页名是用户起的，可以任意长，不封顶时它会把面板顶宽，
                      而面板的宽度该由格子阵说了算。 -->
-                <TextBlock Grid.Column="1" x:Name="PageTitle" VerticalAlignment="Center" MaxWidth="190"
-                           FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="{StaticResource FsMicro}"
-                           Foreground="{StaticResource BrushPaper}" TextAlignment="Center"
-                           TextTrimming="CharacterEllipsis" Margin="10,0" Visibility="Collapsed"/>
-                <!-- 表圈右端：先是「管理面板」，再是「Esc 关闭」。
+                <!-- 页名 + 那把刻度挨在一起：它们答的是同一件事（「哪一页」）。
+                     刻度从前摆在腰上（两坑之间），那是它还答「第几屏」时的位置——
+                     现在它只答「哪一页」，摆在内容中间就成了一个插在动作里的指示器。
+                     腰于是回到它本来的身份：两坑之间露出的一道夹板。 -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <TextBlock x:Name="PageTitle" VerticalAlignment="Center" MaxWidth="190"
+                               FontFamily="{StaticResource FontDisplay}" FontWeight="SemiBold" FontSize="{StaticResource FsMicro}"
+                               Foreground="{StaticResource BrushPaper}" TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis" Margin="10,0" Visibility="Collapsed"/>
+                    <StackPanel x:Name="PageIndex" Orientation="Horizontal" VerticalAlignment="Center"
+                                Margin="2,0,0,0" Visibility="Collapsed"/>
+                </StackPanel>
+                <!-- 表圈右端：先是「加一格」「找东西」「管手势」「管面板」，最后才是「Esc 关闭」。
                      顺序是有讲究的：**最角上那一格留给不可点的提示**。每一个窗口的右上角
-                     都住着关闭按钮，把一颗齿轮摆到那儿，冲着「关掉它」去点的手会打开管理器。
-                     齿轮退一格，角上仍是一句静止的话，误点就不存在了。
+                     都住着关闭按钮，把一颗能点的按钮摆到那儿，冲着「关掉它」去点的手会打开管理器。
+                     那几颗退一格，角上仍是一句静止的话，误点就不存在了。
 
                      这几颗原来都在腰栏里（先是齿轮，搬走后放大镜又原样接管了那个位置）。
                      毛病不是「谁站在那儿」，而是**那条缝本来就不该站人**：单页又没到搜索阈值时，
                      腰栏里只剩孤零零一个字形卡在两块凹坑之间那道 24px 的缝里，读作一个掉在那儿的东西。
                      一排居中的点读得出「刻度」，一个停在一端的字形读不出任何东西。
-                     控件全部收到这儿之后，腰上只剩刻度，也就只在**真有几屏可翻**时才出现。 -->
+                     控件全部收到这儿之后，腰上就只剩那道缝了。
+
+                     最前面那颗「+」是「往这一页加一格」。它**不进格子阵**：
+                     它曾经是格子阵末尾那个虚位格，而那占着一格的位置——一页装满时
+                     它就成了多出来的第 29 格，孤零零挂在下带第五行，3 + 4 的节奏当场散掉。
+                     挪到表圈右端之后它不占格子，位置也恒定：这一页放了多少东西，它都在同一个地方。 -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <!-- 找东西 / 管手势 / 管面板，都是「关于这个程序自己」的入口，不是你配的动作。 -->
+                    <!-- 加一格 / 找东西 / 管手势 / 管面板：这一排都是「面板自己」的入口，不是你配的动作。 -->
                     <StackPanel x:Name="HeaderOps" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <TextBlock x:Name="HintText" VerticalAlignment="Center"
                                FontSize="{StaticResource FsNano}" Foreground="{StaticResource BrushFaint}" TextTrimming="CharacterEllipsis"/>
@@ -140,9 +155,11 @@
                 <!-- ── 页签栏：一页一条，只有页名 ──
                      不画页图标：那儿绝大多数时候是同一个默认字形，一列重复的记号不带任何信息，
                      还占着宽度、还让这条栏和顶栏（本来就只有名字）长得不一样。
-                     它回答的是「哪一页」；「这一页的第几屏」交给腰上的圆点。
-                     这两件事以前挤在同一排圆点里，于是一个 24 格的页被切成三屏之后，
-                     那三个点看着和「三个不同的页」一模一样——页名才是人认路的东西。 -->
+                     它回答的是「哪一页」；**表圈里那把刻度答的也是「哪一页」**——
+                     所以左栏在的时候刻度整个收起来（同一件事不摆两处），
+                     左栏不在时它顶上，挨着页名站在表圈中间。
+                     从前刻度在腰上（两坑之间），那时它答的是「第几屏」；位置与语义对得上，
+                     而它现在只答「哪一页」——摆在内容中间就成了一个插在动作之间的指示器。 -->
                 <ScrollViewer Grid.Column="0" x:Name="RailScroll" Visibility="Collapsed" MaxHeight="430"
                               VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                               Focusable="False" Margin="0,0,6,0">
@@ -151,7 +168,9 @@
 
             <!-- ── 凹槽：动作格嵌在夹板里，比夹板更暗一档，读作铣出来的一块沉台 ──
                  一页装不下时在页内纵向滚动（那是容量问题，不该变成第二页）。
-                 MaxHeight 在代码里按当前屏幕工作区算；XAML 这个值只是拿不到屏幕信息时的兜底。 -->
+                 可见高度 = 设置里的「每屏行数」行（内部记作上带 + 下带两段），超出的往下滚；
+                 代码里还会按当前屏幕工作区再收一道（面板不能高过屏幕）。
+                 XAML 这个值只是拿不到屏幕信息时的兜底。 -->
             <ScrollViewer Grid.Column="1" x:Name="Scroll" MaxHeight="430" VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled" Focusable="False">
                 <!-- Contained：方向键在网格内部循环，不会跳到窗口外的什么地方去。
@@ -166,9 +185,15 @@
 
                      两条带没有语义差别，它们是**版面节奏**：一整块 7 行的方格阵读起来是一堵墙，
                      切成 3 + 4 之后眼睛有了落点，找格子快得多（同键盘分区的道理）。
-                     行数在设置页可改，下带设 0 即退回单条带（那时下面这个坑整个收起来）。
+                     行数在设置页可改，「上带行数」等于「每屏行数」即退回单条带（那时下面这个坑整个收起来）。
                      两条带是**上限**不是预留：上带没填满时下带也收起来，
-                     只有三个动作的面板不会底下空出四行、看着像没加载完。 -->
+                     只有三个动作的面板不会底下空出四行、看着像没加载完。
+
+                     而「一屏装得下几行」是设置里那个「每屏行数」的意思：
+                     上带 topRows 行 + 下带 bottomRows 行 = 一屏；这一页还有别的格子，
+                     它们排在下面、在坑里往下滚——**不再被切成第二页**。
+                     以前按容量切页的时候，页名会被拆成「第 1 屏 / 第 2 屏」，
+                     而用户在配置里明明只写了一页。 -->
                 <StackPanel KeyboardNavigation.DirectionalNavigation="Contained">
                     <!-- ── 搜索域 ──
                          搜索一开始，它就是这个窗口的主角，所以它有自己的一条凹槽、占满整幅宽度，
@@ -224,23 +249,21 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- ── 腰：一把刻度，没有别的 ──
-                         位置本身在说话：上面是一页的上半截，下面是下半截，中间这条管的是「你在第几屏」。
-                         两坑之间那道缝本来就是分界（说明见上面那段），腰只是把刻度画在缝上。
+                    <!-- ── 腰：两坑之间露出的一道夹板 ──
+                         上面是这一页的上半截，下面是下半截，中间这条**没有控件**：
+                         它是版面的一部分（两坑之间的界），不是一条工具栏。
 
-                         **这儿不放控件。** 一度放过「管理面板」，后来放过搜索——两次都是同一个结果：
-                         单屏时刻度不画，那条缝里就只剩一个停在右端的字形，读作掉在那儿的东西，
-                         而不是一条栏。一排居中的点才读得出「刻度」；一个字形读不出任何东西。
-                         面板自己的控件（找东西、管东西）因此全部收到表圈右端去了。
+                         **这儿从前放过那把刻度**（它现在在表圈里、紧挨页名）：
+                         刻度当年答的是「第几屏」，位置与语义对得上；
+                         现在它只答「哪一页」，摆在内容中间就成了一个插在动作之间的指示器——
+                         而「哪一页」这件事，表圈里本来就有人答（页名与刻度挨在一起）。
+
+                         面板自己的控件（加一格、找东西、管东西）因此全部收到表圈右端去了。
 
                          Quicker 把这条叫腰栏，翻页指示与搜索都在那儿——分工借它，位置按本程序的实际情况定。
                          它那把锁是用来冻结上下文自动切换的，而本面板是呼出的那一刻按前台程序算一次页、
                          之后不再变，没有可冻结的东西，所以不抄那把锁——照搬一个理由不存在的控件，
                          只会留下一颗按了没反应的按钮。 -->
-                    <StackPanel x:Name="Waist" Margin="0,1,0,0" Visibility="Collapsed">
-                        <StackPanel x:Name="PageIndex" Orientation="Horizontal"
-                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
 
                     <!-- 单页时切换条整个收起来，这 6px 就是那道缝本身。 -->
                     <Border x:Name="BandRule" Background="{StaticResource BrushInk}" BorderBrush="{StaticResource BrushLine}"
@@ -257,10 +280,10 @@
                  只有图标，没有文字。这不是为了省地方，是为了**分清这两排东西是谁的**：
                  凹坑里是你配的动作，每一格都写着你起的名字；夹板上是程序自己的开关，
                  像机器面板上那几颗没有标注的按钮——认一次就记住，天天看见的东西不需要天天读一遍。
-                 名字退到悬停提示，与托盘菜单里那五条一字不差，两处对得上。
+                 名字退到悬停提示，与托盘菜单里对应的那几条一字不差，两处对得上。
 
-                 顺带解决了原来的毛病：五条带文字的窄条在中文下折成两行、德语三行，
-                 一排「重新运行启动清单」比它上面整页动作还占眼睛。
+                 顺带解决了原来的毛病：几条带文字的窄条在中文下折成两行、德语三行，
+                 一排说明文字比它上面整页动作还占眼睛。
 
                  UniformGrid(Rows=1) 而非 WrapPanel：只剩图标就不存在放不下的问题了，
                  等分反倒把它们排成一条均匀的开关带，而不是挤在左边的一小撮。

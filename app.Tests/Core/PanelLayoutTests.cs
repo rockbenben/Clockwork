@@ -166,7 +166,7 @@ public class PanelLayoutTests
         Assert.Equal(new[] { "开发", "常用" }, pages.Select(p => p.Title));
     }
 
-    // ── 版面：上下两条带 + 按容量续页 ──
+    // ── 版面：上下两条带 ──
 
     private static PanelPage Many(string name, int n)
     {
@@ -201,24 +201,60 @@ public class PanelLayoutTests
         Assert.Empty(bottom);
     }
 
-    // 一页装不下就续到下一页，续页沿用同一个页名——续页是「同一批东西的下半截」。
+    // 一页装不下**也不续页**：格子多了就在面板的坑里往下滚。
+    // 从前是按容量切页的，切出来的几屏共用同一个页名，于是「这一页」在一屏放不下时被拆成两半——
+    // 用户在配置里明明只写了一页，面板却摆出两个「第 1 屏 / 第 2 屏」。
     [Fact]
-    public void Overflow_spills_onto_continuation_pages_keeping_the_name()
+    public void Overflow_stays_on_one_page()
     {
-        var pages = PanelLayout.BuildPages(new[] { Many("常用", 30) }, null, capacity: 28);
-        Assert.Equal(2, pages.Count);
-        Assert.Equal(28, pages[0].Items.Count);
-        Assert.Equal(2, pages[1].Items.Count);
-        Assert.All(pages, p => Assert.Equal("常用", p.Title));
+        var pages = PanelLayout.BuildPages(new[] { Many("常用", 30) });
+        var page = Assert.Single(pages);
+        Assert.Equal(30, page.Items.Count);
+        Assert.Equal("常用", page.Title);
     }
 
     [Fact]
-    public void An_exact_fit_does_not_add_an_empty_page()
-        => Assert.Single(PanelLayout.BuildPages(new[] { Many("常用", 28) }, null, capacity: 28));
+    public void An_exact_fit_is_still_one_page()
+        => Assert.Single(PanelLayout.BuildPages(new[] { Many("常用", 28) }));
 
+    // 管理器预览用的三段切分：面板**第一屏**看得见的两条带 + 落在下面的那些。
+    // 预览必须照这个口径画：下带是有行数上限的，卡片下带走到底的话，
+    // 「每屏 7 行 / 上带 3 行」与卡片对不上，而管理器那句「看到什么样，呼出来就是什么样」就只兑现了一半。
     [Fact]
-    public void Capacity_zero_means_unlimited()
-        => Assert.Equal(50, Assert.Single(PanelLayout.BuildPages(new[] { Many("常用", 50) }, null, capacity: 0)).Items.Count);
+    public void Visible_split_cuts_the_screen_and_leaves_the_rest_below()
+    {
+        var items = Enumerable.Range(1, 40).Select(i => i.ToString()).ToList();
+        var (top, bottom, below) = PanelLayout.SplitVisible(items, topRows: 3, bottomRows: 4, columns: 4);
+        Assert.Equal(12, top.Count);      // 上带 3 行 × 4 列
+        Assert.Equal(16, bottom.Count);   // 下带 4 行 × 4 列
+        Assert.Equal(12, below.Count);    // 剩下的（面板里要往下滚才看得到）
+        Assert.Equal("1", top[0]);
+        Assert.Equal("13", bottom[0]);
+        Assert.Equal("29", below[0]);
+    }
+
+    // 正好装满一屏时下面那一块是空的——**不留半个空位、也不多出一行**。
+    // 那一行假空位正是「每屏 7 行 / 上带 3 行」与卡片对不上的来由（补位公式总多补一整行）。
+    [Fact]
+    public void A_page_that_exactly_fits_has_nothing_below()
+    {
+        var items = Enumerable.Range(1, 28).ToList();
+        var (top, bottom, below) = PanelLayout.SplitVisible(items, 3, 4, 4);
+        Assert.Equal(12, top.Count);
+        Assert.Equal(16, bottom.Count);
+        Assert.Empty(below);
+    }
+
+    // 页与页之间不留任何「续页」痕迹：一个存储页 = 一个 View（见 PanelPageView 的注释）。
+    [Fact]
+    public void Every_page_view_maps_to_exactly_one_stored_page()
+    {
+        var stored = new[] { Many("甲", 30), Many("乙", 3) };
+        var pages = PanelLayout.BuildPages(stored);
+        Assert.Equal(2, pages.Count);
+        Assert.Same(stored[0], pages[0].Source);
+        Assert.Same(stored[1], pages[1].Source);
+    }
 
     [Fact]
     public void Null_input_is_not_a_crash()

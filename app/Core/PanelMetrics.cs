@@ -20,6 +20,21 @@ public static class PanelMetrics
     /// 一个像素就够。空隙给多了，面板会比它装的东西宽出一大截。</summary>
     public const double TileGap = 1;
 
+    /// <summary>面板除格子区以外的那些高度（DIP）：表圈、底部开关带、窗口内边距与投影留白。
+    /// 格子区的上限就是「工作区高度 − 这个数」——面板因此正好待在屏幕里，不会顶出工作区。</summary>
+    //
+    // 这一个数此前散在两处：面板那边写死 110（当工作区边距用），管理器那边根本没有。
+    // 散着的后果是**设置说空话**：行数设了 4，小屏上实际只露得下 1 行，而界面从不说这件事。
+    // 现在两边共用这一份算式（ScreenRows），管理器就能如实告诉用户「这块屏放得下几行」。
+    public const double WindowChrome = 110;
+
+    /// <summary>两坑自己那点高度（DIP）：各自的边框与内边距（各 8）+ 中间那道缝（6）。</summary>
+    public const double BandChrome = 23;
+
+    /// <summary>面板一行有多高（DIP）：格子高 + 上下各一个空隙。</summary>
+    public static double RowHeight(string? size, bool iconOnly)
+        => For(size, iconOnly).Height + TileGap * 2;
+
     /// <summary>列数的合法范围。上界 8 不是怕算不过来，是过了这个数一格就窄到放不下两个汉字。</summary>
     public const int MinColumns = 3;
     public const int MaxColumns = 8;
@@ -33,14 +48,56 @@ public static class PanelMetrics
 
     public static int ClampRows(int n) => n < MinRows ? MinRows : n > MaxRows ? MaxRows : n;
 
-    /// <summary>一页装得下多少格 = （上带行数 + 下带行数）× 列数。装不下的翻到下一页。</summary>
+    /// <summary>一屏能看见多少格 = （上带行数 + 下带行数）× 列数。</summary>
     //
-    // 两条带都为 0 时给一个兜底容量而不是返回 0：容量 0 会让分页逻辑切出无穷多张空页。
+    // **这不是一页的上限。** 一页装多少由用户自己决定，装不下的在面板里往下滚——
+    // 一页就是一页，不再按容量切成好几屏（理由见 PanelLayout.BuildPages）。
+    // 这个数只回答「一屏放得下吗」：搜索要不要装、搜索结果留多少、管理器里的读数。
+    //
+    // 两条带都为 0 时给一个兜底值而不是返回 0：0 会让「一屏放得下吗」这个问题没有答案。
     // 这种配置从界面走不到（上带的下拉从 1 起，见 MainWindow 里填下拉那段），但配置文件是能手改的。
-    public static int PageCapacity(int topRows, int bottomRows, int columns)
+    public static int VisibleCapacity(int topRows, int bottomRows, int columns)
     {
         int rows = ClampRows(topRows) + ClampRows(bottomRows);
         return rows <= 0 ? ClampColumns(columns) : rows * ClampColumns(columns);
+    }
+
+    /// <summary>一屏最多几行（两条带加起来）。</summary>
+    //
+    // 面板内部记的是「上带几行 + 下带几行」，设置面上给用户的却是两个别的数
+    // （每屏行数、上带行数）——换算在这里做一次，两边才不会各算各的。
+    public const int MaxScreenRows = MaxRows * 2;
+
+    /// <summary>「每屏几行」与「分带在哪」换算成面板用的那两个数。</summary>
+    //
+    // 设置面只有两个下拉：**每屏行数**（一屏装得下几行）与**上带行数**（分带的位置）。
+    // 面板内部用的仍是「上带几行 + 下带几行」，下带行数 = 每屏 − 上带。
+    //
+    // 夹在中间的分带按「上带 = ⌊每屏/2⌋」分：分带略高于视觉中心，七行就是 3 + 4——
+    // 一整块七行的方格阵读起来是一堵墙，切开之后眼睛才有落点（键盘分区是同一个道理）。
+    //
+    // 越界一律夹住：上带不能超过每屏（否则下带成了负数），每屏至少一行。
+    public static (int Top, int Bottom) BandsOf(int rowsPerScreen, int topRows)
+    {
+        int rows = Math.Max(1, Math.Min(rowsPerScreen, MaxScreenRows));
+        int top = Math.Max(1, Math.Min(topRows, rows));
+        return (top, rows - top);
+    }
+
+    /// <summary>这块屏上，面板能显示几行格子。装不下的在页内滚，不是不显示。</summary>
+    //
+    // 算的是「格子区能有多高」：工作区高度减去窗口自己的那些高度（表圈、开关带），
+    // 再减去两坑的边，然后除以一行的高度。
+    //
+    // **那把刻度不占这里的高度**：它从前在腰上（两坑之间），现在搬到了表圈里、挨着页名
+    // （它答的是「哪一页」，该和页名待在一起）。腰于是回到它本来的身份：一道夹板。
+    //
+    // 拿不到工作区高度时返回 0——那表示「量不到」，不是「一行也放不下」。
+    public static int ScreenRows(double workAreaHeight, string? size, bool iconOnly)
+    {
+        if (workAreaHeight <= 0) return 0;
+        double usable = workAreaHeight - WindowChrome - BandChrome;
+        return Math.Max(1, (int)Math.Floor(usable / RowHeight(size, iconOnly)));
     }
 
     /// <summary>格子阵摊开有多宽（DIP）。**面板的宽度该由它说了算**——

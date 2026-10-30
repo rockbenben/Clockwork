@@ -143,10 +143,15 @@ public class PanelManagerWidthTests
 
     // 显示之后要重量一次：构造时左栏的页签刚填上去，量到的未必是最终那一份
     // （换语言、换版面都会让页签变宽）。
+    //
+    // 那次 Loaded 上现在还挂了一件同属「显示之后才知道」的事：读出这块屏放得下几行
+    // （面板管理器要如实告诉用户行数放不下，见 UpdateScreenRowsNote）——
+    // 工作区高度要等窗口有了 HWND 才量得到，所以它也得在 Loaded 之后。
     [Fact]
     public void The_cap_is_recomputed_once_the_window_is_loaded()
     {
         var code = Code();
-        Assert.Contains("Loaded += (_, _) => CapWidthToContent();", code);
+        Assert.Contains("CapWidthToContent();", code);
+        Assert.Contains("Loaded += (_, _) =>", code);
     }
 }

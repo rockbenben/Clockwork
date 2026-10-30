@@ -42,12 +42,10 @@ public sealed record PanelTile(string Label, PanelIconSpec Icon, Action Run, boo
 }
 
 /// <summary>面板的一页：页名 + 这页的格子。页名显示在翻页刻度旁边。</summary>
-/// <param name="OnAdd">这一页末尾那个「新增」格。为 null 则不画。</param>
+/// <param name="OnAdd">往这一页加一格的动作（表圈右端那颗「+」按它）。为 null 则那颗按钮不出现。</param>
 /// <param name="Tab">这一页归哪一类（空 = 未分类）。顶栏一格一类。</param>
-/// <param name="Screen">同一页被容量切开之后的第几屏（从 0 起）。左侧页签只画 Screen==0 的那些——
-/// 它回答「哪一页」，而「这一页的第几屏」是腰栏圆点的事。</param>
 public sealed record PanelTilePage(string Title, IReadOnlyList<PanelTile> Tiles, Action? OnAdd = null,
-                                   string Tab = "", int Screen = 0);
+                                   string Tab = "");
 
 /// <summary>面板外观（设置页可改）。集中成一个记录而不是四个参数：
 /// 这几项总是一起读、一起变，拆开传迟早会漏传一个。</summary>
@@ -78,7 +76,9 @@ public partial class QuickPanelWindow : Window
     private const int MDT_EFFECTIVE_DPI = 0;
     private const uint SWP_NOSIZE = 0x0001, SWP_NOACTIVATE = 0x0010, SWP_NOZORDER = 0x0004;
     // 工作区上下各留一点，面板不要顶满屏幕高——顶满时滚动条紧贴任务栏，看着像被裁了。
-    private const double WorkAreaMargin = 110;
+    // 留多少就是窗口自己那些高度（表圈、开关带、内边距），与 Core.PanelMetrics 共用同一个数：
+    // 管理器那边要按同一份算式告诉用户「这块屏放得下几行」（见 PanelMetrics.ScreenRows）。
+    private const double WorkAreaMargin = PanelMetrics.WindowChrome;
 
     private static readonly FontFamily IconFont = new("Segoe MDL2 Assets");
 
@@ -92,8 +92,15 @@ public partial class QuickPanelWindow : Window
     private int _watchTick;        // 看门狗已走过的拍数（补抢额度）：提成字段是为了 Revive 能把它清零重满
     private int _outsideTicks;     // 观察拍（没有任何一拍见过真前台的那类面板）里光标已连续离开面板矩形的拍数（回来即清零，判据见 PanelFocus.ZombieShouldDismiss）
     private bool _searching;  // 搜索态：凹坑里铺的是搜索结果，不是某一页
-    private bool _hasSearch;  // 这个面板装了搜索吗（动作够多才装，见 BuildWaist）
+    private bool _hasSearch;  // 这个面板装了搜索吗（动作够多才装，见 BuildChrome）
     private List<PanelTile> _hits = new();   // 当前搜索结果，按名次排好（回车跑第一个）
+    // 「往这一页加一格」：动作随当前页变（每页加的是它自己），按钮是**一颗**——
+    // 它挂在表圈右端，位置恒定，不随这一页放了多少东西而挪窝。
+    private Action? _addAction;
+    private Button? _addButton;
+    // 格子区的可见高度上限。XAML 里那个 430 是「量不到屏幕时」的保守兜底，
+    // 探测到工作区就换掉（见 PlaceAtCursor）；真正生效的是它与行数上限里小的那个。
+    private double _workCap = 430;
     private DispatcherTimer? _focusWatch;
     private Native.ForegroundWatch? _fgWatch;   // 前台易主事件（快路）；250ms 轮询仍在，见 StartFocusWatch
 
@@ -154,7 +161,8 @@ public partial class QuickPanelWindow : Window
 
     private bool MultiPage => _pages.Count > 1;
 
-    // 切换条：**一个点 = 一页，当前那个拉成胶囊**。摆在两坑之间那道缝里，设计理由写在 XAML 里。
+    // 切换条：**一个点 = 一页，当前那个拉成胶囊**。它住在表圈里、紧挨页名——
+    // 它答的是「哪一页」，就该和页名待在一起；设计理由写在 XAML 里。
     //
     // 一页一个，不是一页一段：一段三颗齿时，三页就是九颗，得先数清一段有几颗才知道有几页——
     // 而这条索引存在的意义正是「一眼看出有几页」。一页一个，数几个就是几个。
@@ -165,41 +173,31 @@ public partial class QuickPanelWindow : Window
     //
     // 点本身 6×6，可 6×6 的点击靶按不着。所以外面套一层透明的命中区：
     // 看得见的还是那个点，点得到的是 10×18。左右各留 2，间距仍是 4，节奏不因为「好点」而走样。
-    // 这一页从第几条开始（同一页被容量切开的那几屏是连着的，Screen 从 0 数起）。
-    private int PageStart(int i)
-    {
-        while (i > 0 && i < _pages.Count && _pages[i].Screen > 0) i--;
-        return i;
-    }
-
-    // 这一页一共几屏。
-    private int ScreenCount(int start)
-    {
-        int n = 1;
-        while (start + n < _pages.Count && _pages[start + n].Screen == n) n++;
-        return n;
-    }
-
-    // 圆点画什么，取决于左边那条页签栏在不在：
-    //   页签栏在 → 点表示**这一页的第几屏**（「哪一页」已经由页签回答了）。
-    //   页签栏不在（只有一页，或用户把它关了）→ 点退回表示「哪一页」，否则关掉页签栏就等于
-    //     把翻页入口一起关掉了。
-    // 两种模式下点的含义都是单一的；以前它同时兼着两件事，于是一个被切成三屏的页
-    // 看着和「三个不同的页」一模一样。
+    //
+    // 圆点画什么：**只有一件事——「哪一页」。**
+    //
+    // 它曾经还有第二层意思：「这一页的第几屏」。那一页被容量切开时，切出来的几屏共用同一个页名，
+    // 于是「这一页」在一屏放不下时被拆成两半，页签栏说「哪一页」、腰上的圆点说「第几屏」——
+    // 同一件事有两个答案，而用户配的是一页。现在一页就是一页（装不下的在页内往下滚），
+    // 那第二层意思没有了，圆点只剩一件事可答。
+    //
+    // **它现在住在表圈里、紧挨页名**（见 XAML）：它答的是「哪一页」，那就该和页名待在一起，
+    // 而不是插在这一页的动作中间——摆在那儿时它读作一个插在内容里的指示器。
+    //
+    // 页签栏在的时候**整个收起来**：左栏已经逐页点名了，同一件事不摆两处。
+    // 页签栏不在（用户把它关了，或当前这一类只有一页）时，圆点就是唯一的翻页入口——
+    // 关掉页签栏不等于把翻页入口一起关掉。
     private void BuildIndex()
     {
         PageIndex.Children.Clear();
-        bool byScreen = RailScroll.Visibility == Visibility.Visible;
-        int first = byScreen ? PageStart(_page) : 0;
-        int count = byScreen ? ScreenCount(first) : _pages.Count;
-        // **腰栏跟着刻度走，不自己判。** 它俩曾各判各的：腰栏看「有几页」，刻度看「有几屏」——
-        // 两页而每页都只有一屏时，腰栏可见、刻度收起，于是格子底下剩一条什么都没有的 1px 缝。
-        // 腰栏唯一的孩子就是刻度，那就让它由刻度决定，两处真源合成一处。
-        if (count <= 1) { Waist.Visibility = PageIndex.Visibility = Visibility.Collapsed; return; }
-        Waist.Visibility = PageIndex.Visibility = Visibility.Visible;
-        for (int k = 0; k < count; k++)
+        if (RailScroll.Visibility == Visibility.Visible || _pages.Count <= 1)
         {
-            int i = first + k;
+            PageIndex.Visibility = Visibility.Collapsed;
+            return;
+        }
+        PageIndex.Visibility = Visibility.Visible;
+        for (int i = 0; i < _pages.Count; i++)
+        {
             int idx = i;
             var tooth = new Border { Width = i == _page ? 16 : 6, Height = 6, CornerRadius = new CornerRadius(3), Background = (Brush)FindResource("BrushSteel") };
             var hit = new Border
@@ -221,9 +219,11 @@ public partial class QuickPanelWindow : Window
 
     // ── 两条导航栏：上边分类、左边页签 ──
     //
-    // 它们和腰栏那排圆点分工明确：**栏回答「哪一页」，圆点回答「这一页的第几屏」**。
-    // 以前这两件事挤在同一排圆点里，于是一个 24 格的页被容量切成三屏之后，
-    // 那三个点看着和「三个不同的页」一模一样——而页是有名字的，人认路靠的正是名字。
+    // 它们和腰栏那排圆点分工明确：**栏回答「哪一页」，圆点也回答「哪一页」——
+    // 但两者不同时出现**（页签栏在的时候圆点收起来，见 BuildIndex）。
+    // 以前圆点答的是「这一页的第几屏」，于是「哪一页」这件事有两个答案：
+    // 一个 24 格的页被容量切成三屏之后，那三个点看着和「三个不同的页」一模一样——
+    // 而页是有名字的，人认路靠的正是名字。现在一页就是一页，那第二层意思没有了。
     //
     // **两条栏是父子**：上边选分类，左边列这一类里的页。页只有一个落点（左栏），
     // 所以不存在「这一页到底在哪条栏上」这个问题——那正是把它们做成平行两条时的毛病。
@@ -253,16 +253,15 @@ public partial class QuickPanelWindow : Window
         var seen = new List<string>();
         foreach (var p in _pages)
         {
-            if (p.Screen != 0) continue;
             var c = CatOf(p);
             if (!seen.Any(x => PanelLayout.SameCategory(x, c))) seen.Add(c);
         }
         return seen;
     }
 
-    // 左栏：当前这一类里的页。一页一条（同一页被容量切开的那几屏只算一条）。
+    // 左栏：当前这一类里的页。一页一条。
     private IEnumerable<PanelTilePage> PagesInCurrentCategory()
-        => _pages.Where(p => p.Screen == 0 && PanelLayout.SameCategory(CatOf(p), _cat));
+        => _pages.Where(p => PanelLayout.SameCategory(CatOf(p), _cat));
 
     // 顶栏：一格一个分类，点了跳到这一类的第一页。
     private void BuildCategoryBar()
@@ -285,8 +284,7 @@ public partial class QuickPanelWindow : Window
                 // 跳到这一类的第一页。**先换类再找页**：页签栏画的是当前类里的页，
                 // 顺序反过来的话会先拿旧的类去筛，找不到就停在原地，读起来像点不动。
                 _cat = c;
-                var first = _pages.FirstOrDefault(x => x.Screen == 0
-                    && PanelLayout.SameCategory(CatOf(x), c));
+                var first = _pages.FirstOrDefault(x => PanelLayout.SameCategory(CatOf(x), c));
                 ShowPage(first == null ? _page : IndexOfPage(first));
             };
             System.Windows.Automation.AutomationProperties.SetName(b, label);
@@ -321,9 +319,8 @@ public partial class QuickPanelWindow : Window
     // 于是你眼前这一页在左栏里根本找不到自己。
     private void SyncCategory()
     {
-        int i = PageStart(_page);
-        if (i < 0 || i >= _pages.Count) return;
-        var c = CatOf(_pages[i]);
+        if (_page < 0 || _page >= _pages.Count) return;
+        var c = CatOf(_pages[_page]);
         if (PanelLayout.SameCategory(c, _cat)) return;
         _cat = c;
         BuildPageRail();
@@ -350,8 +347,7 @@ public partial class QuickPanelWindow : Window
     {
         // 当前页在哪一类，就先站到哪一类去：面板可能一开就停在某个场景页上，
         // 而那一页未必在未分类那一格里。
-        int start = PageStart(_page);
-        _cat = start >= 0 && start < _pages.Count ? CatOf(_pages[start]) : "";
+        _cat = _page >= 0 && _page < _pages.Count ? CatOf(_pages[_page]) : "";
         BuildCategoryBar();
         BuildPageRail();
         TopTabRow.Visibility = Show(_look.TopTabs && TopTabBar.Children.Count > 1);
@@ -360,14 +356,14 @@ public partial class QuickPanelWindow : Window
 
     private static Visibility Show(bool on) => on ? Visibility.Visible : Visibility.Collapsed;
 
-    // 两条栏各亮一格：上边亮当前这一类，左边亮当前这一页。第二屏也算在它那一页上（PageStart）。
+    // 两条栏各亮一格：上边亮当前这一类，左边亮当前这一页。
     //
     // 两种亮法都各带一条**形状**线索（左栏那条竖杠、上栏那条下划线），不只靠颜色：
     // 深色下强调蓝与钢灰的明度差本来就不大，色觉障碍更分不出。
     private void PaintRails()
     {
         SyncCategory();
-        int cur = PageStart(_page);
+        int cur = _page;
         foreach (var child in PageRail.Children)
             if (child is Button b && b.Tag is int i)
             {
@@ -385,21 +381,35 @@ public partial class QuickPanelWindow : Window
             }
     }
 
-    // ── 腰栏右侧：找东西 / 管东西 ──
+    // ── 表圈右端：加一格 / 找东西 / 管东西 ──
 
-    // 空面板那颗按钮要做的事，与表圈上那颗齿轮一模一样。存下来而不是各建一份：
+    // 空面板那颗按钮要做的事，与表圈上那颗「管理面板」（方格网字形）一模一样。
+    // 存下来而不是各建一份：
     // 「一个动作在整条流程里只有一个名字」——两处若各自取名，用户就得学两遍。
     private Action? _manage;
     private string _manageLabel = "";
 
-    /// <summary>面板自己的那几个控件（找东西、管东西）摆表圈右端，并决定腰要不要出现。</summary>
+    /// <summary>面板自己的那几个控件（加一格 / 找东西 / 管东西）摆表圈右端。</summary>
     private void BuildChrome(IReadOnlyList<PanelTile>? chromeOps)
     {
         EmptyAction.Click += (_, _) => _manage?.Invoke();
+
+        // 「往这一页加一格」摆在表圈右端第一位，**不进格子阵**。
+        //
+        // 它曾经是格子阵末尾那个半透明的虚位格——「跟在最后一个动作后面，位置本身在说往这儿放」。
+        // 可它占的是**一格的位置**：一页装满时它就是多出来的第 29 格，孤零零挂在下带第五行，
+        // 3 + 4 的版面节奏当场散掉（实测那张截图就是这么长歪的）。
+        // 挪到表圈右端之后它不再占格子，位置也恒定：这一页放了多少东西，它都在同一个地方。
+        // 至于「这一页能不能加」，由 RenderBands 按当前页决定（没有 OnAdd 的页不摆这颗）。
+        _addButton = MakeWaistButton(char.ConvertFromUtf32(0xE710), Strings.Get("Btn_Add"),
+                                       () => _addAction?.Invoke());
+        _addButton.Visibility = Visibility.Collapsed;   // 由 RenderBands 按当前页点亮
+        HeaderOps.Children.Add(_addButton);
+
         // 搜索只在「有得可搜」时才装：一页三个动作的面板摆一个放大镜，是给用户一个用不上的承诺。
-        // 阈值取一屏（一页的容量）——装得下一屏的东西，用眼睛找比打字快。
+        // 阈值取一屏装得下的格数——装得下一屏的东西，用眼睛找比打字快。
         int total = _pages.Sum(p => p.Tiles.Count);
-        _hasSearch = total > PanelMetrics.PageCapacity(_look.TopRows, _look.BottomRows, _look.Columns);
+        _hasSearch = total > PanelMetrics.VisibleCapacity(_look.TopRows, _look.BottomRows, _look.Columns);
         if (_hasSearch)
             HeaderOps.Children.Add(MakeWaistButton(char.ConvertFromUtf32(0xE721), Strings.Get("Panel_Search"), () => StartSearch()));
 
@@ -418,8 +428,9 @@ public partial class QuickPanelWindow : Window
             { _manage = () => { Dismiss(); op.Run(); }; _manageLabel = op.Label; }
         }
 
-        // 腰的显隐由 BuildIndex 一处说了算（它算的是「这一页有几屏」，而腰上就只有那把刻度）。
-        // 这儿曾按「有几页」另判一次，两处真源对不上就漏出一条空缝。
+        // 表圈里那把刻度（PageIndex）的显隐由 BuildIndex 一处说了算（它算的是「有几页」，
+        // 以及页签栏在不在）。**腰（BandRule）不归它管**——腰的显隐由 RenderBands 决定
+        // （下带有没有东西），见 ShowPage 里那一行。
     }
 
     private Button MakeWaistButton(string glyph, string tip, Action run)
@@ -430,7 +441,11 @@ public partial class QuickPanelWindow : Window
             Style = (Style)FindResource("RailButton"),
             Content = g,
             ToolTip = tip,
-            Padding = new Thickness(6, 0, 6, 0),
+            // 左右各 4：这一排图标之间原来的间隔是 14–16 DIP，**比图标本身（~13 DIP）还宽**——
+            // 实测那张截图里四个记号散在一条排上，读起来不像一条工具栏。
+            // 收到 4 之后间隔约 10 DIP，图标挨着图标，那一排才读作「一排按钮」。
+            // 命中区仍有 ~21×22 DIP（≈150% 下 31px），够按。
+            Padding = new Thickness(4, 0, 4, 0),
             Height = 22,
         };
         // 没有文字的按钮必须显式给可访问名：内容只剩一个私用区码位，读屏软件念出来是乱码。
@@ -453,7 +468,7 @@ public partial class QuickPanelWindow : Window
     {
         _searching = true;
         SearchField.Visibility = Visibility.Visible;
-        Waist.Visibility = Visibility.Collapsed;   // 刻度收起：搜索结果不分页，留着只会让人以为还得翻页找
+        PageIndex.Visibility = Visibility.Collapsed;   // 刻度收起：搜索结果不分页，留着只会让人以为还得翻页找
         HintText.Text = Strings.Get("Panel_HintBack");   // 此刻 Esc 是「回到分页」，不是「关闭」
         // 搜索时页名要收起来：此刻铺在坑里的是所有页的动作，不是某一页的。
         // 留着一个页名，等于告诉用户「你在这一页里搜」——而搜索恰恰是跨页的。
@@ -473,7 +488,8 @@ public partial class QuickPanelWindow : Window
     {
         _searching = false;
         SearchField.Visibility = Visibility.Collapsed;
-        // 腰的显隐不在这儿判：下面 ShowPage 会走一遍 BuildIndex，由它一处决定。
+        // 刻度与腰的显隐不在这儿判：下面 ShowPage 会走一遍 BuildIndex（刻度）与
+        // RenderBands（腰），各由一处决定。
         // 这儿曾无条件放回去，单页面板退出搜索后就多出一条什么都没有的 1px 缝。
         HintText.Text = Strings.Get("Panel_Hint");
         BuildRails();                      // 两条栏由它按「有没有多页 / 多类」重新决定要不要出现
@@ -491,9 +507,10 @@ public partial class QuickPanelWindow : Window
 
         // 铺出来的结果有上限。**这不是为了好看，是量出来的**：搜索时每敲一个键都会把结果整批重造，
         // 实测 50 格 23ms、200 格 30ms，到 500 格就是 531ms——打两个字卡一秒，搜索框直接不能用了。
-        // 上限按面板自己的容量算（两页），所以它跟着用户的列数/行数设置走，不是拍脑袋的一个数。
-        // 而且这个数远超一屏：没有人会滚到第五十个搜索结果，那时该做的是多打一个字。
-        int cap = PanelMetrics.PageCapacity(_look.TopRows, _look.BottomRows, _look.Columns) * 2;
+        // 上限按面板自己的「一屏装得下几格」算（两屏的量），所以它跟着用户的列数/行数设置走，
+        // 不是拍脑袋的一个数。而且这个数远超一屏：没有人会滚到第五十个搜索结果，
+        // 那时该做的是多打一个字。
+        int cap = PanelMetrics.VisibleCapacity(_look.TopRows, _look.BottomRows, _look.Columns) * 2;
         bool cut = _hits.Count > cap;
         var show = cut ? _hits.Take(cap).ToList() : _hits;
 
@@ -557,8 +574,16 @@ public partial class QuickPanelWindow : Window
         // 环绕而不是夹住：滚到最后一页再滚一下回到第一页。面板的页数很少（页=组），
         // 环绕让「一路滚过去看看有什么」不会在两端卡住。
         int n = _pages.Count;
+        int prev = _page;
         _page = ((index % n) + n) % n;
         var page = _pages[_page];
+
+        // 换页就把滚动位置退回顶部：新的一页该从它的第一行看起。
+        // 不退的话，上一页滚到一半留下的偏移会跟着过来——翻页时内容忽然少了半屏，
+        // 读起来像「这一页少了点什么」。
+        // IsLoaded 是必须的：模板还没贴上时 ScrollViewer 还没有 ScrollInfo，
+        // 那会儿调 ScrollToTop 会空引用（构造函数里换页走的就是这条）。
+        if (prev != _page && Scroll.IsLoaded) Scroll.ScrollToTop();
 
         RenderBands(page.Tiles, page.OnAdd);
 
@@ -573,9 +598,11 @@ public partial class QuickPanelWindow : Window
         // 换页只重涂选中态，不必重建两条栏——除非换到了别的类里去，那一步由 PaintRails
         // 里的 SyncCategory 负责（它会顺手重建左栏）。
         PaintRails();
-        // 圆点按「当前页有几屏」画，换了页就得重画。放在 PaintRails 之后：
-        // 它要读 RailScroll 的可见性来决定画屏还是画页。
+        // 圆点按「有几页」画，换了页就得重画。放在 PaintRails 之后：
+        // 它要读 RailScroll 的可见性来决定画不画（页签栏在的时候圆点让位）。
         BuildIndex();
+        // 腰栏在两坑之间，它在不在占着高度不一样——可见高度跟着重算一次。
+        ApplyContentCap();
         for (int i = 0; i < PageIndex.Children.Count; i++)
             if (PageIndex.Children[i] is Border h2 && h2.Tag is int at && h2.Child is Border t2)
             {
@@ -596,10 +623,11 @@ public partial class QuickPanelWindow : Window
         TilesBottom.Children.Clear();
         foreach (var t in top) Tiles.Children.Add(MakeTile(t));
         foreach (var t in bottom) TilesBottom.Children.Add(MakeTile(t));
-        // 「新增」格挂在内容末尾那条带上——跟在最后一个动作后面，而不是固定在页脚：
-        // 它就是「下一个格子」，位置本身在说「往这儿放」。
-        if (onAdd is { } add)
-            (bottom.Count > 0 ? TilesBottom : Tiles).Children.Add(MakeAddTile(add));
+        // 「加一格」**不占格子**：它在表圈右端，位置恒定（理由见 BuildChrome）。
+        // 这一页能不能加由 OnAdd 说了算——没有它的页不摆那颗按钮。
+        _addAction = onAdd;
+        if (_addButton != null)
+            _addButton.Visibility = onAdd == null ? Visibility.Collapsed : Visibility.Visible;
         BandRule.Visibility = bottom.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         EmptyBlock.Visibility = tiles.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         // 空屏幕是一次邀请，不是一条指路。按钮上的字与那句话里那个名字一字不差。
@@ -611,6 +639,35 @@ public partial class QuickPanelWindow : Window
     // 切分公式在 Core.PanelLayout（可测），这里只把当前外观的行数/列数喂进去。
     private (List<PanelTile> Top, List<PanelTile> Bottom) SplitBands(IReadOnlyList<PanelTile> tiles)
         => PanelLayout.SplitBands(tiles, _look.TopRows, _look.Columns);
+
+    // ── 可见高度：一屏看得见几行 ──
+    //
+    // 设置里那个「每屏行数」现在就是这个意思（内部记作上带 topRows 行 + 下带 bottomRows 行），
+    // 一屏就这么高，装不下的格子在页内往下滚（一页就是一页，不再切成第二屏）。
+    // 以前它们决定的是「一页切几屏」——页一被切，页名就被拆成「第 1 屏 / 第 2 屏」，
+    // 而用户在配置里明明只写了一页。
+    //
+    // 一行 = 格子高 + 上下各一个空隙（TileGap）。两个坑各自还有 1px 边 + 3px 内边距（8px），
+    // 两坑之间那道缝 6px。少算一点，滚动条就会比预期早冒出来。
+    private double VisibleHeight()
+    {
+        int rows = PanelMetrics.ClampRows(_look.TopRows) + PanelMetrics.ClampRows(_look.BottomRows);
+        if (rows <= 0) rows = 1;   // 两个下拉都填 0 的手改配置：至少留一行，别塌成一条缝
+        double row = PanelMetrics.RowHeight(_look.TileSize, _look.IconOnly);
+        // 两坑自己的边 + 中间那道缝。那把刻度现在在表圈里（它答的是「哪一页」），
+        // **不再从内容区的高度里扣**——腰于是回到它本来的身份：两坑之间的一道夹板。
+        return rows * row + PanelMetrics.BandChrome;
+    }
+
+    // 生效的上限 = 工作区与行数上限里小的那个。
+    // 少了工作区这一半，面板会长得比屏幕还高（这一档没有标题栏，连关都不好关）；
+    // 少了行数这一半，设置里那个「每屏行数」就白设了——面板会一路长到屏幕底。
+    private void ApplyContentCap()
+    {
+        double cap = Math.Min(_workCap, VisibleHeight());
+        // 只在真的变了才设：设同样的值也会让布局重来一遍，而 ShowPage 在按键与滚轮里都会走到。
+        if (Math.Abs(Scroll.MaxHeight - cap) > 0.5) Scroll.MaxHeight = cap;
+    }
 
     // 换页时内容横向落位。机构不回弹，所以是线性收尾、没有 ease-out-back 那种弹性——
     // 幅度也压得很小（10px）：这一下是为了说明「内容换了一批」，不是为了表演。
@@ -628,7 +685,11 @@ public partial class QuickPanelWindow : Window
 
     // 滚轮翻页。挂在窗口的 Preview 上而不是凹槽里：格子多到要纵向滚动时，
     // ScrollViewer 会先吃掉滚轮事件，翻页就再也滚不出来了。
-    // 凹槽真的能纵向滚时把滚轮让给它——那时用户想滚的显然是内容。
+    //
+    // 凹槽还能往下滚时把滚轮让给它——那时用户想滚的显然是内容；
+    // **滚到头了还往下滚，就交给下一页**。一页装不下时内容是能滚的（那是它现在的常态），
+    // 若滚轮在页尾就什么也不做，用户会以为面板卡住了；而「一路滚过去看看有什么」
+    // 正是这个面板的用法（见 ShowPage 里那段环绕的说明）。
     //
     // `!_searching` 不能省，与 PageUp / PageDown 那两条同一个理由，但后果更重：
     // ShowPage 只重铺凹槽，不动 `_searching` / `_hits`，也不移焦点（键盘翻页那两条
@@ -638,13 +699,23 @@ public partial class QuickPanelWindow : Window
     // 搜索态下落给 base：结果溢出时 ScrollViewer 滚结果，装得下时就什么也不做。
     protected override void OnPreviewMouseWheel(MouseWheelEventArgs e)
     {
-        if (MultiPage && !_searching && Scroll.ScrollableHeight <= 0)
+        if (MultiPage && !_searching && AtScrollEdge(e.Delta < 0))
         {
             ShowPage(_page + (e.Delta < 0 ? 1 : -1));
             e.Handled = true;
             return;
         }
         base.OnPreviewMouseWheel(e);
+    }
+
+    // 这一轮滚动能不能继续：往下滚时已经在底（或根本没有可滚的），往上滚时已经在顶。
+    // 「没有可滚的」也算到边——那种情况下滚轮本来就该交给翻页。
+    private bool AtScrollEdge(bool forward)
+    {
+        double max = Scroll.ScrollableHeight;
+        if (max <= 0) return true;
+        double off = Scroll.VerticalOffset;
+        return forward ? off >= max - 0.5 : off <= 0.5;
     }
 
     // Esc 关闭；PageUp / PageDown 翻页。
@@ -836,15 +907,6 @@ public partial class QuickPanelWindow : Window
         // 关窗把前台交还给用户原本在用的那个程序，动作再跑，目标才是对的。
         b.Click += (_, _) => { Dismiss(); t.Run(); };
         return b;
-    }
-
-    // 「新增」格：一个虚位。压到半透明，因为它不是一个动作，是一个位置——
-    // 与真动作同样亮的话，眼睛扫过去会把它当成「有个叫『新增』的东西可以跑」。
-    private Button MakeAddTile(Action add)
-    {
-        var tile = MakeTile(new PanelTile(Strings.Get("Btn_Add"), char.ConvertFromUtf32(0xE710), add));
-        tile.Opacity = 0.45;
-        return tile;
     }
 
     // 右键菜单：编辑 / 删除。三条文案（新增/编辑/删除）主界面已经在用，18 语现成，不另造说法。
@@ -1088,10 +1150,6 @@ public partial class QuickPanelWindow : Window
     // 位置不理想但窗口还在、还能用——比为了摆位失败就不开面板好。
     private void PlaceAtCursor()
     {
-        // ShowActivated=false 意味着这次显示不是弹给用户看的（冒烟自查会把每扇窗挪到屏幕外、
-        // 不激活地开一遍，见 DevChecks.Park）。那种场合追着光标跑会把面板拽回屏幕中央闪一下，
-        // 正好破坏 Park 要的「不抢焦点、不进视野」。真正的呼出路径走 Popup()，那里是要激活的。
-        if (!ShowActivated) return;
         try
         {
             var hwnd = new WindowInteropHelper(this).Handle;
@@ -1112,7 +1170,21 @@ public partial class QuickPanelWindow : Window
             // 页签栏与格子区**同一个上限**：它俩并排在一个 Grid 里，谁高谁说了算。
             // 不封住页签栏的话，十几条页签会把整个面板撑得比屏幕还高，而那时连关都不好关
             //（这个窗口没有标题栏）。封住之后多出来的页签在自己那一栏里滚。
-            if (workH - WorkAreaMargin > 140) Scroll.MaxHeight = RailScroll.MaxHeight = workH - WorkAreaMargin;
+            if (workH - WorkAreaMargin > 140)
+            {
+                _workCap = workH - WorkAreaMargin;
+                RailScroll.MaxHeight = _workCap;
+                ApplyContentCap();
+            }
+
+            // ShowActivated=false 意味着这次显示不是弹给用户看的（冒烟自查会把每扇窗挪到屏幕外、
+            // 不激活地开一遍，见 DevChecks.Park）。那种场合追着光标跑会把面板拽回屏幕中央闪一下，
+            // 正好破坏 Park 要的「不抢焦点、不进视野」。真正的呼出路径走 Popup()，那里是要激活的。
+            //
+            // **高度上限照算不误**：截图与自查要的是真机上那副尺寸（行数上限也得生效），
+            // 不要的只是位置。把这条一起挡掉的话，截图里的面板会比实物矮一截——
+            // 看着「版面没问题」的那张图其实是另一副版面。
+            if (!ShowActivated) return;
 
             // Measure 走一遍拿 DIP 尺寸。SizeToContent 下 ActualWidth/Height 此刻还是 0
             //（布局尚未跑过），量一次是唯一能在显示之前知道自己多大的办法。

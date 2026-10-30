@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>هل أنت متأكد من تنفيذ «{0}»؟</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>إعادة تشغيل قائمة البدء؟ سيُنفَّذ ما يلي مرة أخرى:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…و {0} أخرى</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · خطأ</value>
   </data>
@@ -1230,6 +1236,12 @@
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>الأخيرة</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>التذكيرات</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>إصلاح</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>لا يوجد سجل بدء تشغيل بعد (شغّل قائمة البدء مرة أولاً)</value>
@@ -1878,7 +1890,7 @@
     <value>التخطيط</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>عدد الأعمدة × صفوف الأعلى + صفوف الأسفل يحدّد ما يتّسع له الصفحة وعرض اللوحة. والباقي ينتقل إلى الصفحة التالية، وضبط الأسفل على 0 يجعلها شريطًا واحدًا.</value>
+    <value>عدد الأعمدة × الصفوف في الشاشة يحدّد كم خانة تتّسع في الشاشة الواحدة وعرض اللوحة؛ صفوف الأعلى هي موضع الفاصل (تساوي عدد الصفوف في الشاشة = شريط واحد). عدد الصفوف حدّ أعلى — الشاشة الأصغر تعرض أقلّ والباقي بالتمرير.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>عدد المربّعات في الصف</value>
@@ -1910,8 +1922,8 @@
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>صفوف الأعلى</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>صفوف الأسفل</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>الصفوف في الشاشة</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">أيقونة</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@
   <data name="Panel_NewPage" xml:space="preserve">
     <value>صفحة جديدة</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>ضع إجراءً هنا</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ {0} خانة أخرى في الأسفل · مرّر داخل اللوحة لرؤيتها</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>هذه الشاشة تتّسع {0} صفًا؛ الإعدادات تقول {1} — تعرض اللوحة ما تسمح به الشاشة، والباقي بالتمرير.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>لا توجد صفحات حتى الآن. اضغط على علامة «+» الموجودة في نهاية شريط علامات التبويب لإنشاء صفحة جديدة؛ ثم أضف الإجراءات إليها.</value>

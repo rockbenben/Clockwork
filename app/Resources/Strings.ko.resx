@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>“{0}”을(를) 실행하시겠습니까?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>시작 목록을 다시 실행할까요? 다음 항목들이 다시 실행됩니다:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…외 {0}개</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · 오류</value>
   </data>
@@ -1230,6 +1236,12 @@
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>최근 알림</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>알림</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>복구</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>아직 시작 로그가 없습니다(먼저 시작 목록을 한 번 실행하세요)</value>
@@ -1878,7 +1890,7 @@
     <value>배치</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>열 수 × 위쪽 줄 수 + 아래쪽 줄 수가 한 페이지에 들어가는 개수와 패널 너비를 정합니다. 넘치는 것은 다음 페이지로 가고, 아래쪽을 0으로 하면 한 줄띠가 됩니다.</value>
+    <value>열 수 × 화면당 줄 수가 한 화면에 몇 개가 들어가는지, 패널 너비를 정합니다. 위쪽 줄 수는 두 띠가 나뉘는 자리입니다(화면당 줄 수와 같으면 한 줄띠가 됩니다). 줄 수는 상한입니다 — 화면이 작으면 덜 보이며 나머지는 스크롤해서 봅니다.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>한 줄의 타일 수</value>
@@ -1910,8 +1922,8 @@
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>위쪽 줄 수</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>아래쪽 줄 수</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>화면당 줄 수</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">아이콘</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@
   <data name="Panel_NewPage" xml:space="preserve">
     <value>새 페이지</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>여기에 동작 넣기</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ 아래에 {0}개 더 있음 · 패널에서 스크롤하면 보입니다</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>이 화면에는 {0}줄이 들어갑니다. 설정은 {1}줄입니다 — 패널은 화면에 들어가는 만큼만 보여 주고, 나머지는 스크롤해서 봅니다.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>아직 페이지가 없습니다. 페이지 탭 레일 끝에 있는 ‘+’를 클릭하면 페이지가 생성되며, 그 위에 동작을 추가할 수 있습니다.</value>

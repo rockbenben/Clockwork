@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>Вы уверены, что хотите выполнить «{0}»?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>Повторить список запуска? Следующее будет выполнено снова:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…и ещё {0}</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Ошибка</value>
   </data>
@@ -1230,6 +1236,12 @@
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Недавние</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Напоминания</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Починка</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>Журнала запуска ещё нет (сначала запустите список запуска)</value>
@@ -1878,7 +1890,7 @@
     <value>Раскладка</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Столбцы × строк сверху + строк снизу задаёт, сколько помещается на странице и какой ширины панель. Остальное уходит на следующую страницу; 0 снизу — одна полоса.</value>
+    <value>Столбцы × строк на экран задаёт, сколько плиток помещается на один экран и какой ширины панель; верхние строки — это место разделения (столько же, сколько строк на экран, — одна полоса). Строки — это верхняя граница: на меньшем экране покажется меньше, остальное прокручивается.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Плиток в ряду</value>
@@ -1910,8 +1922,8 @@
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Строк сверху</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Строк снизу</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Строк на экран</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Значок</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@
   <data name="Panel_NewPage" xml:space="preserve">
     <value>Новая страница</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Поместить сюда действие</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ ниже ещё {0} · прокрутите панель, чтобы их увидеть</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>На этот экран помещается {0} строк; в настройках указано {1} — панель показывает то, что помещается, остальное прокручивается.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>Страниц пока нет. Нажмите значок «+» в конце панели вкладок, чтобы создать страницу; затем добавьте на неё действия.</value>

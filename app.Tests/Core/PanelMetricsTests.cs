@@ -67,21 +67,75 @@ public class PanelMetricsTests
         Assert.Equal(3, PanelMetrics.ClampRows(3));
     }
 
+    // 一屏能看见几格 = （上带行数 + 下带行数）× 列数。
+    // **这不是一页的上限**：一页装多少由用户自己决定，装不下的在面板里往下滚。
     [Fact]
-    public void Page_capacity_is_rows_times_columns()
+    public void Visible_capacity_is_rows_times_columns()
     {
-        Assert.Equal(28, PanelMetrics.PageCapacity(3, 4, 4));    // 默认版面
-        Assert.Equal(12, PanelMetrics.PageCapacity(3, 0, 4));    // 单条带
-        Assert.Equal(48, PanelMetrics.PageCapacity(4, 4, 6));
+        Assert.Equal(28, PanelMetrics.VisibleCapacity(3, 4, 4));    // 默认版面
+        Assert.Equal(12, PanelMetrics.VisibleCapacity(3, 0, 4));    // 单条带
+        Assert.Equal(48, PanelMetrics.VisibleCapacity(4, 4, 6));
     }
 
-    // 容量 0 会让分页切出无穷多张空页。设置页给不出 0+0，但配置文件是能手改的。
+    // 两个行数都是 0 时给个兜底值而不是 0：0 会让「一屏放得下吗」这个问题没有答案。
+    // 设置页给不出 0+0，但配置文件是能手改的。
     [Fact]
     public void A_zero_row_config_still_yields_a_usable_capacity()
     {
-        Assert.True(PanelMetrics.PageCapacity(0, 0, 4) > 0);
-        Assert.True(PanelMetrics.PageCapacity(-5, -5, 4) > 0);
+        Assert.True(PanelMetrics.VisibleCapacity(0, 0, 4) > 0);
+        Assert.True(PanelMetrics.VisibleCapacity(-5, -5, 4) > 0);
     }
+
+    // 一行有多高：格子高 + 上下各一个空隙。
+    [Fact]
+    public void A_row_is_a_tile_plus_the_gaps()
+    {
+        Assert.Equal(78, PanelMetrics.RowHeight("normal", false));    // 76 + 2
+        Assert.Equal(68, PanelMetrics.RowHeight("compact", false));   // 66 + 2
+        Assert.Equal(60, PanelMetrics.RowHeight("normal", true));     // 58 + 2
+    }
+
+    // 「每屏几行」与「分带在哪」换算成面板内部的那对数（上带行数、下带行数）。
+    //
+    // 设置面只给这两个数，下带行数是**算出来的**——而它们俩加起来必须正好是每屏行数，
+    // 否则面板露出来的行数就与设置说的不是一个数（那正是「说空话」）。
+    [Fact]
+    public void Bands_are_split_from_the_rows_per_screen()
+    {
+        Assert.Equal((3, 4), PanelMetrics.BandsOf(7, 3));   // 默认：3 + 4
+        Assert.Equal((3, 3), PanelMetrics.BandsOf(6, 3));
+        Assert.Equal((1, 5), PanelMetrics.BandsOf(6, 1));
+        Assert.Equal((7, 0), PanelMetrics.BandsOf(7, 7));   // 上带 = 每屏 = 单条带
+    }
+
+    // 越界一律夹住：上带不能超过每屏（下带会成负数），每屏至少一行。
+    [Fact]
+    public void Bands_clamp_out_of_range_input()
+    {
+        Assert.Equal((5, 0), PanelMetrics.BandsOf(5, 9));   // 上带超过每屏 → 夹到每屏
+        Assert.Equal((1, 0), PanelMetrics.BandsOf(0, 0));   // 0 行 → 至少一行
+    }
+
+    // 这块屏放得下几行：工作区高度减去窗口自己的高度与两坑的边，再除以一行。
+    //
+    // 行数是**上限**，不是承诺——屏幕不够时面板会少显示几行（往下滚看得到）。
+    // 管理器把这句话如实说给用户（见 PanelManagerWindow.UpdateScreenRowsNote），
+    // 所以这个算式与面板那侧必须是同一份（PanelMetrics.WindowChrome / BandChrome）。
+    [Fact]
+    public void Screen_rows_follow_the_work_area()
+    {
+        // 最紧那一档（1366×768 @150%，可用高度 464）：(464-110-23)/78 = 4 行
+        Assert.Equal(4, PanelMetrics.ScreenRows(464, "normal", false));
+        // 1080p @150%（可用高度约 693）：(693-110-23)/78 = 7 行
+        Assert.Equal(7, PanelMetrics.ScreenRows(693, "normal", false));
+        // 紧凑档的行更矮（68 而非 78），同一块屏能多放一行
+        Assert.Equal(8, PanelMetrics.ScreenRows(693, "compact", false));
+    }
+
+    // 量不到屏幕时返回 0——那是「量不到」，不是「一行也放不下」。
+    [Fact]
+    public void Screen_rows_are_zero_when_the_screen_cannot_be_measured()
+        => Assert.Equal(0, PanelMetrics.ScreenRows(0, "normal", false));
 
     // 所有档位都必须给出可用的正数尺寸——0 或负数会让 WPF 把格子画成看不见的一点。
     [Fact]

@@ -695,7 +695,7 @@ internal sealed class ReminderScheduler
         ShowToast("Clockwork", Strings.Get("Toast_DndEndOfDay"), Views.ToastLevel.Info);
     }
 
-    /// <summary>「恢复提醒（剩 …）」那一行的文案。托盘与面板腰带共用这一份。</summary>
+    /// <summary>「恢复提醒（剩 …）」那一行的文案。托盘与面板底栏共用这一份。</summary>
     //
     // 一小时以内按分钟、超过就按小时。加了 8 小时和「到今天结束」两档之后，
     // 原来那句固定按分钟的写法会说出「剩 480 分钟」——一个要在心里除一遍才知道是多久的数。

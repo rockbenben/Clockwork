@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>Vuoi davvero eseguire «{0}»?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>Riesegui l'elenco di avvio? Verranno ripetiti questi elementi:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…e altri {0}</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Errore</value>
   </data>
@@ -1230,6 +1236,12 @@ Registro: {1}</value>
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Recenti</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Promemoria</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Ripara</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>Nessun log di avvio (esegui prima l'elenco di avvio)</value>
@@ -1878,7 +1890,7 @@ Registro: {1}</value>
     <value>Disposizione</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Colonne × righe in alto + righe in basso decide quanto entra in una pagina e quanto è largo il pannello. Il resto passa alla pagina successiva; metti 0 in basso per una sola fascia.</value>
+    <value>Colonne × righe per schermo decide quante schede stanno su uno schermo e quanto è largo il pannello; le righe in alto segnano dove cade la divisione (tante quante «righe per schermo» = una sola fascia). Le righe sono un limite massimo: uno schermo più piccolo ne mostra meno, il resto si scorre.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Riquadri per riga</value>
@@ -1910,8 +1922,8 @@ Registro: {1}</value>
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Righe in alto</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Righe in basso</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Righe per schermo</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Icona</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@ Registro: {1}</value>
   <data name="Panel_NewPage" xml:space="preserve">
     <value>Nuova pagina</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Metti un’azione qui</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ altri {0} qui sotto · scorri nel pannello per vederli</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>Questo schermo ne contiene {0} righe; le impostazioni ne indicano {1} — il pannello mostra quanto consente lo schermo, il resto si scorre.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>Non ci sono ancora pagine. Il simbolo «+» alla fine della barra delle schede crea una nuova pagina; a quel punto è possibile aggiungere delle azioni.</value>

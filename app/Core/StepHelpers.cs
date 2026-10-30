@@ -113,7 +113,7 @@ public static class StepHelpers
 
     // message 步骤呈现形态判定。三条路径（动作组运行 / 单步运行 / 开机清单）共用同一口径，别在各调用点重写。
     // Present="card" 优先：手改 json 同时配了 Confirm/OnYes 时卡片赢、后两者忽略——卡片只有「点击即关」
-    // 一种交互（NotificationToast.xaml.cs:42），挂不了动作，让 Confirm 赢会造出一个永远点不到的是/否。
+    // 一种交互（见 NotificationToast.xaml.cs 里那张卡：鼠标一按即关），挂不了动作，让 Confirm 赢会造出一个永远点不到的是/否。
     // Present 为空或无法识别 → 沿用旧推导，盘上老配置行为逐字不变。
     public static MessageForm MessageFormOf(LaunchStep s)
         => s.Present == "card" ? MessageForm.Card

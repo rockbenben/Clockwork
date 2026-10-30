@@ -895,7 +895,7 @@ public partial class MainWindow : Window
                 if (r.OnYes?.Type == "group" && r.OnYes.Target == g.Id) r.OnYes = new OnYes();
             }
             _launch?.RemoveWhere(RefsGroup, save: false);   // 随后的 DeleteSelected 会整体落盘，不写两次
-            // **删了行就得同步选中。** 这是本文件第 505 行那条规矩唯一漏掉的调用点：RemoveWhere 只对
+            // **删了行就得同步选中。** 这是本文件 SyncSelection 那条规矩唯一漏掉的调用点：RemoveWhere 只对
             // VM 的 SelectedIndex 做钳位，而删掉高亮行**之前**的一条时钳位是空操作（Math.Min(1,2)=1），
             // WPF 那边保住 SelectedItem 把 grid 索引前移一位却不发 SelectionChanged——两边就此错开。
             // 之后在启动清单页按「删除」，删掉的是另一条，而且直接落盘：静默丢数据。

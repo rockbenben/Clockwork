@@ -131,24 +131,35 @@
                                       Margin="10,0,0,4" SelectionChanged="Look_Changed"
                                       ToolTip="{loc:Loc Settings_PanelLayoutTip}"
                                       AutomationProperties.Name="{loc:Loc Settings_PanelColumns}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{loc:Loc Settings_PanelTopRows}"
+                            <!-- 「每屏行数」与「上带行数」各说一件事：前者是一屏装得下几行，
+                                 后者是分带的位置（等于每屏行数即单条带）。
+                                 从前给的是「上带行数 / 下带行数」——用户想表达的是「一屏几行」，
+                                 却得自己把两个数相加，而「下带行数」本身还是个怪量。 -->
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{loc:Loc Settings_PanelRowsPerScreen}"
                                        Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
-                            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="PanelTopRowsCombo" Width="54" Height="28"
+                            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="PanelRowsCombo" Width="54" Height="28"
+                                      Margin="10,0,0,4" SelectionChanged="Look_Changed"
+                                      ToolTip="{loc:Loc Settings_PanelLayoutTip}"
+                                      AutomationProperties.Name="{loc:Loc Settings_PanelRowsPerScreen}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Settings_PanelTopRows}"
+                                       Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Row="2" Grid.Column="1" x:Name="PanelTopRowsCombo" Width="54" Height="28"
                                       Margin="10,0,0,4" SelectionChanged="Look_Changed"
                                       ToolTip="{loc:Loc Settings_PanelLayoutTip}"
                                       AutomationProperties.Name="{loc:Loc Settings_PanelTopRows}"/>
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{loc:Loc Settings_PanelBottomRows}"
-                                       Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
-                            <ComboBox Grid.Row="2" Grid.Column="1" x:Name="PanelBottomRowsCombo" Width="54" Height="28"
-                                      Margin="10,0,0,4" SelectionChanged="Look_Changed"
-                                      ToolTip="{loc:Loc Settings_PanelLayoutTip}"
-                                      AutomationProperties.Name="{loc:Loc Settings_PanelBottomRows}"/>
                             <TextBlock Grid.Row="3" Grid.Column="0" Text="{loc:Loc Settings_PanelTileSize}"
                                        Style="{StaticResource FieldMicroLabel}" VerticalAlignment="Center"/>
                             <ComboBox Grid.Row="3" Grid.Column="1" x:Name="PanelTileSizeCombo" Width="100" Height="28"
                                       Margin="10,0,0,0" SelectionChanged="Look_Changed"
                                       AutomationProperties.Name="{loc:Loc Settings_PanelTileSize}"/>
                         </Grid>
+                        <!-- 行数是**上限**，不是承诺：屏幕放不下时面板会少显示几行（往下滚看得到）。
+                             平时这句话不出现——设置兑现得起时没人需要被提醒。
+                             放不下时它把这块屏实际放得下几行说出来：设置写着 4、屏幕上只有 1 行，
+                             那是「说空话」，而这块屏上放得下几行只有这里能说（面板跟着光标走，
+                             可能落在另一块屏上——那句话说的是**这块屏**，见 ScreenRowsNote 的代码）。 -->
+                        <TextBlock x:Name="ScreenRowsNote" Visibility="Collapsed" Margin="0,10,0,0"
+                                   Style="{StaticResource FieldHint}" TextWrapping="Wrap"/>
                         <!-- 两条导航栏的开关。它们**空着本来就不画**（只有一页没有页签栏、只有一类没有分类栏），
                              所以这两个勾的实际用途是「我知道有好几页，但我就是不想看见那条栏」。 -->
                         <CheckBox x:Name="PanelIconOnlyChk" Content="{loc:Loc Settings_PanelIconOnly}"

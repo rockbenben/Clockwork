@@ -75,7 +75,7 @@ public partial class IconPickerWindow : Window
             // 字形必须挂在自建的 TextBlock 上、并清掉 ContentTemplate：全局 Button 样式的
             // ContentTemplate 里那个 TextBlock 会命中全局 TextBlock 样式的 FontFamily setter，
             // 而显式 setter 压过从按钮继承下来的值——只设 Button.FontFamily 的话字形取不到，
-            // 渲染成一个空心方框（面板格子、页眉齿轮都踩过同一颗钉子）。
+            // 渲染成一个空心方框（面板格子、管理面板那颗方格都踩过同一颗钉子）。
             Content = new TextBlock
             {
                 Text = char.ConvertFromUtf32(codepoint),

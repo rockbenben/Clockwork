@@ -35,14 +35,17 @@ public sealed class TrayIcon : IDisposable
             ShowImageMargin = false,
             ShowCheckMargin = false,
         };
-        menu.Opening += (s, e) => { Rebuild(menu, app); SyncTip(); };
-        Rebuild(menu, app);   // 初始也建一份：空菜单在部分系统上首次右键不弹
+        menu.Opening += (s, e) => { Rebuild(menu, app, SyncTip); SyncTip(); };
+        Rebuild(menu, app, SyncTip);   // 初始也建一份：空菜单在部分系统上首次右键不弹
         _icon.ContextMenuStrip = menu;
         _icon.Text = TrayTip.Build(app.IsRunning, app.DndUntil, DateTime.Now, YieldLabel(app));
         _icon.DoubleClick += (s, e) => app.ShowMain();
     }
 
-    private void Rebuild(WinForms.ContextMenuStrip menu, App app)
+    /// <param name="forShots">截图用：把「修复」段的三项**强制摆出来**。
+    /// 它们平时只在出问题时才出现（钩子被抢 / 让路中 / 鼠标键卡住），
+    /// 而截图里看不到的那一段，就是最需要看的那一段。</param>
+    internal static void Rebuild(WinForms.ContextMenuStrip menu, App app, Action? syncTip = null, bool forShots = false)
     {
         // 清空前先释放上一轮的项：TrayMenu.SubMenu 会实体化 DropDown（一个 ToolStripDropDownMenu，是 Control），
         // 展开过一次就持有窗口句柄——只 Items.Clear() 不 Dispose 的话每次开菜单都漏一批 USER 对象，
@@ -59,21 +62,34 @@ public sealed class TrayIcon : IDisposable
         //
         // 但总开关关掉时这一项要收掉：那是「我不用这个功能」，而不是「热键没注册上」。
         // 留着一个点了什么都不发生的菜单项，比没有这一项更糟。
+        //
+        // 字形用**方格网**（与面板里「管理面板」同一个）：这一项开的就是那盘格子。
+        // 原来它挂的是「播放」——而「播放」在托盘里是「运行某个动作组」的意思，
+        // 同一个字形说两件事，扫菜单时那一列就没法读了。
         if (app.PanelEnabled)
-            menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Panel"), TrayGlyph.Run, (s, e) => app.TogglePanel()));
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Tray_Panel"), TrayGlyph.Tiles, (s, e) => app.TogglePanel()));
+        // ── 修复段 ──
         // 钩子被别的程序抢了链首（中键/手势按了没反应、心跳却正常，自愈不管这一种）时，
         // 任何配置形态都够得着的手动入口——手势管理器里那颗按钮只在开着手势时才看得见。
-        // 文案复用 Gesture_Rehook（各语言已齐），字形用「刷新」。
-        if (app.MouseHookActive)
-            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_Rehook"), TrayGlyph.Rerun, (s, e) => app.RehookMouse()));
+        // 文案复用 Gesture_Rehook（各语言已齐），字形用**扳手**（修复的意思，与「刷新」分得开）。
+        //
+        // **这一段带自己的小标题**：这几项只在出问题时才出现，平时根本不在菜单里。
+        // 它们和「显示主窗」这类日常项混在一起、又没有标题，于是出了事（右键是死的）
+        // 用户得在一堆日常项里找那条修问题的——而那正是最急的时候。
+        if (app.MouseHookActive || app.GestureYieldActive || app.HasStuckMouseButton || forShots)
+            menu.Items.Add(TrayMenu.Header(Strings.Get("Tray_SectionRepair")));
+        if (app.MouseHookActive || forShots)
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_Rehook"), TrayGlyph.Wrench, (s, e) => app.RehookMouse()));
         // 让路中给一条「立即恢复」：菜单是用户此刻唯一确定够得着的入口（管理器可能没开）。
-        if (app.GestureYieldActive)
-            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_YieldResume"), TrayGlyph.Run, (s, e) => app.EndGestureYield()));
+        // 字形用实心上箭头（抬起来 / 恢复）——「播放」留给「运行某个动作组」。
+        if (app.GestureYieldActive || forShots)
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_YieldResume"), TrayGlyph.ArrowUp, (s, e) => app.EndGestureYield()));
         // **人工逃生口**：系统里还有哪个鼠标键按着、而我们欠着一个抬起时，
         // 给用户一条手动松开的路——看门狗只认账上欠着的，真抬起被安全桌面吃掉的那一次
         // 要等下一次右键才被认领，在那之前用户的右键一直是死的。
-        if (app.HasStuckMouseButton)
-            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_ReleaseStuck"), TrayGlyph.Run, (s, e) => app.ReleaseStuckMouseButtons()));
+        // 字形用鼠标（这件事就是鼠标键的事）。
+        if (app.HasStuckMouseButton || forShots)
+            menu.Items.Add(TrayMenu.Item(Strings.Get("Gesture_ReleaseStuck"), TrayGlyph.Mouse, (s, e) => app.ReleaseStuckMouseButtons()));
 
         // 启动清单区（小标题复用「我的启动清单」标签页名，已多语言）
         menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Launch")));
@@ -99,43 +115,47 @@ public sealed class TrayIcon : IDisposable
 
         // 提醒区——勿扰折成子菜单：1/2/4/8 小时加「到今天结束」共五行，而它们都是低频操作，摊平不值当（动作组段则保持扁平，
         // 「运行：某组」是托盘最高频的动作，不能埋进 hover）。生效期间追加「恢复提醒（剩 N 分钟）」。
-        menu.Items.Add(TrayMenu.Header(Strings.Get("Tab_Reminder")));
+        //
+        // **这一段的小标题叫「提醒」，不叫「定时任务」**：它装的是「暂停提醒 / 快速提醒 / 恢复提醒」，
+        // 跟定时任务不是一回事。「定时任务」是主窗口那一页的名字（Tab_Reminder），
+        // 抄过来当托盘段标题，人会以为这里能管定时任务——点进去却只有勿扰与快速提醒。
+        menu.Items.Add(TrayMenu.Header(Strings.Get("Tray_SectionRemind")));
         var dnd = TrayMenu.SubMenu(Strings.Get("Tray_DndMenu"), TrayGlyph.Dnd, menu.Renderer, menu.Font);
         // 加了 8 小时：4 小时到「今天结束」之间原本是空的，而「一个工作日别吵我」正落在那儿。
         foreach (int h in new[] { 1, 2, 4, 8 })
         {
             int hh = h;
-            dnd.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Tray_Hours", hh), TrayGlyph.Dnd, (s, e) => { app.PauseReminders(hh); SyncTip(); }));
+            dnd.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Tray_Hours", hh), TrayGlyph.Dnd, (s, e) => { app.PauseReminders(hh); syncTip?.Invoke(); }));
         }
         // 「到今天结束」摆在小时档之后：它是这一列里唯一不用算的那一项，
         // 也是真实场景里最常说的那一句（今天在出差 / 在录屏 / 在开会）。到点自动失效，不必记得回来开。
         dnd.DropDownItems.Add(TrayMenu.Item(Strings.Get("Tray_DndEndOfDay"), TrayGlyph.Dnd,
-                                            (s, e) => { app.PauseRemindersUntilEndOfDay(); SyncTip(); }));
+                                            (s, e) => { app.PauseRemindersUntilEndOfDay(); syncTip?.Invoke(); }));
         menu.Items.Add(dnd);
         // 快速提醒——同样折成子菜单。它和勿扰是一对：一个让接下来安静，一个在接下来某刻叫你。
         // 五个档位覆盖绝大多数临场需求（煮面 / 番茄 / 会议前），要别的时长就去定时任务里建一条。
-        var quick = TrayMenu.SubMenu(Strings.Get("Tray_QuickRemind"), TrayGlyph.Log, menu.Renderer, menu.Font);
+        var quick = TrayMenu.SubMenu(Strings.Get("Tray_QuickRemind"), TrayGlyph.Timer, menu.Renderer, menu.Font);
         foreach (int m in new[] { 5, 15, 25, 30, 60 })
         {
             int mm = m;
-            quick.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Unit_Minutes", mm), TrayGlyph.Log, (s, e) => app.QuickReminder(mm)));
+            quick.DropDownItems.Add(TrayMenu.Item(Strings.Lf("Unit_Minutes", mm), TrayGlyph.Timer, (s, e) => app.QuickReminder(mm)));
         }
         menu.Items.Add(quick);
-        // 文案走 App.DndResumeLabel（面板腰带那一项用的是同一份）：一小时以内按分钟、超过按小时。
+        // 文案走 App.DndResumeLabel（面板底栏那一项用的是同一份）：一小时以内按分钟、超过按小时。
         // 各写一份的话，加了 8 小时和「到今天结束」两档之后，这里会说「剩 480 分钟」而那边说「剩 8 小时」。
         if (app.DndRemaining is TimeSpan left)
-            menu.Items.Add(TrayMenu.Item(app.DndResumeLabel(left), TrayGlyph.Run, (s, e) => { app.ResumeReminders(); SyncTip(); }));
+            menu.Items.Add(TrayMenu.Item(app.DndResumeLabel(left), TrayGlyph.Run, (s, e) => { app.ResumeReminders(); syncTip?.Invoke(); }));
 
         // 最近通知区——回看被点掉 / 被挤掉 / 已自动消失的卡片；点一条把它重新弹出来。
         // 会话级：重启即空，所以没通知时整区不出现（不留一个常年空着的小标题）。
         var recent = app.RecentNotifications;
         if (recent.Count > 0)
         {
-            var hist = TrayMenu.SubMenu(Strings.Get("Tray_History"), TrayGlyph.Log, menu.Renderer, menu.Font);
+            var hist = TrayMenu.SubMenu(Strings.Get("Tray_History"), TrayGlyph.Message, menu.Renderer, menu.Font);
             foreach (var n in recent)
             {
                 var nn = n;
-                hist.DropDownItems.Add(TrayMenu.Item($"{n.At:HH:mm}  {StepHelpers.Ellipsis(OneLine(n.Message), 36)}", TrayGlyph.Log,
+                hist.DropDownItems.Add(TrayMenu.Item($"{n.At:HH:mm}  {StepHelpers.Ellipsis(OneLine(n.Message), 36)}", TrayGlyph.Message,
                     (s, e) => app.ReplayNotification(nn)));
             }
             menu.Items.Add(hist);

@@ -451,7 +451,11 @@ public sealed class AppSettings
     // 凹槽分上下两条带，各自的行数。两条带没有语义差别——它们是**版面节奏**：
     // 一整块 7 行的方格阵读起来是一堵墙，切成 3 + 4 之后眼睛有了落点，找格子快得多
     //（同键盘分区、仪表分区的道理）。
-    // 上下加起来即一页的容量，装不下的翻到下一页。下带设 0 就退回单条带的老样子。
+    // 上下加起来是**一屏看得见几行**：这一页还有别的格子时，它们排在下面、在坑里往下滚，
+    // 不会被切成第二页（以前这两个数决定的是「一页切几屏」，页名于是被拆成「第 1 屏 / 第 2 屏」）。
+    // 设置面给的是**每屏行数**与**上带行数**，下带行数是算出来的（换算见 PanelMetrics.BandsOf），
+    // 存进配置的还是这两个数——旧配置不用搬，它那对数的意思没变。
+    // 下带设 0 就退回单条带的老样子。
     public int PanelTopRows { get; set; } = 3;
     public int PanelBottomRows { get; set; } = 4;
     // 格子尺寸档位：compact | normal | roomy。用字符串而不是枚举，与本模型里 Kind / IfPower /
@@ -459,6 +463,8 @@ public sealed class AppSettings
     public string PanelTileSize { get; set; } = "normal";
     // 是否显示底部那排自带操作（重跑清单 / 停止 / 勿扰 / 打开窗口）。
     // 默认开：它们是「面板存在的第二个理由」，但把它关掉是合理偏好——热键和托盘都够得着。
+    // 「重跑清单」会在跑之前弹一道整清单确认（见 RunOrchestrator.ConfirmRerunLaunchList），
+    // 所以它在这一排里是安全的；那一排四颗均分，少一颗就不成一排。
     public bool PanelShowOps { get; set; } = true;
     // 只显示图标、不显示文字。格子会收成接近正方，一屏能放下的数量大幅增加。
     // 名字仍在 ToolTip 上，所以这不是「藏起信息」，是「把信息挪到需要时才看」。

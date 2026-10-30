@@ -1038,6 +1038,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>「{0}」を実行してもよろしいですか？</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>起動リストを再実行しますか？次の項目がもう一度実行されます：</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…他 {0} 件</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · エラー</value>
   </data>
@@ -1236,6 +1242,12 @@
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>最近の通知</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>リマインダー</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>修復</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>起動ログはまだありません（先に起動リストを一度実行してください）</value>
@@ -1878,7 +1890,7 @@
     <value>レイアウト</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>列数 × 上段の行数 + 下段の行数で、1 ページに入る数とパネルの幅が決まります。入りきらない分は次のページへ。下段を 0 にすると 1 段になります。</value>
+    <value>列数 × 画面あたりの行数で、1 画面に何個収まるか、パネルの幅が決まります。上段の行数は分割の位置です（画面あたりの行数と同じなら 1 段になります）。行数は上限です — 小さい画面では少なく表示され、残りはスクロールして見ます。</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>1 行あたりのタイル数</value>
@@ -1910,8 +1922,8 @@
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>上段の行数</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>下段の行数</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>画面あたりの行数</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">アイコン</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@
   <data name="Panel_NewPage" xml:space="preserve">
     <value>新しいページ</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>ここにアクションを置く</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ 下にあと {0} 件 · パネル内でスクロールすると見えます</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>この画面には {0} 行入ります。設定は {1} 行です — パネルは画面に収まる分だけを表示し、残りはスクロールして見ます。</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>まだページはありません。ページタブレールの末尾にある「+」をクリックするとページが作成されます。その後、そのページにアクションを追加してください。</value>

@@ -40,7 +40,7 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
 | --- | --- |
 | **Sistem** | Windows 10 / 11, x64 |
 | **Kurulum** | Yok. Taşınabilir tek bir `Clockwork.exe` — istediğiniz klasöre koyun |
-| **Yönetici hakkı** | Yalnızca «Oturum açınca başlat» ve **yönetici olarak çalıştır** diye işaretlediğiniz adımlar için |
+| **Yönetici hakkı** | Yalnızca «Oturum açılışında başlat» ve **yönetici olarak çalıştır** diye işaretlediğiniz adımlar için |
 | **Ayarlarınız** | exe'nin yanındaki `clockwork.settings.json` (ilk çalıştırmada o klasör salt okunursa; sonrasında bulunduğu yerde kalır `%APPDATA%\Clockwork\`) — hiçbir şey makineden çıkmaz |
 | **Arayüz** | 18 dil ve koyu / açık tema. Dil ilk çalıştırmada Windows’u izler; tema koyu başlar ve Windows’u izleyecek şekilde ayarlanabilir |
 
@@ -53,7 +53,7 @@ Oturum açınca uygulamalarınızı otomatik başlatın · zamanlı hatırlatıc
    - **`Clockwork-<sürüm>-win-x64-needs-dotnet10.zip`** — kurulu bir [.NET 10 Masaüstü Çalışma Zamanı](https://dotnet.microsoft.com/download/dotnet/10.0) gerektirir. İnternete bağlı bir bilgisayarda bir kez kurun, sonraki her güncelleme çok küçük bir indirme olsun.
    - **`Clockwork.exe`** — yukarıdaki zip ile aynı yapı, sadece zip'siz: tıklayıp çalıştırın ya da mevcut kopyanızın üzerine kopyalayıp güncelleyin. Çalışma zamanı yoksa Windows indirmeyi kendisi önerir.
 2. Ayarlar penceresini açmak için çift tıklayın. Yüklenen örneklerin hepsi **işaretsiz** gelir — siz işaretlemeden hiçbir şey çalışmaz.
-3. Her açılışta çalıştırmak için: **Ayarlar** sekmesinde **Oturum açınca başlat**'ı işaretleyin (yönetici haklarıyla bir zamanlanmış görev kaydeder, böylece açılışta yığınla UAC istemi olmaz).
+3. Her açılışta çalıştırmak için: **Ayarlar** sekmesinde **Oturum açılışında başlat**'ı işaretleyin (yönetici haklarıyla bir zamanlanmış görev kaydeder, böylece açılışta yığınla UAC istemi olmaz).
 
 Sonrasında tepside durur: simgeye çift tıklayınca pencere açılır, pencerenin kapat düğmesi ise onu yalnızca yeniden gizler. Gerçekten çıkmak için tepsinin sağ tık menüsündeki **Çıkış**'ı kullanın.
 
@@ -68,7 +68,7 @@ Sonrasında tepside durur: simgeye çift tıklayınca pencere açılır, pencere
 - **Sırayı değiştirmek için satırı sürükleyin** — üç listenin hepsinde ve grup düzenleyicinin adım listesinde geçerlidir; yukarı/aşağı düğmeleri de çalışmaya devam eder.
 - **Kaydetmeden önce deneyin** — grup düzenleyicideki **▶ Bu adımı çalıştır** ve **▶ Grubu çalıştır**, o an ekranda olanı çalıştırır ve çalışırken düğme **■ Durdur**'a dönüşür.
 - **Çoğalt**, seçili görev ya da grubun bir kopyasını hemen altına ekler — neredeyse aynısını sıfırdan kurmaktan hızlıdır. **Silme her yerde önce onay ister.**
-- `Clockwork.exe`'ye çift tıklamak yalnızca pencereyi açar; başlangıç listesini yeniden **çalıştırmaz**. Bunun için tepsinin **Başlangıç listesini yeniden çalıştır**'ını kullanın.
+- `Clockwork.exe`'ye çift tıklamak yalnızca pencereyi açar; başlangıç listesini yeniden **çalıştırmaz**. Bunun için tepsinin **Başlangıç listesini yeniden çalıştır**'ını kullanın. — önce sorar ve bu çalıştırmanın neleri tekrarlayacağını gösterir.
 
 ## 365 Açık Kaynak Planı hakkında
 

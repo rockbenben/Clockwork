@@ -1038,6 +1038,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>確定要執行「{0}」嗎？</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>確定要重新執行啟動清單嗎？下面這些會再做一遍：</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…另有 {0} 項</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · 發生錯誤</value>
   </data>
@@ -1236,6 +1242,12 @@
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>最近通知</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>提醒</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>修復</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>還沒有啟動日誌（先跑一次啟動清單）</value>
@@ -1878,7 +1890,7 @@
     <value>版面</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>列數 × 上帶行數 + 下帶行數，決定一頁裝多少、面板多寬。裝不下的翻到下一頁；下帶設 0 即單條帶。</value>
+    <value>列數 × 每屏行數，決定一屏裝得下幾格、面板多寬；上帶行數是分帶的位置（等於每屏行數即單條帶）。行數是上限，螢幕不夠時面板會少顯示幾行，往下滾看得到。</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>每列格子數</value>
@@ -1910,8 +1922,8 @@
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>上帶行數</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>下帶行數</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>每屏行數</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">圖示</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@
   <data name="Panel_NewPage" xml:space="preserve">
     <value>新頁面</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>往這兒放一個動作</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ 還有 {0} 格 · 面板裡往下滾才看得到</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>這塊屏放得下 {0} 行，設定裡是 {1} 行 —— 面板按螢幕的實際高度顯示，往下滾看得到。</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>還沒有頁。用頁籤欄末尾那顆 + 新建一頁，再往裡放動作。</value>

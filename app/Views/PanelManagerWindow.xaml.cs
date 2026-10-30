@@ -106,7 +106,12 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         RenderPages();
         // 构造时左栏的页签刚填上去，量到的宽度未必是最终那一份（换语言/换版面都会变）；
         // 显示之后再按排版后的实际宽度重算一次封顶值。见 CapWidthToContent。
-        Loaded += (_, _) => CapWidthToContent();
+        Loaded += (_, _) =>
+        {
+            CapWidthToContent();
+            // 工作区高度要等窗口有了 HWND 才量得到（WindowSizing.WorkAreaHeight 走的是窗口所在那块屏）。
+            UpdateScreenRowsNote();
+        };
     }
 
     // 这个格子被点过几次。没有 = 从未统计过（角标不画）。
@@ -192,6 +197,9 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
 
         RenderBody();
         CapWidthToContent();
+        // 左栏列的页数会变（切分类、拖页归类），而面板上表圈里那把刻度露不露出来跟着它变——
+        // 它住在表圈里、不占内容区的高度，所以「这块屏放得下几行」这个读数不受它影响；
+        UpdateScreenRowsNote();
     }
 
     /// <summary>把窗口宽度封在「左栏 + 卡片 + 外观列」这一块的宽度上：
@@ -642,13 +650,21 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         VerticalAlignment = VerticalAlignment.Center,
     };
 
-    // 一页 = 一张卡：页眉 + 上带 + 发丝线 + 下带。**列数与分带都取用户当前的设置**，
-    // 不写死 4 列——类注释说「管理器里看到什么样，呼出来就是什么样」，那就得连版面节奏一起对上。
-    // 少了那条发丝线，这里看到的是一堵七行的方格墙，而面板上是 3+4 两段，两处根本不是一个东西。
+    // 一页 = 一张卡：页眉 + 发丝线（页眉下那条 1px）+ 上带 + 两带之间那道 6px 的缝 + 下带
+    // [+ 落在下面的那些 + 那行说明]。
+    // **列数与分带都取用户当前的设置**，不写死 4 列——类注释说「管理器里看到什么样，呼出来就是什么样」，
+    // 那就得连版面节奏一起对上。少了那道缝，这里看到的是一堵七行的方格墙，
+    // 而面板上是 3+4 两段，两处根本不是一个东西。
     //
-    // 空位只补到「当前行填满 + 再留一行」，不铺满整页容量：一页能放 28 个，
-    // 而多数页只有五六个动作，把余下二十几个空框全画出来，卡片会变成一片空盒子。
-    // 「还能放多少」交给页眉那个读数说，它一个字符顶二十个空框。
+    // **卡片只画面板第一屏看得见的那部分**（上带 + 下带），落在下面的另起一块并写明
+    // 「面板里要往下滚才看得到」——下带现在是有行数上限的（设置里那个「每屏行数」），
+    // 卡片下带走到底的话，「每屏 7 行 / 上带 3 行」与卡片对不上，而管理器那句话就只兑现了一半。
+    //
+    // 空位**不补**：从前补过整行半透明的「+」空位，那是两件错事叠在一起——
+    //   ① 它会顶出一整行：下带正好 4 行满时它再补 4 个空位，卡片于是有 5 行，
+    //      而设置写着「每屏 7 行 / 上带 3 行」（下带 4 行是算出来的）；
+    //   ② 它是假的：点哪一格都是追加到这一页末尾（AddStep 里是 Steps.Add），新格子并不出现在那儿。
+    // 现在「加一格」是页眉右端那颗恒定的按钮——面板上也是一颗表圈按钮，两处同一副面孔。
     private Border MakePageCard(PanelPageView page)
     {
         // 页本身就在 Source 上。**不能**从 Items[0].Page 反推——空页没有第一个格子，
@@ -657,12 +673,14 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         var owner = page.Source;
         int cols = PanelMetrics.ClampColumns(_config.Settings.PanelColumns);
         int topRows = PanelMetrics.ClampRows(_config.Settings.PanelTopRows);
+        int bottomRows = PanelMetrics.ClampRows(_config.Settings.PanelBottomRows);
 
-        // 与面板同一次分带（PanelLayout.SplitBands），不在这儿另算一遍。
-        var (top, bottom) = PanelLayout.SplitBands(page.Items, topRows, cols);
+        // 与面板同一次分带（PanelLayout.SplitVisible），不在这儿另算一遍。
+        var (top, bottom, below) = PanelLayout.SplitVisible(page.Items, topRows, bottomRows, cols);
 
-        var grid = MakeBand(top, cols, owner, bottom.Count == 0);
-        UniformGrid? lower = bottom.Count > 0 ? MakeBand(bottom, cols, owner, true) : null;
+        var grid = MakeBand(top, cols);
+        UniformGrid? lower = bottom.Count > 0 ? MakeBand(bottom, cols) : null;
+        UniformGrid? rest = below.Count > 0 ? MakeBand(below, cols) : null;
 
         // 页眉 = 这一页的属性条：名字、装了几个、归哪一类、只在哪个程序上出现。
         // 一页只有这几个字段，所以它们全在这条上——没有「其余设置」，也就不需要一扇设置窗。
@@ -678,11 +696,11 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
             _renaming = owner;
             RenderPages();
         };
-        // 名字(撑开) / 读数 / (空) / 归哪一类 / 只在哪个程序上出现
+        // 名字(撑开) / 读数 / (空) / 归哪一类 / 只在哪个程序上出现 / 加一格
         //
         // 页曾经也有一个图标，摆在这条最左边。它只在「这一页被别的格子指过来时」才起作用，
         // 而页独立成实体之后没有任何东西能指向一页（能被指的是**动作**），那个图标于是无处可用。
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
             head.ColumnDefinitions.Add(new ColumnDefinition
             { Width = i == 0 ? new GridLength(1, GridUnitType.Star) : GridLength.Auto });
 
@@ -735,17 +753,21 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         }
         Grid.SetColumn(title, 0);
         head.Children.Add(title);
-        // 容量读数：这一页放了几个、总共放得下几个。用等宽面——主题里 Cascadia Mono
+        // 读数：这一页有几个格。用等宽面——主题里 Cascadia Mono
         // 就是留给「机器读数」的（Theme.xaml），而这正是一个读数，不是一句话。
-        // 顺带它不需要翻译：一个斜杠两个数字，十八种语言下长得一样宽。
+        // 顺带它不需要翻译：一个数字，十八种语言下长得一样宽。
+        //
+        // **它不再有「总共放得下几个」那一半**：一页没有上限了，装不下的在面板的坑里往下滚。
+        // 悬停那句把口径说清楚——设置里那两个行数现在说的是「一屏看得见几行」。
         var meter = new TextBlock
         {
-            Text = $"{page.Items.Count}/{PanelMetrics.PageCapacity(_config.Settings.PanelTopRows, _config.Settings.PanelBottomRows, _config.Settings.PanelColumns)}",
+            Text = page.Items.Count.ToString(System.Globalization.CultureInfo.InvariantCulture),
             FontFamily = (FontFamily)FindResource("FontMono"),
             FontSize = 10.5,
             Foreground = (Brush)FindResource("BrushFaint"),
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(8, 0, 4, 0),
+            ToolTip = Strings.Get("Settings_PanelLayoutTip"),
         };
         Grid.SetColumn(meter, 1);
         head.Children.Add(meter);
@@ -849,6 +871,55 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
             head.Children.Add(catBtn);
         }
 
+        // 页眉右端那颗「+」：往这一页加一格。
+        //
+        // 它**不在格子阵里**，而且这是有意的：格子阵里只该有格子（面板上就是如此，
+        // 那儿的「+」也是一颗表圈按钮）。从前那排半透明的空位格是假的——
+        // 点哪一格都是追加到这一页末尾，新格子并不出现在那儿——
+        // 而且它会顶出一整行，把「每屏 7 行 / 上带 3 行」这个设置顶得对不上。
+        //
+        // 它同时仍是一个拖放落点：把一个格子拖到它上面 = 收进这一页末尾（与拖到左栏页签上同一件事）。
+        if (owner != null)
+        {
+            var add = new Button
+            {
+                Content = new TextBlock
+                {
+                    Text = char.ConvertFromUtf32(0xE710),
+                    FontFamily = new FontFamily("Segoe MDL2 Assets"),
+                    FontSize = 12,
+                    Foreground = (Brush)FindResource("BrushMuted"),
+                },
+                ContentTemplate = null,
+                Padding = new Thickness(6, 2, 6, 2),
+                MinWidth = 0,
+                Margin = new Thickness(2, 0, 2, 0),
+                ToolTip = Strings.Get("Btn_Add"),
+                AllowDrop = true,
+                Tag = new CellRef(owner, null),      // 落点 = 追加到这一页末尾
+            };
+            System.Windows.Automation.AutomationProperties.SetName(add, Strings.Get("Btn_Add"));
+            add.Click += (_, _) => { if (!_dragging) AddStep(owner, add); };
+            // 悬停提示：页签那颗用「整条淡下去」（它没有描边可用），这儿也一样。
+            add.DragOver += (_, e) =>
+            {
+                bool ok = e.Data.GetDataPresent(typeof(CellRef));
+                e.Effects = ok ? DragDropEffects.Move : DragDropEffects.None;
+                if (ok) add.Opacity = 0.55;
+                e.Handled = true;
+            };
+            add.DragLeave += (_, _) => add.Opacity = 1;
+            add.Drop += (_, e) =>
+            {
+                e.Handled = true;
+                add.Opacity = 1;
+                if (e.Data.GetData(typeof(CellRef)) is not CellRef src || src.Step is not { } step) return;
+                if (PanelReorder.Move(src.Page.Steps, step, owner.Steps, null)) Commit();
+            };
+            Grid.SetColumn(add, 5);
+            head.Children.Add(add);
+        }
+
         var body = new StackPanel { Margin = new Thickness(0, 0, 0, 6) };
         body.Children.Add(head);
         body.Children.Add(new Border
@@ -861,6 +932,13 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         if (lower != null)
         {
             body.Children.Add(Well(lower, top: 6));
+        }
+        // 落在第一屏之外的那些格子：另起一块，并在前面写明它们在面板上要往下滚才看得到。
+        // 不写这句，那一块就是「凭空多出来的一堆格子」；写了，它说的是面板上的真实位置。
+        if (rest != null)
+        {
+            body.Children.Add(FoldNote(below.Count));
+            body.Children.Add(Well(rest, top: 4));
         }
 
         return new Border
@@ -887,17 +965,29 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         Child = band,
     };
 
-    // 一条带。空位只补在最后一条带上——补在上带末尾会把下带整个顶下去，
-    // 而那条带在面板上是紧挨着发丝线的，位置一错，预览就不是预览了。
-    private UniformGrid MakeBand(IReadOnlyList<PanelItem> items, int cols, PanelPage? owner, bool padHere)
+    // 一条带。**只画真的格子**：空位不补。
+    //
+    // 从前补过整行半透明的「+」空位（补到「当前行填满 + 再留一行」），那是两件错事叠在一起：
+    //   ① 它会顶出一整行——下带正好 4 行满时它再补 4 个空位，卡片于是有 5 行，
+    //      而设置里写着「每屏 7 行 / 上带 3 行」（下带 4 行是算出来的）；
+    //   ② 它是假的——点哪一格都是追加到这一页末尾（AddStep 里是 Steps.Add），新格子并不出现在那儿。
+    // 「加一格」现在是页眉右端那颗恒定的按钮。
+    private UniformGrid MakeBand(IReadOnlyList<PanelItem> items, int cols)
     {
         var g = new UniformGrid { Columns = cols, Margin = new Thickness(3) };
         foreach (var it in items) g.Children.Add(MakeTile(it));
-        if (!padHere) return g;
-        int slots = Math.Max(cols * 2, ((items.Count / cols) + 1) * cols) - items.Count;
-        for (int i = 0; i < slots; i++) g.Children.Add(MakeSlot(owner));
         return g;
     }
+
+    // 「这一屏之外的那些格子」的那行说明。写在那一块之前，指着它说：
+    // 这些格子在面板上要往下滚才看得到——卡片画的是整页，面板只露得下第一屏。
+    private TextBlock FoldNote(int count) => new TextBlock
+    {
+        Text = Strings.Lf("Panel_BelowFold", count),
+        FontSize = 10.5,
+        Foreground = (Brush)FindResource("BrushFaint"),
+        Margin = new Thickness(10, 10, 10, 2),
+    };
 
     // ── 格 ──
 
@@ -924,17 +1014,6 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         del.Click += (_, _) => DeleteStep(it.Page, it.Step);
         menu.Items.Add(del);
         b.ContextMenu = menu;
-        return b;
-    }
-
-    // 空位：点了就往这一页加东西。压到很淡——它不是一个动作，是一个位置。
-    private Button MakeSlot(PanelPage? owner)
-    {
-        var b = NewCell("", 0.28);
-        if (owner != null) b.Tag = new CellRef(owner, null);
-        b.ToolTip = Strings.Get("Panel_AddHere");
-        SetCellIcon(b, new PanelIconSpec(PanelIconKind.Glyph, char.ConvertFromUtf32(0xE710), ""), System.Math.Round(Metrics.GlyphFont * 1.25));
-        b.Click += (_, _) => { if (!_dragging && owner != null) AddStep(owner, b); };
         return b;
     }
 
@@ -1326,19 +1405,26 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
                 PanelColumnsCombo.Items.Add(new ComboBoxItem { Content = n.ToString(), Tag = n });
             PanelColumnsCombo.SelectedIndex = PanelMetrics.ClampColumns(_config.Settings.PanelColumns) - PanelMetrics.MinColumns;
 
-            // 上下两条带的行数。**下带可以为 0，上带不行**：
-            //   下带 0 = 退回单条带，是个合理的偏好，不该逼用户在「至少一行」和「关掉」之间二选一；
-            //   上带 0 则只在下带也为 0 时才有意义，而 0+0 是一个坏配置 ——
-            //   PageCapacity 会退回兜底容量（= 列数），上条带永远空着，面板却按 4 格一页翻，
-            //   界面上没有任何东西解释为什么。PanelMetrics 的注释一直断言「下拉给不出 0+0」，
-            //   而在这条修好之前，下拉给得出。
-            for (int n = 1; n <= PanelMetrics.MaxRows; n++)
-                PanelTopRowsCombo.Items.Add(new ComboBoxItem { Content = n.ToString(), Tag = n });
-            for (int n = PanelMetrics.MinRows; n <= PanelMetrics.MaxRows; n++)
-                PanelBottomRowsCombo.Items.Add(new ComboBoxItem { Content = n.ToString(), Tag = n });
+            // 设置面给的是**每屏行数**（一屏装得下几行）与**上带行数**（分带的位置）。
+            //
+            // 从前给的是「上带行数 / 下带行数」，可用户想表达的是「一屏几行」，
+            // 得自己把两个数相加；而「下带行数」本身还是个怪量——它是「分带以下露几行」，
+            // 不是一个能独立想清楚的数。
+            //
+            // 面板内部仍然记「上带几行 + 下带几行」，下带 = 每屏 − 上带（换算在 Core.PanelMetrics.BandsOf，
+            // 两边共用一份）。**旧配置不用搬**：它那对数的意思没变，只是设置面换了说法。
+            //
+            // 「上带 = 每屏」即单条带（从前是「下带 0」）——分带落在内容末尾，下面那条带就没有了。
+            for (int n = 1; n <= PanelMetrics.MaxScreenRows; n++)
+                PanelRowsCombo.Items.Add(new ComboBoxItem { Content = n.ToString(), Tag = n });
+            int rows = PanelMetrics.ClampRows(_config.Settings.PanelTopRows)
+                     + PanelMetrics.ClampRows(_config.Settings.PanelBottomRows);
+            PanelRowsCombo.SelectedIndex = Math.Max(1, Math.Min(rows, PanelMetrics.MaxScreenRows)) - 1;
+            // **上带的选项要在每屏行数定下来之后才填**：它的范围是 1..每屏，
+            // 顺序反了的话它只会剩一个选项（而选中项越界，WPF 会悄悄夹到第一个）。
+            FillTopRowsItems();
             // 上带的选项从 1 开始，所以索引要减 1；手改 json 写了 0 的按 1 显示（存的值由 ClampRows 兜住）。
             PanelTopRowsCombo.SelectedIndex = Math.Max(1, PanelMetrics.ClampRows(_config.Settings.PanelTopRows)) - 1;
-            PanelBottomRowsCombo.SelectedIndex = PanelMetrics.ClampRows(_config.Settings.PanelBottomRows) - PanelMetrics.MinRows;
 
             // 档位标签走 resx（Size_compact / Size_normal / Size_roomy），值存英文 id——
             // 存本地化文案的话，换一次界面语言配置就读不回来了。
@@ -1360,10 +1446,15 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         if (_loadingLook) return;
         if ((PanelColumnsCombo.SelectedItem as ComboBoxItem)?.Tag is int cols)
             _config.Settings.PanelColumns = PanelMetrics.ClampColumns(cols);
-        if ((PanelTopRowsCombo.SelectedItem as ComboBoxItem)?.Tag is int top)
-            _config.Settings.PanelTopRows = PanelMetrics.ClampRows(top);
-        if ((PanelBottomRowsCombo.SelectedItem as ComboBoxItem)?.Tag is int bottom)
-            _config.Settings.PanelBottomRows = PanelMetrics.ClampRows(bottom);
+        // 「每屏行数」变了，上带的可选范围也跟着变（上带不能超过每屏）——
+        // **先重填、再读**：重填会把上带夹到合法范围，读到的才是夹过之后的那个值。
+        if (sender == PanelRowsCombo) FillTopRowsItems();
+        // 「每屏行数」与「上带行数」换算成面板内部的那对数（换算只有一处，见 Core.PanelMetrics.BandsOf）。
+        int rows = (PanelRowsCombo.SelectedItem as ComboBoxItem)?.Tag is int r ? r : 1;
+        int top = (PanelTopRowsCombo.SelectedItem as ComboBoxItem)?.Tag is int t ? t : 1;
+        var bands = PanelMetrics.BandsOf(rows, top);
+        _config.Settings.PanelTopRows = bands.Top;
+        _config.Settings.PanelBottomRows = bands.Bottom;
         if ((PanelTileSizeCombo.SelectedItem as ComboBoxItem)?.Tag is string size)
             _config.Settings.PanelTileSize = PanelMetrics.NormalizeSize(size);
         _config.Settings.PanelShowOps = PanelShowOpsChk.IsChecked == true;
@@ -1373,6 +1464,42 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         _save();
         // 预览必须当场重画：格子尺寸/只显示图标改的是 PanelMetrics，而每一格的宽高都由它算。
         RenderPages();
+        UpdateScreenRowsNote();
+    }
+
+    // 上带行数的可选范围 = 1..每屏行数。
+    // 上带不能超过每屏：超了，下带就成了负数（面板那边下带是「其余全部」，负数没意义）。
+    private void FillTopRowsItems()
+    {
+        int rows = (PanelRowsCombo.SelectedItem as ComboBoxItem)?.Tag is int r ? r : 1;
+        int keep = (PanelTopRowsCombo.SelectedItem as ComboBoxItem)?.Tag is int t ? t : 1;
+        PanelTopRowsCombo.Items.Clear();
+        for (int n = 1; n <= rows; n++)
+            PanelTopRowsCombo.Items.Add(new ComboBoxItem { Content = n.ToString(), Tag = n });
+        PanelTopRowsCombo.SelectedIndex = Math.Max(0, Math.Min(keep, rows) - 1);
+    }
+
+    // 「这块屏放得下几行」——**行数是上限，不是承诺**。
+    //
+    // 屏幕放不下时面板会少显示几行（往下滚看得到），而这件事只有设置里说得出来：
+    // 用户在管理器里把「每屏行数」设成 7，落到小屏上实际只露得下 4 行，
+    // 界面从不说这件事 —— 那就是设置在说空话。
+    //
+    // 放得下时**不说话**：没人需要被提醒「你的设置兑现得起」。
+    //
+    // 算的是**这块屏**（管理器所在的那块）：面板跟着光标走，可能落在另一块屏上，
+    // 所以这句话说的是「你现在看着的这块屏放得下几行」，不是「面板一定会显示几行」。
+    private void UpdateScreenRowsNote()
+    {
+        double work = WindowSizing.WorkAreaHeight(this);
+        if (work <= 0) { ScreenRowsNote.Visibility = Visibility.Collapsed; return; }
+        int want = PanelMetrics.ClampRows(_config.Settings.PanelTopRows)
+                 + PanelMetrics.ClampRows(_config.Settings.PanelBottomRows);
+        int fit = PanelMetrics.ScreenRows(work, _config.Settings.PanelTileSize,
+                                         _config.Settings.PanelIconOnly);
+        if (fit <= 0 || fit >= want) { ScreenRowsNote.Visibility = Visibility.Collapsed; return; }
+        ScreenRowsNote.Text = Strings.Lf("Panel_ScreenRows", fit, want);
+        ScreenRowsNote.Visibility = Visibility.Visible;
     }
 
     private void Close_Click(object sender, RoutedEventArgs e) => Close();

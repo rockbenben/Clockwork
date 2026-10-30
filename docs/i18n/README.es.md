@@ -32,7 +32,7 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 - ⚡ **Panel rápido** — una tecla (por defecto `Ctrl+Alt+Space`) abre una rejilla de mosaicos justo donde ya está el ratón: tus propias acciones, más reejecutar la lista, detener, no molestar y abrir la ventana. Haz clic en un mosaico, o llega a él con las flechas y pulsa Intro; **Esc** o un clic fuera lo cierra. También está en el menú del área de notificación, así que borrar la tecla apaga el atajo, no la función. ¿Prefieres el ratón? Activa **mantener pulsado el botón central** y se abre sin tocar el teclado; el clic central normal sigue funcionando. Las páginas del panel las creas y las ordenas tú en el gestor de paneles, y cada casilla de una página es una sola operación: así conviven bloquear la pantalla, silenciar, abrir una app, abrir una URL y «ejecutar un grupo entero». Cuando acumules muchas páginas, agrúpalas: **la fila superior elige una categoría y la columna izquierda lista las páginas de esa categoría**; ambas se ordenan arrastrando. Sin categorías todo queda en *Sin categoría* y la fila de categorías ni siquiera aparece. ¿No la usas en absoluto? **Ajustes → Usar el panel rápido** desactiva la función en sí, atajo y botón central a la vez.
 - 🖱️ **Gestos del ratón** — mantén el **botón derecho**, dibuja un trazo y se ejecuta la acción correspondiente. Ocho direcciones y cualquier tipo de paso (incluido ejecutar un grupo entero). El trazo se dibuja en pantalla mientras lo haces y desaparece al soltar. **Vienen diez listos para usar** (copiar / pegar / atrás / adelante / buscar el texto seleccionado (↑↓) / ir al final, más las cuatro diagonales para minimizar, maximizar, fijar encima y cerrar): úsalos tal cual o reescríbelos. El coste, dicho de entrada: basta un gesto activo para que el botón derecho quede tomado, así que **arrastrar con el botón derecho pide una pausa previa** — pulsa, quédate quieto unos 0,2 s y entonces arrastra (arrastrar un archivo con el botón derecho en el Explorador, girar la vista en una app 3D). Si prefieres que no se toque el botón derecho en absoluto, la fila de título del gestor de gestos tiene un interruptor general. Tampoco tienes que usar los incorporados: apaga ese interruptor, deja que dibujen WGestures / StrokesPlus / Quicker y mantén aquí las acciones con `Clockwork.exe --run-group "Concentración"`. Ese interruptor también está en la pestaña **Ajustes**: **Usar gestos del ratón**. En la primera ejecución, el interruptor principal de los gestos del ratón está desactivado; actívalo en la pestaña Ajustes o en la barra de título del gestor de gestos.
 
-> **Detenlo cuando quieras** — el botón de detención al final de la barra de pestañas (solo aparece mientras algo se ejecuta), bandeja → **Detener acciones en ejecución**, o el atajo de pánico global (por defecto `Ctrl+Alt+Q`). Las esperas largas se cortan, no se aguantan.
+> **Detenlo cuando quieras** — el botón de detención al final de la barra de pestañas (solo aparece mientras algo se ejecuta), bandeja → **Detener acciones en curso**, o el atajo de pánico global (por defecto `Ctrl+Alt+Q`). Las esperas largas se cortan, no se aguantan.
 
 ## Requisitos
 
@@ -40,7 +40,7 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
 | --- | --- |
 | **Sistema** | Windows 10 / 11, x64 |
 | **Instalación** | Ninguna. Un solo `Clockwork.exe` portátil — ponlo en cualquier carpeta |
-| **Administrador** | Solo para «Iniciar al arrancar sesión» y para los pasos que marques **ejecutar como administrador** |
+| **Administrador** | Solo para «Iniciar al iniciar sesión» y para los pasos que marques **ejecutar como administrador** |
 | **Tu configuración** | `clockwork.settings.json` junto al exe (o `%APPDATA%\Clockwork\` si esa carpeta era de solo lectura en el primer arranque; después se queda donde quedó) — nada sale del equipo |
 | **Interfaz** | 18 idiomas y tema claro / oscuro. El idioma sigue a Windows en el primer arranque; el tema empieza en oscuro y puede seguir a Windows |
 
@@ -53,7 +53,7 @@ Abre tus aplicaciones automáticamente al iniciar sesión · recordatorios progr
    - **`Clockwork-<versión>-win-x64-needs-dotnet10.zip`** — necesita el [entorno de ejecución de escritorio de .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) instalado. Instálalo una vez en un PC con internet y cada actualización posterior será una descarga mínima.
    - **`Clockwork.exe`** — la misma compilación del zip anterior, sin zip alrededor: haz clic y ejecútalo, o sobrescribe tu copia actual para actualizar. Si falta el entorno de ejecución, Windows te ofrece la descarga.
 2. Haz doble clic para abrir la ventana de configuración. Los ejemplos que carga vienen todos **sin marcar** — no se ejecuta nada hasta que tú lo marques.
-3. Para ejecutarlo en cada arranque: en la pestaña **Ajustes**, marca **Iniciar al arrancar sesión** (registra una tarea programada con permisos de administrador, así no hay una avalancha de avisos de UAC al arrancar).
+3. Para ejecutarlo en cada arranque: en la pestaña **Ajustes**, marca **Iniciar al iniciar sesión** (registra una tarea programada con permisos de administrador, así no hay una avalancha de avisos de UAC al arrancar).
 
 Después se queda en la bandeja: doble clic en el icono para abrir la ventana, y el botón de cerrar solo vuelve a ocultarla. Para salir de verdad, usa **Salir** en el clic derecho de la bandeja.
 
@@ -68,7 +68,7 @@ Después se queda en la bandeja: doble clic en el icono para abrir la ventana, y
 - **Arrastra una fila para reordenarla** — en las tres listas y en la lista de pasos del editor de grupos; los botones de subir/bajar siguen funcionando.
 - **Pruébalo antes de guardar** — **▶ Ejecutar este paso** y **▶ Ejecutar grupo** del editor de grupos ejecutan lo que hay ahora en pantalla, y el botón se convierte en **■ Detener** mientras dura.
 - **Duplicar** clona la tarea o el grupo seleccionado justo debajo — más rápido que rehacer uno casi idéntico. **Eliminar siempre pide confirmación**, en todas partes.
-- Hacer doble clic en `Clockwork.exe` solo abre la ventana; **no** vuelve a ejecutar la lista de inicio. Para eso usa **Reejecutar lista de inicio** de la bandeja.
+- Hacer doble clic en `Clockwork.exe` solo abre la ventana; **no** vuelve a ejecutar la lista de inicio. Para eso usa **Reejecutar lista de inicio** de la bandeja. — pregunta primero y muestra lo que esta ejecución repetiría.
 
 ## Sobre el Plan 365 de código abierto
 

@@ -21,14 +21,15 @@ Those settings live in the profiles rather than the csproj on purpose: on the cs
 
 ## Self-checks
 
-Five switches built into the exe (see `app/DevChecks.cs` and `app/DevSelfTest.cs`). They run before the single-instance check, so a Clockwork already sitting in your tray keeps working; each exits on its own and writes a verdict marker to `%TEMP%\clockwork-smoke.txt` / `clockwork-selftest.txt` / `clockwork-shots.txt` / `clockwork-hookprobe.txt`:
+Six switches built into the exe (see `app/DevChecks.cs` and `app/DevSelfTest.cs`). They run before the single-instance check, so a Clockwork already sitting in your tray keeps working; each exits on its own; four of them also write a verdict marker to `%TEMP%\clockwork-smoke.txt` / `clockwork-selftest.txt` / `clockwork-shots.txt` / `clockwork-hookprobe.txt`:
 
 ```powershell
 .\Clockwork.exe --smoke              # constructs and lays out every window, asserts each got a real size —
                                      # XAML is lazy-loaded, so a broken window throws nothing until opened
-.\Clockwork.exe --selftest           # drives the question dialogs (prompt / choice) end to end in a real
-                                     # process — the checks that need a live window and therefore cannot
-                                     # live in app.Tests. CI gates on this one too
+.\Clockwork.exe --selftest           # drives the modal dialogs end to end in a real process — the question
+                                     # dialogs (prompt / choice) and the confirmation that guards a manual
+                                     # rerun of the whole startup list — the checks that need a live window
+                                     # and therefore cannot live in app.Tests. CI gates on this one too
 .\Clockwork.exe --shots shots-dir    # renders every tab of every window to PNG: 3 widths × 5 work-area
                                      # heights × 6 languages, plus one light-theme pass — on the order of
                                      # ten thousand images (the exact total moves with every window and
@@ -38,6 +39,13 @@ Five switches built into the exe (see `app/DevChecks.cs` and `app/DevSelfTest.cs
 .\Clockwork.exe --screenshots out    # the three README screenshots (en / zh-CN / zh-TW) at a fixed size.
                                      # Separate from --shots because README wants three fixed languages
                                      # at one size, not the "find the clipping" matrix
+.\Clockwork.exe --trayshot out.png   # renders the tray menu to a PNG. It is the screen you look at most
+                                     # often and it is not a WPF window, so --shots cannot reach it —
+                                     # which is how two glyph collisions and a misaligned section
+                                     # header survived for so long. The menu flashes at the top-left
+                                     # corner of the screen for about a fifth of a second.
+                                     # Add --repair to force the normally hidden "Fix" section
+                                     # into the shot (it only appears when something is wrong)
 .\Clockwork.exe --hookprobe          # installs a bare WH_MOUSE_LL *and* a real MouseHook side by side,
                                      # counts events for 12 s, exits. Answers the one question the app
                                      # itself cannot: is the low-level mouse hook getting input on this

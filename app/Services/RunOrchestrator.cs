@@ -107,6 +107,15 @@ internal sealed class RunOrchestrator
     {
         if (Interlocked.Exchange(ref _launchRunning, 1) == 1) return;   // 已有一次在跑，忽略
         Native.WindowManager.MarkForegroundBaseline();   // 「恢复活动窗口」要回的就是此刻这个
+        // 手动重跑先问一句。开机那一次不问：那时没人在座，问就是问空气（boot=true 跳过这道）。
+        // 顺序也有讲究：基线在问之前记，因为确认框是置顶的，它一弹出来前台就换人了——
+        // 基线要的是「用户按下那一下时前台是谁」。
+        if (!boot && !ConfirmRerunLaunchList())
+        {
+            // 取消也要把闸放回去：不然这一次的闸就永远留在 1，「重跑清单」从此点不动。
+            Interlocked.Exchange(ref _launchRunning, 0);
+            return;
+        }
         var cfg = _config.SnapshotForRun();   // 快照列表：开机延迟期间 UI 增删步骤不会让后台枚举抛「集合已修改」
         var selfPaths = new[] { _exePath };
         var cfgDir = CfgDir;
@@ -475,4 +484,31 @@ internal sealed class RunOrchestrator
         => Disp.Invoke(() => Views.BrandDialog.Confirm(
             owner, Strings.Get("Confirm_Title"), Lf("Confirm_Destructive", action), Views.ToastLevel.Warn,
             action, Strings.Get("Ed_Cancel")));
+
+    // 手动重跑整份启动清单的确认框：把「这一次会做哪几件事」摊开，让人看着内容按下去。
+    //
+    // 为什么要有这道：托盘菜单里那一句「重新运行启动清单」只有七个字，而清单里的步骤多半不可逆
+    // （关窗口、发按键、结束程序）。点下去就没有回头路——补救只能靠日志，而日志要跑完才写。
+    // **面板底栏那颗与托盘那一条走的是同一段代码**（见 PanelCoordinator.BuildPanelOps），
+    // 所以两处都会先弹这道确认——闸不在「哪一处入口」上，而在「手动重跑」这条路上。
+    //
+    // 为什么只问这一次、不是逐条问：逐条问会把一次重跑变成十几次点击，而连点十几次的人早就不看
+    // 内容了——那道闸就白设了，还把「重跑」变成一件比开机还费劲的事。
+    // 真正不可逆的那几步（关机/重启/注销）另有自己的一道（见 SystemCommands.IsDestructive），
+    // 两道闸问的是两件事：这一道问「整份清单现在跑不跑」，那几道问「这一件现在做不做」。
+    //
+    // owner=null：托盘与面板底栏两处点进来的，都没有「属于谁」的主窗可认。无主时 BrandDialog
+    // 自己置顶，见得着，也不会把主界面一起拽到前台（见 BrandDialog.Show 的说明）。
+    private bool ConfirmRerunLaunchList()
+    {
+        var cfg = _config.SnapshotForRun();
+        var (total, lines, more) = LaunchPreview.Build(cfg, DateTime.Now);
+        // 清单里没有会跑的条目 → 没什么可确认的（跑了也是空转），直接放行，不拿一个空框烦人。
+        if (total == 0) return true;
+        // 「是」那颗印动作名（重新运行启动清单）：与 ConfirmDestructive 同一口径——
+        // 手在键盘上、屏幕上还是别人的程序时，用户要看见自己按下去的是哪件事。
+        return Disp.Invoke(() => Views.BrandDialog.Confirm(
+            null, Strings.Get("Confirm_Title"), LaunchPreview.Message(lines, more), Views.ToastLevel.Warn,
+            Strings.Get("Tray_Rerun"), Strings.Get("Ed_Cancel")));
+    }
 }

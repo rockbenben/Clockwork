@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>Tem certeza de que deseja executar «{0}»?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>Reexecutar a lista de inicialização? Os itens abaixo serão repetidos:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…e mais {0}</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Erro</value>
   </data>
@@ -1230,6 +1236,12 @@ Registro: {1}</value>
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Recentes</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Lembretes</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Reparar</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>Ainda não há log de inicialização (execute a lista de inicialização primeiro)</value>
@@ -1878,7 +1890,7 @@ Registro: {1}</value>
     <value>Disposição</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Colunas × linhas em cima + linhas embaixo define quanto cabe numa página e a largura do painel. O resto passa para a página seguinte; ponha 0 embaixo para uma única faixa.</value>
+    <value>Colunas × linhas por tela define quantos mosaicos cabem numa tela e a largura do painel; as linhas de cima marcam onde fica a divisão (iguais às linhas por tela = uma única faixa). As linhas são um limite superior — uma tela menor mostra menos e o resto se rola.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Blocos por linha</value>
@@ -1910,8 +1922,8 @@ Registro: {1}</value>
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Linhas em cima</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Linhas embaixo</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Linhas por tela</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Ícone</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@ Registro: {1}</value>
   <data name="Panel_NewPage" xml:space="preserve">
     <value>Nova página</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Colocar uma ação aqui</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ mais {0} abaixo · role no painel para vê-los</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>Esta tela cabe {0} linhas; as configurações dizem {1} — o painel mostra o que a tela permite e o resto se rola.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>Ainda não há páginas. O sinal «+» no final da barra de abas cria uma página; em seguida, insira as ações nela.</value>

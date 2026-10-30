@@ -229,6 +229,10 @@ public partial class BrandDialog : Window
             dlg.Topmost = true;
             DialogForeground.Arm(dlg);   // 同 Make：无主即不请自来，键盘焦点不能留在背后的程序上
         }
+        // 自查钩子（--selftest）也挂在这儿，不只挂在问句那条路上：
+        // 确认框同样模态、同样只能从里面驱动（手动重跑清单之前那道就是它），
+        // 而那一道是**唯一**能挡住「重跑整份清单」的地方——弹不出来没人知道。
+        if (Rehearse is { } script) dlg.ContentRendered += (_, _) => script(dlg);
         dlg.ShowDialog();
         return dlg.Result;
     }

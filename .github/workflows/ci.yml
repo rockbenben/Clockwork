@@ -86,7 +86,8 @@ jobs:
 
       # 问句弹框是模态的，从外面驱动不了它，所以这条链（打字 → 点确定 → 答案进变量 →
       # 后面的步骤用得上）进不了 app.Tests。--selftest（app/DevSelfTest.cs）在真进程里
-      # 按脚本点一遍，7 条检查。同 --smoke：成败以 marker 为准，退出码只在明确非零时才判失败。
+      # 按脚本点一遍，条数写在 marker 里、不写死在这里（写死的数每次加检查都会过期）。
+      # 同 --smoke：成败以 marker 为准，退出码只在明确非零时才判失败。
       # 它第一次跑就抓到一个线上的死递归（SystemCommands.ClipboardText 调它自己），
       # 那种错会让进程当场消失、日志里一个字都不留——正是单元测试罩不到的那一类。
       - name: Self-test (drive the ask dialog end to end)

@@ -7,7 +7,7 @@ using Xunit;
 // 每个 {StaticResource Key} 必须真有其物——StaticResource 在**模板第一次实例化**时才解析，
 // 写错一个键名，单元测试与窗口构造全程绿灯，直到用户在真机上打开那扇菜单/弹出层才炸。
 // 实测漏过一次：Theme.xaml 的全局 MenuItem 模板写成 FontCode（真名 FontMono），
-// 1812 条测试全绿，--smoke 真正弹出菜单时才 XamlParseException。
+// 全量测试全绿，--smoke 真正弹出菜单时才 XamlParseException。
 // 这里做全仓库 XAML 的「引用键 ⊆ 定义键」静态对账；--smoke 继续负责实例化那另一半。
 public class StaticResourceTests
 {

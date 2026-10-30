@@ -5,9 +5,9 @@ using Xunit;
 
 // 面板的两条导航栏：**上边是分类，左边是这一类里的页**——父子，不是平行的两处。
 //
-// 它们和腰栏那排圆点分工明确：**栏回答「哪一页」，圆点回答「这一页的第几屏」**——
-// 以前这两件事挤在同一排点里，于是一个装不下的页被切成三屏之后，
-// 那三个点看着和「三个不同的页」一模一样。
+// 它们和表圈里那排圆点分工明确：**栏回答「哪一页」，圆点也回答「哪一页」，但两者不同时出现**。
+// 以前圆点答的是「这一页的第几屏」——那一页被容量切成几屏之后，
+// 那几个点看着和「几个不同的页」一模一样，而页是有名字的，人认路靠的正是名字。
 public class PanelRailTests
 {
     private static PanelPage Page(string name, int steps, string tab = "")
@@ -19,23 +19,16 @@ public class PanelRailTests
 
     private static List<PanelPage> Groups(params PanelPage[] gs) => gs.ToList();
 
-    // ── 页签：一页一条，不管它被切成几屏 ──
+    // ── 页签：一页一条 ──
 
+    // 一页装多少格都不影响页签的条数：格子多了在坑里往下滚，不切成第二页。
     [Fact]
-    public void One_tab_per_page_however_many_screens_it_takes()
+    public void One_tab_per_page_however_many_tiles_it_takes()
     {
-        // 6 个步骤、每屏装 2 个 → 切成 3 屏，但页签只该有 1 条。
-        var pages = PanelLayout.BuildPages(Groups(Page("手边", 6)), null, capacity: 2);
-        Assert.Equal(3, pages.Count);                 // 三屏
+        var pages = PanelLayout.BuildPages(Groups(Page("手边", 30)));
+        Assert.Single(pages);                 // 30 格仍是一页
         Assert.Single(PanelLayout.Tabs(pages));       // 一条页签
         Assert.Equal("手边", PanelLayout.Tabs(pages)[0].Title);
-    }
-
-    [Fact]
-    public void Screens_are_numbered_within_their_page()
-    {
-        var pages = PanelLayout.BuildPages(Groups(Page("甲", 5), Page("乙", 3)), null, capacity: 2);
-        Assert.Equal(new[] { 0, 1, 2, 0, 1 }, pages.Select(p => p.Screen));
     }
 
     [Fact]
@@ -60,11 +53,6 @@ public class PanelRailTests
         Assert.Empty(pages[0].Items);
     }
 
-    // 切屏那一步会第二次弄丢它：一页零格切不出任何一屏，循环一次都不进。
-    [Fact]
-    public void An_empty_page_survives_capacity_chunking()
-        => Assert.Single(PanelLayout.BuildPages(Groups(Page("新页", 0)), null, capacity: 4, keepEmpty: true));
-
     // 空页也照样记得自己归哪一类，否则它在管理器里会从那一类里消失。
     [Fact]
     public void An_empty_page_keeps_its_category()
@@ -86,13 +74,13 @@ public class PanelRailTests
         Assert.Same(full, pages.Single(p => p.Title == "满页").Source);
     }
 
-    // 切屏之后每一屏也得记得（管理器不切屏，但这条不变式别留缺口）。
+    // 格子多到一屏装不下的那一页，也得记得自己是哪一页——管理器靠它接上拖动与改名。
     [Fact]
-    public void Every_screen_knows_its_group()
+    public void A_page_with_many_tiles_knows_its_group()
     {
-        var g = Page("甲", 6);
-        var pages = PanelLayout.BuildPages(Groups(g), null, capacity: 2);
-        Assert.All(pages, p => Assert.Same(g, p.Source));
+        var g = Page("甲", 30);
+        var pages = PanelLayout.BuildPages(Groups(g));
+        Assert.Same(g, Assert.Single(pages).Source);
     }
 
     // ── 两条栏：父子 ──
@@ -141,20 +129,20 @@ public class PanelRailTests
                      PanelLayout.Categories(pages).Sum(c => PanelLayout.PagesIn(pages, c).Count));
     }
 
-    // 一页被切成几屏，在它那一类里只算一条页签。
+    // 一页装多少格，在它那一类里都只算一条页签——不再被切成几屏。
     [Fact]
-    public void Splitting_a_page_does_not_duplicate_its_tab()
+    public void A_page_with_many_tiles_is_still_one_tab()
     {
-        var pages = PanelLayout.BuildPages(Groups(Page("甲", 6, "写代码")), null, capacity: 2);
-        Assert.Equal(3, pages.Count);
+        var pages = PanelLayout.BuildPages(Groups(Page("甲", 30, "写代码")), null);
+        Assert.Single(pages);
         Assert.Single(PanelLayout.PagesIn(pages, "写代码"));
     }
 
-    // 切屏之后每一屏都还记得自己归哪一类——否则翻到第二屏，顶栏的高亮会跳走。
+    // 装得下多少格都还记得自己归哪一类——否则翻页时顶栏的高亮会跳走。
     [Fact]
-    public void Every_screen_keeps_its_category()
+    public void A_page_with_many_tiles_keeps_its_category()
     {
-        var pages = PanelLayout.BuildPages(Groups(Page("甲", 6, "写代码")), null, capacity: 2);
+        var pages = PanelLayout.BuildPages(Groups(Page("甲", 30, "写代码")), null);
         Assert.All(pages, p => Assert.Equal("写代码", PanelLayout.CategoryOf(p)));
     }
 

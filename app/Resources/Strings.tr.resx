@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>«{0}» çalıştırmak istediğinizden emin misiniz?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>Başlangıç listesini yeniden çalıştır? Aşağıdakiler bir daha yapılacak:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…ve {0} tane daha</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · Hata</value>
   </data>
@@ -1230,6 +1236,12 @@ Günlük: {1}</value>
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>Son bildirimler</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>Hatırlatıcılar</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>Onarım</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>Henüz başlangıç günlüğü yok (önce başlangıç listesini bir kez çalıştırın)</value>
@@ -1878,7 +1890,7 @@ Günlük: {1}</value>
     <value>Yerleşim</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>Sütun × üst satır + alt satır, bir sayfaya ne kadar sığacağını ve panelin ne kadar geniş olacağını belirler. Kalanlar sonraki sayfaya geçer; alt satırı 0 yaparsanız tek bant olur.</value>
+    <value>Sütun × ekran başına satır, bir ekrana kaç karo sığacağını ve panelin ne kadar geniş olacağını belirler; üst satırlar iki bandın ayrıldığı yerdir (ekran başına satır kadarı tek bant demektir). Satır sayısı bir üst sınırdır — daha küçük ekran daha azını gösterir, kalanı kaydırırsın.</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>Satır başına kutu</value>
@@ -1910,8 +1922,8 @@ Günlük: {1}</value>
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>Üst satırlar</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>Alt satırlar</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>Ekran başına satır</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">Simge</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@ Günlük: {1}</value>
   <data name="Panel_NewPage" xml:space="preserve">
     <value>Yeni sayfa</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>Buraya bir eylem koy</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ Altta {0} tane daha · panelde kaydırarak görün</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>Bu ekrana {0} satır sığar; ayarlarda {1} yazıyor — panel ekranın izin verdiğini gösterir, kalanı kaydırırsın.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>Henüz sayfa yok. Sayfa sekme çubuğunun sonundaki + işareti ile bir sayfa oluşturabilirsiniz; ardından bu sayfaya eylemler ekleyebilirsiniz.</value>

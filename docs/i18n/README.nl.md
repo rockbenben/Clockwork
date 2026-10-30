@@ -40,7 +40,7 @@ Start je apps automatisch bij het aanmelden · herinneringen op tijd · met éé
 | --- | --- |
 | **Systeem** | Windows 10 / 11, x64 |
 | **Installatie** | Geen. Eén portable `Clockwork.exe` — zet hem in een willekeurige map |
-| **Beheerdersrechten** | Alleen voor «Starten bij aanmelden» en voor stappen die je markeert als **als administrator uitvoeren** |
+| **Beheerdersrechten** | Alleen voor «Bij aanmelden starten» en voor stappen die je markeert als **als beheerder uitvoeren** |
 | **Jouw instellingen** | `clockwork.settings.json` naast de exe (of `%APPDATA%\Clockwork\` als die map bij de eerste start alleen-lezen was; daarna blijft hij waar hij terechtkwam) — er verlaat niets de machine |
 | **Interface** | 18 talen en een licht / donker thema. De taal volgt bij de eerste start Windows; het thema begint donker en kan Windows volgen |
 
@@ -53,7 +53,7 @@ Start je apps automatisch bij het aanmelden · herinneringen op tijd · met éé
    - **`Clockwork-<versie>-win-x64-needs-dotnet10.zip`** — vereist een geïnstalleerde [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0). Installeer die één keer op een pc met internet en daarna is elke update een minieme download.
    - **`Clockwork.exe`** — dezelfde build als de zip hierboven, zonder zip eromheen: klikken en draaien, of over je bestaande kopie zetten om bij te werken. Ontbreekt de runtime, dan biedt Windows de download aan.
 2. Dubbelklik erop om het instellingenvenster te openen. De voorbeelden die hij laadt staan allemaal **uit** — er draait niets tot je ze zelf aanvinkt.
-3. Om hem bij elke keer opstarten uit te voeren: vink op het tabblad **Instellingen** **Starten bij aanmelden** aan (registreert een geplande taak met beheerdersrechten, dus geen stortvloed aan UAC-meldingen bij het opstarten).
+3. Om hem bij elke keer opstarten uit te voeren: vink op het tabblad **Instellingen** **Bij aanmelden starten** aan (registreert een geplande taak met beheerdersrechten, dus geen stortvloed aan UAC-meldingen bij het opstarten).
 
 Daarna zit hij in het systeemvak: dubbelklik op het pictogram om het venster te openen, en de sluitknop verbergt het alleen weer. Echt afsluiten doe je via **Afsluiten** in het rechtsklikmenu van het systeemvak.
 
@@ -64,11 +64,11 @@ Daarna zit hij in het systeemvak: dubbelklik op het pictogram om het venster te 
 
 ## Tips
 
-- **Dubbelklik op een rij om die te bewerken**. Paden, processen en datums hoef je niet te typen: **de … knop aan het eind van de rij** opent de bijbehorende kiezer (bestand, doorzoekbare proceslijst, datum), en sneltoetsen neem je op door ze in te drukken via **Opnemen**.
+- **Dubbelklik op een rij om die te bewerken**. Paden, processen en datums hoef je niet te typen: **de … knop aan het eind van de rij** opent de bijbehorende kiezer (bestand, doorzoekbare proceslijst, datum), en sneltoetsen neem je op door ze in te drukken via **Vastleggen**.
 - **Sleep een rij om de volgorde te wijzigen** — in alle drie de lijsten en in de stappenlijst van de groepseditor; de omhoog/omlaag-knoppen werken nog steeds.
 - **Test het vóór het opslaan** — **▶ Deze stap uitvoeren** en **▶ Groep uitvoeren** in de groepseditor voeren uit wat er nu op het scherm staat, en de knop verandert ondertussen in **■ Stoppen**.
 - **Dupliceren** kloont de geselecteerde taak of groep er direct onder — sneller dan een bijna identieke opnieuw opbouwen. **Verwijderen vraagt altijd eerst om bevestiging**, overal.
-- Dubbelklikken op `Clockwork.exe` opent alleen het venster; het voert de opstartlijst **niet** opnieuw uit. Gebruik daarvoor **Opstartlijst opnieuw uitvoeren** in het systeemvak.
+- Dubbelklikken op `Clockwork.exe` opent alleen het venster; het voert de opstartlijst **niet** opnieuw uit. Gebruik daarvoor **Opstartlijst opnieuw uitvoeren** in het systeemvak. — vraagt het eerst en toont wat deze run nogmaals zou doen.
 
 ## Over het 365 Open-Source Plan
 

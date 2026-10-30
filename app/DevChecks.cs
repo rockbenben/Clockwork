@@ -13,7 +13,12 @@ namespace Clockwork;
 //   --smoke        构造并布局每一个 XAML 窗口（并逐个选一遍它的每个 Tab）后退出。
 //                  XAML 是懒加载的，而 WPF 又只实例化当前选中页——写错的窗口/标签页不打开就不报错，
 //                  能一路带到发版；这个开关在 CI 里替用户把每扇窗、每一页都开一遍。
-//   --selftest     要一扇真窗、因而进不了 app.Tests 的那几条检查（问句弹框那条链）。见 DevSelfTest.cs。
+//   --selftest     要一扇真窗、因而进不了 app.Tests 的那几条检查（模态弹框那条链：
+//                  问句弹框，以及手动重跑整份清单之前那道确认）。见 DevSelfTest.cs。
+//   --trayshot <png>  把托盘菜单拍成一张 PNG（见 ProbeTrayMenu.cs）。这张菜单是本程序
+//                  最常被看见的一屏，却不是 WPF 窗——--shots 那套离屏渲染罩不住它，
+//                  于是它此前既没被拍过、也没被测过（字形撞车、区段标题不对齐都是这么漏的）。
+//                  走的是屏幕上那一条真路径：屏幕左上角会闪一下菜单。
 //   --shots <目录>  离屏渲染成 PNG 逐张比对：每个窗口的每个 Tab × 3 档宽度 × 5 档工作区高度 × 6 种语言，
 //                  外加一轮浅色主题——量级是**万张**（具体张数随窗口与页签增减，不写死在这里：
 //                  写死的那个数每次加窗口都会过期，而过期的数比没有数更坏）。
@@ -66,6 +71,7 @@ public partial class App
             () =>
             {
                 if (args.Contains("--hookprobe")) RunHookProbe();
+                else if (args.Contains("--trayshot")) ProbeTrayMenuShot(TrayShotPath(args), args);
                 else if (args.Contains("--screenshots")) RunScreenshots(args);
                 else if (args.Contains("--shots")) RunShots(args);
                 else if (args.Contains("--selftest")) RunSelfTest();
@@ -74,8 +80,7 @@ public partial class App
             System.Windows.Threading.DispatcherPriority.ApplicationIdle);
 
 
-    // ── --hookprobe：低级鼠标钩子的隔离探针 ──
-    //
+    // ── --hookprobe：低级鼠标钩子的隔离探针 ──    //
     // 装一个裸的 WH_MOUSE_LL，数 12 秒，把收到的事件数写进 %TEMP%\clockwork-hookprobe.txt 然后退出。
     // 裸钩子那一半不读配置、不看总开关、没有心跳没有自愈、不建轨迹窗——就一句 SetWindowsHookEx 加一个计数器。
     //
@@ -341,7 +346,7 @@ public partial class App
 
         var groups = new[] { new ActionGroup() };
 
-        // 面板管理器：默认配置只有一页两格，页眉、空位、并排那三件要验的东西
+        // 面板管理器：默认配置只有一页两格，页眉、并排那三件要验的东西
         // 得靠再添一页格子更多的才拍得全。焦点探针必须与基线用同一份配置，
         // 否则成对像素差先被窗口尺寸差打断、根本量不到焦点环。
         PanelManagerWindow MakePanelManagerWithExtraPage()
@@ -381,6 +386,43 @@ public partial class App
                 return w;
             }),
             ("PanelManager", MakePanelManagerWithExtraPage),
+            // 正好装满一屏（28 格）的样子：**下面那一块不该出现，卡片也不该多出一行**。
+            // 这一档曾经正是那行假空位的现场——补位公式总多补一整行，
+            // 于是「每屏 7 行 / 上带 3 行」写着下带 4，卡片却画着 5 行。
+            ("PanelManagerExactFit", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.PanelPages.Clear();
+                var full = new PanelPage { Name = LongestOf("Menu_") };
+                for (int i = 0; i < 28; i++)
+                    full.Steps.Add(new LaunchStep { Kind = "system", Label = LongestOf("Sys_"), Command = "showDesktop" });
+                cfg.PanelPages.Add(full);
+                return new PanelManagerWindow(cfg, () => { });
+            }),
+            // 行数超过这块屏放得下的行数：面板管理器要**把实情说出来**（见 ScreenRowsNote）。
+            // 设 8 + 8 行 = 16 行，任何常见屏幕都放不下，那句话必然出现——
+            // 而这句话此前**一次都没被渲染过**（默认的 3 + 4 大多数屏幕放得下）。
+            ("PanelManagerOverRows", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.Settings.PanelTopRows = 8;
+                cfg.Settings.PanelBottomRows = 8;
+                return new PanelManagerWindow(cfg, () => { });
+            }),
+            // 一页装得比第一屏多的样子：预览里的第三块（落在第一屏之外的那些格子）
+            // 与它前面那行「面板里往下滚才看得到」的说明。
+            // **这一块此前一次都没被渲染过**——默认配置的页只有两三格，
+            // 而「一屏之外还有东西」这个状态，只有格子多过一屏才存在。
+            ("PanelManagerFullPage", () =>
+            {
+                var cfg = RootConfig.Default();
+                cfg.PanelPages.Clear();
+                var full = new PanelPage { Name = LongestOf("Menu_") };
+                for (int i = 0; i < 40; i++)
+                    full.Steps.Add(new LaunchStep { Kind = "system", Label = LongestOf("Sys_"), Command = "showDesktop" });
+                cfg.PanelPages.Add(full);
+                return new PanelManagerWindow(cfg, () => { });
+            }),
             // 面板两条导航栏的焦点探针：它们的模板原先只有悬停，Tab 过去整行像素不动。
             ("FocusProbeTopTab", () =>
             {
@@ -1017,10 +1059,13 @@ public partial class App
             // 两条栏都关掉：版面必须与从前逐像素相同（那是「默认不打扰」的底线）。
             ("QuickPanelRailsOff", () => new QuickPanelWindow(RailPages(), SampleOps(), chromeOps: SampleWaist(),
                 look: new PanelLook(LeftTabs: false, TopTabs: false))),
-            // 动作多到装不下一屏时腰栏才长出放大镜（见 BuildWaist 的阈值）。
+            // 动作多到装不下一屏时表圈右端才长出放大镜（见 BuildChrome 的阈值）。
             // 样例那 17 格过不了阈值，所以搜索这一角在截图里一直是空的——喂一份大的。
             ("QuickPanelSearchable", () => new QuickPanelWindow(BigPages(), SampleOps(), chromeOps: SampleWaist())),
-            // 搜索态本身：输入框 + 计数占满整条腰栏，结果铺进凹坑。
+            // 一页装不下一屏：格子往下排、在坑里滚，而不是被切成第二页。
+            // 「切页」这件事被去掉之后，这一屏就是它唯一的验法。
+            ("QuickPanelOverflow", () => new QuickPanelWindow(OverflowPages(), SampleOps(), chromeOps: SampleWaist())),
+            // 搜索态本身：输入框 + 计数占满整幅宽度（它有自己的一条凹槽），结果铺进凹坑。
             // 没有任何静态入口能到达这个状态，只能让它自己进去一次。
             ("QuickPanelSearching", () =>
             {
@@ -1048,6 +1093,30 @@ public partial class App
             }),
             // 空面板：一页都没有。空状态是最该给方向的一屏，而它一次都没拍过。
             ("QuickPanelEmpty", () => new QuickPanelWindow(System.Array.Empty<PanelTilePage>(), SampleOps(), null, SampleWaist())),
+            // 手动重跑整份启动清单之前的那道确认框：它把「这一次会做哪几件事」摊开，
+            // 而这一屏此前一次都没被渲染过——题干在十八种语言下长度差得很远，
+            // 摊开的清单又有长有短、还带一条「另有 N 项」，只有画出来才看得见
+            // 它会不会把那张卡撑破、按钮会不会掉出卡外。
+            ("BrandDialogRerun", () =>
+            {
+                var cfg = RootConfig.Default();
+                // 样例用真会跑的那几条（关窗口 / 发按键 / 置前）：默认清单那五条全是
+                // 未勾选的样例，摊开是空的，而空的确认框验不到任何东西。
+                cfg.LaunchSteps = new System.Collections.Generic.List<LaunchStep>
+                {
+                    new LaunchStep { Kind = "window", WindowAction = "close", Process = "PicGo.exe", Enabled = true },
+                    new LaunchStep { Kind = "window", WindowAction = "close", Process = "QQ.exe", Enabled = true },
+                    new LaunchStep { Kind = "window", WindowAction = "close", Process = "TIM.exe", Enabled = true },
+                    new LaunchStep { Kind = "keys", Combo = "Win+6", Enabled = true },
+                    new LaunchStep { Kind = "keys", Combo = "Alt+K", Enabled = true },
+                    new LaunchStep { Kind = "window", WindowAction = "topmost", Process = "Weixin.exe", Enabled = true },
+                    // 第七条故意长一点：清单里的条目有长有短，短的那几条永远验不到换行。
+                    new LaunchStep { Kind = "app", Target = "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\wt.exe", Enabled = true },
+                };
+                var (total, lines, more) = LaunchPreview.Build(cfg, DateTime.Now);
+                return new Views.BrandDialog(Strings.Get("Confirm_Title"), LaunchPreview.Message(lines, more),
+                    true, Views.ToastLevel.Warn, Strings.Get("Tray_Rerun"), Strings.Get("Ed_Cancel"));
+            }),
         };
     }
 
@@ -1058,8 +1127,8 @@ public partial class App
     {
         var pages = new[]
         {
-                    // 15 格：默认版面（4 列 × 上 3 行 + 下 4 行）下上带正好铺满 12 格、
-                    // 余 3 格落到下带，两条带和中间那条发丝线才都拍得到。少于 13 格截图里看不到分带。
+                    // 20 格：默认版面（4 列 × 每屏 7 行 = 上 3 + 下 4）下上带正好铺满 12 格、
+                    // 余 8 格落到下带，两条带和中间那道缝才都拍得到。少于 13 格截图里看不到分带。
                     new PanelTilePage(Strings.Get("Tab_Group"), new[]
                     {
                         new PanelTile(LongestOf("Tray_"), PanelGlyph.Group, () => { }),
@@ -1089,7 +1158,9 @@ public partial class App
                         new PanelTile(Strings.Get("Kind_prompt"), PanelGlyph.ForKind("prompt"), () => { }),
                         new PanelTile(Strings.Get("Kind_choice"), PanelGlyph.ForKind("choice"), () => { }),
                     }, OnAdd: () => { }),
-                    // 带 OnAdd：末尾那个半透明的「新增」虚位只有在这一页可加东西时才画得出来。
+                    // 带 OnAdd：这一页能加东西，面板表圈右端那颗「+」才会亮。
+                    // **没有虚位格了**——它曾经在格子阵末尾占一格位置，一页装满就变成多出来的
+                    // 第 29 格（那一段经过见 PanelCoordinator.BuildPanelOps）。
                     new PanelTilePage(Strings.Get("Tab_Launch"), new[]
                     {
                         new PanelTile(LongestOf("Win_"), PanelGlyph.ForKind("mouse"), () => { }),
@@ -1133,7 +1204,7 @@ public partial class App
             var tiles = new List<PanelTile>();
             for (int i = 0; i < 6; i++)
                 tiles.Add(new PanelTile(Strings.Get("Sys_showDesktop"), PanelIcon.Resolve(null, "system"), () => { }));
-            pages.Add(new PanelTilePage(Strings.Get(title), tiles, null, side, 0));
+            pages.Add(new PanelTilePage(Strings.Get(title), tiles, null, side));
         }
         return pages;
     }
@@ -1150,7 +1221,7 @@ public partial class App
             Strings.Get(k),
             Enumerable.Range(0, 4).Select(_ => new PanelTile(Strings.Get("Sys_showDesktop"),
                 PanelIcon.Resolve(null, "system"), () => { })).ToList(),
-            null, "", 0)).ToList();
+            null, "")).ToList();
     }
 
     // 一份「动作多到要搜索」的样例：四页各 24 格，共 96。
@@ -1173,6 +1244,18 @@ public partial class App
         return pages;
     }
 
+    // 一页装不下一屏的样例：40 格（默认版面一屏 28 格）。
+    // 面板不再按容量把它切成两屏——格子排在下面、在坑里往下滚，
+    // 而可见高度仍是设置里那个「每屏行数」（默认 7 行 = 上带 3 + 下带 4）。这一张是那件事唯一能验的图：
+    // 切页的旧行为下这里该是「第 2 页」，现在该是同一页的第 4 行往下还有东西。
+    private static IReadOnlyList<PanelTilePage> OverflowPages()
+    {
+        var tiles = new List<PanelTile>();
+        for (int i = 0; i < 40; i++)
+            tiles.Add(new PanelTile(LongestOf("Sys_", "Kind_"), PanelGlyph.ForKind("system"), () => { }));
+        return new[] { new PanelTilePage(LongestOf("Tab_"), tiles, () => { }) };
+    }
+
     // 表圈右端那几颗。截图里必须喂上，否则「找东西 / 管东西」那一角永远是空的。
     // 与 PanelCoordinator.BuildPanelWaistOps 一一对应。少喂一个的话，表圈右端在截图里就少一颗，
     // 而那正是要验的地方——它和「Esc 关闭」挤在同一行，多一颗少一颗的排布只有渲染看得见。
@@ -1181,7 +1264,7 @@ public partial class App
         new PanelTile(Strings.Get("Gesture_Manager"), char.ConvertFromUtf32(0xE962), () => { }),
         // fillsEmptyPanel 要跟 PanelCoordinator.BuildPanelWaistOps 一致：空面板那颗行动按钮的显隐与文字全看它，
         // 这儿漏了标记，QuickPanelEmpty 那张图就会画出一块没有按钮的空面板——一张说谎的截图。
-        new PanelTile(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE790), () => { }, fillsEmptyPanel: true),
+        new PanelTile(Strings.Get("Panel_Manager"), char.ConvertFromUtf32(0xE8A9), () => { }, fillsEmptyPanel: true),
     };
 
     // 挪出屏幕再显示：不居中、不抢焦点、不进任务栏视野。

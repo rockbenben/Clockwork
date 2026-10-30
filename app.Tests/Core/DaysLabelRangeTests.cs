@@ -78,7 +78,9 @@ public class DaysLabelRangeTests
     [Fact]
     public void Out_of_range_entries_are_dropped_not_rendered()
     {
-        // 手改 json 塞进来的脏值：不能让它们把区间两端带歪（Day_0 / Day_9 取不到就是空串）。
+        // 手改 json 塞进来的脏值：不能让它们把区间两端带歪。越界的（0、9）在查文案**之前**
+        // 就被滤掉了，所以 Day_0 / Day_9 这两个键根本不会被去取——resx 里也确实一个都没有
+        // （真去取会拿回键名本身，不是空串）。
         var label = StepDisplay.DaysLabel(new[] { 0, 1, 2, 3, 9 });
         Assert.Equal(Day(1) + Dash + Day(3), label);
     }

@@ -156,8 +156,25 @@ for f in glob.glob("docs/i18n/README.*.md"):
 
 
 def resx_values(lang):
+    """一份 resx 里的全部文案。
+
+    **两种条目形状都要读**：仓库里的 resx 有一批写成单行裸文本
+    （`<data name="X" xml:space="preserve">文案</data>`，没有 <value> 元素），
+    ResourceManager 照样读得出（覆盖测试就靠它），但只认 <value> 的正则会漏掉那 160 条
+    ——每份 860 条里漏 19%。漏读的直接后果是第 ⑤ 类**同时制造假阳性并遮住真问题**：
+    候选集小的时候，「calcular」只配得上不相干的「Cancelar」，
+    而葡萄牙语 README 里真正的错字（「Abrir o arquivo-fonte do site」多一个 o）
+    反而因为够不着任何候选而查不出来。
+    """
     p = "app/Resources/Strings.resx" if lang == "" else "app/Resources/Strings.%s.resx" % lang
-    return set(re.findall(r"<value>([^<]{4,60})</value>", read(p)))
+    out = set()
+    for m in re.finditer(r'<data name="[^"]+"[^>]*>(.*?)</data>', read(p), re.S):
+        inner = m.group(1).strip()
+        v = re.search(r"<value>(.*?)</value>", inner, re.S)
+        text = (v.group(1) if v else inner).strip()
+        if 4 <= len(text) <= 60:
+            out.add(text)
+    return out
 
 
 def lev(a, b, cap):
@@ -195,13 +212,20 @@ for f, lang in LANG_OF.items():
             key = s.casefold()
             if key in lower:
                 continue
+            # **词尾的省略号是代码加的**，不算打错：界面上「手势设置…」这颗按钮的文字是
+            # `Strings.Get("Gesture_Settings") + "…"`（见 GestureManagerWindow.xaml.cs），
+            # resx 里只有词干那一半。文档照抄界面的写法，就必然多一个省略号。
+            if s.endswith("…") and s[:-1].casefold() in lower:
+                continue
             n5 += 1
             # 短串只容一个字的差（四字词差两个字已是另一个词），长串容两个
             cap = 1 if len(s) < 8 else 2
-            near = [v for L in range(len(s) - cap, len(s) + cap + 1) for v in by_len.get(L, ())
-                    if lev(key, v.casefold(), cap) <= cap]
+            near = sorted({v for L in range(len(s) - cap, len(s) + cap + 1) for v in by_len.get(L, ())
+                           if lev(key, v.casefold(), cap) <= cap})
             if near:
-                rows.append(("⑤", f, ln, s, "像是打错的界面文字，resx 里是「%s」" % near[0]))
+                # 候选按接近度排、只给前几个：只报「第一个像的」会把不相干的串摆上来
+                # （曾经「calcular」配出的是「Cancelar」），人还得自己再查一遍。
+                rows.append(("⑤", f, ln, s, "像是打错的界面文字，resx 里像的是「%s」" % "」「".join(near[:4])))
 
 # ── 输出 ──
 print("检查：Type.Member %d · resx 键 %d · 文件路径 %d · README 同步 %d 份 · 文档加粗 %d 处"

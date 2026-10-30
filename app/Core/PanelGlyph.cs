@@ -72,7 +72,8 @@ public static class PanelGlyph
         "urlDecode" => char.ConvertFromUtf32(0xE945),   // 花括号 = 处理编码/代码
         "regex" => char.ConvertFromUtf32(0xE721),      // Find ＝ 正则提取是「从一段里找出一段」
         "replace" => char.ConvertFromUtf32(0xE8AB),    // 双向箭头 ＝ 来回替换
-        // 交互式流程那五个。码位验过存在、与既有那一批不撞（PanelGlyphTests 钉唯一性），
+        // 交互式流程那批（最早挑的是五个：等键 / 拆行 / 计算 / 跳出 / 循环，后来又添了几种）。
+        // 码位验过存在、与既有那一批不撞（PanelGlyphTests 钉唯一性），
         // **语义是渲染出来看图挑的**——上面那个测试只挡得住「不存在」，挡不住「存在但语义不对」
         // （原先随手挑的五个里有画成 (o) 的、有画成实心方块的，全是这个盲区）。
         // 改这里之后重跑 tools/_glyph-probe 那类探针看一眼，别只信测试。

@@ -1032,6 +1032,12 @@
   <data name="Confirm_Destructive" xml:space="preserve">
     <value>क्या आप वाकई «{0}» चलाना चाहते हैं?</value>
   </data>
+  <data name="Confirm_RerunLaunchList" xml:space="preserve">
+    <value>स्टार्टअप सूची फिर चलाएँ? नीचे दिए गए काम दोबारा होंगे:</value>
+  </data>
+  <data name="Confirm_RerunLaunchListMore" xml:space="preserve">
+    <value>…और {0} और</value>
+  </data>
   <data name="Crash_Title" xml:space="preserve">
     <value>Clockwork · त्रुटि</value>
   </data>
@@ -1230,6 +1236,12 @@
   </data>
   <data name="Tray_History" xml:space="preserve">
     <value>हाल के</value>
+  </data>
+  <data name="Tray_SectionRemind" xml:space="preserve">
+    <value>अनुस्मारक</value>
+  </data>
+  <data name="Tray_SectionRepair" xml:space="preserve">
+    <value>मरम्मत</value>
   </data>
   <data name="Tray_NoLog" xml:space="preserve">
     <value>अभी कोई स्टार्टअप लॉग नहीं (पहले स्टार्टअप सूची एक बार चलाएँ)</value>
@@ -1878,7 +1890,7 @@
     <value>लेआउट</value>
   </data>
   <data name="Settings_PanelLayoutTip" xml:space="preserve">
-    <value>कॉलम × ऊपरी पंक्तियाँ + निचली पंक्तियाँ तय करती हैं कि एक पेज में कितना आएगा और पैनल कितना चौड़ा होगा। बाकी अगले पेज पर चला जाता है; निचली को 0 करने पर एक ही पट्टी रहती है।</value>
+    <value>कॉलम × प्रति स्क्रीन पंक्तियाँ तय करती हैं कि एक स्क्रीन में कितने टाइल आ जाते हैं और पैनल कितना चौड़ा होगा; ऊपरी पंक्तियाँ बीच का विभाजन बताती हैं (प्रति स्क्रीन पंक्तियों के बराबर = एक ही पट्टी)। पंक्तियाँ एक ऊपरी सीमा हैं — छोटी स्क्रीन में कम दिखेंगे, बाकी स्क्रॉल करके देखें।</value>
   </data>
   <data name="Settings_PanelColumns" xml:space="preserve">
     <value>प्रति पंक्ति टाइल</value>
@@ -1910,8 +1922,8 @@
   <data name="Settings_PanelTopRows" xml:space="preserve">
     <value>ऊपरी पंक्तियाँ</value>
   </data>
-  <data name="Settings_PanelBottomRows" xml:space="preserve">
-    <value>निचली पंक्तियाँ</value>
+  <data name="Settings_PanelRowsPerScreen" xml:space="preserve">
+    <value>प्रति स्क्रीन पंक्तियाँ</value>
   </data>
   <data name="Ed_Icon" xml:space="preserve">आइकन</data>
   <data name="Ed_IconHint" xml:space="preserve">
@@ -1932,8 +1944,11 @@
   <data name="Panel_NewPage" xml:space="preserve">
     <value>नया पेज</value>
   </data>
-  <data name="Panel_AddHere" xml:space="preserve">
-    <value>यहाँ एक क्रिया रखें</value>
+  <data name="Panel_BelowFold" xml:space="preserve">
+    <value>↓ नीचे और {0} · उन्हें देखने के लिए पैनल में स्क्रॉल करें</value>
+  </data>
+  <data name="Panel_ScreenRows" xml:space="preserve">
+    <value>यह स्क्रीन {0} पंक्तियाँ समा लेता है; सेटिंग्स में {1} है — पैनल जितना स्क्रीन देती है उतना दिखाता है, बाकी स्क्रॉल करते हैं.</value>
   </data>
   <data name="Panel_NoPages" xml:space="preserve">
     <value>अभी तक कोई पेज नहीं है। पेज टैब रेल के अंत में + चिह्न एक नया पेज बनाता है; फिर उस पर क्रियाएँ जोड़ें।</value>

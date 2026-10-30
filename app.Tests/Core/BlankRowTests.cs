@@ -88,7 +88,7 @@ public class BlankRowTests
             new() { Id = "blank", Name = "",
                     Steps = new List<LaunchStep> { new() { Kind = "keys", Combo = "Ctrl+C" } } },
         };
-        var pages = PanelLayout.BuildPages(cfg, null, 0);
+        var pages = PanelLayout.BuildPages(cfg, null);
         Assert.NotEmpty(pages);
         Assert.All(pages, p => Assert.False(string.IsNullOrWhiteSpace(p.Title), "页签标题是空白"));
     }
