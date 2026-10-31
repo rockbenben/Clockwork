@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Clockwork.Core;
 
 // 提醒运行态的持久化。只存"耐久"部分：上次触发日期(防同日重复弹 + 供「错过必补」判当天是否已弹) +
-// 「稍后」到点时刻 + 循环运行下一轮时刻。会话性字段(pending/repeat/startupHandled)有意不落盘——
+// 「稍后」到点时刻 + 循环运行下一轮时刻 + 手动跳过的日期(SkippedDate)。会话性字段(pending/repeat/startupHandled)有意不落盘——
 // 每次启动重新判定；NextRepeatAt 也刻意不落盘——nag 链是短程弹窗追问，每次启动从头重判，
 // 而 NextIntervalAt 是全天日程，两者语义不同不能混为一谈。
 public static class ReminderStateStore

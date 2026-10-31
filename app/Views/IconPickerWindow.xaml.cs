@@ -53,7 +53,7 @@ public partial class IconPickerWindow : Window
             // **和 MakeCell 一样必须拆掉默认 ContentTemplate。** 默认那个 DataTemplate 是
             // <TextBlock Text="{Binding}">，喂给它一个 Path（图形）时 TextBlock 会对它调
             // ToString()，画出来的是类型名 —— 选择器顶部四行整片 "Syst"（实测截图），
-            // 一个 logo 都没有。IconOnlyButton 的样式注释里记的就是同一颗钉子。
+            // 一个 logo 都没有。IconButton 的样式注释里记的就是同一颗钉子。
             ContentTemplate = null,
             Width = 32,
             Height = 32,

@@ -1959,6 +1959,9 @@ Günlük: {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Yeni kategori</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Yeni kategori — boş bir sayfayla başlar</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Kategori</value>
   </data>
@@ -2210,7 +2213,7 @@ Günlük: {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Arayüz</data>
   <data name="Menu_SecClip" xml:space="preserve">Pano</data>
   <data name="Menu_SecFile" xml:space="preserve">Dosyalar ve yollar</data>
-  <data name="Menu_SecSys" xml:space="preserve">Sistem ve pencere</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistem</data>
   <data name="Menu_SecCalc" xml:space="preserve">Hesapla</data>
   <data name="Menu_SecPreset" xml:space="preserve">Yaygın ön ayarlar</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Bu adımın adresi yok. Yukarıya bir adres yazın; adresin geçerli sayfayı izlemesini istiyorsanız önce «Tarayıcı adresini oku» adımını ekleyin, adresi bir değişkene yazın ve buraya {değişken} yazın.</data>

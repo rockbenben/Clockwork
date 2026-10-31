@@ -1959,6 +1959,9 @@ Protokoll: {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Neue Kategorie</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Neue Kategorie — sie beginnt mit einer leeren Seite</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Kategorie</value>
   </data>
@@ -2210,7 +2213,7 @@ Protokoll: {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Bedienung</data>
   <data name="Menu_SecClip" xml:space="preserve">Zwischenablage</data>
   <data name="Menu_SecFile" xml:space="preserve">Dateien und Pfade</data>
-  <data name="Menu_SecSys" xml:space="preserve">System und Fenster</data>
+  <data name="Menu_SecSys" xml:space="preserve">System</data>
   <data name="Menu_SecCalc" xml:space="preserve">Rechnen</data>
   <data name="Menu_SecPreset" xml:space="preserve">Fertige Vorlagen</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Dieser Schritt hat keine URL. Tragen Sie oben eine ein; soll die URL der aktuellen Seite folgen, fügen Sie zuerst einen Schritt „Browser-Adresse lesen“ hinzu, schreiben Sie ihn in eine Variable und tragen Sie hier {Variablenname} ein.</data>

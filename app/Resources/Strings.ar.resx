@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>تصنيف جديد</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>تصنيف جديد — يبدأ بصفحة فارغة</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>التصنيف</value>
   </data>
@@ -2210,7 +2213,7 @@
   <data name="Menu_SecUI" xml:space="preserve">الواجهة</data>
   <data name="Menu_SecClip" xml:space="preserve">الحافظة</data>
   <data name="Menu_SecFile" xml:space="preserve">الملفات والمسارات</data>
-  <data name="Menu_SecSys" xml:space="preserve">النظام والنوافذ</data>
+  <data name="Menu_SecSys" xml:space="preserve">النظام</data>
   <data name="Menu_SecCalc" xml:space="preserve">حساب</data>
   <data name="Menu_SecPreset" xml:space="preserve">الإعدادات الجاهزة</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">لا يوجد عنوان في هذه الخطوة. اكتب عنوانًا في الأعلى؛ وإذا أردت أن يتبع العنوان الصفحة الحالية، فأضف أولًا خطوة «قراءة عنوان المتصفح»، واكتبه في متغيّر، ثم ضع {متغير} هنا.</data>

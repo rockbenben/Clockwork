@@ -35,11 +35,20 @@ public partial class App
     {
         string marker = Path.Combine(Path.GetTempPath(), "clockwork-selftest.txt");
         var fails = new List<string>();
+        var skips = new List<string>();
         int checks = 0;
         void Check(string what, bool ok, string got)
         {
             checks++;
             if (!ok) fails.Add($"{what}：{got}");
+        }
+        // **验不成的那一条**：环境不具备（如抢不到前台，没法往别的程序上注入键）。
+        // 它不是失败——失败会让 CI 变红，而它压根不是程序的毛病；
+        // 但也不能当成通过（那等于没验却说验过了），所以单开一档，写在账上。
+        void Skip(string what, string why)
+        {
+            checks++;
+            skips.Add($"{what}：{why}");
         }
 
         try
@@ -92,12 +101,40 @@ public partial class App
             //    闸卡在 1 的后果是「重跑清单」从此点不动——那种故障只有真跑一遍才看得见，
             //    而 app.Tests 罩不到模态框（问句那条链进不了测试，原因见文件头）。
             Check("重跑清单·确认与放行", RerunConfirm(out var relog), relog);
+
+            // ⑨ 面板的按键：回车、空格、方向键、翻页键、Esc——**每一个都真按一遍**。
+            //    那类缺陷代码里看不出来（case 都在、单测也绿，按下去没反应而已），
+            //    所以只能真的按：投递 Windows 键消息走 WPF 输入管线，按完看效果。
+            Check("面板按键", PanelKeyChecks.Run(out var keylog), keylog);
+
+            // ⑩ 逐个功能：每一种步骤类型都过一遍（编辑器开不开得出来、引擎派不派发得了）。
+            Check("逐功能自查", FuncSweep.Run(out var funclog), funclog);
+
+            // ⑪ 面板之外的按键处理点：录键框 / 问句弹框 / 就地改名。
+            Check("其它按键自查", KeySweep.Run(out var keysweep), keysweep);
+
+            // ⑫ 面板的两条导航栏：顶栏点了另一个分类，左栏跟着换；两条栏各自写明
+            //     自己装的是什么；管理器那颗「+」建出来的分类站得住。
+            //     这一族缺陷单测罩不到（它们住在窗口的接线里，而单元测试进程里不能建
+            //     WPF Application——见 DevCategoryNav 的文件头），所以在真进程里点一遍。
+            Check("两条导航栏", CategoryNavChecks.Run(out var navlog), navlog);
+
+            // ⑬ 发键：真的注入一次键，看**目标程序**收到的是不是用户写下的那个键。
+            //     用户实报「发送 enter 还是无效」——修饰键还按着时，发出去的是
+            //     Ctrl+Shift+Enter 而不是回车（机制与实测见 DevKeySend 的文件头）。
+            //     这条只能在真进程里验：单测进程里不许往系统里注入（见 Win32.InTestHost），
+            //     而「目标程序收到什么」本来就不是单测能问出来的问题。
+            //     抢不到前台时它只能跳过（注入会打到用户正在用的程序上），不算失败。
+            bool sendOk = KeySendChecks.Run(out var sendlog, out bool sendSkipped);
+            if (sendSkipped) Skip("发键", sendlog);
+            else Check("发键", sendOk, sendlog);
         }
         catch (Exception ex) { fails.Add("自查自己抛了：" + ex); }
         finally { BrandDialog.Rehearse = null; }
 
         File.WriteAllText(marker, fails.Count == 0
             ? $"OK {checks} checks"
+                + (skips.Count == 0 ? "" : "\r\n（跳过 " + skips.Count + " 条：\r\n" + string.Join("\r\n", skips) + "）")
             : $"FAIL {fails.Count}/{checks}\r\n" + string.Join("\r\n", fails));
         Shutdown(fails.Count == 0 ? 0 : 1);
     }

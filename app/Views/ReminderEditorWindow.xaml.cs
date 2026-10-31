@@ -22,7 +22,7 @@ public partial class ReminderEditorWindow : Window
         WindowSizing.FitToWorkArea(this);
         _original = r;
 
-        // 触发下拉 = 时间 + 登录 + 七个事件。事件项的标签键与 ReminderDisplay.EventLabel 用同一套
+        // 触发下拉 = 时间 + 登录 + 十二个事件。事件项的标签键与 ReminderDisplay.EventLabel 用同一套
         // Ed_Trig_<Id 首字母大写>，别在两处各维护一张表。
         var trigItems = new[] { (Strings.Get("Ed_Trig_Time"), "time"), (Strings.Get("Ed_Trig_Startup"), "startup") }
             .Concat(ReminderEvent.All.Select(id => (Strings.Get("Ed_Trig_" + char.ToUpperInvariant(id[0]) + id.Substring(1)), id)))

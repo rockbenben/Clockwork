@@ -54,4 +54,49 @@ public class StepKindContextTests
         var want = StepDisplay.StepKinds.Where(StepDisplay.IsAtomic).ToList();
         Assert.Equal(want, StepDisplay.KindsFor(insideGroup: false).ToList());
     }
+
+    // 「发送按键」要摆在「常用」那一节里。
+    //
+    // 用户报的是「发送按键 是非常常用的动作，却在很多路径都没有入口」：它原先只在
+    // 「系统与窗口」那一节——那一节问的是「我对什么做事」，而敲键不针对任何窗口对象；
+    // 它的兄弟「发送文本」一直就在「常用」里。同一个「发送」分成两处摆着，
+    // 最常用的那个反倒最难找。而「常用」这一节现在在菜单里被拍平到首层（一格直达）。
+    [Fact]
+    public void Send_keys_is_a_daily_action_and_lives_in_the_common_section()
+    {
+        var common = StepDisplay.StepKindSections.First(s => s.SectionKey == StepDisplay.CommonSectionKey);
+        Assert.Contains("keys", common.Kinds);
+        // 它的兄弟「发送文本」也在这儿——两者是同一族，不该分开摆。
+        Assert.Contains("text", common.Kinds);
+        // 不再留在「系统」那一节：那一节现在只放「对这台机器本身」的事。
+        var sys = StepDisplay.StepKindSections.First(s => s.SectionKey == "Menu_SecSys");
+        Assert.DoesNotContain("keys", sys.Kinds);
+    }
+
+    // **一种类型只在一节里。**
+    //
+    // 上一版允许一种类型出现在多节（Quicker 官方原话：「个别模块会属于多个分类」），
+    // 看着是给了两条找路，实际在「新增 ▾」菜单里变成**同一个动作在菜单里出现两次**：
+    // 「用户输入」既在「常用」又在「界面交互」，「获取选中的文字」既在「常用」又在「剪贴板」。
+    // 「按对象找」的那条路没丢——动作组工具箱有搜索框，找不着就搜。
+    [Fact]
+    public void Every_kind_belongs_to_exactly_one_section()
+    {
+        var flat = StepDisplay.StepKindSections.SelectMany(s => s.Kinds).ToList();
+        Assert.Equal(flat.Count, flat.Distinct().Count());
+        Assert.Equal(StepDisplay.StepKinds.OrderBy(k => k), flat.Distinct().OrderBy(k => k));
+    }
+
+    // 首层快捷项（每个「新增」菜单的第一层）里必须有「发送按键」：
+    // 那是唯一一处「不用先猜分类」的路。缺了它，用户在启动清单、手势、面板管理器、
+    // 快捷面板四个入口里都得展开「系统与窗口」才够得着这个最常用的机制。
+    [Fact]
+    public void Send_keys_has_a_one_click_entry_in_every_add_menu()
+    {
+        Assert.Contains("keys", Clockwork.Views.StepMenu.QuickKinds);
+        // 首层那一项也必须自己站得住：能单独当一格用（面板格子 / 开机清单 / 手势）。
+        Assert.All(Clockwork.Views.StepMenu.QuickKinds, k => Assert.True(StepDisplay.IsAtomic(k)));
+        // 并且它在目录里（拼错了的话那个名字在哪儿都选不到）。
+        Assert.All(Clockwork.Views.StepMenu.QuickKinds, k => Assert.Contains(k, StepDisplay.StepKinds));
+    }
 }

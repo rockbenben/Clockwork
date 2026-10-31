@@ -30,7 +30,7 @@ public static class ReminderDisplay
             };
         }
         else baseLabel = r.Time;
-        // 循环运行后缀：一眼看出这条不是一天一响。两种基础文案（登录时短语 / 原始 HH:mm）都要追加。
+        // 循环运行后缀：一眼看出这条不是一天一响。三种基础文案（事件 / 登录时短语 / 原始 HH:mm）都要追加。
         if (r.IntervalMinutes > 0)
         {
             baseLabel += " " + Strings.Lf("Time_LoopEvery", r.IntervalMinutes);

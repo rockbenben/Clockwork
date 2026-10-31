@@ -94,9 +94,11 @@ public partial class App : System.Windows.Application
         // 宿主策略把它升级成进程退出。
         TaskScheduler.UnobservedTaskException += (s, ex) => { ex.SetObserved(); _diag.LogError(ex.Exception); };
 
-        // 开发期自查（--smoke / --shots / --selftest，见 DevChecks.cs）：在单实例之前——托盘里正在用的实例照常工作。
+        // 开发期自查（--smoke / --selftest / --keysend / --shots / --screenshots / --trayshot / --hookprobe，
+        // 见 DevChecks.cs）：在单实例之前——托盘里正在用的实例照常工作。
         if (e.Args.Contains("--smoke") || e.Args.Contains("--shots") || e.Args.Contains("--selftest")
-            || e.Args.Contains("--screenshots") || e.Args.Contains("--hookprobe") || e.Args.Contains("--trayshot"))
+            || e.Args.Contains("--screenshots") || e.Args.Contains("--hookprobe") || e.Args.Contains("--trayshot")
+            || e.Args.Contains("--keysend"))
         { RunDevCheck(e.Args); return; }
 
         if (!ClaimSingleInstance(e.Args)) return;     // 已有实例在跑：叫醒它，自己退出
@@ -552,7 +554,7 @@ public partial class App : System.Windows.Application
     }
 
     // 语言切换：重开自身（--show 强制显示窗口）后退出当前实例。新实例读到已保存的新语言，
-    // 建窗前 ApplyCulture 即全量生效。单实例：本实例先释放互斥体/退出，新实例的等待(1200ms)随即接管。
+    // 建窗前 ApplyCulture 即全量生效。单实例：本实例先释放互斥体/退出，新实例的等待(HandoffTakeoverWait 250ms)随即接管。
     public void RelaunchForLanguage()
     {
         // 重开失败也必须退出：导入只改了磁盘文件、切换语言只改了 _config，都靠新实例重读生效。
@@ -565,7 +567,7 @@ public partial class App : System.Windows.Application
 
     // 以管理员身份重开自身（系统启动项开关/接管遇 NeedsAdmin 时用；旧版 Show-NeedsAdminPrompt 的移植）。
     // 仅用户取消 UAC（Win32 1223）静默留在当前实例；其他启动失败（exe 被删/被策略拦）如实报警——
-    // 用户刚点了「是，以管理员重开」，静默不动会让人以为提权坏了。新实例对单实例互斥有 1.2s 接管等待。
+    // 用户刚点了「是，以管理员重开」，静默不动会让人以为提权坏了。新实例对单实例互斥有 3s（RelaunchTakeoverWait）接管等待。
     public void RelaunchElevated()
     {
         try

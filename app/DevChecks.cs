@@ -27,7 +27,7 @@ namespace Clockwork;
 //                  这些轴都是被真实缺陷逃过之后一条条加上去的：只截首页 → 其余五页从未被渲染；
 //                  宽度恒为 1040 → 窗口拖到最窄时的裁切从未被看见；只跑 zh/en/de/ar → 西语在某些串上比德语更长。
 //                  「工作区高度」是模拟出来的可用高度，不等于窗口高度：最高那一档（1032）下窗口并不会真长到
-//                  1032，它被窗口自带的 Height 封住（主窗口 720、动作组编辑器 640），实测就是这两个数。
+//                  1032，它被窗口自带的 Height 封住（主窗口与动作组编辑器都是 720），实测就是这两个数。
 //                  也就是说那一档测的是「工作区比窗口还宽裕」，而不是一个更高的窗口——想看更高窗口下的版面，
 //                  得先改窗口的 Height，只加高工作区没用。
 //                  这 6 种语言不等于「每条串的最长译文」——它们只是整体上最容易出事的一组。
@@ -46,7 +46,7 @@ namespace Clockwork;
 //                      同样落成了测试：WrappingHintTests 要求 Wrap 的 TextBlock 在无限宽容器里
 //                      必须自带 Width 或 MaxWidth，否则那句 Wrap 是空话。
 //                    · 异步填充的列（如系统启动项页的扫描）拍到的是未完成态，那是时序不是缺陷。
-// 两个开关都挂在单实例检查之前：托盘里正在用的实例照常工作，检查进程自己开自己关，互不打扰。
+// 这些开关都挂在单实例检查之前：托盘里正在用的实例照常工作，检查进程自己开自己关，互不打扰。
 // 成败判定以 marker 文件为准，不靠退出码——PowerShell 读 GUI 进程 ExitCode 有已知读空坑，
 // 且 marker 顺带证明真跑到了「所有窗口布局完、走到写文件」那一步。
 public partial class App
@@ -75,6 +75,7 @@ public partial class App
                 else if (args.Contains("--screenshots")) RunScreenshots(args);
                 else if (args.Contains("--shots")) RunShots(args);
                 else if (args.Contains("--selftest")) RunSelfTest();
+                else if (args.Contains("--keysend")) { KeySendChecks.RunStandalone(); Shutdown(); }
                 else RunSmoke();
             },
             System.Windows.Threading.DispatcherPriority.ApplicationIdle);
@@ -240,7 +241,7 @@ public partial class App
     // ── 焦点可见性的成对判据（--smoke 跑，所以 CI 每次构建都过一遍）──────────────
     //
     // 强调色环是**纯样式属性**：谁重做一次 CheckBox 模板、把那个 ring 元素改个名，环就静默消失，
-    // 而唯一受害者是键盘用户——他看不见焦点在哪，只能靠 Tab 数格子。截图矩阵里那五个探针只产出
+    // 而唯一受害者是键盘用户——他看不见焦点在哪，只能靠 Tab 数格子。截图矩阵里那七个探针只产出
     // 给人看的 PNG，而 CI 不跑 --shots，所以「补了环」这件事原本没有任何东西在守。
     //
     // 判据是**同一扇窗的成对像素差**：一次什么都不做，一次把键盘焦点放到目标控件上，两次的位图
@@ -259,7 +260,7 @@ public partial class App
         ("FocusProbePageTab", "PanelManager", "PanelPageTab"),
     };
 
-    // 阈值是量出来的，不是拍的：五类控件补上环之后实测差 128 / 552 / 311 / 1226 / 1972 像素，
+    // 阈值是量出来的，不是拍的：七类控件统一用 32 像素阈值（其中前五类实测差 128 / 552 / 311 / 1226 / 1972 像素），
     // 而环坏掉的那一轮实测是**整 0**（不是「小一点」，是一模一样）。线就画在 0 与 128 之间，
     // 取 32：离抗锯齿抖动的量级足够远，又离最小的真环足够近。
     private const int FocusChangedPixelsMin = 32;
@@ -267,7 +268,7 @@ public partial class App
     private void CheckFocusRings()
     {
         var byName = AllXamlWindows().ToDictionary(v => v.Name, v => v.Make);
-        // 一次跑完五类再报：第一条就抛的话，改一类要重跑一遍全矩阵才知道下一类坏没坏。
+        // 一次跑完七类再报：第一条就抛的话，改一类要重跑一遍全矩阵才知道下一类坏没坏。
         var bad = new List<string>();
         foreach (var (focused, baseline, control) in FocusPairs)
         {
@@ -616,6 +617,20 @@ public partial class App
                 w.BeginRenameForShots(cfg.PanelPages.First());
                 return w;
             }),
+            // 刚按下顶栏那颗「+」之后的样子：新建的那一类在改名框里，
+            // 而**当前这一页已经被挪进去了**（分类是从页上涌现的，一类必须带着一张页
+            // 才站得住——不带着页的那一类在配置里没有容身之处，关掉管理器就没了）。
+            // 这一态此前没有任何一张截图钉着它，而它正是「新建分类」之后你看到的那一屏。
+            ("PanelManagerNewCategory", () =>
+            {
+                var cfg = RootConfig.Default();
+                var w = new PanelManagerWindow(cfg, () => { });
+                // 真的按那颗「+」：改的是这份一次性配置，_save 是空的，什么也落不下去。
+                var plus = w.TopTabBar.Children.OfType<System.Windows.Controls.Button>()
+                    .Last(x => (string?)x.Content == "+");
+                plus.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
+                return w;
+            }),
             // 顶栏有**两个分类**、左栏有**两页**的样子。默认配置全在「未分类」里，
             // 于是顶栏只画得出那一格加一颗「+」，多分类下的排布永远拍不到。
             //
@@ -785,9 +800,8 @@ public partial class App
                 cfg.Settings.PanelIconOnly = true;
                 return new MainWindow(cfg, () => { });
             }),
-// 设置页的下半截。主窗口高度封顶 720，而设置页有八节——**底下六节从来没进过任何截图**
-            // （面板、鼠标手势、关于全在折线以下），裁切和文案溢出在那儿发生了也没人看得见。
-            // 滚到底再拍，把这块盲区盖上。
+// 设置页的下半截。主窗口高度封顶 720，而设置页有四节加一条页脚——**面板、鼠标手势和「关于」都在首屏以下**，
+            // 裁切和文案溢出在那儿发生了也没人看得见。滚到底再拍，把这块盲区盖上。
             ("MainWindowSettingsBottom", () =>
             {
                 var cfg = RootConfig.Default();
@@ -965,8 +979,8 @@ public partial class App
                     cfg.Gestures.Add(new LaunchStep { Kind = "group", GroupId = cfg.ActionGroups[0].Id, Label = cfg.ActionGroups[0].Name, Gesture = "1L7" });
                 return new GestureManagerWindow(cfg, () => { });
             }),
-            // 空态：得**自己清空**。默认配置现在带 5 条示例手势（RootConfig.DefaultGestures），
-            // 直接喂 Default() 的话这张图里是那 5 条，空态从此拍不到——而空态正是新用户
+            // 空态：得**自己清空**。默认配置现在带 10 条示例手势（RootConfig.DefaultGestures），
+            // 直接喂 Default() 的话这张图里是那 10 条，空态从此拍不到——而空态正是新用户
             // 删光样例之后看到的那一屏，也是「怎么加第一条」那句话唯一的载体。
             ("GestureManagerEmpty", () =>
             {

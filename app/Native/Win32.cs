@@ -9,6 +9,7 @@ namespace Clockwork.Native;
 public static class Win32
 {
     public const uint WM_CLOSE = 0x0010;
+    public const uint WM_KEYDOWN = 0x0100, WM_KEYUP = 0x0101;
     public const int SW_MINIMIZE = 6;
     public const int SW_MAXIMIZE = 3;
     public const int SW_RESTORE = 9;
@@ -166,6 +167,33 @@ public static class Win32
     {
         try { return GetForegroundWindow(); }
         catch { return IntPtr.Zero; }
+    }
+
+    /// <summary>往某个窗口投递一条消息。</summary>
+    //
+    // 自查要**真的按一个键**（见 DevSelfTest 的「面板按键」那条）：把 WM_KEYDOWN / WM_KEYUP
+    // 投给面板那扇窗的 HWND，走的是 Windows 消息 → WPF 输入管线那条真路，
+    // 而不是自己造一个假事件——那样验的是「处理器写没写对」，
+    // 不是「这个键到底会不会到达面板、焦点在不在它身上」。
+    public static bool PostKey(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam)
+        => hwnd != IntPtr.Zero && PostMessage(hwnd, msg, wParam, lParam) != IntPtr.Zero;
+
+    /// <summary>虚拟键码 → 扫描码（投递按键消息时填 lParam 用；扩展键的标志位另算）。</summary>
+    public static uint ScanCode(uint vk) => MapVirtualKey(vk, 0);
+
+    /// <summary>前台窗口是不是本进程自己的。</summary>    //
+    // 菜单「失焦即关」用它当判据：菜单弹出的那一瞬，锚点窗口会失焦——但那**不是**「程序没了前台」。
+    // 问 OS「现在谁在前台」才是那件事的真话（面板的看门狗问的是同一个）。
+    public static bool ForegroundIsOurs()
+    {
+        try
+        {
+            var fg = GetForegroundWindow();
+            if (fg == IntPtr.Zero) return false;   // 没有前台窗：程序不在前台
+            GetWindowThreadProcessId(fg, out uint pid);
+            return pid == (uint)Environment.ProcessId;
+        }
+        catch { return false; }
     }
 
     /// <summary>前台窗口所属进程的 pid；没有前台窗时返回 0。</summary>
@@ -859,6 +887,18 @@ public static class Win32
         foreach (var k in vks) list.Add(MakeKey(k, true));
         var arr = list.ToArray();
         SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT)));
+    }
+
+    /// <summary>只按下、不抬起一个键。**自查专用**：模拟「用户还按着 Ctrl」的那一刻。</summary>
+    //
+    // 为什么自查需要它：发键自查要验的正是「修饰键还按着时发出去的主键还是不是裸的」，
+    // 而「还按着」这件事没法靠读状态造出来——得真的按下去。
+    // 代价是这个键会卡在全系统按下态，所以**调用方必须负责把它抬起来**
+    // （用 ReleaseKeys），中途抛异常也要在 finally 里抬。
+    public static uint SendKeyDown(ushort vk)
+    {
+        var arr = new[] { MakeKey(vk, false) };
+        return SendInput((uint)arr.Length, arr, Marshal.SizeOf(typeof(INPUT)));
     }
 
     // 目标进程的所有可见顶层窗口句柄。入参须为裸进程名（调用方先 StepHelpers.ToProcessName 归一）。

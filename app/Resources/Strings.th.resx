@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>เพิ่มหมวด</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>หมวดหมู่ใหม่ — เริ่มจากหน้าว่าง</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>หมวด</value>
   </data>
@@ -2210,9 +2213,9 @@
   <data name="Menu_SecUI" xml:space="preserve">การโต้ตอบ</data>
   <data name="Menu_SecClip" xml:space="preserve">คลิปบอร์ด</data>
   <data name="Menu_SecFile" xml:space="preserve">ไฟล์และพาธ</data>
-  <data name="Menu_SecSys" xml:space="preserve">ระบบและหน้าต่าง</data>
+  <data name="Menu_SecSys" xml:space="preserve">ระบบ</data>
   <data name="Menu_SecCalc" xml:space="preserve">คำนวณ</data>
-  <data name="Menu_SecPreset" xml:space="preserve">พรีเซ็ตที่ใช้บ่อย</data>
+  <data name="Menu_SecPreset" xml:space="preserve">พรีเซ็ตพร้อมใช้</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">ขั้นตอนนี้ยังไม่มีที่อยู่ ใส่ที่อยู่ไว้ด้านบน ถ้าอยากให้ที่อยู่ตามหน้าที่เปิดอยู่ ให้เพิ่มขั้นตอน «อ่านที่อยู่เบราว์เซอร์» ก่อน เก็บผลลัพธ์ไว้ในตัวแปร แล้วค่อยใส่ {ชื่อตัวแปร} ที่นี่</data>
   <data name="Tpl_UrlVar" xml:space="preserve">ที่อยู่</data>
   <data name="Tbx_Title" xml:space="preserve">กล่องเครื่องมือโมดูล</data>

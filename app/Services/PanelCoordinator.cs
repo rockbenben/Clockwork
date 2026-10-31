@@ -272,16 +272,20 @@ internal sealed class PanelCoordinator
         if (p.Source is not { } page) return null;
         return () =>
         {
-            _panel?.Dismiss();
             var owner = DialogOwner?.Invoke();
             var config = _cfg();
 
             // **与管理器同一个分流**（见 PanelManagerWindow.AddStep 与 Quicker 的格子菜单）：
             // 「加一个步骤」与「做一个复杂动作」是两种东西，此前这里只有前者——直接开
             // 「运行程序」的编辑器，于是浮动面板上根本没有编复杂动作的入口，那条路只在管理器里有。
+            ContextMenu? menu = null;
             var compound = new MenuItem { Header = Strings.Get("Panel_NewCompound") };
             compound.Click += (_, _) =>
             {
+                // 菜单此刻还开着（这一段就是菜单项的点击回调）：先把菜单收掉，再收面板，最后才开编辑器。
+                // 面板若在菜单还开着时就没了，菜单那扇浮窗跟着一起没——菜单项点下去像是没反应。
+                menu!.IsOpen = false;
+                _panel?.Dismiss();
                 var g = Views.GroupEditorWindow.Edit(
                     owner, new ActionGroup { Name = Strings.Get("Panel_NewCompound") },
                     config.ActionGroups, config.Settings.FunctionHotkeys());
@@ -292,8 +296,11 @@ internal sealed class PanelCoordinator
                 RefreshMainGroupRows?.Invoke();
             };
 
-            var menu = Views.StepMenu.Build((kind, seed) =>
+            menu = Views.StepMenu.Build((kind, seed) =>
             {
+                // 同上：菜单先收、面板再收、编辑器最后开。
+                menu!.IsOpen = false;
+                _panel?.Dismiss();
                 // 传 _config.LaunchSteps：面板语境独有的「引用启动项」类型靠它现身（见 StepDisplay.RefKind）。
                 var s = Views.StepEditorWindow.Create(owner, kind, seed, config.ActionGroups, config.LaunchSteps);
                 if (s == null) return;
@@ -302,7 +309,17 @@ internal sealed class PanelCoordinator
                 RefreshMainGroupRows?.Invoke();
             }, presets: true, headerItems: new[] { compound });
 
-            Views.StepMenu.OpenAt(owner, menu);
+            // 菜单挂在**面板**上，不能挂在一个已经不存在的窗口上。
+            //
+            // PlacementTarget 为空的 ContextMenu 是一扇**没有归属的浮窗**：它收不到
+            // 「本程序失去前台」这件事，于是切到别的程序之后它就留在屏幕上不走（用户报的就是这个）。
+            // 主窗通常还缩在托盘里（DialogOwner 给的就是 null），所以这条路上锚点只能是面板自己——
+            // 面板也得因此**晚一点收**：菜单开着的时候先收面板，菜单那扇浮窗会跟着一起没。
+            //
+            // 面板在菜单开着的时候不能自己关掉（失焦即关），那一条由 QuickPanelWindow 挂菜单时接管。
+            var anchor = _panel;
+            anchor?.HoldMenu(menu);
+            Views.StepMenu.OpenAt(anchor, menu);
         };
     }
 

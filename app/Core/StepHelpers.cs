@@ -63,9 +63,7 @@ public static class StepHelpers
     public static int AfterMinutesOfDay(LaunchStep s) => AfterHour(s) * 60 + AfterMinute(s);
     public static string AfterTimeLabel(LaunchStep s) => $"{AfterHour(s):D2}:{AfterMinute(s):D2}";
 
-    // 开机延迟秒数夹取：0..600（10 分钟）。设置页与开机消费侧共用同一口径，避免魔数分家、UI 收了值而开机静默只等一半。
-    // 「等剪贴板变化」的超时秒数。借用 Level 字段（0-100 的通用数值位）而不是新加一个：
-    // 这个步骤只需要一个数，而模型里已经有一个没被它占用的数值位。
+    // 「等剪贴板变化」的超时秒数，存在 WaitSeconds 里（每个类型各占一格；Level 只剩迁移读）。
     // 夹到 1..60：0 秒等于不等（那就别放这一步），60 秒以上不像等剪贴板，像挂住了。
     public static int ClampWaitSeconds(int seconds) => seconds < 1 ? 5 : (seconds > 60 ? 60 : seconds);
 
@@ -78,6 +76,7 @@ public static class StepHelpers
     // 于是这一档单独有个夹取：0 放行，其余走同一把 1..60 的尺子。
     public static int ClampWaitKeySeconds(int seconds) => seconds <= 0 ? 0 : ClampWaitSeconds(seconds);
 
+    // 开机延迟秒数夹取：0..600（10 分钟）。设置页与开机消费侧共用同一口径，避免魔数分家、UI 收了值而开机静默只等一半。
     public static int ClampStartupDelay(int seconds) => Math.Clamp(seconds, 0, 600);
 
     // 中键长按阀值夹取：150..2000 ms。同样设置页与消费侧共用。
@@ -120,10 +119,10 @@ public static class StepHelpers
          : (s.Confirm || (s.OnYes != null && s.OnYes.Type != "none")) ? MessageForm.Confirm
          : MessageForm.Info;
 
-    /// <summary>一个类型起手时的默认动作（写在 Action 那一格里的值）。</summary>
+    /// <summary>一个类型起手时的默认动作（写在它自己那一格里的值：VolumeAction / WindowAction / MouseAction / SkipMode）。</summary>
     //
-    // **Action 是一格共用的数值位，量纲随类型变**：音量用它记「静音/设到几成」，
-    // 窗口用它记「关掉/最小化」，鼠标用它记「按下/双击」，跳过用它记「跳到哪一段」。
+    // **每个类型认领自己那一格**：音量用 VolumeAction 记「静音/设到几成」，
+    // 窗口用 WindowAction 记「关掉/最小化」，鼠标用 MouseAction 记「按下/双击」，跳过用 SkipMode 记「跳到哪一段」。
     // 于是「这一格该是什么」只有一处说了算——就是这里。
     //
     // 为什么值得收成一处：**新建与换类型这两条路原本各答各的。**

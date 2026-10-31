@@ -4,7 +4,7 @@ using System.Resources;
 namespace Clockwork.I18n;
 
 // 本地化字符串查找。resx 卫星程序集：中性(Strings.resx)=中文源、Strings.en.resx=英文；按 CurrentUICulture 取，
-// 未找到回退中性(中文)。M7 补其余语言时各加一个 Strings.<lang>.resx 即可。
+// 未找到回退中性(中文)。其余 17 门语言已各有 Strings.<lang>.resx；再加语言时照此各加一个即可。
 public static class Strings
 {
     private static readonly ResourceManager Rm = new("Clockwork.Resources.Strings", typeof(Strings).Assembly);

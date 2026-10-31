@@ -127,4 +127,61 @@ public class StepDisplayTests
         Assert.Contains("TAILWORD", StepDisplay.StepSearchText(step));
         Assert.DoesNotContain("TAILWORD", StepDisplay.StepSummary(step));
     }
+
+    [Fact]
+    public void StepKindDescription_covers_all_registered_kinds()
+    {
+        foreach (var kind in StepDisplay.StepKinds)
+        {
+            var desc = StepDisplay.StepKindDescription(kind);
+            Assert.False(string.IsNullOrWhiteSpace(desc), $"Description for {kind} should not be empty");
+            Assert.False(desc.StartsWith("Kind_"), $"Description for {kind} fell back to raw resource key: {desc}");
+        }
+    }
+
+    [Theory]
+    [InlineData("text", null, "发送文本", "打字", true)]
+    [InlineData("text", null, "发送文本", "输入", true)]
+    [InlineData("keys", null, "发送按键", "快捷键", true)]
+    [InlineData("keys", null, "发送按键", "热键", true)]
+    [InlineData("url", null, "打开网址", "网页", true)]
+    [InlineData("browserUrl", null, "读浏览器地址", "浏览器", true)]
+    [InlineData("browserUrl", null, "读浏览器地址", "Chrome", true)]
+    [InlineData("browserUrl", null, "读浏览器地址", "Edge", true)]
+    [InlineData("volume", null, "音量", "麦克风", true)]
+    [InlineData("volume", null, "音量", "静音", true)]
+    [InlineData("system", null, "系统命令", "关机", true)]
+    [InlineData("system", null, "系统命令", "锁屏", true)]
+    [InlineData("system", null, "系统命令", "截图", true)]
+    [InlineData("window", null, "窗口动作", "置顶", true)]
+    [InlineData("window", null, "窗口动作", "最小化", true)]
+    [InlineData("copySelection", null, "获取选中的文字", "复制", true)]
+    [InlineData("math", null, "算一步", "计算", true)]
+    [InlineData("each", null, "每个（循环）", "循环", true)]
+    [InlineData("text", null, "发送文本", "type", true)]
+    [InlineData("keys", null, "发送按键", "hotkey", true)]
+    [InlineData("system", null, "系统命令", "shutdown", true)]
+    public void MatchesToolSearch_natural_intents(string kind, string? combo, string label, string query, bool expected)
+    {
+        var seed = combo != null ? new LaunchStep { Kind = kind, Combo = combo } : null;
+        var tip = StepDisplay.StepKindDescription(kind);
+        Assert.Equal(expected, StepDisplay.MatchesToolSearch(kind, seed, label, tip, query));
+    }
+
+    [Fact]
+    public void MatchesToolSearch_preset_aliases()
+    {
+        var copyPreset = StepDisplay.MakePreset("keys", "Ctrl+C");
+        Assert.True(StepDisplay.MatchesToolSearch("keys", copyPreset, "复制", "发送 Ctrl+C", "复制"));
+        Assert.True(StepDisplay.MatchesToolSearch("keys", copyPreset, "复制", "发送 Ctrl+C", "copy"));
+        Assert.True(StepDisplay.MatchesToolSearch("keys", copyPreset, "复制", "发送 Ctrl+C", "Ctrl+C"));
+
+        var playPreset = StepDisplay.MakePreset("keys", "MediaPlayPause");
+        Assert.True(StepDisplay.MatchesToolSearch("keys", playPreset, "播放、暂停", "发送 MediaPlayPause", "音乐"));
+        Assert.True(StepDisplay.MatchesToolSearch("keys", playPreset, "播放、暂停", "发送 MediaPlayPause", "play"));
+
+        var cleanPreset = StepDisplay.MakePreset("system", "emptyRecycleBin");
+        Assert.True(StepDisplay.MatchesToolSearch("system", cleanPreset, "清空回收站", "清空回收站", "垃圾桶"));
+        Assert.True(StepDisplay.MatchesToolSearch("system", cleanPreset, "清空回收站", "清空回收站", "clean"));
+    }
 }

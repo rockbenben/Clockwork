@@ -26,7 +26,7 @@ It sits quietly in the tray. The window's close button only hides it to the tray
 
 Right-clicking the tray icon opens the program's own menu, grouped under four headings — the ones you see depend on what is going on:
 
-- **My startup list** — **Rerun startup list** (asks first and lays out what this run would do again), **Stop running actions**, **View last startup log**.
+- **Startup List** — **Rerun startup list** (asks first and lays out what this run would do again), **Stop running actions**, **View last startup log**.
 - **Actions** — one **Run: <group>** per action group you put in the tray. Groups not listed here still run from their hotkey, from a reminder, or from the **Run** button on the Actions tab.
 - **Reminders** — **Pause reminders** (1 / 2 / 4 / 8 hours, or until the end of today) and **Quick reminder** (5 to 60 minutes). While reminders are paused, a **Resume reminders (N minutes left)** line appears here too.
 - **Fix** — **only there when something is actually wrong**: re-install the mouse hook (another program stole it), resume a gesture that yielded the right button, or release a mouse button that is stuck down. It sits near the top of the menu, right under the two everyday entries — so when your right-click is dead you can see there is something to fix.
@@ -35,7 +35,7 @@ Above those sit **Show window** and **Quick panel**; **Exit** is at the bottom.
 
 ## First run: replace the samples with your own
 
-On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — muting the speakers, launching an app, opening a URL on weekdays only (conditional execution), starting a chat app minimized in the background, sending a key combo. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Actions tab also preloads two **templates** (Stepping away / Wrap up · End of day), disabled like the rest — they turn off the screen or close apps, so enable one only when you mean it. Add more from the built-in templates under **From a template…**.
+On first run the startup list and the scheduled tasks each contain a handful of **samples** (marked as such), picked to show the most representative moves — muting the speakers, launching an app, opening a URL on weekdays only (conditional execution), starting a chat app minimized in the background, sending a key combo. They are there to be copied from, so edit or delete them freely. **All of them start unticked**, so a fresh install does nothing on its own; tick the ones you actually want. The Actions tab also preloads two **templates** (Stepping away / End of day), disabled like the rest — they turn off the screen or close apps, so enable one only when you mean it. Add more from the built-in templates under **From a template…**.
 
 The most common need, "open my everyday apps at login":
 
@@ -50,7 +50,7 @@ The most common need, "open my everyday apps at login":
 5. Tray → **Rerun startup list** to test it once. (It asks first and lays out what this run would do again — the list's close-window and send-keys steps are mostly irreversible, so it is worth reading before pressing.)
 6. Happy with it? On the **Settings** tab, enable **Start at login** — it'll run automatically every boot.
 
-> Only want scheduled tasks or actions? Adjust the samples on the matching tab the same way; the startup list can be emptied entirely — the four features are independent.
+> Only want scheduled tasks or actions? Adjust the samples on the matching tab the same way; the startup list can be emptied entirely — the five features are independent.
 
 ## Startup list
 
@@ -58,9 +58,12 @@ The most common need, "open my everyday apps at login":
   **Every row also carries an icon at its left** — the same thing the tile would draw on the panel, resolved by the same code: whatever you set on the step, else the target program's own icon, else that step kind's line glyph. It is the one place outside the panel where `icon` shows up; the gesture and scheduled-task lists have no icon column at all.
 - Each step can be enabled/disabled, given a **post-step delay**, a **repeat count** (loop it N times, waiting the post-step delay between each), and **run conditions** (see below). *Message* steps have no repeat count — they always show once, and a count left over from switching a step to *Message* has no effect.
 - Selecting a step and clicking **Run** runs *just that step* immediately (ignoring its enabled state and time conditions — pure test); a tray toast reports the result.
-- **At the top of Add ▾, the first entry is "Pick from Start menu…", with "Launch program" and "Open URL" right beside it** — the three most common jobs never require guessing a category. The picker lists every program in your Start menu — **including Store / UWP apps like Sticky Notes or Paint, which have no exe path** (they don't exist as files, so you could never type them in). Search, multi-select with Ctrl / Shift, and each one becomes a *Launch program* step. No more right-click → Properties → copy the target path. Added steps arrive **unticked**, so you get a look before anything runs.
-- **Below those quick entries, Add ▾ groups the remaining step types by what you want to do** (Common / UI / Clipboard / Text processing / Files & paths / System & windows / Calculations / Flow control / Run action). A section with only one type is placed directly at the top level rather than under a one-item submenu. Mechanism names live inside the sections — so "close WeChat: is that a window action or send keys?" never has to be answered up front; you pick *System & windows* and read from there. (It was flat once: a dozen-plus types plus section headings made a twenty-row wall that grew scroll arrows on a 1366×768 laptop, hiding the last few entries.)
-- **Add ▾ → Common** — a list of ready-filled steps: copy / paste / search the selected text / back / forward / play-pause · previous · next track / volume up · down / minimize · maximize · toggle-on-top · close the current window. They are not new step types, just existing ones with their fields filled in (*Copy* is really *Send keys `Ctrl+C`*), and picking one still opens the same step editor, where you can change it. **They are here for mouse gestures**: the word in your head while drawing one is “copy”, not “send keys”.
+- **At the top of Add ▾, the first entry is "Pick from Start menu…", with "Launch program", "Open URL", "Send keys", "Send text", "Window action" and "Delay" right beside it** — the six daily jobs never require guessing a category; they are one click away. The picker lists every program in your Start menu — **including Store / UWP apps like Sticky Notes or Paint, which have no exe path** (they don't exist as files, so you could never type them in). Search, multi-select with Ctrl / Shift, and each one becomes a *Launch program* step. No more right-click → Properties → copy the target path. Added steps arrive **unticked**, so you get a look before anything runs.
+- **Below those quick entries, Add ▾ groups the remaining step types by what you want to do** (Interface / Clipboard / Text / Files & paths / System / Calculate / Flow control / Actions). A section with only one type is placed directly at the top level rather than under a one-item submenu. Mechanism names live inside the sections — so "close WeChat: is that a window action or a run action?" never has to be answered up front; you pick *System* and read from there. (It was flat once: a dozen-plus types plus section headings made a twenty-row wall that grew scroll arrows on a 1366×768 laptop, hiding the last few entries.)
+- **Each action shows up in the menu exactly once.** "User input" used to appear under both *Common* and *UI*, and "Get the selected text" under both *Common* and *Clipboard* — the menu grew a line without gaining an inch of information. Every type now belongs to one section; the "find it by what it acts on" route is not lost, because the compound-action editor has a **search box** — type "user input" and it is there.
+- **Every menu item has a tooltip.** Hovering over any step type or preset pops an immediate plain-language explanation (presets state their concrete action, e.g. "Send Ctrl+C"), so there is no guessing what an unfamiliar step does.
+- **Add ▾ → Presets** — a list of ready-filled steps: copy / paste / search the selected text / back / forward / play-pause · previous · next track / volume up · down / minimize · maximize · toggle-on-top · close the current window · empty the recycle bin. They are not new step types, just existing ones with their fields filled in (*Copy* is really *Send keys `Ctrl+C`*), and picking one still opens the same step editor, where you can change it. **They are here for mouse gestures**: the word in your head while drawing one is “copy”, not “send keys”.
+  This section used to be called "Common presets" — two characters away from the "Common" section next to it, and describing a completely different table. It is now called **Presets**, so it reads at a glance as *ready-made*, not *pick a type and fill it in*.
   The startup list has no such section — every entry in it asks what you are looking at right now, and at login nobody is there.
 
 ### Step types
@@ -68,7 +71,7 @@ The most common need, "open my everyday apps at login":
 | Type | What it does |
 | --- | --- |
 | **Launch program** | A program (full path or bare name), shortcut, script, folder, URL, document, or a protocol like `ms-settings:` (the **…** button to the right picks a file); `.ps1` runs via PowerShell, and **the right PowerShell is picked for you** (see the notes below this table). Target and working dir may both include surrounding quotes or environment variables like `%USERPROFILE%` — both are handled for you. Working dir blank = target's folder. Advanced: **window style** (minimized / maximized / hidden), **activate if already running** (**on by default**: bring to front instead of relaunching; process name via the **…** button. For a URL / `.lnk` / `.ps1` / document target the process name can't be derived, so the option quietly does nothing and the target launches as usual), **fallback paths** (one full path per line; the first existing one is used — handy when install paths differ across machines). These advanced fields sit under **More settings** by default; a step that already uses any of them opens with the section expanded. |
-| **Send keys** | e.g. Win+D, Alt+K, Ctrl+Enter, F5 (supports Enter / Tab / Esc / Del / arrows…; **Capture** records a shortcut by pressing it). **Wheel with modifiers** (e.g. `Ctrl+wheel` to zoom) lives here too: hold Ctrl and scroll inside the combo box to record `Ctrl+WheelDown`; **hold Shift and scroll to record a horizontal scroll** — a key is recorded by pressing it, a wheel by rolling it, no syntax to memorise (you can still double-click and type `WheelUp` / `WheelDown`). **For plain scrolling or clicking, the Mouse step below is more direct** (a dropdown, nothing to memorise). Typed forms: `LeftClick` / `DoubleClick` / `RightClick` / `MiddleClick` / `MouseBack` / `MouseForward`. Wheel can be sent but not bound as a global hotkey — the OS hotkey registration cannot express it. |
+| **Send keys** | e.g. Win+D, Alt+K, Ctrl+Enter, F5 (supports Enter / Tab / Esc / Del / arrows…; **Capture** records a shortcut by pressing it). **Wheel with modifiers** (e.g. `Ctrl+wheel` to zoom) lives here too: hold Ctrl and scroll inside the combo box to record `Ctrl+WheelDown`; **hold Shift and scroll to record a horizontal scroll** — a key is recorded by pressing it, a wheel by rolling it, no syntax to memorise (you can still double-click and type `WheelUp` / `WheelDown`). **For plain scrolling or clicking, the Mouse step below is more direct** (a dropdown, nothing to memorise). Typed forms: `LeftClick` / `DoubleClick` / `RightClick` / `MiddleClick` / `MouseBack` / `MouseForward`. Wheel can be sent but not bound as a global hotkey — the OS hotkey registration cannot express it.<br>**What goes out is exactly the combo in the box**: modifiers you are holding to press the hotkey are not carried over with the main key — otherwise “send Enter” would arrive as Ctrl+Enter, which most apps ignore (fixed after a user report that “sending Enter” did nothing).<br>**A plain letter is swallowed while an IME is running** (that is the IME composing pinyin, not this step failing) — letters with Ctrl are unaffected, since an IME does not intercept combinations. To type text, use *Send text* below: it goes in as Unicode, bypassing the IME and the keyboard layout. |
 | **Mouse** | One dropdown for every mouse action: **scroll** (up / down / left / right, one notch per run), **click** (left / double / right / middle) and the **side buttons** (back / forward). Raise the **repeat count** for N clicks or notches and use the post-step delay for the rhythm (e.g. 5 × 50 ms).<br>Horizontal scrolling emits a real tilt-wheel event (`HWHEEL`), which more apps honour than the `Shift+wheel` workaround — handy for wide tables, Gantt charts and timelines.<br>**The targeting rules differ, so keep them straight:** scrolling goes to the window **under the pointer** (Windows’ “Scroll inactive windows when I hover over them” setting, on by default on Win10/11; turn it off and it goes to the foreground window), while **clicks land wherever the pointer already is** — this app never moves it (moving it would mean absolute vs relative coordinates, multi-monitor and DPI scaling, and it would interrupt whatever you are doing). So either put the target in place first with **Window action → bring to front** and make sure the pointer is where it needs to be, or stick to position-independent actions like **back / forward**.<br>Prefer the keyboard where it works: `PageDown` via **Send keys** scrolls more predictably and `Alt+←` goes back; reach for the mouse only where nothing else does (maps, image viewers, Electron virtual lists, CAD). |
 | **Send text** | Type a string into the focused window (newline = Enter, Tab works). Optional **target process** (the **…** button picks one) — brings its window to front first, then types; blank = current focus. **An active IME doesn't interfere**: text goes in as Unicode, bypassing the keyboard layout, so it can't be swallowed into a candidate window — CJK, accents and emoji all arrive intact. |
 | **Volume** | Mute / unmute / set level (setting a level unmutes first) / **mute or unmute the microphone** — that one mutes the default recording device itself, so no app hears you, which is stronger than any meeting app's own mute button. |
@@ -244,7 +247,7 @@ Three ways, all doing exactly the same thing: the **stop button** at the right e
 ## Scheduled tasks
 
 - Each task either **pops a reminder** (text / speech / on-Yes action) or **silently runs an action**. **The reminder text is required** — saving an empty task is refused, and the text is how the task is identified in the list.
-- **Trigger:** timed, **at login** (with "only within N minutes of boot" counting as login — 10 min by default for new tasks), or one of the 7 **events** below.
+- **Trigger:** timed, **at login** (with "only within N minutes of boot" counting as login — 10 min by default for new tasks), or one of the **events** below.
 - **Recurrence:** by weekday / every-N-days / monthly; the reminder can be read aloud. **With weekday recurrence, ticking no day means every day** — the editor says so next to the row.
 
 ### Event triggers
@@ -294,7 +297,9 @@ These don't watch the clock, they watch the machine — the task fires the momen
   - **Type line by line is the only interactive template.** Paste a block of multi-line text first, then press `Insert` to send the next line and `Esc` to stop. It shows how a block loop and a variable condition are wired together — the fastest way to adapt looping over a batch to your own action.
   - **Open the local source file needs a site map first.** It reads your browser's address bar, then turns that address into the source file behind it in your local repo. The first run reports that the address' domain isn't in the site map — add one with **Open site mappings…** in that step.
 - **The action editor is three columns** (following Quicker's combination-action editor): a **module toolbox** on the left (category dropdown + search box; double-click or press Enter to add a step), the step list in the middle, and this action's **variables and appearance** on the right.
-  - The toolbox's categories follow Quicker's module taxonomy: **Common / UI interaction / Text processing / Clipboard / Files and paths / System and windows / Compute / Flow control / Actions**. A step can appear under more than one category (Quicker's own docs say the same), while *All* shows each kind exactly once.
+  - The toolbox's categories follow Quicker's module taxonomy: **Common / Interface / Clipboard / Text / Files & paths / System / Calculate / Flow control / Actions**. A step can appear under more than one category (Quicker's own docs say the same), while *All* shows each kind exactly once.
+  - Hovering over any item in the toolbox displays an instant tooltip so you can see what it does without opening it first.
+  - **The search box understands everyday intent and synonyms**: besides step names and kind IDs (like `regex` or `app`), typing "type" or "typing" finds Send text, "hotkey" or "combo" finds Send keys, "browser" or "web" finds Open URL and Read browser URL, and "shutdown", "screenshot", "music", "volume", "topmost", "copy", "paste" jump straight to the matching actions or presets.
   - The right column lists every variable this action produces (the union of the steps' "output to variable"), and double-clicking one copies `{name}`.
 - The list shows each group's **step summary** and **hotkey** columns (an empty group's summary reads **(empty)**).
 - A group runs **only one copy at a time** (repeat triggers are skipped — except its hotkey, see "the hotkey is a toggle" below).
@@ -317,9 +322,9 @@ These don't watch the clock, they watch the machine — the task fires the momen
 The group editor has two run buttons that act on **whatever is currently in the editor**, not the last-saved version — so you can test a step you just tweaked without saving first.
 
 - **▶ Run This Step** runs just the selected row. If that row is itself an action-group step, it resolves and runs the referenced group as currently saved, not any unsaved edits made to that sub-group elsewhere.
-- **▶ Run Group** runs every step top to bottom, exactly like a real trigger — including delays, repeat counts, and weekday / before-N-o'clock conditions, so a weekday-only step really is skipped on the wrong day.
+- **▶ Run Action** runs every step top to bottom, exactly like a real trigger — including delays, repeat counts, and weekday / before-N-o'clock conditions, so a weekday-only step really is skipped on the wrong day.
 
-While a whole-group run is going, **▶ Run Group** turns into **■ Stop**; closing the group editor also stops the run. Confirmation dialogs (e.g. from a message step) pop up in front of the editor window instead of behind it.
+While a whole-action run is going, **▶ Run Action** turns into **■ Stop**; closing the group editor also stops the run. Confirmation dialogs (e.g. from a message step) pop up in front of the editor window instead of behind it.
 
 ### Chaining steps into one action
 
@@ -368,7 +373,12 @@ You get told when it doesn't work: an unknown name or a switched-off group raise
 A tile grid at your mouse, one press away — for when the tray icon is a long way from where your hand already is.
 
 - **Press the panel hotkey** (default `Ctrl+Alt+Space`, set on the **Settings** tab — in that box, Esc cancels and **Del clears it**, leaving the middle-button hold and the tray entry as the ways in) and the panel appears at the pointer. Press it again, press **Esc**, or click anywhere else to dismiss it.
-- **A page is a thing you make, not a side job of some action.** Hit the **+** at the end of the left rail in the **panel manager** and a card drops in with its name ready to type, **in whichever category you were looking at**; the **+** at the end of the top row makes a category instead — just the category, no page with it, so its rail starts empty and you add the first page yourself. Put something on a page with the **+** at the right end of its header — it is not part of the grid, because the grid holds real tiles and nothing else (the panel works the same way). A page's name, category and app binding are all edited in place on its header — there is no separate settings window.
+- **Your hands can stay on the keyboard**: just start typing and the panel searches (the search box only exists when there are more actions than one screen holds); **arrow keys pick a tile, Enter runs it**.
+  - **Arrow keys move the focus between tiles** (left/right within a row, up/down across rows; down from the last row of the top band lands on the first row of the bottom band, so the tiles that don't fit on one screen are still reachable by keyboard).
+  - **Enter runs the tile you picked** — the one you can see highlighted — not something else, so "I picked A and something else ran" never happens. A disabled tile doesn't run either. Space runs it too (that's Windows' own path).
+  - While searching: **type → ↓ into the results → ↓ to keep going → Enter runs the one you picked** (a second ↓ moves down a result instead of jumping back to the first).
+- **The menu the + at the right end of the dial opens keeps the panel alive while it's up** (opening a menu takes the focus away from the panel, and the panel's rule is "close when it loses focus"); **switch to another program and that menu closes itself** instead of hanging around on screen.
+- **A page is a thing you make, not a side job of some action.** Hit the **+** at the end of the left rail in the **panel manager** and a card drops in with its name ready to type, **in whichever category you were looking at**; the **+** at the end of the top row makes a category instead — it arrives with an empty page in it, because a category with no page has nowhere to live (see *Pages* below). Put something on a page with the **+** at the right end of its header — it is not part of the grid, because the grid holds real tiles and nothing else (the panel works the same way). A page's name, category and app binding are all edited in place on its header — there is no separate settings window.
   - **The manager's preview is the panel's first screen.** The two bands are drawn to the row counts you set, and **anything more on that page is drawn in a block below**, under a line saying you have to scroll in the panel to see it — so the card always matches the panel's first screen instead of running a few rows past it.
   - **Pages and actions are two different things.** An action is a run of operations plus how it fires (hotkey, tray, referenced elsewhere); a page is a screenful of tiles plus when it shows (category, app). They share no properties, so they no longer share a stored object — configs from older versions are moved across on first launch, and you get a card listing what changed.
   - **Every step kind works as a tile** — launch program, open URL, send keys, mouse, send text, volume, window action, system command, run action, delay, message, and the rest. A tile runs that one operation the same way the **Run** button next to a step does.
@@ -401,13 +411,17 @@ A tile grid at your mouse, one press away — for when the tray icon is a long w
 
 Pages follow content, not a tile count: **each one is a page you made and named yourself.** So you flip between "Handy" and "Dev", not "2 of 4". **One page is one page** — when it holds more tiles than fit, they scroll inside that page instead of continuing onto a second screen under the same name. That is a capacity problem, not a content one.
 
-**Two rows — the top one picks a category, the left one lists that category's pages.** A category is a name you give
+**Two rows — the top one picks a category, the left one lists that category's pages.** The two look alike (the top
+row's first tab sits right above the left row's first entry), so the layout separates the levels instead: the **panel
+manager** writes down what each row holds (*Category* on top, *Pages* on the left), while the **quick panel** says
+nothing and simply indents its left row by 12px — every pixel of that overlay belongs to the tiles, and the level is
+carried by shape. A category is a name you give
 a batch of pages (*Coding*, *Winding down*). Pages have none by default, so everything sits under *Uncategorized*,
 which is what most people will see forever. A page lives in exactly one place — the left row — so there is never a
 question of which row a page is on.
 
 - **With one category the top row is not drawn**, and with one page in the current category neither is the left one
-  (a tab would just repeat the name). The panel manager's appearance strip has a tick for each, to force one out of
+  (a tab would just repeat the name). The panel manager's appearance column has a tick for each, to force one out of
   sight when you do have several.
 - **The scale in the middle of the panel's header row only answers "which page"**, and it sits right next to the page name.
   It disappears entirely while the left row is up — one thing is said in one place — and it is the only
@@ -417,14 +431,17 @@ question of which row a page is on.
   the middle of the content — so it moved up to the header row, next to the name it belongs with.
 - **Both rows hide while you search**: results come from every page, so a highlighted tab would claim you are
   searching inside one.
-- The panel manager shows the same two rows (same styles). **Putting a page in a category** has three routes, take
-  whichever is nearest: drag its tab **onto a category tab**, or click the button in its heading that names its
-  current category. The **+** at the end of the top row makes a new category **on its own** — it creates no page, so
-  the left rail stays empty until you put the first page in with the **+** at the end of that rail; it puts the new
-  category last in the row and lets you name it on the spot. **Double-click a category
-  tab** to rename it; that rewrites the category name on every page in it, because a category is not a record of its
-  own, it emerges from the pages. The manager always keeps its category row, even with only *Uncategorized* on it,
-  because that + is the only way to make a category.
+- The panel manager shows the same two rows (same styles, and a small label above each). **Putting a page in a
+  category** has three routes, take whichever is nearest: drag its tab **onto a category tab**, or click the button in
+  its heading that names its current category. The **+** at the end of the top row makes a new category **with an
+  empty page in it**, then lets you name it on the spot — a category is not a record of its own, it emerges from
+  the pages, so it has to carry at least one of them; one carrying none has nowhere to live and would be gone the next
+  time you open the manager. It **does not move the page you are on** (changing a page's category is a different
+  thing: the button in its heading, or dragging its tab up to the top row). The new category lands last in the row —
+  the order of that row is the order of the pages, and the page order is the panel's page order, so making a
+  category is no reason to move a page off the front. **Double-click a category
+  tab** to rename it; that rewrites the category name on every page in it. The manager always keeps its category row,
+  even with only *Uncategorized* on it, because that + is the only way to make a category.
 - **Both rows sort freely**: drag a page tab to reorder pages, drag a category tab to reorder categories (the whole
   category travels, and the order inside it is kept). Categorising a page also slides it to the end of that category's
   run — without that the two categories' pages interleave, and since category order is *whose first page comes first*,
@@ -453,7 +470,7 @@ This is what makes the panel worth opening in the first place: pop it over your 
 
 ### Making it look how you want
 
-On the **Settings** tab, under **Quick panel**:
+In the **panel manager**'s right-hand appearance column — the window that shows the panel's first screen, so a change is visible on the spot. (The Settings tab keeps only the ways to summon the panel.)
 
 - **Layout — read it as `columns × rows per screen`** (4 × 7 by default). The well is split into two bands with a hairline between them. They mean nothing different from each other; the split is rhythm. A single 7-row slab of squares reads as a wall, while 3 + 4 gives the eye a place to land, the same reason a keyboard has rows.
   - **"Rows per screen" is how many rows fit on one screen** (7 rows = 28 tiles by default); **"Top rows" is where the split falls** (3 by default, so 3 + 4 — set it equal to the rows per screen for a single band). The old pair, top rows / bottom rows, had to be added up to see how much fits, and "bottom rows" was an odd thing to want on its own.
@@ -517,7 +534,7 @@ On the **Settings** tab, under **Quick panel**:
 
 ## Mouse gestures
 
-Hold the **right button**, draw a stroke, release, and the matching action runs. Open the manager from the **polyline icon at the right end of the main window's tab strip**, or from the quick panel's title row.
+Hold the **right button**, draw a stroke, release, and the matching action runs. Open the manager from the **mouse icon at the right end of the main window's tab strip**, or from the quick panel's title row.
 
 - **The line can look like five different lines.** **Gesture settings…** at the bottom of the gesture manager opens a small
   window with the style, the weight, and whether the tail fades out. Five styles: **Lumen** (the default: a ribbon with a deep
@@ -529,7 +546,7 @@ Hold the **right button**, draw a stroke, release, and the matching action runs.
   outline that keeps the tail readable never dims. Lumen's outer glow stays too, but Neon's two glows dim with the
   core. The default is **Lumen** (a deliberate change from the old classic line); the other four are always one click
   away.
-- **A gesture is one action plus one stroke.** The action is an ordinary step, any of the ten kinds; to run a whole action, point a **Run action** step at it. So actions that only ever exist as a gesture — paste, lock screen — need no group of their own. The most common ones — copy, paste, search the selected text, back and forward, play-pause and track skip, volume up and down, minimize / maximize / toggle-on-top / close the current window — are already there under **Add ▾ → Common**: pick one, draw a stroke, done.
+- **A gesture is one action plus one stroke.** The action is an ordinary step, any step kind; to run a whole action, point a **Run action** step at it. So actions that only ever exist as a gesture — paste, lock screen — need no group of their own. The most common ones — copy, paste, search the selected text, back and forward, play-pause and track skip, volume up and down, minimize / maximize / toggle-on-top / close the current window — are already there under **Add ▾ → Presets**: pick one, draw a stroke, done.
 - **You can see what you are drawing — and the line brightens the moment it is recognised.** The moment the stroke starts, a line follows the pointer on screen and vanishes when you release. **As soon as what you have drawn matches a gesture, that line turns bright and thickens**, so you know it has locked on before you let go. It goes dark again as the stroke grows past the match and lights up again when it matches something else: draw ↑ and Copy lights up, continue into ↑↓ and it goes dark, and it returns as Search. Colour and weight only — no flash, no popup, no text: the line is already where your eyes are. The line is **click-through and never takes focus**: whatever sits under the pointer keeps receiving your input, so *Minimize current window* and friends still mean the window you were actually using, not the line.
 - **The line also says what it is about to do.** As soon as the stroke is recognised, a small label next to the pointer names the action it will run (`Copy`). The line brightening tells you *that* it recognised the shape; the label tells you *which* one — and with per-app gestures those differ: ↑ is Search in a browser and Copy in an editor, so "it lit up" is ambiguous on its own. An uncertain signal is worse than none: it makes you believe you already know what will happen, and stop checking. The label sits right by the line, is click-through, never takes focus, and disappears when you let go. Turn it off with **Show the action name while drawing** in the gesture manager.
 - **Eight directions**: ← ↑ → ↓ and the four diagonals ↖ ↗ ↙ ↘. A stroke is stored as a direction string (`L U R D` for the axes, numpad-shaped `7 9 1 3` for the diagonals) and shown as arrows.
@@ -640,7 +657,7 @@ no gesture tool to install first.
 
 ## Settings
 
-Three sections, ordered by when you'd reach for them.
+Four sections, ordered by when you'd reach for them.
 
 **Startup**
 
@@ -649,21 +666,23 @@ Three sections, ordered by when you'd reach for them.
 - **Wait until the system is ready** (desktop / network) — goes as soon as both are ready, waits at most 90 s, then the fixed delay above is added on top. Better than simply raising the delay when the list runs too early for your apps.
 - **Start minimized to tray** (opening manually goes straight to the tray).
 
-**General** — app-wide things; the first two are both "how you summon it globally".
+**General** — app-wide things.
 
 - **Panic hotkey** — click the box and press your shortcut; Esc cancels, Del clears; default `Ctrl+Alt+Q`.
-- **Mouse gestures** — the way in is the **polyline icon at the right end of the main window's tab strip** (*Manage gestures…*), not a row on this page; the quick panel's title row has one too. With no enabled gesture the right button behaves exactly as usual.
 - **UI language** — Simplified Chinese, English, 日本語 and 15 more (18 total); switching restarts the app to apply.
 - **Theme** — Dark / Light / Follow system; switching restarts the app to apply. "Follow system" reads the **app** mode in Windows settings (not the system mode), matching File Explorer.
 - **Export settings** — saves a copy of `clockwork.settings.json` wherever you choose (default name `clockwork.settings.backup.json`). Use it to back up before a big change, or to move your setup to another PC.
 - **Import settings** — replaces **all** current config (startup list / scheduled tasks / actions / gestures / settings) with the chosen file. It confirms first, copies the current config to `clockwork.settings.json.bak` as an undo path, verifies the file parses before overwriting, then restarts the app so everything reloads. Task state (`clockwork.state.json`) is not touched.
 - **A config file that can't be read is never overwritten.** Hand-edit the json and miss a comma, or lose power mid-save, and the app starts on defaults, tells you so, and saves your file aside as `clockwork.settings.json.bad`. The original is not clobbered by the defaults — fix it and restart to recover. Even if you miss the notice, rebuild everything by hand and save, that `.bad` copy is still there.
 
-**Quick panel** — six settings, all of which affect only that one overlay; ordered "how you summon it, then how it looks". Two for summoning, four for appearance; details under **Quick panel** above.
+**Quick panel** — the master switch and the two ways to summon it. Appearance is not here: it lives in the panel manager's right-hand column, beside the preview (see *Making it look how you want* above).
 
+- **Use the quick panel** — the master switch. Unticking it releases the hotkey, stops the middle-button hook being installed and removes the tray entry; the pages themselves stay, and *Manage panel…* still opens them.
 - **Quick panel hotkey** — same box behaviour as the panic hotkey; default `Ctrl+Alt+Space`. Clearing it leaves the tray menu entry, so the panel is still reachable. If the combo is already taken by another program, registration fails with a card naming it — pick another; the panic hotkey is registered first and wins any clash.
 - **Hold the middle mouse button to open the panel** — off by default, with the hold time next to it (350 ms, clamps to 150–2000). Details and the passthrough rules are under **Quick panel** above.
-- **Layout / tile size / icons only / show built-in controls** — see **Tune it to taste** above.
+- **Layout / tile size / icons only / show built-in controls** — in the panel manager's appearance column; see *Making it look how you want* above.
+
+**Mouse gestures** — one switch, **Use mouse gestures**: the master switch described under *Mouse gestures* above. The gestures themselves are drawn in the gesture manager, opened from the **mouse icon at the right end of the main window's tab strip** (*Manage gestures…*) or from the quick panel's title row. With no enabled gesture the right button behaves exactly as usual.
 
 ### Checking for updates
 

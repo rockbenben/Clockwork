@@ -33,8 +33,8 @@ namespace Clockwork.Core;
 //
 // 判定协议与 LongPressGate 同构——先吞按下、抬起时回头定性，三条出口：
 //   没动就抬起          → ReplayClick 补发真右键。上下文菜单本来就出在 button-up，用户无感。
-//   画出的串匹配某个组  → Fire。
-//   画了但没匹配        → Swallow，什么都不发生。补发点击会在轨迹终点弹一个莫名的菜单，更糟。
+//   画出的串匹配某条手势 → Fire。
+//   画了但没匹配        → ReplayClick，把这一下右键还给用户（轨迹终点弹一个莫名菜单比这更糟）。
 //   （移动本身一律 Pass：光标位移吞不掉也不必吞，下游没收到按下，移动对它无意义。）
 /// <summary>右键监听此刻的状态。给界面显示用。</summary>
 public enum GestureWatchState

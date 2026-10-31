@@ -47,7 +47,35 @@ public sealed record PanelTile(string Label, PanelIconSpec Icon, Action Run, boo
 public sealed record PanelTilePage(string Title, IReadOnlyList<PanelTile> Tiles, Action? OnAdd = null,
                                    string Tab = "");
 
-/// <summary>面板外观（设置页可改）。集中成一个记录而不是四个参数：
+/// <summary>面板上能被回车触发的那一类按钮：格子、夹板上那排自带开关、表圈右端那几颗。</summary>
+///
+/// **为什么不能指望 WPF 自己处理**：回车只会激活 IsDefault="True" 的那颗按钮，
+/// 而一块面板上有几十颗按钮，不可能有一颗是「默认按钮」。于是在 WPF 的默认行为里，
+/// 焦点落在某一格上时按回车**什么也不会发生**（空格才有效）——
+/// 「方向键挑中一颗、回车跑它」这条流程就此落空：挑中的那颗高亮着，回车没反应，
+/// 而面板的其余部分照常工作，看上去像「这一格坏了」。
+///
+/// 每颗面板按钮把自己的动作挂在 Tag 上，窗口级回车据此找到它（见 <see cref="QuickPanelWindow.EnterTarget"/>）。
+internal sealed class PanelAction
+{
+    public PanelAction(Action run, bool enabled = true, object? identity = null)
+    {
+        Run = run; Enabled = enabled; Identity = identity;
+    }
+
+    /// <summary>按下这一颗要做的事（与鼠标点下去走的是同一个动作）。</summary>
+    public Action Run { get; }
+
+    /// <summary>这一颗是不是停用的。停用的格子点不动，回车也不该跑它。</summary>
+    public bool Enabled { get; }
+
+    /// <summary>这一格的身份（分类名 / 页序号）——两条导航栏画选中态时要用。</summary>
+    // 身份与动作住在一起，是因为 Tag 只有一格：两条栏原来拿 Tag 放身份，
+    // 那样就没地方放动作了，于是这两颗按钮成了面板上唯二按回车没反应的。
+    public object? Identity { get; }
+}
+
+/// <summary>面板外观（在面板管理器的外观列里改）。集中成一个记录而不是四个参数：
 /// 这几项总是一起读、一起变，拆开传迟早会漏传一个。</summary>
 public sealed record PanelLook(int Columns = 4, string TileSize = "normal", bool IconOnly = false, bool ShowOps = true,
                                int TopRows = 3, int BottomRows = 4, bool LeftTabs = true, bool TopTabs = true);
@@ -88,6 +116,7 @@ public partial class QuickPanelWindow : Window
     private int _page;
     private bool _closing;
     private bool _menuOpen;   // 右键菜单挂着：此刻的失焦是菜单造成的，不是用户点了别处
+    private ContextMenu? _heldMenu;   // 面板上开着的外部菜单（表圈那颗「+」开的「新增」菜单）
     private bool _everActivated;   // Show 后到底真激活过没有：被前台锁拒掉时的即刻 Deactivated 不能关窗
     private int _watchTick;        // 看门狗已走过的拍数（补抢额度）：提成字段是为了 Revive 能把它清零重满
     private int _outsideTicks;     // 观察拍（没有任何一拍见过真前台的那类面板）里光标已连续离开面板矩形的拍数（回来即清零，判据见 PanelFocus.ZombieShouldDismiss）
@@ -121,6 +150,7 @@ public partial class QuickPanelWindow : Window
         Native.DarkWindow.Apply(this);   // 深色标题栏用不上（无边框），要的是它消白闪的那半边
         // 这里不设 FlowDirection：RTL 由 App.ApplyUiCulture 在建任何窗口之前覆盖 Window 的默认元数据
         // 统一处理，逐窗口再设一遍只会多出一处将来会和它分歧的地方。
+        ApplyRailIndent();   // 左栏那道缩进要跟书写方向走（RTL 时换边）
 
         _look = look ?? new PanelLook();
         _metrics = PanelMetrics.For(_look.TileSize, _look.IconOnly);
@@ -154,7 +184,23 @@ public partial class QuickPanelWindow : Window
         //（中键长按这条路没有「刚响应用户输入」的豁免，开机首次最容易踩），WPF 立刻给一记
         // Deactivated，照关就是「面板闪一下就没了 / 完全没出现」。看门狗同一条规矩：
         // 从没拿到过前台的面板自己不关（见 StartFocusWatch）。
-        Deactivated += (_, _) => { if (!_menuOpen && _everActivated) Dismiss(); };
+        Deactivated += (_, _) => { if (!AnyMenuOpen && _everActivated) Dismiss(); };
+    }
+
+    // 此刻有没有菜单开着：右键菜单，或面板上开着的外部菜单。
+    //
+    // **判据用菜单自己的 IsOpen，不用另记一个布尔**：布尔在「菜单没能开起来」时会永远留在
+    // true 上，面板从此再也不自动关；而 IsOpen 从设上去那一刻起就是真的。
+    private bool AnyMenuOpen => _menuOpen || _heldMenu?.IsOpen == true;
+
+    // 面板上开着的**外部菜单**（表圈右端那颗「+」开的「新增」菜单）也要挂起「失焦即关」。
+    //
+    // 菜单弹出时面板会失去焦点，而面板的规矩是「失焦即关」——照关的话菜单刚出来面板就没了，
+    // 菜单项点下去指向的是一个已经关掉的窗口。与右键菜单同一条理由（见 BuildTileMenu）。
+    internal void HoldMenu(ContextMenu menu)
+    {
+        _heldMenu = menu;
+        menu.Closed += (_, _) => { if (ReferenceEquals(_heldMenu, menu)) _heldMenu = null; };
     }
 
     // ── 翻页 ──
@@ -272,24 +318,55 @@ public partial class QuickPanelWindow : Window
         foreach (var c in cats)
         {
             string label = c.Length > 0 ? c : Strings.Get("Panel_Uncategorized");
+            // 动作与身份一起挂上：这一格也要能被回车触发（见 PanelAction 的说明）。
+            void JumpToCategory()
+            {
+                // 跳到这一类的第一页。
+                //
+                // **不先改 _cat**：改了它就与当前页所属的那一类对不上，
+                // SyncCategory 于是以为「类别没变」而提前返回，左栏也就不重建——
+                // 顶栏点了另一类，格子换到了那一类，左栏却还列着上一类的页（实测）。
+                // 换类这件事交给 SyncCategory：它认的是**当前页属于哪一类**，
+                // 而当前页正是这里要换过去的那一页。
+                var first = _pages.FirstOrDefault(x => PanelLayout.SameCategory(CatOf(x), c));
+                ShowPage(first == null ? _page : IndexOfPage(first));
+            }
             var b = new Button
             {
                 Style = (Style)FindResource("PanelTopTab"),
                 Content = label,
-                Tag = c,
+                Tag = new PanelAction(JumpToCategory, identity: c),
                 ToolTip = label,
             };
-            b.Click += (_, _) =>
-            {
-                // 跳到这一类的第一页。**先换类再找页**：页签栏画的是当前类里的页，
-                // 顺序反过来的话会先拿旧的类去筛，找不到就停在原地，读起来像点不动。
-                _cat = c;
-                var first = _pages.FirstOrDefault(x => PanelLayout.SameCategory(CatOf(x), c));
-                ShowPage(first == null ? _page : IndexOfPage(first));
-            };
+            b.Click += (_, _) => JumpToCategory();
             System.Windows.Automation.AutomationProperties.SetName(b, label);
             TopTabBar.Children.Add(b);
         }
+    }
+
+    // 左栏整体缩进 12px：让开顶栏那几格。
+    //
+    // 两条栏长得几乎一样（都是一排名字），而顶栏那一格正好落在左栏第一条的正上方——
+    // 不缩进的话扫一眼就成了「同一个列表拆成两截」（用户实报：「横栏与竖栏看起来都是分类」）。
+    // 缩进是**形状**上的层级线索：面板上不摆「分类」「页」那样的说明词
+    // （那是管理器那种编辑窗口才摆得下的东西，面板每一像素都得留给格子）。
+    //
+    // **缩进的那一侧跟着书写方向走**：LTR 时顶栏在左、左栏往右让；RTL 时顶栏在右、
+    // 左栏往左让。外边距不会跟着 FlowDirection 自己翻，XAML 里的触发器也管不到
+    // **继承**来的方向变化——所以这一处自己算（OnPropertyChanged 里跟着方向一起换）。
+    private void ApplyRailIndent()
+    {
+        if (PageRail is null) return;
+        PageRail.Margin = FlowDirection == System.Windows.FlowDirection.RightToLeft
+            ? new Thickness(0, 0, 12, 0)
+            : new Thickness(12, 0, 0, 0);
+    }
+
+    /// <summary>书写方向变了：左栏那道缩进要跟着换边。</summary>
+    protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.Property == FlowDirectionProperty) ApplyRailIndent();
     }
 
     // 左栏：一条一页，点了直接切到那一页。
@@ -303,7 +380,7 @@ public partial class QuickPanelWindow : Window
             {
                 Style = (Style)FindResource("PanelPageTab"),
                 Content = TabRow(p),
-                Tag = idx,
+                Tag = new PanelAction(() => ShowPage(idx), identity: idx),
                 ToolTip = p.Title,
             };
             b.Click += (_, _) => ShowPage(idx);
@@ -365,7 +442,7 @@ public partial class QuickPanelWindow : Window
         SyncCategory();
         int cur = _page;
         foreach (var child in PageRail.Children)
-            if (child is Button b && b.Tag is int i)
+            if (child is Button b && b.Tag is PanelAction { Identity: int i })
             {
                 bool on = i == cur;
                 b.BorderBrush = on ? (Brush)FindResource("BrushAccent") : Brushes.Transparent;
@@ -373,7 +450,7 @@ public partial class QuickPanelWindow : Window
                 b.Background = on ? (Brush)FindResource("BrushAccentTint") : Brushes.Transparent;
             }
         foreach (var child in TopTabBar.Children)
-            if (child is Button b && b.Tag is string c)
+            if (child is Button b && b.Tag is PanelAction { Identity: string c })
             {
                 bool on = PanelLayout.SameCategory(c, _cat);
                 b.BorderBrush = on ? (Brush)FindResource("BrushAccent") : Brushes.Transparent;
@@ -393,6 +470,9 @@ public partial class QuickPanelWindow : Window
     private void BuildChrome(IReadOnlyList<PanelTile>? chromeOps)
     {
         EmptyAction.Click += (_, _) => _manage?.Invoke();
+        // 空面板那颗行动按钮也要能被回车触发（见 PanelAction 的说明）：
+        // 面板是置顶浮窗，Tab 能走到它，走了过去按回车却没反应——又是「只有键盘坏了」那副样子。
+        EmptyAction.Tag = new PanelAction(() => _manage?.Invoke());
 
         // 「往这一页加一格」摆在表圈右端第一位，**不进格子阵**。
         //
@@ -451,6 +531,8 @@ public partial class QuickPanelWindow : Window
         // 没有文字的按钮必须显式给可访问名：内容只剩一个私用区码位，读屏软件念出来是乱码。
         System.Windows.Automation.AutomationProperties.SetName(b, tip);
         BindForeground(b, new[] { g });
+        // 与格子同一件事：这一颗也要能被回车触发（见 PanelAction 的说明）。
+        b.Tag = new PanelAction(run);
         b.Click += (_, _) => run();
         return b;
     }
@@ -621,8 +703,8 @@ public partial class QuickPanelWindow : Window
         var (top, bottom) = SplitBands(tiles);
         Tiles.Children.Clear();
         TilesBottom.Children.Clear();
-        foreach (var t in top) Tiles.Children.Add(MakeTile(t));
-        foreach (var t in bottom) TilesBottom.Children.Add(MakeTile(t));
+        FillBand(Tiles, top);
+        FillBand(TilesBottom, bottom);
         // 「加一格」**不占格子**：它在表圈右端，位置恒定（理由见 BuildChrome）。
         // 这一页能不能加由 OnAdd 说了算——没有它的页不摆那颗按钮。
         _addAction = onAdd;
@@ -634,6 +716,24 @@ public partial class QuickPanelWindow : Window
         EmptyNote.Text = tiles.Count == 0 ? Strings.Get("Panel_Empty") : "";
         EmptyAction.Visibility = tiles.Count == 0 && _manage != null ? Visibility.Visible : Visibility.Collapsed;
         if (EmptyAction.Visibility == Visibility.Visible) EmptyAction.Content = _manageLabel;
+    }
+
+    // 铺一条带里的格子。
+    //
+    // **顺带把行列坐标写上**：UniformGrid 自己按序排版（它不认 Grid.Row / Grid.Column，
+    // 写上去不影响版面，一像素都不动），但 WPF 的方向键导航是**按 Grid 的行列找邻居**的——
+    // 不填它，「下一行同一列的那一颗」根本不存在，方向键于是找不到落点，
+    // 焦点钉在原地不动（实测：方向键按了没反应，「挑一颗、回车跑它」这条流程是断的）。
+    private void FillBand(System.Windows.Controls.Primitives.UniformGrid band, IReadOnlyList<PanelTile> tiles)
+    {
+        int cols = Math.Max(1, band.Columns);
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            var b = MakeTile(tiles[i]);
+            Grid.SetRow(b, i / cols);
+            Grid.SetColumn(b, i % cols);
+            band.Children.Add(b);
+        }
     }
 
     // 切分公式在 Core.PanelLayout（可测），这里只把当前外观的行数/列数喂进去。
@@ -719,18 +819,41 @@ public partial class QuickPanelWindow : Window
     }
 
     // Esc 关闭；PageUp / PageDown 翻页。
-    // 用 Preview 是因为按钮会先吃掉普通的 KeyDown（空格/回车走按钮自己的激活路径），
+    // 用 Preview 是因为按钮会先吃掉普通的 KeyDown（空格走按钮自己的激活路径），
     // 而 Esc 必须在任何格子拿到它之前生效——它是这个窗口唯一的退出保证。
     // 方向键在**焦点已进格子区后**不接管：那是格子之间移动用的（DirectionalNavigation），
     // 两者抢同一组键的话，走到行尾到底是换行还是翻页就说不清了。焦点还在窗口上时接管
     //（见下面的落格 case）——那时 DirectionalNavigation 根本没上弦，不接管才是「按了没反应」。
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
+        // **焦点在谁身上，看这一下事件自己的来源**，不看 Keyboard.FocusedElement。
+        //
+        // 后者是「**当前活动窗口**里的焦点元素」：面板被别的程序抢了前台、或者窗口刚
+        // 弹出来还没拿到前台时，它答 null 或答着别的窗口的元素——于是一颗明明高亮着的
+        // 格子按回车什么也不发生（用户报的正是这个）。键盘事件是**发给焦点元素**的，
+        // 所以事件自己的来源就是「拿到键盘焦点的那颗」，不依赖本窗口是不是活动窗口。
+        var focused = e.OriginalSource;
+
         switch (e.Key)
         {
             // 搜索态下 Esc 先退出搜索：一次按键撤一层，而不是把整个面板一起带走——
             // 打错一个字就得重新呼出面板，是最让人不想再用搜索的一种设计。
             case Key.Escape when _searching: EndSearch(); e.Handled = true; return;
+
+            // 回车 = 跑焦点所在的那一颗。
+            //
+            // **WPF 的普通按钮不吃回车**：回车只激活 IsDefault="True" 的那颗，
+            // 而一块面板上有几十颗按钮，不可能有一颗是「默认按钮」（空格才有效）。
+            // 不接这一下，「方向键挑中一颗、回车跑它」这条流程就落空——挑中的那颗高亮着，
+            // 回车什么也不发生，而面板的其余部分照常工作，看上去像「这一格坏了」。
+            //
+            // 顺带把搜索态那处「回车跑 _hits[0]」与眼睛看到的不一致也抹平：焦点在格子上时，
+            // 回车跑的是**焦点那一颗**（正是用户看着高亮的那颗）；焦点还在搜索框时才跑排第一的。
+            case Key.Enter when EnterTarget(focused) is { } act:
+                e.Handled = true;
+                if (!act.Enabled) return;   // 停用的格子点不动，回车也不该跑它
+                act.Run();
+                return;
 
             // 回车 = 跑排在第一位的那个。搜索的完整动作是「打几个字，回车」——
             // 中间插一步「把手挪到鼠标上去点」，前面省下的时间就全还回去了。
@@ -738,11 +861,11 @@ public partial class QuickPanelWindow : Window
             // **但焦点已经在某个格子上时不能抢。** 这里是 Preview（隧道）阶段，抢了就
             // `e.Handled = true`，那颗获得焦点的 Button 永远收不到回车，于是「方向键挑一个」
             // 挑中的是 A、回车跑的却是 _hits[0]——用户眼看着 A 高亮着，跑起来是另一个动作，
-            // 而出厂默认页里就有「锁屏」和「清空回收站」。下一条 case 的注释写的正是那个流程：
-            // 「打字缩小范围 → 方向键挑一个 → 回车」，两条得对得上。
+            // 而出厂默认页里就有「锁屏」和「清空回收站」。上一条 case 正是按焦点那一颗跑的，
+            // 这两条得对得上。
             // 焦点还在搜索框（没按过方向键）时才走这条快路。
             case Key.Enter when _searching && _hits.Count > 0
-                                && Keyboard.FocusedElement is not System.Windows.Controls.Primitives.ButtonBase:
+                                && focused is not System.Windows.Controls.Primitives.ButtonBase:
                 var top = _hits[0];
                 e.Handled = true;
                 if (!top.Enabled) return;   // 停用的项照样列出来（「它被关掉了」和「它没了」得分得清），但不该被回车跑掉
@@ -752,26 +875,88 @@ public partial class QuickPanelWindow : Window
 
             // ↓ 从输入框进结果区。进去之后方向键就是格子间移动（DirectionalNavigation），
             // 于是「打字缩小范围 → 方向键挑一个 → 回车」全程不用碰鼠标。
-            case Key.Down when _searching:
+            //
+            // **只在焦点还不在格子上时进结果区**：焦点已经在某颗结果上时，再按 ↓ 是
+            // 「往下挑一颗」，不是「跳回第一颗」——旧写法每次都跳回第一颗，
+            // 于是结果多于一颗时永远挑不到第二个。
+            case Key.Down when _searching
+                                && focused is not System.Windows.Controls.Primitives.ButtonBase:
                 FocusFirstTile();
                 e.Handled = true;
                 return;
 
             // 唤出后焦点在窗口、没在任何格子上（见 Popup 里那句 Focus）：第一下方向键/Tab/回车
             // 是「进格子区」的意图，落焦到第一格并**吃掉这一下**——回车只选不跑，
-            // 下一回车（此刻焦点已是 ButtonBase，这条 case 让位）才激活。没有这段，
-            // 窗口持焦时方向键无处可去（格子间的 DirectionalNavigation 要求焦点已在容器内）。
+            // 下一回车（此刻焦点已是 ButtonBase，这条 case 让位）才由上面那条 case 跑那一颗。
+            // 没有这段，窗口持焦时方向键无处可去（格子间的 DirectionalNavigation 要求焦点已在容器内）。
             case Key.Down or Key.Up or Key.Left or Key.Right or Key.Tab or Key.Enter
-                when !_searching && Keyboard.FocusedElement is not System.Windows.Controls.Primitives.ButtonBase:
+                when !_searching && focused is not System.Windows.Controls.Primitives.ButtonBase:
                 FocusFirstTile();
                 e.Handled = true;
                 return;
+
+            // 方向键**跨带**的那一步：上带最后一行往下 = 下带第一行（同列）；下带第一行往上 = 上带最后一行。
+            //
+            // 两条带是两个 UniformGrid（中间隔着腰那道夹板），WPF 的方向键导航在**一条带**里循环，
+            // 跨带这一步得自己接——不然一屏装不下的那些格子，方向键永远够不着（只能滚轮/搜索过去）。
+            case Key.Down or Key.Up when CrossBandTarget(focused, e.Key) is { } cross:
+                cross.Focus();
+                e.Handled = true;
+                return;
+
             case Key.Escape: Dismiss(); e.Handled = true; return;
             case Key.PageDown when MultiPage && !_searching: ShowPage(_page + 1); FocusFirstTile(); e.Handled = true; return;
             case Key.PageUp when MultiPage && !_searching: ShowPage(_page - 1); FocusFirstTile(); e.Handled = true; return;
         }
         base.OnPreviewKeyDown(e);
     }
+
+    // 焦点所在的那颗面板按钮要跑的动作。焦点不在面板按钮上时是 null（回车另有去处）。
+    //
+    // 判据是 **Tag 里的 PanelAction**，不是「是不是 Button」：面板上的按钮分好几类，
+    // 判据落在 Tag 的**类型**上，别的 Tag（两条导航栏的身份是分类名 / 页序号）不会误中。
+    internal static PanelAction? EnterTarget(object? focused)
+        => focused is System.Windows.Controls.Primitives.ButtonBase { Tag: PanelAction a } ? a : null;
+
+    // 方向键跨带的那一颗：上带最后一行往下 = 下带第一行（同列）；下带第一行往上 = 上带最后一行。
+    //
+    // 带内那一步交给 WPF 的方向键导航（它在一条带里循环，见 XAML 里那句「方向键在网格内部循环」）。
+    // 跨带这一步得自己接：两条带是两个 UniformGrid，导航看不见对方。
+    //
+    // 判据用格子的行列坐标（FillBand 填的）——那是「它排在第几行第几列」的真话。
+    private Button? CrossBandTarget(object? focused, Key key)
+    {
+        if (focused is not Button b) return null;
+        int cols = Math.Max(1, Tiles.Columns);
+        int row = Grid.GetRow(b), col = Grid.GetColumn(b);
+        bool inTop = Tiles.Children.Contains(b);
+        bool inBottom = TilesBottom.Children.Contains(b);
+
+        if (key == Key.Down && inTop)
+        {
+            int rowsTop = (Tiles.Children.Count + cols - 1) / cols;
+            if (row < rowsTop - 1) return null;   // 带内还有下一行，交给 WPF
+            // 同一列的那颗；下带最后一行没排满时那一列不存在，就落到下带第一颗。
+            return FirstAt(TilesBottom, row: 0, col: col) ?? FirstEnabled(TilesBottom);
+        }
+        if (key == Key.Up && inBottom && row == 0)
+        {
+            int rowsTop = (Tiles.Children.Count + cols - 1) / cols;
+            return FirstAt(Tiles, row: rowsTop - 1, col: col) ?? LastEnabled(Tiles);
+        }
+        return null;
+    }
+
+    // 某条带里第 row 行第 col 列那颗（停用的不算：点不动的东西也不该被键盘选中）。
+    private static Button? FirstAt(System.Windows.Controls.Primitives.UniformGrid band, int row, int col)
+        => band.Children.OfType<Button>().FirstOrDefault(b => b.IsEnabled && Grid.GetRow(b) == row && Grid.GetColumn(b) == col);
+
+    // 某条带里第一颗 / 最后一颗能用的格子。
+    private static Button? FirstEnabled(System.Windows.Controls.Primitives.UniformGrid band)
+        => band.Children.OfType<Button>().FirstOrDefault(b => b.IsEnabled);
+
+    private static Button? LastEnabled(System.Windows.Controls.Primitives.UniformGrid band)
+        => band.Children.OfType<Button>().LastOrDefault(b => b.IsEnabled);
 
     // 直接打字就开始搜索，不必先去点那颗放大镜。面板是呼出来就要用的东西，
     // 手已经在键盘上了，让它先去找一颗按钮再回来打字是白绕一圈。
@@ -892,6 +1077,8 @@ public partial class QuickPanelWindow : Window
             ToolTip = string.IsNullOrWhiteSpace(t.Tip) ? t.Label : t.Tip,   // 只显示图标时这是名字唯一的去处；有文字时它补上被截掉的部分
             // 同上：只显示图标那一档，格子里也没有文字可念。
             ContextMenu = BuildTileMenu(t),
+            // 回车要能找到这一颗的动作（见 PanelAction 的说明）：WPF 的普通按钮不吃回车。
+            Tag = new PanelAction(() => { Dismiss(); t.Run(); }, t.Enabled),
         };
         // **禁用的格子也要能右键。** WPF 默认不在禁用元素上弹 ContextMenu，而「停用」正是用
         // IsEnabled=false 表达的（置灰而不是不显示，「它被关掉了」和「它没了」得分得清）。
@@ -951,6 +1138,8 @@ public partial class QuickPanelWindow : Window
         // ToolTip 顶不了这个用——它是给鼠标的，不是给读屏的。
         System.Windows.Automation.AutomationProperties.SetName(b, t.Label);
         BindForeground(b, new[] { glyph });
+        // 与格子同一件事：这一颗也要能被回车触发（见 PanelAction 的说明）。
+        b.Tag = new PanelAction(() => { Dismiss(); t.Run(); }, t.Enabled);
         b.Click += (_, _) => { Dismiss(); t.Run(); };
         return b;
     }
@@ -1034,7 +1223,7 @@ public partial class QuickPanelWindow : Window
         _fgWatch?.Dispose();
         _fgWatch = new Native.ForegroundWatch(() =>
         {
-            if (_closing || _menuOpen || !hadFocus) return;
+            if (_closing || AnyMenuOpen || !hadFocus) return;
             var mine = new WindowInteropHelper(this).Handle;
             if (mine == 0 || Native.Win32.GetForegroundWindow() == mine) return;   // 前台又还回来了：这次事件作废
             Dismiss();
@@ -1042,7 +1231,7 @@ public partial class QuickPanelWindow : Window
         _focusWatch = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
         _focusWatch.Tick += (_, _) =>
         {
-            if (_closing || _menuOpen) return;   // 右键菜单挂着时的失焦不算，也不吃补抢额度
+            if (_closing || AnyMenuOpen) return;   // 菜单挂着时的失焦不算，也不吃补抢额度
             var mine = new WindowInteropHelper(this).Handle;
             if (mine == 0) return;
             bool now = Native.Win32.GetForegroundWindow() == mine;
@@ -1102,7 +1291,7 @@ public partial class QuickPanelWindow : Window
     // 返回是否抢到了前台，PanelCoordinator.TogglePanel 据此留日志。
     public bool Revive()
     {
-        if (_closing || _menuOpen) return false;   // 关闭中 / 右键菜单挂着时都不动
+        if (_closing || AnyMenuOpen) return false;   // 关闭中 / 菜单挂着时都不动
         var hwnd = new WindowInteropHelper(this).Handle;
         if (hwnd == 0) return false;
         bool ok;

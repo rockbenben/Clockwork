@@ -1959,6 +1959,9 @@ Log: {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Nieuwe categorie</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Nieuwe categorie — begint met een lege pagina</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Categorie</value>
   </data>
@@ -2210,7 +2213,7 @@ Log: {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Interactie</data>
   <data name="Menu_SecClip" xml:space="preserve">Klembord</data>
   <data name="Menu_SecFile" xml:space="preserve">Bestanden en paden</data>
-  <data name="Menu_SecSys" xml:space="preserve">Systeem en vensters</data>
+  <data name="Menu_SecSys" xml:space="preserve">Systeem</data>
   <data name="Menu_SecCalc" xml:space="preserve">Rekenen</data>
   <data name="Menu_SecPreset" xml:space="preserve">Kant-en-klare sjablonen</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Deze stap heeft geen URL. Vul hierboven een URL in; laat de URL de huidige pagina volgen, voeg dan eerst een stap ‘Browseradres lezen’ toe, zet die in een variabele en vul hier {variabelenaam} in.</data>

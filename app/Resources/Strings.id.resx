@@ -1959,6 +1959,9 @@ Log: {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Kategori baru</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Kategori baru — dimulai dengan satu halaman kosong</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Kategori</value>
   </data>
@@ -2210,9 +2213,9 @@ Log: {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Interaksi UI</data>
   <data name="Menu_SecClip" xml:space="preserve">Clipboard</data>
   <data name="Menu_SecFile" xml:space="preserve">Berkas &amp; jalur</data>
-  <data name="Menu_SecSys" xml:space="preserve">Sistem &amp; jendela</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistem</data>
   <data name="Menu_SecCalc" xml:space="preserve">Hitung</data>
-  <data name="Menu_SecPreset" xml:space="preserve">Preset umum</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Preset</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Langkah ini belum punya alamat. Isi alamat di atas; agar alamat ikut halaman yang sedang terbuka, tambahkan langkah “Baca alamat browser” lebih dulu, simpan hasilnya ke variabel, lalu di sini tulis {nama variabel}.</data>
   <data name="Tpl_UrlVar" xml:space="preserve">alamat</data>
   <data name="Tbx_Title" xml:space="preserve">Kotak alat modul</data>

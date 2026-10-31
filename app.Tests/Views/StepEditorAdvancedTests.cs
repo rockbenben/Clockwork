@@ -14,9 +14,14 @@ public class StepEditorAdvancedTests
         return d!.FullName;
     }
 
+    // 首层快捷项 = 「常用」那一节拍平：启动程序 / 打开网址 / 发送按键 / 发送文本 / 窗口动作 / 延时。
+    //
+    // 「发送按键」是后加进来的（用户报「发送按键 是非常常用的动作，却在很多路径都没有入口」）：
+    // 它与「启动程序」「打开网址」是同一类东西——用户心里想的是「我要发个键」，
+    // 不是「我要在系统那一类里找第三项」。
     [Fact]
     public void Common_step_types_are_offered_at_the_top_of_the_add_menu()
-        => Assert.Equal(new[] { "app", "url" }, StepMenu.QuickKinds);
+        => Assert.Equal(new[] { "app", "url", "keys", "text", "window", "delay" }, StepMenu.QuickKinds);
 
     [Fact]
     public void Advanced_fields_are_collapsed_by_default_and_keep_existing_values_visible()

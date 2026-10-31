@@ -41,7 +41,10 @@ public class PanelFocusLandingTests
     {
         var src = Src("Views", "QuickPanelWindow.xaml.cs");
         Assert.Contains("case Key.Down or Key.Up or Key.Left or Key.Right or Key.Tab or Key.Enter", src);
-        Assert.Contains("when !_searching && Keyboard.FocusedElement is not System.Windows.Controls.Primitives.ButtonBase", src);
+        // 焦点认的是**事件自己的来源**（focused = e.OriginalSource），不是全局的
+        // Keyboard.FocusedElement：后者是「当前活动窗口里的焦点元素」，
+        // 面板被别的程序抢了前台时它答 null——于是「第一下方向键落格」这条也没了落点。
+        Assert.Contains("when !_searching && focused is not System.Windows.Controls.Primitives.ButtonBase", src);
         int a = src.IndexOf("case Key.Down or Key.Up");
         var body = src.Substring(a, src.IndexOf("return;", a) - a);
         Assert.Contains("FocusFirstTile();", body);
@@ -76,7 +79,10 @@ public class PanelFocusLandingTests
     {
         var src = Src("Views", "QuickPanelWindow.xaml.cs");
         Assert.Contains("new Native.ForegroundWatch", src);
-        Assert.Contains("if (_closing || _menuOpen || !hadFocus) return;", src);
+        // 菜单那一道门现在是 AnyMenuOpen（右键菜单 + 面板上开着的外部菜单都算）：
+        // 它比原来的 _menuOpen 更宽，方向一致——挂着菜单时那记失焦不算「用户点了别处」。
+        // 判据的核心仍是 !hadFocus：没见过真前台的面板不许被这记事件关掉。
+        Assert.Contains("if (_closing || AnyMenuOpen || !hadFocus) return;", src);
         // 关窗必须解钩：每块面板漏一个钩子，而程序设计成常驻托盘数周。
         Assert.Contains("_fgWatch?.Dispose()", src);
     }

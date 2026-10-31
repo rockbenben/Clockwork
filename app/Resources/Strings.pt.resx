@@ -1959,6 +1959,9 @@ Registro: {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Nova categoria</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Nova categoria — começa com uma página vazia</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Categoria</value>
   </data>
@@ -2210,9 +2213,9 @@ Registro: {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Interface</data>
   <data name="Menu_SecClip" xml:space="preserve">Área de transferência</data>
   <data name="Menu_SecFile" xml:space="preserve">Arquivos e caminhos</data>
-  <data name="Menu_SecSys" xml:space="preserve">Sistema e janela</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistema</data>
   <data name="Menu_SecCalc" xml:space="preserve">Calcular</data>
-  <data name="Menu_SecPreset" xml:space="preserve">Predefinições comuns</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Predefinições</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Esta etapa ainda não tem endereço. Preencha um acima; para que o endereço siga a página atual, adicione primeiro um passo «Ler endereço do navegador», grave-o numa variável e ponha {variável} aqui.</data>
   <data name="Tpl_UrlVar" xml:space="preserve">endereço</data>
   <data name="Tbx_Title" xml:space="preserve">Caixa de ferramentas</data>

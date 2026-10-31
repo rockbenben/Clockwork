@@ -22,7 +22,7 @@ internal static class TrayPalette
     public static Color Line  => Get("Line",  0x35, 0x35, 0x35);
     public static Color Paper => Get("Paper", 0xEA, 0xEA, 0xEA);
     public static Color Muted => Get("Muted", 0x9E, 0x9E, 0x9E);
-    public static Color Faint => Get("Faint", 0x7C, 0x7C, 0x7C);
+    public static Color Faint => Get("Faint", 0x84, 0x84, 0x84);
     public static Color Accent => Get("Accent", 0x34, 0x66, 0xB2);
 
     private static Color Get(string key, int r, int g, int b)
@@ -88,7 +88,7 @@ internal static class TrayMenu
 
     // 子菜单父项。WinForms 的 DropDown 是独立的 ToolStripDropDownMenu，不会继承父 ContextMenuStrip 的
     // Renderer/BackColor/Font——不显式设，子菜单就以系统浅色主题绘制，在暗色托盘菜单里是一道刺眼的接缝。
-    // 集中在这里配一次，两个折叠段共用，避免各配一遍日后漂移（同 TrayPalette / TrayGlyph 的思路）。
+    // 集中在这里配一次，三个折叠段共用（免打扰 / 快捷提醒 / 最近提醒），避免各配一遍日后漂移（同 TrayPalette / TrayGlyph 的思路）。
     public static ToolStripMenuItem SubMenu(string text, string glyph, ToolStripRenderer renderer, Font font)
     {
         var it = new ToolStripMenuItem(Escape(text))

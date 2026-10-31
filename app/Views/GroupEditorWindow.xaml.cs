@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -183,10 +183,11 @@ public partial class GroupEditorWindow : Window
     //
     // 从「新增 ▾」一个下拉搬过来的。分节与 Quicker 的模块分类同源（StepDisplay.StepKindSections）。
     // 三条约定：
-    //   · **「全部」里每种类型只出现一次**（按主节排）。分节表允许一个类型属于多节
-    //     （同 Quicker 的「个别模块会属于多个分类」），而在「全部」视图里同一个类型
-    //     出现两次只是看着像 bug。选定某一节时才按那一节的成员列——那才是多归属有意义的地方。
-    //   · **搜索认标签也认类型 id**：界面上是译文，配置文件里是 kind，搜 `regex` 能搜到「正则提取」，
+    //   · **「全部」里每种类型只出现一次**（按节序排）。分节表是一张**划分**：一种类型只归一节，
+    //     所以这里天然不会重复——上一版允许一种类型属于多节（同 Quicker 的「个别模块会属于多个
+    //     分类」），在「新增 ▾」菜单里那变成同一个动作露两次面。
+    //   · **搜索认标签、类型 id、说明与日常意图词**：搜 `regex`、`正则` 能搜到「正则提取」，
+    //     搜「打字」能搜到「发送文本」，搜「快捷键」「网页」「音量」「关机」「音乐」等均能直接命中。
     //     搜「正则」也能。不做拼音首字母（Quicker 那样做要带一整张拼音表，
     //     而这个程序的中文标签本身短到可以直接输）。
     //   · **双击添加**，与 Quicker 一致（拖放另说，见 DevChecks 的说明：本程序步骤表只做了上下拖拽）。
@@ -207,8 +208,9 @@ public partial class GroupEditorWindow : Window
         var box = new List<SectionItem>
         {
             new SectionItem(AllSection, Strings.Get("Tbx_All")),
-            // 「常用预设」是**填好字段的成品**（复制 = Ctrl+C 那一类），与「常用」节里那些
-            // 「先挑类型再自己配」不是一回事，两者同名会让人以为是一张表里的同一批。
+            // 「预置动作」是**填好字段的成品**（复制 = Ctrl+C 那一类），与各节里那些
+            // 「先挑类型再自己配」不是一回事——它原先叫「常用预设」，与旁边的「常用」只差两个字，
+            // 两人会以为是一张表里的同一批。改名之后一眼看得出它是现成的。
             new SectionItem(PresetSection, Strings.Get("Menu_SecPreset")),
         };
         foreach (var (sec, _) in StepDisplay.StepKindSections) box.Add(new SectionItem(sec, Strings.Get(sec)));
@@ -243,8 +245,7 @@ public partial class GroupEditorWindow : Window
         }
 
         if (q.Length > 0)
-            items = items.Where(i => (i.Label ?? "").Contains(q, StringComparison.OrdinalIgnoreCase)
-                                  || i.Kind.Contains(q, StringComparison.OrdinalIgnoreCase)).ToList();
+            items = items.Where(i => i.Matches(q)).ToList();
 
         _toolItems = items;
         Toolbox.ItemsSource = items;
@@ -313,10 +314,12 @@ public partial class GroupEditorWindow : Window
         public override string ToString() => Label;
     }
 
-    // 图标走面板那张字形表（PanelGlyph.ForKind）：工具箱、菜单、面板格子是同一枚图标。
+    // 工具箱条目：图标走面板字形表，悬停带白话 ToolTip，搜索走 StepDisplay.MatchesToolSearch（兼顾标签、类型、提示与日常词）。
     private sealed record ToolItem(string Label, string Kind, LaunchStep? Seed)
     {
         public string Glyph => PanelGlyph.ForKind(Kind);
+        public string ToolTip => Seed != null ? StepDisplay.StepSummary(Seed) : StepDisplay.StepKindDescription(Kind);
+        public bool Matches(string query) => StepDisplay.MatchesToolSearch(Kind, Seed, Label, ToolTip, query);
     }
 
     private sealed record VarItem(string Name, string KindLabel);
@@ -609,7 +612,7 @@ public partial class GroupEditorWindow : Window
     private void Cancel_Click(object sender, RoutedEventArgs e) => DialogResult = false;
 
     // 步骤深拷贝（工作副本，取消即丢弃不动原组）。经 JSON 往返：LaunchStep 以后加字段自动带上，
-    // 不再手抄 30 个字段——手抄漏一个，编辑组就悄悄丢那个字段的值。
+    // 不再手抄几十个字段——手抄漏一个，编辑组就悄悄丢那个字段的值。
     private static LaunchStep Clone(LaunchStep s)
     {
         var c = System.Text.Json.JsonSerializer.Deserialize<LaunchStep>(

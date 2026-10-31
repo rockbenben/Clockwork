@@ -23,7 +23,7 @@ public sealed class LaunchStep
     public string Kind { get; set; } = "";
     public string Label { get; set; } = "";
     // 默认 100ms：多数动作（开程序后发按键、切窗口后发文本）需要一点缓冲；0 会打空。
-    // 只影响新建对象——盘上既有步骤都带显式 delayMs（JsonOptions 不忽略默认值），读回原样。
+    // 只影响新建对象——省略即回落到构造初值 100，读回原样（序列化只写与新建实例不同的值，见 ConfigStore 那个跳过器）。
     public int DelayMs { get; set; } = 100;
     // app
     public string Target { get; set; } = "";
@@ -33,7 +33,7 @@ public sealed class LaunchStep
     // 默认开：「启动程序」步骤的常见意图是「让它到前面来」，不是「再开一个」——尤其开机清单里，
     // 手动开过的程序会被清单又开一份。目标是 URL/.lnk/.ps1/文档时 TargetProcessName 返回空串
     // （见 LaunchTarget），本选项自动空转、照常启动，故打开它对这些步骤无副作用。
-    // 只影响新建步骤：盘上既有步骤都带显式 activateIfRunning（JsonOptions 不忽略默认值），读回原样。
+    // 只影响新建步骤——省略即回落到构造初值 true，读回原样（序列化只写与新建实例不同的值，见 ConfigStore 那个跳过器）。
     public bool ActivateIfRunning { get; set; } = true;
     public string ActivateProcess { get; set; } = "";
     public string WindowStyle { get; set; } = "";
@@ -290,40 +290,23 @@ public sealed class ActionGroup
     // 可空是为了区分「老配置没有这个字段」与「显式关掉」：null 由 ConfigStore.Normalize 补成 true，
     // 否则升级后老用户托盘里的组会一起消失，看起来像功能坏了。
     public bool? ShowInTray { get; set; }
-    // 本组是不是**面板的一页**。面板上只有这一种东西：一页 = 一个动作组，格子 = 组里的步骤。
+    // 【历史字段】老配置里这个组当年是不是**面板的一页**。现在页是独立的 PanelPage
+    //（一页 = 一屏格子），运行期不再读它；只有 ConfigStore 的 PanelPages 迁移看一眼，
+    // 用来把老组搬成页。新建的组请直接建页。
     //
-    // 想在页上放一个「跑整组」的按钮？加一个 group 类型的步骤指过去就是了——那本来就是那个
-    // 步骤类型的用途。早先为此另立过一套（PanelExpand「整组一格」+ 一张自动拼出来的「动作组」页），
-    // 结果是同一件事有两种表达，而那张自动页谁也改不了、排不了序。现在只剩这一个开关。
-    //
-    // 新建的组默认 false：一个刚建的组多半是给热键或定时任务用的，不该自己跑到面板上占一页。
-    // 可空三态是历史包袱（null=老配置没这个字段），由 ConfigStore 的一次性迁移抹平。
+    // 可空三态也是历史包袱（null=老配置没这个字段），由 ConfigStore 的一次性迁移抹平。
     public bool? ShowInPanel { get; set; }
     // 【历史字段】早先用来区分「整组一格」与「展开成每步一格」。现在没有这个区分了，
     // 运行期不再读它——只有 ConfigStore 那次迁移看一眼，用来认出老配置里哪些组当初是"一格"。
     // 保留属性只为让老 json 原样往返（迁移要靠它判断），别再给它加新用途。
     public bool PanelExpand { get; set; }
-    // 场景页：只在呼出面板时前台是这个程序，本组才出现在面板上（进程名，裸名即可，大小写不敏感）。
-    // 空 = 全局，任何时候都在。
-    //
-    // 这是面板最值钱的一条规则：在 VS Code 里弹出来和在资源管理器里弹出来，看到的不该是同一批动作。
-    // 与步骤上那个 IfProcess 条件是两回事，别混——
-    //   IfProcess         判「那个程序此刻在不在跑」，管的是这一步**要不要执行**；
-    //   PanelForProcess   判「你现在正用着哪个程序」，管的是这一组**要不要显示**。
-    // 前者可以在后台成立（微信开着但你在写代码），后者只认前台那一个。
+    // 【历史字段】老配置里这个组当年只在某个前台程序下出现。运行期不再读它；
+    // 迁移时原样搬进 PanelPage.ForProcess。场景页的现行规则写在 PanelPage.ForProcess 上。
     public string PanelForProcess { get; set; } = "";
 
-    /// <summary>这一页归哪一类（自由文本，空 = 未分类）。顶栏一格一类，点了只列这一类里的页。</summary>
+    /// <summary>【历史字段】老配置里这一组当年归哪一类。运行期不再读它；迁移时原样搬进 PanelPage.Tab。</summary>
     //
-    // **两条栏是父子：上边选类，左边列这一类里的页。** 所以这里存的是分组名，
-    // 而不是「摆哪边」——页只有一个落点（左栏），不存在「这一页在哪条栏上」这个问题。
-    //
-    // 分类没有自己的存储：它是从页上涌现出来的，用同一个名字的页就是同一类。
-    // 于是「改分类名」是把那些页一起改掉，「解散一类」是把它们的这个字段清空——
-    // 都不需要另一张表，也就不会出现「表里有一类，却一个页都不指向它」这种孤儿。
-    //
-    // 默认空串 = 未分类，它自己也在顶栏上占一格：不给它位置的话，没填分类的页无处可去。
-    // 绝大多数人一直看到的就是这一格，而只有一类时那条栏整条不画。
+    // 分类的现行规则写在 PanelPage.Tab 上，别在这里加新用途。
     public string PanelTab { get; set; } = "";
     // 整组一格时用的图标。空 = 线描的「一叠动作」字形。同 LaunchStep.Icon 的写法：
     // 图片路径 / 借某个 exe 的图标 / 四位十六进制的 MDL2 码位。
@@ -440,13 +423,13 @@ public sealed class AppSettings
     // 都会让同一个数字在不同机器上感觉不同，留个旋钮比猜一个"正确值"实在。
     public int PanelLongPressMs { get; set; } = 350;
 
-    // —— 面板外观（都在设置页可改；范围与合法值由 Core.PanelMetrics 统一把关）——
-    // 每列格子数。4 列是照着「一屏放得下常用的一批、又不横跨半个屏幕」定的默认值。
+    // —— 面板外观（都在面板管理器的外观列里改；范围与合法值由 Core.PanelMetrics 统一把关）——
     // 面板两条导航栏的开关。默认开，但**空的时候本来就不画**（只有一页就没有页签栏，
     // 只有一类就没有分类栏），所以这两个开关的实际用途是「我知道有好几页，但我就是不想看见那条栏」。
     public bool PanelLeftTabs { get; set; } = true;
     public bool PanelTopTabs { get; set; } = true;
 
+    // 每列格子数。4 列是照着「一屏放得下常用的一批、又不横跨半个屏幕」定的默认值。
     public int PanelColumns { get; set; } = 4;
     // 凹槽分上下两条带，各自的行数。两条带没有语义差别——它们是**版面节奏**：
     // 一整块 7 行的方格阵读起来是一堵墙，切成 3 + 4 之后眼睛有了落点，找格子快得多
@@ -481,12 +464,6 @@ public sealed class AppSettings
         (QuickOpenHotkey, Clockwork.I18n.Strings.Get("Settings_QuickOpenHotkey")),
     };
 
-    /// <summary>面板数据模型的版本。迁移完成后写上，用来保证那次改写只发生一次。</summary>
-    //
-    // 为什么需要一个显式版本号，而不是靠"看字段长什么样"来判断：迁移会把老的「整组一格」组
-    // 收进一张新页、并把它们自己从面板上摘下来。判据若写成「ShowInPanel 为真但不是页」，
-    // 那么用户日后新建一个组并勾上「作为面板的一页」，就会再次落进同一个判据里被搬走一次。
-    // 一次性的改写必须由一个一次性的标记来关门。
     /// <summary>鼠标手势的总开关。关掉即完全不监听右键。</summary>
     //
     // 与「每条手势自己的启用」是两件事：那个是「这一条灵不灵」，这个是
@@ -505,9 +482,9 @@ public sealed class AppSettings
 
     /// <summary>笔迹样式："classic"（经典）| "neon"（霓虹）| "rainbow"（彩虹）| "dashed"（虚线）| "dots"（圆点）。</summary>
     //
-    // **默认是 classic，而 classic 就是升级前那一条线**（深色描边 + 主题强调色的线芯，
-    // 命中时转近白并一起加粗）。存量配置里没有这一项，落到默认值上时看到的应当与升级前一模一样——
-    // 这是「新增可选项」的第一条规矩：新的那几样都得由用户自己去挑。
+    // **默认是 classic；这个 id 不能换，但它现在画的是流光 Lumen**（约 2px 起笔、向笔头展开到
+    // 8–10px 的丝带，深钢带身 + 冰蓝亮芯 + 冷光外缘 + 深色描边）。存量配置没有这一项时落到它上面，
+    // 看到的是当前默认外观，而不是升级前那条等粗线——id 保留只是为了不迁移配置文件。
     public string GestureTrailStyle { get; set; } = GestureTrailStyles.DefaultId;
 
     /// <summary>尾迹淡出：画着的那条线，尾巴变暗、笔尖留一段亮的（彗星那样）。</summary>
@@ -544,6 +521,12 @@ public sealed class AppSettings
     // 这一格是**可关的**：有人要那种极简的「只有一条线」的手感，翻掉它即可。
     public bool GestureShowActionLabel { get; set; } = true;
 
+    /// <summary>面板数据模型的版本。迁移完成后写上，用来保证那次改写只发生一次。</summary>
+    //
+    // 为什么需要一个显式版本号，而不是靠"看字段长什么样"来判断：迁移会把老的「整组一格」组
+    // 收进一张新页、并把它们自己从面板上摘下来。判据若写成「ShowInPanel 为真但不是页」，
+    // 那么用户日后新建一个组并勾上「作为面板的一页」，就会再次落进同一个判据里被搬走一次。
+    // 一次性的改写必须由一个一次性的标记来关门。
     public int PanelSchema { get; set; }
     public string Language { get; set; } = "";   // 空=跟随系统显示语言（App 启动时解析成具体 code 并落盘）
 

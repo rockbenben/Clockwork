@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>新建分类</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>新建分类：在新的一类里放一张空页</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>分类</value>
   </data>
@@ -2210,9 +2213,9 @@
   <data name="Menu_SecUI" xml:space="preserve">界面交互</data>
   <data name="Menu_SecClip" xml:space="preserve">剪贴板</data>
   <data name="Menu_SecFile" xml:space="preserve">文件与路径</data>
-  <data name="Menu_SecSys" xml:space="preserve">系统与窗口</data>
+  <data name="Menu_SecSys" xml:space="preserve">系统</data>
   <data name="Menu_SecCalc" xml:space="preserve">计算</data>
-  <data name="Menu_SecPreset" xml:space="preserve">常用预设</data>
+  <data name="Menu_SecPreset" xml:space="preserve">预置动作</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">这一步没有网址。请在上面填一个网址；想让网址跟着当前页面走，先加一步「读取浏览器地址栏」，把它写进变量，再在这里填 {变量名}。</data>
   <data name="Tpl_UrlVar" xml:space="preserve">地址</data>
   <data name="Tbx_Title" xml:space="preserve">模块工具箱</data>

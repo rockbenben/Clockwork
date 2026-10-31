@@ -774,7 +774,7 @@ public partial class MainWindow : Window
     //
     // 现在是一扇管理器：除了「添加为新动作」，还能**改模板本身**（此前只能添加，改不了），
     // 以及把改过的模板恢复默认。改过的存进 RootConfig.Templates，按内置模板的 key 认领——
-    // 不按名字，因为名字是本地化的，同一个模板在 19 种语言下是 19 个字符串。
+    // 不按名字，因为名字是本地化的，同一个模板在 18 种语言下是 18 个字符串。
     private void GTemplate_Click(object sender, RoutedEventArgs e)
     {
         if (_config == null || AppInstance == null) return;

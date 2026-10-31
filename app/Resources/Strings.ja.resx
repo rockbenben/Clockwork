@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>分類を追加</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>新しい分類 — 空のページから始まります</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>分類</value>
   </data>
@@ -2210,9 +2213,9 @@
   <data name="Menu_SecUI" xml:space="preserve">画面操作</data>
   <data name="Menu_SecClip" xml:space="preserve">クリップボード</data>
   <data name="Menu_SecFile" xml:space="preserve">ファイルとパス</data>
-  <data name="Menu_SecSys" xml:space="preserve">システムとウィンドウ</data>
+  <data name="Menu_SecSys" xml:space="preserve">システム</data>
   <data name="Menu_SecCalc" xml:space="preserve">計算</data>
-  <data name="Menu_SecPreset" xml:space="preserve">よく使うプリセット</data>
+  <data name="Menu_SecPreset" xml:space="preserve">プリセット</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">この手順にはまだアドレスがありません。上でアドレスを入力してください。現在のページに追従させたい場合は、まず「ブラウザのアドレスを読み取る」を追加して変数に書き出し、ここに {変数名} を入力します。</data>
   <data name="Tpl_UrlVar" xml:space="preserve">アドレス</data>
   <data name="Tbx_Title" xml:space="preserve">モジュールツールボックス</data>

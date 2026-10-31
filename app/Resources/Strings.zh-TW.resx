@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>新增分類</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>新增分類：在新的一類裡放一張空頁</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>分類</value>
   </data>
@@ -2210,9 +2213,9 @@
   <data name="Menu_SecUI" xml:space="preserve">介面互動</data>
   <data name="Menu_SecClip" xml:space="preserve">剪貼簿</data>
   <data name="Menu_SecFile" xml:space="preserve">檔案與路徑</data>
-  <data name="Menu_SecSys" xml:space="preserve">系統與視窗</data>
+  <data name="Menu_SecSys" xml:space="preserve">系統</data>
   <data name="Menu_SecCalc" xml:space="preserve">計算</data>
-  <data name="Menu_SecPreset" xml:space="preserve">常用預設</data>
+  <data name="Menu_SecPreset" xml:space="preserve">預置動作</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">這一步還沒有網址。請在上面填一個；想讓網址跟著目前頁面走，先加一步「讀瀏覽器網址」，把它寫進變數，再在這裡填 {變數名}。</data>
   <data name="Tpl_UrlVar" xml:space="preserve">網址</data>
   <data name="Tbx_Title" xml:space="preserve">模組工具箱</data>

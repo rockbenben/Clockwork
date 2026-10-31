@@ -151,9 +151,18 @@ public static class WindowManager
     public static bool WindowLogin(string process, string sendKey = "{ENTER}", int timeoutSec = 8, bool literal = false, RunCancel? cancel = null)
     {
         var deadline = DateTime.Now.AddSeconds(timeoutSec);
+        // 这一串里带了哪些修饰键（SendKeys 写法：^ Ctrl、% Alt、+ Shift）——它们要留着，
+        // 不在里面的那些才是「用户还按着、又不该跟这次走」的（见 ModifierGuard）。
+        // **字面文本不走这条**：它是按 Unicode 注入的，修饰键对它没有意义——
+        // 只有文本里的换行与制表符是真键，而那两个也不该带修饰键（要留就一个都不留）。
+        string sequence = KeyCombo.ToSendKeysSequence(sendKey);
+        ushort[] wanted = literal ? System.Array.Empty<ushort>() : ModifierGuard.WantedFromSendKeys(sequence);
         while (DateTime.Now < deadline)
         {
             if (RunCancel.Stopped(cancel)) return false;   // 急停 或 本次运行被取消：等窗口/重试期间收到即弃发
+            // 等修饰键松开：放在注入锁之外（锁只包单次注入动作，见 InjectionLock 的说明）。
+            ushort[] stray = ModifierGuard.AwaitRelease(wanted, cancel);
+            if (RunCancel.Stopped(cancel)) return false;   // 等的过程中被急停了：别再发
             bool got = InjectionLock.Enter();
             try
             {
@@ -168,8 +177,9 @@ public static class WindowManager
                         // 代价要说清：SendKeys 的注入标志不归我们控制，所以 Win32.MakeKey 那套扩展键修正
                         // （方向键/Home/End 在远程桌面、虚拟机、DirectInput 里不被收成小键盘键）**覆盖不到这条路**。
                         // 热键与「发送按键」步骤走的是 KeyInput.SendKeyCombo → Win32.SendCombo，那条是修好的。
+                        ModifierGuard.Release(stray);   // 还按着的修饰键：从这次注入里摘出去
                         if (literal) Win32.SendUnicodeText(sendKey);
-                        else WinSendKeys.SendWait(KeyCombo.ToSendKeysSequence(sendKey));
+                        else WinSendKeys.SendWait(sequence);
                         return true;
                     }
                 }
@@ -192,10 +202,25 @@ public static class WindowManager
             if (!RunCancel.Stopped(cancel)) return ActionResult.Warn("Warn_TextSendFail", process);
             return ActionResult.Empty;
         }
+        // 文本是按 Unicode 注入的，**不受修饰键影响**——只有文本里的换行与制表符是真键
+        // （Win32.SendUnicodeText 把 \n / \t 发成真回车/真 Tab），那两个才可能被修饰键改了身份。
+        // 所以只有文本里含真键时才需要先把「还按着的修饰键」摘出去（见 ModifierGuard）。
+        ushort[] stray = HasRealKey(text) ? ModifierGuard.AwaitRelease(System.Array.Empty<ushort>(), cancel)
+                                          : System.Array.Empty<ushort>();
+        if (RunCancel.Stopped(cancel)) return ActionResult.Empty;   // 等的过程中被急停了：别再发
         bool got = InjectionLock.Enter();
-        try { Win32.SendUnicodeText(text); } finally { InjectionLock.Exit(got); }
+        try
+        {
+            ModifierGuard.Release(stray);
+            Win32.SendUnicodeText(text);
+        }
+        finally { InjectionLock.Exit(got); }
         return ActionResult.Unver();
     }
+
+    // 文本里有没有「真键」（换行 / 制表符）。其余字符都是 Unicode 注入，不吃修饰键。
+    private static bool HasRealKey(string text)
+        => text.IndexOf('\n') >= 0 || text.IndexOf('\t') >= 0;
 
     // 「恢复活动窗口」的基准：这一次运行**开始时**前台是哪个窗口。
     //

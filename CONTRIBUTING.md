@@ -21,15 +21,35 @@ Those settings live in the profiles rather than the csproj on purpose: on the cs
 
 ## Self-checks
 
-Six switches built into the exe (see `app/DevChecks.cs` and `app/DevSelfTest.cs`). They run before the single-instance check, so a Clockwork already sitting in your tray keeps working; each exits on its own; four of them also write a verdict marker to `%TEMP%\clockwork-smoke.txt` / `clockwork-selftest.txt` / `clockwork-shots.txt` / `clockwork-hookprobe.txt`:
-
+Seven switches built into the exe (see `app/DevChecks.cs` and `app/DevSelfTest.cs`). They run before the single-instance check, so a Clockwork already sitting in your tray keeps working; each exits on its own; five of them also write a verdict marker to `%TEMP%\clockwork-smoke.txt` / `clockwork-selftest.txt` / `clockwork-shots.txt` / `clockwork-hookprobe.txt` / `cw-keysend.txt`:
 ```powershell
 .\Clockwork.exe --smoke              # constructs and lays out every window, asserts each got a real size —
                                      # XAML is lazy-loaded, so a broken window throws nothing until opened
 .\Clockwork.exe --selftest           # drives the modal dialogs end to end in a real process — the question
                                      # dialogs (prompt / choice) and the confirmation that guards a manual
                                      # rerun of the whole startup list — the checks that need a live window
-                                     # and therefore cannot live in app.Tests. CI gates on this one too
+                                     # and therefore cannot live in app.Tests. CI gates on this one too.
+                                     # It also presses the keys for real: the quick panel's whole key set
+                                     # (Enter / Space / arrows / PageUp-Down / Esc / typing-to-search) goes
+                                     # through the Windows message → WPF input pipeline, and every step type
+                                     # is put through the editor and the engine (see app/DevPanelKeys.cs,
+                                     # app/DevFuncSweep.cs, app/DevKeySweep.cs) — the "it looks right in the
+                                     # code" class of defect only shows up when the key is actually pressed.
+                                     # It also sends keys for real and watches what the **target program**
+                                     # receives (app/DevKeySend.cs, also runnable on its own with
+                                     # --keysend below): a key sent while a modifier is still held used to
+                                     # arrive as Ctrl+Enter instead of Enter, and only the receiving side
+                                     # can tell.
+                                     # It also drives the panel's two navigation rows for real (app/DevCategoryNav.cs):
+                                     # picking a category in the top row has to rebuild the left rail, and the
+                                     # manager's "+" has to leave a category that actually exists.
+.\Clockwork.exe --keysend             # sends keys for real and watches what the **target program** receives
+                                     # (app/DevKeySend.cs): a key sent while a modifier is still held used to
+                                     # arrive as Ctrl+Enter instead of Enter, and only the receiving side
+                                     # can tell. It needs the foreground, so on a machine where that cannot
+                                     # be had it reports itself as skipped, not passed. Kept as its own switch
+                                     # because it is the one check you want to run on its own while chasing
+                                     # that class of defect. Verdict: %TEMP%\cw-keysend.txt
 .\Clockwork.exe --shots shots-dir    # renders every tab of every window to PNG: 3 widths × 5 work-area
                                      # heights × 6 languages, plus one light-theme pass — on the order of
                                      # ten thousand images (the exact total moves with every window and
@@ -66,7 +86,7 @@ Two of those touch the machine they run on, and the difference matters when that
 
 Both are fine in CI. On a workstation, run them when you are not driving the mouse.
 
-The tallest tier does not give you a taller window: work-area height is the *available* height, and each window is still capped by its own `Height` (720 for the main window, 640 for the group editor). That tier tests "more room than the window needs", not a bigger window.
+The tallest tier does not give you a taller window: work-area height is the *available* height, and each window is still capped by its own `Height` (720 for both the main window and the group editor). That tier tests "more room than the window needs", not a bigger window.
 
 ## Layout
 

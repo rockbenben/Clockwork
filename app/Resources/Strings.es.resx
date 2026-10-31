@@ -1959,6 +1959,9 @@ Registro: {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Nueva categoría</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Nueva categoría: empieza con una página vacía</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Categoría</value>
   </data>
@@ -2210,7 +2213,7 @@ Registro: {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Interfaz</data>
   <data name="Menu_SecClip" xml:space="preserve">Portapapeles</data>
   <data name="Menu_SecFile" xml:space="preserve">Archivos y rutas</data>
-  <data name="Menu_SecSys" xml:space="preserve">Sistema y ventanas</data>
+  <data name="Menu_SecSys" xml:space="preserve">Sistema</data>
   <data name="Menu_SecCalc" xml:space="preserve">Cálculo</data>
   <data name="Menu_SecPreset" xml:space="preserve">Preajustes</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Este paso no tiene dirección. Escribe una arriba; si quieres que la dirección siga la página actual, añade antes un paso «Leer dirección del navegador», guárdalo en una variable y aquí pon {variable}.</data>

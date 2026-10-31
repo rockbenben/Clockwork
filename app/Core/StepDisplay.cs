@@ -82,20 +82,26 @@ public static class StepDisplay
     // 「新增」菜单与动作组工具箱的**分节索引**：按用户意图 / 操作对象分组，只此一份。
     //
     // **分法照着 Quicker 的模块分类来（getquicker.net/KC/Help「组合动作模块说明」），不是照着
-    // "实现上像不像"。** 关键的三条与上一版不同：
+    // "实现上像不像"。** 关键的三条：
     //
-    //   1. **日常的原子操作聚在「常用」一节**：打开网址、运行程序、发送文本、获取选中的文字、
-    //      用户输入、提示消息、等待时间——正是 Quicker「常用模块」那一节的东西。上一版把它们
-    //      散进「打开 / 控制 / 取值」三节，于是「等两秒」和「取选中的文字」永远不在同一页。
-    //   2. **其余各节按操作对象分**（界面交互 / 文本处理 / 剪贴板 / 文件与路径 / 系统与窗口 / 计算），
+    //   1. **日常的原子操作聚在「常用」一节**：启动程序、打开网址、发送按键、发送文本、
+    //      窗口动作、等待时间——正是 Quicker「常用模块」那一节的东西。
+    //      上一版把它们散进「打开 / 控制 / 取值」三节，于是「等两秒」和「取选中的文字」永远不在同一页。
+    //      「发送按键」原先被归在「系统与窗口」——那一节问的是「我对什么做事」，
+    //      而敲键不针对任何窗口对象；与它的兄弟「发送文本」分开摆着，最常用的机制反倒最难找。
+    //   2. **其余各节按操作对象分**（界面交互 / 文本处理 / 剪贴板 / 文件与路径 / 系统 / 计算），
     //      名字就是 Quicker 的节名，不另发明。上一版的「取值」是自造的：Quicker 没有这一节，
     //      「获取当前浏览器网址」在它那儿属于 **Win系统操作**。
     //   3. **程序流控制里只剩结构**：每个 / 跳出。**「等待时间」不在里面**——它在 Quicker 的
     //      常用模块里，上一版把它塞进流程控制是错的（用户报过一次）。
     //
-    // **这张表是索引，不是划分**：一个步骤类型可以出现在多节里（Quicker 官方原话：「个别模块会
-    // 属于多个分类」）。所以「用户输入」既在「常用」也在「界面交互」，「获取选中的文字」既在
-    // 「常用」也在「剪贴板」。对应的断言盯的是**每种类型至少出现在一节**，不再盯「恰好一次」。
+    // **这张表是划分，不是索引：一种类型只在一节里。**
+    // 上一版允许一种类型出现在多节（Quicker 官方原话：「个别模块会属于多个分类」），
+    // 看着是给了两条找路，实际在「新增 ▾」菜单里变成**同一个动作在菜单里出现两次**——
+    // 「用户输入」既在「常用」又在「界面交互」，「获取选中的文字」既在「常用」又在「剪贴板」。
+    // 用户先看见「常用」里那十一项，展开「界面交互」又撞见同一批，菜单长了一截而信息没多一分。
+    // 「按对象找」的那条路没丢：动作组工具箱有**搜索框**（见 GroupEditorWindow），
+    // 找「用户输入」搜一下就有，不必靠同一项摆两处。
     //
     // 「动作组」自成一节且排在最前：想找它的人不会去别的节里翻，而面板上的「运行动作」格子
     // 与启动清单的「选现有动作组」都靠它。
@@ -121,30 +127,51 @@ public static class StepDisplay
     public static IEnumerable<string> KindsFor(bool insideGroup)
         => insideGroup ? StepKinds : StepKinds.Where(IsAtomic);
 
+    /// <summary>「常用」那一节的节键。</summary>
+    // 「新增 ▾」菜单把它**拍平到首层**（见 StepMenu.Build），动作组工具箱里它仍是一节。
+    public const string CommonSectionKey = "Menu_SecCommon";
+
     public static readonly (string SectionKey, string[] Kinds)[] StepKindSections =
     {
-        ("Menu_SecCommon", new[] { "url", "app", "text", "copySelection", "prompt", "choice", "list", "message", "delay", "waitClipboard" }),
-        ("Menu_SecUI", new[] { "prompt", "choice", "list", "waitKey", "message" }),
+        // 日常最常用的六样：启动程序 / 打开网址 / 发送按键 / 发送文本 / 窗口动作 / 延时。
+        // 「发送按键」与「发送文本」是一对：一个是敲键，一个是打字，日常用得一样多。
+        // 之前只有「发送文本」在「常用」里，「发送按键」被归在「系统与窗口」——
+        // 那节问的是「我对什么做事」，而「发送按键」问的是「我做什么」：它不针对任何窗口对象。
+        // 于是这个最常用的机制在每个「新增」菜单里都要先展开第三层才看得见（用户报的就是这个）。
+        //
+        // 「窗口动作」也在这儿：关掉/最小化当前窗口是每天都要的动作，而它原先缩在
+        // 「系统与窗口」那一节的第二位——那一节一次要展开六项才看得见它。
+        (CommonSectionKey, new[] { "app", "url", "keys", "text", "window", "delay" }),
+        // 界面交互：都是「跟界面打交道」的——鼠标、等人按键、问一句、答一句、留一句话。
+        ("Menu_SecUI", new[] { "mouse", "waitKey", "prompt", "choice", "list", "message" }),
         ("Menu_SecClip", new[] { "copySelection", "waitClipboard" }),
         ("Menu_SecText", new[] { "regex", "replace", "urlDecode", "splitLines", "join" }),
         // 「网址 → 本地文件」也在这一节：它产出的是一个本地路径，按对象分就该在这儿，
         // 而不是一个和「打开网址 / 打开文件夹」并排的「打开」原语（见 SiteSourceTemplate 的注释）。
         ("Menu_SecFile", new[] { "path", "siteMap" }),
-        ("Menu_SecSys", new[] { "window", "keys", "mouse", "browserUrl", "system", "volume" }),
+        // 「窗口动作」搬去「常用」之后，这一节剩下的都是「对这台机器本身」的事：
+        // 系统命令、音量、读当前浏览器地址。
+        ("Menu_SecSys", new[] { "browserUrl", "system", "volume" }),
         ("Menu_SecCalc", new[] { "math" }),
         ("Menu_SecCtrl", new[] { "each", "skip" }),
         ("Tab_Group", new[] { "group" }),
     };
+
+    /// <summary>「常用」那一节的类型：日常最常用的那几样。</summary>
+    // 「新增 ▾」菜单的**首层**就是这一节拍平（见 StepMenu.Build），
+    // 而动作组工具箱里它仍是一节 —— 一处定义，两处用。
+    public static readonly string[] DailyKinds =
+        StepKindSections.First(s => s.SectionKey == CommonSectionKey).Kinds;
 
     /// <summary>一个步骤类型出现在哪几节，按 <see cref="StepKindSections"/> 的节序。</summary>
     // 工具箱的搜索结果要按节分组显示，而搜索框只有一份——分组这件事靠它。
     public static IEnumerable<string> SectionsOf(string kind)
         => StepKindSections.Where(s => s.Kinds.Contains(kind)).Select(s => s.SectionKey);
 
-    /// <summary>这个类型归哪一节（「仅在一节出现时」的场合用；多节时取第一节，即最常用的那个）。</summary>
+    /// <summary>这个类型归哪一节（一张表是划分，这里就只有一节）。</summary>
     public static string PrimarySectionOf(string kind) => SectionsOf(kind).DefaultIfEmpty("").First();
 
-    // 「常用」——一份预填好的步骤。它们**没有任何新的执行路径**：每一条都只是既有类型
+    // 「预置动作」——一份预填好的步骤。它们**没有任何新的执行路径**：每一条都只是既有类型
     // （keys / window / system）填好字段的样子，选完照样进同一个步骤编辑器，进去还能改。
     // 存在的理由只有一个：找得到。「复制」这一步的真身是「发送按键 Ctrl+C」，
     // 可你得先想到去「发送按键」里敲 Ctrl+C —— 而画手势的人心里想的词就是「复制」。
@@ -236,6 +263,176 @@ public static class StepDisplay
     }
 
     public static string StepKindLabel(string kind) => OrRaw("Kind_" + kind, kind);
+
+    /// <summary>步骤类型在工具箱或说明中的简短白话描述。</summary>
+    // 直接复用既有的编辑器提示（Ed_*Hint）与动作摘要，避免引入数十个需 18 门语言同步的新 resx 键；
+    // 未设专属说明的类型则回退到该类型本身的本地化标签。
+    public static string StepKindDescription(string kind) => kind switch
+    {
+        "app" => Strings.Get("Ed_AppHint"),
+        "keys" => Strings.Get("Ed_KeysHint"),
+        "mouse" => Strings.Get("Ed_MouseHint"),
+        "text" => Strings.Get("Ed_TextHint"),
+        "window" => Strings.Get("Ed_WindowHint"),
+        "url" => Strings.Get("Ed_UrlHint"),
+        "path" => Strings.Get("Ed_PathHint"),
+        "copySelection" => Strings.Get("Ed_CopySelectionHint"),
+        "browserUrl" => Strings.Get("Ed_BrowserUrlHint"),
+        "siteMap" => Strings.Get("Ed_SiteMapUrlHint"),
+        "regex" => Strings.Get("Ed_RegexHint"),
+        "replace" => Strings.Get("Ed_RegexHint"),
+        "waitKey" => Strings.Get("Ed_WaitKeyHint"),
+        "splitLines" => Strings.Get("Ed_SplitHint"),
+        "math" => Strings.Get("Ed_MathHint"),
+        "skip" => Strings.Get("Ed_SkipHint"),
+        "each" => Strings.Get("Ed_EachHint"),
+        "list" => Strings.Get("Ed_ListHint"),
+        "join" => Strings.Get("Ed_JoinHint"),
+        "choice" => Strings.Get("Ed_OptionsHint"),
+        "volume" => $"{Strings.Get("Vol_mute")} · {Strings.Get("Vol_unmute")} · {Strings.Get("Vol_micMute")}",
+        "system" => $"{Strings.Get("Sys_showDesktop")} · {Strings.Get("Sys_lockScreen")} · {Strings.Get("Sys_screenshot")} · {Strings.Get("Sys_emptyRecycleBin")}",
+        "waitClipboard" => Strings.Lf("Sum_WaitClipboard", "…"),
+        "delay" => Strings.Lf("Sum_Delay_Sec", "N"),
+        "group" => Strings.Lf("Sum_RunGroup", "…"),
+        "prompt" => $"{Strings.Get("Ed_AskText")} → {Strings.Get("Ed_OutputVar")}",
+        "message" => $"{Strings.Get("Ed_Message")} · {Strings.Get("Ed_Confirm")}",
+        "urlDecode" => Strings.Get("Kind_urlDecode"),
+        _ => StepKindLabel(kind),
+    };
+
+    private static readonly Dictionary<string, string[]> ToolKindAliases = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["app"] = new[] { "软件", "应用", "程序", "启动", "打开", "exe", "application", "run", "launch" },
+        ["url"] = new[] { "网页", "网站", "网址", "打开网页", "浏览器", "web", "browser", "link", "http", "https" },
+        ["path"] = new[] { "打开文件", "打开文件夹", "文件", "文件夹", "目录", "路径", "资源管理器", "folder", "directory", "file", "explorer" },
+        ["siteMap"] = new[] { "源码", "源文件", "博客", "文章", "markdown", "sitemap", "source" },
+        ["keys"] = new[] { "快捷键", "组合键", "热键", "按键", "敲键", "键盘", "hotkey", "shortcut", "combo", "key", "keyboard", "press" },
+        ["mouse"] = new[] { "鼠标", "滚轮", "点击", "单击", "双击", "右键", "中键", "侧键", "滚动", "mouse", "click", "wheel", "scroll" },
+        ["text"] = new[] { "打字", "输入", "打字输入", "文字", "文本", "内容", "填表", "type", "text", "input", "string" },
+        ["volume"] = new[] { "声音", "音量", "静音", "麦克风", "喇叭", "扬声器", "耳机", "sound", "volume", "mute", "mic", "audio" },
+        ["window"] = new[] { "窗口", "关窗口", "最小化", "最大化", "置顶", "前台", "激活", "切窗口", "window", "win", "close", "minimize", "maximize", "topmost" },
+        ["system"] = new[] { "系统", "关机", "重启", "注销", "锁屏", "息屏", "睡眠", "休眠", "截图", "回收站", "垃圾桶", "任务管理器", "亮度", "桌面", "通知", "免打扰", "shutdown", "restart", "sleep", "lock", "screenshot" },
+        ["copySelection"] = new[] { "复制", "选中", "选中文本", "划词", "取词", "copy", "selection", "clip" },
+        ["waitClipboard"] = new[] { "剪贴板", "等待复制", "等剪贴板", "clipboard" },
+        ["browserUrl"] = new[] { "网页", "网址", "浏览器", "地址栏", "当前网址", "chrome", "edge", "brave", "browser", "url", "tab" },
+        ["prompt"] = new[] { "输入框", "弹窗输入", "问一句", "提问", "询问", "prompt", "ask", "input" },
+        ["choice"] = new[] { "选择", "下拉选择", "单选", "挑一个", "选项", "choice", "select", "pick" },
+        ["list"] = new[] { "多行输入", "列表输入", "逐行输入", "批量输入", "list", "multiline" },
+        ["message"] = new[] { "弹窗", "提示框", "确认框", "通知", "气泡", "卡片", "提醒", "消息", "message", "msg", "alert", "notify", "dialog" },
+        ["delay"] = new[] { "等待", "暂停", "睡眠", "延时", "延迟", "间隔", "delay", "wait", "sleep", "pause" },
+        ["regex"] = new[] { "正则", "正则表达式", "提取文本", "匹配", "regex", "pattern", "match", "extract" },
+        ["replace"] = new[] { "替换", "查找替换", "换字", "replace", "substitute" },
+        ["urlDecode"] = new[] { "解码", "网址解码", "百分号解码", "decode", "urldecode" },
+        ["splitLines"] = new[] { "拆分", "按行拆分", "拆行", "换行拆分", "split", "lines" },
+        ["math"] = new[] { "计算", "算数", "算一步", "加减乘除", "计数器", "公式", "math", "calc", "count" },
+        ["skip"] = new[] { "跳出", "跳出循环", "中止", "停止", "break", "continue", "skip", "stop" },
+        ["each"] = new[] { "循环", "遍历", "每个", "逐个", "逐行", "loop", "foreach", "for", "each" },
+        ["join"] = new[] { "合并", "拼接", "连接", "合", "join", "concat" },
+        ["waitKey"] = new[] { "等待按键", "按键继续", "按任意键", "wait key", "press key" },
+        ["group"] = new[] { "动作组", "运行动作", "子动作", "调用动作", "group", "action" },
+    };
+
+    private static readonly Dictionary<string, string[]> ToolPresetAliases = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Ctrl+C"] = new[] { "复制", "拷贝", "copy" },
+        ["Ctrl+V"] = new[] { "粘贴", "粘帖", "paste" },
+        ["searchSelection"] = new[] { "搜索", "查词", "百度", "必应", "谷歌", "search" },
+        ["Alt+Left"] = new[] { "后退", "上一页", "back" },
+        ["Alt+Right"] = new[] { "前进", "下一页", "forward" },
+        ["MediaPlayPause"] = new[] { "音乐", "歌曲", "播放", "暂停", "媒体", "play", "pause" },
+        ["MediaPreviousTrack"] = new[] { "音乐", "歌曲", "上一首", "prev" },
+        ["MediaNextTrack"] = new[] { "音乐", "歌曲", "下一首", "next" },
+        ["VolumeUp"] = new[] { "音量调大", "声音调大", "大声", "louder" },
+        ["VolumeDown"] = new[] { "音量调小", "声音调小", "小声", "quieter" },
+        ["minimize"] = new[] { "最小化", "隐藏窗口", "收起窗口" },
+        ["maximize"] = new[] { "最大化", "全屏", "放大窗口" },
+        ["topmost"] = new[] { "置顶", "钉住", "固定", "pin" },
+        ["close"] = new[] { "关闭窗口", "退出", "关掉", "close" },
+        ["emptyRecycleBin"] = new[] { "清空回收站", "清空垃圾", "垃圾桶", "废纸篓", "clean" },
+    };
+
+    /// <summary>为步骤类型与预设匹配搜索关键词（使小白搜「打字」「快捷键」「网页」「音量」「关机」「音乐」等均能命中）。</summary>
+    // 普通用户在工具箱寻找动作时通常从日常意图（如打字、关机、置顶）出发，而非底层机制名（text、system、window）。
+    // 此处逐层匹配：标签与类型 -> 悬停描述 -> 种子步骤参数 -> 系统/音量/窗口/鼠标子命令表 -> 意图别名库。
+    public static bool MatchesToolSearch(string kind, LaunchStep? seed, string label, string? toolTip, string query)
+    {
+        if (string.IsNullOrWhiteSpace(query)) return true;
+        var q = query.Trim();
+
+        // 1. 标签与类型 id 直接匹配
+        if ((label ?? "").Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+        if (kind.Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+
+        // 2. 描述文案匹配
+        if (!string.IsNullOrEmpty(toolTip) && toolTip.Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+
+        // 3. 种子步骤的具体参数匹配
+        if (seed != null)
+        {
+            if (!string.IsNullOrEmpty(seed.Combo) && seed.Combo.Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+            if (!string.IsNullOrEmpty(seed.Command) && seed.Command.Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+            if (!string.IsNullOrEmpty(seed.WindowAction) && seed.WindowAction.Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+        }
+
+        // 4. 复合类型内置子命令/操作名称命中（如搜「关机」或「截屏」命中「系统命令」，搜「麦克风」命中「音量」，搜「置顶」命中「窗口动作」）
+        if (kind == "system")
+        {
+            foreach (var cmd in SysCmdIds)
+            {
+                if (SystemCommandLabel(cmd).Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+        }
+        else if (kind == "volume")
+        {
+            var volKeys = new[] { "Vol_mute", "Vol_unmute", "Ed_Vol_Set", "Vol_micMute", "Vol_micUnmute" };
+            foreach (var vk in volKeys)
+            {
+                if (Strings.Get(vk).Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+        }
+        else if (kind == "window")
+        {
+            foreach (var (_, lk) in WindowActions)
+            {
+                if (Strings.Get(lk).Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+        }
+        else if (kind == "mouse")
+        {
+            foreach (var (_, lk, _) in MouseActions)
+            {
+                if (Strings.Get(lk).Contains(q, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+        }
+
+        // 5. 常见日常意图别名匹配
+        if (ToolKindAliases.TryGetValue(kind, out var aliases))
+        {
+            foreach (var a in aliases)
+            {
+                if (a.Contains(q, StringComparison.OrdinalIgnoreCase) || q.Contains(a, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+        }
+
+        // 6. 预设专属别名
+        if (seed != null)
+        {
+            var key = !string.IsNullOrEmpty(seed.Combo) ? seed.Combo
+                    : !string.IsNullOrEmpty(seed.Command) ? seed.Command
+                    : !string.IsNullOrEmpty(seed.WindowAction) ? seed.WindowAction : "";
+            if (ToolPresetAliases.TryGetValue(key, out var presetAliases))
+            {
+                foreach (var pa in presetAliases)
+                {
+                    if (pa.Contains(q, StringComparison.OrdinalIgnoreCase) || q.Contains(pa, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     /// <summary>这一步是不是一个「块」（有孩子、会被重复执行的那一种）。</summary>
     // 编辑器据此决定「新增」时新步骤挂进谁、删除时要不要连坐、步序重排时能不能跨层。
@@ -375,7 +572,7 @@ public static class StepDisplay
     /// 且**不带**修饰段（×N、星期、条件后缀）。</summary>
     //
     // 与 StepSummary 分开是因为两者服务的宽度差一个量级：列表里一行有几百像素，
-    // 把条件后缀写全是它的价值所在（「这一步为什么没跑」的唯一线索）；而快捷面板的格子只有 116 像素，
+    // 把条件后缀写全是它的价值所在（「这一步为什么没跑」的唯一线索）；而快捷面板的格子常规只有 88 像素（宽松档 104），
     // 同一串文字在那里会被裁成一句读不出意思的残句。
     // Label 在这里统一优先——StepBase 里只有 app / group 两种 kind 照顾了 Label，
     // 而用户给某一步起了名字，就是希望在能显示名字的地方看到它。

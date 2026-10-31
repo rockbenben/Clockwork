@@ -155,7 +155,7 @@ internal sealed class HotkeyManager
     // 不随之后每次无关的保存反复刷屏；失败消除（改键/解除占用）后再失败会重新提示。
     private void RebindGroupHotkeys()
     {
-        if (_hotkeyHwnd == 0 || !HotKey.IsWindow(_hotkeyHwnd)) return;   // 句柄已销毁则跳过（同 RebindStopHotkey）
+        if (_hotkeyHwnd == 0 || !HotKey.IsWindow(_hotkeyHwnd)) return;   // 句柄已销毁则跳过（同 RebindFunctionHotkey）
         // 脏检查：组热键配置一字未动、当前注册仍挂着、且没有失败项等着重试 → 省掉整轮摘装。
         // 「有失败就照旧重绑」是这条优化的边界：RegisterHotKey 失败后没有事件可等，
         // 全靠每次保存无条件重建去抢回被别的程序占用的组合（判据见 Core.HotkeyRebindGate）。

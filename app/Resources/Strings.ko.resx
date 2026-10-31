@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>분류 추가</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>새 분류 — 빈 페이지로 시작합니다</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>분류</value>
   </data>
@@ -2210,9 +2213,9 @@
   <data name="Menu_SecUI" xml:space="preserve">화면 상호작용</data>
   <data name="Menu_SecClip" xml:space="preserve">클립보드</data>
   <data name="Menu_SecFile" xml:space="preserve">파일과 경로</data>
-  <data name="Menu_SecSys" xml:space="preserve">시스템과 창</data>
+  <data name="Menu_SecSys" xml:space="preserve">시스템</data>
   <data name="Menu_SecCalc" xml:space="preserve">계산</data>
-  <data name="Menu_SecPreset" xml:space="preserve">자주 쓰는 프리셋</data>
+  <data name="Menu_SecPreset" xml:space="preserve">프리셋</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">이 단계에는 주소가 없습니다. 위에 주소를 입력하세요. 주소가 현재 페이지를 따라가게 하려면 먼저 “브라우저 주소 읽기” 단계를 추가해 변수에 저장한 뒤 여기에 {변수 이름}을 입력하세요.</data>
   <data name="Tpl_UrlVar" xml:space="preserve">주소</data>
   <data name="Tbx_Title" xml:space="preserve">모듈 도구 상자</data>

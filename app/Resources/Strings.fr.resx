@@ -1959,6 +1959,9 @@ Journal : {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Nouvelle catégorie</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Nouvelle catégorie — elle commence par une page vide</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Catégorie</value>
   </data>
@@ -2210,7 +2213,7 @@ Journal : {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Interface</data>
   <data name="Menu_SecClip" xml:space="preserve">Presse-papiers</data>
   <data name="Menu_SecFile" xml:space="preserve">Fichiers et chemins</data>
-  <data name="Menu_SecSys" xml:space="preserve">Système et fenêtres</data>
+  <data name="Menu_SecSys" xml:space="preserve">Système</data>
   <data name="Menu_SecCalc" xml:space="preserve">Calcul</data>
   <data name="Menu_SecPreset" xml:space="preserve">Préréglages</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Cette étape n’a pas d’adresse. Saisissez-en une ci-dessus ; pour que l’adresse suive la page courante, ajoutez d’abord une étape « Lire l’adresse du navigateur », enregistrez-la dans une variable, puis mettez {variable} ici.</data>

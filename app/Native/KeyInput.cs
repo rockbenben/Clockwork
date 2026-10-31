@@ -80,9 +80,14 @@ public static class KeyInput
             bool wheel = mi.Button == MouseButton.None;
             // 事件数 = 修饰键按下 + 主体 + 修饰键抬起。滚轮主体 1 条，点击每次 2 条（按下+抬起）。
             int wexpected = wmods.Length * 2 + (wheel ? 1 : mi.Clicks * 2);
+            // 修饰键同样要摘出去：框里写「左键」就发左键，用户这会儿按着 Ctrl 也不该变成 Ctrl+左键
+            // （浏览器里那是「在新标签页打开」）。理由与键盘那条路同源，见 ModifierGuard。
+            ushort[] mstray = ModifierGuard.AwaitRelease(wmods);
+            if (RunCancel.Stopped(null)) return ActionResult.Empty;   // 等的时候被急停了：别再发
             bool wgot = InjectionLock.Enter();
             try
             {
+                ModifierGuard.Release(mstray);
                 uint n = wheel
                     ? Win32.SendWheel(wmods, mi.Notches, mi.Horizontal)
                     : Win32.SendMouseButton(wmods, (int)mi.Button, mi.Clicks);
@@ -115,9 +120,20 @@ public static class KeyInput
 
         var mods = ModifierVks(p, addShift: needShift);
 
+        // **注入之前先把「还按着、又不属于这次组合」的修饰键摘出去。**
+        // 热键触发的那一刻用户多半还按着热键自己的修饰键（Ctrl+Shift），
+        // 不摘出去的话发出去的是「Ctrl+回车」而不是「回车」——目标程序多半对它没反应，
+        // 用户看到的正是「发送按键没反应」（见 ModifierGuard 的说明与实测）。
+        // 等的那一下放在注入锁之外：锁只包单次注入动作，不含等待。
+        ushort[] stray = ModifierGuard.AwaitRelease(mods);
+        // 等的过程中被急停了：**这一键就别发了**。急停的承诺是「立刻停」，
+        // 而这里最多要等 300ms——那 300ms 里用户已经按下急停键了。
+        if (RunCancel.Stopped(null)) return ActionResult.Empty;
+
         bool got = InjectionLock.Enter();
         try
         {
+            ModifierGuard.Release(stray);   // 还没松手的那些：补发抬起，让这次发出的是用户写下的那个键
             uint sent = Win32.SendCombo(mods, vk);
             int expected = mods.Length * 2 + 2;
             if (sent == 0)

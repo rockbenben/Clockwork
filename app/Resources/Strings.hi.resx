@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>नई श्रेणी</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>नई श्रेणी — यह खाली पेज से शुरू होती है</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>श्रेणी</value>
   </data>
@@ -2210,9 +2213,9 @@
   <data name="Menu_SecUI" xml:space="preserve">इंटरफ़ेस क्रिया</data>
   <data name="Menu_SecClip" xml:space="preserve">क्लिपबोर्ड</data>
   <data name="Menu_SecFile" xml:space="preserve">फ़ाइलें और पथ</data>
-  <data name="Menu_SecSys" xml:space="preserve">सिस्टम और विंडो</data>
+  <data name="Menu_SecSys" xml:space="preserve">सिस्टम</data>
   <data name="Menu_SecCalc" xml:space="preserve">गणना</data>
-  <data name="Menu_SecPreset" xml:space="preserve">आम प्रीसेट</data>
+  <data name="Menu_SecPreset" xml:space="preserve">प्रीसेट</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">इस चरण में अभी कोई पता नहीं है। ऊपर कोई पता भरें; पता वर्तमान पेज के साथ चलना चाहिए तो पहले «ब्राउज़र पता पढ़ें» चरण जोड़कर उसे चर में लिखें, फिर यहाँ {चर का नाम} भरें।</data>
   <data name="Tpl_UrlVar" xml:space="preserve">पता</data>
   <data name="Tbx_Title" xml:space="preserve">मॉड्यूल टूलबॉक्स</data>

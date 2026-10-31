@@ -61,10 +61,19 @@
                     BorderBrush="{StaticResource BrushLine}" BorderThickness="0,0,0,1">
                 <WrapPanel x:Name="TopTabBar" AutomationProperties.Name="{loc:Loc Panel_Category}"/>
             </Border>
-            <ScrollViewer x:Name="RailScroll" Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled" Margin="0,0,10,0">
-                <StackPanel x:Name="PageRail" AutomationProperties.Name="{loc:Loc Panel_Pages}"/>
-            </ScrollViewer>
+            <!-- ── 左栏：这一类里的页 ──
+                 外面这一层只为了放栏头：左栏与顶栏装的东西**不是同一种**
+                 （上面是分类，这里是页），而两条栏长得几乎一样，顶栏那一格又正好
+                 落在这里第一条的正上方——不点明的话，扫一眼就是同一个列表拆成两截
+                 （用户实报：「横栏与竖栏看起来都是分类」，见 Theme 里的 BarHead）。 -->
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <TextBlock x:Name="RailHead" Text="{loc:Loc Panel_Pages}" Style="{StaticResource BarHead}"
+                           Margin="0,0,0,4"/>
+                <ScrollViewer x:Name="RailScroll" VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled" Margin="0,0,10,0">
+                    <StackPanel x:Name="PageRail" AutomationProperties.Name="{loc:Loc Panel_Pages}"/>
+                </ScrollViewer>
+            </StackPanel>
             <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <!-- 卡片宽度 = 格子阵自己的宽度（PanelMetrics.GridWidth），不跟着窗口长：
                      拉宽它就不再是所见即所得，用户在这儿看到的宽度骗了他。

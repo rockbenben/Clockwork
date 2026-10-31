@@ -1959,6 +1959,9 @@ Nhật ký: {1}</value>
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Danh mục mới</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Danh mục mới — bắt đầu với một trang trống</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Danh mục</value>
   </data>
@@ -2210,9 +2213,9 @@ Nhật ký: {1}</value>
   <data name="Menu_SecUI" xml:space="preserve">Tương tác giao diện</data>
   <data name="Menu_SecClip" xml:space="preserve">Khay nhớ tạm</data>
   <data name="Menu_SecFile" xml:space="preserve">Tệp &amp; đường dẫn</data>
-  <data name="Menu_SecSys" xml:space="preserve">Hệ thống &amp; cửa sổ</data>
+  <data name="Menu_SecSys" xml:space="preserve">Hệ thống</data>
   <data name="Menu_SecCalc" xml:space="preserve">Tính</data>
-  <data name="Menu_SecPreset" xml:space="preserve">Preset thường dùng</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Preset</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">Bước này chưa có địa chỉ. Hãy điền một địa chỉ ở trên; muốn địa chỉ bám theo trang đang mở thì thêm bước “Đọc địa chỉ trình duyệt”, lưu kết quả ra biến, rồi điền {tên biến} ở đây.</data>
   <data name="Tpl_UrlVar" xml:space="preserve">địa chỉ</data>
   <data name="Tbx_Title" xml:space="preserve">Hộp công cụ mô-đun</data>

@@ -730,6 +730,25 @@
         </Setter>
     </Style>
 
+    <!-- 栏头：两条导航栏各自顶上那个小字，写明这一条栏里装的是什么。
+         **两条栏装的不是同一种东西**：上面那条是分类（分类之间是平行的），
+         左边那条是页（页归当前这一类，是它的下一层）。
+         而它们长得太像——一排名字对着一排名字，连位置都挨着：顶栏那一格正好落在
+         左栏第一条的正上方，扫一眼就成了「同一个列表拆成两截」（用户实报：
+         「横栏与竖栏看起来都是分类」）。
+         写两个字把各自的种类点明，两条栏立刻各归各的。
+         颜色压到最淡的一档：它是路标不是内容，亮起来就抢了它指的那些名字。
+
+         **只有面板管理器用它。** 快捷面板不摆这两个词（用户实报：「面板上『页』『分类』
+         这个属性名不该显示」）——面板每一像素都得留给格子，那边的层级由缩进说
+         （左栏整体右移 12px，见 QuickPanelWindow.xaml）。 -->
+    <Style x:Key="BarHead" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource BrushFaint}"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,8,0"/>
+    </Style>
+
     <!-- ============ Calendar（选日期）============ -->
     <!-- 只改颜色、不重写日历模板：自带模板的日期网格已经好用，缺的只是暗色配色。
          CalendarItem 的边框底色写死在自带模板里，故这里连它一起接管（仅换 Border 的底/描边）。 -->

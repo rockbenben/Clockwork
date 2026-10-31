@@ -88,7 +88,7 @@ public partial class BrandDialog : Window
         // **而「想用就回车」得先有个默认按钮。** 焦点在单行 TextBox 上时它自己不处理回车，
         // 窗口里又没有任何 IsDefault 按钮，于是那一下按键直接被丢掉——这张卡挂在那儿，
         // 而它是模态的：一个手势或热键跑的动作组会就此停住等人，而急停键解不开模态。
-        // 三个编辑器窗口都显式设了 IsDefault，只有这张后来加的问答卡漏了。
+        // 四个编辑器窗口都显式设了 IsDefault，只有这张后来加的问答卡漏了。
         // 设在 Make 里（本方法与 Pick 共用它），因为那里才知道哪颗是可见的。
         dlg.ContentRendered += (_, _) => { dlg.AnswerBox.Focus(); dlg.AnswerBox.SelectAll(); };
         return Run(dlg);

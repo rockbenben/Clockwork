@@ -11,7 +11,7 @@ namespace Clockwork.Core;
 
 // 配置读写（原子写 + 缺失容错）。
 // 原子写：先写同目录临时文件、再原子替换——直接写目标是非原子的，写到一半崩溃会截断配置、下次读失败落回默认、全部设置静默丢失。
-// 不做 launchItems/specialSteps 旧格式迁移（按 spec：项目未发布、不考虑旧版兼容）。
+// 不做 launchItems/specialSteps 旧格式迁移（v1.0 的 PowerShell 版用过这两个字段；C# 重写版按 spec 不兼容旧格式，升级用户需重新配置）。
 public static class ConfigStore
 {
     public static readonly JsonSerializerOptions JsonOptions = new()

@@ -664,9 +664,11 @@
                                 </Grid>
 
                                 <!-- ===== 快捷面板 =====
-                                     单独开一节而不是塞进「常规」：这里有六项，且全都只影响那一个浮层——
+                                     单独开一节而不是塞进「常规」：这几行都只影响那一个浮层——
                                      混在急停键、语言、导入导出中间时，读的人分不出哪几行是一伙的。
-                                     顺序按「先怎么叫出来、再长什么样」：两项呼出方式，四项外观。 -->
+                                     外观（版面 / 格子尺寸 / 只显示图标 / 显示自带操作）不在这里：它在面板
+                                     管理器的外观列里，那是面板第一屏的所见即所得预览。设置页只留
+                                     「怎么叫出来」与总开关——前者是记忆与冲突问题，不是看得见的问题。 -->
                                 <Border Height="1" Background="{StaticResource BrushLine}" Margin="0,14,0,0"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,13,0,11">
                                     <Border Width="3" Height="16" Background="{StaticResource BrushAccent}" CornerRadius="1.5" VerticalAlignment="Center"/>
@@ -716,9 +718,6 @@
                                     </StackPanel>
                                     <TextBlock Grid.Column="2" Text="{loc:Loc Settings_MiddleLongPressTip}" Style="{StaticResource FieldHint}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="16,6,0,0"/>
                                 </Grid>
-
-                                <!-- 外观：每行格子数 + 格子尺寸并作一行。两者一起决定面板多宽多密，
-                                     分两行会让人以为它们互不相干、各调一个。 -->
 
                                 <!-- ===== 鼠标手势 =====
                                      和快捷面板并列成一节：它们是这个程序里唯二「要占用鼠标」的功能，

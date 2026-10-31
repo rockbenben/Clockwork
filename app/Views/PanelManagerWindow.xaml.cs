@@ -72,10 +72,6 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
     private List<PanelPageView> _shown = new();
     // 当前在看哪一类（空串 = 未分类那一格）。左栏列的就是这一类里的页。
     private string _cat = "";
-    // 本次打开期间新建、**还没有页**的那一类。分类没有自己的存储（它从页的 Tab 上涌现），
-    // 所以一类要等第一张页进来才真的存在——在那之前只能由这个字段让它在顶栏上占一格。
-    // 第一张页一进来就清掉（那时它已经从页上涌现出来了）；一张页都没放就关窗，它自然不存在。
-    private string? _pendingCat;
     // 正在就地改名的分类。与页的 _renaming 是两回事：改分类名要把这一类里
     // **每一页**的 Tab 一起改掉，那是一次批量重写，不是改一个字段。
     private string? _renamingCat;
@@ -149,33 +145,29 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         // 正在改名的那一页要是这一屏根本不画（它被删了），就把这个状态收掉：
         // 那个输入框已经随着重画消失，再留着标记，下次会莫名其妙又冒出一个光标。
         if (_renaming != null && !pages.Any(p => ReferenceEquals(p.Source, _renaming))) _renaming = null;
-        // 顶栏一格一类、左栏一条一页——**两条栏本身就是「哪一页归哪一类」的答案**，
-        // 不需要另画小标题来说一遍。而格子只画当前这一页：面板上你一次也只看见一页。
+        // 顶栏一格一类、左栏一条一页——**两条栏是父子**：上面选类，左边列这一类里的页。
+        // 格子只画当前这一页：面板上你一次也只看见一页。
         _shown = pages;
-        // 顶栏要画的分类 = 从页上涌现的那些 + 这一次新建、还没有页的那一个。
+        // 顶栏要画的分类 = 从页上涌现的那些。
         var cats = PanelLayout.Categories(pages);
-        // 已经有页进来了 → 它自己涌现得出来，这个临时标记就该退场。
-        if (_pendingCat != null && cats.Any(c => PanelLayout.SameCategory(c, _pendingCat))) _pendingCat = null;
-        if (_pendingCat != null) cats.Add(_pendingCat);
         // 正在改名的分类要是这一屏根本不画（它被解散了 / 它的页都没了），把状态收掉——同上面那一页。
-        // **必须排在 cats 算完之后**：刚新建、还没有页的那一类不在 Categories(pages) 里，
-        // 提前清会把它的改名态当场抹掉，表现是「按下 +，那一格出来了，却没进改名框」。
         if (_renamingCat != null && !cats.Any(c => PanelLayout.SameCategory(c, _renamingCat)))
             _renamingCat = null;
 
-        // 停在一个还没有页的分类上时不去跟当前页——那一类里本来就没有页可跟，
-        // 跟了就会被拽回别的类，刚建的那一格当场亮不起来。
-        bool onEmptyCat = PanelLayout.PagesIn(pages, _cat).Count == 0
-                          && cats.Any(c => PanelLayout.SameCategory(c, _cat));
-        if (onEmptyCat) _open = null;
-        else
-        {
-            var cur = pages.FirstOrDefault(p => ReferenceEquals(p.Source, _open)) ?? pages.FirstOrDefault();
-            _open = cur?.Source;
-            // 当前类跟着当前页走：换了页（或那一页被拖进别的类）之后，顶栏得亮在对的那一格上，
-            // 否则左栏列的是另一类的页，而你眼前这一页在里面根本找不到自己。
-            _cat = cur != null ? PanelLayout.CategoryOf(cur) : "";
-        }
+        // 当前页跟着当前类走：换了页（或那一页被拖进别的类）之后，顶栏得亮在对的那一格上，
+        // 否则左栏列的是另一类的页，而你眼前这一页在里面根本找不到自己。
+        //
+        // **不再有「停在空分类上」这一态**：分类是从页上涌现的，一类只要有页就站得住，
+        // 而没有页的一类在配置里没有容身之处（见 NewCategory）——于是「当前类」永远
+        // 就是当前页的那一类。
+        var cur = pages.FirstOrDefault(p => ReferenceEquals(p.Source, _open)) ?? pages.FirstOrDefault();
+        _open = cur?.Source;
+        _cat = cur != null ? PanelLayout.CategoryOf(cur) : "";
+
+        // 栏头：写明上面这条栏里装的是**分类**（左边那条装的是页）。
+        // 两条栏长得几乎一样，顶栏那一格又正好落在左栏第一条的正上方，
+        // 不点明的话，扫一眼就是同一个列表拆成两截（见 Theme 里的 BarHead）。
+        TopTabBar.Children.Add(BarHead(Strings.Get("Panel_Category")));
         foreach (var c in cats) TopTabBar.Children.Add(MakeCategoryTab(c));
         // 「+」常驻：**新建分类的唯一入口**。没它的话，一个还没分过类的面板顶栏上只有
         // 「未分类」一格，而「怎么加一类」在界面上没有任何痕迹——上一版正是栽在这里。
@@ -327,14 +319,6 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
             if (pages > 0 && !BrandDialog.Confirm(this, Strings.Get("Confirm_Title"),
                     Strings.Lf("Confirm_DeleteCategory", cat, pages, Strings.Get("Panel_Uncategorized")),
                     ToastLevel.Warn, Strings.Get("Btn_Delete"), Strings.Get("Confirm_Keep"))) return;
-            // 还没落地的那一类：没有页可搬，去掉这个标记就是了。
-            if (PanelLayout.SameCategory(_pendingCat, cat))
-            {
-                _pendingCat = null;
-                _cat = "";
-                RenderPages();
-                return;
-            }
             // 解散 = 把这一类的页移回「未分类」。走与改名同一条路（改成空名），
             // 于是「合并前先整块搬」那条也照样生效：它们会并到未分类那一段旁边，不和别的类交错。
             if (_config.PanelPages.Any(p => PanelLayout.SameCategory(p.Tab, "")))
@@ -348,6 +332,13 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         menu.Items.Add(dissolve);
         return menu;
     }
+
+    // 栏头：一条栏顶上那个小字，写明这条栏里装的是什么（样式见 Theme 里的 BarHead）。
+    private TextBlock BarHead(string text) => new TextBlock
+    {
+        Text = text,
+        Style = (Style)FindResource("BarHead"),
+    };
 
     /// <summary>顶栏的一格：一个分类。点了切过去，双击就地改名，把页签拖上来就归进这一类。</summary>
     //
@@ -441,14 +432,6 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
             if (_renamingCat == null) return;   // 回车之后失焦会再来一次，只认第一次
             _renamingCat = null;
             var name = box.Text.Trim();
-            // 还没落地的那一类没有页可改，改的就是这个标记本身；名字清空 = 这一类不要了。
-            if (PanelLayout.SameCategory(_pendingCat, cat))
-            {
-                _pendingCat = name.Length > 0 ? name : null;
-                _cat = _pendingCat ?? "";
-                RenderPages();
-                return;
-            }
             // 改成一个**已存在**的名字 = 把两类合并。两类的页在列表里本是分开的两段，
             // 直接改名会让它们交错，此后拖这一类里的页可能把别的分类整个越过去
             //（用户拖的是页，动的却是分类，见 PanelReorder 类头）。
@@ -477,15 +460,15 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
     }
 
     // 顶栏末尾那颗「+」：新建一个分类，并把**当前这一页**放进去——
-    // 建一个空分类没有意义（顶栏上会多一格永远打不开的东西），而你按下它时
-    // 手边正好有一页。建完直接进改名，同新建文件夹的手感。
+    // 一类必须带着一张页才站得住（理由见 NewCategory），而你按下它时手边正好有一页。
+    // 建完直接进改名，同新建文件夹的手感。
     private Button MakeAddCategory()
     {
         var b = new Button
         {
             Style = (Style)FindResource("PanelTopTab"),
             Content = "+",
-            ToolTip = Strings.Get("Panel_NewCategory"),
+            ToolTip = Strings.Get("Panel_NewCategoryTip"),
             Margin = new Thickness(4, 0, 0, 0),
         };
         System.Windows.Automation.AutomationProperties.SetName(b, Strings.Get("Panel_NewCategory"));
@@ -509,21 +492,33 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
         return b;
     }
 
-    /// <summary>新建一类。**只建这一类，不连带建页。**</summary>
+    /// <summary>新建一类，并在这一类里放一张**空页**。</summary>
     //
-    // 曾经它顺手建一张页，理由是「空分类什么都不是——顶栏上多一格，点进去左栏是空的」。
-    // 那条理由随左栏那颗「+」一起失效了：一个空分类现在是「往这儿放第一页」，有入口、有去处。
-    // 而按下「＋」的人要的就是多一类，不是多一页——多出来的那张页他还得去删。
+    // **这一类必须带着一张页**：分类没有自己的存储（它从页的 Tab 上涌现），
+    // 于是「只建一类不建页」建出来的东西在配置里**没有容身之处**——
+    // 顶栏上看着有一格，关掉这扇窗它就没了（页是它唯一的容身之处）。
+    // 曾经它靠一个只在内存里活着的标记撑着，那一格在关窗的那一瞬消失，
+    // 而用户什么也没做错：他按下过「+」，起过名，看得见它。
     //
-    // 分类没有自己的存储（从页的 Tab 上涌现），所以这一类先记在 _pendingCat 上，
-    // 让它在顶栏占一格；第一张页进来它才真的落地。**这里不写盘**：确实什么都还没存下来。
+    // **不挪走别的页**：按下「+」的人要的是多一类，不是把手里这一页搬走——
+    // 换分类是另一件事（页眉那颗按钮、拖页签到顶栏，两条路都是「给这一页换个类」）。
+    // 新类里放的是一张**新页**（空的），往里放动作就是拖格子到它的页签上。
+    //
+    // 新页追加在列表**末尾**，于是新的一类也排在顶栏末尾——顶栏的先后就是页的先后。
+    // 页序是面板的翻页优先级，新建一个分类不该把它挪到最前面去。
     private void NewCategory()
     {
         var use = UnusedCategoryName(Strings.Get("Panel_NewCategory"));
-        _pendingCat = use;
+        var page = new PanelPage { Name = Strings.Get("Panel_NewPage"), Tab = use };
+        _config.PanelPages.Add(page);
+        // 并进这一类的段尾，别让两类的页在列表里交错（同拖页归类那条，理由见 PanelReorder.PlaceInCategory）。
+        PanelReorder.PlaceInCategory(_config.PanelPages, page);
+        // 新建的那一页当场翻到眼前：否则你按下「+」，看见的还是刚才那一页，
+        // 而左栏底下多出来的那一条在中间那一列里并不对应任何东西。
+        _open = page;
         _cat = use;
         _renamingCat = use;   // 先给分类起名——按下「＋」要的就是这一类
-        RenderPages();
+        Commit();
     }
 
     /// <summary>把某一页挪进一个新建的分类（页眉那颗分类按钮里的「新建分类…」走这条）。</summary>
@@ -542,9 +537,8 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
     private string UnusedCategoryName(string name)
     {
         var use = name;
-        // 也要避开还没落地的那一类：两格同名会指向同一堆页，点哪一格都一样，读起来像坏了。
-        for (int i = 2; _config.PanelPages.Any(p => PanelLayout.SameCategory(p.Tab, use))
-                        || PanelLayout.SameCategory(_pendingCat, use); i++)
+        // 重名的两格会指向同一堆页，点哪一格都一样，读起来像坏了。
+        for (int i = 2; _config.PanelPages.Any(p => PanelLayout.SameCategory(p.Tab, use)); i++)
             use = name + " " + i;
         return use;
     }
@@ -1097,7 +1091,7 @@ public partial class PanelManagerWindow : Window, App.INaturalWidthShot
     }
 
     // 右下角的点击次数角标：只在**面板管理器**里画（面板本身保持干净，统计是回顾用的，不是提示用的）。
-    // 没有计数就不建元素，而不是建好再折叠——空位（AddSlot）走同一个画法，不该凭空多出子节点。
+    // 没有计数就不建元素，而不是建好再折叠——空位根本不画（只画真的格子），不该凭空多出子节点。
     private void SetClickBadge(Button cell, long clicks)
     {
         if (clicks <= 0) return;

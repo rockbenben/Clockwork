@@ -1959,6 +1959,9 @@
   <data name="Panel_NewCategory" xml:space="preserve">
     <value>Новая категория</value>
   </data>
+  <data name="Panel_NewCategoryTip" xml:space="preserve">
+    <value>Новая категория — начинается с пустой страницы</value>
+  </data>
   <data name="Panel_Category" xml:space="preserve">
     <value>Категория</value>
   </data>
@@ -2210,9 +2213,9 @@
   <data name="Menu_SecUI" xml:space="preserve">Интерфейс</data>
   <data name="Menu_SecClip" xml:space="preserve">Буфер обмена</data>
   <data name="Menu_SecFile" xml:space="preserve">Файлы и пути</data>
-  <data name="Menu_SecSys" xml:space="preserve">Система и окна</data>
+  <data name="Menu_SecSys" xml:space="preserve">Система</data>
   <data name="Menu_SecCalc" xml:space="preserve">Вычислить</data>
-  <data name="Menu_SecPreset" xml:space="preserve">Частые пресеты</data>
+  <data name="Menu_SecPreset" xml:space="preserve">Пресеты</data>
   <data name="Warn_SiteMapNoUrl" xml:space="preserve">У этого шага нет адреса. Впишите его выше; чтобы адрес шёл за текущей страницей, сначала добавьте шаг «Прочитать адрес браузера», запишите его в переменную, а здесь укажите {переменная}.</data>
   <data name="Tpl_UrlVar" xml:space="preserve">адрес</data>
   <data name="Tbx_Title" xml:space="preserve">Панель инструментов</data>

@@ -21,7 +21,7 @@ dotnet build app/Clockwork.csproj -c Debug
 dotnet test app.Tests/Clockwork.Tests.csproj -c Debug
 ```
 
-The application has six in-process self-checks:
+The application has seven in-process self-checks:
 
 ```bash
 app/bin/Debug/net10.0-windows/Clockwork.exe --smoke
@@ -30,6 +30,7 @@ app/bin/Debug/net10.0-windows/Clockwork.exe --selftest
 
 - `--smoke` constructs and lays out every XAML window. It must be run after XAML or window-option changes.
 - `--selftest` drives the modal dialogs end to end — the question dialogs and the confirmation that guards a manual rerun of the whole startup list.
+- `--keysend` sends keys for real and watches what the **target program** receives. It needs the foreground; on a machine where that cannot be had it reports itself as skipped, not passed.
 - For UI changes, also run `--shots <directory>`. The full matrix is expensive; use `CW_SHOT_WINDOWS` and `CW_SHOT_LANGS` to render only the changed windows/languages first, then run the full matrix for broad layout changes.
 - `--trayshot <png>` renders the tray menu. It is the screen the user looks at most often and it is **not** a WPF window, so `--shots` cannot reach it — which is how two glyph collisions and a misaligned section header survived for so long. The menu flashes at the top-left corner of the screen for about a fifth of a second; add `--repair` to force the normally hidden **Fix** section into the shot.
 - `--screenshots <directory>` writes the three fixed README screenshots (en / zh-CN / zh-TW).

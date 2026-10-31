@@ -12,10 +12,11 @@ public static class ReminderEvent
     // 下拉按「什么在发生变化」分组排：人（空闲/连续使用）→ 会话（解锁/锁屏/唤醒）→ 电源 → 外设与网络。
     // 重排是安全的：FillCombo 按值选中而不是按下标，老配置切到新版本不会串项。
     //
-    // 三类事件的来源各不相同，加新项前先想清楚归哪一类，否则会在错的地方找不到通知：
+    // 四类事件的来源各不相同，加新项前先想清楚归哪一类，否则会在错的地方找不到通知：
     //   · 订阅类（unlock/lock/resume/display）—— Windows 主动广播，WireSystemEvents 里订阅；
     //   · 消息类（usb）—— 广播到顶层窗口的 WM_，在 HotkeyHook 里接（本程序已有一个常驻窗口句柄）；
-    //   · 轮询类（idle/busy/lowBattery/acPlugged/acUnplugged）—— 没有通知可订，搭提醒计时器的班车。
+    //   · 轮询类（idle/busy/lowBattery/acPlugged/acUnplugged）—— 没有通知可订，搭提醒计时器的班车；
+    //   · 网络类（netUp/netDown）—— NetworkChange.NetworkAvailabilityChanged 订阅（见 ReminderScheduler）。
     public static readonly string[] All =
         { "idle", "busy", "unlock", "lock", "resume", "acPlugged", "acUnplugged", "lowBattery",
           "display", "netUp", "netDown", "usb" };
@@ -55,7 +56,7 @@ public static class ReminderEvent
         return days.Count == 0 || days.Contains(StepCondition.IsoDayOfWeek(now));
     }
 
-    // 「空闲」是唯一需要轮询的事件（系统不发这个通知），故判定也在这儿：
+    // 「空闲」是轮询事件之一（系统不发这个通知），它的判定也在这儿：
     // 空闲时长够了且这一轮离开还没触发过 → 触发。fired 由调用方在人回来时复位，
     // 保证「一次离开只触发一次」——否则每个 tick 都满足条件，会一直响下去。
     public static bool IdleDue(Reminder r, int idleMinutes, bool alreadyFired)
