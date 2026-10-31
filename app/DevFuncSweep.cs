@@ -123,7 +123,7 @@ internal static class FuncSweep
         ["url"] = new LaunchStep { Kind = "url", Target = "" },
         ["path"] = new LaunchStep { Kind = "path", Target = "" },
         ["keys"] = new LaunchStep { Kind = "keys", Combo = "!!!" },                  // 认不出的组合 → 报「无法识别的键」，不发键
-        ["text"] = new LaunchStep { Kind = "text", Text = "x", Process = "__不存在的进程__" },
+        ["text"] = new LaunchStep { Kind = "text", Text = "" },
         ["volume"] = new LaunchStep { Kind = "volume", VolumeAction = "没有这个动作" },
         ["window"] = new LaunchStep { Kind = "window", WindowAction = "close", Process = "__不存在的进程__" },
         // 「关机」配 confirmDestructive=null → 无人值守不弹确认，于是它**拒绝执行**：

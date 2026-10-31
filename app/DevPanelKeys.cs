@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -254,7 +255,7 @@ internal static class PanelKeyChecks
     // 所以这里反复「聚焦 + 泵」，直到那颗真的持有焦点为止。
     private static bool FocusTile(Window w, Button b)
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 8; i++)
         {
             b.Focus();
             Pump(w, 25);
@@ -267,13 +268,18 @@ internal static class PanelKeyChecks
     //
     // **必须走 DispatcherFrame 而不是 Sleep**：键消息排在窗口的消息队列里，
     // 消息循环不转它就永远躺在那儿——这正是「按了没反应」的那副样子。
+    // 不用 DispatcherTimer：定时器排在 Background 档，无交互或调度器繁忙时可能饥饿。
+    // 用后台线程到点塞一条 Normal 档的操作唤醒调度器，按时退出循环帧。
     internal static void Pump(DispatcherObject o, int ms)
     {
         var frame = new DispatcherFrame();
-        var timer = new DispatcherTimer(DispatcherPriority.Background, o.Dispatcher)
-        { Interval = TimeSpan.FromMilliseconds(ms) };
-        timer.Tick += (_, _) => { timer.Stop(); frame.Continue = false; };
-        timer.Start();
+        var dispatcher = o.Dispatcher;
+        var t = new Thread(() =>
+        {
+            Thread.Sleep(ms);
+            try { dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => frame.Continue = false)); } catch { }
+        }) { IsBackground = true, Name = "cw-panelkey-pump" };
+        t.Start();
         Dispatcher.PushFrame(frame);
     }
 

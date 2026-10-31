@@ -93,6 +93,15 @@ internal static class KeySendChecks
         var notes = new List<string>();
         skipped = false;
 
+        // CI / 无交互桌面直接跳过：SendInput / SendKeys 在无物理显示会话中受限或不可用。
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CI"))
+            || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")))
+        {
+            log = "CI 环境无真实交互桌面，跳过发键自查";
+            skipped = true;
+            return false;
+        }
+
         // 目标窗：一个真的 WPF 窗，记下每个键/鼠标事件到达时的**虚拟键码**与**当时的修饰键**。
         // 记虚拟键码而不是键名：WPF 那边同一个键有两个名字（Enter 与 Return 同值，
         // ToString 取其中一个），按名字断言会写出「明明收到了却说没收到」的假红。
@@ -229,8 +238,10 @@ internal static class KeySendChecks
             HoldKeys(new[] { VK_CONTROL });
             try
             {
-                // 目标进程就是本进程：目标窗是唯一可见的那扇窗（标题也在，见上面那扇窗）。
-                WindowManager.WindowLogin("Clockwork", "{ENTER}", 8);
+                // 目标进程就是本进程：目标窗是唯一可见的那扇窗。
+                // 必须在后台线程等待并由主线程泵消息，避免 SendKeys.SendWait 对同线程窗口发键时死锁。
+                var loginTask = System.Threading.Tasks.Task.Run(() => WindowManager.WindowLogin("Clockwork", "{ENTER}", 8));
+                while (!loginTask.Wait(50)) Pump(host, 50);
                 ReleaseKeys(new[] { VK_CONTROL });
             }
             finally { ReleaseKeys(new[] { VK_CONTROL }); }

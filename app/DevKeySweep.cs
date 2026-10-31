@@ -125,7 +125,11 @@ internal static class KeySweep
         try
         {
             bool? isDefault = null;
-            AskWith("问一句？", d => After(d, 700, () => isDefault = d.YesBtn.IsDefault));
+            AskWith("问一句？", d => After(d, 700, () =>
+            {
+                isDefault = d.YesBtn.IsDefault;
+                d.NoBtn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+            }));
             if (isDefault != true) fails.Add($"问句弹框·回车：确定那颗不是默认按钮（IsDefault={isDefault}）");
         }
         catch (Exception ex) { fails.Add("问句弹框·回车：" + ex.Message); }
@@ -198,7 +202,8 @@ internal static class KeySweep
             {
                 guard.Stop();
                 if (!d.IsVisible) return;
-                try { d.DialogResult = false; } catch { }
+                try { d.NoBtn.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent)); } catch { }
+                try { d.Close(); } catch { }
             };
             guard.Start();
             After(d, 700, () => script(d));
